@@ -464,7 +464,6 @@ export const DashboardModal: React.FC<DashboardModalProps> = ({
             backgroundColor: currentTheme === 'dark' ? 'rgba(0, 0, 0, 0.8)' : 'rgba(0, 0, 0, 0.5)',
             zIndex: 9998
           }}
-          onClick={() => handleSubModalClose('ai-companion', null)}
         />
         
         <div 
@@ -517,21 +516,6 @@ export const DashboardModal: React.FC<DashboardModalProps> = ({
                 Select a learning companion to guide you through today's activities
               </p>
             </div>
-            <button
-              onClick={() => handleSubModalClose('ai-companion', null)}
-              style={{
-                background: 'transparent',
-                border: 'none',
-                color: colors.subtext,
-                fontSize: '1.5rem',
-                cursor: 'pointer',
-                padding: '0.5rem',
-                borderRadius: '0.375rem'
-              }}
-              aria-label="Close modal"
-            >
-              ✕
-            </button>
           </div>
 
           {/* Scrollable Content Container */}
@@ -540,14 +524,13 @@ export const DashboardModal: React.FC<DashboardModalProps> = ({
             overflowY: 'auto',
             overflowX: 'hidden'
           }}>
-            {/* Companion Grid - 2x2 Layout */}
+            {/* Companion Grid - 4 Cards in a Row */}
             <div className="companions-grid" style={{
               padding: '2rem',
               display: 'grid',
-              gridTemplateColumns: 'repeat(2, 1fr)',
-              gridTemplateRows: 'repeat(2, 1fr)',
-              gap: '1.5rem',
-              maxWidth: '1000px',
+              gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
+              gap: '0.75rem',
+              maxWidth: '1100px',
               margin: '0 auto'
             }}>
             {companionsWithDetails.map((companion, index) => (
@@ -558,13 +541,13 @@ export const DashboardModal: React.FC<DashboardModalProps> = ({
                   backgroundColor: colors.cardBg,
                   border: `2px solid ${selectedCompanionTemp === companion.id ? companion.color : colors.border}`,
                   borderRadius: '0.75rem',
-                  padding: '1.25rem',
+                  padding: '1rem',
                   cursor: 'pointer',
                   transition: 'all 0.3s',
                   animationDelay: `${index * 0.1}s`,
                   position: 'relative',
-                  height: 'fit-content',
-                  minHeight: '400px',
+                  width: '100%',
+                  minHeight: '500px',
                   display: 'flex',
                   flexDirection: 'column'
                 }}
@@ -575,9 +558,9 @@ export const DashboardModal: React.FC<DashboardModalProps> = ({
                 {/* Avatar & Name */}
                 <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
                   <div style={{ 
-                    width: '80px',
-                    height: '80px',
-                    margin: '0 auto 1rem',
+                    width: '70px',
+                    height: '70px',
+                    margin: '0 auto 0.75rem',
                     backgroundColor: companion.color + '20',
                     border: `2px solid ${companion.color}`,
                     borderRadius: '50%',
@@ -593,19 +576,32 @@ export const DashboardModal: React.FC<DashboardModalProps> = ({
                       }}
                     />
                   </div>
-                  <h3 style={{ color: colors.text, margin: '0.5rem 0' }}>{companion.name}</h3>
-                  <p style={{ color: companion.color, fontSize: '0.875rem', margin: 0 }}>
+                  <h3 style={{ color: colors.text, margin: '0.25rem 0', fontSize: '1.1rem' }}>{companion.name}</h3>
+                  <p style={{ color: companion.color, fontSize: '0.8rem', margin: 0 }}>
                     {companion.personality}
                   </p>
                 </div>
 
                 {/* Description */}
-                <p style={{ color: colors.subtext, fontSize: '0.875rem', marginBottom: '1rem' }}>
+                <p style={{ 
+                  color: colors.subtext, 
+                  fontSize: '0.8rem', 
+                  marginBottom: '0.75rem', 
+                  lineHeight: '1.4',
+                  textAlign: 'center',
+                  minHeight: '3.5em'
+                }}>
                   {companion.teachingStyle}
                 </p>
 
                 {/* Traits */}
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1rem' }}>
+                <div style={{ 
+                  display: 'grid', 
+                  gridTemplateColumns: 'repeat(2, 1fr)', 
+                  gap: '0.3rem', 
+                  marginBottom: '0.75rem',
+                  justifyItems: 'center'
+                }}>
                   {companion.traits.map((trait, i) => (
                     <span
                       key={i}
@@ -613,9 +609,11 @@ export const DashboardModal: React.FC<DashboardModalProps> = ({
                         backgroundColor: companion.color + '15',
                         color: companion.color,
                         border: `1px solid ${companion.color}30`,
-                        padding: '0.25rem 0.75rem',
+                        padding: '0.2rem 0.5rem',
                         borderRadius: '1rem',
-                        fontSize: '0.75rem'
+                        fontSize: '0.7rem',
+                        textAlign: 'center',
+                        width: 'fit-content'
                       }}
                     >
                       {trait}
@@ -628,18 +626,29 @@ export const DashboardModal: React.FC<DashboardModalProps> = ({
                   backgroundColor: colors.background,
                   border: `1px solid ${colors.border}`,
                   borderRadius: '0.5rem',
-                  padding: '0.75rem',
-                  marginBottom: '1rem'
+                  padding: '0.5rem',
+                  marginBottom: '0.75rem'
                 }}>
-                  <span style={{ color: companion.color, fontSize: '1.5rem' }}>"</span>
-                  <p style={{ color: colors.subtext, fontStyle: 'italic', fontSize: '0.875rem', margin: 0 }}>
+                  <p style={{ 
+                    color: colors.subtext, 
+                    fontStyle: 'italic', 
+                    fontSize: '1rem', 
+                    margin: 0, 
+                    lineHeight: '1.4', 
+                    textAlign: 'center',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden'
+                  }}>
+                    <span style={{ color: companion.color, fontSize: '1.2rem', marginRight: '0.25rem' }}>"</span>
                     {companion.quote}
                   </p>
                 </div>
 
                 {/* Voice Style with Audio Preview */}
-                <div style={{ marginTop: '0.5rem' }}>
-                  <div style={{ color: colors.subtext, fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+                <div style={{ marginTop: '1.5rem' }}>
+                  <div style={{ color: colors.subtext, fontSize: '0.8rem', marginBottom: '1.2rem' }}>
                     <span>🎙️</span> {companion.voiceStyle}
                   </div>
                   
@@ -653,13 +662,13 @@ export const DashboardModal: React.FC<DashboardModalProps> = ({
                       }
                     }}
                     style={{
-                      padding: '0.5rem 1rem',
+                      padding: '0.4rem 0.8rem',
                       backgroundColor: playingAudio === companion.id ? companion.color : 'transparent',
                       color: playingAudio === companion.id ? 'white' : companion.color,
                       border: `2px solid ${companion.color}`,
                       borderRadius: '0.5rem',
                       cursor: 'pointer',
-                      fontSize: '0.875rem',
+                      fontSize: '0.8rem',
                       fontWeight: '600',
                       maxWidth: '160px',
                       margin: '0 auto',

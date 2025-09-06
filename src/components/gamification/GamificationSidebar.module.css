@@ -7,13 +7,14 @@
 
 /* Container Styles */
 .gamificationSidebar {
-  position: fixed;
-  top: 0;
-  bottom: 0;
+  position: relative;
+  height: 100vh;
   width: 320px;
+  min-width: 320px;
+  flex-shrink: 0; /* Prevent sidebar from shrinking */
   background: var(--bg-primary);
   border-left: 1px solid var(--border-color);
-  transition: transform var(--duration-moderate) var(--easing-out);
+  transition: width var(--duration-moderate) var(--easing-out);
   z-index: var(--z-40);
   display: flex;
   flex-direction: column;
@@ -21,30 +22,29 @@
 }
 
 .gamificationSidebarLeft {
-  left: 0;
-  right: auto;
   border-left: none;
   border-right: 1px solid var(--border-color);
 }
 
 .gamificationSidebarRight {
-  right: 0;
-  left: auto;
+  /* No special positioning needed - handled by flexbox parent */
 }
 
 .gamificationSidebarCollapsed {
-  transform: translateX(calc(100% - 60px));
+  width: 60px;
+  min-width: 60px;
 }
 
 .gamificationSidebarLeft.gamificationSidebarCollapsed {
-  transform: translateX(calc(-100% + 60px));
+  width: 60px;
+  min-width: 60px;
 }
 
 /* Toggle Button */
 .toggleButton {
   position: absolute;
   top: 20px;
-  left: -40px;
+  left: 10px;
   width: 32px;
   height: 32px;
   background: var(--color-primary);
@@ -67,7 +67,7 @@
 
 .gamificationSidebarLeft .toggleButton {
   left: auto;
-  right: -40px;
+  right: 10px;
 }
 
 /* Header Section */

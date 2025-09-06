@@ -1182,18 +1182,16 @@ export const AILearnContainer: React.FC<AILearnContainerProps> = ({
   // we're generating instruction - show different message
   if (phase === 'loading' && content && content.practice.length > 0) {
     return (
-      <div className="ai-learn-container min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4"
-           data-theme={theme}>
-        <div className="max-w-2xl w-full">
-          <EnhancedLoadingScreen 
-            phase="instruction"
-            skillName={skill.skill_name}
-            studentName={student.display_name}
-            theme={theme}
-            customMessage="Preparing your personalized lesson based on your practice results..."
-          />
-        </div>
-      </div>
+      <EnhancedLoadingScreen 
+        phase="instruction"
+        skillName={skill.skill_name}
+        studentName={student.display_name}
+        theme={theme}
+        customMessage="Preparing your personalized lesson based on your practice results..."
+        showGamification={true}
+        containerType="learn"
+        currentCareer={selectedCareer}
+      />
     );
   }
 
@@ -1231,6 +1229,9 @@ export const AILearnContainer: React.FC<AILearnContainerProps> = ({
           skillName={skill.skill_name}
           studentName={student.display_name}
           theme={theme}
+          showGamification={true}
+          containerType="learn"
+          currentCareer={selectedCareer}
         />
       );
     }

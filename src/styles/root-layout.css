@@ -53,7 +53,7 @@ html, body {
 .app-content {
   width: 100%;
   max-width: 100%;
-  padding: 0 20px;
+  padding: 0;
 }
 
 /* Headers should stay within the 1400px constraint */
@@ -65,7 +65,8 @@ header,
 }
 
 /* Modals can break out of constraint */
-.modal-overlay {
+.modal-overlay,
+.two-panel-modal {
   position: fixed;
   top: 0;
   left: 0;
@@ -73,6 +74,13 @@ header,
   bottom: 0;
   width: 100vw;
   height: 100vh;
+}
+
+/* TwoPanelModal container should be exactly 1400px */
+.two-panel-modal .modal-container {
+  width: 1400px !important;
+  max-width: 100vw !important;
+  margin: 0 auto !important;
 }
 
 /* Debug helper - remove in production */
