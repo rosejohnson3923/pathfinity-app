@@ -1,0 +1,548 @@
+/**
+ * Bento Box Grid Layout System
+ * Modern asymmetric grid design for dashboard
+ */
+
+/* ============================================
+   BENTO GRID CONTAINER
+   ============================================ */
+.bentoContainer {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, minmax(150px, auto));
+  gap: var(--space-4);
+  padding: var(--space-4);
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  animation: fadeInScale 0.5s ease-out;
+}
+
+/* Grid Areas for Default Bento Layout */
+.bentoContainer {
+  grid-template-areas:
+    "learn learn stats badges"
+    "career companion stats achievements"
+    "progress progress progress social";
+}
+
+/* ============================================
+   GRADE-SPECIFIC LAYOUTS
+   ============================================ */
+
+/* Elementary (K-5): 2x2 grid, big tiles, spacious */
+.bentoContainer.elementary {
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, minmax(200px, auto));
+  gap: var(--space-6);
+  padding: var(--space-6);
+  grid-template-areas:
+    "learn learn"
+    "career companion";
+}
+
+.elementary .bentoTile {
+  padding: var(--space-8);
+  border-radius: var(--radius-2xl);
+  font-size: 1.2rem;
+}
+
+.elementary .tileTitle {
+  font-size: var(--text-2xl);
+}
+
+.elementary .tileIcon {
+  font-size: 3rem;
+}
+
+.elementary .tileButton {
+  padding: var(--space-4) var(--space-6);
+  font-size: var(--text-lg);
+}
+
+/* Middle School (6-8): 4x3 grid, balanced */
+.bentoContainer.middle {
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, minmax(140px, auto));
+  gap: var(--space-4);
+  grid-template-areas:
+    "learn learn stats badges"
+    "career companion stats achievements"
+    "progress progress social social";
+}
+
+.middle .bentoTile {
+  padding: var(--space-5);
+}
+
+.middle .tileTitle {
+  font-size: var(--text-lg);
+}
+
+/* High School (9-12): 4x4 grid, compact, information-dense */
+.bentoContainer.high {
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, minmax(100px, auto));
+  gap: var(--space-3);
+  padding: var(--space-3);
+  grid-template-areas:
+    "learn learn stats gpa"
+    "career companion rank badges"
+    "progress progress achievements achievements"
+    "schedule schedule resources social";
+}
+
+.high .bentoTile {
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+}
+
+.high .tileTitle {
+  font-size: var(--text-md);
+}
+
+.high .tileIcon {
+  font-size: 1.5rem;
+}
+
+.high .tileButton {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+}
+
+/* ============================================
+   BENTO TILES - Base Styles
+   ============================================ */
+.bentoTile {
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Hover Effects */
+.bentoTile:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-primary);
+}
+
+.bentoTile::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    rgba(var(--color-primary-rgb), 0.05) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.bentoTile:hover::before {
+  opacity: 1;
+}
+
+/* ============================================
+   TILE VARIANTS BY SIZE
+   ============================================ */
+
+/* Large Tile - Primary Action */
+.bentoTileLarge {
+  grid-area: learn;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  color: white;
+  min-height: 250px;
+}
+
+.bentoTileLarge:hover {
+  background: linear-gradient(135deg, var(--color-primary-light), var(--color-primary));
+}
+
+/* Medium Tiles */
+.bentoTileMedium {
+  min-height: 180px;
+}
+
+.bentoTileCareer {
+  grid-area: career;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+}
+
+.bentoTileCompanion {
+  grid-area: companion;
+  background: linear-gradient(135deg, #f093fb, #f5576c);
+  color: white;
+}
+
+/* Small Tiles - Stats */
+.bentoTileSmall {
+  min-height: 120px;
+  padding: var(--space-4);
+}
+
+.bentoTileStats {
+  grid-area: stats;
+  grid-row: span 2;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.bentoTileBadges {
+  grid-area: badges;
+}
+
+.bentoTileAchievements {
+  grid-area: achievements;
+}
+
+.bentoTileProgress {
+  grid-area: progress;
+  background: var(--bg-secondary);
+}
+
+.bentoTileSocial {
+  grid-area: social;
+}
+
+/* ============================================
+   TILE CONTENT
+   ============================================ */
+
+.tileHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+}
+
+.tileIcon {
+  font-size: 2rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.tileTitle {
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.tileSubtitle {
+  font-size: var(--text-sm);
+  opacity: 0.9;
+  margin-top: var(--space-1);
+}
+
+.tileContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.tileFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* ============================================
+   INTERACTIVE ELEMENTS
+   ============================================ */
+
+.tileButton {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tileButton:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+/* Progress Bars */
+.progressBar {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-top: var(--space-2);
+}
+
+.progressFill {
+  height: 100%;
+  background: white;
+  border-radius: var(--radius-full);
+  transition: width 0.5s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.progressFill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+
+/* ============================================
+   STATS DISPLAY
+   ============================================ */
+
+.statItem {
+  background: var(--bg-primary);
+  padding: var(--space-3);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  transition: all 0.2s ease;
+}
+
+.statItem:hover {
+  background: var(--bg-hover);
+  transform: translateX(4px);
+}
+
+.statValue {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+  color: var(--color-primary);
+}
+
+.statLabel {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+}
+
+/* ============================================
+   BADGE DISPLAY
+   ============================================ */
+
+.badgeGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+}
+
+.badge {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: all 0.2s ease;
+}
+
+.badge.earned {
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+}
+
+.badge:hover {
+  transform: rotate(10deg) scale(1.1);
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Staggered entrance animation */
+.bentoTile:nth-child(1) { animation-delay: 0.05s; }
+.bentoTile:nth-child(2) { animation-delay: 0.1s; }
+.bentoTile:nth-child(3) { animation-delay: 0.15s; }
+.bentoTile:nth-child(4) { animation-delay: 0.2s; }
+.bentoTile:nth-child(5) { animation-delay: 0.25s; }
+.bentoTile:nth-child(6) { animation-delay: 0.3s; }
+.bentoTile:nth-child(7) { animation-delay: 0.35s; }
+.bentoTile:nth-child(8) { animation-delay: 0.4s; }
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .bentoContainer {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas:
+      "learn learn"
+      "career companion"
+      "stats badges"
+      "progress progress";
+  }
+  
+  .bentoTileSocial,
+  .bentoTileAchievements {
+    display: none;
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .bentoContainer {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "learn"
+      "stats"
+      "career"
+      "companion"
+      "progress";
+  }
+  
+  .bentoTile {
+    min-height: 150px !important;
+  }
+  
+  .bentoTileStats {
+    grid-row: span 1;
+  }
+}
+
+/* ============================================
+   DARK THEME ADJUSTMENTS
+   ============================================ */
+
+[data-theme="dark"] .bentoTile {
+  background: var(--bg-card-dark);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .bentoTile:hover {
+  border-color: var(--color-primary-light);
+}
+
+[data-theme="dark"] .statItem {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .statItem:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+
+.bentoTile:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   ANIMATIONS FOR VISUAL HIERARCHY
+   ============================================ */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-8px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+  75% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0.5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bentoTile,
+  .progressFill::after {
+    animation: none;
+    transition: none;
+  }
+}

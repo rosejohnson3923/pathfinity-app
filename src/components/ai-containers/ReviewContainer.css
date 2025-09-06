@@ -1,0 +1,409 @@
+/**
+ * Review Container Styles
+ */
+
+.review-container {
+  min-height: 100vh;
+  padding: 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Loading State */
+.review-container.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-spinner {
+  font-size: 4rem;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Overview Phase */
+.review-container.overview {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.review-header {
+  text-align: center;
+  color: white;
+  margin-bottom: 3rem;
+}
+
+.review-header h1 {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.review-header h2 {
+  font-size: 1.5rem;
+  opacity: 0.9;
+}
+
+.review-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.info-card {
+  background: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.info-icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.info-card h3 {
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.info-card p {
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+.skills-to-review {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.skills-to-review h3 {
+  color: #1f2937;
+  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.subject-skills h4 {
+  color: #4b5563;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.subject-skills ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.subject-skills li {
+  color: #6b7280;
+  font-size: 0.9rem;
+  padding: 0.25rem 0;
+}
+
+.start-review-btn {
+  display: block;
+  margin: 0 auto;
+  padding: 1rem 3rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, #10b981, #059669);
+  border: none;
+  border-radius: 2rem;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.start-review-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Practice Phase */
+.review-container.practice {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.review-progress {
+  margin-bottom: 2rem;
+}
+
+.progress-bar {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #34d399);
+  transition: width 0.5s ease;
+}
+
+.progress-text {
+  color: white;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.question-card {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.question-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.subject-badge,
+.skill-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.subject-badge {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+.skill-badge {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.question-text {
+  color: #1f2937;
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.answer-options {
+  display: grid;
+  gap: 1rem;
+}
+
+.option-btn {
+  padding: 1rem;
+  background: #f3f4f6;
+  border: 2px solid transparent;
+  border-radius: 0.75rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.option-btn:hover:not(:disabled) {
+  background: #e5e7eb;
+  border-color: #8b5cf6;
+  transform: translateX(5px);
+}
+
+.option-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.option-btn.true {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.option-btn.false {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.feedback-message {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: #f0f9ff;
+  border-left: 4px solid #0284c7;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.companion-emoji {
+  font-size: 2rem;
+}
+
+.feedback-message p {
+  color: #0c4a6e;
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+/* Results Phase */
+.review-container.results {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.results-header {
+  color: white;
+  margin-bottom: 2rem;
+}
+
+.results-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.score-display {
+  display: inline-block;
+  background: white;
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.score-number {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #8b5cf6;
+}
+
+.score-label {
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.results-message {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.results-message h2 {
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.results-message p {
+  color: #6b7280;
+}
+
+.results-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.strength-areas,
+.improvement-areas {
+  background: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  text-align: left;
+}
+
+.strength-areas h3 {
+  color: #10b981;
+  margin-bottom: 1rem;
+}
+
+.improvement-areas h3 {
+  color: #f59e0b;
+  margin-bottom: 1rem;
+}
+
+.strength-areas ul,
+.improvement-areas ul {
+  list-style: none;
+  padding: 0;
+}
+
+.strength-areas li,
+.improvement-areas li {
+  padding: 0.5rem 0;
+  color: #4b5563;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.next-steps {
+  color: white;
+  font-size: 1.1rem;
+  opacity: 0.9;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.9; }
+  50% { opacity: 0.6; }
+}
+
+/* Dark Theme */
+[data-theme="dark"] .review-container {
+  background: linear-gradient(135deg, #4c1d95 0%, #5b21b6 100%);
+}
+
+[data-theme="dark"] .info-card,
+[data-theme="dark"] .skills-to-review,
+[data-theme="dark"] .question-card,
+[data-theme="dark"] .results-message,
+[data-theme="dark"] .strength-areas,
+[data-theme="dark"] .improvement-areas {
+  background: #1e293b;
+}
+
+[data-theme="dark"] .info-card h3,
+[data-theme="dark"] .skills-to-review h3,
+[data-theme="dark"] .question-text,
+[data-theme="dark"] .results-message h2 {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .info-card p,
+[data-theme="dark"] .subject-skills li,
+[data-theme="dark"] .results-message p {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .option-btn {
+  background: #374151;
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .option-btn:hover:not(:disabled) {
+  background: #4b5563;
+}

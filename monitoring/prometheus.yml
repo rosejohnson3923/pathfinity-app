@@ -1,0 +1,196 @@
+# ================================================================
+# PATHFINITY PROMETHEUS CONFIGURATION
+# Comprehensive monitoring for AI education platform
+# ================================================================
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: 'pathfinity-production'
+    environment: 'production'
+
+# ================================================================
+# RULE FILES
+# ================================================================
+rule_files:
+  - "alerts.yml"
+  - "recording_rules.yml"
+
+# ================================================================
+# ALERTMANAGER CONFIGURATION
+# ================================================================
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - alertmanager:9093
+
+# ================================================================
+# SCRAPE CONFIGURATIONS
+# ================================================================
+scrape_configs:
+  # ================================================================
+  # Prometheus itself
+  # ================================================================
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+    scrape_interval: 30s
+
+  # ================================================================
+  # Pathfinity Application
+  # ================================================================
+  - job_name: 'pathfinity-app'
+    metrics_path: '/metrics'
+    scrape_interval: 15s
+    static_configs:
+      - targets:
+        - 'pathfinity-app:3000'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'pathfinity-app'
+
+  # ================================================================
+  # Node Exporter (System Metrics)
+  # ================================================================
+  - job_name: 'node-exporter'
+    scrape_interval: 15s
+    static_configs:
+      - targets:
+        - 'node-exporter:9100'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'pathfinity-host'
+
+  # ================================================================
+  # PostgreSQL Database
+  # ================================================================
+  - job_name: 'postgres-exporter'
+    scrape_interval: 30s
+    static_configs:
+      - targets:
+        - 'postgres-exporter:9187'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'pathfinity-database'
+
+  # ================================================================
+  # Redis Cache
+  # ================================================================
+  - job_name: 'redis-exporter'
+    scrape_interval: 30s
+    static_configs:
+      - targets:
+        - 'redis-exporter:9121'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'pathfinity-redis'
+
+  # ================================================================
+  # Nginx Load Balancer
+  # ================================================================
+  - job_name: 'nginx-exporter'
+    scrape_interval: 30s
+    static_configs:
+      - targets:
+        - 'nginx-exporter:9113'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'pathfinity-nginx'
+
+  # ================================================================
+  # Container Metrics (cAdvisor)
+  # ================================================================
+  - job_name: 'cadvisor'
+    scrape_interval: 30s
+    static_configs:
+      - targets:
+        - 'cadvisor:8080'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'pathfinity-containers'
+
+  # ================================================================
+  # Azure OpenAI Custom Metrics (via app)
+  # ================================================================
+  - job_name: 'azure-openai-metrics'
+    metrics_path: '/metrics/azure-openai'
+    scrape_interval: 60s
+    static_configs:
+      - targets:
+        - 'pathfinity-app:3000'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'azure-openai-service'
+
+  # ================================================================
+  # AI Worker Metrics
+  # ================================================================
+  - job_name: 'ai-worker'
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+    static_configs:
+      - targets:
+        - 'pathfinity-ai-worker:3001'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'pathfinity-ai-worker'
+
+  # ================================================================
+  # Elasticsearch (ELK Stack)
+  # ================================================================
+  - job_name: 'elasticsearch-exporter'
+    scrape_interval: 60s
+    static_configs:
+      - targets:
+        - 'elasticsearch-exporter:9114'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'pathfinity-elasticsearch'
+
+  # ================================================================
+  # Custom Business Metrics
+  # ================================================================
+  - job_name: 'pathfinity-business-metrics'
+    metrics_path: '/metrics/business'
+    scrape_interval: 300s  # 5 minutes for business metrics
+    static_configs:
+      - targets:
+        - 'pathfinity-app:3000'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'pathfinity-business'
+
+# ================================================================
+# REMOTE WRITE (for long-term storage)
+# ================================================================
+# Uncomment to enable remote write to Azure Monitor or other TSDB
+# remote_write:
+#   - url: "https://prometheus-us-central1.grafana.net/api/prom/push"
+#     basic_auth:
+#       username: "your-prometheus-username"
+#       password: "your-prometheus-password"
+#     write_relabel_configs:
+#       - source_labels: [__name__]
+#         regex: 'pathfinity_.*'
+#         action: keep
+
+# ================================================================
+# STORAGE CONFIGURATION
+# ================================================================
+# These are command-line flags, but documented here for reference
+# --storage.tsdb.path=/prometheus
+# --storage.tsdb.retention.time=30d
+# --storage.tsdb.retention.size=50GB
+# --storage.tsdb.wal-compression

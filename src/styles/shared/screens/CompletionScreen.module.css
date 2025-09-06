@@ -1,0 +1,541 @@
+/**
+ * COMPLETION SCREEN MODULE
+ * ========================
+ * Styles for the completion phase across all containers
+ * Celebratory animations and summary displays
+ * 
+ * Created: 2025-08-22
+ */
+
+/* ============================================
+   COMPLETION PHASE CONTAINER
+   ============================================ */
+.completionPhase {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8);
+  animation: fadeIn var(--duration-base) var(--easing-out);
+  position: relative;
+  overflow: hidden;
+}
+
+.completionPhase.withHeader {
+  padding-top: 5rem;
+}
+
+/* ============================================
+   CONFETTI BACKGROUND
+   ============================================ */
+.confettiContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: var(--gradient-primary);
+  animation: confettiFall 3s linear infinite;
+}
+
+.confetti:nth-child(odd) {
+  background: var(--gradient-success);
+  animation-duration: 2.5s;
+}
+
+.confetti:nth-child(even) {
+  background: var(--gradient-warning);
+  animation-duration: 3.5s;
+}
+
+@keyframes confettiFall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+/* ============================================
+   COMPLETION CARD
+   ============================================ */
+.completionCard {
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
+  padding: var(--space-10);
+  box-shadow: var(--shadow-elevated);
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  animation: celebrateSlide var(--duration-slow) var(--easing-bounce);
+}
+
+[data-theme="dark"] .completionCard {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  border: 2px solid rgba(16, 185, 129, 0.2);
+}
+
+@keyframes celebrateSlide {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(50px);
+  }
+  50% {
+    transform: scale(1.05) translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ============================================
+   TROPHY ICON
+   ============================================ */
+.trophyIcon {
+  font-size: var(--text-6xl);
+  margin-bottom: var(--space-6);
+  animation: trophyBounce 2s ease-in-out infinite;
+  background: var(--gradient-warning);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 4px 8px rgba(251, 191, 36, 0.3));
+}
+
+@keyframes trophyBounce {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-10px) rotate(-5deg);
+  }
+  75% {
+    transform: translateY(-10px) rotate(5deg);
+  }
+}
+
+/* ============================================
+   COMPLETION HEADER
+   ============================================ */
+.completionTitle {
+  font-size: var(--text-4xl);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-4);
+  background: var(--gradient-success);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.completionSubtitle {
+  font-size: var(--text-xl);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-8);
+  font-weight: var(--font-medium);
+}
+
+/* ============================================
+   SCORE DISPLAY
+   ============================================ */
+.scoreDisplay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+  padding: var(--space-6);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-xl);
+  position: relative;
+}
+
+.scoreLabel {
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+  font-weight: var(--font-medium);
+}
+
+.scoreValue {
+  font-size: var(--text-5xl);
+  font-weight: var(--font-bold);
+  color: var(--color-success);
+  font-family: var(--font-mono);
+  animation: countUp 1s ease-out;
+}
+
+@keyframes countUp {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.scorePercentage {
+  font-size: var(--text-3xl);
+  color: var(--text-primary);
+  font-weight: var(--font-bold);
+}
+
+/* ============================================
+   PERFORMANCE STATS
+   ============================================ */
+.performanceStats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+.statCard {
+  padding: var(--space-4);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  transition: all var(--duration-base) var(--easing-out);
+}
+
+.statCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.statIcon {
+  font-size: var(--text-3xl);
+  margin-bottom: var(--space-2);
+  opacity: 0.8;
+}
+
+.statCard.correct .statIcon {
+  color: var(--color-success);
+}
+
+.statCard.incorrect .statIcon {
+  color: var(--color-error);
+}
+
+.statCard.time .statIcon {
+  color: var(--color-info);
+}
+
+.statCard.streak .statIcon {
+  color: var(--color-warning);
+}
+
+.statLabel {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  margin-bottom: var(--space-1);
+}
+
+.statValue {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+}
+
+/* ============================================
+   ACHIEVEMENT BADGES
+   ============================================ */
+.achievementSection {
+  margin-bottom: var(--space-8);
+}
+
+.achievementTitle {
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  margin-bottom: var(--space-4);
+}
+
+.achievementGrid {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.achievementBadge {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-full);
+  background: var(--gradient-warning);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-3xl);
+  box-shadow: 
+    var(--shadow-md),
+    inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  animation: badgeAppear 0.5s ease-out backwards;
+  position: relative;
+}
+
+.achievementBadge:nth-child(1) { animation-delay: 0.1s; }
+.achievementBadge:nth-child(2) { animation-delay: 0.2s; }
+.achievementBadge:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes badgeAppear {
+  from {
+    opacity: 0;
+    transform: scale(0) rotate(180deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.achievementBadge.locked {
+  background: var(--bg-tertiary);
+  opacity: 0.5;
+}
+
+.achievementBadge .shine {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  width: 30%;
+  height: 30%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.6) 0%,
+    transparent 70%
+  );
+  border-radius: var(--radius-full);
+  animation: shine 3s infinite;
+}
+
+@keyframes shine {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+/* ============================================
+   XP PROGRESS BAR
+   ============================================ */
+.xpProgress {
+  margin-bottom: var(--space-8);
+}
+
+.xpHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-2);
+}
+
+.xpLabel {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+}
+
+.xpValue {
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  color: var(--color-primary);
+}
+
+.xpBar {
+  height: 12px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  position: relative;
+}
+
+.xpFill {
+  height: 100%;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-full);
+  animation: xpGrow 1.5s ease-out;
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes xpGrow {
+  from { width: 0; }
+}
+
+.xpFill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+/* ============================================
+   ACTION BUTTONS
+   ============================================ */
+.completionActions {
+  display: flex;
+  gap: var(--space-4);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.actionButton {
+  padding: var(--space-4) var(--space-8);
+  border-radius: var(--radius-full);
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  cursor: pointer;
+  transition: all var(--duration-base) var(--easing-out);
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.continueButton {
+  background: var(--gradient-primary);
+  color: white;
+  box-shadow: var(--shadow-md);
+  min-width: 200px;
+}
+
+.continueButton:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-primary);
+}
+
+.reviewButton {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 2px solid var(--border-color);
+}
+
+.reviewButton:hover {
+  background: var(--bg-secondary);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* ============================================
+   COMPLETION MESSAGE
+   ============================================ */
+.completionMessage {
+  padding: var(--space-6);
+  background: var(--info-bg-soft);
+  border-radius: var(--radius-xl);
+  margin-bottom: var(--space-8);
+  border-left: 4px solid var(--info-border);
+}
+
+.messageText {
+  font-size: var(--text-lg);
+  color: var(--info-text);
+  line-height: var(--leading-relaxed);
+  font-style: italic;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 768px) {
+  .completionPhase {
+    padding: var(--space-6);
+  }
+  
+  .completionCard {
+    padding: var(--space-8);
+  }
+  
+  .completionTitle {
+    font-size: var(--text-3xl);
+  }
+  
+  .scoreValue {
+    font-size: var(--text-4xl);
+  }
+  
+  .performanceStats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .achievementBadge {
+    width: 60px;
+    height: 60px;
+    font-size: var(--text-2xl);
+  }
+}
+
+@media (max-width: 480px) {
+  .completionPhase {
+    padding: var(--space-4);
+  }
+  
+  .completionCard {
+    padding: var(--space-6);
+  }
+  
+  .completionTitle {
+    font-size: var(--text-2xl);
+  }
+  
+  .completionSubtitle {
+    font-size: var(--text-lg);
+  }
+  
+  .scoreValue {
+    font-size: var(--text-3xl);
+  }
+  
+  .trophyIcon {
+    font-size: var(--text-5xl);
+  }
+  
+  .completionActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .actionButton {
+    width: 100%;
+  }
+}

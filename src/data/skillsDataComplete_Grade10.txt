@@ -1,0 +1,965 @@
+Subject	Grade	SkillsArea	SkillCluster	SkillNumber	SkillName
+Math	10	Math Foundations	A.	A.0	Integers
+Math	10	Math Foundations	A.	A.1	Compare and order integers
+Math	10	Math Foundations	A.	A.2	Integer addition and subtraction rules
+Math	10	Math Foundations	A.	A.3	Add and subtract integers using counters
+Math	10	Math Foundations	A.	A.4	Add and subtract integers
+Math	10	Math Foundations	A.	A.5	Add and subtract three or more integers
+Math	10	Math Foundations	A.	A.6	Add and subtract integers: word problems
+Math	10	Math Foundations	A.	A.7	Integer multiplication and division rules
+Math	10	Math Foundations	A.	A.8	Multiply and divide integers
+Math	10	Math Foundations	A.	A.9	Evaluate numerical expressions involving integers
+Math	10	Math Foundations	B.	B.0	Rational numbers
+Math	10	Math Foundations	B.	B.1	Convert between repeating decimals and fractions
+Math	10	Math Foundations	B.	B.2	Convert between decimals and fractions or mixed numbers
+Math	10	Math Foundations	B.	B.3	Compare rational numbers
+Math	10	Math Foundations	B.	B.4	Put rational numbers in order
+Math	10	Math Foundations	B.	B.5	Reciprocals and multiplicative inverses
+Math	10	Math Foundations	B.	B.6	Add and subtract rational numbers
+Math	10	Math Foundations	B.	B.7	Add and subtract rational numbers: word problems
+Math	10	Math Foundations	B.	B.8	Apply addition and subtraction rules
+Math	10	Math Foundations	B.	B.9	Multiply and divide rational numbers
+Math	10	Math Foundations	B.	B.10	Multiply and divide rational numbers: word problems
+Math	10	Math Foundations	B.	B.11	Apply multiplication and division rules
+Math	10	Math Foundations	B.	B.12	Apply addition, subtraction, multiplication, and division rules
+Math	10	Math Foundations	B.	B.13	Evaluate numerical expressions involving rational numbers
+Math	10	Math Foundations	B.	B.14	Multi-step word problems
+Math	10	Math Foundations	C.	C.0	Exponents
+Math	10	Math Foundations	C.	C.1	Understanding exponents
+Math	10	Math Foundations	C.	C.2	Evaluate powers
+Math	10	Math Foundations	C.	C.3	Solve equations with variable exponents
+Math	10	Math Foundations	C.	C.4	Powers with negative bases
+Math	10	Math Foundations	C.	C.5	Powers with decimal and fractional bases
+Math	10	Math Foundations	C.	C.6	Understanding negative exponents
+Math	10	Math Foundations	C.	C.7	Evaluate powers with negative exponents
+Math	10	Math Foundations	C.	C.8	Evaluate powers with negative or zero exponents
+Math	10	Math Foundations	C.	C.9	Multiply powers: integer bases
+Math	10	Math Foundations	C.	C.10	Divide powers: integer bases
+Math	10	Math Foundations	C.	C.11	Multiply and divide powers: integer bases
+Math	10	Math Foundations	C.	C.12	Power of a power: integer bases
+Math	10	Math Foundations	C.	C.13	Evaluate expressions using properties of exponents
+Math	10	Math Foundations	C.	C.14	Identify equivalent expressions involving exponents I
+Math	10	Math Foundations	C.	C.15	Identify equivalent expressions involving exponents II
+Math	10	Math Foundations	C.	C.16	Multiply powers: variable bases
+Math	10	Math Foundations	C.	C.17	Divide powers: variable bases
+Math	10	Math Foundations	C.	C.18	Multiply and divide powers: variable bases
+Math	10	Math Foundations	C.	C.19	Powers of a power: variable bases
+Math	10	Math Foundations	D.	D.0	Scientific notation
+Math	10	Math Foundations	D.	D.1	Convert between standard and scientific notation
+Math	10	Math Foundations	D.	D.2	Scientific notation on calculators
+Math	10	Math Foundations	D.	D.3	Compare numbers written in scientific notation
+Math	10	Math Foundations	D.	D.4	Add and subtract numbers written in scientific notation
+Math	10	Math Foundations	D.	D.5	Multiply numbers written in scientific notation
+Math	10	Math Foundations	D.	D.6	Divide numbers written in scientific notation
+Math	10	Math Foundations	E.	E.0	Square roots and cube roots
+Math	10	Math Foundations	E.	E.1	Square roots of perfect squares
+Math	10	Math Foundations	E.	E.2	Estimate positive square roots
+Math	10	Math Foundations	E.	E.3	Positive and negative square roots
+Math	10	Math Foundations	E.	E.4	Estimate positive and negative square roots
+Math	10	Math Foundations	E.	E.5	Relationship between squares and square roots
+Math	10	Math Foundations	E.	E.6	Solve equations using square roots
+Math	10	Math Foundations	E.	E.7	Cube roots of positive perfect cubes
+Math	10	Math Foundations	E.	E.8	Cube roots of positive and negative perfect cubes
+Math	10	Math Foundations	E.	E.9	Solve equations using cube roots
+Math	10	Math Foundations	E.	E.10	Estimate cube roots
+Math	10	Math Foundations	F.	F.0	Rational and irrational numbers
+Math	10	Math Foundations	F.	F.1	Identify rational and irrational square roots
+Math	10	Math Foundations	F.	F.2	Identify rational and irrational numbers
+Math	10	Math Foundations	F.	F.3	Classify numbers
+Math	10	Math Foundations	F.	F.4	Irrational numbers on number lines
+Math	10	Math Foundations	F.	F.5	Compare and order rational and irrational numbers
+Math	10	Math Foundations	G.	G.0	Proportions
+Math	10	Math Foundations	G.	G.1	Solve proportions
+Math	10	Math Foundations	G.	G.2	Solve proportions: word problems
+Math	10	Math Foundations	G.	G.3	Estimate population size using proportions
+Math	10	Math Foundations	G.	G.4	Scale drawings: word problems
+Math	10	Math Foundations	G.	G.5	Scale drawings: scale factor word problems
+Math	10	Math Foundations	H.	H.0	Percents
+Math	10	Math Foundations	H.	H.1	Convert between percents, fractions, and decimals
+Math	10	Math Foundations	H.	H.2	Compare percents to fractions and decimals
+Math	10	Math Foundations	H.	H.3	Find what percent one number is of another
+Math	10	Math Foundations	H.	H.4	Find what percent one number is of another: word problems
+Math	10	Math Foundations	H.	H.5	Estimate percents of numbers
+Math	10	Math Foundations	H.	H.6	Percents of numbers and money amounts
+Math	10	Math Foundations	H.	H.7	Percents of numbers: word problems
+Math	10	Math Foundations	H.	H.8	Compare percents of numbers
+Math	10	Math Foundations	H.	H.9	Solve percent equations
+Math	10	Math Foundations	H.	H.10	Percent of change
+Math	10	Math Foundations	H.	H.11	Percent of change: word problems
+Math	10	Math Foundations	H.	H.12	Percent of change: find the original amount word problems
+Math	10	Math Foundations	I.	I.0	Consumer math
+Math	10	Math Foundations	I.	I.1	Price lists
+Math	10	Math Foundations	I.	I.2	Unit prices
+Math	10	Math Foundations	I.	I.3	Unit prices with unit conversions
+Math	10	Math Foundations	I.	I.4	Unit prices: find the total price
+Math	10	Math Foundations	I.	I.5	Percent of a number: tax, discount, and more
+Math	10	Math Foundations	I.	I.6	Find the percent: tax, discount, and more
+Math	10	Math Foundations	I.	I.7	Sale prices: find the original price
+Math	10	Math Foundations	I.	I.8	Multi-step problems with percents
+Math	10	Math Foundations	I.	I.9	Estimate tips
+Math	10	Math Foundations	I.	I.10	Simple interest
+Math	10	Math Foundations	I.	I.11	Compound interest
+Math	10	Math Foundations	J.	J.0	Units of measurement
+Math	10	Math Foundations	J.	J.1	Convert rates and measurements: customary units
+Math	10	Math Foundations	J.	J.2	Convert rates and measurements: metric units
+Math	10	Math Foundations	J.	J.3	Mixed customary units
+Math	10	Math Foundations	J.	J.4	Convert between customary and metric systems
+Math	10	Math Foundations	J.	J.5	Convert between Celsius and Fahrenheit
+Math	10	Math Foundations	K.	K.0	Expressions
+Math	10	Math Foundations	K.	K.1	Write variable expressions: one operation
+Math	10	Math Foundations	K.	K.2	Write variable expressions: two or three operations
+Math	10	Math Foundations	K.	K.3	Write variable expressions from diagrams
+Math	10	Math Foundations	K.	K.4	Write variable expressions: word problems
+Math	10	Math Foundations	K.	K.5	Evaluate one-variable expressions
+Math	10	Math Foundations	K.	K.6	Evaluate multi-variable expressions
+Math	10	Math Foundations	K.	K.7	Evaluate absolute value expressions
+Math	10	Math Foundations	K.	K.8	Evaluate radical expressions
+Math	10	Math Foundations	K.	K.9	Evaluate rational expressions
+Math	10	Math Foundations	K.	K.10	Identify terms and coefficients
+Math	10	Math Foundations	K.	K.11	Sort factors of variable expressions
+Math	10	Math Foundations	L.	L.0	Equivalent expressions
+Math	10	Math Foundations	L.	L.1	Properties of addition and multiplication
+Math	10	Math Foundations	L.	L.2	Multiply using the distributive property
+Math	10	Math Foundations	L.	L.3	Write equivalent expressions using properties
+Math	10	Math Foundations	L.	L.4	Add and subtract like terms
+Math	10	Math Foundations	L.	L.5	Add and subtract linear expressions
+Math	10	Math Foundations	L.	L.6	Factors of linear expressions
+Math	10	Math Foundations	L.	L.7	Identify equivalent linear expressions I
+Math	10	Math Foundations	L.	L.8	Identify equivalent linear expressions II
+Math	10	Math Foundations	L.	L.9	Identify equivalent linear expressions: word problems
+Math	10	Math Foundations	M.	M.0	One-variable equations
+Math	10	Math Foundations	M.	M.1	Which x satisfies an equation?
+Math	10	Math Foundations	M.	M.2	Write an equation from words
+Math	10	Math Foundations	M.	M.3	Model and solve equations using algebra tiles
+Math	10	Math Foundations	M.	M.4	Write and solve equations that represent diagrams
+Math	10	Math Foundations	M.	M.5	Properties of equality
+Math	10	Math Foundations	M.	M.6	Identify equivalent equations
+Math	10	Math Foundations	M.	M.7	Solve one-step equations
+Math	10	Math Foundations	M.	M.8	Solve two-step equations
+Math	10	Math Foundations	M.	M.9	Solve two-step equations: complete the solution
+Math	10	Math Foundations	M.	M.10	Solve one-step and two-step equations: word problems
+Math	10	Math Foundations	M.	M.11	Solve equations involving like terms
+Math	10	Math Foundations	M.	M.12	Solve equations with variables on both sides
+Math	10	Math Foundations	M.	M.13	Solve equations with variables on both sides: fractional coefficients
+Math	10	Math Foundations	M.	M.14	Solve equations with variables on both sides: word problems
+Math	10	Math Foundations	M.	M.15	Solve equations with the distributive property
+Math	10	Math Foundations	M.	M.16	Solve multi-step equations
+Math	10	Math Foundations	M.	M.17	Solve multi-step equations with fractional coefficients
+Math	10	Math Foundations	M.	M.18	Solve equations: mixed review
+Math	10	Math Foundations	M.	M.19	Solve multi-step equations: complete the solution
+Math	10	Math Foundations	M.	M.20	Find the number of solutions
+Math	10	Math Foundations	M.	M.21	Create equations with no solutions or infinitely many solutions
+Math	10	Math Foundations	N.	N.0	One-variable inequalities
+Math	10	Math Foundations	N.	N.1	Solutions to inequalities
+Math	10	Math Foundations	N.	N.2	Graph inequalities on number lines
+Math	10	Math Foundations	N.	N.3	Write inequalities from number lines
+Math	10	Math Foundations	N.	N.4	Solve one-step inequalities
+Math	10	Math Foundations	N.	N.5	Graph solutions to one-step inequalities
+Math	10	Math Foundations	N.	N.6	Solve two-step inequalities
+Math	10	Math Foundations	N.	N.7	Graph solutions to two-step inequalities
+Math	10	Math Foundations	N.	N.8	Solve multi-step inequalities
+Math	10	Math Foundations	N.	N.9	Graph solutions to multi-step inequalities
+Math	10	Math Foundations	N.	N.10	Solve inequalities with integers: variables on both sides
+Math	10	Math Foundations	N.	N.11	Solve inequalities with decimals: variables on both sides
+Math	10	Math Foundations	O.	O.0	Coordinate plane
+Math	10	Math Foundations	O.	O.1	Coordinate plane review
+Math	10	Math Foundations	O.	O.2	Quadrants and axes
+Math	10	Math Foundations	O.	O.3	Follow directions on a coordinate plane
+Math	10	Math Foundations	O.	O.4	Find the distance between two points
+Math	10	Math Foundations	P.	P.0	Lines and angles
+Math	10	Math Foundations	P.	P.1	Identify complementary, supplementary, vertical, adjacent, and congruent angles
+Math	10	Math Foundations	P.	P.2	Find measures of complementary, supplementary, vertical, and adjacent angles
+Math	10	Math Foundations	P.	P.3	Write and solve equations using angle relationships
+Math	10	Math Foundations	P.	P.4	Identify alternate interior and alternate exterior angles
+Math	10	Math Foundations	P.	P.5	Transversals of parallel lines: name angle pairs
+Math	10	Math Foundations	P.	P.6	Transversals of parallel lines: find angle measures
+Math	10	Math Foundations	P.	P.7	Transversals of parallel lines: solve for x
+Math	10	Math Foundations	P.	P.8	Find lengths and measures of bisected line segments and angles
+Math	10	Math Foundations	Q.	Q.0	Two-dimensional figures
+Math	10	Math Foundations	Q.	Q.1	Identify and classify polygons
+Math	10	Math Foundations	Q.	Q.2	Classify triangles
+Math	10	Math Foundations	Q.	Q.3	Identify trapezoids
+Math	10	Math Foundations	Q.	Q.4	Classify quadrilaterals I
+Math	10	Math Foundations	Q.	Q.5	Classify quadrilaterals II
+Math	10	Math Foundations	Q.	Q.6	Graph triangles and quadrilaterals
+Math	10	Math Foundations	Q.	Q.7	Find missing angles in triangles
+Math	10	Math Foundations	Q.	Q.8	Find missing angles in triangles using ratios
+Math	10	Math Foundations	Q.	Q.9	Triangle Angle-Sum Theorem
+Math	10	Math Foundations	Q.	Q.10	Find missing angles in quadrilaterals I
+Math	10	Math Foundations	Q.	Q.11	Find missing angles in quadrilaterals II
+Math	10	Math Foundations	Q.	Q.12	Exterior Angle Theorem
+Math	10	Math Foundations	Q.	Q.13	Interior angles of polygons
+Math	10	Math Foundations	Q.	Q.14	Parts of a circle
+Math	10	Math Foundations	R.	R.0	Transformations and congruence
+Math	10	Math Foundations	R.	R.1	Identify reflections, rotations, and translations
+Math	10	Math Foundations	R.	R.2	Describe a sequence of transformations
+Math	10	Math Foundations	R.	R.3	Translations: graph the image
+Math	10	Math Foundations	R.	R.4	Translations: find the coordinates
+Math	10	Math Foundations	R.	R.5	Translations: write the rule
+Math	10	Math Foundations	R.	R.6	Reflections over the x- and y-axes: graph the image
+Math	10	Math Foundations	R.	R.7	Reflections over the x- and y-axes: find the coordinates
+Math	10	Math Foundations	R.	R.8	Reflections: graph the image
+Math	10	Math Foundations	R.	R.9	Reflections: find the coordinates
+Math	10	Math Foundations	R.	R.10	Rotations: graph the image
+Math	10	Math Foundations	R.	R.11	Rotations: find the coordinates
+Math	10	Math Foundations	R.	R.12	Reflections and rotations: write the rule
+Math	10	Math Foundations	R.	R.13	Describe transformations
+Math	10	Math Foundations	R.	R.14	Sequences of congruence transformations: graph the image
+Math	10	Math Foundations	R.	R.15	Sequences of congruence transformations: choose the sequence
+Math	10	Math Foundations	R.	R.16	Identify congruent figures
+Math	10	Math Foundations	R.	R.17	Congruence statements and corresponding parts
+Math	10	Math Foundations	R.	R.18	Determine if two figures are congruent: justify your answer
+Math	10	Math Foundations	R.	R.19	Side lengths and angle measures of congruent figures
+Math	10	Math Foundations	S.	S.0	Transformations and similarity
+Math	10	Math Foundations	S.	S.1	Similar and congruent figures
+Math	10	Math Foundations	S.	S.2	Dilations: graph the image
+Math	10	Math Foundations	S.	S.3	Dilations: find the coordinates
+Math	10	Math Foundations	S.	S.4	Dilations: find the scale factor
+Math	10	Math Foundations	S.	S.5	Identify similar triangles
+Math	10	Math Foundations	S.	S.6	Angle-angle criterion for similar triangles
+Math	10	Math Foundations	S.	S.7	Side lengths and angle measures of similar triangles
+Math	10	Math Foundations	S.	S.8	Side lengths and angle measures of similar figures
+Math	10	Math Foundations	S.	S.9	Similar triangles and indirect measurement
+Math	10	Math Foundations	S.	S.10	Find missing side lengths in proportional triangles
+Math	10	Math Foundations	T.	T.0	Pythagorean theorem
+Math	10	Math Foundations	T.	T.1	Pythagorean theorem: find the length of the hypotenuse
+Math	10	Math Foundations	T.	T.2	Pythagorean theorem: find the missing leg length
+Math	10	Math Foundations	T.	T.3	Pythagorean theorem: find the missing leg or hypotenuse length
+Math	10	Math Foundations	T.	T.4	Pythagorean theorem: find the perimeter
+Math	10	Math Foundations	T.	T.5	Pythagorean theorem: word problems
+Math	10	Math Foundations	T.	T.6	Converse of the Pythagorean theorem: is it a right triangle?
+Math	10	Math Foundations	U.	U.0	Three-dimensional figures
+Math	10	Math Foundations	U.	U.1	Parts of three-dimensional figures
+Math	10	Math Foundations	U.	U.2	Nets of three-dimensional figures
+Math	10	Math Foundations	U.	U.3	Front, side, and top view
+Math	10	Math Foundations	U.	U.4	Similar solids
+Math	10	Math Foundations	V.	V.0	Perimeter and area
+Math	10	Math Foundations	V.	V.1	Perimeter
+Math	10	Math Foundations	V.	V.2	Area
+Math	10	Math Foundations	V.	V.3	Area and perimeter: word problems
+Math	10	Math Foundations	V.	V.4	Area and circumference of circles
+Math	10	Math Foundations	V.	V.5	Circles: word problems
+Math	10	Math Foundations	V.	V.6	Area and perimeter of semicircles and quarter circles
+Math	10	Math Foundations	V.	V.7	Area between two shapes
+Math	10	Math Foundations	V.	V.8	Perimeter and area: changes in scale
+Math	10	Math Foundations	W.	W.0	Surface area and volume
+Math	10	Math Foundations	W.	W.1	Volume of cubes, prisms, and pyramids
+Math	10	Math Foundations	W.	W.2	Surface area of cubes, prisms, and pyramids
+Math	10	Math Foundations	W.	W.3	Volume of cylinders
+Math	10	Math Foundations	W.	W.4	Volume of cones
+Math	10	Math Foundations	W.	W.5	Surface area of cylinders
+Math	10	Math Foundations	W.	W.6	Surface area of cones
+Math	10	Math Foundations	W.	W.7	Volume of spheres
+Math	10	Math Foundations	W.	W.8	Surface area of spheres
+Math	10	Math Foundations	W.	W.9	Volume and surface area of similar solids
+Math	10	Math Foundations	X.	X.0	Proportional relationships
+Math	10	Math Foundations	X.	X.1	Find the constant of proportionality from a table
+Math	10	Math Foundations	X.	X.2	Write equations for proportional relationships from tables
+Math	10	Math Foundations	X.	X.3	Identify proportional relationships by graphing
+Math	10	Math Foundations	X.	X.4	Find the constant of proportionality from a graph
+Math	10	Math Foundations	X.	X.5	Write equations for proportional relationships from graphs
+Math	10	Math Foundations	X.	X.6	Identify proportional relationships from graphs and equations
+Math	10	Math Foundations	X.	X.7	Identify proportional relationships from tables
+Math	10	Math Foundations	X.	X.8	Identify proportional relationships: word problems
+Math	10	Math Foundations	X.	X.9	Graph proportional relationships and find the slope
+Math	10	Math Foundations	X.	X.10	Interpret graphs of proportional relationships
+Math	10	Math Foundations	X.	X.11	Write and solve equations for proportional relationships
+Math	10	Math Foundations	X.	X.12	Compare proportional relationships represented in different ways
+Math	10	Math Foundations	Y.	Y.0	Direct variation
+Math	10	Math Foundations	Y.	Y.1	Find the constant of variation
+Math	10	Math Foundations	Y.	Y.2	Identify direct variation
+Math	10	Math Foundations	Y.	Y.3	Write direct variation equations
+Math	10	Math Foundations	Y.	Y.4	Write and solve direct variation equations
+Math	10	Math Foundations	Z.	Z.0	Slope
+Math	10	Math Foundations	Z.	Z.1	Find the slope from a graph
+Math	10	Math Foundations	Z.	Z.2	Find the slope from two points
+Math	10	Math Foundations	Z.	Z.3	Find the slope from a table
+Math	10	Math Foundations	Z.	Z.4	Find a missing coordinate using slope
+Math	10	Math Foundations	Z.	Z.5	Graph a line using slope
+Math	10	Math Foundations	AA.	AA.0	Linear equations
+Math	10	Math Foundations	AA.	AA.1	Is (x, y) a solution to the linear equation?
+Math	10	Math Foundations	AA.	AA.2	Relate the graph of an equation to its solutions
+Math	10	Math Foundations	AA.	AA.3	Slope-intercept form: find the slope and y-intercept
+Math	10	Math Foundations	AA.	AA.4	Graph a line from an equation in slope-intercept form
+Math	10	Math Foundations	AA.	AA.5	Graph a line from an equation in point-slope form
+Math	10	Math Foundations	AA.	AA.6	Write a linear equation from a slope and y-intercept
+Math	10	Math Foundations	AA.	AA.7	Write a linear equation from a graph
+Math	10	Math Foundations	AA.	AA.8	Write a linear equation from a slope and a point
+Math	10	Math Foundations	AA.	AA.9	Write a linear equation from two points
+Math	10	Math Foundations	AA.	AA.10	Convert a linear equation in standard form to slope-intercept form
+Math	10	Math Foundations	AA.	AA.11	Graph a line from an equation in standard form
+Math	10	Math Foundations	AA.	AA.12	Graph a horizontal or vertical line
+Math	10	Math Foundations	AA.	AA.13	Equations of horizontal and vertical lines
+Math	10	Math Foundations	AA.	AA.14	Slopes of parallel and perpendicular lines
+Math	10	Math Foundations	BB.	BB.0	Function concepts
+Math	10	Math Foundations	BB.	BB.1	Identify functions
+Math	10	Math Foundations	BB.	BB.2	Identify functions: graphs
+Math	10	Math Foundations	BB.	BB.3	Identify independent and dependent variables
+Math	10	Math Foundations	BB.	BB.4	Find values using function graphs
+Math	10	Math Foundations	BB.	BB.5	Complete a table for a function graph
+Math	10	Math Foundations	CC.	CC.0	Linear functions
+Math	10	Math Foundations	CC.	CC.1	Evaluate a linear function
+Math	10	Math Foundations	CC.	CC.2	Complete a table for a linear function
+Math	10	Math Foundations	CC.	CC.3	Complete a table and graph a linear function
+Math	10	Math Foundations	CC.	CC.4	Interpret points on the graph of a linear function
+Math	10	Math Foundations	CC.	CC.5	Rate of change of a linear function: graphs
+Math	10	Math Foundations	CC.	CC.6	Interpret the slope and y-intercept of a linear function
+Math	10	Math Foundations	CC.	CC.7	Write a linear function from a table
+Math	10	Math Foundations	CC.	CC.8	Compare linear functions: graphs and equations
+Math	10	Math Foundations	CC.	CC.9	Compare linear functions: tables, graphs, and equations
+Math	10	Math Foundations	CC.	CC.10	Write linear functions: word problems
+Math	10	Math Foundations	CC.	CC.11	Evaluate a linear function: word problems
+Math	10	Math Foundations	DD.	DD.0	Nonlinear functions
+Math	10	Math Foundations	DD.	DD.1	Identify linear and nonlinear functions: graphs and equations
+Math	10	Math Foundations	DD.	DD.2	Identify linear and nonlinear functions: tables
+Math	10	Math Foundations	DD.	DD.3	Is (x, y) a solution to the nonlinear equation?
+Math	10	Math Foundations	DD.	DD.4	Evaluate a nonlinear function
+Math	10	Math Foundations	EE.	EE.0	Interpret functions
+Math	10	Math Foundations	EE.	EE.1	Rate of change: tables
+Math	10	Math Foundations	EE.	EE.2	Rate of change: graphs
+Math	10	Math Foundations	EE.	EE.3	Identify graphs: word problems
+Math	10	Math Foundations	FF.	FF.0	Sequences
+Math	10	Math Foundations	FF.	FF.1	Identify arithmetic and geometric sequences
+Math	10	Math Foundations	FF.	FF.2	Arithmetic sequences
+Math	10	Math Foundations	FF.	FF.3	Geometric sequences
+Math	10	Math Foundations	FF.	FF.4	Sequences: mixed review
+Math	10	Math Foundations	FF.	FF.5	Sequences: word problems
+Math	10	Math Foundations	FF.	FF.6	Evaluate variable expressions for sequences
+Math	10	Math Foundations	FF.	FF.7	Write variable expressions for arithmetic sequences
+Math	10	Math Foundations	GG.	GG.0	Systems of equations
+Math	10	Math Foundations	GG.	GG.1	Is (x, y) a solution to the system of equations?
+Math	10	Math Foundations	GG.	GG.2	Solve a system of equations by graphing
+Math	10	Math Foundations	GG.	GG.3	Solve a system of equations by graphing: word problems
+Math	10	Math Foundations	GG.	GG.4	Find the number of solutions to a system of equations by graphing
+Math	10	Math Foundations	GG.	GG.5	Find the number of solutions to a system of equations
+Math	10	Math Foundations	GG.	GG.6	Classify a system of equations by graphing
+Math	10	Math Foundations	GG.	GG.7	Classify a system of equations
+Math	10	Math Foundations	GG.	GG.8	Solve a system of equations using substitution
+Math	10	Math Foundations	GG.	GG.9	Solve a system of equations using substitution: word problems
+Math	10	Math Foundations	GG.	GG.10	Solve a system of equations using elimination
+Math	10	Math Foundations	GG.	GG.11	Solve a system of equations using elimination: word problems
+Math	10	Math Foundations	GG.	GG.12	Solve a system of equations using any method
+Math	10	Math Foundations	GG.	GG.13	Solve a system of equations using any method: word problems
+Math	10	Math Foundations	HH.	HH.0	One-variable statistics
+Math	10	Math Foundations	HH.	HH.1	Calculate mean, median, mode, and range
+Math	10	Math Foundations	HH.	HH.2	Interpret charts and graphs to find mean, median, mode, and range
+Math	10	Math Foundations	HH.	HH.3	Mean, median, mode, and range: find the missing number
+Math	10	Math Foundations	HH.	HH.4	Changes in mean, median, mode, and range
+Math	10	Math Foundations	HH.	HH.5	Calculate mean absolute deviation
+Math	10	Math Foundations	HH.	HH.6	Calculate quartiles and interquartile range
+Math	10	Math Foundations	HH.	HH.7	Box plots
+Math	10	Math Foundations	HH.	HH.8	Identify an outlier
+Math	10	Math Foundations	HH.	HH.9	Identify an outlier and describe the effect of removing it
+Math	10	Math Foundations	II.	II.0	Two-variable statistics
+Math	10	Math Foundations	II.	II.1	Interpret line graphs
+Math	10	Math Foundations	II.	II.2	Create line graphs
+Math	10	Math Foundations	II.	II.3	Interpret scatter plots
+Math	10	Math Foundations	II.	II.4	Create scatter plots
+Math	10	Math Foundations	II.	II.5	Identify trends with scatter plots
+Math	10	Math Foundations	II.	II.6	Make predictions with scatter plots
+Math	10	Math Foundations	II.	II.7	Outliers in scatter plots
+Math	10	Math Foundations	II.	II.8	Identify lines of best fit
+Math	10	Math Foundations	II.	II.9	Write equations for lines of best fit
+Math	10	Math Foundations	II.	II.10	Interpret lines of best fit: word problems
+Math	10	Math Foundations	II.	II.11	Identify representative, random, and biased samples
+Math	10	Math Foundations	JJ.	JJ.0	Probability
+Math	10	Math Foundations	JJ.	JJ.1	Probability of simple events
+Math	10	Math Foundations	JJ.	JJ.2	Probability of opposite, mutually exclusive, and overlapping events
+Math	10	Math Foundations	JJ.	JJ.3	Experimental probability
+Math	10	Math Foundations	JJ.	JJ.4	Find probabilities using two-way frequency tables
+Math	10	Math Foundations	JJ.	JJ.5	Make predictions
+Math	10	Math Foundations	JJ.	JJ.6	Compound events: find the number of outcomes
+Math	10	Math Foundations	JJ.	JJ.7	Compound events: find the number of sums
+Math	10	Math Foundations	JJ.	JJ.8	Identify independent and dependent events
+Math	10	Math Foundations	JJ.	JJ.9	Probability of independent and dependent events
+Math	10	Math Foundations	JJ.	JJ.10	Counting principle
+Math	10	Math Foundations	JJ.	JJ.11	Two-way frequency tables
+Subject	Grade	SkillsArea	SkillCluster	SkillNumber	SkillName
+ELA	10	ELA Foundations	A.	A.0	Main idea
+ELA	10	ELA Foundations	A.	A.1	Determine the main idea of a passage
+ELA	10	ELA Foundations	B.	B.0	Theme
+ELA	10	ELA Foundations	B.	B.1	Match the quotations with their themes
+ELA	10	ELA Foundations	B.	B.2	Determine the themes of short stories
+ELA	10	ELA Foundations	C.	C.0	Author's purpose and tone
+ELA	10	ELA Foundations	C.	C.1	Identify the author's purpose
+ELA	10	ELA Foundations	C.	C.2	Which sentence is more formal?
+ELA	10	ELA Foundations	C.	C.3	Compare passages for tone
+ELA	10	ELA Foundations	D.	D.0	Author's perspective
+ELA	10	ELA Foundations	D.	D.1	Determine the author's point of view
+ELA	10	ELA Foundations	E.	E.0	Text structure
+ELA	10	ELA Foundations	E.	E.1	Compare and contrast in informational texts
+ELA	10	ELA Foundations	E.	E.2	Match causes and effects in informational texts
+ELA	10	ELA Foundations	E.	E.3	Match problems with their solutions
+ELA	10	ELA Foundations	E.	E.4	Identify text structures
+ELA	10	ELA Foundations	F.	F.0	Literary devices
+ELA	10	ELA Foundations	F.	F.1	Identify sensory details
+ELA	10	ELA Foundations	F.	F.2	Interpret the meaning of an allusion from its source
+ELA	10	ELA Foundations	F.	F.3	Recall the source of an allusion
+ELA	10	ELA Foundations	F.	F.4	Interpret figures of speech
+ELA	10	ELA Foundations	F.	F.5	Classify figures of speech
+ELA	10	ELA Foundations	F.	F.6	Analyze the effects of figures of speech on meaning and tone
+ELA	10	ELA Foundations	G.	G.0	Analyzing literature
+ELA	10	ELA Foundations	G.	G.1	Identify the narrative point of view
+ELA	10	ELA Foundations	G.	G.2	Analyze short stories
+ELA	10	ELA Foundations	G.	G.3	Label the rhyme scheme
+ELA	10	ELA Foundations	H.	H.0	Analyzing informational texts
+ELA	10	ELA Foundations	H.	H.1	Read and understand informational passages
+ELA	10	ELA Foundations	I.	I.0	Analyzing arguments
+ELA	10	ELA Foundations	I.	I.1	Trace an argument
+ELA	10	ELA Foundations	J.	J.0	Novel study
+ELA	10	ELA Foundations	J.	J.1	Analyze passages from The Giver: Part 1
+ELA	10	ELA Foundations	J.	J.2	Analyze passages from The Giver: Part 2
+ELA	10	ELA Foundations	J.	J.3	Analyze passages from The Outsiders: Part 1
+ELA	10	ELA Foundations	J.	J.4	Analyze passages from The Outsiders: Part 2
+ELA	10	ELA Foundations	K.	K.0	Nonfiction book study
+ELA	10	ELA Foundations	K.	K.1	Analyze passages from Narrative of the Life of Frederick Douglass: Part 1
+ELA	10	ELA Foundations	K.	K.2	Analyze passages from Narrative of the Life of Frederick Douglass: Part 2
+ELA	10	ELA Foundations	K.	K.3	Analyze passages from Travels with Charley: Part 1
+ELA	10	ELA Foundations	K.	K.4	Analyze passages from Travels with Charley: Part 2
+ELA	10	ELA Foundations	L.	L.0	Comparing texts
+ELA	10	ELA Foundations	L.	L.1	Compare information from two texts
+ELA	10	ELA Foundations	L.	L.2	Compare two texts with different genres
+ELA	10	ELA Foundations	M.	M.0	Visual elements
+ELA	10	ELA Foundations	M.	M.1	Compare illustrations of literary and historical subjects
+ELA	10	ELA Foundations	M.	M.2	Read graphic organizers
+ELA	10	ELA Writing Strategies	N.	N.0	Expository writing
+ELA	10	ELA Writing Strategies	N.	N.1	Order topics from broadest to narrowest
+ELA	10	ELA Writing Strategies	N.	N.2	Organize information by topic
+ELA	10	ELA Writing Strategies	N.	N.3	Remove the sentence that does not belong
+ELA	10	ELA Writing Strategies	O.	O.0	Persuasive and opinion writing
+ELA	10	ELA Writing Strategies	O.	O.1	Identify thesis statements
+ELA	10	ELA Writing Strategies	O.	O.2	Distinguish facts from opinions
+ELA	10	ELA Writing Strategies	O.	O.3	Choose evidence to support a claim
+ELA	10	ELA Writing Strategies	O.	O.4	Identify counterclaims
+ELA	10	ELA Writing Strategies	O.	O.5	Identify appeals to ethos, pathos, and logos in advertisements
+ELA	10	ELA Writing Strategies	O.	O.6	Classify logical fallacies
+ELA	10	ELA Writing Strategies	P.	P.0	Descriptive and creative writing
+ELA	10	ELA Writing Strategies	P.	P.1	Use personification
+ELA	10	ELA Writing Strategies	P.	P.2	Create varied sentences based on models
+ELA	10	ELA Writing Strategies	P.	P.3	Revise the sentence using a stronger verb
+ELA	10	ELA Writing Strategies	Q.	Q.0	Identifying text evidence
+ELA	10	ELA Writing Strategies	Q.	Q.1	Identify supporting details in informational texts
+ELA	10	ELA Writing Strategies	Q.	Q.2	Identify supporting details in literary texts
+ELA	10	ELA Writing Strategies	R.	R.0	Writing clearly and concisely
+ELA	10	ELA Writing Strategies	R.	R.1	Transitions with conjunctive adverbs
+ELA	10	ELA Writing Strategies	R.	R.2	Use parallel structure
+ELA	10	ELA Writing Strategies	R.	R.3	Remove redundant words or phrases
+ELA	10	ELA Writing Strategies	S.	S.0	Active and passive voice
+ELA	10	ELA Writing Strategies	S.	S.1	Identify active and passive voice
+ELA	10	ELA Writing Strategies	S.	S.2	Rewrite the sentence in active voice
+ELA	10	ELA Writing Strategies	T.	T.0	Editing and revising
+ELA	10	ELA Writing Strategies	T.	T.1	Use the correct frequently confused word
+ELA	10	ELA Writing Strategies	T.	T.2	Correct errors with frequently confused words
+ELA	10	ELA Writing Strategies	T.	T.3	Correct errors with signs
+ELA	10	ELA Writing Strategies	T.	T.4	Correct errors in everyday use
+ELA	10	ELA Writing Strategies	T.	T.5	Suggest appropriate revisions
+ELA	10	ELA Writing Strategies	U.	U.0	Research skills
+ELA	10	ELA Writing Strategies	U.	U.1	Identify relevant sources
+ELA	10	ELA Writing Strategies	U.	U.2	Evaluate newspaper headlines for bias
+ELA	10	ELA Writing Strategies	U.	U.3	Recognize the parts of a Works Cited entry (MLA 8th–9th editions)
+ELA	10	ELA Writing Strategies	U.	U.4	Use in-text citations (MLA 8th–9th editions)
+ELA	10	ELA Writing Strategies	U.	U.5	Identify plagiarism
+ELA	10	ELA Vocabulary	V.	V.0	Prefixes and suffixes
+ELA	10	ELA Vocabulary	V.	V.1	Words with pre-
+ELA	10	ELA Vocabulary	V.	V.2	Words with re-
+ELA	10	ELA Vocabulary	V.	V.3	Words with sub-
+ELA	10	ELA Vocabulary	V.	V.4	Words with mis-
+ELA	10	ELA Vocabulary	V.	V.5	Words with un-, dis-, in-, im-, and non-
+ELA	10	ELA Vocabulary	V.	V.6	Words with -ful
+ELA	10	ELA Vocabulary	V.	V.7	Words with -less
+ELA	10	ELA Vocabulary	V.	V.8	Words with -able and -ible
+ELA	10	ELA Vocabulary	W.	W.0	Greek and Latin roots
+ELA	10	ELA Vocabulary	W.	W.1	Use Greek and Latin roots as clues to the meanings of words
+ELA	10	ELA Vocabulary	W.	W.2	Use words as clues to the meanings of Greek and Latin roots
+ELA	10	ELA Vocabulary	W.	W.3	Determine the meanings of Greek and Latin roots
+ELA	10	ELA Vocabulary	W.	W.4	Determine the meanings of words with Greek and Latin roots
+ELA	10	ELA Vocabulary	X.	X.0	Synonyms and antonyms
+ELA	10	ELA Vocabulary	X.	X.1	Choose the synonym
+ELA	10	ELA Vocabulary	X.	X.2	Choose the antonym
+ELA	10	ELA Vocabulary	Y.	Y.0	Word choice and usage
+ELA	10	ELA Vocabulary	Y.	Y.1	Describe the difference between related words
+ELA	10	ELA Vocabulary	Y.	Y.2	Positive and negative connotation
+ELA	10	ELA Vocabulary	Z.	Z.0	Homophones
+ELA	10	ELA Vocabulary	Z.	Z.1	Use the correct homophone
+ELA	10	ELA Vocabulary	Z.	Z.2	Which definition matches the sentence?
+ELA	10	ELA Vocabulary	Z.	Z.3	Which sentence matches the definition?
+ELA	10	ELA Vocabulary	AA.	AA.0	Analogies
+ELA	10	ELA Vocabulary	AA.	AA.1	Analogies
+ELA	10	ELA Vocabulary	AA.	AA.2	Analogies: challenge
+ELA	10	ELA Vocabulary	BB.	BB.0	Context clues
+ELA	10	ELA Vocabulary	BB.	BB.1	Find words using context
+ELA	10	ELA Vocabulary	BB.	BB.2	Determine the meaning of words using synonyms in context
+ELA	10	ELA Vocabulary	BB.	BB.3	Determine the meaning of words using antonyms in context
+ELA	10	ELA Vocabulary	BB.	BB.4	Use context to identify the meaning of a word
+ELA	10	ELA Vocabulary	BB.	BB.5	Use academic vocabulary in context: literary
+ELA	10	ELA Vocabulary	BB.	BB.6	Use academic vocabulary in context: informational
+ELA	10	ELA Vocabulary	CC.	CC.0	Domain-specific vocabulary
+ELA	10	ELA Vocabulary	CC.	CC.1	Determine the meaning of domain-specific words with pictures
+ELA	10	ELA Vocabulary	DD.	DD.0	Reference skills
+ELA	10	ELA Vocabulary	DD.	DD.1	Alphabetical order
+ELA	10	ELA Vocabulary	DD.	DD.2	Use guide words
+ELA	10	ELA Vocabulary	DD.	DD.3	Use dictionary entries
+ELA	10	ELA Vocabulary	DD.	DD.4	Use dictionary definitions
+ELA	10	ELA Vocabulary	DD.	DD.5	Use thesaurus entries
+ELA	10	ELA Grammar	EE.	EE.0	Sentences, fragments, and run-ons
+ELA	10	ELA Grammar	EE.	EE.1	Is the sentence declarative, interrogative, imperative, or exclamatory?
+ELA	10	ELA Grammar	EE.	EE.2	Identify the complete subject or complete predicate of a sentence
+ELA	10	ELA Grammar	EE.	EE.3	Identify the simple subject or simple predicate of a sentence
+ELA	10	ELA Grammar	EE.	EE.4	Identify the compound subject or compound predicate of a sentence
+ELA	10	ELA Grammar	EE.	EE.5	Is it a complete sentence or a fragment?
+ELA	10	ELA Grammar	EE.	EE.6	Is it a complete sentence or a run-on?
+ELA	10	ELA Grammar	EE.	EE.7	Is it a complete sentence, a fragment, or a run-on?
+ELA	10	ELA Grammar	FF.	FF.0	Phrases and clauses
+ELA	10	ELA Grammar	FF.	FF.1	Is it a phrase or a clause?
+ELA	10	ELA Grammar	FF.	FF.2	Identify appositives and appositive phrases
+ELA	10	ELA Grammar	FF.	FF.3	Identify dependent and independent clauses
+ELA	10	ELA Grammar	FF.	FF.4	Is the sentence simple, compound, complex, or compound-complex?
+ELA	10	ELA Grammar	FF.	FF.5	Combine sentences using relative clauses
+ELA	10	ELA Grammar	GG.	GG.0	Nouns
+ELA	10	ELA Grammar	GG.	GG.1	Form and use plurals: review
+ELA	10	ELA Grammar	GG.	GG.2	Form and use plurals of compound nouns
+ELA	10	ELA Grammar	GG.	GG.3	Identify plurals, singular possessives, and plural possessives
+ELA	10	ELA Grammar	GG.	GG.4	Form the singular or plural possessive
+ELA	10	ELA Grammar	GG.	GG.5	Identify and correct errors with plural and possessive nouns
+ELA	10	ELA Grammar	GG.	GG.6	Identify and correct errors with compound and joint possession
+ELA	10	ELA Grammar	HH.	HH.0	Pronouns and antecedents
+ELA	10	ELA Grammar	HH.	HH.1	Identify pronouns and their antecedents
+ELA	10	ELA Grammar	HH.	HH.2	Use the pronoun that agrees with the antecedent
+ELA	10	ELA Grammar	HH.	HH.3	Correct inappropriate shifts in pronoun number and person
+ELA	10	ELA Grammar	HH.	HH.4	Identify vague pronoun references
+ELA	10	ELA Grammar	HH.	HH.5	Identify all of the possible antecedents
+ELA	10	ELA Grammar	II.	II.0	Pronoun types
+ELA	10	ELA Grammar	II.	II.1	Choose between subject and object pronouns
+ELA	10	ELA Grammar	II.	II.2	Compound subjects and objects with "I" and "me"
+ELA	10	ELA Grammar	II.	II.3	Compound subjects and objects with pronouns
+ELA	10	ELA Grammar	II.	II.4	Choose between personal and reflexive pronouns
+ELA	10	ELA Grammar	II.	II.5	Use reflexive pronouns
+ELA	10	ELA Grammar	II.	II.6	Is the pronoun reflexive or intensive?
+ELA	10	ELA Grammar	II.	II.7	Use relative pronouns: who and whom
+ELA	10	ELA Grammar	II.	II.8	Use relative pronouns: who, whom, whose, which, and that
+ELA	10	ELA Grammar	JJ.	JJ.0	Verb types
+ELA	10	ELA Grammar	JJ.	JJ.1	Identify transitive and intransitive verbs
+ELA	10	ELA Grammar	JJ.	JJ.2	Identify linking verbs, predicate adjectives, and predicate nouns
+ELA	10	ELA Grammar	KK.	KK.0	Subject-verb agreement
+ELA	10	ELA Grammar	KK.	KK.1	Correct errors with subject-verb agreement
+ELA	10	ELA Grammar	KK.	KK.2	Correct errors with indefinite pronoun-verb agreement
+ELA	10	ELA Grammar	KK.	KK.3	Use the correct verb – with compound subjects
+ELA	10	ELA Grammar	LL.	LL.0	Verb tense and mood
+ELA	10	ELA Grammar	LL.	LL.1	Irregular past tense: review
+ELA	10	ELA Grammar	LL.	LL.2	Simple past, present, and future tense: review
+ELA	10	ELA Grammar	LL.	LL.3	Identify and correct inappropriate shifts in verb tense
+ELA	10	ELA Grammar	LL.	LL.4	Form the progressive verb tenses
+ELA	10	ELA Grammar	LL.	LL.5	Form the perfect verb tenses
+ELA	10	ELA Grammar	LL.	LL.6	Identify participles and what they modify
+ELA	10	ELA Grammar	LL.	LL.7	Identify gerunds and their functions
+ELA	10	ELA Grammar	LL.	LL.8	Identify infinitives and infinitive phrases
+ELA	10	ELA Grammar	LL.	LL.9	Identify the verb mood
+ELA	10	ELA Grammar	LL.	LL.10	Correct errors with verb mood
+ELA	10	ELA Grammar	MM.	MM.0	Adjectives and adverbs
+ELA	10	ELA Grammar	MM.	MM.1	Identify adjectives
+ELA	10	ELA Grammar	MM.	MM.2	Order adjectives
+ELA	10	ELA Grammar	MM.	MM.3	Identify adverbs
+ELA	10	ELA Grammar	MM.	MM.4	Choose between adjectives and adverbs
+ELA	10	ELA Grammar	MM.	MM.5	Is the word an adjective or adverb?
+ELA	10	ELA Grammar	MM.	MM.6	Form and use comparative and superlative adjectives
+ELA	10	ELA Grammar	MM.	MM.7	Good, better, best, bad, worse, and worst
+ELA	10	ELA Grammar	MM.	MM.8	Form and use comparative and superlative adverbs
+ELA	10	ELA Grammar	MM.	MM.9	Well, better, best, badly, worse, and worst
+ELA	10	ELA Grammar	NN.	NN.0	Prepositions
+ELA	10	ELA Grammar	NN.	NN.1	Identify prepositional phrases
+ELA	10	ELA Grammar	OO.	OO.0	Direct and indirect objects
+ELA	10	ELA Grammar	OO.	OO.1	Is it a direct object or an indirect object?
+ELA	10	ELA Grammar	PP.	PP.0	Conjunctions
+ELA	10	ELA Grammar	PP.	PP.1	Use the correct pair of correlative conjunctions
+ELA	10	ELA Grammar	QQ.	QQ.0	Misplaced modifiers
+ELA	10	ELA Grammar	QQ.	QQ.1	Misplaced modifiers with pictures
+ELA	10	ELA Grammar	QQ.	QQ.2	Select the misplaced or dangling modifier
+ELA	10	ELA Grammar	QQ.	QQ.3	Are the modifiers used correctly?
+ELA	10	ELA Grammar	RR.	RR.0	Restrictive and nonrestrictive elements
+ELA	10	ELA Grammar	RR.	RR.1	What does the punctuation suggest?
+ELA	10	ELA Grammar	RR.	RR.2	Commas with nonrestrictive elements
+ELA	10	ELA Grammar	SS.	SS.0	Commas
+ELA	10	ELA Grammar	SS.	SS.1	Commas with series, dates, and places
+ELA	10	ELA Grammar	SS.	SS.2	Commas with compound and complex sentences
+ELA	10	ELA Grammar	SS.	SS.3	Commas with direct addresses, introductory words, interjections, and interrupters
+ELA	10	ELA Grammar	SS.	SS.4	Commas with coordinate adjectives
+ELA	10	ELA Grammar	SS.	SS.5	Commas: review
+ELA	10	ELA Grammar	TT.	TT.0	Semicolons, colons, and commas
+ELA	10	ELA Grammar	TT.	TT.1	Use semicolons and commas to separate clauses
+ELA	10	ELA Grammar	TT.	TT.2	Use semicolons, colons, and commas with lists
+ELA	10	ELA Grammar	UU.	UU.0	Dashes, hyphens, and ellipses
+ELA	10	ELA Grammar	UU.	UU.1	Use dashes
+ELA	10	ELA Grammar	UU.	UU.2	Use hyphens in compound adjectives
+ELA	10	ELA Grammar	UU.	UU.3	Decide whether ellipses are used appropriately
+ELA	10	ELA Grammar	VV.	VV.0	Capitalization
+ELA	10	ELA Grammar	VV.	VV.1	Correct capitalization errors
+ELA	10	ELA Grammar	VV.	VV.2	Capitalizing titles
+ELA	10	ELA Grammar	WW.	WW.0	Formatting
+ELA	10	ELA Grammar	WW.	WW.1	Formatting titles
+ELA	10	ELA Grammar	WW.	WW.2	Formatting and capitalizing titles: review
+ELA	10	ELA Grammar	WW.	WW.3	Formatting street addresses
+ELA	10	ELA Grammar	WW.	WW.4	Formatting quotations and dialogue
+Subject	Grade	SkillsArea	SkillCluster	SkillNumber	SkillName
+Science	10	Science Foundations	A.	A.0	Science practices and tools
+Science	10	Science Foundations	A.	A.1	The process of scientific inquiry
+Science	10	Science Foundations	A.	A.2	Identify laboratory tools
+Science	10	Science Foundations	A.	A.3	Laboratory safety equipment
+Science	10	Science Foundations	B.	B.0	Designing experiments
+Science	10	Science Foundations	B.	B.1	Identify control and experimental groups
+Science	10	Science Foundations	B.	B.2	Identify independent and dependent variables
+Science	10	Science Foundations	B.	B.3	Identify the experimental question
+Science	10	Science Foundations	B.	B.4	Identify questions that can be investigated with a set of materials
+Science	10	Science Foundations	B.	B.5	Understand an experimental protocol about plant growth
+Science	10	Science Foundations	B.	B.6	Understand an experimental protocol about diffusion
+Science	10	Science Foundations	B.	B.0	Understand an experimental protocol about evaporation
+Science	10	Science Foundations	C.	C.0	Engineering practices
+Science	10	Science Foundations	C.	C.1	Identify parts of the engineering-design process
+Science	10	Science Foundations	C.	C.2	Evaluate tests of engineering-design solutions
+Science	10	Science Foundations	C.	C.3	Use data from tests to compare engineering-design solutions
+Science	10	Science Foundations	C.	C.4	Explore the engineering-design process: going to the Moon!
+Science	10	Science Foundations	D.	D.0	Density
+Science	10	Science Foundations	D.	D.1	Calculate density, mass, and volume
+Science	10	Science Foundations	E.	E.0	Atoms and molecules
+Science	10	Science Foundations	E.	E.1	What are atoms and chemical elements?
+Science	10	Science Foundations	E.	E.2	How are substances represented by chemical formulas and models?
+Science	10	Science Foundations	E.	E.3	Identify chemical formulas for ball-and-stick models
+Science	10	Science Foundations	E.	E.4	Describe the atomic composition of molecules
+Science	10	Science Foundations	E.	E.5	Classify elementary substances and compounds using chemical formulas
+Science	10	Science Foundations	E.	E.6	Classify elementary substances and compounds using models
+Science	10	Science Foundations	F.	F.0	Chemical reactions
+Science	10	Science Foundations	F.	F.1	Identify reactants and products
+Science	10	Science Foundations	F.	F.2	Count atoms and molecules in chemical reactions
+Science	10	Science Foundations	F.	F.3	Calculate amounts of reactants or products in chemical reactions
+Science	10	Science Foundations	F.	F.4	Describe energy changes in chemical reactions
+Science	10	Science Foundations	F.	F.5	Compare physical and chemical changes
+Science	10	Science Foundations	F.	F.6	Explore chemical structure and properties: soapmaking
+Science	10	Science Foundations	F.	F.7	Explore chemical structure and properties: food flavors
+Science	10	Science Foundations	F.	F.8	Synthetic materials
+Science	10	Science Foundations	G.	G.0	Force and motion
+Science	10	Science Foundations	G.	G.1	Calculate velocity from time and distance
+Science	10	Science Foundations	G.	G.2	Calculate distance from velocity and time
+Science	10	Science Foundations	G.	G.3	Calculate time from velocity and distance
+Science	10	Science Foundations	G.	G.4	Calculate velocity, distance, and time I
+Science	10	Science Foundations	G.	G.5	Calculate velocity, distance, and time II
+Science	10	Science Foundations	G.	G.6	Identify whether objects are accelerating
+Science	10	Science Foundations	G.	G.7	How does mass affect force and acceleration?
+Science	10	Science Foundations	G.	G.8	Predict forces using Newton's third law
+Science	10	Science Foundations	G.	G.9	Balanced and unbalanced forces
+Science	10	Science Foundations	H.	H.0	Kinetic and potential energy
+Science	10	Science Foundations	H.	H.1	Identify changes in gravitational potential energy
+Science	10	Science Foundations	H.	H.2	Use tables and graphs to identify patterns about kinetic energy
+Science	10	Science Foundations	H.	H.3	Explore energy transformations: roller coaster ride
+Science	10	Science Foundations	H.	H.4	Explore energy transformations: bike ride
+Science	10	Science Foundations	I.	I.0	Electricity and magnetism
+Science	10	Science Foundations	I.	I.1	Electric forces and fields
+Science	10	Science Foundations	I.	I.2	Compare magnitudes of magnetic forces
+Science	10	Science Foundations	J.	J.0	Thermal energy
+Science	10	Science Foundations	J.	J.1	Predict heat flow and temperature changes
+Science	10	Science Foundations	J.	J.2	Compare thermal energy transfers
+Science	10	Science Foundations	K.	K.0	Particle motion and energy
+Science	10	Science Foundations	K.	K.1	How does particle motion affect temperature?
+Science	10	Science Foundations	K.	K.2	Particle motion and changes of state
+Science	10	Science Foundations	K.	K.3	How does particle motion affect gas pressure?
+Science	10	Science Foundations	K.	K.4	Identify how particle motion affects temperature and pressure
+Science	10	Science Foundations	L.	L.0	Waves
+Science	10	Science Foundations	L.	L.1	Transverse waves
+Science	10	Science Foundations	L.	L.2	Longitudinal waves
+Science	10	Science Foundations	L.	L.3	Compare amplitudes, wavelengths, and frequencies of waves
+Science	10	Science Foundations	L.	L.4	Compare energy of waves
+Science	10	Science Foundations	L.	L.5	Transmission, reflection, and absorption of waves
+Science	10	Science Foundations	L.	L.6	Electromagnetic waves
+Science	10	Science Foundations	L.	L.7	Applications of infrared waves
+Science	10	Science Foundations	L.	L.8	Effects of ultraviolet waves
+Science	10	Science Foundations	M.	M.0	Solutions
+Science	10	Science Foundations	M.	M.1	Compare concentrations of solutions
+Science	10	Science Foundations	M.	M.2	Diffusion across membranes
+Science	10	Science Foundations	N.	N.0	Classification and scientific names
+Science	10	Science Foundations	N.	N.1	Identify common and scientific names
+Science	10	Science Foundations	N.	N.2	Origins of scientific names
+Science	10	Science Foundations	N.	N.3	Use scientific names to classify organisms
+Science	10	Science Foundations	O.	O.0	Biochemistry
+Science	10	Science Foundations	O.	O.1	Structure and function: carbohydrates, lipids, proteins, and nucleic acids
+Science	10	Science Foundations	O.	O.2	The chemistry of cellular respiration
+Science	10	Science Foundations	P.	P.0	Cells
+Science	10	Science Foundations	P.	P.1	Understanding cells
+Science	10	Science Foundations	P.	P.2	Identify functions of plant cell parts
+Science	10	Science Foundations	P.	P.3	Identify functions of animal cell parts
+Science	10	Science Foundations	P.	P.4	Plant cell diagrams: label parts
+Science	10	Science Foundations	P.	P.5	Animal cell diagrams: label parts
+Science	10	Science Foundations	P.	P.6	Compare cells and cell parts
+Science	10	Science Foundations	P.	P.7	Cell division
+Science	10	Science Foundations	Q.	Q.0	Anatomy and physiology
+Science	10	Science Foundations	Q.	Q.1	Organization in the human body
+Science	10	Science Foundations	Q.	Q.2	Science literacy: how does the nervous system produce phantom pain?
+Science	10	Science Foundations	R.	R.0	Genes to traits
+Science	10	Science Foundations	R.	R.1	Inherited and acquired traits: use evidence to support a statement
+Science	10	Science Foundations	R.	R.2	Genetic variation in sexual reproduction
+Science	10	Science Foundations	R.	R.3	Genetics vocabulary: genotype and phenotype
+Science	10	Science Foundations	R.	R.4	Genetics vocabulary: dominant and recessive
+Science	10	Science Foundations	R.	R.5	Complete and interpret Punnett squares
+Science	10	Science Foundations	R.	R.6	Use Punnett squares to calculate ratios of offspring types
+Science	10	Science Foundations	R.	R.7	Use Punnett squares to calculate probabilities of offspring types
+Science	10	Science Foundations	R.	R.8	Genes, proteins, and traits: understanding the genetic code
+Science	10	Science Foundations	R.	R.9	Describe the effects of gene mutations on organisms
+Science	10	Science Foundations	R.	R.10	How do genes and the environment affect plant growth?
+Science	10	Science Foundations	S.	S.0	Adaptations and natural selection
+Science	10	Science Foundations	S.	S.1	How can animal behaviors affect reproductive success? Identify evidence to support a claim
+Science	10	Science Foundations	S.	S.2	Introduction to natural selection
+Science	10	Science Foundations	S.	S.3	Calculate the percentages of traits in a population
+Science	10	Science Foundations	S.	S.4	Calculate the averages of traits in a population
+Science	10	Science Foundations	S.	S.5	Construct explanations of natural selection
+Science	10	Science Foundations	T.	T.0	Fossils
+Science	10	Science Foundations	T.	T.1	Compare fossils to modern organisms
+Science	10	Science Foundations	T.	T.2	Compare ages of fossils in a rock sequence
+Science	10	Science Foundations	U.	U.0	Plant reproduction
+Science	10	Science Foundations	U.	U.1	Angiosperm and conifer life cycles
+Science	10	Science Foundations	U.	U.2	Moss and fern life cycles
+Science	10	Science Foundations	V.	V.0	Photosynthesis
+Science	10	Science Foundations	V.	V.1	How do plants use and change energy?
+Science	10	Science Foundations	V.	V.2	Identify the photosynthetic organism
+Science	10	Science Foundations	W.	W.0	Ecosystems
+Science	10	Science Foundations	W.	W.1	Describe populations, communities, and ecosystems
+Science	10	Science Foundations	W.	W.2	Identify ecosystems
+Science	10	Science Foundations	W.	W.3	Describe ecosystems
+Science	10	Science Foundations	X.	X.0	Ecological interactions
+Science	10	Science Foundations	X.	X.1	How does matter move in food chains?
+Science	10	Science Foundations	X.	X.2	Interpret food webs I
+Science	10	Science Foundations	X.	X.3	Interpret food webs II
+Science	10	Science Foundations	X.	X.4	Use food chains to predict changes in populations
+Science	10	Science Foundations	X.	X.5	Classify symbiotic relationships
+Science	10	Science Foundations	X.	X.6	Investigate primary succession on a volcanic island
+Science	10	Science Foundations	Y.	Y.0	Conservation
+Science	10	Science Foundations	Y.	Y.1	Coral reef biodiversity and human uses: explore a problem
+Science	10	Science Foundations	Y.	Y.2	Coral reef biodiversity and human uses: evaluate solutions
+Science	10	Science Foundations	Z.	Z.0	Natural resources and human impacts
+Science	10	Science Foundations	Z.	Z.1	Evaluate claims about natural resource use: groundwater
+Science	10	Science Foundations	Z.	Z.2	Evaluate claims about natural resource use: fossil fuels
+Science	10	Science Foundations	AA.	AA.0	Rocks
+Science	10	Science Foundations	AA.	AA.1	Identify rocks and minerals
+Science	10	Science Foundations	AA.	AA.2	Introduction to the rock cycle
+Science	10	Science Foundations	AA.	AA.3	Label parts of rock cycle diagrams
+Science	10	Science Foundations	AA.	AA.4	Select parts of rock cycle diagrams
+Science	10	Science Foundations	BB.	BB.0	Earth's features
+Science	10	Science Foundations	BB.	BB.1	Label Earth layers
+Science	10	Science Foundations	BB.	BB.2	Label Earth features at tectonic plate boundaries
+Science	10	Science Foundations	BB.	BB.3	Describe tectonic plate boundaries around the world
+Science	10	Science Foundations	CC.	CC.0	Topographic maps
+Science	10	Science Foundations	CC.	CC.1	Select parts of a topographic map
+Science	10	Science Foundations	DD.	DD.0	Earth’s cycles
+Science	10	Science Foundations	DD.	DD.1	Label parts of water cycle diagrams
+Science	10	Science Foundations	DD.	DD.2	Select parts of water cycle diagrams
+Science	10	Science Foundations	DD.	DD.3	The carbon cycle
+Science	10	Science Foundations	EE.	EE.0	The atmosphere
+Science	10	Science Foundations	EE.	EE.1	Explore air masses
+Science	10	Science Foundations	EE.	EE.2	Identify and compare air masses
+Science	10	Science Foundations	EE.	EE.3	How do air masses form?
+Science	10	Science Foundations	EE.	EE.4	The greenhouse effect
+Science	10	Science Foundations	FF.	FF.0	Weather and climate
+Science	10	Science Foundations	FF.	FF.1	Use data to describe climates
+Science	10	Science Foundations	FF.	FF.2	Factors affecting climate: latitude
+Science	10	Science Foundations	FF.	FF.3	Factors affecting climate: altitude
+Science	10	Science Foundations	FF.	FF.4	Factors affecting climate: distance from the ocean
+Science	10	Science Foundations	GG.	GG.0	Natural hazards
+Science	10	Science Foundations	GG.	GG.1	Analyze natural hazard maps
+Science	10	Science Foundations	HH.	HH.0	Astronomy
+Science	10	Science Foundations	HH.	HH.1	Analyze models of the Earth-Sun-Moon system
+Science	10	Science Foundations	HH.	HH.2	Identify phases of the Moon
+Science	10	Science Foundations	HH.	HH.3	Solar eclipses
+Science	10	Science Foundations	HH.	HH.4	Lunar eclipses
+Science	10	Science Foundations	HH.	HH.5	What causes the seasons on Earth?
+Science	10	Science Foundations	HH.	HH.6	Analyze data to compare properties of planets
+Science	10	Science Foundations	HH.	HH.7	Identify constellations
+Science	10	Science Foundations	HH.	HH.8	Structure of the universe
+Science	10	Science Foundations	II.	II.0	Units and measurement
+Science	10	Science Foundations	II.	II.1	Choose customary units of distance, mass, and volume
+Science	10	Science Foundations	II.	II.2	Choose metric units of distance, mass, and volume
+Science	10	Science Foundations	II.	II.3	Estimate temperatures
+Science	10	Science Foundations	II.	II.4	Abbreviate length, speed, and acceleration units
+Science	10	Science Foundations	II.	II.5	Abbreviate temperature, mass, and volume units
+Science	10	Science Foundations	II.	II.6	Abbreviate force, energy, and electricity units
+Subject	Grade	SkillsArea	SkillCluster	SkillNumber	SkillName
+Social Studies	10	SS Foundations	A.	A.0	Government
+Social Studies	10	SS Foundations	A.	A.1	Purposes of government
+Social Studies	10	SS Foundations	A.	A.2	The Legislative Branch
+Social Studies	10	SS Foundations	A.	A.3	The Executive Branch
+Social Studies	10	SS Foundations	A.	A.4	The Judicial Branch
+Social Studies	10	SS Foundations	A.	A.5	Checks and balances
+Social Studies	10	SS Foundations	A.	A.5	State and local government
+Social Studies	10	SS Foundations	A.	A.5	Identify levels and branches of government
+Social Studies	10	SS Foundations	B.	B.0	The Constitution
+Social Studies	10	SS Foundations	B.	B.1	The Constitution: structure and principles
+Social Studies	10	SS Foundations	B.	B.2	The Constitution: amendments
+Social Studies	10	SS Foundations	B.	B.3	The Constitution: interpretation
+Social Studies	10	SS Foundations	B.	B.4	The Bill of Rights
+Social Studies	10	SS Foundations	C.	C.0	The legal system
+Social Studies	10	SS Foundations	C.	C.1	Laws and courts
+Social Studies	10	SS Foundations	D.	D.0	Citizenship
+Social Studies	10	SS Foundations	D.	D.1	Citizenship and the naturalization process
+Social Studies	10	SS Foundations	D.	D.2	Rights and responsibilities of active citizenship
+Social Studies	10	SS Foundations	D.	D.3	The U.S. naturalization test
+Social Studies	10	SS Foundations	E.	E.0	Basic economic principles
+Social Studies	10	SS Foundations	E.	E.1	What is economics?
+Social Studies	10	SS Foundations	E.	E.2	Costs and benefits
+Social Studies	10	SS Foundations	E.	E.3	Opportunity cost
+Social Studies	10	SS Foundations	E.	E.4	Trade and specialization
+Social Studies	10	SS Foundations	E.	E.5	What is a market?
+Social Studies	10	SS Foundations	F.	F.0	Supply and demand
+Social Studies	10	SS Foundations	F.	F.1	Understand quantity supplied and quantity demanded
+Social Studies	10	SS Foundations	F.	F.2	Understand overall supply and demand
+Social Studies	10	SS Foundations	F.	F.3	Create and use supply and demand curves
+Social Studies	10	SS Foundations	F.	F.4	Identify shortage and surplus
+Social Studies	10	SS Foundations	F.	F.5	Identify shortage and surplus with graphs
+Social Studies	10	SS Foundations	F.	F.6	Identify shortage and surplus with data
+Social Studies	10	SS Foundations	G.	G.0	Banking and finance
+Social Studies	10	SS Foundations	G.	G.1	Banks
+Social Studies	10	SS Foundations	H.	H.0	Pre-contact America
+Social Studies	10	SS Foundations	H.	H.1	Pre-contact Native Peoples: introduction
+Social Studies	10	SS Foundations	I.	I.0	Early Modern Europe
+Social Studies	10	SS Foundations	I.	I.1	Renaissance origins
+Social Studies	10	SS Foundations	I.	I.2	Italian Renaissance: achievements in literature and art
+Social Studies	10	SS Foundations	I.	I.3	The Reformation
+Social Studies	10	SS Foundations	I.	I.4	The Scientific Revolution
+Social Studies	10	SS Foundations	I.	I.5	The Enlightenment: origins and natural rights
+Social Studies	10	SS Foundations	I.	I.6	The Enlightenment: influences on government
+Social Studies	10	SS Foundations	J.	J.0	Age of Exploration
+Social Studies	10	SS Foundations	J.	J.1	The Age of Exploration: origins
+Social Studies	10	SS Foundations	J.	J.2	Portuguese and Spanish expeditions: part I
+Social Studies	10	SS Foundations	J.	J.3	Portuguese and Spanish expeditions: part II
+Social Studies	10	SS Foundations	J.	J.4	French and English expeditions: part I
+Social Studies	10	SS Foundations	J.	J.5	French and English expeditions: part II
+Social Studies	10	SS Foundations	J.	J.6	The Columbian Exchange
+Social Studies	10	SS Foundations	K.	K.0	Colonial America
+Social Studies	10	SS Foundations	K.	K.1	Life as a colonist
+Social Studies	10	SS Foundations	K.	K.2	Identify the Thirteen Colonies
+Social Studies	10	SS Foundations	K.	K.3	Select the Thirteen Colonies
+Social Studies	10	SS Foundations	K.	K.4	Name the Thirteen Colonies
+Social Studies	10	SS Foundations	K.	K.5	New England Colonies: founding and government
+Social Studies	10	SS Foundations	K.	K.6	New England Colonies: economy and interactions with Native Americans
+Social Studies	10	SS Foundations	K.	K.7	Middle Colonies: founding and government
+Social Studies	10	SS Foundations	K.	K.8	Middle Colonies: economy and society
+Social Studies	10	SS Foundations	K.	K.9	Southern Colonies: founding and government
+Social Studies	10	SS Foundations	K.	K.10	Southern Colonies: economy and slavery
+Social Studies	10	SS Foundations	L.	L.0	The American Revolution
+Social Studies	10	SS Foundations	L.	L.1	Causes of the American Revolution: the French and Indian War
+Social Studies	10	SS Foundations	L.	L.2	Causes of the American Revolution: politics and society
+Social Studies	10	SS Foundations	L.	L.3	Causes of the American Revolution: introduction to mercantilism and the Navigation Acts
+Social Studies	10	SS Foundations	L.	L.4	Causes of the American Revolution: new taxes and colonial response
+Social Studies	10	SS Foundations	L.	L.5	The Revolutionary War: preparing for war
+Social Studies	10	SS Foundations	L.	L.6	The Revolutionary War: struggle for independence
+Social Studies	10	SS Foundations	L.	L.7	The Revolutionary War: turning the tide of war
+Social Studies	10	SS Foundations	L.	L.8	The Revolutionary War: conclusion and aftermath
+Social Studies	10	SS Foundations	L.	L.9	Source analysis: the Boston Massacre
+Social Studies	10	SS Foundations	L.	L.10	Source analysis: the Declaration of Independence
+Social Studies	10	SS Foundations	M.	M.0	The Early Republic
+Social Studies	10	SS Foundations	M.	M.1	The Articles of Confederation
+Social Studies	10	SS Foundations	M.	M.2	The Constitutional Convention
+Social Studies	10	SS Foundations	M.	M.3	Washington's presidency: part I
+Social Studies	10	SS Foundations	M.	M.4	Washington's presidency: part II
+Social Studies	10	SS Foundations	M.	M.5	The first party system: Federalists and Democratic-Republicans
+Social Studies	10	SS Foundations	M.	M.6	The Marshall Court
+Social Studies	10	SS Foundations	M.	M.7	The Louisiana Purchase
+Social Studies	10	SS Foundations	N.	N.0	The Jacksonian period
+Social Studies	10	SS Foundations	N.	N.1	Jacksonian Democracy
+Social Studies	10	SS Foundations	N.	N.2	Tariff, nullification, and bank war
+Social Studies	10	SS Foundations	N.	N.3	Indian Removal and the Trail of Tears
+Social Studies	10	SS Foundations	O.	O.0	The Antebellum period
+Social Studies	10	SS Foundations	O.	O.1	Industrial and Transportation Revolutions
+Social Studies	10	SS Foundations	O.	O.2	Comparing the North and the South
+Social Studies	10	SS Foundations	O.	O.3	Antebellum reform movements
+Social Studies	10	SS Foundations	O.	O.4	Antebellum immigration
+Social Studies	10	SS Foundations	O.	O.5	Slavery in the South
+Social Studies	10	SS Foundations	O.	O.6	The abolitionists
+Social Studies	10	SS Foundations	O.	O.7	Texas independence and annexation
+Social Studies	10	SS Foundations	O.	O.8	The U.S.-Mexican War
+Social Studies	10	SS Foundations	O.	O.9	Causes of the Civil War: Missouri Compromise to Bleeding Kansas
+Social Studies	10	SS Foundations	O.	O.10	Causes of the Civil War: Dred Scott to secession
+Social Studies	10	SS Foundations	P.	P.0	The Civil War
+Social Studies	10	SS Foundations	P.	P.1	The Civil War: the beginning of the war
+Social Studies	10	SS Foundations	P.	P.2	The Civil War: Bull Run to the Emancipation Proclamation
+Social Studies	10	SS Foundations	P.	P.3	The Civil War: Gettysburg to the election of 1864
+Social Studies	10	SS Foundations	P.	P.4	The Civil War: the conclusion of the war
+Social Studies	10	SS Foundations	P.	P.5	Source analysis: the Gettysburg Address
+Social Studies	10	SS Foundations	Q.	Q.0	Reconstruction
+Social Studies	10	SS Foundations	Q.	Q.1	Radical Reconstruction
+Social Studies	10	SS Foundations	Q.	Q.2	The end of Reconstruction and the rise of Jim Crow
+Social Studies	10	SS Foundations	R.	R.0	The Gilded Age
+Social Studies	10	SS Foundations	R.	R.1	Industrialization in the Gilded Age
+Social Studies	10	SS Foundations	R.	R.2	Cities in the Gilded Age
+Social Studies	10	SS Foundations	S.	S.0	World War I
+Social Studies	10	SS Foundations	S.	S.1	World War I: the road to war
+Social Studies	10	SS Foundations	S.	S.2	World War I: the Great War
+Social Studies	10	SS Foundations	T.	T.0	Social studies skills
+Social Studies	10	SS Foundations	T.	T.1	Identify primary and secondary sources
+Social Studies	10	SS Foundations	T.	T.2	Identify facts and opinions
+Social Studies	10	SS Foundations	T.	T.3	Reading and creating timelines with BCE and CE
+Social Studies	10	SS Foundations	U.	U.0	Read maps
+Social Studies	10	SS Foundations	U.	U.1	Identify and use lines of latitude and longitude
+Social Studies	10	SS Foundations	V.	V.0	Physical geography
+Social Studies	10	SS Foundations	V.	V.1	Oceans and continents
+Social Studies	10	SS Foundations	W.	W.0	The Americas: society and environment
+Social Studies	10	SS Foundations	W.	W.1	Region profile: South America
+Social Studies	10	SS Foundations	W.	W.2	Country profile: Brazil
+Social Studies	10	SS Foundations	X.	X.0	The Americas: geography
+Social Studies	10	SS Foundations	X.	X.1	Identify and select countries of Northern and Central America
+Social Studies	10	SS Foundations	X.	X.2	Name countries of Northern and Central America
+Social Studies	10	SS Foundations	X.	X.3	Identify and select countries of the Caribbean
+Social Studies	10	SS Foundations	X.	X.4	Name countries of the Caribbean
+Social Studies	10	SS Foundations	X.	X.5	Identify and select countries of South America
+Social Studies	10	SS Foundations	X.	X.6	Name countries of South America
+Social Studies	10	SS Foundations	Y.	Y.0	Europe: society and environment
+Social Studies	10	SS Foundations	Y.	Y.1	Region profile: Europe
+Social Studies	10	SS Foundations	Z.	Z.0	Europe: geography
+Social Studies	10	SS Foundations	Z.	Z.1	Identify and select countries of Europe: region 1
+Social Studies	10	SS Foundations	Z.	Z.2	Name countries of Europe: region 1
+Social Studies	10	SS Foundations	Z.	Z.3	Identify and select countries of Europe: region 2
+Social Studies	10	SS Foundations	Z.	Z.4	Name countries of Europe: region 2
+Social Studies	10	SS Foundations	Z.	Z.5	Identify and select countries of Europe: region 3
+Social Studies	10	SS Foundations	Z.	Z.6	Name countries of Europe: region 3
+Social Studies	10	SS Foundations	Z.	Z.7	Identify and select countries of Europe: region 4
+Social Studies	10	SS Foundations	Z.	Z.8	Name countries of Europe: region 4
+Social Studies	10	SS Foundations	Z.	Z.9	Identify and select countries of Europe: region 5
+Social Studies	10	SS Foundations	Z.	Z.10	Name countries of Europe: region 5
+Social Studies	10	SS Foundations	Z.	Z.11	Identify countries of Europe: review
+Social Studies	10	SS Foundations	Z.	Z.12	Select countries of Europe: review
+Social Studies	10	SS Foundations	Z.	Z.13	Name countries of Europe: review
+Social Studies	10	SS Foundations	AA.	AA.0	Africa: society and environment
+Social Studies	10	SS Foundations	AA.	AA.1	Region profile: West and Central Africa
+Social Studies	10	SS Foundations	BB.	BB.0	Africa: geography
+Social Studies	10	SS Foundations	BB.	BB.1	Identify and select countries of Africa: region 1
+Social Studies	10	SS Foundations	BB.	BB.2	Name countries of Africa: region 1
+Social Studies	10	SS Foundations	BB.	BB.3	Identify and select countries of Africa: region 2
+Social Studies	10	SS Foundations	BB.	BB.4	Name countries of Africa: region 2
+Social Studies	10	SS Foundations	BB.	BB.5	Identify and select countries of Africa: region 3
+Social Studies	10	SS Foundations	BB.	BB.6	Name countries of Africa: region 3
+Social Studies	10	SS Foundations	BB.	BB.7	Identify and select countries of Africa: region 4
+Social Studies	10	SS Foundations	BB.	BB.8	Name countries of Africa: region 4
+Social Studies	10	SS Foundations	BB.	BB.9	Identify and select countries of Africa: region 5
+Social Studies	10	SS Foundations	BB.	BB.10	Name countries of Africa: region 5
+Social Studies	10	SS Foundations	BB.	BB.11	Identify countries of Africa: review
+Social Studies	10	SS Foundations	BB.	BB.12	Select countries of Africa: review
+Social Studies	10	SS Foundations	BB.	BB.13	Name countries of Africa: review
+Social Studies	10	SS Foundations	CC.	CC.0	The Middle East: society and environment
+Social Studies	10	SS Foundations	CC.	CC.1	Region profile: the Middle East
+Social Studies	10	SS Foundations	DD.	DD.0	Asia: society and environment
+Social Studies	10	SS Foundations	DD.	DD.1	Region profile: East Asia
+Social Studies	10	SS Foundations	DD.	DD.2	Country profile: China
+Social Studies	10	SS Foundations	DD.	DD.3	Country profile: Japan
+Social Studies	10	SS Foundations	EE.	EE.0	Asia: geography
+Social Studies	10	SS Foundations	EE.	EE.1	Identify and select countries of Asia: region 1
+Social Studies	10	SS Foundations	EE.	EE.2	Name countries of Asia: region 1
+Social Studies	10	SS Foundations	EE.	EE.3	Identify and select countries of Asia: region 2
+Social Studies	10	SS Foundations	EE.	EE.4	Name countries of Asia: region 2
+Social Studies	10	SS Foundations	EE.	EE.5	Identify and select countries of Asia: region 3
+Social Studies	10	SS Foundations	EE.	EE.6	Name countries of Asia: region 3
+Social Studies	10	SS Foundations	EE.	EE.7	Identify and select countries of Asia: region 4
+Social Studies	10	SS Foundations	EE.	EE.8	Name countries of Asia: region 4
+Social Studies	10	SS Foundations	EE.	EE.9	Identify and select countries of Asia: region 5
+Social Studies	10	SS Foundations	EE.	EE.10	Name countries of Asia: region 5
+Social Studies	10	SS Foundations	EE.	EE.11	Identify and select countries of Asia: region 6
+Social Studies	10	SS Foundations	EE.	EE.12	Name countries of Asia: region 6
+Social Studies	10	SS Foundations	EE.	EE.13	Identify countries of Asia: review
+Social Studies	10	SS Foundations	EE.	EE.14	Select countries of Asia: review
+Social Studies	10	SS Foundations	EE.	EE.15	Name countries of Asia: review
+Social Studies	10	SS Foundations	FF.	FF.0	Oceania: geography
+Social Studies	10	SS Foundations	FF.	FF.1	Identify and select countries of Oceania
+Social Studies	10	SS Foundations	FF.	FF.2	Name countries of Oceania

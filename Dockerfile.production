@@ -1,0 +1,87 @@
+# ================================================================
+# PATHFINITY PRODUCTION DOCKERFILE
+# Multi-stage build for AI-native education platform
+# ================================================================
+
+# ================================================================
+# Stage 1: Build environment
+# ================================================================
+FROM node:18-alpine AS builder
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+COPY tsconfig.json ./
+
+# Install dependencies
+RUN npm ci --only=production
+
+# Copy source code
+COPY src/ ./src/
+COPY public/ ./public/
+COPY *.config.* ./
+
+# Build the application
+RUN npm run build
+
+# ================================================================
+# Stage 2: Production environment
+# ================================================================
+FROM node:18-alpine AS production
+
+# Set production environment
+ENV NODE_ENV=production
+ENV PORT=3000
+
+# Create app user for security
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S pathfinity -u 1001
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install only production dependencies
+RUN npm ci --only=production && npm cache clean --force
+
+# Copy built application from builder stage
+COPY --from=builder --chown=pathfinity:nodejs /app/dist ./dist
+COPY --from=builder --chown=pathfinity:nodejs /app/public ./public
+
+# Copy production configuration
+COPY --chown=pathfinity:nodejs production/ ./production/
+
+# Create necessary directories
+RUN mkdir -p logs temp uploads
+RUN chown -R pathfinity:nodejs logs temp uploads
+
+# Set security headers and limits
+ENV NODE_OPTIONS="--max-old-space-size=2048"
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+  CMD node ./production/healthcheck.js
+
+# Switch to non-root user
+USER pathfinity
+
+# Expose port
+EXPOSE 3000
+
+# Start the application
+CMD ["node", "./production/server.js"]
+
+# ================================================================
+# LABELS FOR CONTAINER METADATA
+# ================================================================
+LABEL maintainer="Pathfinity Development Team"
+LABEL version="1.0.0"
+LABEL description="AI-native education platform - Production container"
+LABEL org.opencontainers.image.title="Pathfinity"
+LABEL org.opencontainers.image.description="AI-powered educational platform for K-12 students"
+LABEL org.opencontainers.image.version="1.0.0"
+LABEL org.opencontainers.image.vendor="Pathfinity"

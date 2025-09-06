@@ -1,0 +1,629 @@
+/**
+ * DASHBOARD MODAL MODULE
+ * ======================
+ * Styles for the main dashboard modal interface
+ * Provides consistent theming and layout
+ * 
+ * Created: 2025-08-22
+ */
+
+/* ============================================
+   MODAL CONTAINER
+   ============================================ */
+.dashboardModal {
+  background: var(--bg-primary);
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  transition: background var(--duration-base) var(--easing-out);
+}
+
+.dashboardModal.fullPage {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--z-50);
+}
+
+/* ============================================
+   BACKGROUND DECORATION
+   ============================================ */
+.backgroundDecoration {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.1;
+  background: radial-gradient(circle at 30% 50%, var(--color-primary) 0%, transparent 50%),
+              radial-gradient(circle at 70% 80%, var(--color-secondary) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.contentWrapper {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+/* ============================================
+   DASHBOARD HEADER
+   ============================================ */
+.dashboardHeader {
+  color: var(--text-primary);
+  padding: var(--space-8) var(--space-6) var(--space-6);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.headerContent h1 {
+  font-size: var(--text-4xl);
+  font-weight: var(--font-bold);
+  margin: 0 0 var(--space-2) 0;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.date {
+  color: var(--text-secondary);
+  font-size: var(--text-lg);
+}
+
+.headerActions {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+}
+
+/* ============================================
+   STREAK BADGE
+   ============================================ */
+.streakBadge {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 40px;
+  font-size: var(--text-base);
+  transition: all var(--duration-fast);
+}
+
+.streakBadge:hover {
+  background: var(--bg-tertiary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.streakIcon {
+  font-size: var(--text-2xl);
+}
+
+.streakNumber {
+  color: var(--color-primary);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+}
+
+.streakLabel {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+/* ============================================
+   ACTION BUTTONS
+   ============================================ */
+.actionButton {
+  padding: var(--space-3);
+  background: var(--card-bg);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--duration-base) var(--easing-out);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-xl);
+}
+
+.actionButton:hover {
+  background: var(--bg-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+
+/* Voiceover toggle */
+.voiceoverToggle {
+  padding: var(--space-3);
+  background: transparent;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--duration-base);
+  font-size: var(--text-xl);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.voiceoverToggle.active {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.voiceoverToggle:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-md);
+}
+
+
+.primaryActionButton {
+  padding: var(--space-3) var(--space-6);
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-full);
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+  transition: all var(--duration-base) var(--easing-out);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.primaryActionButton:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-primary);
+}
+
+/* ============================================
+   HEADER ACTION BUTTONS - Using MasterTheme vars
+   ============================================ */
+.themeToggleBtn,
+.settingsBtn,
+.logoutBtn {
+  /* Use consistent sizing from MasterTheme */
+  padding: var(--button-padding-y) var(--button-padding-x);
+  height: 40px;
+  min-width: 40px;
+  
+  /* Use theme-aware colors */
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: var(--button-radius);
+  color: var(--text-primary);
+  
+  /* Standard button behavior */
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: var(--text-base);
+  font-weight: var(--font-medium);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+/* Icon-only buttons get smaller padding */
+.themeToggleBtn,
+.settingsBtn {
+  padding: var(--space-2);
+  width: 40px;
+}
+
+/* Hover states using theme colors */
+.themeToggleBtn:hover,
+.settingsBtn:hover {
+  background: var(--bg-hover);
+  border-color: var(--color-primary);
+  transform: translateY(-1px);
+}
+
+/* Logout has error styling */
+.logoutBtn {
+  border-color: var(--color-error);
+  color: var(--color-error);
+  padding: var(--space-2) var(--space-4);
+}
+
+.logoutBtn:hover {
+  background: var(--color-error);
+  color: white;
+  border-color: var(--color-error);
+}
+
+
+/* ============================================
+   DASHBOARD SECTIONS
+   ============================================ */
+.dashboardSections {
+  padding: 0 var(--space-6) var(--space-6);
+}
+
+.dashboardSections h2 {
+  color: var(--text-primary);
+  font-size: var(--text-2xl);
+  margin-bottom: var(--space-6);
+}
+
+.sectionsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-6);
+  margin-bottom: var(--space-8);
+}
+
+/* ============================================
+   SECTION CARD
+   ============================================ */
+.sectionCard {
+  background: linear-gradient(135deg, var(--card-bg) 0%, var(--bg-secondary) 100%);
+  border: 2px solid;
+  border-color: var(--border-color);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  cursor: pointer;
+  transition: all var(--duration-base) var(--easing-out);
+  position: relative;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+  animation-delay: var(--animation-delay, 0s);
+}
+
+.sectionCard:hover:not(.locked) {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--border-color);
+}
+
+.sectionCard.completed {
+  border-color: var(--color-success);
+}
+
+.sectionCard.in-progress {
+  border-color: var(--color-warning);
+}
+
+.sectionCard.locked {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.sectionCard.locked:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* ============================================
+   SECTION HEADER
+   ============================================ */
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-4);
+}
+
+.sectionIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.3);
+  transition: all var(--duration-base) var(--easing-out);
+}
+
+.sectionCard.locked .sectionIcon {
+  background: var(--bg-tertiary);
+}
+
+.statusBadge {
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.statusBadge.setup {
+  background: var(--warning-bg-soft);
+  color: var(--color-warning);
+}
+
+.statusBadge.completed {
+  background: var(--success-bg-soft);
+  color: var(--color-success);
+}
+
+.statusBadge.inProgress {
+  background: var(--info-bg-soft);
+  color: var(--color-info);
+}
+
+.statusBadge.locked {
+  background: var(--bg-tertiary);
+  color: var(--text-tertiary);
+}
+
+/* ============================================
+   SECTION CONTENT
+   ============================================ */
+.sectionTitle {
+  color: var(--text-primary);
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  margin: var(--space-3) 0 var(--space-2) 0;
+}
+
+.sectionCard.locked .sectionTitle {
+  color: var(--text-tertiary);
+}
+
+.sectionDescription {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: var(--space-4);
+}
+
+.sectionCard.locked .sectionDescription {
+  color: var(--text-tertiary);
+}
+
+/* ============================================
+   PROGRESS BAR
+   ============================================ */
+.progressBar {
+  background: var(--bg-tertiary);
+  height: 6px;
+  border-radius: 3px;
+  overflow: hidden;
+  margin: var(--space-3) 0;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--progress-color, var(--gradient-primary));
+  width: var(--progress, 0%);
+  border-radius: 3px;
+  transition: width var(--duration-moderate) var(--easing-out);
+}
+
+/* ============================================
+   SECTION ACTION
+   ============================================ */
+.sectionAction {
+  background: linear-gradient(135deg, 
+    var(--action-color, var(--color-primary)) 0%, 
+    color-mix(in srgb, var(--action-color, var(--color-primary)) 80%, black) 100%);
+  color: white;
+  border: none;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-full);
+  font-weight: var(--font-semibold);
+  font-size: var(--text-base);
+  cursor: pointer;
+  transition: all var(--duration-base) var(--easing-out);
+  width: 100%;
+  margin-top: var(--space-4);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  text-transform: capitalize;
+}
+
+.sectionAction:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.sectionAction.secondary {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+}
+
+.sectionAction.disabled,
+.sectionAction:disabled {
+  background: var(--bg-tertiary);
+  color: var(--text-tertiary);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* ============================================
+   QUICK STATS
+   ============================================ */
+.quickStats {
+  background: linear-gradient(135deg, var(--card-bg) 0%, var(--bg-secondary) 100%);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6) var(--space-8);
+  margin: 0 var(--space-6) var(--space-6);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(10px);
+}
+
+.statItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: 0 var(--space-4);
+  border-right: 1px solid var(--border-color);
+}
+
+.statItem:last-child {
+  border-right: none;
+}
+
+.statIcon {
+  font-size: var(--text-4xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-lg);
+}
+
+.statContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.statValue {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.statLabel {
+  color: var(--text-tertiary);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: var(--space-1);
+}
+
+/* ============================================
+   FOOTER ACTIONS
+   ============================================ */
+.footerActions {
+  padding: var(--space-6);
+  display: flex;
+  justify-content: center;
+}
+
+.startLearningBtn {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  color: white;
+  border: none;
+  padding: var(--space-4) var(--space-8);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  cursor: pointer;
+  transition: all var(--duration-base) var(--easing-out);
+  box-shadow: var(--shadow-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.startLearningBtn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 40px rgba(139, 92, 246, 0.4);
+}
+
+.startLearningBtn.pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 20px rgba(139, 92, 246, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0);
+  }
+}
+
+/* ============================================
+   SUB MODAL OVERLAY
+   ============================================ */
+.subModalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: var(--z-50);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn var(--duration-base) var(--easing-out);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 768px) {
+  .dashboardHeader {
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  
+  .headerActions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .sectionsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .quickStats {
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  
+  .statItem {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboardHeader {
+    padding: var(--space-4);
+  }
+  
+  .dashboardSections {
+    padding: 0 var(--space-4) var(--space-4);
+  }
+  
+  .headerContent h1 {
+    font-size: var(--text-2xl);
+  }
+  
+  .date {
+    font-size: var(--text-base);
+  }
+  
+  .startLearningBtn {
+    padding: var(--space-3) var(--space-6);
+    font-size: var(--text-lg);
+  }
+}

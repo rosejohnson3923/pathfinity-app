@@ -1,0 +1,349 @@
+/**
+ * Student Dashboard - Modal-First Styles
+ */
+
+/* Wrapper to prevent white flash during transitions */
+.student-dashboard-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 100%;
+  height: 100vh;
+  overflow: auto; /* Changed from hidden to auto to allow scrolling */
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  /* Default dark background to prevent white flash */
+  background: #0F1419;
+  transition: none; /* No transition to prevent flash */
+  box-sizing: border-box;
+}
+
+/* Theme-specific backgrounds - applied immediately */
+.student-dashboard-wrapper[data-theme="light"] {
+  background: linear-gradient(135deg, #F0F4F8 0%, #E2E8F0 100%);
+}
+
+.student-dashboard-wrapper[data-theme="dark"] {
+  background: linear-gradient(135deg, #0F1419 0%, #1A202C 100%);
+}
+
+/* Loading state */
+.student-dashboard-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #F0F4F8 0%, #E2E8F0 100%);
+}
+
+/* Theme Toggle Button - Removed for header redesign */
+
+/* AI Container specific styling */
+.student-dashboard-wrapper > div:not(.theme-toggle-button) {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* Ensure AI containers are visible */
+.ai-learn-container,
+.ai-experience-container,
+.ai-discover-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.student-dashboard.modal-first {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem;
+}
+
+/* Header Section - Old Dashboard Style (not used in modal-first) */
+.student-dashboard.modal-first .dashboard-header {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-message h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #1a202c;
+  margin-bottom: 0.5rem;
+}
+
+.welcome-message p {
+  color: #718096;
+  font-size: 1.1rem;
+}
+
+.quick-stats {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: #f7fafc;
+  border-radius: 0.75rem;
+  border: 2px solid #e2e8f0;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #5a67d8;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: #718096;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 0.25rem;
+}
+
+/* Dashboard Grid */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.dashboard-card {
+  background: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: 3px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.dashboard-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--container-color) 0%, var(--container-color-light) 100%);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.agent-icon {
+  font-size: 2rem;
+}
+
+.container-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.dashboard-card h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 1rem;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.open-modal-btn {
+  background: none;
+  border: none;
+  color: #5a67d8;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: color 0.2s;
+}
+
+.open-modal-btn:hover {
+  color: #4c51bf;
+}
+
+/* Quick Actions Bar */
+.quick-actions {
+  background: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.action-button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  border: 2px solid #e2e8f0;
+  background: white;
+  color: #4a5568;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.action-button:hover {
+  background: #f7fafc;
+  border-color: #cbd5e0;
+  transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .student-dashboard.modal-first {
+    padding: 1rem;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-stats {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .stat-card {
+    flex: 1;
+    min-width: 100px;
+  }
+
+  .quick-actions {
+    flex-wrap: wrap;
+  }
+
+  .welcome-message h1 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .student-dashboard.modal-first {
+    background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+  }
+
+  .student-dashboard.modal-first .dashboard-header,
+  .dashboard-card,
+  .quick-actions {
+    background: #2d3748;
+    color: #e2e8f0;
+  }
+
+  .welcome-message h1 {
+    color: #f7fafc;
+  }
+
+  .welcome-message p {
+    color: #cbd5e0;
+  }
+
+  .stat-card {
+    background: #374151;
+    border-color: #4b5563;
+  }
+
+  .dashboard-card h3 {
+    color: #f7fafc;
+  }
+
+  .action-button {
+    background: #374151;
+    color: #e2e8f0;
+    border-color: #4b5563;
+  }
+
+  .action-button:hover {
+    background: #4b5563;
+  }
+}
+
+/* Animation Classes */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.dashboard-card {
+  animation: slideIn 0.5s ease-out;
+  animation-fill-mode: both;
+}
+
+.dashboard-card:nth-child(1) { animation-delay: 0.1s; }
+.dashboard-card:nth-child(2) { animation-delay: 0.2s; }
+.dashboard-card:nth-child(3) { animation-delay: 0.3s; }
+.dashboard-card:nth-child(4) { animation-delay: 0.4s; }
+.dashboard-card:nth-child(5) { animation-delay: 0.5s; }
+.dashboard-card:nth-child(6) { animation-delay: 0.6s; }

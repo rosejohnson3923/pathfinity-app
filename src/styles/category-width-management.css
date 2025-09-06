@@ -1,0 +1,478 @@
+/**
+ * Category-Based Width Management System
+ * ========================================
+ * Systematic approach to managing widths across different page categories
+ * instead of fixing individual pages
+ */
+
+/* ============================================
+   ROOT ELEMENT - Full Viewport
+   ============================================ */
+html, body, #root {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
+}
+
+/* ============================================
+   CATEGORY 1: AUTH PAGES
+   Small centered forms (login, signup, etc.)
+   ============================================ */
+/* Login, signup, password reset screens should be narrow and centered */
+[data-page-category="auth"],
+.auth-page,
+.login-page,
+[class*="Login"]:not([class*="Button"]):not([class*="Icon"]),
+[class*="Auth"]:not([class*="Button"]):not([class*="Provider"]):not([class*="Context"]),
+.unauthorized-page {
+  /* Let these use their Tailwind classes (max-w-md, max-w-sm, etc.) */
+  /* Don't override their natural sizing */
+}
+
+/* ============================================
+   CATEGORY 2: MODAL OVERLAYS
+   Modals that appear over content
+   ============================================ */
+/* Modal overlays should be flexible in width based on content */
+[data-page-category="modal"],
+.modal-overlay,
+.modal-backdrop {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 9999 !important;
+}
+
+/* Modal content containers - flexible sizing */
+/* IMPORTANT: Exclude Bento components and Dashboard content */
+/* EXCLUDING DashboardModal content which should be full width */
+.modal-container:not(.dashboardModal),
+.modal-content:not(.bento-content):not([class*="dashboard"]),
+[class*="Modal"]:not(.modal-overlay):not(.modal-backdrop):not([class*="Bento"]):not([class*="Dashboard"]):not(.introduction-modal):not(.dashboardModal):not([class*="dashboardModal"]),
+.daily-learning-modal,
+.settings-modal,
+.companion-chat-modal {
+  position: relative !important;
+  width: auto !important;
+  max-width: min(90vw, 800px) !important;
+  margin: 2rem auto !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* Introduction modal needs special handling due to its steps */
+.introduction-modal {
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: inherit !important;
+}
+
+/* Large modals */
+.career-choice-modal {
+  max-width: min(95vw, 1200px) !important;
+}
+
+/* Welcome container inside introduction modal should be centered and contained */
+.intro-welcome-container,
+.introduction-modal .intro-welcome-container,
+[class*="intro-welcome"] {
+  max-width: 600px !important;
+  margin: 0 auto !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Career selection container in introduction modal */
+.intro-career-container,
+.introduction-modal .intro-career-container {
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  width: 100% !important;
+  padding: 2rem !important;
+  box-sizing: border-box !important;
+}
+
+/* DashboardModal is actually a dashboard page, not a modal overlay */
+.dashboardModal,
+.dashboard-modal,
+[class*="dashboardModal"] {
+  width: 100% !important;
+  max-width: 100% !important; /* Full viewport for dashboard */
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Everything inside DashboardModal should respect full width */
+.dashboardModal *,
+[class*="dashboardModal"] * {
+  max-width: none !important; /* Remove any max-width constraints */
+}
+
+/* Except for specific content that needs constraints */
+.dashboardModal .modal-content,
+[class*="dashboardModal"] .modal-content {
+  max-width: 100% !important;
+}
+
+/* CareerIncLobby is a full-page experience, not a traditional modal */
+.careerinc-lobby-modal,
+[class*="careerinc-lobby"] {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-y: auto !important; /* Allow scrolling if content is long */
+}
+
+/* Small modals (like settings, chat) */
+.settings-modal,
+.companion-chat-modal {
+  max-width: min(90vw, 600px) !important;
+}
+
+/* ============================================
+   CATEGORY 3: DASHBOARD PAGES
+   Main application dashboards
+   ============================================ */
+[data-page-category="dashboard"],
+.dashboard-page,
+.student-dashboard,
+.teacher-dashboard,
+.admin-dashboard,
+[class*="Dashboard"]:not([class*="Button"]):not([class*="Icon"]):not([class*="Card"]),
+[class*="Bento"][class*="Dashboard"],
+[class*="BentoLearn"],
+[class*="BentoExperience"],
+[class*="BentoDiscover"] {
+  width: 100% !important;
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  padding: 0 20px !important;
+  box-sizing: border-box !important;
+}
+
+/* Bento components inside DashboardModal should use full dashboard width */
+.dashboardModal [class*="Bento"],
+.dashboard-modal [class*="Bento"],
+[class*="dashboardModal"] [class*="bento"] {
+  width: 100% !important;
+  max-width: 100% !important; /* Use parent's width */
+  margin: 0 !important;
+}
+
+/* Override BentoLearnCard's internal constraints */
+[class*="bentoContainerV2"],
+[class*="BentoContainer"] {
+  max-height: none !important; /* Remove 900px height limit */
+  height: auto !important;
+  min-height: 100vh !important;
+}
+
+/* Fix mainContent width constraint in BentoLearn */
+[class*="BentoLearn"] [class*="mainContent"],
+[class*="bentoLearn"] [class*="mainContent"],
+.dashboardModal [class*="mainContent"],
+.dashboard-modal [class*="mainContent"],
+/* Target the specific module CSS class pattern */
+[class*="_mainContent_"] {
+  max-width: 100% !important; /* Use full available width instead of 720px */
+  width: 100% !important;
+}
+
+/* Ensure header section inside bento components uses full width */
+[class*="_dashboardHeader_"] > div,
+[class*="_dashboardHeader_"] .greeting-section,
+[class*="_dashboardHeader_"] .header-actions {
+  max-width: none !important;
+  width: auto !important;
+}
+
+/* Fix loading screen container width constraint */
+[class*="_loadingContainer_"],
+.loadingContainer {
+  max-width: min(90vw, 1400px) !important; /* Match dashboard width for consistency */
+  width: 90% !important;
+}
+
+/* Loading screen inside dashboards should use appropriate width */
+.dashboardModal [class*="_loadingContainer_"],
+.dashboard-page [class*="_loadingContainer_"],
+[data-page-category="dashboard"] [class*="_loadingContainer_"] {
+  max-width: min(90vw, 1400px) !important; /* Use full dashboard width */
+}
+
+/* Fix CareerContextScreen height constraint */
+.career-context-screen {
+  min-height: 100vh !important;
+  height: 100vh !important;
+  overflow: hidden !important; /* No scrollbar for full-screen experience */
+}
+
+.career-context-content {
+  height: 85vh !important; /* Ensure it uses 85% of viewport height */
+  min-height: 85vh !important;
+  max-height: 85vh !important; /* Cap at 85vh to prevent overflow */
+  overflow: hidden !important; /* No scrollbar on content */
+}
+
+/* Ensure particle canvas is visible */
+.particle-canvas {
+  opacity: 1 !important; /* Make particles fully visible */
+  z-index: 1 !important; /* Ensure it's above background but below content */
+}
+
+/* Dashboard headers should match dashboard width */
+.dashboard-page header,
+.dashboard-page .header,
+[data-page-category="dashboard"] header,
+[data-page-category="dashboard"] .header,
+[class*="dashboardHeader"],
+[class*="dashboard-header"],
+header[class*="dashboard"],
+/* Target the specific module CSS class pattern */
+header[class*="_dashboardHeader_"] {
+  width: 100% !important;
+  max-width: 100% !important; /* Use full available width */
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* Override any parent constraints on dashboard headers */
+.dashboardModal header,
+[class*="dashboardModal"] header {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* ============================================
+   CATEGORY 4: CONTENT CONTAINERS
+   AI Learning containers and educational content
+   ============================================ */
+[data-page-category="content"],
+.ai-container,
+.learning-container,
+[class*="AILearn"],
+[class*="AIExperience"],
+[class*="AIDiscover"],
+[class*="Container"][class*="AI"],
+.multi-subject-container {
+  width: 100% !important;
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  padding: 0 20px !important;
+  box-sizing: border-box !important;
+}
+
+/* Content inside containers should be readable width */
+.ai-container .content,
+.learning-container .content,
+[data-page-category="content"] .content-wrapper {
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+}
+
+/* ============================================
+   CATEGORY 5: MARKETING PAGES
+   Public-facing pages (landing, about, etc.)
+   ============================================ */
+[data-page-category="marketing"],
+.marketing-page,
+.homepage,
+.landing-page,
+[class*="Homepage"],
+[class*="Landing"],
+.about-page,
+.contact-page,
+.pricing-page {
+  width: 100% !important;
+  /* Marketing pages can be wider for impact */
+  max-width: 1600px !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* Marketing content sections */
+.marketing-page section,
+[data-page-category="marketing"] section {
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  padding: 0 20px !important;
+}
+
+/* Hero sections can be full width */
+.hero-section,
+.marketing-hero {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+/* ============================================
+   CATEGORY 6: UTILITY PAGES
+   Settings, profile, analytics, admin panels
+   ============================================ */
+[data-page-category="utility"],
+.settings-page,
+.profile-page,
+.analytics-page,
+.admin-panel,
+[class*="Settings"]:not([class*="Button"]):not([class*="Icon"]),
+[class*="Analytics"]:not([class*="Card"]):not([class*="Chart"]) {
+  width: 100% !important;
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  padding: 0 20px !important;
+  box-sizing: border-box !important;
+}
+
+/* ============================================
+   SPECIAL: PROGRESS HEADERS
+   Fixed headers with progress indicators
+   ============================================ */
+.progressHeader,
+[class*="ProgressHeader"],
+[class*="progress-header"] {
+  position: fixed !important;
+  top: 0 !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 100% !important;
+  max-width: 1400px !important;
+  z-index: 1000 !important;
+  box-sizing: border-box !important;
+}
+
+.progressHeader .headerContent,
+[class*="ProgressHeader"] [class*="headerContent"] {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 0 20px !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* ============================================
+   SPECIAL: MODAL HEADERS
+   Headers within modals
+   ============================================ */
+.modal-header,
+.modal-headers,
+[class*="modal-header"],
+[class*="modal-headers"] {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 1.5rem 2rem !important;
+  box-sizing: border-box !important;
+}
+
+/* ============================================
+   RESPONSIVE BREAKPOINTS
+   ============================================ */
+
+/* Tablet (768px - 1024px) */
+@media (max-width: 1024px) {
+  /* Dashboards and content containers */
+  [data-page-category="dashboard"],
+  [data-page-category="content"],
+  .dashboard-page,
+  .ai-container {
+    max-width: 100% !important;
+    padding: 0 16px !important;
+  }
+
+  /* Marketing pages */
+  [data-page-category="marketing"] {
+    max-width: 100% !important;
+  }
+
+  /* Modals */
+  .modal-container,
+  .modal-content {
+    max-width: 95vw !important;
+    margin: 1rem auto !important;
+  }
+}
+
+/* Mobile (< 768px) */
+@media (max-width: 768px) {
+  /* All categories get full width on mobile */
+  [data-page-category="dashboard"],
+  [data-page-category="content"],
+  [data-page-category="marketing"],
+  [data-page-category="utility"],
+  .dashboard-page,
+  .ai-container,
+  .marketing-page,
+  .settings-page {
+    max-width: 100% !important;
+    padding: 0 12px !important;
+  }
+
+  /* Modals take up more screen */
+  .modal-container,
+  .modal-content {
+    max-width: 100vw !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+  }
+
+  /* Progress headers */
+  .progressHeader,
+  [class*="ProgressHeader"] {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    left: 0 !important;
+    transform: none !important;
+  }
+}
+
+/* Small mobile (< 480px) */
+@media (max-width: 480px) {
+  /* Reduce padding on small screens */
+  [data-page-category="dashboard"],
+  [data-page-category="content"],
+  [data-page-category="utility"] {
+    padding: 0 8px !important;
+  }
+
+  .progressHeader .headerContent,
+  .modal-header {
+    padding: 0.75rem 1rem !important;
+  }
+}
+
+/* ============================================
+   DEBUG HELPERS (Remove in production)
+   ============================================ */
+/* Uncomment to see category boundaries */
+/*
+[data-page-category] {
+  outline: 2px dashed red !important;
+  outline-offset: -2px !important;
+}
+
+[data-page-category]::before {
+  content: "Category: " attr(data-page-category);
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 0, 0, 0.9);
+  color: white;
+  padding: 5px 10px;
+  font-size: 12px;
+  z-index: 99999;
+  border-radius: 4px;
+}
+*/

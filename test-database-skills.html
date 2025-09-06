@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Database Skills Loading</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+        .skill-item {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 4px;
+        }
+        pre {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Database Skills Loading Test</h1>
+    
+    <div class="test-section">
+        <h2>1. Supabase Connection Test</h2>
+        <div id="connection-test"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. Grade 10 Math Skills</h2>
+        <div id="grade10-math"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. Grade 10 Algebra 1 Skills</h2>
+        <div id="grade10-algebra"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>4. First Skill Details</h2>
+        <div id="first-skill"></div>
+    </div>
+
+    <script type="module">
+        // Use the same Supabase config as the app
+        const SUPABASE_URL = 'https://zohdmprtfyijneqnwjsu.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpvaGRtcHJ0Znlpam5lcW53anN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAyNjM1ODQsImV4cCI6MjA2NTgzOTU4NH0.DBzvfk4O0Aus5Aew26J4hIBxT6n32fnZJuGiN2J3IUo';
+        
+        async function testDatabaseConnection() {
+            const connectionDiv = document.getElementById('connection-test');
+            
+            try {
+                // Test basic connection
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/skills_master_v2?limit=1`, {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                    }
+                });
+                
+                if (response.ok) {
+                    connectionDiv.innerHTML = '<span class="success">✅ Connected to Supabase</span>';
+                    return true;
+                } else {
+                    connectionDiv.innerHTML = `<span class="error">❌ Connection failed: ${response.status}</span>`;
+                    return false;
+                }
+            } catch (error) {
+                connectionDiv.innerHTML = `<span class="error">❌ Connection error: ${error.message}</span>`;
+                return false;
+            }
+        }
+        
+        async function loadSkillsForGrade10(subject, divId) {
+            const div = document.getElementById(divId);
+            
+            try {
+                // Query for Grade 10 skills
+                const response = await fetch(
+                    `${SUPABASE_URL}/rest/v1/skills_master_v2?grade_level=eq.10&subject=eq.${encodeURIComponent(subject)}&order=skill_number`,
+                    {
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                        }
+                    }
+                );
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const skills = await response.json();
+                
+                if (skills.length === 0) {
+                    div.innerHTML = `<span class="info">No skills found for Grade 10 ${subject}</span>`;
+                } else {
+                    let html = `<span class="success">Found ${skills.length} skills:</span>`;
+                    
+                    // Show first 5 skills
+                    skills.slice(0, 5).forEach(skill => {
+                        html += `
+                            <div class="skill-item">
+                                <strong>${skill.skill_number}: ${skill.skill_name}</strong><br>
+                                Category: ${skill.category || 'N/A'}<br>
+                                Skills Area: ${skill.skills_area || 'N/A'}
+                            </div>
+                        `;
+                    });
+                    
+                    if (skills.length > 5) {
+                        html += `<div class="info">... and ${skills.length - 5} more skills</div>`;
+                    }
+                    
+                    div.innerHTML = html;
+                    
+                    // Return first skill for detailed view
+                    return skills[0];
+                }
+            } catch (error) {
+                div.innerHTML = `<span class="error">❌ Error loading skills: ${error.message}</span>`;
+            }
+            
+            return null;
+        }
+        
+        async function runTests() {
+            console.log('Starting database skills test...');
+            
+            // Test connection
+            const connected = await testDatabaseConnection();
+            
+            if (!connected) {
+                console.error('Cannot proceed without database connection');
+                return;
+            }
+            
+            // Load Math skills
+            const mathSkill = await loadSkillsForGrade10('Math', 'grade10-math');
+            
+            // Load Algebra 1 skills
+            const algebraSkill = await loadSkillsForGrade10('Algebra 1', 'grade10-algebra');
+            
+            // Show first skill details
+            const firstSkill = algebraSkill || mathSkill;
+            if (firstSkill) {
+                document.getElementById('first-skill').innerHTML = `
+                    <h3>First Skill Full Details:</h3>
+                    <pre>${JSON.stringify(firstSkill, null, 2)}</pre>
+                    <div class="success">
+                        <strong>Expected Skill Name:</strong> A.1: Compare and order integers<br>
+                        <strong>Actual Skill Name:</strong> ${firstSkill.skill_number}: ${firstSkill.skill_name}
+                    </div>
+                `;
+            }
+        }
+        
+        // Run tests when page loads
+        runTests();
+    </script>
+</body>
+</html>

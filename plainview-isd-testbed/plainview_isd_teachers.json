@@ -1,0 +1,571 @@
+[
+  {
+    "id": "patricia_williams",
+    "name": "Dr. Patricia Williams",
+    "email": "superintendent@plainviewisd.edu",
+    "role": "district_admin",
+    "district_id": "plainview_isd",
+    "district_name": "Plainview ISD",
+    "school_id": null,
+    "school_name": "District Office",
+    "subject_specialties": [
+      "Administration",
+      "Policy",
+      "Strategic Planning"
+    ],
+    "grades_taught": [
+      "All"
+    ],
+    "years_experience": 20,
+    "teaching_style": "transformational",
+    "created_at": "2025-07-12T19:11:49.022Z"
+  },
+  {
+    "id": "city_view_high_principal",
+    "name": "Dr. Sarah Martinez",
+    "email": "principal@cityviewhigh.edu",
+    "role": "school_admin",
+    "district_id": "plainview_isd",
+    "district_name": "Plainview ISD",
+    "school_id": "city_view_high",
+    "school_name": "City View High School",
+    "subject_specialties": [
+      "Administration",
+      "Leadership",
+      "Curriculum"
+    ],
+    "grades_taught": [
+      "9",
+      "10",
+      "11",
+      "12"
+    ],
+    "years_experience": 13,
+    "teaching_style": "instructional_leadership",
+    "created_at": "2025-07-12T19:11:49.022Z"
+  },
+  {
+    "id": "john_land",
+    "name": "Mr John Land",
+    "school_id": "city_view_high",
+    "school_name": "City View High School",
+    "subject_specialties": [
+      "Algebra I",
+      "Algebra II"
+    ],
+    "grades_taught": [
+      "9",
+      "10",
+      "11"
+    ],
+    "years_experience": 8,
+    "teaching_style": "project_based",
+    "created_at": "2025-07-12T19:11:49.022Z"
+  },
+  {
+    "id": "patricia_summit",
+    "name": "Ms Patricia Summit",
+    "school_id": "city_view_high",
+    "school_name": "City View High School",
+    "subject_specialties": [
+      "Geometry",
+      "Pre-Calculus"
+    ],
+    "grades_taught": [
+      "10",
+      "11",
+      "12"
+    ],
+    "years_experience": 10,
+    "teaching_style": "analytical",
+    "created_at": "2025-07-12T19:11:49.022Z"
+  },
+  {
+    "id": "robert_peak",
+    "name": "Mr Robert Peak",
+    "school_id": "city_view_high",
+    "school_name": "City View High School",
+    "subject_specialties": [
+      "Calculus",
+      "Statistics"
+    ],
+    "grades_taught": [
+      "11",
+      "12"
+    ],
+    "years_experience": 15,
+    "teaching_style": "conceptual",
+    "created_at": "2025-07-12T19:11:49.022Z"
+  },
+  {
+    "id": "jennifer_slope",
+    "name": "Ms Jennifer Slope",
+    "school_id": "city_view_high",
+    "school_name": "City View High School",
+    "subject_specialties": [
+      "English I",
+      "English II"
+    ],
+    "grades_taught": [
+      "9",
+      "10"
+    ],
+    "years_experience": 7,
+    "teaching_style": "discussion_based",
+    "created_at": "2025-07-12T19:11:49.022Z"
+  },
+  {
+    "id": "david_ridge",
+    "name": "Mr David Ridge",
+    "school_id": "city_view_high",
+    "school_name": "City View High School",
+    "subject_specialties": [
+      "English III",
+      "English IV"
+    ],
+    "grades_taught": [
+      "11",
+      "12"
+    ],
+    "years_experience": 12,
+    "teaching_style": "literature_focused",
+    "created_at": "2025-07-12T19:11:49.022Z"
+  },
+  {
+    "id": "angela_cliff",
+    "name": "Ms Angela Cliff",
+    "school_id": "city_view_high",
+    "school_name": "City View High School",
+    "subject_specialties": [
+      "Creative Writing",
+      "Literature"
+    ],
+    "grades_taught": [
+      "9",
+      "10",
+      "11",
+      "12"
+    ],
+    "years_experience": 9,
+    "teaching_style": "creative_expression",
+    "created_at": "2025-07-12T19:11:49.022Z"
+  },
+  {
+    "id": "michael_heights",
+    "name": "Dr Michael Heights",
+    "school_id": "city_view_high",
+    "school_name": "City View High School",
+    "subject_specialties": [
+      "Biology",
+      "Environmental Science"
+    ],
+    "grades_taught": [
+      "9",
+      "10",
+      "11",
+      "12"
+    ],
+    "years_experience": 18,
+    "teaching_style": "inquiry_based",
+    "created_at": "2025-07-12T19:11:49.022Z"
+  },
+  {
+    "id": "laura_canyon",
+    "name": "Ms Laura Canyon",
+    "school_id": "city_view_high",
+    "school_name": "City View High School",
+    "subject_specialties": [
+      "Chemistry",
+      "Physics"
+    ],
+    "grades_taught": [
+      "10",
+      "11",
+      "12"
+    ],
+    "years_experience": 11,
+    "teaching_style": "laboratory_focused",
+    "created_at": "2025-07-12T19:11:49.022Z"
+  },
+  {
+    "id": "steven_mesa",
+    "name": "Mr Steven Mesa",
+    "school_id": "city_view_high",
+    "school_name": "City View High School",
+    "subject_specialties": [
+      "Anatomy",
+      "AP Sciences"
+    ],
+    "grades_taught": [
+      "11",
+      "12"
+    ],
+    "years_experience": 14,
+    "teaching_style": "advanced_application",
+    "created_at": "2025-07-12T19:11:49.022Z"
+  },
+  {
+    "id": "rachel_plateau",
+    "name": "Ms Rachel Plateau",
+    "school_id": "city_view_high",
+    "school_name": "City View High School",
+    "subject_specialties": [
+      "World History",
+      "Geography"
+    ],
+    "grades_taught": [
+      "9",
+      "10"
+    ],
+    "years_experience": 6,
+    "teaching_style": "visual_storytelling",
+    "created_at": "2025-07-12T19:11:49.022Z"
+  },
+  {
+    "id": "daniel_bluff",
+    "name": "Mr Daniel Bluff",
+    "school_id": "city_view_high",
+    "school_name": "City View High School",
+    "subject_specialties": [
+      "US History",
+      "Government"
+    ],
+    "grades_taught": [
+      "11",
+      "12"
+    ],
+    "years_experience": 13,
+    "teaching_style": "civic_engagement",
+    "created_at": "2025-07-12T19:11:49.022Z"
+  },
+  {
+    "id": "victoria_crest",
+    "name": "Ms Victoria Crest",
+    "school_id": "city_view_high",
+    "school_name": "City View High School",
+    "subject_specialties": [
+      "Psychology",
+      "Economics"
+    ],
+    "grades_taught": [
+      "11",
+      "12"
+    ],
+    "years_experience": 8,
+    "teaching_style": "real_world_application",
+    "created_at": "2025-07-12T19:11:49.022Z"
+  },
+  {
+    "id": "ocean_view_middle_principal",
+    "name": "Ms. Maria Rodriguez",
+    "email": "principal@oceanviewmiddle.edu",
+    "role": "school_admin",
+    "district_id": "plainview_isd",
+    "district_name": "Plainview ISD",
+    "school_id": "ocean_view_middle",
+    "school_name": "Ocean View Middle School",
+    "subject_specialties": [
+      "Administration",
+      "Leadership",
+      "Curriculum"
+    ],
+    "grades_taught": [
+      "6",
+      "7",
+      "8"
+    ],
+    "years_experience": 18,
+    "teaching_style": "instructional_leadership",
+    "created_at": "2025-07-12T19:11:49.023Z"
+  },
+  {
+    "id": "brenda_sea",
+    "name": "Ms Brenda Sea",
+    "school_id": "ocean_view_middle",
+    "school_name": "Ocean View Middle School",
+    "subject_specialties": [
+      "ELA"
+    ],
+    "grades_taught": [
+      "6",
+      "7",
+      "8"
+    ],
+    "years_experience": 12,
+    "teaching_style": "collaborative",
+    "created_at": "2025-07-12T19:11:49.023Z"
+  },
+  {
+    "id": "derek_ocean",
+    "name": "Mr Derek Ocean",
+    "school_id": "ocean_view_middle",
+    "school_name": "Ocean View Middle School",
+    "subject_specialties": [
+      "Math"
+    ],
+    "grades_taught": [
+      "6",
+      "7",
+      "8"
+    ],
+    "years_experience": 9,
+    "teaching_style": "step_by_step",
+    "created_at": "2025-07-12T19:11:49.023Z"
+  },
+  {
+    "id": "sandra_wave",
+    "name": "Ms Sandra Wave",
+    "school_id": "ocean_view_middle",
+    "school_name": "Ocean View Middle School",
+    "subject_specialties": [
+      "Science"
+    ],
+    "grades_taught": [
+      "6",
+      "7",
+      "8"
+    ],
+    "years_experience": 8,
+    "teaching_style": "experimental",
+    "created_at": "2025-07-12T19:11:49.023Z"
+  },
+  {
+    "id": "tony_bay",
+    "name": "Mr Tony Bay",
+    "school_id": "ocean_view_middle",
+    "school_name": "Ocean View Middle School",
+    "subject_specialties": [
+      "Social Studies"
+    ],
+    "grades_taught": [
+      "6",
+      "7",
+      "8"
+    ],
+    "years_experience": 11,
+    "teaching_style": "historical_connections",
+    "created_at": "2025-07-12T19:11:49.023Z"
+  },
+  {
+    "id": "kelly_tide",
+    "name": "Ms Kelly Tide",
+    "school_id": "ocean_view_middle",
+    "school_name": "Ocean View Middle School",
+    "subject_specialties": [
+      "Art"
+    ],
+    "grades_taught": [
+      "6",
+      "7",
+      "8"
+    ],
+    "years_experience": 7,
+    "teaching_style": "creative_exploration",
+    "created_at": "2025-07-12T19:11:49.023Z"
+  },
+  {
+    "id": "steve_coral",
+    "name": "Mr Steve Coral",
+    "school_id": "ocean_view_middle",
+    "school_name": "Ocean View Middle School",
+    "subject_specialties": [
+      "Physical Education"
+    ],
+    "grades_taught": [
+      "6",
+      "7",
+      "8"
+    ],
+    "years_experience": 15,
+    "teaching_style": "active_participation",
+    "created_at": "2025-07-12T19:11:49.023Z"
+  },
+  {
+    "id": "nancy_shell",
+    "name": "Ms Nancy Shell",
+    "school_id": "ocean_view_middle",
+    "school_name": "Ocean View Middle School",
+    "subject_specialties": [
+      "Technology",
+      "Computer Science"
+    ],
+    "grades_taught": [
+      "6",
+      "7",
+      "8"
+    ],
+    "years_experience": 5,
+    "teaching_style": "hands_on_technology",
+    "created_at": "2025-07-12T19:11:49.023Z"
+  },
+  {
+    "id": "sand_view_elementary_principal",
+    "name": "Mr. David Wilson",
+    "email": "principal@sandviewelementary.edu",
+    "role": "school_admin",
+    "district_id": "plainview_isd",
+    "district_name": "Plainview ISD",
+    "school_id": "sand_view_elementary",
+    "school_name": "Sand View Elementary School",
+    "subject_specialties": [
+      "Administration",
+      "Leadership",
+      "Curriculum"
+    ],
+    "grades_taught": [
+      "Pre-K",
+      "K",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "years_experience": 12,
+    "teaching_style": "instructional_leadership",
+    "created_at": "2025-07-12T19:11:49.023Z"
+  },
+  {
+    "id": "jenna_grain",
+    "name": "Ms Jenna Grain",
+    "school_id": "sand_view_elementary",
+    "school_name": "Sand View Elementary School",
+    "subject_specialties": [
+      "Math"
+    ],
+    "grades_taught": [
+      "Pre-K",
+      "K",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "years_experience": 6,
+    "teaching_style": "hands_on",
+    "created_at": "2025-07-12T19:11:49.023Z"
+  },
+  {
+    "id": "marcus_river",
+    "name": "Mr Marcus River",
+    "school_id": "sand_view_elementary",
+    "school_name": "Sand View Elementary School",
+    "subject_specialties": [
+      "ELA"
+    ],
+    "grades_taught": [
+      "Pre-K",
+      "K",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "years_experience": 8,
+    "teaching_style": "phonics_focused",
+    "created_at": "2025-07-12T19:11:49.023Z"
+  },
+  {
+    "id": "diana_forest",
+    "name": "Ms Diana Forest",
+    "school_id": "sand_view_elementary",
+    "school_name": "Sand View Elementary School",
+    "subject_specialties": [
+      "Science"
+    ],
+    "grades_taught": [
+      "Pre-K",
+      "K",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "years_experience": 5,
+    "teaching_style": "discovery_based",
+    "created_at": "2025-07-12T19:11:49.023Z"
+  },
+  {
+    "id": "rosa_valley",
+    "name": "Ms Rosa Valley",
+    "school_id": "sand_view_elementary",
+    "school_name": "Sand View Elementary School",
+    "subject_specialties": [
+      "Social Studies"
+    ],
+    "grades_taught": [
+      "3",
+      "4",
+      "5"
+    ],
+    "years_experience": 10,
+    "teaching_style": "community_connected",
+    "created_at": "2025-07-12T19:11:49.023Z"
+  },
+  {
+    "id": "james_creek",
+    "name": "Mr James Creek",
+    "school_id": "sand_view_elementary",
+    "school_name": "Sand View Elementary School",
+    "subject_specialties": [
+      "Art"
+    ],
+    "grades_taught": [
+      "Pre-K",
+      "K",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "years_experience": 12,
+    "teaching_style": "creative_expression",
+    "created_at": "2025-07-12T19:11:49.023Z"
+  },
+  {
+    "id": "lisa_mountain",
+    "name": "Ms Lisa Mountain",
+    "school_id": "sand_view_elementary",
+    "school_name": "Sand View Elementary School",
+    "subject_specialties": [
+      "Physical Education"
+    ],
+    "grades_taught": [
+      "Pre-K",
+      "K",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "years_experience": 9,
+    "teaching_style": "movement_based",
+    "created_at": "2025-07-12T19:11:49.023Z"
+  },
+  {
+    "id": "carlos_stone",
+    "name": "Mr Carlos Stone",
+    "school_id": "sand_view_elementary",
+    "school_name": "Sand View Elementary School",
+    "subject_specialties": [
+      "Music"
+    ],
+    "grades_taught": [
+      "Pre-K",
+      "K",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "years_experience": 7,
+    "teaching_style": "rhythm_and_melody",
+    "created_at": "2025-07-12T19:11:49.023Z"
+  }
+]

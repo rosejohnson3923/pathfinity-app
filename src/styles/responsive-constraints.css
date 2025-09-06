@@ -1,0 +1,382 @@
+/**
+ * Responsive Design Constraints
+ * ==============================
+ * Global responsive constraints to ensure proper display across all devices
+ * Prevents horizontal scrolling and ensures optimal reading experience
+ */
+
+/* ============================================
+   GLOBAL CONSTRAINTS
+   ============================================ */
+
+/* Prevent horizontal scroll on all elements */
+* {
+  /* max-width: 100%; - Removed, was causing inheritance issues */
+  box-sizing: border-box;
+}
+
+/* Prevent fixed position elements from overflowing */
+/* Commented out - was causing width inheritance issues with modals
+*[style*="position: fixed"],
+*[style*="position:fixed"],
+[class*="fixed"] {
+  max-width: 100% !important;
+}
+*/
+
+/* HTML and Body constraints */
+html {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Ensure html with any dark theme classes is constrained */
+html[class*="dark"],
+html.dark,
+html.dark-theme-dark {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+/* ============================================
+   CONTAINER WIDTH CONSTRAINTS
+   ============================================ */
+
+/* Main app container */
+#root {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Dashboard wrapper constraint */
+.student-dashboard-wrapper {
+  width: 100%;
+  max-width: 1400px !important;
+  margin: 0 auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* Account for gamification sidebar (320px width) */
+.student-dashboard-wrapper.sidebar-open {
+  padding-right: 0; /* Remove padding since sidebar isn't showing */
+}
+
+/* Dashboard content area */
+.student-dashboard {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-4);
+}
+
+/* Main content area when sidebar is present */
+.dashboard-main-content {
+  width: 100%;
+  max-width: calc(100% - 320px);
+  transition: max-width 0.3s ease;
+}
+
+.dashboard-main-content.sidebar-collapsed {
+  max-width: 100%;
+}
+
+/* Content containers - optimal reading width */
+.container-content,
+.content-wrapper,
+.main-content {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-4);
+}
+
+/* Wide content areas (with sidebar) */
+.container-with-sidebar {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Full-width containers that need constraint */
+.ai-learn-container,
+.ai-experience-container,
+.ai-discover-container,
+.multi-subject-container {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Adjust container widths when sidebar is present */
+.sidebar-open .ai-learn-container,
+.sidebar-open .ai-experience-container,
+.sidebar-open .ai-discover-container,
+.sidebar-open .multi-subject-container {
+  max-width: calc(100% - 320px);
+  margin-right: 320px;
+}
+
+/* Inner content constraint */
+.ai-learn-container .content,
+.ai-experience-container .content,
+.ai-discover-container .content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-4);
+}
+
+/* Adjust inner content when sidebar is present on large screens */
+@media (min-width: 1520px) {
+  .sidebar-open .ai-learn-container .content,
+  .sidebar-open .ai-experience-container .content,
+  .sidebar-open .ai-discover-container .content {
+    max-width: calc(1200px - 160px); /* Slightly narrower to account for sidebar */
+  }
+}
+
+/* ============================================
+   MODAL CONSTRAINTS
+   ============================================ */
+
+/* Modal containers */
+.modal-container,
+.modal-overlay {
+  max-width: 100%;
+  max-height: 100vh;
+}
+
+.modal-content {
+  max-width: min(90vw, 800px);
+  max-height: min(90vh, 600px);
+  overflow-y: auto;
+}
+
+/* Large modals */
+.modal-large {
+  max-width: min(95vw, 1200px);
+}
+
+/* ============================================
+   RESPONSIVE BREAKPOINTS
+   ============================================ */
+
+/* Extra Large Screens (1400px+) */
+@media (min-width: 1400px) {
+  .container-content {
+    padding: 0 var(--spacing-6);
+  }
+}
+
+/* Large Screens (1200px - 1399px) */
+@media (max-width: 1399px) {
+  .container-content {
+    max-width: 1100px;
+  }
+}
+
+/* Medium Screens (992px - 1199px) */
+@media (max-width: 1199px) {
+  .container-content {
+    max-width: 960px;
+    padding: 0 var(--spacing-4);
+  }
+}
+
+/* Tablets (768px - 991px) */
+@media (max-width: 991px) {
+  .container-content {
+    max-width: 720px;
+    padding: 0 var(--spacing-3);
+  }
+  
+  /* Sidebar becomes overlay on tablets */
+  .gamification-sidebar {
+    position: fixed !important;
+    z-index: var(--z-modal);
+    width: 280px !important;
+    right: -280px;
+    transition: right 0.3s ease;
+  }
+  
+  .gamification-sidebar.open {
+    right: 0;
+    box-shadow: -5px 0 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Remove padding adjustment on tablets since sidebar is overlay */
+  .student-dashboard-wrapper.sidebar-open {
+    padding-right: 0;
+  }
+  
+  .dashboard-main-content {
+    max-width: 100%;
+  }
+}
+
+/* Small Tablets (576px - 767px) */
+@media (max-width: 767px) {
+  .container-content {
+    max-width: 540px;
+    padding: 0 var(--spacing-3);
+  }
+  
+  /* Stack elements vertically */
+  .horizontal-layout {
+    flex-direction: column;
+  }
+}
+
+/* Mobile (up to 575px) */
+@media (max-width: 575px) {
+  .container-content {
+    max-width: 100%;
+    padding: 0 var(--spacing-2);
+  }
+  
+  /* Full width modals on mobile */
+  .modal-content {
+    max-width: 100%;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+  
+  /* Hide desktop-only elements */
+  .desktop-only {
+    display: none !important;
+  }
+}
+
+/* ============================================
+   COMPONENT-SPECIFIC CONSTRAINTS
+   ============================================ */
+
+/* Navigation header */
+.navigation-header,
+.container-navigation-header {
+  width: 100%;
+  max-width: 100%;
+}
+
+.navigation-header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-4);
+}
+
+/* Question containers */
+.question-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Cards and grids */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: var(--spacing-4);
+  width: 100%;
+}
+
+/* Tables - make responsive */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+table {
+  min-width: 600px;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+/* Container width utilities */
+.w-full { width: 100%; }
+.w-content { width: 100%; max-width: 1200px; margin: 0 auto; }
+.w-narrow { width: 100%; max-width: 800px; margin: 0 auto; }
+.w-wide { width: 100%; max-width: 1400px; margin: 0 auto; }
+
+/* Responsive padding */
+.px-responsive {
+  padding-left: var(--spacing-2);
+  padding-right: var(--spacing-2);
+}
+
+@media (min-width: 576px) {
+  .px-responsive {
+    padding-left: var(--spacing-3);
+    padding-right: var(--spacing-3);
+  }
+}
+
+@media (min-width: 768px) {
+  .px-responsive {
+    padding-left: var(--spacing-4);
+    padding-right: var(--spacing-4);
+  }
+}
+
+@media (min-width: 992px) {
+  .px-responsive {
+    padding-left: var(--spacing-6);
+    padding-right: var(--spacing-6);
+  }
+}
+
+/* ============================================
+   SCROLLBAR STYLING
+   ============================================ */
+
+/* Custom scrollbar for overflow areas */
+.scrollable::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scrollable::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-full);
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+  background: var(--color-gray-400);
+  border-radius: var(--radius-full);
+}
+
+.scrollable::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gray-500);
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+  /* Reset widths for print */
+  body, .student-dashboard-wrapper {
+    width: auto !important;
+    max-width: none !important;
+  }
+  
+  .container-content {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+}

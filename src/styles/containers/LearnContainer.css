@@ -1,0 +1,295 @@
+/**
+ * LEARN CONTAINER STYLES
+ * ======================
+ * Specific styles for the Learn container
+ * Extends BaseContainer.css with purple theme
+ * 
+ * Created: 2025-08-22
+ */
+
+@import './BaseContainer.css';
+
+/* ============================================
+   LEARN CONTAINER SPECIFIC
+   ============================================ */
+.ai-learn-container {
+  composes: container-base;
+  composes: container-learn;
+}
+
+/* ============================================
+   LEARN THEME DECORATIONS
+   ============================================ */
+/* Purple accent line at top */
+.ai-learn-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gradient-primary);
+  z-index: 10;
+}
+
+/* Floating math symbols background pattern */
+.ai-learn-container .container-pattern {
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(124, 58, 237, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.03) 0%, transparent 50%);
+  animation: floatPattern 30s ease-in-out infinite;
+}
+
+@keyframes floatPattern {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* ============================================
+   LEARN PHASE INDICATORS
+   ============================================ */
+.ai-learn-container .phase-indicator {
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.1) 0%,
+    rgba(124, 58, 237, 0.05) 100%
+  );
+  border-left: 3px solid var(--color-primary);
+}
+
+/* ============================================
+   LEARN CARD STYLES
+   ============================================ */
+.ai-learn-container .modal-card,
+.ai-learn-container .content-card {
+  border: 1px solid rgba(139, 92, 246, 0.1);
+  box-shadow: 
+    var(--shadow-elevated),
+    0 0 40px rgba(139, 92, 246, 0.05);
+}
+
+[data-theme="dark"] .ai-learn-container .modal-card,
+[data-theme="dark"] .ai-learn-container .content-card {
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  box-shadow: 
+    var(--shadow-elevated),
+    0 0 60px rgba(139, 92, 246, 0.1);
+}
+
+/* ============================================
+   LEARN BUTTON OVERRIDES
+   ============================================ */
+.ai-learn-container .primary-button {
+  background: var(--gradient-primary);
+  box-shadow: var(--shadow-primary);
+}
+
+.ai-learn-container .primary-button:hover {
+  box-shadow: 
+    var(--shadow-primary),
+    0 0 30px rgba(139, 92, 246, 0.3);
+}
+
+/* ============================================
+   LEARN PROGRESS ELEMENTS
+   ============================================ */
+.ai-learn-container .progress-bar {
+  background: rgba(139, 92, 246, 0.1);
+}
+
+.ai-learn-container .progress-fill {
+  background: var(--gradient-primary);
+}
+
+.ai-learn-container .progress-dot.active {
+  background: var(--gradient-primary);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+}
+
+/* ============================================
+   CAREER CONTEXT CARD STYLES
+   ============================================ */
+.ai-learn-container .career-context-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease;
+}
+
+.ai-learn-container .career-context-card {
+  background: var(--color-card);
+  border-radius: 24px;
+  padding: 32px;
+  max-width: 900px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(139, 92, 246, 0.3);
+  border: 2px solid var(--color-primary);
+  animation: slideUp 0.4s ease;
+}
+
+/* Grade-specific styling */
+.ai-learn-container .grade-elementary .career-context-title {
+  font-size: 2.5rem;
+  color: var(--color-primary);
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.ai-learn-container .grade-middle .career-context-title {
+  font-size: 2rem;
+  color: var(--color-primary);
+  margin-bottom: 20px;
+}
+
+.ai-learn-container .grade-high .career-context-title {
+  font-size: 1.75rem;
+  color: var(--color-text);
+  margin-bottom: 16px;
+}
+
+.ai-learn-container .career-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(124, 58, 237, 0.05) 100%);
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--color-primary);
+}
+
+.ai-learn-container .career-greeting {
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: var(--color-text);
+  margin-bottom: 16px;
+  padding: 16px;
+  background: rgba(139, 92, 246, 0.05);
+  border-radius: 12px;
+  border-left: 4px solid var(--color-primary);
+}
+
+.ai-learn-container .career-start-button {
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+}
+
+.ai-learn-container .career-start-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 30px rgba(139, 92, 246, 0.4);
+}
+
+/* Avatar animations */
+.ai-learn-container .avatar-container.speaking {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* ============================================
+   LEARN FEEDBACK STYLES
+   ============================================ */
+.ai-learn-container .feedback-correct {
+  background: linear-gradient(
+    135deg,
+    rgba(16, 185, 129, 0.1) 0%,
+    rgba(5, 150, 105, 0.05) 100%
+  );
+  border-left: 4px solid var(--color-success);
+}
+
+.ai-learn-container .feedback-incorrect {
+  background: linear-gradient(
+    135deg,
+    rgba(239, 68, 68, 0.1) 0%,
+    rgba(220, 38, 38, 0.05) 100%
+  );
+  border-left: 4px solid var(--color-error);
+}
+
+/* ============================================
+   LEARN COMPANION INTEGRATION
+   ============================================ */
+.ai-learn-container .companion-avatar {
+  background: var(--gradient-primary);
+  box-shadow: 
+    var(--shadow-md),
+    0 0 30px rgba(139, 92, 246, 0.2);
+}
+
+.ai-learn-container .companion-message {
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.05) 0%,
+    transparent 100%
+  );
+  border: 1px solid rgba(139, 92, 246, 0.1);
+}
+
+/* ============================================
+   LEARN GAMIFICATION
+   ============================================ */
+.ai-learn-container .xp-display {
+  background: var(--gradient-primary);
+  color: white;
+}
+
+.ai-learn-container .achievement-badge {
+  background: linear-gradient(
+    135deg,
+    #fbbf24 0%,
+    #f59e0b 100%
+  );
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
+}
+
+/* ============================================
+   LEARN ANIMATIONS
+   ============================================ */
+.ai-learn-container .animate-in {
+  animation: learnSlideIn var(--duration-moderate) var(--easing-out);
+}
+
+@keyframes learnSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================
+   LEARN RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .ai-learn-container::before {
+    height: 2px;
+  }
+  
+  .ai-learn-container .container-pattern {
+    opacity: 0.02;
+  }
+}

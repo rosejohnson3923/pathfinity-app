@@ -1,0 +1,29 @@
+<<<<<<< HEAD
+=======
+# Logs - updated 07/08/2025 - v1
+>>>>>>> 7225b9b8001518dfffce043244e6e1052e5a518a
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.env
+claude-sessions/

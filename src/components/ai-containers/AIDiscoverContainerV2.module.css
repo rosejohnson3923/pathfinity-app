@@ -1,0 +1,350 @@
+/**
+ * AI Discover Container V2 CSS Module
+ * ====================================
+ * Unified styles for the Discover Container
+ * Theme: Magenta/Purple for creative exploration
+ */
+
+/* Container Base */
+.discoverContainer {
+  background: var(--gradient-discover);
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Theme Variables */
+.discoverContainer {
+  --container-primary: var(--color-magenta-500);
+  --container-secondary: var(--color-purple-500);
+  --container-accent: var(--color-magenta-600);
+  --container-gradient: var(--gradient-discover);
+}
+
+/* Dark Theme Overrides */
+[data-theme="dark"] .discoverContainer {
+  --container-primary: var(--color-magenta-400);
+  --container-secondary: var(--color-purple-400);
+  --container-accent: var(--color-magenta-500);
+  background: var(--gradient-discover-dark);
+}
+
+/* Content Wrapper */
+.contentWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-6);
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Discovery Cards */
+.discoveryCard {
+  background: var(--bg-primary);
+  border: 2px solid var(--container-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-5);
+  margin-bottom: var(--spacing-4);
+  position: relative;
+  overflow: hidden;
+  transition: all var(--duration-fast) var(--easing-out);
+}
+
+.discoveryCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, 
+    var(--container-primary) 0%, 
+    var(--container-secondary) 100%);
+}
+
+.discoveryCard:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 15px 40px rgba(236, 72, 153, 0.2);
+  border-color: var(--container-accent);
+}
+
+/* Creative Workspace */
+.creativeWorkspace {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-6);
+  position: relative;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.canvasArea {
+  flex: 1;
+  background: var(--bg-primary);
+  border: 2px dashed var(--container-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-4);
+  position: relative;
+  transition: all var(--duration-fast) var(--easing-out);
+}
+
+.canvasArea:hover {
+  border-style: solid;
+  background: linear-gradient(135deg,
+    rgba(236, 72, 153, 0.02) 0%,
+    rgba(168, 85, 247, 0.02) 100%);
+}
+
+/* Exploration Tools */
+.toolPalette {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: var(--spacing-2);
+  padding: var(--spacing-3);
+  background: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+}
+
+.toolItem {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-1);
+  padding: var(--spacing-2);
+  background: var(--bg-secondary);
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--easing-out);
+}
+
+.toolItem:hover {
+  background: var(--container-primary);
+  color: var(--color-white);
+  transform: translateY(-2px);
+  border-color: var(--container-primary);
+}
+
+.toolItemActive {
+  background: var(--container-primary);
+  color: var(--color-white);
+  border-color: var(--container-accent);
+  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
+}
+
+/* Interactive Elements */
+.interactiveObject {
+  position: absolute;
+  cursor: move;
+  user-select: none;
+  transition: transform var(--duration-fast) var(--easing-out);
+}
+
+.interactiveObject:hover {
+  transform: scale(1.1);
+}
+
+.interactiveObjectDragging {
+  opacity: 0.7;
+  transform: scale(1.15);
+  z-index: 1000;
+}
+
+/* Discovery Path */
+.discoveryPath {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-4);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  margin: var(--spacing-4) 0;
+  overflow-x: auto;
+}
+
+.pathStep {
+  min-width: 120px;
+  padding: var(--spacing-3);
+  background: var(--bg-primary);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  text-align: center;
+  position: relative;
+  transition: all var(--duration-fast) var(--easing-out);
+}
+
+.pathStep::after {
+  content: '→';
+  position: absolute;
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--container-primary);
+  font-size: var(--text-lg);
+}
+
+.pathStep:last-child::after {
+  display: none;
+}
+
+.pathStepActive {
+  background: linear-gradient(135deg,
+    rgba(236, 72, 153, 0.1) 0%,
+    rgba(168, 85, 247, 0.1) 100%);
+  border-color: var(--container-primary);
+}
+
+.pathStepCompleted {
+  background: var(--container-secondary);
+  color: var(--color-white);
+  border-color: var(--container-secondary);
+}
+
+/* Inspiration Gallery */
+.inspirationGallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--spacing-3);
+  padding: var(--spacing-4);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+}
+
+.galleryItem {
+  aspect-ratio: 16/9;
+  background: var(--bg-primary);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--easing-out);
+}
+
+.galleryItem:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 25px rgba(236, 72, 153, 0.2);
+}
+
+.galleryItemOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: var(--spacing-2);
+  background: linear-gradient(to top,
+    rgba(0, 0, 0, 0.8) 0%,
+    transparent 100%);
+  color: var(--color-white);
+  transform: translateY(100%);
+  transition: transform var(--duration-fast) var(--easing-out);
+}
+
+.galleryItem:hover .galleryItemOverlay {
+  transform: translateY(0);
+}
+
+/* Achievement Showcase */
+.achievementBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-3);
+  background: linear-gradient(135deg, 
+    var(--container-primary) 0%, 
+    var(--container-secondary) 100%);
+  color: var(--color-white);
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+/* Loading State */
+.loadingScreen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--container-gradient);
+}
+
+/* Grade-Level Adaptations */
+[data-grade="K-2"] .discoveryCard {
+  font-size: var(--text-xl);
+  padding: var(--spacing-6);
+  border-width: 3px;
+}
+
+[data-grade="K-2"] .toolItem {
+  min-width: 100px;
+  min-height: 100px;
+  font-size: var(--text-lg);
+}
+
+[data-grade="3-5"] .discoveryCard {
+  font-size: var(--text-lg);
+  padding: var(--spacing-5);
+}
+
+[data-grade="3-5"] .toolItem {
+  min-width: 90px;
+  min-height: 90px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .contentWrapper {
+    padding: var(--spacing-4);
+  }
+  
+  .toolPalette {
+    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+  }
+  
+  .inspirationGallery {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .inspirationGallery {
+    grid-template-columns: 1fr;
+  }
+  
+  .discoveryPath {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .pathStep::after {
+    content: '↓';
+    right: 50%;
+    bottom: -15px;
+    top: auto;
+    transform: translateX(50%);
+  }
+}
+
+/* Print Styles */
+@media print {
+  .discoverContainer {
+    background: white !important;
+  }
+  
+  .toolPalette,
+  .loadingScreen {
+    display: none !important;
+  }
+}

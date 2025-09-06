@@ -1,0 +1,1203 @@
+[
+  {
+    "questionType": "multiple_choice",
+    "success": true,
+    "stages": {
+      "aiGeneration": {
+        "success": true,
+        "response": {
+          "type": "multiple_choice",
+          "question": "An engineer needs to build a bridge that can hold 5000 kilograms. If each support beam can hold 1250 kilograms, what is the minimum number of beams required to safely build the bridge?",
+          "options": [
+            "3",
+            "4",
+            "5",
+            "6"
+          ],
+          "correct_answer": 1,
+          "visual": null,
+          "hint": "Divide the total weight by the capacity of one beam and round up if needed.",
+          "explanation": "5000 divided by 1250 equals 4, so 4 beams are required to safely hold the bridge's weight."
+        }
+      },
+      "templateValidation": {
+        "success": true
+      },
+      "contentConversion": {
+        "success": true,
+        "converted": {
+          "id": "assessment-1756728983218-1",
+          "type": "multiple_choice",
+          "content": "An engineer needs to build a bridge that can hold 5000 kilograms. If each support beam can hold 1250 kilograms, what is the minimum number of beams required to safely build the bridge?",
+          "topic": "Problem Solving",
+          "subject": "Math",
+          "difficulty": "medium",
+          "points": 10,
+          "options": [
+            {
+              "id": "opt-0",
+              "text": "3",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-1",
+              "text": "4",
+              "isCorrect": true
+            },
+            {
+              "id": "opt-2",
+              "text": "5",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-3",
+              "text": "6",
+              "isCorrect": false
+            }
+          ],
+          "allowMultiple": false,
+          "randomizeOptions": false,
+          "explanation": "5000 divided by 1250 equals 4, so 4 beams are required to safely hold the bridge's weight.",
+          "metadata": {
+            "bloomsLevel": "understand",
+            "estimatedTime": 45
+          }
+        }
+      },
+      "answerExtraction": {
+        "success": true,
+        "correctAnswer": "opt-1",
+        "display": "4"
+      },
+      "finalValidation": {
+        "success": true
+      }
+    },
+    "example": {
+      "question": "An engineer needs to build a bridge that can hold 5000 kilograms. If each support beam can hold 1250 kilograms, what is the minimum number of beams required to safely build the bridge?",
+      "userAnswer": "3",
+      "correctAnswer": "opt-1",
+      "displayAnswer": "4"
+    }
+  },
+  {
+    "questionType": "true_false",
+    "success": true,
+    "stages": {
+      "aiGeneration": {
+        "success": true,
+        "response": {
+          "type": "true_false",
+          "question": "True or False: A bridge engineer must calculate the weight a bridge can support before construction begins to ensure safety.",
+          "correct_answer": true,
+          "visual": null,
+          "hint": "Think about the importance of planning and safety in engineering.",
+          "explanation": "Engineers must determine the load capacity of a bridge during the design phase to prevent structural failure and ensure safety."
+        }
+      },
+      "templateValidation": {
+        "success": true
+      },
+      "contentConversion": {
+        "success": true,
+        "converted": {
+          "id": "assessment-1756728986169-2",
+          "type": "true_false",
+          "content": "True or False: A bridge engineer must calculate the weight a bridge can support before construction begins to ensure safety.",
+          "statement": "A bridge engineer must calculate the weight a bridge can support before construction begins to ensure safety.",
+          "topic": "Problem Solving",
+          "subject": "Math",
+          "difficulty": "easy",
+          "points": 5,
+          "correctAnswer": true,
+          "explanation": "Engineers must determine the load capacity of a bridge during the design phase to prevent structural failure and ensure safety.",
+          "metadata": {
+            "bloomsLevel": "understand",
+            "estimatedTime": 20
+          }
+        }
+      },
+      "answerExtraction": {
+        "success": true,
+        "correctAnswer": true,
+        "display": "True"
+      },
+      "finalValidation": {
+        "success": true
+      }
+    },
+    "example": {
+      "question": "True or False: A bridge engineer must calculate the weight a bridge can support before construction begins to ensure safety.",
+      "userAnswer": false,
+      "correctAnswer": true,
+      "displayAnswer": "True"
+    }
+  },
+  {
+    "questionType": "counting",
+    "success": true,
+    "stages": {
+      "aiGeneration": {
+        "success": true,
+        "response": {
+          "type": "counting",
+          "question": "How many gears do you see?",
+          "visual": "⚙️ ⚙️ ⚙️ ⚙️ ⚙️ ⚙️ ⚙️",
+          "correct_answer": 7,
+          "hint": "Count each gear carefully one by one",
+          "explanation": "There are 7 gears: one, two, three, four, five, six, seven"
+        }
+      },
+      "templateValidation": {
+        "success": true
+      },
+      "contentConversion": {
+        "success": true,
+        "converted": {
+          "id": "assessment-1756728988781-3",
+          "type": "counting",
+          "content": "How many gears do you see?",
+          "topic": "Problem Solving",
+          "subject": "Math",
+          "difficulty": "easy",
+          "points": 10,
+          "visualElements": {
+            "type": "objects",
+            "description": "⚙️ ⚙️ ⚙️ ⚙️ ⚙️ ⚙️ ⚙️"
+          },
+          "correctCount": 7,
+          "countWhat": "items",
+          "minCount": 0,
+          "maxCount": 10,
+          "explanation": "There are 7 gears: one, two, three, four, five, six, seven",
+          "metadata": {
+            "bloomsLevel": "remember",
+            "estimatedTime": 30
+          }
+        }
+      },
+      "answerExtraction": {
+        "success": true,
+        "correctAnswer": 7,
+        "display": "7"
+      },
+      "finalValidation": {
+        "success": true
+      }
+    },
+    "example": {
+      "question": "How many gears do you see?",
+      "userAnswer": 3,
+      "correctAnswer": 7,
+      "displayAnswer": "7"
+    }
+  },
+  {
+    "questionType": "numeric",
+    "success": true,
+    "stages": {
+      "aiGeneration": {
+        "success": true,
+        "response": {
+          "type": "numeric",
+          "question": "An engineer is designing a bridge and needs 7 steel beams for each section. If the bridge has 6 sections, how many steel beams are required in total?",
+          "correct_answer": 42,
+          "unit": "steel beams",
+          "visual": null,
+          "hint": "Multiply the number of sections by the number of beams per section.",
+          "explanation": "There are 6 sections, each requiring 7 beams. 6 × 7 = 42. Therefore, 42 steel beams are required."
+        }
+      },
+      "templateValidation": {
+        "success": true
+      },
+      "contentConversion": {
+        "success": true,
+        "converted": {
+          "id": "assessment-1756728991754-4",
+          "type": "numeric",
+          "content": "An engineer is designing a bridge and needs 7 steel beams for each section. If the bridge has 6 sections, how many steel beams are required in total?",
+          "topic": "Problem Solving",
+          "subject": "Math",
+          "difficulty": "medium",
+          "points": 10,
+          "correctAnswer": 42,
+          "tolerance": 0.01,
+          "explanation": "There are 6 sections, each requiring 7 beams. 6 × 7 = 42. Therefore, 42 steel beams are required.",
+          "metadata": {
+            "bloomsLevel": "apply",
+            "estimatedTime": 45
+          }
+        }
+      },
+      "answerExtraction": {
+        "success": true,
+        "correctAnswer": 42,
+        "display": "42"
+      },
+      "finalValidation": {
+        "success": true
+      }
+    },
+    "example": {
+      "question": "An engineer is designing a bridge and needs 7 steel beams for each section. If the bridge has 6 sections, how many steel beams are required in total?",
+      "userAnswer": 42,
+      "correctAnswer": 42,
+      "displayAnswer": "42"
+    }
+  },
+  {
+    "questionType": "fill_blank",
+    "success": true,
+    "stages": {
+      "aiGeneration": {
+        "success": true,
+        "response": {
+          "type": "fill_blank",
+          "question": "Solve this engineering problem about forces",
+          "template": "If a bridge is designed to hold a maximum weight of 1,000 kilograms, and a vehicle weighing 750 kilograms is on it, the remaining weight capacity is _____ kilograms.",
+          "blanks": [
+            {
+              "id": "blank_0",
+              "correctAnswers": [
+                "250",
+                "250 kilograms"
+              ]
+            }
+          ],
+          "correct_answer": "250",
+          "visual": null,
+          "hint": "Subtract the vehicle's weight from the bridge's maximum capacity.",
+          "explanation": "The maximum weight capacity of the bridge is 1,000 kilograms. Subtracting the vehicle's weight (750 kilograms) gives 1,000 - 750 = 250 kilograms."
+        }
+      },
+      "templateValidation": {
+        "success": true
+      },
+      "contentConversion": {
+        "success": true,
+        "converted": {
+          "id": "fb_1756728995460",
+          "type": "fill_blank",
+          "content": "Solve this engineering problem about forces",
+          "template": "If a bridge is designed to hold a maximum weight of 1,000 kilograms, and a vehicle weighing 750 kilograms is on it, the remaining weight capacity is {{blank_0}} kilograms.",
+          "blanks": [
+            {
+              "id": "blank_0",
+              "position": 0,
+              "correctAnswers": [
+                "250",
+                "250 kilograms"
+              ],
+              "caseSensitive": false
+            }
+          ],
+          "correctAnswers": [
+            "250"
+          ],
+          "acceptableAnswers": [
+            [
+              "250",
+              "250 kilograms"
+            ]
+          ],
+          "difficulty": "medium",
+          "points": 10,
+          "topic": "Problem Solving",
+          "subject": "Math",
+          "metadata": {
+            "subject": "Math",
+            "grade": "5",
+            "skill": "Problem Solving",
+            "difficulty": "medium",
+            "estimatedTime": 30
+          }
+        }
+      },
+      "answerExtraction": {
+        "success": true,
+        "correctAnswer": [
+          "250"
+        ],
+        "display": "250"
+      },
+      "finalValidation": {
+        "success": true
+      }
+    },
+    "example": {
+      "question": "Solve this engineering problem about forces",
+      "userAnswer": "answer",
+      "correctAnswer": [
+        "250"
+      ],
+      "displayAnswer": "250"
+    }
+  },
+  {
+    "questionType": "short_answer",
+    "success": true,
+    "stages": {
+      "aiGeneration": {
+        "success": true,
+        "response": {
+          "type": "short_answer",
+          "question": "What tool is often used to measure angles in engineering drawings?",
+          "correct_answer": "Protractor",
+          "acceptable_answers": [
+            "Protractor",
+            "protractor",
+            "PROTRACTOR"
+          ],
+          "visual": null,
+          "hint": "It is a semicircular tool with degree markings.",
+          "explanation": "A protractor is commonly used in engineering to measure angles accurately."
+        }
+      },
+      "templateValidation": {
+        "success": true
+      },
+      "contentConversion": {
+        "success": true,
+        "converted": {
+          "id": "assessment-1756728997783-5",
+          "type": "short_answer",
+          "content": "What tool is often used to measure angles in engineering drawings?",
+          "topic": "Problem Solving",
+          "subject": "Math",
+          "difficulty": "medium",
+          "points": 10,
+          "acceptableAnswers": [
+            "Protractor"
+          ],
+          "caseSensitive": false,
+          "maxLength": 100,
+          "explanation": "A protractor is commonly used in engineering to measure angles accurately.",
+          "metadata": {
+            "bloomsLevel": "understand",
+            "estimatedTime": 60
+          }
+        }
+      },
+      "answerExtraction": {
+        "success": true,
+        "correctAnswer": [
+          "Protractor"
+        ],
+        "display": "Protractor"
+      },
+      "finalValidation": {
+        "success": true
+      }
+    },
+    "example": {
+      "question": "What tool is often used to measure angles in engineering drawings?",
+      "userAnswer": "Paris",
+      "correctAnswer": [
+        "Protractor"
+      ],
+      "displayAnswer": "Protractor"
+    }
+  },
+  {
+    "questionType": "long_answer",
+    "success": true,
+    "stages": {
+      "aiGeneration": {
+        "success": true,
+        "response": {
+          "type": "long_answer",
+          "question": "An engineer is designing a bridge and needs to ensure it can support heavy vehicles while staying within budget. Describe the steps they should take to solve this problem and explain why each step is important.",
+          "sample_answer": "To solve this problem, the engineer should first identify the weight capacity required by analyzing the types of vehicles that will use the bridge. Next, they should calculate the materials needed and select cost-effective yet durable options, ensuring safety standards are met. Afterward, they can create detailed design plans and simulate stress tests to evaluate performance under heavy loads. Finally, they should review the budget and optimize costs where possible without compromising quality. Each step is crucial for achieving a safe, functional, and affordable bridge.",
+          "grading_rubric": [
+            "Identifies weight capacity requirements",
+            "Discusses material selection and cost-effectiveness",
+            "Explains the importance of simulations and testing",
+            "Mentions budget optimization"
+          ],
+          "visual": null,
+          "hint": "Consider the stages of planning, testing, and refining a design.",
+          "explanation": "A strong answer should address each step of the problem-solving process, linking actions to engineering principles and ensuring the design is practical and cost-effective."
+        }
+      },
+      "templateValidation": {
+        "success": true
+      },
+      "contentConversion": {
+        "success": true,
+        "converted": {
+          "id": "assessment-1756729001830-6",
+          "type": "long_answer",
+          "content": "An engineer is designing a bridge and needs to ensure it can support heavy vehicles while staying within budget. Describe the steps they should take to solve this problem and explain why each step is important.",
+          "topic": "Problem Solving",
+          "subject": "Math",
+          "difficulty": "hard",
+          "points": 20,
+          "minWords": 50,
+          "maxWords": 200,
+          "rubric": {
+            "criteria": [
+              "Content",
+              "Organization",
+              "Grammar"
+            ],
+            "maxPoints": 20
+          },
+          "sampleAnswer": "To solve this problem, the engineer should first identify the weight capacity required by analyzing the types of vehicles that will use the bridge. Next, they should calculate the materials needed and select cost-effective yet durable options, ensuring safety standards are met. Afterward, they can create detailed design plans and simulate stress tests to evaluate performance under heavy loads. Finally, they should review the budget and optimize costs where possible without compromising quality. Each step is crucial for achieving a safe, functional, and affordable bridge.",
+          "explanation": "A strong answer should address each step of the problem-solving process, linking actions to engineering principles and ensuring the design is practical and cost-effective.",
+          "metadata": {
+            "bloomsLevel": "create",
+            "estimatedTime": 300
+          }
+        }
+      },
+      "answerExtraction": {
+        "success": true,
+        "correctAnswer": "To solve this problem, the engineer should first identify the weight capacity required by analyzing the types of vehicles that will use the bridge. Next, they should calculate the materials needed and select cost-effective yet durable options, ensuring safety standards are met. Afterward, they can create detailed design plans and simulate stress tests to evaluate performance under heavy loads. Finally, they should review the budget and optimize costs where possible without compromising quality. Each step is crucial for achieving a safe, functional, and affordable bridge.",
+        "display": "To solve this problem, the engineer should first identify the weight capacity required by analyzing ..."
+      },
+      "finalValidation": {
+        "success": true
+      }
+    },
+    "example": {
+      "question": "An engineer is designing a bridge and needs to ensure it can support heavy vehicles while staying within budget. Describe the steps they should take to solve this problem and explain why each step is important.",
+      "userAnswer": "test answer",
+      "correctAnswer": "To solve this problem, the engineer should first identify the weight capacity required by analyzing the types of vehicles that will use the bridge. Next, they should calculate the materials needed and select cost-effective yet durable options, ensuring safety standards are met. Afterward, they can create detailed design plans and simulate stress tests to evaluate performance under heavy loads. Finally, they should review the budget and optimize costs where possible without compromising quality. Each step is crucial for achieving a safe, functional, and affordable bridge.",
+      "displayAnswer": "To solve this problem, the engineer should first identify the weight capacity required by analyzing ..."
+    }
+  },
+  {
+    "questionType": "matching",
+    "success": true,
+    "stages": {
+      "aiGeneration": {
+        "success": true,
+        "response": {
+          "type": "matching",
+          "question": "Match the engineering tools to their functions",
+          "left_items": [
+            "Ruler",
+            "Calculator",
+            "Blueprint"
+          ],
+          "right_items": [
+            "Measures straight lines",
+            "Performs mathematical calculations",
+            "Provides a detailed design plan"
+          ],
+          "correct_pairs": [
+            [
+              0,
+              0
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              2,
+              2
+            ]
+          ],
+          "visual": null,
+          "hint": "Think about what each tool is commonly used for in engineering.",
+          "explanation": "Ruler measures straight lines, calculator performs mathematical calculations, and blueprint provides a detailed design plan."
+        }
+      },
+      "templateValidation": {
+        "success": true
+      },
+      "contentConversion": {
+        "success": true,
+        "converted": {
+          "id": "assessment-1756729004859-7",
+          "type": "matching",
+          "content": "Match the engineering tools to their functions",
+          "topic": "Problem Solving",
+          "subject": "Math",
+          "difficulty": "medium",
+          "points": 15,
+          "leftItems": [
+            {
+              "id": "left-0",
+              "text": "Ruler"
+            },
+            {
+              "id": "left-1",
+              "text": "Calculator"
+            },
+            {
+              "id": "left-2",
+              "text": "Blueprint"
+            }
+          ],
+          "rightItems": [
+            {
+              "id": "right-0",
+              "text": "Measures straight lines"
+            },
+            {
+              "id": "right-1",
+              "text": "Performs mathematical calculations"
+            },
+            {
+              "id": "right-2",
+              "text": "Provides a detailed design plan"
+            }
+          ],
+          "leftColumn": [
+            {
+              "id": "left-0",
+              "text": "Ruler"
+            },
+            {
+              "id": "left-1",
+              "text": "Calculator"
+            },
+            {
+              "id": "left-2",
+              "text": "Blueprint"
+            }
+          ],
+          "rightColumn": [
+            {
+              "id": "right-0",
+              "text": "Measures straight lines"
+            },
+            {
+              "id": "right-1",
+              "text": "Performs mathematical calculations"
+            },
+            {
+              "id": "right-2",
+              "text": "Provides a detailed design plan"
+            }
+          ],
+          "correctPairs": [
+            [
+              0,
+              0
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              2,
+              2
+            ]
+          ],
+          "allowPartialCredit": true,
+          "explanation": "Ruler measures straight lines, calculator performs mathematical calculations, and blueprint provides a detailed design plan.",
+          "metadata": {
+            "bloomsLevel": "analyze",
+            "estimatedTime": 120
+          }
+        }
+      },
+      "answerExtraction": {
+        "success": true,
+        "correctAnswer": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ]
+        ],
+        "display": "undefined → undefined, undefined → undefined, undefined → undefined"
+      },
+      "finalValidation": {
+        "success": true
+      }
+    },
+    "example": {
+      "question": "Match the engineering tools to their functions",
+      "userAnswer": "test answer",
+      "correctAnswer": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      "displayAnswer": "undefined → undefined, undefined → undefined, undefined → undefined"
+    }
+  },
+  {
+    "questionType": "ordering",
+    "success": true,
+    "stages": {
+      "aiGeneration": {
+        "success": true,
+        "response": {
+          "type": "ordering",
+          "question": "Put these steps for building a simple bridge in the correct order",
+          "items": [
+            "Design the bridge and create a blueprint",
+            "Test the bridge for safety and durability",
+            "Build the foundation and assemble the structure"
+          ],
+          "correct_order": [
+            0,
+            2,
+            1
+          ],
+          "visual": null,
+          "hint": "Think about the sequence of planning, constructing, and testing.",
+          "explanation": "First, you need to design the bridge and create a blueprint. Then, build the foundation and assemble the structure. Finally, test the bridge for safety and durability."
+        }
+      },
+      "templateValidation": {
+        "success": true
+      },
+      "contentConversion": {
+        "success": true,
+        "converted": {
+          "id": "assessment-1756729008237-8",
+          "type": "ordering",
+          "content": "Put these steps for building a simple bridge in the correct order",
+          "topic": "Problem Solving",
+          "subject": "Math",
+          "difficulty": "medium",
+          "points": 15,
+          "orderType": "sequence",
+          "items": [
+            {
+              "id": "item-0",
+              "text": "Design the bridge and create a blueprint",
+              "correctPosition": 0
+            },
+            {
+              "id": "item-1",
+              "text": "Test the bridge for safety and durability",
+              "correctPosition": 2
+            },
+            {
+              "id": "item-2",
+              "text": "Build the foundation and assemble the structure",
+              "correctPosition": 1
+            }
+          ],
+          "correctOrder": [
+            0,
+            2,
+            1
+          ],
+          "allowPartialCredit": true,
+          "explanation": "First, you need to design the bridge and create a blueprint. Then, build the foundation and assemble the structure. Finally, test the bridge for safety and durability.",
+          "metadata": {
+            "bloomsLevel": "understand",
+            "estimatedTime": 90
+          }
+        }
+      },
+      "answerExtraction": {
+        "success": true,
+        "correctAnswer": [
+          0,
+          2,
+          1
+        ],
+        "display": "[object Object] → [object Object] → [object Object]"
+      },
+      "finalValidation": {
+        "success": true
+      }
+    },
+    "example": {
+      "question": "Put these steps for building a simple bridge in the correct order",
+      "userAnswer": "test answer",
+      "correctAnswer": [
+        0,
+        2,
+        1
+      ],
+      "displayAnswer": "[object Object] → [object Object] → [object Object]"
+    }
+  },
+  {
+    "questionType": "classification",
+    "success": true,
+    "stages": {
+      "aiGeneration": {
+        "success": true,
+        "response": {
+          "type": "classification",
+          "question": "Classify these items based on the type of engineering material they represent.",
+          "items": [
+            "Steel",
+            "Concrete",
+            "Rubber"
+          ],
+          "categories": [
+            "Metal",
+            "Composite",
+            "Polymer"
+          ],
+          "correct_classification": {
+            "Steel": "Metal",
+            "Concrete": "Composite",
+            "Rubber": "Polymer"
+          },
+          "visual": null,
+          "hint": "Think about the material properties and their common usage in engineering.",
+          "explanation": "These items are classified based on their material type: Steel is a metal, Concrete is a composite material, and Rubber is a polymer often used for flexibility."
+        }
+      },
+      "templateValidation": {
+        "success": true
+      },
+      "contentConversion": {
+        "success": true,
+        "converted": {
+          "id": "assessment-1756729011592-9",
+          "type": "classification",
+          "content": "Classify these items based on the type of engineering material they represent.",
+          "topic": "Problem Solving",
+          "subject": "Math",
+          "difficulty": "medium",
+          "points": 15,
+          "categories": [
+            {
+              "id": "metal",
+              "name": "Metal"
+            },
+            {
+              "id": "composite",
+              "name": "Composite"
+            },
+            {
+              "id": "polymer",
+              "name": "Polymer"
+            }
+          ],
+          "items": [
+            {
+              "id": "Steel",
+              "text": "Steel",
+              "correctCategory": "Metal"
+            },
+            {
+              "id": "Concrete",
+              "text": "Concrete",
+              "correctCategory": "Metal"
+            },
+            {
+              "id": "Rubber",
+              "text": "Rubber",
+              "correctCategory": "Metal"
+            }
+          ],
+          "allowPartialCredit": true,
+          "explanation": "These items are classified based on their material type: Steel is a metal, Concrete is a composite material, and Rubber is a polymer often used for flexibility.",
+          "metadata": {
+            "bloomsLevel": "analyze",
+            "estimatedTime": 120
+          }
+        }
+      },
+      "answerExtraction": {
+        "success": true,
+        "correctAnswer": {},
+        "display": "No classifications defined"
+      },
+      "finalValidation": {
+        "success": true
+      }
+    },
+    "example": {
+      "question": "Classify these items based on the type of engineering material they represent.",
+      "userAnswer": "test answer",
+      "correctAnswer": {},
+      "displayAnswer": "No classifications defined"
+    }
+  },
+  {
+    "questionType": "visual_identification",
+    "success": true,
+    "stages": {
+      "aiGeneration": {
+        "success": true,
+        "response": {
+          "type": "visual_identification",
+          "question": "What shape is this?",
+          "visual_description": "A blue triangle",
+          "correct_answer": "triangle",
+          "options": [
+            "circle",
+            "square",
+            "triangle"
+          ],
+          "visual": "🔺",
+          "hint": "Count the sides and corners.",
+          "explanation": "This is a triangle - it has three sides and three corners."
+        }
+      },
+      "templateValidation": {
+        "success": true
+      },
+      "contentConversion": {
+        "success": true,
+        "converted": {
+          "id": "assessment-1756729015125-10",
+          "type": "visual_identification",
+          "content": "What shape is this?",
+          "topic": "Problem Solving",
+          "subject": "Math",
+          "difficulty": "easy",
+          "points": 10,
+          "visualContent": {
+            "type": "emoji",
+            "content": "🔺"
+          },
+          "options": [
+            {
+              "id": "opt-0",
+              "text": "circle",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-1",
+              "text": "square",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-2",
+              "text": "triangle",
+              "isCorrect": true
+            }
+          ],
+          "targetFeature": "shape",
+          "explanation": "This is a triangle - it has three sides and three corners.",
+          "metadata": {
+            "bloomsLevel": "remember",
+            "estimatedTime": 30
+          }
+        }
+      },
+      "answerExtraction": {
+        "success": true,
+        "correctAnswer": [],
+        "display": ""
+      },
+      "finalValidation": {
+        "success": true
+      }
+    },
+    "example": {
+      "question": "What shape is this?",
+      "userAnswer": "test answer",
+      "correctAnswer": [],
+      "displayAnswer": ""
+    }
+  },
+  {
+    "questionType": "pattern_recognition",
+    "success": true,
+    "stages": {
+      "aiGeneration": {
+        "success": true,
+        "response": {
+          "type": "pattern_recognition",
+          "question": "What comes next in the pattern?",
+          "pattern": [
+            "3",
+            "9",
+            "27",
+            "81",
+            "?"
+          ],
+          "correct_answer": "243",
+          "visual": null,
+          "hint": "Each number is multiplied by 3.",
+          "explanation": "The pattern follows multiplying each number by 3: 3, 9, 27, 81, 243."
+        }
+      },
+      "templateValidation": {
+        "success": true
+      },
+      "contentConversion": {
+        "success": true,
+        "converted": {
+          "id": "assessment-1756729017242-11",
+          "type": "pattern_recognition",
+          "content": "What comes next in the pattern?",
+          "topic": "Problem Solving",
+          "subject": "Math",
+          "difficulty": "medium",
+          "points": 15,
+          "pattern": [
+            "3",
+            "9",
+            "27",
+            "81",
+            "?"
+          ],
+          "nextItem": "243",
+          "patternType": "sequence",
+          "explanation": "The pattern follows multiplying each number by 3: 3, 9, 27, 81, 243.",
+          "metadata": {
+            "bloomsLevel": "analyze",
+            "estimatedTime": 90
+          }
+        }
+      },
+      "answerExtraction": {
+        "success": true,
+        "correctAnswer": "",
+        "display": ""
+      },
+      "finalValidation": {
+        "success": true
+      }
+    },
+    "example": {
+      "question": "What comes next in the pattern?",
+      "userAnswer": "test answer",
+      "correctAnswer": "",
+      "displayAnswer": ""
+    }
+  },
+  {
+    "questionType": "code_completion",
+    "success": true,
+    "stages": {
+      "aiGeneration": {
+        "success": true,
+        "response": {
+          "type": "code_completion",
+          "question": "Complete the function to calculate the area of a rectangle.",
+          "code_template": "function calculateArea(length, width) { return _____ }",
+          "correct_answer": "length * width",
+          "language": "javascript",
+          "visual": null,
+          "hint": "How do you calculate the area of a rectangle?",
+          "explanation": "The area of a rectangle is calculated by multiplying its length by its width."
+        }
+      },
+      "templateValidation": {
+        "success": true
+      },
+      "contentConversion": {
+        "success": true,
+        "converted": {
+          "id": "assessment-1756729019977-12",
+          "type": "code_completion",
+          "content": "Complete the function to calculate the area of a rectangle.",
+          "topic": "Problem Solving",
+          "subject": "Math",
+          "difficulty": "hard",
+          "points": 20,
+          "codeSnippet": "",
+          "language": "javascript",
+          "blanks": [
+            {
+              "id": "blank-0",
+              "position": 0,
+              "correctValue": "answer"
+            }
+          ],
+          "syntaxHighlighting": true,
+          "explanation": "The area of a rectangle is calculated by multiplying its length by its width.",
+          "metadata": {
+            "bloomsLevel": "apply",
+            "estimatedTime": 180
+          }
+        }
+      },
+      "answerExtraction": {
+        "success": true,
+        "correctAnswer": "",
+        "display": ""
+      },
+      "finalValidation": {
+        "success": true
+      }
+    },
+    "example": {
+      "question": "Complete the function to calculate the area of a rectangle.",
+      "userAnswer": "test answer",
+      "correctAnswer": "",
+      "displayAnswer": ""
+    }
+  },
+  {
+    "questionType": "diagram_labeling",
+    "success": true,
+    "stages": {
+      "aiGeneration": {
+        "success": true,
+        "response": {
+          "type": "diagram_labeling",
+          "question": "Label the parts of the truss bridge",
+          "diagram_description": "A diagram of a simple truss bridge with its main components",
+          "labels": [
+            "Deck",
+            "Truss",
+            "Support Beam"
+          ],
+          "correct_positions": [
+            [
+              50,
+              80
+            ],
+            [
+              50,
+              50
+            ],
+            [
+              50,
+              20
+            ]
+          ],
+          "visual": "🌉",
+          "hint": "Start from the base and move upward",
+          "explanation": "The deck is at the base, the truss is the triangular structure above, and the support beam connects and strengthens the bridge."
+        }
+      },
+      "templateValidation": {
+        "success": true
+      },
+      "contentConversion": {
+        "success": true,
+        "converted": {
+          "id": "assessment-1756729022762-13",
+          "type": "diagram_labeling",
+          "content": "Label the parts of the truss bridge",
+          "topic": "Problem Solving",
+          "subject": "Math",
+          "difficulty": "medium",
+          "points": 15,
+          "diagramUrl": "🌉",
+          "labels": [
+            {
+              "id": "label-0",
+              "position": {
+                "x": 50,
+                "y": 50
+              },
+              "correctText": "Deck"
+            },
+            {
+              "id": "label-1",
+              "position": {
+                "x": 50,
+                "y": 50
+              },
+              "correctText": "Truss"
+            },
+            {
+              "id": "label-2",
+              "position": {
+                "x": 50,
+                "y": 50
+              },
+              "correctText": "Support Beam"
+            }
+          ],
+          "allowPartialCredit": true,
+          "explanation": "The deck is at the base, the truss is the triangular structure above, and the support beam connects and strengthens the bridge.",
+          "metadata": {
+            "bloomsLevel": "understand",
+            "estimatedTime": 120
+          }
+        }
+      },
+      "answerExtraction": {
+        "success": true,
+        "correctAnswer": [],
+        "display": "No labels defined"
+      },
+      "finalValidation": {
+        "success": true
+      }
+    },
+    "example": {
+      "question": "Label the parts of the truss bridge",
+      "userAnswer": "test answer",
+      "correctAnswer": [],
+      "displayAnswer": "No labels defined"
+    }
+  },
+  {
+    "questionType": "open_ended",
+    "success": true,
+    "stages": {
+      "aiGeneration": {
+        "success": true,
+        "response": {
+          "type": "open_ended",
+          "question": "Imagine you are designing a bridge to connect two small islands. You need to decide how long the bridge should be, what materials to use, and how to make it strong enough to hold cars and trucks. How would you plan and solve this problem?",
+          "sample_response": "I would first measure the distance between the two islands to determine the length of the bridge. Then, I would research strong and durable materials like steel or reinforced concrete. I would also consider the weight the bridge needs to hold and consult engineers to create a design that distributes the weight evenly. Finally, I would test a small model of the bridge to make sure it’s safe before building the real one.",
+          "evaluation_criteria": [
+            "Creativity",
+            "Feasibility",
+            "Explanation"
+          ],
+          "visual": null,
+          "hint": "Let your imagination flow",
+          "explanation": "There are many possible good answers"
+        }
+      },
+      "templateValidation": {
+        "success": true
+      },
+      "contentConversion": {
+        "success": true,
+        "converted": {
+          "id": "assessment-1756729027577-14",
+          "type": "open_ended",
+          "content": "Imagine you are designing a bridge to connect two small islands. You need to decide how long the bridge should be, what materials to use, and how to make it strong enough to hold cars and trucks. How would you plan and solve this problem?",
+          "topic": "Problem Solving",
+          "subject": "Math",
+          "difficulty": "hard",
+          "points": 25,
+          "promptType": "creative",
+          "suggestedLength": "paragraph",
+          "sampleResponses": [
+            ""
+          ],
+          "evaluationCriteria": [
+            "Creativity",
+            "Relevance",
+            "Clarity"
+          ],
+          "explanation": "There are many possible good answers",
+          "metadata": {
+            "bloomsLevel": "create",
+            "estimatedTime": 300
+          }
+        }
+      },
+      "answerExtraction": {
+        "success": true,
+        "correctAnswer": null,
+        "display": "Open-ended (various answers accepted)"
+      },
+      "finalValidation": {
+        "success": true
+      }
+    },
+    "example": {
+      "question": "Imagine you are designing a bridge to connect two small islands. You need to decide how long the bridge should be, what materials to use, and how to make it strong enough to hold cars and trucks. How would you plan and solve this problem?",
+      "userAnswer": "test answer",
+      "correctAnswer": null,
+      "displayAnswer": "Open-ended (various answers accepted)"
+    }
+  }
+]

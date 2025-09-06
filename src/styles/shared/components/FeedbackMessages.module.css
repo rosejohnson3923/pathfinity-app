@@ -1,0 +1,580 @@
+/**
+ * FEEDBACK MESSAGES MODULE
+ * ========================
+ * Unified feedback display styles for all response states
+ * Success, error, warning, info, and neutral feedback
+ * 
+ * Created: 2025-08-22
+ */
+
+/* ============================================
+   BASE FEEDBACK STYLES
+   ============================================ */
+.feedback {
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-xl);
+  margin: var(--space-4) 0;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  animation: feedbackSlide var(--duration-base) var(--easing-out);
+  position: relative;
+  overflow: hidden;
+  transition: all var(--duration-base) var(--easing-out);
+}
+
+@keyframes feedbackSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Feedback Icon */
+.feedbackIcon {
+  font-size: var(--text-2xl);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+}
+
+/* Feedback Content */
+.feedbackContent {
+  flex: 1;
+}
+
+.feedbackTitle {
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  margin-bottom: var(--space-1);
+  line-height: var(--leading-tight);
+}
+
+.feedbackMessage {
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  margin: 0;
+}
+
+/* Close Button */
+.feedbackClose {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: all var(--duration-fast) var(--easing-out);
+  opacity: 0.6;
+}
+
+.feedbackClose:hover {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* ============================================
+   SUCCESS FEEDBACK
+   ============================================ */
+.success {
+  background: linear-gradient(
+    135deg,
+    rgba(16, 185, 129, 0.1) 0%,
+    rgba(5, 150, 105, 0.05) 100%
+  );
+  border-left: 4px solid var(--color-success);
+  color: var(--success-text);
+}
+
+[data-theme="dark"] .success {
+  background: linear-gradient(
+    135deg,
+    rgba(16, 185, 129, 0.15) 0%,
+    rgba(5, 150, 105, 0.08) 100%
+  );
+}
+
+.success .feedbackIcon {
+  color: var(--color-success);
+  animation: successPulse 0.5s ease;
+}
+
+@keyframes successPulse {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.success::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: rgba(16, 185, 129, 0.05);
+  animation: successWave 0.6s ease-out;
+}
+
+@keyframes successWave {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+/* ============================================
+   ERROR FEEDBACK
+   ============================================ */
+.error {
+  background: linear-gradient(
+    135deg,
+    rgba(239, 68, 68, 0.1) 0%,
+    rgba(220, 38, 38, 0.05) 100%
+  );
+  border-left: 4px solid var(--color-error);
+  color: var(--error-text);
+}
+
+[data-theme="dark"] .error {
+  background: linear-gradient(
+    135deg,
+    rgba(239, 68, 68, 0.15) 0%,
+    rgba(220, 38, 38, 0.08) 100%
+  );
+}
+
+.error .feedbackIcon {
+  color: var(--color-error);
+  animation: errorShake 0.5s ease;
+}
+
+@keyframes errorShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* ============================================
+   WARNING FEEDBACK
+   ============================================ */
+.warning {
+  background: linear-gradient(
+    135deg,
+    rgba(245, 158, 11, 0.1) 0%,
+    rgba(217, 119, 6, 0.05) 100%
+  );
+  border-left: 4px solid var(--color-warning);
+  color: var(--warning-text);
+}
+
+[data-theme="dark"] .warning {
+  background: linear-gradient(
+    135deg,
+    rgba(245, 158, 11, 0.15) 0%,
+    rgba(217, 119, 6, 0.08) 100%
+  );
+}
+
+.warning .feedbackIcon {
+  color: var(--color-warning);
+  animation: warningBounce 0.6s ease;
+}
+
+@keyframes warningBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* ============================================
+   INFO FEEDBACK
+   ============================================ */
+.info {
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.1) 0%,
+    rgba(37, 99, 235, 0.05) 100%
+  );
+  border-left: 4px solid var(--color-info);
+  color: var(--info-text);
+}
+
+[data-theme="dark"] .info {
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.15) 0%,
+    rgba(37, 99, 235, 0.08) 100%
+  );
+}
+
+.info .feedbackIcon {
+  color: var(--color-info);
+  animation: infoRotate 0.8s ease;
+}
+
+@keyframes infoRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================
+   NEUTRAL FEEDBACK
+   ============================================ */
+.neutral {
+  background: var(--bg-secondary);
+  border-left: 4px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.neutral .feedbackIcon {
+  color: var(--text-secondary);
+}
+
+/* ============================================
+   ANIMATED FEEDBACK STATES
+   ============================================ */
+
+/* Correct Answer Animation */
+.correct {
+  background: linear-gradient(
+    135deg,
+    rgba(16, 185, 129, 0.15) 0%,
+    rgba(5, 150, 105, 0.08) 100%
+  );
+  border-left: 4px solid var(--color-success);
+  color: var(--success-text);
+  position: relative;
+}
+
+.correct::after {
+  content: '✓';
+  position: absolute;
+  right: var(--space-4);
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: var(--text-3xl);
+  color: var(--color-success);
+  opacity: 0.2;
+  animation: checkmark 0.5s ease;
+}
+
+@keyframes checkmark {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) scale(0) rotate(-180deg);
+  }
+  to {
+    opacity: 0.2;
+    transform: translateY(-50%) scale(1) rotate(0deg);
+  }
+}
+
+/* Incorrect Answer Animation */
+.incorrect {
+  background: linear-gradient(
+    135deg,
+    rgba(239, 68, 68, 0.15) 0%,
+    rgba(220, 38, 38, 0.08) 100%
+  );
+  border-left: 4px solid var(--color-error);
+  color: var(--error-text);
+  position: relative;
+}
+
+.incorrect::after {
+  content: '×';
+  position: absolute;
+  right: var(--space-4);
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: var(--text-4xl);
+  color: var(--color-error);
+  opacity: 0.2;
+  animation: crossmark 0.5s ease;
+}
+
+@keyframes crossmark {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) scale(0);
+  }
+  to {
+    opacity: 0.2;
+    transform: translateY(-50%) scale(1);
+  }
+}
+
+/* ============================================
+   HINT FEEDBACK
+   ============================================ */
+.hint {
+  background: linear-gradient(
+    135deg,
+    rgba(168, 85, 247, 0.1) 0%,
+    rgba(139, 92, 246, 0.05) 100%
+  );
+  border-left: 4px solid var(--color-primary);
+  color: var(--text-primary);
+}
+
+.hint .feedbackIcon {
+  color: var(--color-primary);
+  animation: hintGlow 2s ease-in-out infinite;
+}
+
+@keyframes hintGlow {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* ============================================
+   ENCOURAGEMENT FEEDBACK
+   ============================================ */
+.encouragement {
+  background: linear-gradient(
+    135deg,
+    rgba(251, 191, 36, 0.1) 0%,
+    rgba(245, 158, 11, 0.05) 100%
+  );
+  border-left: 4px solid var(--color-warning);
+  color: var(--text-primary);
+  font-style: italic;
+}
+
+.encouragement .feedbackIcon {
+  color: var(--color-warning);
+  animation: encourageSpin 1s ease;
+}
+
+@keyframes encourageSpin {
+  from { transform: rotate(0deg) scale(0.8); }
+  to { transform: rotate(360deg) scale(1); }
+}
+
+/* ============================================
+   COMPACT FEEDBACK
+   ============================================ */
+.compact {
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-sm);
+}
+
+.compact .feedbackIcon {
+  font-size: var(--text-xl);
+  width: 24px;
+  height: 24px;
+}
+
+.compact .feedbackTitle {
+  font-size: var(--text-base);
+}
+
+.compact .feedbackMessage {
+  font-size: var(--text-sm);
+}
+
+/* ============================================
+   INLINE FEEDBACK
+   ============================================ */
+.inline {
+  display: inline-flex;
+  padding: var(--space-2) var(--space-3);
+  margin: 0 var(--space-1);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-sm);
+  vertical-align: middle;
+}
+
+.inline .feedbackIcon {
+  font-size: var(--text-base);
+  width: 16px;
+  height: 16px;
+  margin-right: var(--space-1);
+}
+
+.inline .feedbackContent {
+  display: inline;
+}
+
+.inline .feedbackTitle {
+  display: none;
+}
+
+.inline .feedbackMessage {
+  display: inline;
+  font-size: var(--text-sm);
+}
+
+/* ============================================
+   TOAST FEEDBACK
+   ============================================ */
+.toast {
+  position: fixed;
+  top: var(--space-8);
+  right: var(--space-8);
+  max-width: 400px;
+  z-index: var(--z-50);
+  box-shadow: var(--shadow-elevated);
+  animation: toastSlide 0.3s ease-out;
+}
+
+@keyframes toastSlide {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.toast.exiting {
+  animation: toastExit 0.3s ease-in forwards;
+}
+
+@keyframes toastExit {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+/* ============================================
+   PROGRESS FEEDBACK
+   ============================================ */
+.progress {
+  position: relative;
+  overflow: hidden;
+}
+
+.progressBar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: var(--gradient-primary);
+  animation: progressFill 2s ease-out forwards;
+}
+
+@keyframes progressFill {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+/* ============================================
+   HINT OVERLAY
+   ============================================ */
+.hintOverlay {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--gradient-primary);
+  color: white;
+  padding: var(--space-4) var(--space-6);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-elevated);
+  max-width: 500px;
+  width: 90%;
+  z-index: var(--z-40);
+  animation: slideUp var(--duration-base) var(--easing-out);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.hintOverlay h4 {
+  margin: 0 0 var(--space-2) 0;
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+}
+
+.hintContent {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.hintIcon {
+  font-size: var(--text-xl);
+  flex-shrink: 0;
+}
+
+.hintText {
+  margin: 0;
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 768px) {
+  .feedback {
+    padding: var(--space-3) var(--space-4);
+    gap: var(--space-2);
+  }
+  
+  .feedbackIcon {
+    font-size: var(--text-xl);
+    width: 28px;
+    height: 28px;
+  }
+  
+  .feedbackTitle {
+    font-size: var(--text-base);
+  }
+  
+  .feedbackMessage {
+    font-size: var(--text-sm);
+  }
+  
+  .toast {
+    top: var(--space-4);
+    right: var(--space-4);
+    left: var(--space-4);
+    max-width: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .feedback {
+    padding: var(--space-3);
+    border-left-width: 3px;
+  }
+  
+  .feedbackIcon {
+    font-size: var(--text-lg);
+    width: 24px;
+    height: 24px;
+  }
+  
+  .correct::after,
+  .incorrect::after {
+    display: none;
+  }
+}

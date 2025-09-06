@@ -1,0 +1,98 @@
+{
+  "timestamp": "2025-08-26T20:54:55.963Z",
+  "summary": {
+    "totalOperations": 10,
+    "averageResponseTime": "67.74",
+    "fastOperations": 1,
+    "slowOperations": 0
+  },
+  "targets": {
+    "cache": {
+      "target": 100,
+      "actual": "67.17",
+      "passed": true
+    },
+    "database": {
+      "target": 50,
+      "actual": "75.60",
+      "passed": false
+    },
+    "queue": {
+      "target": 100,
+      "actual": "83.00",
+      "passed": true
+    }
+  },
+  "details": [
+    {
+      "name": "Fetch question types for Grade 10",
+      "avg": 96.1,
+      "min": 65,
+      "max": 232,
+      "iterations": 10
+    },
+    {
+      "name": "Fetch detection rules",
+      "avg": 78.2,
+      "min": 61,
+      "max": 159,
+      "iterations": 10
+    },
+    {
+      "name": "Fetch Grade 10 Math skills",
+      "avg": 67.1,
+      "min": 61,
+      "max": 76,
+      "iterations": 10
+    },
+    {
+      "name": "Complex query (skills with counts)",
+      "avg": 68.2,
+      "min": 58,
+      "max": 77,
+      "iterations": 10
+    },
+    {
+      "name": "Cache write operation",
+      "avg": 67,
+      "min": 61,
+      "max": 74,
+      "iterations": 5
+    },
+    {
+      "name": "Cache read operation",
+      "avg": 69.3,
+      "min": 59,
+      "max": 86,
+      "iterations": 10
+    },
+    {
+      "name": "Cache hit check",
+      "avg": 65.2,
+      "min": 59,
+      "max": 80,
+      "iterations": 10
+    },
+    {
+      "name": "Add item to generation queue",
+      "avg": 97.6,
+      "min": 63,
+      "max": 207,
+      "iterations": 5
+    },
+    {
+      "name": "Fetch next queue item",
+      "avg": 68.4,
+      "min": 60,
+      "max": 77,
+      "iterations": 10
+    },
+    {
+      "name": "Detect question type (5 questions)",
+      "avg": 0.3,
+      "min": 0,
+      "max": 1,
+      "iterations": 10
+    }
+  ]
+}

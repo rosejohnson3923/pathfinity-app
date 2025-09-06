@@ -1,0 +1,605 @@
+/**
+ * MODAL CARD MODULE
+ * =================
+ * Unified modal and dialog styles for consistent popup displays
+ * Fixes modal styling issues across all containers
+ * 
+ * Created: 2025-08-22
+ */
+
+/* ============================================
+   MODAL OVERLAY
+   ============================================ */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-50);
+  animation: overlayFade var(--duration-base) var(--easing-out);
+  padding: var(--space-6);
+  overflow-y: auto;
+}
+
+[data-theme="dark"] .modalOverlay {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+@keyframes overlayFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ============================================
+   MODAL CARD BASE
+   ============================================ */
+.modalCard {
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
+  box-shadow: var(--shadow-elevated);
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: modalSlide var(--duration-moderate) var(--easing-bounce);
+  position: relative;
+}
+
+[data-theme="dark"] .modalCard {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  border: 1px solid var(--border-color);
+}
+
+@keyframes modalSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Modal Sizes */
+.modalCard.small {
+  max-width: 400px;
+}
+
+.modalCard.medium {
+  max-width: 600px;
+}
+
+.modalCard.large {
+  max-width: 900px;
+}
+
+.modalCard.fullscreen {
+  max-width: 95vw;
+  max-height: 95vh;
+  width: 95vw;
+  height: 95vh;
+}
+
+/* ============================================
+   MODAL HEADER
+   ============================================ */
+.modalHeader {
+  padding: var(--space-6);
+  border-bottom: 1px solid var(--border-color-soft);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.modalTitle {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.modalIcon {
+  font-size: var(--text-3xl);
+  display: flex;
+  align-items: center;
+}
+
+.modalSubtitle {
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  margin-top: var(--space-1);
+}
+
+/* Close Button */
+.modalClose {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--duration-fast) var(--easing-out);
+  color: var(--text-secondary);
+  font-size: var(--text-xl);
+}
+
+.modalClose:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  transform: rotate(90deg);
+}
+
+/* ============================================
+   MODAL BODY
+   ============================================ */
+.modalBody {
+  padding: var(--space-6);
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.modalBody.noPadding {
+  padding: 0;
+}
+
+.modalContent {
+  line-height: var(--leading-relaxed);
+  color: var(--text-primary);
+}
+
+/* Scrollbar Styling */
+.modalBody::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modalBody::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+}
+
+.modalBody::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-md);
+}
+
+.modalBody::-webkit-scrollbar-thumb:hover {
+  background: var(--text-tertiary);
+}
+
+/* ============================================
+   MODAL FOOTER
+   ============================================ */
+.modalFooter {
+  padding: var(--space-6);
+  border-top: 1px solid var(--border-color-soft);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  flex-shrink: 0;
+  background: var(--bg-secondary);
+}
+
+.modalFooter.centered {
+  justify-content: center;
+}
+
+.modalFooter.spaceBetween {
+  justify-content: space-between;
+}
+
+/* ============================================
+   MODAL VARIANTS
+   ============================================ */
+
+/* Success Modal */
+.modalCard.success .modalHeader {
+  background: linear-gradient(
+    135deg,
+    rgba(16, 185, 129, 0.1) 0%,
+    rgba(5, 150, 105, 0.05) 100%
+  );
+  border-bottom-color: var(--success-border);
+}
+
+.modalCard.success .modalIcon {
+  color: var(--color-success);
+}
+
+/* Error Modal */
+.modalCard.error .modalHeader {
+  background: linear-gradient(
+    135deg,
+    rgba(239, 68, 68, 0.1) 0%,
+    rgba(220, 38, 38, 0.05) 100%
+  );
+  border-bottom-color: var(--error-border);
+}
+
+.modalCard.error .modalIcon {
+  color: var(--color-error);
+}
+
+/* Warning Modal */
+.modalCard.warning .modalHeader {
+  background: linear-gradient(
+    135deg,
+    rgba(245, 158, 11, 0.1) 0%,
+    rgba(217, 119, 6, 0.05) 100%
+  );
+  border-bottom-color: var(--warning-border);
+}
+
+.modalCard.warning .modalIcon {
+  color: var(--color-warning);
+}
+
+/* Info Modal */
+.modalCard.info .modalHeader {
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.1) 0%,
+    rgba(37, 99, 235, 0.05) 100%
+  );
+  border-bottom-color: var(--info-border);
+}
+
+.modalCard.info .modalIcon {
+  color: var(--color-info);
+}
+
+/* ============================================
+   CONFIRMATION MODAL
+   ============================================ */
+.confirmModal {
+  text-align: center;
+  padding: var(--space-8);
+}
+
+.confirmIcon {
+  font-size: var(--text-6xl);
+  margin-bottom: var(--space-4);
+  animation: confirmBounce 0.5s ease;
+}
+
+@keyframes confirmBounce {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.confirmTitle {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-3);
+}
+
+.confirmMessage {
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-6);
+}
+
+.confirmActions {
+  display: flex;
+  gap: var(--space-4);
+  justify-content: center;
+}
+
+/* ============================================
+   FORM MODAL
+   ============================================ */
+.formModal .modalBody {
+  padding: var(--space-8) var(--space-6);
+}
+
+.formGroup {
+  margin-bottom: var(--space-6);
+}
+
+.formLabel {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-2);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+}
+
+.formInput {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg-primary);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-base);
+  color: var(--text-primary);
+  transition: all var(--duration-fast) var(--easing-out);
+}
+
+.formInput:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.formTextarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.formError {
+  color: var(--error-text);
+  font-size: var(--text-sm);
+  margin-top: var(--space-2);
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+/* ============================================
+   IMAGE MODAL
+   ============================================ */
+.imageModal .modalBody {
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-primary);
+}
+
+.modalImage {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.imageCaption {
+  padding: var(--space-4);
+  background: var(--bg-secondary);
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  border-top: 1px solid var(--border-color-soft);
+}
+
+/* ============================================
+   SLIDE PANEL MODAL
+   ============================================ */
+.slidePanel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 400px;
+  max-width: 90vw;
+  background: var(--card-bg);
+  box-shadow: var(--shadow-elevated);
+  z-index: var(--z-50);
+  display: flex;
+  flex-direction: column;
+  animation: slideIn var(--duration-moderate) var(--easing-out);
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.slidePanel.left {
+  left: 0;
+  right: auto;
+  animation: slideInLeft var(--duration-moderate) var(--easing-out);
+}
+
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+/* ============================================
+   LOADING STATE
+   ============================================ */
+.modalLoading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-10);
+}
+
+.loadingSpinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--border-color);
+  border-top-color: var(--color-primary);
+  border-radius: var(--radius-full);
+  animation: spin 1s linear infinite;
+  margin-bottom: var(--space-4);
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.loadingText {
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 768px) {
+  .modalOverlay {
+    padding: var(--space-4);
+  }
+  
+  .modalCard {
+    max-height: 85vh;
+  }
+  
+  .modalHeader {
+    padding: var(--space-4);
+  }
+  
+  .modalTitle {
+    font-size: var(--text-xl);
+  }
+  
+  .modalBody {
+    padding: var(--space-4);
+  }
+  
+  .modalFooter {
+    padding: var(--space-4);
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  
+  .modalFooter > * {
+    width: 100%;
+  }
+  
+  .slidePanel {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .modalOverlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+  
+  .modalCard {
+    max-height: 90vh;
+    max-width: 100%;
+    width: 100%;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    margin: 0;
+    animation: slideUpMobile 0.3s ease-out;
+  }
+  
+  .modalCard.fullscreen {
+    width: 100%;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+  
+  .modalHeader {
+    padding: var(--space-3);
+    position: sticky;
+    top: 0;
+    background: inherit;
+    z-index: 10;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .modalTitle {
+    font-size: var(--text-lg);
+  }
+  
+  .modalBody {
+    padding: var(--space-3);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .modalFooter {
+    padding: var(--space-3);
+    position: sticky;
+    bottom: 0;
+    background: inherit;
+    border-top: 1px solid var(--border-color);
+  }
+  
+  .confirmActions {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  
+  .confirmActions button {
+    width: 100%;
+    min-height: 44px;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 374px) {
+  .modalCard {
+    max-height: 85vh;
+  }
+  
+  .modalHeader {
+    padding: var(--space-2);
+  }
+  
+  .modalTitle {
+    font-size: var(--text-base);
+  }
+  
+  .modalBody {
+    padding: var(--space-2);
+    font-size: var(--text-sm);
+  }
+  
+  .modalFooter {
+    padding: var(--space-2);
+  }
+  
+  .modalCloseButton {
+    width: 28px;
+    height: 28px;
+    font-size: 16px;
+  }
+}
+
+/* Slide up animation for mobile */
+@keyframes slideUpMobile {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Safe area support for notched devices */
+@supports (padding: max(0px)) {
+  @media (max-width: 480px) {
+    .modalCard {
+      padding-bottom: max(var(--space-4), env(safe-area-inset-bottom));
+    }
+    
+    .modalFooter {
+      padding-bottom: max(var(--space-3), env(safe-area-inset-bottom));
+    }
+  }
+}

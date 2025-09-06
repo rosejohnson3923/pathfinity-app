@@ -1,0 +1,211 @@
+/**
+ * DARK THEME OVERRIDES
+ * =====================
+ * Dark mode specific variable overrides and extensions
+ * Imported after MasterTheme.css when dark mode is active
+ * 
+ * Created: 2025-08-22
+ */
+
+/* Dark theme is already defined in MasterTheme.css via :root[data-theme="dark"] */
+/* This file is for any additional dark-specific styles or component overrides */
+
+[data-theme="dark"] {
+  /* ==== EXTENDED DARK COLORS ==== */
+  /* Additional dark mode specific colors not in main theme */
+  --bg-code: #0d1117;
+  --bg-code-highlight: #161b22;
+  --bg-input-focus: #1f2937;
+  --bg-tooltip: #111827;
+  
+  /* Glass morphism effects for dark mode */
+  --glass-bg: rgba(26, 32, 44, 0.8);
+  --glass-border: rgba(139, 92, 246, 0.1);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  
+  /* Glow effects for dark mode */
+  --glow-primary: 0 0 20px rgba(139, 92, 246, 0.6);
+  --glow-success: 0 0 20px rgba(16, 185, 129, 0.6);
+  --glow-error: 0 0 20px rgba(239, 68, 68, 0.6);
+  
+  /* Enhanced gradients for dark mode */
+  --gradient-dark-primary: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 50%, #6d28d9 100%);
+  --gradient-dark-vibrant: linear-gradient(135deg, #ec4899 0%, #8b5cf6 50%, #3b82f6 100%);
+  --gradient-dark-subtle: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(124, 58, 237, 0.05) 100%);
+  
+  /* Neon accents for gamification */
+  --neon-purple: #e879f9;
+  --neon-cyan: #67e8f9;
+  --neon-pink: #f472b6;
+  --neon-green: #4ade80;
+}
+
+/* ==== DARK MODE SPECIFIC STYLES ==== */
+
+/* Scrollbar styling for dark mode */
+[data-theme="dark"] ::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-full);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+  border: 2px solid var(--bg-secondary);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+/* Selection colors for dark mode */
+[data-theme="dark"] ::selection {
+  background: rgba(139, 92, 246, 0.3);
+  color: var(--text-primary);
+}
+
+/* Focus rings for dark mode */
+[data-theme="dark"] *:focus-visible {
+  outline: 2px solid var(--color-primary-light);
+  outline-offset: 2px;
+}
+
+/* Input placeholders for dark mode */
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+  color: var(--text-tertiary);
+  opacity: 0.7;
+}
+
+/* Code blocks for dark mode */
+[data-theme="dark"] pre,
+[data-theme="dark"] code {
+  background: var(--bg-code);
+  color: #e6edf3;
+  border: 1px solid var(--border-color-soft);
+}
+
+/* Table styles for dark mode */
+[data-theme="dark"] table {
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] th {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] td {
+  border-color: var(--border-color-soft);
+}
+
+[data-theme="dark"] tr:hover {
+  background: var(--bg-hover);
+}
+
+/* Link styles for dark mode */
+[data-theme="dark"] a {
+  color: var(--text-link);
+}
+
+[data-theme="dark"] a:hover {
+  color: var(--color-primary-light);
+  text-decoration: underline;
+}
+
+/* Disabled state for dark mode */
+[data-theme="dark"] [disabled],
+[data-theme="dark"] .disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Loading skeleton for dark mode */
+[data-theme="dark"] .skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-secondary) 0%,
+    var(--bg-tertiary) 50%,
+    var(--bg-secondary) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-dark 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-dark {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Glass effect overlays for dark mode */
+[data-theme="dark"] .glass-effect {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+/* Neon glow effects for dark mode buttons */
+[data-theme="dark"] .btn-neon:hover {
+  box-shadow: var(--glow-primary);
+  transform: translateY(-2px);
+}
+
+/* Enhanced shadows for elevated elements */
+[data-theme="dark"] .elevated {
+  box-shadow: 
+    0 10px 40px rgba(0, 0, 0, 0.4),
+    0 2px 10px rgba(139, 92, 246, 0.1);
+}
+
+/* Gradient text for dark mode */
+[data-theme="dark"] .gradient-text {
+  background: var(--gradient-dark-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Container-specific dark mode enhancements */
+[data-theme="dark"] .container-learn {
+  position: relative;
+}
+
+[data-theme="dark"] .container-learn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--gradient-primary);
+  opacity: 0.5;
+}
+
+[data-theme="dark"] .container-experience::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #14b8a6 0%, #0891b2 100%);
+  opacity: 0.5;
+}
+
+[data-theme="dark"] .container-discover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #ec4899 0%, #a855f7 100%);
+  opacity: 0.5;
+}

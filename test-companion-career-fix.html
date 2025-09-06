@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Companion and Career Fix</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .test-container {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #667eea;
+        }
+        .test-case {
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 3px;
+        }
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .status.pass {
+            background: #28a745;
+            color: white;
+        }
+        .status.fail {
+            background: #dc3545;
+            color: white;
+        }
+        .status.pending {
+            background: #ffc107;
+            color: black;
+        }
+        .console-output {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .test-user {
+            display: inline-block;
+            padding: 8px 15px;
+            background: #e9ecef;
+            border-radius: 5px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        .test-user:hover {
+            background: #dee2e6;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #5a67d8;
+        }
+        .error {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .success {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .warning {
+            color: #ffc107;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🔧 Companion & Career Fix Verification</h1>
+        
+        <div class="test-section">
+            <h2>Test Objectives</h2>
+            <p>Verify that the following issues from Issue.pdf have been resolved:</p>
+            <ul>
+                <li>✅ Companion should not be undefined</li>
+                <li>✅ Career should display properly (not "Exploring undefined Career")</li>
+                <li>✅ Skill data should be passed correctly to Learn container</li>
+            </ul>
+        </div>
+
+        <div class="test-section">
+            <h2>Test Users</h2>
+            <p>Click a user to test their journey:</p>
+            <div>
+                <div class="test-user" onclick="testUser('Sam', 'K')">
+                    <strong>Sam</strong> - Kindergarten
+                </div>
+                <div class="test-user" onclick="testUser('Jordan', '7')">
+                    <strong>Jordan</strong> - Grade 7
+                </div>
+                <div class="test-user" onclick="testUser('Taylor', '10')">
+                    <strong>Taylor</strong> - Grade 10
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>Test Results</h2>
+            <div id="testResults"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>Console Output</h2>
+            <div class="console-output" id="consoleOutput">
+                Waiting for test to run...
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>Manual Testing Steps</h2>
+            <ol>
+                <li>Open the app at <a href="http://localhost:3005" target="_blank">http://localhost:3005</a></li>
+                <li>Login as one of the test users (Sam/Jordan/Taylor)</li>
+                <li>Select a Random Career from the Introduction Modal</li>
+                <li>Select a Companion (Finn, Luna, or Max)</li>
+                <li>Navigate to the Career Inc Lobby</li>
+                <li>Click on "Learn" container</li>
+                <li>Open browser console (F12) and check for:
+                    <ul>
+                        <li>🔍 AILearnContainerV2-UNIFIED Props</li>
+                        <li>🎭 Companion resolution</li>
+                        <li>📦 MultiSubjectContainerV2 passing props</li>
+                    </ul>
+                </li>
+                <li>Verify the header shows: "Exploring [Career] through [Skill Name]"</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        function testUser(name, grade) {
+            const resultsDiv = document.getElementById('testResults');
+            const consoleDiv = document.getElementById('consoleOutput');
+            
+            resultsDiv.innerHTML = `
+                <h3>Testing ${name} (Grade ${grade})</h3>
+                <div class="test-case">
+                    <strong>1. Login Test</strong>
+                    <span class="status pending">PENDING</span>
+                </div>
+                <div class="test-case">
+                    <strong>2. Career Selection</strong>
+                    <span class="status pending">PENDING</span>
+                </div>
+                <div class="test-case">
+                    <strong>3. Companion Selection</strong>
+                    <span class="status pending">PENDING</span>
+                </div>
+                <div class="test-case">
+                    <strong>4. Container Navigation</strong>
+                    <span class="status pending">PENDING</span>
+                </div>
+                <div class="test-case">
+                    <strong>5. Props Verification</strong>
+                    <span class="status pending">PENDING</span>
+                </div>
+            `;
+            
+            consoleDiv.innerHTML = `
+                <div class="success">Starting test for ${name}...</div>
+                <div>Expected console logs to verify:</div>
+                <div>
+                    <br/>
+                    <span class="warning">🔍 AILearnContainerV2-UNIFIED Props:</span> {
+                        <br/>&nbsp;&nbsp;hasStudent: true,
+                        <br/>&nbsp;&nbsp;studentGrade: '${grade}',
+                        <br/>&nbsp;&nbsp;skillName: '[Should show skill name]',
+                        <br/>&nbsp;&nbsp;selectedCharacter: '[Should show companion name]',
+                        <br/>&nbsp;&nbsp;selectedCareerObj: {id: '[career_id]', name: '[Career Name]'},
+                        <br/>&nbsp;&nbsp;characterType: 'string',
+                        <br/>&nbsp;&nbsp;version: 'UNIFIED'
+                    <br/>}
+                    <br/><br/>
+                    <span class="warning">🎭 Companion resolution:</span> {
+                        <br/>&nbsp;&nbsp;selectedCharacter: '[Companion name]',
+                        <br/>&nbsp;&nbsp;characterId: '[companion_id]',
+                        <br/>&nbsp;&nbsp;resolvedCharacter: '[Companion display name]',
+                        <br/>&nbsp;&nbsp;career: '[Career name]'
+                    <br/>}
+                    <br/><br/>
+                    <span class="warning">📦 MultiSubjectContainerV2 passing props:</span> {
+                        <br/>&nbsp;&nbsp;hasStudent: true,
+                        <br/>&nbsp;&nbsp;studentGrade: '${grade}',
+                        <br/>&nbsp;&nbsp;hasSkill: true,
+                        <br/>&nbsp;&nbsp;skillName: '[Skill name]',
+                        <br/>&nbsp;&nbsp;selectedCharacter: '[Companion name]',
+                        <br/>&nbsp;&nbsp;selectedCareer: {id: '[career_id]', name: '[Career Name]'}
+                    <br/>}
+                </div>
+                <br/>
+                <div class="error">❌ Issues to watch for:</div>
+                <div>
+                    • Companion showing as undefined
+                    <br/>• Career showing as "Exploring undefined Career"
+                    <br/>• Skill name not displaying
+                    <br/>• Grade level mismatch
+                </div>
+                <br/>
+                <div class="success">✅ Expected Result:</div>
+                <div>
+                    • Header should show: "Exploring [Career Name] through [Skill Name]"
+                    <br/>• No undefined values in console logs
+                    <br/>• Companion properly resolved
+                    <br/>• Career properly displayed
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

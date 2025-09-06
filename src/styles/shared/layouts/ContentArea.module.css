@@ -1,0 +1,340 @@
+/**
+ * CONTENT AREA MODULE
+ * ====================
+ * Styles for content regions within containers
+ * Provides consistent content presentation
+ * 
+ * Created: 2025-08-22
+ */
+
+/* ============================================
+   CONTENT AREA BASE
+   ============================================ */
+.contentArea {
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-base);
+  transition: all var(--duration-base) var(--easing-out);
+}
+
+.contentArea:hover {
+  box-shadow: var(--shadow-hover);
+}
+
+/* Dark theme adjustments */
+[data-theme="dark"] .contentArea {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+}
+
+/* ============================================
+   CONTENT HEADER
+   ============================================ */
+.contentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-4);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.contentTitle {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.contentSubtitle {
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  margin-top: var(--space-2);
+}
+
+.contentMeta {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  font-size: var(--text-sm);
+  color: var(--text-tertiary);
+}
+
+/* ============================================
+   CONTENT BODY
+   ============================================ */
+.contentBody {
+  line-height: var(--line-height-relaxed);
+  color: var(--text-primary);
+}
+
+.contentBody p {
+  margin-bottom: var(--space-4);
+}
+
+.contentBody h2 {
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  margin: var(--space-6) 0 var(--space-3) 0;
+  color: var(--text-primary);
+}
+
+.contentBody h3 {
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  margin: var(--space-4) 0 var(--space-2) 0;
+  color: var(--text-primary);
+}
+
+/* ============================================
+   CONTENT SECTIONS
+   ============================================ */
+.contentSection {
+  margin-bottom: var(--space-8);
+}
+
+.contentSection:last-child {
+  margin-bottom: 0;
+}
+
+.sectionTitle {
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-3);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.sectionIcon {
+  font-size: var(--text-xl);
+}
+
+/* ============================================
+   CONTENT GRID
+   ============================================ */
+.contentGrid {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.contentGrid.cols2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.contentGrid.cols3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.contentGrid.cols4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.gridItem {
+  background: var(--bg-secondary);
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  transition: all var(--duration-base) var(--easing-out);
+}
+
+.gridItem:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ============================================
+   CONTENT ACTIONS
+   ============================================ */
+.contentActions {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--border-color);
+}
+
+.contentActions.centered {
+  justify-content: center;
+}
+
+.contentActions.spaceBetween {
+  justify-content: space-between;
+}
+
+.contentActions.right {
+  justify-content: flex-end;
+}
+
+/* ============================================
+   CONTENT HIGHLIGHTS
+   ============================================ */
+.highlight {
+  background: var(--highlight-bg);
+  padding: var(--space-4);
+  border-left: 4px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  margin: var(--space-4) 0;
+}
+
+.highlight.success {
+  border-left-color: var(--color-success);
+  background: var(--success-bg-soft);
+}
+
+.highlight.warning {
+  border-left-color: var(--color-warning);
+  background: var(--warning-bg-soft);
+}
+
+.highlight.error {
+  border-left-color: var(--color-error);
+  background: var(--error-bg-soft);
+}
+
+.highlight.info {
+  border-left-color: var(--color-info);
+  background: var(--info-bg-soft);
+}
+
+/* ============================================
+   CONTENT CARDS
+   ============================================ */
+.contentCard {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  margin-bottom: var(--space-4);
+  transition: all var(--duration-base) var(--easing-out);
+}
+
+.contentCard:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.cardIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background: var(--gradient-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: var(--text-xl);
+}
+
+.cardTitle {
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
+}
+
+.cardContent {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  line-height: var(--line-height-relaxed);
+}
+
+/* ============================================
+   CONTENT LISTS
+   ============================================ */
+.contentList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.listItem {
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.listItem:last-child {
+  border-bottom: none;
+}
+
+.listItem:hover {
+  background: var(--bg-hover);
+  margin: 0 calc(-1 * var(--space-3));
+  padding-left: var(--space-3);
+  padding-right: var(--space-3);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 768px) {
+  .contentArea {
+    padding: var(--space-4);
+  }
+  
+  .contentGrid.cols3,
+  .contentGrid.cols4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .contentActions {
+    flex-direction: column;
+  }
+  
+  .contentActions button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .contentArea {
+    padding: var(--space-3);
+    border-radius: var(--radius-lg);
+  }
+  
+  .contentGrid.cols2,
+  .contentGrid.cols3,
+  .contentGrid.cols4 {
+    grid-template-columns: 1fr;
+  }
+  
+  .contentHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+.noPadding {
+  padding: 0;
+}
+
+.noMargin {
+  margin: 0;
+}
+
+.textCenter {
+  text-align: center;
+}
+
+.textLeft {
+  text-align: left;
+}
+
+.textRight {
+  text-align: right;
+}

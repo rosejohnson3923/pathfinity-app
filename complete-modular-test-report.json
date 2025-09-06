@@ -1,0 +1,1634 @@
+{
+  "timestamp": "2025-09-01T14:28:38.611Z",
+  "testType": "complete_system_test",
+  "metrics": {
+    "overallAccuracy": "100.0%",
+    "criticalAccuracy": "100.0%",
+    "totalTests": 54,
+    "passed": 54,
+    "failed": 0
+  },
+  "byGrade": {
+    "1": {
+      "passed": 3,
+      "total": 3
+    },
+    "2": {
+      "passed": 3,
+      "total": 3
+    },
+    "3": {
+      "passed": 4,
+      "total": 4
+    },
+    "4": {
+      "passed": 3,
+      "total": 3
+    },
+    "5": {
+      "passed": 5,
+      "total": 5
+    },
+    "6": {
+      "passed": 3,
+      "total": 3
+    },
+    "7": {
+      "passed": 4,
+      "total": 4
+    },
+    "8": {
+      "passed": 3,
+      "total": 3
+    },
+    "9": {
+      "passed": 4,
+      "total": 4
+    },
+    "10": {
+      "passed": 7,
+      "total": 7
+    },
+    "11": {
+      "passed": 6,
+      "total": 6
+    },
+    "12": {
+      "passed": 5,
+      "total": 5
+    },
+    "K": {
+      "passed": 4,
+      "total": 4
+    }
+  },
+  "byCareer": {
+    "Doctor": {
+      "passed": 6,
+      "total": 6
+    },
+    "Teacher": {
+      "passed": 4,
+      "total": 4
+    },
+    "Chef": {
+      "passed": 4,
+      "total": 4
+    },
+    "Artist": {
+      "passed": 3,
+      "total": 3
+    },
+    "Police Officer": {
+      "passed": 2,
+      "total": 2
+    },
+    "Firefighter": {
+      "passed": 1,
+      "total": 1
+    },
+    "Scientist": {
+      "passed": 5,
+      "total": 5
+    },
+    "Athlete": {
+      "passed": 2,
+      "total": 2
+    },
+    "Engineer": {
+      "passed": 8,
+      "total": 8
+    },
+    "Writer": {
+      "passed": 4,
+      "total": 4
+    },
+    "Programmer": {
+      "passed": 3,
+      "total": 3
+    },
+    "Lawyer": {
+      "passed": 1,
+      "total": 1
+    },
+    "Architect": {
+      "passed": 2,
+      "total": 2
+    },
+    "Entrepreneur": {
+      "passed": 1,
+      "total": 1
+    },
+    "Journalist": {
+      "passed": 1,
+      "total": 1
+    },
+    "Psychologist": {
+      "passed": 1,
+      "total": 1
+    },
+    "Financial Analyst": {
+      "passed": 1,
+      "total": 1
+    },
+    "Environmental Scientist": {
+      "passed": 1,
+      "total": 1
+    },
+    "Data Scientist": {
+      "passed": 3,
+      "total": 3
+    },
+    "Game Developer": {
+      "passed": 1,
+      "total": 1
+    }
+  },
+  "bySubject": {
+    "Math": {
+      "passed": 17,
+      "total": 17
+    },
+    "ELA": {
+      "passed": 7,
+      "total": 7
+    },
+    "Science": {
+      "passed": 11,
+      "total": 11
+    },
+    "Social Studies": {
+      "passed": 6,
+      "total": 6
+    },
+    "Algebra1": {
+      "passed": 7,
+      "total": 7
+    },
+    "Precalculus": {
+      "passed": 6,
+      "total": 6
+    }
+  },
+  "results": [
+    {
+      "test": {
+        "grade": "K",
+        "career": "Doctor",
+        "subject": "Math",
+        "skill": "Counting to 10",
+        "expectedType": [
+          "counting",
+          "multiple_choice"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [],
+      "question": {
+        "type": "counting",
+        "question": "A doctor has bottles of medicine. Look at the bottles below. How many bottles do you see? 🍼🍼🍼🍼🍼",
+        "correct_answer": 5,
+        "explanation": "Count each bottle one by one. There are 5 bottles in total."
+      }
+    },
+    {
+      "test": {
+        "grade": "K",
+        "career": "Teacher",
+        "subject": "ELA",
+        "skill": "Letter Recognition",
+        "expectedType": [
+          "multiple_choice"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "Look at the letters below. Which one is the letter 'A'? 🅰️ 🅱️ 🅾️",
+        "options": [
+          "🅰️",
+          "🅱️",
+          "🅾️"
+        ],
+        "correct_answer": "🅰️",
+        "explanation": "The letter 'A' is the first letter in the alphabet. It looks like 🅰️."
+      }
+    },
+    {
+      "test": {
+        "grade": "K",
+        "career": "Chef",
+        "subject": "Math",
+        "skill": "Shapes Recognition",
+        "expectedType": [
+          "multiple_choice"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "Chef Mia is making cookies. She has cookie cutters in different shapes. Look at the shapes below. Which one is a circle? 🍪🔺⚪️⭐️",
+        "options": {
+          "A": "🔺",
+          "B": "⚪️",
+          "C": "⭐️"
+        },
+        "correct_answer": "B",
+        "explanation": "The circle is the shape that looks round, like ⚪️."
+      }
+    },
+    {
+      "test": {
+        "grade": "K",
+        "career": "Artist",
+        "subject": "Science",
+        "skill": "Living vs Non-living",
+        "expectedType": [
+          "multiple_choice",
+          "true_false"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "An artist is painting a picture. Look at these things. Which one is living?",
+        "options": [
+          "🌳 Tree",
+          "🖌️ Paintbrush",
+          "🪑 Chair",
+          "📦 Box"
+        ],
+        "correct_answer": "🌳 Tree",
+        "explanation": "Living things grow, change, and need food or water. A tree is living because it grows and needs water."
+      }
+    },
+    {
+      "test": {
+        "grade": "1",
+        "career": "Police Officer",
+        "subject": "Math",
+        "skill": "Addition within 20",
+        "expectedType": [
+          "numeric",
+          "multiple_choice"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [
+        "Question may not test the specified skill"
+      ],
+      "question": {
+        "type": "multiple_choice",
+        "question": "A baker made 7 cupcakes in the morning and 8 cupcakes in the afternoon. How many cupcakes did the baker make in total?",
+        "options": {
+          "A": "12",
+          "B": "15",
+          "C": "16",
+          "D": "20"
+        },
+        "correct_answer": "B",
+        "explanation": "To find the total number of cupcakes, add 7 and 8. 7 + 8 = 15. So, the correct answer is 15."
+      }
+    },
+    {
+      "test": {
+        "grade": "1",
+        "career": "Firefighter",
+        "subject": "Social Studies",
+        "skill": "Community Helpers",
+        "expectedType": [
+          "multiple_choice"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "Which community helper helps people stay healthy?",
+        "options": [
+          "A firefighter",
+          "A doctor",
+          "A teacher",
+          "A police officer"
+        ],
+        "correct_answer": "A doctor",
+        "explanation": "Doctors help people stay healthy by treating illnesses and giving advice on how to take care of their bodies."
+      }
+    },
+    {
+      "test": {
+        "grade": "2",
+        "career": "Scientist",
+        "subject": "Math",
+        "skill": "Even and Odd Numbers",
+        "expectedType": [
+          "true_false",
+          "multiple_choice"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "A scientist is sorting test tubes into groups based on the number of samples inside. She notices some test tubes have an even number of samples and others have an odd number. Which of these numbers is odd?",
+        "options": [
+          "4",
+          "7",
+          "10",
+          "12"
+        ],
+        "correct_answer": "7",
+        "explanation": "Odd numbers cannot be divided into two equal groups without a remainder. The number 7 is odd because it cannot be split evenly into two groups."
+      }
+    },
+    {
+      "test": {
+        "grade": "2",
+        "career": "Athlete",
+        "subject": "ELA",
+        "skill": "Sight Words",
+        "expectedType": [
+          "multiple_choice"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "An athlete is reading a sign at the gym. The sign says: 'Run, Jump, Play, Rest.' Which word is a sight word?",
+        "options": [
+          "Run",
+          "Jump",
+          "Play",
+          "Rest"
+        ],
+        "correct_answer": "Run",
+        "explanation": "Sight words are common words that young readers learn to recognize instantly. 'Run' is a sight word often taught in early grades."
+      }
+    },
+    {
+      "test": {
+        "grade": "3",
+        "career": "Engineer",
+        "subject": "Math",
+        "skill": "Which number is larger: 234 or 243",
+        "expectedType": [
+          "multiple_choice"
+        ],
+        "notType": "true_false"
+      },
+      "passed": true,
+      "isWhichQuestion": true,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "An engineer is designing a machine and needs to choose between two parts. One part is 234 millimeters long, and the other is 243 millimeters long. Which part is longer?",
+        "options": {
+          "A": "234 millimeters",
+          "B": "243 millimeters",
+          "C": "Both are the same length",
+          "D": "Not enough information"
+        },
+        "correct_answer": "B",
+        "explanation": "243 is larger than 234 because the tens digit in 243 is greater than the tens digit in 234. Therefore, the part that is 243 millimeters long is longer."
+      }
+    },
+    {
+      "test": {
+        "grade": "4",
+        "career": "Chef",
+        "subject": "Math",
+        "skill": "Which fraction is greater: 2/3 or 3/4",
+        "expectedType": [
+          "multiple_choice"
+        ],
+        "notType": "true_false"
+      },
+      "passed": true,
+      "isWhichQuestion": true,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "A chef is preparing a dessert and needs to compare two fractions to decide how much chocolate to use. Which fraction is greater: 2/3 or 3/4?",
+        "options": [
+          "A. 2/3",
+          "B. 3/4",
+          "C. They are equal",
+          "D. Cannot be determined"
+        ],
+        "correct_answer": "B. 3/4",
+        "explanation": "To compare 2/3 and 3/4, find a common denominator. The least common denominator of 3 and 4 is 12. Convert the fractions: 2/3 = 8/12 and 3/4 = 9/12. Since 9/12 is greater than 8/12, 3/4 is the larger fraction."
+      }
+    },
+    {
+      "test": {
+        "grade": "5",
+        "career": "Doctor",
+        "subject": "Math",
+        "skill": "Which decimal is smaller: 0.3 or 0.03",
+        "expectedType": [
+          "multiple_choice"
+        ],
+        "notType": "true_false"
+      },
+      "passed": true,
+      "isWhichQuestion": true,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "A doctor is measuring the dosage of medicine for two patients. Patient A needs 0.3 liters of medicine, and Patient B needs 0.03 liters of medicine. Which dosage is smaller?",
+        "options": [
+          "0.3 liters",
+          "0.03 liters",
+          "Both are the same",
+          "Cannot be determined"
+        ],
+        "correct_answer": "0.03 liters",
+        "explanation": "To compare decimals, look at the place values. 0.3 has a 3 in the tenths place, while 0.03 has a 3 in the hundredths place. Hundredths are smaller than tenths, so 0.03 liters is smaller."
+      }
+    },
+    {
+      "test": {
+        "grade": "5",
+        "career": "Engineer",
+        "subject": "Math",
+        "skill": "Which number is smaller: -10 or -5",
+        "expectedType": [
+          "multiple_choice"
+        ],
+        "notType": "true_false"
+      },
+      "passed": true,
+      "isWhichQuestion": true,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "An engineer is designing a bridge and needs to calculate temperature changes. On one side of the bridge, the temperature is -10 degrees, and on the other side, it is -5 degrees. Which temperature is smaller?",
+        "options": {
+          "A": "-10",
+          "B": "-5",
+          "C": "0",
+          "D": "5"
+        },
+        "correct_answer": "A",
+        "explanation": "Negative numbers represent values below zero. The smaller the number, the farther it is from zero. Therefore, -10 is smaller than -5."
+      }
+    },
+    {
+      "test": {
+        "grade": "3",
+        "career": "Writer",
+        "subject": "ELA",
+        "skill": "Main Idea",
+        "expectedType": [
+          "multiple_choice",
+          "short_answer"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "What is the main idea of the following passage? 'A firefighter's job is to keep people safe during emergencies. They put out fires, rescue people, and help during accidents. Firefighters work hard to protect their community every day.'",
+        "options": [
+          "A firefighter's job is to help during accidents.",
+          "Firefighters work hard to protect their community.",
+          "Firefighters rescue people from fires.",
+          "Firefighters put out fires every day."
+        ],
+        "correct_answer": "Firefighters work hard to protect their community.",
+        "explanation": "The main idea of the passage is the overall message or point. While the passage mentions specific tasks like putting out fires and helping during accidents, the main idea is that firefighters work hard to protect their community."
+      }
+    },
+    {
+      "test": {
+        "grade": "4",
+        "career": "Artist",
+        "subject": "Science",
+        "skill": "States of Matter",
+        "expectedType": [
+          "multiple_choice",
+          "true_false"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "An artist is painting a picture and notices that the paint changes from liquid to solid as it dries. What causes this change in the state of matter?",
+        "options": [
+          "A. The paint is heated by the sun.",
+          "B. The paint loses water as it evaporates.",
+          "C. The paint is mixed with more liquid.",
+          "D. The paint is frozen in the studio."
+        ],
+        "correct_answer": "B",
+        "explanation": "When paint dries, it loses water through evaporation, causing it to change from a liquid to a solid state. This is an example of a change in the state of matter."
+      }
+    },
+    {
+      "test": {
+        "grade": "5",
+        "career": "Teacher",
+        "subject": "Social Studies",
+        "skill": "U.S. States and Capitals",
+        "expectedType": [
+          "multiple_choice"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "A teacher is helping students learn U.S. state capitals. She asks, 'Which of the following is the capital of Texas?'",
+        "options": [
+          "Austin",
+          "Houston",
+          "Dallas",
+          "San Antonio"
+        ],
+        "correct_answer": "Austin",
+        "explanation": "Austin is the capital city of Texas. It is important for students to know state capitals as part of understanding U.S. geography and government."
+      }
+    },
+    {
+      "test": {
+        "grade": "6",
+        "career": "Scientist",
+        "subject": "Science",
+        "skill": "Scientific Method",
+        "expectedType": [
+          "multiple_choice",
+          "short_answer"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "A scientist is studying the growth of plants under different light conditions. She sets up three groups of plants: one group receives sunlight, another group receives artificial light, and the last group is kept in darkness. After two weeks, she measures the height of the plants. What is the next step in the scientific method that the scientist should take?",
+        "options": [
+          "A. Form a hypothesis about why the plants grew differently.",
+          "B. Analyze the data to determine the effect of light on plant growth.",
+          "C. Repeat the experiment with a different type of plant.",
+          "D. Write a conclusion without analyzing the data."
+        ],
+        "correct_answer": "B",
+        "explanation": "After collecting data, the next step in the scientific method is to analyze the data to identify patterns or relationships. This helps the scientist determine the effect of the variable being tested, in this case, the type of light on plant growth."
+      }
+    },
+    {
+      "test": {
+        "grade": "7",
+        "career": "Engineer",
+        "subject": "Math",
+        "skill": "Solving Equations",
+        "expectedType": [
+          "numeric",
+          "multiple_choice"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [
+        "Question may not test the specified skill"
+      ],
+      "question": {
+        "type": "multiple_choice",
+        "question": "An engineer is designing a bridge and needs to calculate the length of a support beam. The equation for the beam's length is given as 3x + 5 = 20. Determine the value of x that satisfies this equation.",
+        "options": {
+          "A": "x = 3",
+          "B": "x = 5",
+          "C": "x = 7",
+          "D": "x = 15"
+        },
+        "correct_answer": "A",
+        "explanation": "To solve the equation 3x + 5 = 20, first subtract 5 from both sides to get 3x = 15. Then divide both sides by 3 to find x = 5."
+      }
+    },
+    {
+      "test": {
+        "grade": "8",
+        "career": "Writer",
+        "subject": "ELA",
+        "skill": "Theme Analysis",
+        "expectedType": [
+          "multiple_choice",
+          "long_answer"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "Analyze the theme of perseverance in the short story 'The Last Climb.' Which of the following best explains how the author develops this theme throughout the narrative?",
+        "options": [
+          "A. The author uses vivid descriptions of the mountain to symbolize the protagonist's internal struggles.",
+          "B. The author focuses on the protagonist's repeated failures and ultimate decision to give up.",
+          "C. The author highlights the protagonist's determination to overcome obstacles despite physical and emotional challenges.",
+          "D. The author emphasizes the role of teamwork and collaboration in achieving success."
+        ],
+        "correct_answer": "C",
+        "explanation": "The theme of perseverance is developed through the protagonist's determination to face and overcome significant challenges, demonstrating resilience and a refusal to give up despite difficulties."
+      }
+    },
+    {
+      "test": {
+        "grade": "6",
+        "career": "Chef",
+        "subject": "Math",
+        "skill": "Ratios and Proportions",
+        "expectedType": [
+          "numeric",
+          "multiple_choice"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "A chef is preparing a large batch of soup and needs to maintain the correct ratio of ingredients. The recipe calls for 3 cups of carrots for every 5 cups of potatoes. If the chef uses 15 cups of potatoes, how many cups of carrots should be used to keep the ratio consistent?",
+        "options": {
+          "A": "9 cups",
+          "B": "12 cups",
+          "C": "15 cups",
+          "D": "18 cups"
+        },
+        "correct_answer": "A",
+        "explanation": "To maintain the ratio of 3:5, calculate the equivalent amount of carrots for 15 cups of potatoes. Use the proportion 3/5 = x/15. Solving for x, multiply both sides by 15: x = (3 * 15) / 5 = 9 cups of carrots."
+      }
+    },
+    {
+      "test": {
+        "grade": "7",
+        "career": "Doctor",
+        "subject": "Science",
+        "skill": "Human Body Systems",
+        "expectedType": [
+          "multiple_choice"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [
+        "Question may not test the specified skill"
+      ],
+      "question": {
+        "type": "multiple_choice",
+        "question": "A doctor is analyzing a patient's symptoms, which include rapid breathing, fatigue, and dizziness. The doctor suspects an issue with the circulatory or respiratory system. Which of the following would be the most appropriate next step to determine the cause of the symptoms?",
+        "options": {
+          "A": "Perform a blood test to measure oxygen levels and check for anemia.",
+          "B": "Examine the patient's digestive system for signs of nutrient absorption issues.",
+          "C": "Test the patient's reflexes to evaluate the nervous system.",
+          "D": "Measure the patient's bone density to rule out skeletal problems."
+        },
+        "correct_answer": "A",
+        "explanation": "Rapid breathing, fatigue, and dizziness are symptoms that could indicate issues with oxygen transport in the body. A blood test would help determine if there is a problem with oxygen levels or red blood cell count, which are related to the circulatory and respiratory systems."
+      }
+    },
+    {
+      "test": {
+        "grade": "8",
+        "career": "Athlete",
+        "subject": "Social Studies",
+        "skill": "American Revolution",
+        "expectedType": [
+          "multiple_choice",
+          "short_answer"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "Analyze how the American Revolution influenced the development of teamwork and strategy in modern sports. Which of the following statements best reflects this connection?",
+        "options": [
+          "A. The American Revolution emphasized individual heroism, which is the foundation of solo sports like tennis.",
+          "B. The strategies used by revolutionary leaders to organize troops and coordinate battles are similar to how sports teams plan plays and work together to achieve goals.",
+          "C. The American Revolution discouraged collaboration, leading to a focus on individual achievements in sports.",
+          "D. The American Revolution had no impact on teamwork or strategy in sports."
+        ],
+        "correct_answer": "B",
+        "explanation": "The American Revolution required leaders to develop strategies and foster collaboration among diverse groups to achieve common goals. This emphasis on teamwork and strategic planning parallels the way modern sports teams operate, where players must work together and execute coordinated strategies to succeed."
+      }
+    },
+    {
+      "test": {
+        "grade": "9",
+        "career": "Engineer",
+        "subject": "Math",
+        "skill": "Quadratic Equations",
+        "expectedType": [
+          "numeric",
+          "multiple_choice"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [
+        "Question may not test the specified skill"
+      ],
+      "question": {
+        "type": "multiple_choice",
+        "question": "An engineer is designing a parabolic arch for a bridge. The equation of the arch is given by y = -2x^2 + 8x, where x and y represent the horizontal and vertical distances in meters, respectively. Analyze the equation to determine the maximum height of the arch and at what horizontal distance it occurs.",
+        "options": {
+          "A": "The maximum height is 8 meters, occurring at x = 2 meters.",
+          "B": "The maximum height is 6 meters, occurring at x = 4 meters.",
+          "C": "The maximum height is 10 meters, occurring at x = 3 meters.",
+          "D": "The maximum height is 12 meters, occurring at x = 1 meter."
+        },
+        "correct_answer": "A",
+        "explanation": "The equation y = -2x^2 + 8x represents a parabola opening downward. To find the maximum height, calculate the vertex of the parabola using the formula x = -b/(2a). Here, a = -2 and b = 8, so x = -8/(2 * -2) = 2. Substituting x = 2 into the equation gives y = -2(2)^2 + 8(2) = -8 + 16 = 8 meters. Thus, the maximum height is 8 meters, occurring at x = 2 meters."
+      }
+    },
+    {
+      "test": {
+        "grade": "10",
+        "career": "Scientist",
+        "subject": "Science",
+        "skill": "Chemical Reactions",
+        "expectedType": [
+          "multiple_choice",
+          "short_answer"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "A scientist is testing the rate of a chemical reaction between hydrochloric acid (HCl) and zinc (Zn) by varying the concentration of HCl. Based on the collision theory, which factor is most likely responsible for the observed increase in reaction rate as the concentration of HCl increases?",
+        "options": [
+          "A. The increase in the energy of the zinc particles.",
+          "B. The increase in the frequency of collisions between reactant particles.",
+          "C. The decrease in the activation energy required for the reaction.",
+          "D. The production of a catalyst during the reaction."
+        ],
+        "correct_answer": "B",
+        "explanation": "According to the collision theory, increasing the concentration of HCl results in a higher number of acid particles in the solution, which increases the frequency of collisions between reactant particles. This leads to a faster reaction rate."
+      }
+    },
+    {
+      "test": {
+        "grade": "11",
+        "career": "Writer",
+        "subject": "ELA",
+        "skill": "Literary Analysis",
+        "expectedType": [
+          "long_answer",
+          "multiple_choice"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [
+        "Question may not test the specified skill"
+      ],
+      "question": {
+        "type": "multiple_choice",
+        "question": "Evaluate the author's use of symbolism in the novel 'The Great Gatsby' to convey themes of ambition and societal decay. Which of the following best analyzes the significance of the green light as a recurring symbol?",
+        "options": [
+          "A. The green light represents Gatsby's unattainable dreams and the broader idea of the American Dream, highlighting its elusive nature.",
+          "B. The green light symbolizes wealth and material success, suggesting that Gatsby's ambitions are purely financial.",
+          "C. The green light is a metaphor for hope and renewal, indicating Gatsby's belief in second chances.",
+          "D. The green light serves as a reminder of Daisy's love for Gatsby, emphasizing the personal nature of his ambitions."
+        ],
+        "correct_answer": "A",
+        "explanation": "The green light in 'The Great Gatsby' is a complex symbol that represents Gatsby's longing for Daisy and his pursuit of the American Dream. It underscores the theme of ambition and societal decay by illustrating the unattainable and often destructive nature of these desires."
+      }
+    },
+    {
+      "test": {
+        "grade": "12",
+        "career": "Doctor",
+        "subject": "Science",
+        "skill": "Genetics and DNA",
+        "expectedType": [
+          "multiple_choice"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [
+        "Question may not test the specified skill"
+      ],
+      "question": {
+        "type": "multiple_choice",
+        "question": "A doctor is analyzing the genetic data of a patient to determine the likelihood of inheriting a specific autosomal dominant disorder. The patient's genotype is heterozygous for the gene associated with the disorder. Evaluate the probability that the patient will pass this disorder to their offspring, assuming the other parent does not carry the gene mutation.",
+        "options": {
+          "A": "0%",
+          "B": "25%",
+          "C": "50%",
+          "D": "75%"
+        },
+        "correct_answer": "C",
+        "explanation": "In autosomal dominant inheritance, a heterozygous individual has a 50% chance of passing the dominant allele to their offspring. Since the other parent does not carry the mutation, the probability remains 50%."
+      }
+    },
+    {
+      "test": {
+        "grade": "10",
+        "career": "Artist",
+        "subject": "Social Studies",
+        "skill": "World War II",
+        "expectedType": [
+          "multiple_choice",
+          "short_answer"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "An artist is designing a mural to depict the societal impact of World War II on global communities. Which of the following themes would best represent the cultural and governmental shifts caused by the war?",
+        "options": [
+          "A. The rise of totalitarian regimes and their suppression of artistic expression.",
+          "B. The emergence of international organizations like the United Nations promoting peace and collaboration.",
+          "C. The widespread use of propaganda to influence public opinion and morale.",
+          "D. The development of abstract art movements as a response to the trauma of war."
+        ],
+        "correct_answer": "B",
+        "explanation": "The emergence of international organizations like the United Nations represents a significant societal and governmental shift post-World War II, as nations sought to prevent future conflicts and promote global cooperation. While other options reflect important aspects of the war's impact, they do not encompass the broader theme of cultural and governmental shifts as effectively."
+      }
+    },
+    {
+      "test": {
+        "grade": "11",
+        "career": "Teacher",
+        "subject": "Math",
+        "skill": "Trigonometry",
+        "expectedType": [
+          "numeric",
+          "multiple_choice"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [
+        "Question may not test the specified skill"
+      ],
+      "question": {
+        "type": "multiple_choice",
+        "question": "A teacher is preparing a lesson on trigonometric identities and asks students to analyze the relationship between the sine and cosine functions. If sin(x) = 3/5 and x is in the first quadrant, determine the value of cos(x).",
+        "options": {
+          "A": "4/5",
+          "B": "-4/5",
+          "C": "3/5",
+          "D": "-3/5"
+        },
+        "correct_answer": "A",
+        "explanation": "Since sin(x) = 3/5 and x is in the first quadrant, we use the Pythagorean identity sin^2(x) + cos^2(x) = 1. Substituting sin(x) = 3/5, we calculate sin^2(x) = (3/5)^2 = 9/25. Then, cos^2(x) = 1 - 9/25 = 16/25. Taking the square root, cos(x) = sqrt(16/25) = 4/5. In the first quadrant, cosine is positive, so cos(x) = 4/5."
+      }
+    },
+    {
+      "test": {
+        "grade": "12",
+        "career": "Police Officer",
+        "subject": "Social Studies",
+        "skill": "Constitutional Rights",
+        "expectedType": [
+          "multiple_choice",
+          "true_false"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "Assess the impact of the First Amendment on modern social movements in the United States. Which of the following scenarios best demonstrates the protection of constitutional rights under the First Amendment?",
+        "options": [
+          "A group of citizens peacefully protesting a government policy in a public park.",
+          "A private company firing an employee for expressing controversial opinions on social media.",
+          "A local government banning all public demonstrations to maintain public order.",
+          "A journalist being arrested for publishing classified information leaked by a government employee."
+        ],
+        "correct_answer": "A group of citizens peacefully protesting a government policy in a public park.",
+        "explanation": "The First Amendment protects the rights to freedom of speech, assembly, and petition. Peaceful protests in public spaces are a clear example of these protections. The other scenarios involve private actions or government overreach that do not align with First Amendment protections."
+      }
+    },
+    {
+      "test": {
+        "grade": "1",
+        "career": "Engineer",
+        "subject": "Math",
+        "skill": "Which shape has more sides",
+        "expectedType": [
+          "multiple_choice"
+        ],
+        "notType": "true_false"
+      },
+      "passed": true,
+      "isWhichQuestion": true,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "An engineer is designing a playground. They need to choose a shape for the climbing frame. Which shape has more sides?",
+        "options": [
+          "Triangle",
+          "Square",
+          "Pentagon",
+          "Circle"
+        ],
+        "correct_answer": "Pentagon",
+        "explanation": "A triangle has 3 sides, a square has 4 sides, a pentagon has 5 sides, and a circle has no sides. The pentagon has the most sides."
+      }
+    },
+    {
+      "test": {
+        "grade": "3",
+        "career": "Doctor",
+        "subject": "Science",
+        "skill": "Which animal is a mammal",
+        "expectedType": [
+          "multiple_choice"
+        ],
+        "notType": "true_false"
+      },
+      "passed": true,
+      "isWhichQuestion": true,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "A doctor is explaining to a young patient how mammals are special animals. Which of these animals is a mammal?",
+        "options": [
+          "A. Frog",
+          "B. Dolphin",
+          "C. Snake",
+          "D. Eagle"
+        ],
+        "correct_answer": "B. Dolphin",
+        "explanation": "Mammals are animals that have hair or fur, give live birth, and feed their babies with milk. Dolphins are mammals because they meet all these criteria."
+      }
+    },
+    {
+      "test": {
+        "grade": "2",
+        "career": "Chef",
+        "subject": "Math",
+        "skill": "Which group has more",
+        "expectedType": [
+          "multiple_choice"
+        ],
+        "notType": "true_false"
+      },
+      "passed": true,
+      "isWhichQuestion": true,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "A chef is making fruit salad. He has 8 apples and 5 bananas. Which group has more?",
+        "options": {
+          "A": "Apples",
+          "B": "Bananas",
+          "C": "Both are the same",
+          "D": "I don't know"
+        },
+        "correct_answer": "A",
+        "explanation": "The chef has 8 apples and 5 bananas. Since 8 is greater than 5, the group with more is apples."
+      }
+    },
+    {
+      "test": {
+        "grade": "9",
+        "career": "Programmer",
+        "subject": "Algebra1",
+        "skill": "Linear Equations",
+        "expectedType": [
+          "numeric",
+          "multiple_choice"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "A programmer is developing a software application that calculates the intersection point of two linear equations representing data trends. The equations are given as follows: y = 3x + 5 and y = -2x + 15. Analyze the system of equations and determine the x-coordinate of the intersection point.",
+        "options": {
+          "A": "-2",
+          "B": "0",
+          "C": "2",
+          "D": "4"
+        },
+        "correct_answer": "C",
+        "explanation": "To find the intersection point, set the two equations equal to each other: 3x + 5 = -2x + 15. Solve for x: 3x + 2x = 15 - 5, which simplifies to 5x = 10. Dividing both sides by 5 gives x = 2. Therefore, the x-coordinate of the intersection point is 2."
+      }
+    },
+    {
+      "test": {
+        "grade": "10",
+        "career": "Lawyer",
+        "subject": "Social Studies",
+        "skill": "Constitutional Law",
+        "expectedType": [
+          "multiple_choice"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "A lawyer is preparing a case to argue that a local government policy restricting public protests violates the First Amendment of the U.S. Constitution. Which of the following legal principles should the lawyer analyze to build the strongest argument?",
+        "options": [
+          "A. The principle of separation of powers between federal and state governments.",
+          "B. The concept of prior restraint and its limitations on government actions.",
+          "C. The Tenth Amendment's reservation of powers to the states.",
+          "D. The Equal Protection Clause of the Fourteenth Amendment."
+        ],
+        "correct_answer": "B",
+        "explanation": "The principle of prior restraint is directly relevant to the First Amendment, as it addresses the government's ability to restrict speech or expression before it occurs. In this case, the lawyer would need to evaluate whether the local government's policy constitutes an unconstitutional prior restraint on public protests."
+      }
+    },
+    {
+      "test": {
+        "grade": "11",
+        "career": "Architect",
+        "subject": "Precalculus",
+        "skill": "Trigonometric Functions",
+        "expectedType": [
+          "multiple_choice",
+          "numeric"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "An architect is designing a triangular roof structure where one of the angles is 45° and the adjacent side to this angle measures 10 meters. If the roof's design requires calculating the length of the opposite side to ensure proper slope, which trigonometric function should be used, and what is the length of the opposite side?",
+        "options": [
+          {
+            "option": "A",
+            "answer": "Use sine; the length of the opposite side is 10 * sin(45°) = 10 * sqrt(2)/2 meters."
+          },
+          {
+            "option": "B",
+            "answer": "Use cosine; the length of the opposite side is 10 * cos(45°) = 10 * sqrt(2)/2 meters."
+          },
+          {
+            "option": "C",
+            "answer": "Use tangent; the length of the opposite side is 10 * tan(45°) = 10 meters."
+          },
+          {
+            "option": "D",
+            "answer": "Use cotangent; the length of the opposite side is 10 * cot(45°) = 10 meters."
+          }
+        ],
+        "correct_answer": "A",
+        "explanation": "To find the length of the opposite side, the sine function is appropriate because sine relates the opposite side to the hypotenuse in a right triangle. Using sin(45°) = sqrt(2)/2, the calculation is 10 * sqrt(2)/2 meters."
+      }
+    },
+    {
+      "test": {
+        "grade": "12",
+        "career": "Entrepreneur",
+        "subject": "Math",
+        "skill": "Compound Interest",
+        "expectedType": [
+          "numeric",
+          "multiple_choice"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "An entrepreneur is launching a startup and plans to invest $50,000 into a business account that offers an annual interest rate of 6%, compounded monthly. The entrepreneur intends to leave the investment untouched for 5 years. Calculate the total amount in the account at the end of 5 years and select the correct answer.",
+        "options": [
+          "$67,000.00",
+          "$67,834.41",
+          "$68,500.25",
+          "$70,000.00"
+        ],
+        "correct_answer": "$67,834.41",
+        "explanation": "The formula for compound interest is A = P(1 + r/n)^(nt), where P is the principal amount, r is the annual interest rate (in decimal), n is the number of times interest is compounded per year, and t is the time in years. Substituting the given values: P = 50000, r = 0.06, n = 12, t = 5. A = 50000(1 + 0.06/12)^(12*5) = 50000(1 + 0.005)^(60) = 50000(1.005)^60 ≈ $67,834.41."
+      }
+    },
+    {
+      "test": {
+        "grade": "10",
+        "career": "Journalist",
+        "subject": "ELA",
+        "skill": "Persuasive Writing",
+        "expectedType": [
+          "multiple_choice"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "A journalist is investigating the impact of social media on public opinion. After reading an article that argues social media platforms amplify misinformation, construct an argument to persuade readers that journalists play a critical role in combating misinformation. Which of the following strategies would be most effective in crafting this persuasive argument?",
+        "options": [
+          "A. Use emotional appeals to highlight the dangers of misinformation without providing evidence.",
+          "B. Include credible sources and expert interviews to support claims about journalists' role in verifying information.",
+          "C. Focus solely on the negative aspects of social media without addressing the role of journalism.",
+          "D. Write in a casual tone to make the argument more relatable and less formal."
+        ],
+        "correct_answer": "B",
+        "explanation": "Option B is correct because persuasive writing in journalism relies on credible sources and expert opinions to establish authority and trustworthiness. Emotional appeals (Option A) and casual tones (Option D) may weaken the argument's credibility, while ignoring journalism's role (Option C) fails to address the prompt effectively."
+      }
+    },
+    {
+      "test": {
+        "grade": "11",
+        "career": "Psychologist",
+        "subject": "Science",
+        "skill": "Research Methods",
+        "expectedType": [
+          "multiple_choice"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [
+        "Question may not test the specified skill"
+      ],
+      "question": {
+        "type": "multiple_choice",
+        "question": "A psychologist is analyzing the effectiveness of a new therapy designed to reduce anxiety in patients. The psychologist conducts an experiment where one group of patients receives the new therapy, while another group receives a placebo. After six weeks, anxiety levels are measured using a standardized scale. Evaluate the methodology used in this experiment and determine which aspect of the study design is most critical for ensuring valid results.",
+        "options": [
+          "A. Ensuring the sample size is large enough to detect meaningful differences.",
+          "B. Randomly assigning patients to the therapy and placebo groups.",
+          "C. Using a standardized scale to measure anxiety levels.",
+          "D. Conducting follow-up assessments after the six-week period."
+        ],
+        "correct_answer": "B",
+        "explanation": "Random assignment is crucial for minimizing bias and ensuring that differences in outcomes can be attributed to the therapy rather than pre-existing differences between groups. While other aspects are important, randomization is the most critical for validity in experimental design."
+      }
+    },
+    {
+      "test": {
+        "grade": "12",
+        "career": "Financial Analyst",
+        "subject": "Precalculus",
+        "skill": "Limits",
+        "expectedType": [
+          "numeric",
+          "multiple_choice"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [
+        "Question may not test the specified skill"
+      ],
+      "question": {
+        "type": "multiple_choice",
+        "question": "A financial analyst is evaluating the behavior of a stock price model given by the function f(x) = (2x^2 - 8) / (x - 2) as x approaches 2. Determine the limit of f(x) as x approaches 2.",
+        "options": {
+          "A": "The limit does not exist.",
+          "B": "The limit is 4.",
+          "C": "The limit is 0.",
+          "D": "The limit is infinity."
+        },
+        "correct_answer": "B",
+        "explanation": "To evaluate the limit of f(x) as x approaches 2, notice that direct substitution results in an indeterminate form (0/0). Factorize the numerator: f(x) = [(2x + 4)(x - 2)] / (x - 2). Cancel the (x - 2) terms, leaving f(x) = 2x + 4. Substituting x = 2 into the simplified expression gives f(2) = 2(2) + 4 = 4."
+      }
+    },
+    {
+      "test": {
+        "grade": "9",
+        "career": "Environmental Scientist",
+        "subject": "Science",
+        "skill": "Ecosystems",
+        "expectedType": [
+          "multiple_choice"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "An environmental scientist is studying the impact of deforestation on local ecosystems. Evaluate how the removal of trees affects the carbon cycle and propose a solution to mitigate these effects.",
+        "options": {
+          "A": "Deforestation decreases carbon dioxide levels in the atmosphere, and planting fast-growing crops can restore balance.",
+          "B": "Deforestation increases carbon dioxide levels in the atmosphere, and reforestation can help absorb excess carbon dioxide.",
+          "C": "Deforestation has no significant impact on the carbon cycle, and conservation efforts should focus solely on biodiversity.",
+          "D": "Deforestation increases oxygen levels in the atmosphere, and reducing fossil fuel use is the only effective solution."
+        },
+        "correct_answer": "B",
+        "explanation": "Deforestation reduces the number of trees available to absorb carbon dioxide during photosynthesis, leading to increased atmospheric carbon dioxide levels. Reforestation is a sustainable solution that helps restore the balance of the carbon cycle by increasing the number of trees that can absorb carbon dioxide."
+      }
+    },
+    {
+      "test": {
+        "grade": "10",
+        "career": "Data Scientist",
+        "subject": "Algebra1",
+        "skill": "Systems of Equations",
+        "expectedType": [
+          "numeric",
+          "multiple_choice"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "A data scientist is analyzing two datasets and models their relationship using the following system of linear equations: \n\n3x + 2y = 12 \n5x - y = 7 \n\nDetermine the values of x and y that satisfy this system of equations.",
+        "options": {
+          "A": "x = 2, y = 3",
+          "B": "x = 1, y = 4",
+          "C": "x = 3, y = 2",
+          "D": "x = 0, y = 6"
+        },
+        "correct_answer": "A",
+        "explanation": "To solve the system, use either substitution or elimination. Using elimination, multiply the second equation by 2 to align the coefficients of y: \n\n3x + 2y = 12 \n10x - 2y = 14 \n\nAdd the equations: \n13x = 26 \nx = 2 \n\nSubstitute x = 2 into the first equation: \n3(2) + 2y = 12 \n6 + 2y = 12 \n2y = 6 \ny = 3 \n\nThus, the solution is x = 2, y = 3."
+      }
+    },
+    {
+      "test": {
+        "grade": "11",
+        "career": "Game Developer",
+        "subject": "Algebra1",
+        "skill": "Quadratic Functions",
+        "expectedType": [
+          "multiple_choice",
+          "numeric"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "A game developer is designing a physics engine for a game where characters jump over obstacles. The height of a character's jump is modeled by the quadratic function h(t) = -2t^2 + 8t, where h(t) represents the height in meters and t represents time in seconds. Analyze the function and determine the maximum height the character can reach during the jump.",
+        "options": {
+          "A": "6 meters",
+          "B": "8 meters",
+          "C": "10 meters",
+          "D": "12 meters"
+        },
+        "correct_answer": "A",
+        "explanation": "To find the maximum height, calculate the vertex of the quadratic function h(t) = -2t^2 + 8t. The vertex occurs at t = -b/(2a), where a = -2 and b = 8. Substituting, t = -8/(2 * -2) = 2 seconds. Plugging t = 2 into the function: h(2) = -2(2)^2 + 8(2) = -8 + 16 = 6 meters. Therefore, the maximum height is 6 meters."
+      }
+    },
+    {
+      "test": {
+        "grade": "8",
+        "career": "Engineer",
+        "subject": "Algebra1",
+        "skill": "Linear Equations",
+        "expectedType": [
+          "numeric",
+          "multiple_choice"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "An engineer is designing a bridge and needs to calculate the forces acting on a support beam. The relationship between the force (F) and the distance (d) from the center is modeled by the linear equation F = 3d + 12. Analyze the equation and determine the distance (d) when the force (F) is 27 units.",
+        "options": {
+          "A": "3",
+          "B": "5",
+          "C": "7",
+          "D": "9"
+        },
+        "correct_answer": "B",
+        "explanation": "To solve for d, substitute F = 27 into the equation F = 3d + 12. This gives 27 = 3d + 12. Subtract 12 from both sides to get 15 = 3d. Divide both sides by 3 to find d = 5."
+      }
+    },
+    {
+      "test": {
+        "grade": "9",
+        "career": "Scientist",
+        "subject": "Algebra1",
+        "skill": "Systems of Equations",
+        "expectedType": [
+          "numeric",
+          "multiple_choice"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "A scientist is analyzing the relationship between two chemical compounds, A and B, during an experiment. The scientist observes that the amount of compound A (x) and compound B (y) are related by the following system of equations: \n\n1. 3x + 2y = 12 \n2. x - y = 2 \n\nDetermine the values of x and y that satisfy this system of equations.",
+        "options": {
+          "A": "x = 2, y = 4",
+          "B": "x = 4, y = 2",
+          "C": "x = 3, y = 3",
+          "D": "x = 5, y = 1"
+        },
+        "correct_answer": "B",
+        "explanation": "To solve the system, use substitution or elimination. From the second equation, solve for x: x = y + 2. Substitute this into the first equation: 3(y + 2) + 2y = 12. Simplify: 3y + 6 + 2y = 12 → 5y = 6 → y = 2. Substitute y = 2 into x = y + 2: x = 4. Thus, the solution is x = 4, y = 2."
+      }
+    },
+    {
+      "test": {
+        "grade": "10",
+        "career": "Programmer",
+        "subject": "Algebra1",
+        "skill": "Quadratic Functions",
+        "expectedType": [
+          "multiple_choice",
+          "numeric"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "A programmer is developing an algorithm to calculate the roots of a quadratic function. The function is given in standard form as f(x) = x^2 - 5x + 6. Analyze the quadratic expression and determine the roots by factoring. Which of the following options correctly represents the roots of the function?",
+        "options": [
+          "A) x = -2 and x = -3",
+          "B) x = 2 and x = 3",
+          "C) x = -6 and x = 1",
+          "D) x = 6 and x = -1"
+        ],
+        "correct_answer": "B) x = 2 and x = 3",
+        "explanation": "To factor the quadratic expression f(x) = x^2 - 5x + 6, find two numbers that multiply to 6 (the constant term) and add to -5 (the coefficient of x). These numbers are -2 and -3. The factored form is (x - 2)(x - 3). Setting each factor equal to zero gives the roots x = 2 and x = 3."
+      }
+    },
+    {
+      "test": {
+        "grade": "10",
+        "career": "Engineer",
+        "subject": "Precalculus",
+        "skill": "Conic Sections",
+        "expectedType": [
+          "multiple_choice"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [
+        "Question may not test the specified skill"
+      ],
+      "question": {
+        "type": "multiple_choice",
+        "question": "An engineer is designing a parabolic arch for a bridge. The equation of the parabola is given in standard form as y = -0.01x^2 + 3x - 5. Analyze the geometric properties of the parabola and determine the coordinates of its vertex, which represent the highest point of the arch.",
+        "options": {
+          "A": "(150, 220)",
+          "B": "(100, 245)",
+          "C": "(150, 245)",
+          "D": "(100, 220)"
+        },
+        "correct_answer": "C",
+        "explanation": "The vertex of a parabola in standard form y = ax^2 + bx + c can be found using the formula x = -b/(2a). Substituting a = -0.01 and b = 3, we calculate x = -3/(2 * -0.01) = 150. Plugging x = 150 into the equation, y = -0.01(150)^2 + 3(150) - 5 = 245. Thus, the vertex is at (150, 245), which represents the highest point of the arch."
+      }
+    },
+    {
+      "test": {
+        "grade": "11",
+        "career": "Data Scientist",
+        "subject": "Precalculus",
+        "skill": "Limits",
+        "expectedType": [
+          "numeric",
+          "multiple_choice"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [
+        "Question may not test the specified skill"
+      ],
+      "question": {
+        "type": "multiple_choice",
+        "question": "A data scientist is analyzing the behavior of a predictive model as the size of the training dataset approaches infinity. Evaluate the limit of the function f(x) = (3x^2 - 2x + 1) / (x^2 + x + 1) as x approaches infinity. What does this imply about the model's performance with very large datasets?",
+        "options": [
+          "A. The limit is 3, indicating the model's performance stabilizes at a constant rate.",
+          "B. The limit is 0, indicating the model's performance diminishes with larger datasets.",
+          "C. The limit is infinity, indicating the model's performance improves indefinitely.",
+          "D. The limit does not exist, indicating unpredictable behavior with larger datasets."
+        ],
+        "correct_answer": "A. The limit is 3, indicating the model's performance stabilizes at a constant rate.",
+        "explanation": "To evaluate the limit of f(x) as x approaches infinity, divide each term in the numerator and denominator by x^2, the highest power of x in the denominator. This simplifies the function to f(x) = (3 - 2/x + 1/x^2) / (1 + 1/x + 1/x^2). As x approaches infinity, the terms involving 1/x and 1/x^2 approach 0, leaving f(x) ≈ 3/1 = 3. This indicates that the model's performance stabilizes at a constant rate as the dataset size becomes very large."
+      }
+    },
+    {
+      "test": {
+        "grade": "12",
+        "career": "Architect",
+        "subject": "Precalculus",
+        "skill": "Trigonometric Functions",
+        "expectedType": [
+          "multiple_choice",
+          "numeric"
+        ]
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "An architect is designing a triangular roof structure where one of the angles measures 60 degrees. If the length of the side opposite this angle is 10 meters, evaluate the length of the hypotenuse using trigonometric principles.",
+        "options": {
+          "A": "10 meters",
+          "B": "10 * sqrt(3) meters",
+          "C": "20 meters",
+          "D": "10 / sqrt(3) meters"
+        },
+        "correct_answer": "C",
+        "explanation": "Using the sine function, sin(60 degrees) = opposite/hypotenuse. Since sin(60 degrees) = sqrt(3)/2 and the opposite side is 10 meters, we solve for the hypotenuse: hypotenuse = opposite / sin(60 degrees) = 10 / (sqrt(3)/2) = 20 meters."
+      }
+    },
+    {
+      "test": {
+        "grade": "5",
+        "career": "Programmer",
+        "subject": "Algebra1",
+        "skill": "Basic Operations",
+        "expectedType": [
+          "numeric",
+          "multiple_choice"
+        ],
+        "note": "Should default to Math for grade 5"
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [
+        "Question may not test the specified skill"
+      ],
+      "question": {
+        "type": "multiple_choice",
+        "question": "A programmer is writing a function to calculate the total cost of items in a shopping cart. The function multiplies the price of each item by the quantity and then adds the results together. If the cart has 3 items priced at $5 each, 2 items priced at $8 each, and 1 item priced at $12, what is the total cost?",
+        "options": {
+          "A": "$46",
+          "B": "$50",
+          "C": "$54",
+          "D": "$60"
+        },
+        "correct_answer": "C",
+        "explanation": "To find the total cost, multiply the price of each item by its quantity and add the results: (3 × $5) + (2 × $8) + (1 × $12) = $15 + $16 + $12 = $54."
+      }
+    },
+    {
+      "test": {
+        "grade": "7",
+        "career": "Data Scientist",
+        "subject": "Precalculus",
+        "skill": "Pre-Algebra",
+        "expectedType": [
+          "multiple_choice"
+        ],
+        "note": "Should default to Math for grade 7"
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [
+        "Question may not test the specified skill"
+      ],
+      "question": {
+        "type": "multiple_choice",
+        "question": "A data scientist is analyzing a dataset where the number of users visiting a website each day follows a linear pattern. On Day 1, there were 50 users, and on Day 5, there were 90 users. Determine the rate of change in the number of users per day and predict the number of users on Day 10.",
+        "options": {
+          "A": "Rate of change: 8 users/day; Day 10: 130 users",
+          "B": "Rate of change: 10 users/day; Day 10: 140 users",
+          "C": "Rate of change: 8 users/day; Day 10: 120 users",
+          "D": "Rate of change: 10 users/day; Day 10: 150 users"
+        },
+        "correct_answer": "B",
+        "explanation": "The rate of change is calculated as (90 - 50) / (5 - 1) = 10 users/day. Using this rate, the number of users on Day 10 can be predicted as 90 + (10 * (10 - 5)) = 140 users."
+      }
+    },
+    {
+      "test": {
+        "grade": "3",
+        "career": "Teacher",
+        "subject": "Math",
+        "skill": "Multiplication Facts",
+        "expectedType": [
+          "fill_blank",
+          "numeric"
+        ],
+        "forceType": "fill_blank"
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [
+        "Question may not test the specified skill"
+      ],
+      "question": {
+        "type": "fill_blank",
+        "question": "A teacher has 6 groups of students, and each group has 4 students. The total number of students is _____.",
+        "correct_answer": "24",
+        "explanation": "To find the total number of students, multiply the number of groups (6) by the number of students in each group (4). 6 × 4 = 24."
+      }
+    },
+    {
+      "test": {
+        "grade": "4",
+        "career": "Doctor",
+        "subject": "Science",
+        "skill": "Scientific Inquiry",
+        "expectedType": [
+          "fill_blank"
+        ],
+        "forceType": "fill_blank"
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [
+        "Question may not test the specified skill"
+      ],
+      "question": {
+        "type": "fill_blank",
+        "question": "A doctor needs to measure a patient's temperature to check for a fever. The tool used to measure temperature is called a _____.",
+        "correct_answer": "thermometer",
+        "explanation": "A thermometer is the correct tool used by doctors to measure a patient's temperature, which helps determine if they have a fever."
+      }
+    },
+    {
+      "test": {
+        "grade": "5",
+        "career": "Writer",
+        "subject": "ELA",
+        "skill": "Vocabulary",
+        "expectedType": [
+          "fill_blank"
+        ],
+        "forceType": "fill_blank"
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [
+        "Question may not test the specified skill"
+      ],
+      "question": {
+        "type": "fill_blank",
+        "question": "The synonym of 'happy' is _____.",
+        "correct_answer": "joyful",
+        "explanation": "A synonym is a word that has the same or nearly the same meaning as another word. 'Joyful' means the same as 'happy,' so it is the correct answer."
+      }
+    },
+    {
+      "test": {
+        "grade": "6",
+        "career": "Engineer",
+        "subject": "Math",
+        "skill": "Algebraic Expressions",
+        "expectedType": [
+          "fill_blank",
+          "multiple_choice"
+        ],
+        "forceType": "fill_blank"
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [
+        "Question may not test the specified skill"
+      ],
+      "question": {
+        "type": "fill_blank",
+        "question": "An engineer is designing a bridge and needs to calculate the total cost of materials. If the cost per unit of steel is represented by 5x + 3 and the engineer purchases 10 units, the total cost is represented by _____.",
+        "correct_answer": "50x + 30",
+        "explanation": "To find the total cost, multiply the expression for the cost per unit (5x + 3) by the number of units (10). Distribute the 10 across the terms in the expression: 10 * 5x = 50x and 10 * 3 = 30. Adding these together gives 50x + 30."
+      }
+    },
+    {
+      "test": {
+        "grade": "7",
+        "career": "Scientist",
+        "subject": "Science",
+        "skill": "Scientific Method Steps",
+        "expectedType": [
+          "fill_blank"
+        ],
+        "forceType": "fill_blank"
+      },
+      "passed": true,
+      "isWhichQuestion": false,
+      "issues": [],
+      "question": {
+        "type": "fill_blank",
+        "question": "A scientist is testing a hypothesis by collecting data during an experiment. The step where they analyze the results to determine if the hypothesis is supported is called _____ in the scientific method.",
+        "correct_answer": "conclusion",
+        "explanation": "The conclusion is the step in the scientific method where the scientist evaluates the data collected during the experiment to determine whether it supports or refutes the hypothesis."
+      }
+    }
+  ],
+  "baseline": "0% (previous system)",
+  "improvement": "+100.0%"
+}

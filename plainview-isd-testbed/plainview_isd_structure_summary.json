@@ -1,0 +1,478 @@
+{
+  "district": {
+    "id": "plainview_isd",
+    "name": "Plainview ISD",
+    "type": "public_school_district",
+    "location": "Plainview, TX",
+    "superintendent": {
+      "id": "patricia_williams",
+      "name": "Dr. Patricia Williams",
+      "email": "superintendent@plainviewisd.edu",
+      "role": "district_admin",
+      "years_experience": 20,
+      "leadership_style": "transformational"
+    }
+  },
+  "generation_timestamp": "2025-07-12T19:11:49.036Z",
+  "structure_focus": "teacher_subject_specialization",
+  "statistics": {
+    "schools": 3,
+    "teachers": 30,
+    "student_teacher_assignments": 13,
+    "analytics_profiles": 13
+  },
+  "schools_breakdown": [
+    {
+      "name": "City View High School",
+      "grades": [
+        "9",
+        "10",
+        "11",
+        "12"
+      ],
+      "teachers": 12,
+      "teacher_specializations": [
+        {
+          "name": "Mr John Land",
+          "subjects": [
+            "Algebra I",
+            "Algebra II"
+          ],
+          "grades": [
+            "9",
+            "10",
+            "11"
+          ]
+        },
+        {
+          "name": "Ms Patricia Summit",
+          "subjects": [
+            "Geometry",
+            "Pre-Calculus"
+          ],
+          "grades": [
+            "10",
+            "11",
+            "12"
+          ]
+        },
+        {
+          "name": "Mr Robert Peak",
+          "subjects": [
+            "Calculus",
+            "Statistics"
+          ],
+          "grades": [
+            "11",
+            "12"
+          ]
+        },
+        {
+          "name": "Ms Jennifer Slope",
+          "subjects": [
+            "English I",
+            "English II"
+          ],
+          "grades": [
+            "9",
+            "10"
+          ]
+        },
+        {
+          "name": "Mr David Ridge",
+          "subjects": [
+            "English III",
+            "English IV"
+          ],
+          "grades": [
+            "11",
+            "12"
+          ]
+        },
+        {
+          "name": "Ms Angela Cliff",
+          "subjects": [
+            "Creative Writing",
+            "Literature"
+          ],
+          "grades": [
+            "9",
+            "10",
+            "11",
+            "12"
+          ]
+        },
+        {
+          "name": "Dr Michael Heights",
+          "subjects": [
+            "Biology",
+            "Environmental Science"
+          ],
+          "grades": [
+            "9",
+            "10",
+            "11",
+            "12"
+          ]
+        },
+        {
+          "name": "Ms Laura Canyon",
+          "subjects": [
+            "Chemistry",
+            "Physics"
+          ],
+          "grades": [
+            "10",
+            "11",
+            "12"
+          ]
+        },
+        {
+          "name": "Mr Steven Mesa",
+          "subjects": [
+            "Anatomy",
+            "AP Sciences"
+          ],
+          "grades": [
+            "11",
+            "12"
+          ]
+        },
+        {
+          "name": "Ms Rachel Plateau",
+          "subjects": [
+            "World History",
+            "Geography"
+          ],
+          "grades": [
+            "9",
+            "10"
+          ]
+        },
+        {
+          "name": "Mr Daniel Bluff",
+          "subjects": [
+            "US History",
+            "Government"
+          ],
+          "grades": [
+            "11",
+            "12"
+          ]
+        },
+        {
+          "name": "Ms Victoria Crest",
+          "subjects": [
+            "Psychology",
+            "Economics"
+          ],
+          "grades": [
+            "11",
+            "12"
+          ]
+        }
+      ],
+      "students": 1
+    },
+    {
+      "name": "Ocean View Middle School",
+      "grades": [
+        "6",
+        "7",
+        "8"
+      ],
+      "teachers": 7,
+      "teacher_specializations": [
+        {
+          "name": "Ms Brenda Sea",
+          "subjects": [
+            "ELA"
+          ],
+          "grades": [
+            "6",
+            "7",
+            "8"
+          ]
+        },
+        {
+          "name": "Mr Derek Ocean",
+          "subjects": [
+            "Math"
+          ],
+          "grades": [
+            "6",
+            "7",
+            "8"
+          ]
+        },
+        {
+          "name": "Ms Sandra Wave",
+          "subjects": [
+            "Science"
+          ],
+          "grades": [
+            "6",
+            "7",
+            "8"
+          ]
+        },
+        {
+          "name": "Mr Tony Bay",
+          "subjects": [
+            "Social Studies"
+          ],
+          "grades": [
+            "6",
+            "7",
+            "8"
+          ]
+        },
+        {
+          "name": "Ms Kelly Tide",
+          "subjects": [
+            "Art"
+          ],
+          "grades": [
+            "6",
+            "7",
+            "8"
+          ]
+        },
+        {
+          "name": "Mr Steve Coral",
+          "subjects": [
+            "Physical Education"
+          ],
+          "grades": [
+            "6",
+            "7",
+            "8"
+          ]
+        },
+        {
+          "name": "Ms Nancy Shell",
+          "subjects": [
+            "Technology",
+            "Computer Science"
+          ],
+          "grades": [
+            "6",
+            "7",
+            "8"
+          ]
+        }
+      ],
+      "students": 1
+    },
+    {
+      "name": "Sand View Elementary School",
+      "grades": [
+        "Pre-K",
+        "K",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "teachers": 7,
+      "teacher_specializations": [
+        {
+          "name": "Ms Jenna Grain",
+          "subjects": [
+            "Math"
+          ],
+          "grades": [
+            "Pre-K",
+            "K",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5"
+          ]
+        },
+        {
+          "name": "Mr Marcus River",
+          "subjects": [
+            "ELA"
+          ],
+          "grades": [
+            "Pre-K",
+            "K",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5"
+          ]
+        },
+        {
+          "name": "Ms Diana Forest",
+          "subjects": [
+            "Science"
+          ],
+          "grades": [
+            "Pre-K",
+            "K",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5"
+          ]
+        },
+        {
+          "name": "Ms Rosa Valley",
+          "subjects": [
+            "Social Studies"
+          ],
+          "grades": [
+            "3",
+            "4",
+            "5"
+          ]
+        },
+        {
+          "name": "Mr James Creek",
+          "subjects": [
+            "Art"
+          ],
+          "grades": [
+            "Pre-K",
+            "K",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5"
+          ]
+        },
+        {
+          "name": "Ms Lisa Mountain",
+          "subjects": [
+            "Physical Education"
+          ],
+          "grades": [
+            "Pre-K",
+            "K",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5"
+          ]
+        },
+        {
+          "name": "Mr Carlos Stone",
+          "subjects": [
+            "Music"
+          ],
+          "grades": [
+            "Pre-K",
+            "K",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5"
+          ]
+        }
+      ],
+      "students": 2
+    }
+  ],
+  "teacher_student_relationships": [
+    {
+      "student": "Taylor",
+      "grade": "10",
+      "subject": "Geometry",
+      "teacher": "Ms Patricia Summit",
+      "school": "City View High School"
+    },
+    {
+      "student": "Taylor",
+      "grade": "10",
+      "subject": "Chemistry",
+      "teacher": "Ms Laura Canyon",
+      "school": "City View High School"
+    },
+    {
+      "student": "Taylor",
+      "grade": "10",
+      "subject": "English II",
+      "teacher": "Ms Jennifer Slope",
+      "school": "City View High School"
+    },
+    {
+      "student": "Jordan",
+      "grade": "7",
+      "subject": "Math",
+      "teacher": "Mr Derek Ocean",
+      "school": "Ocean View Middle School"
+    },
+    {
+      "student": "Jordan",
+      "grade": "7",
+      "subject": "Science",
+      "teacher": "Ms Sandra Wave",
+      "school": "Ocean View Middle School"
+    },
+    {
+      "student": "Jordan",
+      "grade": "7",
+      "subject": "ELA",
+      "teacher": "Ms Brenda Sea",
+      "school": "Ocean View Middle School"
+    },
+    {
+      "student": "Jordan",
+      "grade": "7",
+      "subject": "Social Studies",
+      "teacher": "Mr Tony Bay",
+      "school": "Ocean View Middle School"
+    },
+    {
+      "student": "Alex",
+      "grade": "1",
+      "subject": "Math",
+      "teacher": "Ms Jenna Grain",
+      "school": "Sand View Elementary School"
+    },
+    {
+      "student": "Alex",
+      "grade": "1",
+      "subject": "Science",
+      "teacher": "Ms Diana Forest",
+      "school": "Sand View Elementary School"
+    },
+    {
+      "student": "Alex",
+      "grade": "1",
+      "subject": "ELA",
+      "teacher": "Mr Marcus River",
+      "school": "Sand View Elementary School"
+    },
+    {
+      "student": "Sam",
+      "grade": "K",
+      "subject": "Math",
+      "teacher": "Ms Jenna Grain",
+      "school": "Sand View Elementary School"
+    },
+    {
+      "student": "Sam",
+      "grade": "K",
+      "subject": "Science",
+      "teacher": "Ms Diana Forest",
+      "school": "Sand View Elementary School"
+    },
+    {
+      "student": "Sam",
+      "grade": "K",
+      "subject": "ELA",
+      "teacher": "Mr Marcus River",
+      "school": "Sand View Elementary School"
+    }
+  ]
+}

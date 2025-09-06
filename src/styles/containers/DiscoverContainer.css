@@ -1,0 +1,559 @@
+/**
+ * DISCOVER CONTAINER STYLES
+ * =========================
+ * Specific styles for the Discover container
+ * Extends BaseContainer.css with cosmic magenta theme
+ * 
+ * Created: 2025-08-22
+ */
+
+@import './BaseContainer.css';
+
+/* ============================================
+   DISCOVER CONTAINER SPECIFIC
+   ============================================ */
+.ai-discover-container {
+  composes: container-base;
+  composes: container-discover;
+}
+
+/* With header padding */
+.with-header {
+  padding-top: 5rem !important;
+}
+
+/* ============================================
+   DISCOVER THEME DECORATIONS
+   ============================================ */
+/* Magenta accent line at top */
+.ai-discover-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #ec4899 0%, #a855f7 100%);
+  z-index: 10;
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(236, 72, 153, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.7);
+  }
+}
+
+/* Cosmic pattern background */
+.ai-discover-container .container-pattern {
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(236, 72, 153, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 75% 75%, rgba(168, 85, 247, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(217, 70, 239, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(244, 114, 182, 0.04) 0%, transparent 50%);
+  animation: cosmicFloat 30s ease-in-out infinite;
+}
+
+@keyframes cosmicFloat {
+  0%, 100% { 
+    transform: rotate(0deg) scale(1);
+  }
+  33% {
+    transform: rotate(1deg) scale(1.02);
+  }
+  66% {
+    transform: rotate(-1deg) scale(1.01);
+  }
+}
+
+/* ============================================
+   CAREER CONTEXT CARD - DISCOVER THEME
+   ============================================ */
+.ai-discover-container .career-context-card {
+  background: var(--color-card);
+  border-radius: 24px;
+  padding: 32px;
+  max-width: 900px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(236, 72, 153, 0.3);
+  border: 2px solid #ec4899;
+  animation: slideUp 0.4s ease;
+}
+
+.ai-discover-container .career-greeting {
+  font-size: 1.25rem;
+  color: var(--color-text);
+  padding: 16px;
+  background: rgba(236, 72, 153, 0.05);
+  border-radius: 12px;
+  border-left: 4px solid #ec4899;
+}
+
+.ai-discover-container .career-start-button {
+  background: linear-gradient(90deg, #ec4899 0%, #a855f7 100%);
+  color: white;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(236, 72, 153, 0.3);
+}
+
+/* ============================================
+   DISCOVER PHASE INDICATORS
+   ============================================ */
+.ai-discover-container .phase-indicator {
+  background: linear-gradient(
+    135deg,
+    rgba(236, 72, 153, 0.1) 0%,
+    rgba(168, 85, 247, 0.05) 100%
+  );
+  border-left: 3px solid #ec4899;
+}
+
+/* ============================================
+   EXPLORATION INTRO PHASE
+   ============================================ */
+.exploration-intro-phase {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.discovery-header {
+  background: linear-gradient(135deg, #14b8a6 0%, #0891b2 100%);
+  border-radius: 1.5rem;
+  padding: 2.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 30px rgba(20, 184, 166, 0.3);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+.discovery-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.discovery-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  padding: 0.75rem 1.5rem;
+  border-radius: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.discovery-badge .badge-icon {
+  font-size: 1.5rem;
+}
+
+.discovery-badge .badge-text {
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+}
+
+/* Discovery Content Sections */
+.discovery-section {
+  background: var(--color-background-elevated);
+  border-radius: 1.25rem;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--color-border-light);
+  box-shadow: var(--shadow-card);
+  transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .discovery-section {
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.discovery-section-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.discovery-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.discovery-icon-box.idea {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.discovery-icon-box.mission {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.discovery-icon-box.questions {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.discovery-section h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.discovery-content {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+}
+
+/* Wonder Questions */
+.wonder-questions-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.wonder-question {
+  background: var(--color-background-subtle);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--color-border-light);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+[data-theme="dark"] .wonder-question {
+  background: rgba(16, 185, 129, 0.05);
+  border: 1px solid rgba(16, 185, 129, 0.15);
+}
+
+.wonder-question:hover {
+  transform: translateX(8px);
+  background: var(--color-primary-light);
+  border-color: var(--color-primary);
+}
+
+[data-theme="dark"] .wonder-question:hover {
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.wonder-question .question-icon {
+  font-size: 1.25rem;
+  min-width: 30px;
+}
+
+.wonder-question .question-text {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+
+/* ============================================
+   DISCOVER CARD STYLES
+   ============================================ */
+.ai-discover-container .modal-card,
+.ai-discover-container .content-card {
+  border: 1px solid rgba(236, 72, 153, 0.1);
+  box-shadow: 
+    var(--shadow-elevated),
+    0 0 40px rgba(217, 70, 239, 0.05);
+  position: relative;
+}
+
+[data-theme="dark"] .ai-discover-container .modal-card,
+[data-theme="dark"] .ai-discover-container .content-card {
+  border: 1px solid rgba(236, 72, 153, 0.2);
+  box-shadow: 
+    var(--shadow-elevated),
+    0 0 60px rgba(217, 70, 239, 0.1);
+}
+
+/* ============================================
+   DISCOVER BUTTON OVERRIDES
+   ============================================ */
+.ai-discover-container .primary-button {
+  background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
+  box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-discover-container .primary-button::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transform: rotate(45deg);
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+.ai-discover-container .primary-button:hover {
+  box-shadow: 
+    0 4px 15px rgba(236, 72, 153, 0.3),
+    0 0 30px rgba(168, 85, 247, 0.3);
+  transform: translateY(-2px) scale(1.02);
+}
+
+/* ============================================
+   DISCOVER PROGRESS ELEMENTS
+   ============================================ */
+.ai-discover-container .progress-bar {
+  background: rgba(236, 72, 153, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-discover-container .progress-fill {
+  background: linear-gradient(90deg, #ec4899 0%, #a855f7 100%);
+  position: relative;
+}
+
+.ai-discover-container .progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: progressShimmer 2s infinite;
+}
+
+@keyframes progressShimmer {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+.ai-discover-container .progress-dot.active {
+  background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
+  box-shadow: 0 0 20px rgba(236, 72, 153, 0.4);
+  animation: discoverPulse 2s infinite;
+}
+
+@keyframes discoverPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 20px rgba(236, 72, 153, 0.4);
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 0 30px rgba(168, 85, 247, 0.6);
+  }
+}
+
+/* ============================================
+   DISCOVER FEEDBACK STYLES
+   ============================================ */
+.ai-discover-container .feedback-correct {
+  background: linear-gradient(
+    135deg,
+    rgba(16, 185, 129, 0.1) 0%,
+    rgba(5, 150, 105, 0.05) 100%
+  );
+  border-left: 4px solid var(--color-success);
+  border-image: linear-gradient(135deg, #10b981 0%, #14b8a6 100%) 1;
+}
+
+.ai-discover-container .feedback-incorrect {
+  background: linear-gradient(
+    135deg,
+    rgba(239, 68, 68, 0.1) 0%,
+    rgba(220, 38, 38, 0.05) 100%
+  );
+  border-left: 4px solid var(--color-error);
+  border-image: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) 1;
+}
+
+/* ============================================
+   DISCOVER COMPANION INTEGRATION
+   ============================================ */
+.ai-discover-container .companion-avatar {
+  background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
+  box-shadow: 
+    var(--shadow-md),
+    0 0 30px rgba(236, 72, 153, 0.2),
+    inset 0 0 20px rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+
+.ai-discover-container .companion-avatar::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  animation: avatarGlow 3s infinite;
+}
+
+@keyframes avatarGlow {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 0.5; }
+}
+
+.ai-discover-container .companion-message {
+  background: linear-gradient(
+    135deg,
+    rgba(236, 72, 153, 0.05) 0%,
+    transparent 100%
+  );
+  border: 1px solid rgba(236, 72, 153, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+/* ============================================
+   DISCOVER GAMIFICATION
+   ============================================ */
+.ai-discover-container .xp-display {
+  background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  animation: xpGlow 3s ease-in-out infinite;
+}
+
+@keyframes xpGlow {
+  0%, 100% {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  50% {
+    text-shadow: 
+      0 2px 4px rgba(0, 0, 0, 0.2),
+      0 0 20px rgba(236, 72, 153, 0.6);
+  }
+}
+
+.ai-discover-container .achievement-badge {
+  background: linear-gradient(
+    135deg,
+    #fbbf24 0%,
+    #f59e0b 100%
+  );
+  box-shadow: 
+    0 0 20px rgba(251, 191, 36, 0.4),
+    inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  animation: badgeFloat 4s ease-in-out infinite;
+}
+
+@keyframes badgeFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* ============================================
+   DISCOVER SPECIAL EFFECTS
+   ============================================ */
+/* Sparkle effect for interactive elements */
+.ai-discover-container .sparkle {
+  position: relative;
+}
+
+.ai-discover-container .sparkle::before,
+.ai-discover-container .sparkle::after {
+  content: '✨';
+  position: absolute;
+  opacity: 0;
+  animation: sparkle 3s infinite;
+}
+
+.ai-discover-container .sparkle::before {
+  top: -10px;
+  left: -10px;
+  animation-delay: 0s;
+}
+
+.ai-discover-container .sparkle::after {
+  bottom: -10px;
+  right: -10px;
+  animation-delay: 1.5s;
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1) rotate(180deg);
+  }
+}
+
+/* ============================================
+   DISCOVER ANIMATIONS
+   ============================================ */
+.ai-discover-container .animate-in {
+  animation: discoverSlideIn var(--duration-moderate) var(--easing-out);
+}
+
+@keyframes discoverSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================
+   DISCOVER RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .ai-discover-container::before {
+    height: 2px;
+  }
+  
+  .ai-discover-container .container-pattern {
+    opacity: 0.02;
+  }
+  
+  .ai-discover-container .sparkle::before,
+  .ai-discover-container .sparkle::after {
+    display: none;
+  }
+}

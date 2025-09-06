@@ -1,0 +1,184 @@
+/**
+ * COMPANION CHAT BOX MODULE
+ * ==========================
+ * Styles for the AI companion chat display
+ * Provides non-intrusive companion messaging
+ * 
+ * Created: 2025-08-22
+ */
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* ============================================
+   CHAT BOX CONTAINER
+   ============================================ */
+.companionChatBox {
+  position: fixed;
+  max-width: 350px;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  z-index: var(--z-50);
+  animation: slideUp 0.3s ease-out;
+  border: 2px solid rgba(139, 92, 246, 0.3);
+  transition: all var(--duration-base) ease;
+}
+
+/* Position variants */
+.bottomRight {
+  bottom: 120px;
+  right: 20px;
+  left: auto;
+}
+
+.bottomLeft {
+  bottom: 120px;
+  left: 20px;
+  right: auto;
+}
+
+/* Hiding state */
+.hiding {
+  animation: fadeOut 0.3s ease-out forwards;
+}
+
+/* Dark theme */
+[data-theme="dark"] .companionChatBox {
+  background-color: rgba(30, 41, 59, 0.98);
+  border-color: rgba(139, 92, 246, 0.5);
+}
+
+/* ============================================
+   COMPANION AVATAR
+   ============================================ */
+.companionAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background-color: rgba(139, 92, 246, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-2xl);
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .companionAvatar {
+  background-color: rgba(139, 92, 246, 0.2);
+}
+
+/* ============================================
+   MESSAGE CONTENT
+   ============================================ */
+.messageContent {
+  flex: 1;
+}
+
+.companionName {
+  font-size: var(--text-xs);
+  color: var(--color-primary);
+  font-weight: var(--font-semibold);
+  margin-bottom: var(--space-1);
+}
+
+.messageText {
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  line-height: var(--line-height-relaxed);
+}
+
+[data-theme="dark"] .companionName {
+  color: var(--color-primary-light);
+}
+
+[data-theme="dark"] .messageText {
+  color: var(--text-primary);
+}
+
+/* ============================================
+   CLOSE BUTTON
+   ============================================ */
+.closeButton {
+  background: none;
+  border: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  padding: 0;
+  font-size: var(--text-lg);
+  line-height: 1;
+  opacity: 0.6;
+  transition: opacity var(--duration-fast);
+}
+
+.closeButton:hover {
+  opacity: 1;
+}
+
+[data-theme="dark"] .closeButton {
+  color: var(--text-secondary);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 768px) {
+  .companionChatBox {
+    max-width: 280px;
+    padding: var(--space-2) var(--space-3);
+  }
+  
+  .bottomRight,
+  .bottomLeft {
+    bottom: 100px;
+  }
+  
+  .companionAvatar {
+    width: 36px;
+    height: 36px;
+    font-size: var(--text-xl);
+  }
+  
+  .messageText {
+    font-size: var(--text-xs);
+  }
+}
+
+@media (max-width: 480px) {
+  .companionChatBox {
+    max-width: calc(100% - 40px);
+    left: 20px;
+    right: 20px;
+  }
+  
+  .bottomRight,
+  .bottomLeft {
+    bottom: 80px;
+    left: 20px;
+    right: 20px;
+  }
+}

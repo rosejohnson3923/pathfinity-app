@@ -1,0 +1,505 @@
+/**
+ * ASSESSMENT SCREEN MODULE
+ * ========================
+ * Styles for the assessment phase across all containers
+ * More formal presentation than practice phase
+ * 
+ * Created: 2025-08-22
+ */
+
+/* ============================================
+   ASSESSMENT PHASE CONTAINER
+   ============================================ */
+.assessmentPhase {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--space-8);
+  animation: fadeIn var(--duration-base) var(--easing-out);
+  min-height: calc(100vh - var(--header-height));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* ============================================
+   ASSESSMENT HEADER
+   ============================================ */
+.assessmentHeader {
+  text-align: center;
+  margin-bottom: var(--space-8);
+  position: relative;
+}
+
+.assessmentTitle {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+}
+
+.assessmentIcon {
+  font-size: var(--text-4xl);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.assessmentDescription {
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Assessment Badge */
+.assessmentBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: var(--gradient-error);
+  color: white;
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  margin-bottom: var(--space-4);
+  animation: slideDown var(--duration-moderate) var(--easing-out);
+}
+
+/* ============================================
+   ASSESSMENT QUESTION CARD
+   ============================================ */
+.assessmentQuestion {
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
+  padding: var(--space-8);
+  box-shadow: var(--shadow-elevated);
+  border: 2px solid var(--border-color);
+  position: relative;
+  animation: slideUp var(--duration-moderate) var(--easing-out);
+}
+
+[data-theme="dark"] .assessmentQuestion {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  border: 2px solid rgba(239, 68, 68, 0.2);
+}
+
+/* Assessment-specific styling */
+.assessmentQuestion::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-error);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+
+.questionNumber {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  font-weight: var(--font-semibold);
+}
+
+.questionText {
+  font-size: var(--text-2xl);
+  color: var(--text-primary);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-8);
+  font-weight: var(--font-medium);
+}
+
+/* ============================================
+   TIMER DISPLAY
+   ============================================ */
+.assessmentTimer {
+  position: absolute;
+  top: var(--space-4);
+  left: var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  font-family: var(--font-mono);
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+}
+
+.timerIcon {
+  font-size: var(--text-xl);
+  color: var(--color-error);
+  animation: timerTick 1s steps(1) infinite;
+}
+
+@keyframes timerTick {
+  0%, 50% { transform: rotate(0deg); }
+  50.01%, 100% { transform: rotate(15deg); }
+}
+
+.assessmentTimer.warning {
+  background: var(--warning-bg-soft);
+  color: var(--warning-text);
+  animation: warningFlash 1s infinite;
+}
+
+.assessmentTimer.danger {
+  background: var(--error-bg-soft);
+  color: var(--error-text);
+  animation: dangerFlash 0.5s infinite;
+}
+
+@keyframes warningFlash {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes dangerFlash {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* ============================================
+   ASSESSMENT ACTIONS
+   ============================================ */
+.assessmentActions {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-4);
+  margin-top: var(--space-8);
+  padding-top: var(--space-6);
+}
+
+.submitButton {
+  min-width: 200px;
+  padding: var(--space-4) var(--space-8);
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-full);
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  cursor: pointer;
+  transition: all var(--duration-base) var(--easing-out);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.submitButton::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width var(--duration-slow), height var(--duration-slow);
+}
+
+.submitButton:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-primary);
+}
+
+.submitButton:hover:not(:disabled)::before {
+  width: 400px;
+  height: 400px;
+}
+
+.submitButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.skipButton {
+  padding: var(--space-4) var(--space-6);
+  background: transparent;
+  color: var(--text-secondary);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-full);
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+  transition: all var(--duration-base) var(--easing-out);
+}
+
+.skipButton:hover {
+  background: var(--bg-secondary);
+  border-color: var(--text-secondary);
+}
+
+/* ============================================
+   ASSESSMENT RESULT
+   ============================================ */
+.assessmentResult {
+  margin-top: var(--space-6);
+  padding: var(--space-6);
+  border-radius: var(--radius-xl);
+  animation: resultSlide var(--duration-moderate) var(--easing-out);
+  text-align: center;
+}
+
+@keyframes resultSlide {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.assessmentResult.correct {
+  background: var(--success-bg-soft);
+  border: 2px solid var(--success-border);
+}
+
+.assessmentResult.incorrect {
+  background: var(--error-bg-soft);
+  border: 2px solid var(--error-border);
+}
+
+.resultIcon {
+  font-size: var(--text-5xl);
+  margin-bottom: var(--space-4);
+  animation: resultBounce var(--duration-slow) var(--easing-bounce);
+}
+
+@keyframes resultBounce {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.resultTitle {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+  margin-bottom: var(--space-3);
+}
+
+.assessmentResult.correct .resultTitle {
+  color: var(--success-text);
+}
+
+.assessmentResult.incorrect .resultTitle {
+  color: var(--error-text);
+}
+
+.resultMessage {
+  font-size: var(--text-lg);
+  color: var(--text-primary);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-4);
+}
+
+.correctAnswer {
+  padding: var(--space-4);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  margin-top: var(--space-4);
+}
+
+.correctAnswerLabel {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  margin-bottom: var(--space-2);
+}
+
+.correctAnswerText {
+  font-size: var(--text-lg);
+  color: var(--text-primary);
+  font-weight: var(--font-semibold);
+}
+
+/* ============================================
+   ASSESSMENT PROGRESS
+   ============================================ */
+.assessmentProgress {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--space-6);
+}
+
+.progressIndicator {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.progressStep {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--font-bold);
+  transition: all var(--duration-base) var(--easing-out);
+}
+
+.progressStep.completed {
+  background: var(--gradient-success);
+  color: white;
+}
+
+.progressStep.current {
+  background: var(--gradient-error);
+  color: white;
+  animation: currentPulse 2s infinite;
+}
+
+.progressStep.upcoming {
+  background: var(--bg-tertiary);
+  color: var(--text-tertiary);
+}
+
+@keyframes currentPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.progressConnector {
+  width: 60px;
+  height: 2px;
+  background: var(--border-color);
+  position: relative;
+}
+
+.progressConnector.completed {
+  background: var(--color-success);
+}
+
+/* ============================================
+   NO HINTS MESSAGE
+   ============================================ */
+.noHintsMessage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-5);
+  background: var(--warning-bg-soft);
+  color: var(--warning-text);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  margin-bottom: var(--space-4);
+}
+
+.noHintsIcon {
+  font-size: var(--text-xl);
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 768px) {
+  .assessmentPhase {
+    padding: var(--space-6);
+  }
+  
+  .assessmentQuestion {
+    padding: var(--space-6);
+  }
+  
+  .assessmentTitle {
+    font-size: var(--text-2xl);
+  }
+  
+  .questionText {
+    font-size: var(--text-xl);
+  }
+  
+  .assessmentTimer {
+    position: static;
+    margin-bottom: var(--space-4);
+    width: fit-content;
+  }
+  
+  .assessmentActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .submitButton,
+  .skipButton {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .assessmentPhase {
+    padding: var(--space-4);
+  }
+  
+  .assessmentQuestion {
+    padding: var(--space-4);
+  }
+  
+  .assessmentTitle {
+    font-size: var(--text-xl);
+  }
+  
+  .questionText {
+    font-size: var(--text-lg);
+  }
+  
+  .resultIcon {
+    font-size: var(--text-4xl);
+  }
+}

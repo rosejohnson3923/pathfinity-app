@@ -1,0 +1,685 @@
+/**
+ * CareerContextScreen Styles
+ * Professional full-screen experience with particle effects
+ */
+
+/* ============================================
+   MAIN CONTAINER
+   ============================================ */
+.career-context-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  animation: screenFadeIn 0.6s ease-out;
+  overflow: hidden;
+}
+
+.career-context-screen.dark {
+  background: linear-gradient(135deg, #0a0a1f 0%, #1a1a3e 100%);
+}
+
+/* Dark theme button styles */
+.career-context-screen.dark .start-journey-button {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  color: white;
+  border: 2px solid rgba(139, 92, 246, 0.5);
+}
+
+.career-context-screen.dark .start-journey-button:hover {
+  background: linear-gradient(135deg, #9f5ff6 0%, #8c4aed 100%);
+  border-color: rgba(159, 95, 246, 0.7);
+}
+
+.career-context-screen.animating-out {
+  animation: screenFadeOut 0.5s ease-in forwards;
+}
+
+/* Emergency skip button styles to ensure visibility */
+.emergency-skip-green,
+.emergency-skip-yellow,
+.emergency-skip-red {
+  position: fixed !important;
+  z-index: 2147483647 !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* ============================================
+   PARTICLE CANVAS
+   ============================================ */
+.particle-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* ============================================
+   CONTENT WRAPPER
+   ============================================ */
+.career-context-content {
+  position: relative;
+  width: 90%;
+  max-width: 1200px;
+  height: 85vh;
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  animation: contentSlideUp 0.8s ease-out 0.3s backwards;
+}
+
+/* ============================================
+   HEADER SECTION
+   ============================================ */
+.career-context-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  animation: headerGlow 3s ease-in-out infinite;
+}
+
+.header-content-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  position: relative;
+}
+
+.career-badge-large {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 1.5rem 2.5rem;
+  border-radius: 100px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 8px 32px rgba(139, 92, 246, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  animation: floatBadge 4s ease-in-out infinite;
+}
+
+/* Audio Control Button */
+.audio-control-button {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.3) 0%, rgba(124, 58, 237, 0.3) 100%);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.75rem 1.25rem;
+  border-radius: 50px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: white;
+  transition: all 0.3s ease;
+  animation: audioButtonPulse 2s ease-in-out infinite;
+}
+
+.audio-control-button:hover {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.5) 0%, rgba(124, 58, 237, 0.5) 100%);
+  transform: translateY(-50%) scale(1.05);
+  box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
+}
+
+.audio-icon {
+  font-size: 1.25rem;
+  animation: iconBounce 1.5s ease-in-out infinite;
+}
+
+.audio-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.career-icon-large {
+  font-size: 3rem;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+  animation: iconFloat 3s ease-in-out infinite;
+}
+
+.career-title-group {
+  text-align: left;
+}
+
+.career-name {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 0.5rem 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.skill-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.skill-separator {
+  opacity: 0.5;
+}
+
+/* ============================================
+   MAIN CONTENT AREA
+   ============================================ */
+.career-context-main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 3rem;
+  align-items: center;
+  padding: 2rem 0;
+}
+
+/* Companion Section */
+.companion-section {
+  display: flex;
+  justify-content: center;
+}
+
+.companion-avatar-wrapper {
+  position: relative;
+  text-align: center;
+}
+
+.avatar-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.4) 0%, transparent 70%);
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+.companion-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.3) 0%, rgba(59, 130, 246, 0.3) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 8px 32px rgba(139, 92, 246, 0.4),
+    inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  margin: 0 auto 1rem;
+  position: relative;
+  overflow: hidden;
+  animation: avatarFloat 3s ease-in-out infinite;
+}
+
+.companion-avatar img {
+  width: 90%;
+  height: 90%;
+  border-radius: 50%;
+  object-fit: contain;
+  animation: avatarRotate 20s linear infinite;
+}
+
+.avatar-emoji {
+  font-size: 4rem;
+}
+
+.companion-name {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Content Wrapper */
+.context-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.greeting-section {
+  animation: fadeInLeft 1s ease-out 0.5s backwards;
+}
+
+.greeting-text {
+  font-size: 2.2rem;
+  font-weight: 300;
+  color: #ffffff;
+  line-height: 1.4;
+  margin: 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.concept-section {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  padding: 1.5rem 2rem;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  animation: fadeInLeft 1s ease-out 0.7s backwards;
+}
+
+.concept-text {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Skills Preview */
+.skills-preview {
+  animation: fadeInLeft 1s ease-out 0.9s backwards;
+}
+
+.preview-title {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+.skill-cards {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.skill-card {
+  flex: 1;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%);
+  backdrop-filter: blur(10px);
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  text-align: center;
+  transition: all 0.3s ease;
+  animation: skillCardSlide 0.8s ease-out backwards;
+  position: relative;
+  overflow: hidden;
+}
+
+.skill-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transform: rotate(45deg);
+  transition: all 0.5s ease;
+  opacity: 0;
+}
+
+.skill-card:hover::before {
+  animation: shimmer 0.5s ease;
+  opacity: 1;
+}
+
+.skill-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(139, 92, 246, 0.3);
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.3) 0%, rgba(59, 130, 246, 0.3) 100%);
+}
+
+.skill-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.skill-label {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* Career Connection */
+.career-connection {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.1), transparent);
+  border-radius: 8px;
+  animation: fadeInLeft 1s ease-out 1.1s backwards;
+}
+
+.connection-icon {
+  font-size: 1.5rem;
+}
+
+.connection-text {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+}
+
+/* ============================================
+   FOOTER SECTION
+   ============================================ */
+.career-context-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding-top: 2rem;
+}
+
+.start-journey-button {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  color: white;
+  border: none;
+  padding: 1.25rem 3rem;
+  border-radius: 50px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 
+    0 8px 32px rgba(139, 92, 246, 0.4),
+    inset 0 2px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+  animation: buttonPulse 2s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+.start-journey-button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.start-journey-button:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+.start-journey-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 12px 40px rgba(139, 92, 246, 0.5),
+    inset 0 2px 0 rgba(255, 255, 255, 0.3);
+}
+
+.button-arrow {
+  font-size: 1.5rem;
+  transition: transform 0.3s ease;
+}
+
+.start-journey-button:hover .button-arrow {
+  transform: translateX(5px);
+}
+
+/* Progress Indicator */
+.progress-indicator {
+  animation: fadeIn 1s ease-out 1.3s backwards;
+}
+
+.progress-dots {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.dot.active {
+  background: #8b5cf6;
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.6);
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes screenFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes screenFadeOut {
+  to {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes contentSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes headerGlow {
+  0%, 100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.1);
+  }
+}
+
+@keyframes iconFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    transform: translateX(-50%) scale(1.05);
+  }
+}
+
+@keyframes buttonPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+@keyframes floatBadge {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes audioButtonPulse {
+  0%, 100% {
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2);
+  }
+  50% {
+    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+  }
+}
+
+@keyframes iconBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes avatarFloat {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-10px) scale(1.02);
+  }
+}
+
+@keyframes avatarRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes skillCardSlide {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(45deg);
+  }
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 768px) {
+  .career-context-content {
+    margin-top: 20px;
+    height: 90vh;
+  }
+  
+  .header-content-row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .audio-control-button {
+    position: static;
+    transform: none;
+    margin-top: 1rem;
+  }
+  
+  .career-context-main {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .companion-section {
+    display: none;
+  }
+  
+  .greeting-text {
+    font-size: 1.8rem;
+  }
+  
+  .concept-text {
+    font-size: 1.1rem;
+  }
+  
+  .skill-cards {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .start-journey-button {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+  }
+}

@@ -1,0 +1,173 @@
+/**
+ * QuestionRenderer CSS Module
+ * ============================
+ * Styles for the QuestionRenderer component
+ * Replaces inline styles with CSS module classes
+ */
+
+/* Dynamic Progress Bar */
+.progressBar {
+  width: var(--progress);
+  transition: width var(--duration-moderate) var(--easing-out);
+}
+
+/* Timer Display */
+.timerDisplay {
+  width: var(--timer-width);
+  transition: width var(--duration-fast) linear;
+}
+
+/* Gamification Elements */
+.xpGain {
+  animation-duration: var(--xp-animation-duration, 2s);
+}
+
+.streakIndicator {
+  transform: scale(var(--streak-scale, 1));
+  transition: transform var(--duration-fast) var(--easing-spring);
+}
+
+/* Question Container States */
+.questionContainer {
+  opacity: var(--question-opacity, 1);
+  transform: translateY(var(--question-offset, 0));
+  transition: all var(--duration-moderate) var(--easing-out);
+}
+
+/* Feedback States */
+.feedbackCorrect {
+  border-color: var(--color-success);
+  background: var(--color-success-light);
+}
+
+.feedbackIncorrect {
+  border-color: var(--color-error);
+  background: var(--color-error-light);
+}
+
+/* Loading States */
+.loadingOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-50);
+}
+
+[data-theme="dark"] .loadingOverlay {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+/* Interactive Elements */
+.interactiveElement {
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.interactiveElement:hover {
+  transform: translateY(-2px);
+  transition: transform var(--duration-fast) var(--easing-out);
+}
+
+.interactiveElement:active {
+  transform: translateY(0);
+}
+
+/* Grade-Level Adaptations */
+[data-grade="K-2"] .questionContainer {
+  font-size: var(--text-xl);
+  line-height: 1.8;
+}
+
+[data-grade="K-2"] .interactiveElement {
+  min-height: 48px;
+  font-size: var(--text-lg);
+}
+
+[data-grade="3-5"] .questionContainer {
+  font-size: var(--text-lg);
+  line-height: 1.6;
+}
+
+[data-grade="3-5"] .interactiveElement {
+  min-height: 44px;
+  font-size: var(--text-base);
+}
+
+[data-grade="6-8"] .questionContainer {
+  font-size: var(--text-base);
+  line-height: 1.5;
+}
+
+[data-grade="6-8"] .interactiveElement {
+  min-height: 40px;
+  font-size: var(--text-base);
+}
+
+[data-grade="9-12"] .questionContainer {
+  font-size: var(--text-sm);
+  line-height: 1.4;
+}
+
+[data-grade="9-12"] .interactiveElement {
+  min-height: 36px;
+  font-size: var(--text-sm);
+}
+
+/* Animation Classes */
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animateSlideIn {
+  animation: slideInFromRight var(--duration-moderate) var(--easing-out);
+}
+
+.animateFadeInUp {
+  animation: fadeInUp var(--duration-moderate) var(--easing-out);
+}
+
+/* Accessibility Focus Styles */
+.interactiveElement:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Print Styles */
+@media print {
+  .loadingOverlay,
+  .progressBar,
+  .timerDisplay {
+    display: none !important;
+  }
+  
+  .questionContainer {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

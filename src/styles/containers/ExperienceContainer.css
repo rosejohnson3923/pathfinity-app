@@ -1,0 +1,592 @@
+/**
+ * EXPERIENCE CONTAINER STYLES
+ * ===========================
+ * Specific styles for the Experience container
+ * Extends BaseContainer.css with teal/ocean theme
+ * 
+ * Created: 2025-08-22
+ */
+
+@import './BaseContainer.css';
+
+/* ============================================
+   EXPERIENCE CONTAINER SPECIFIC
+   ============================================ */
+.ai-experience-container {
+  composes: container-base;
+  composes: container-experience;
+}
+
+/* ============================================
+   EXPERIENCE THEME DECORATIONS
+   ============================================ */
+/* Teal accent line at top */
+.ai-experience-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #14b8a6 0%, #0891b2 100%);
+  z-index: 10;
+}
+
+/* Wave pattern background */
+.ai-experience-container .container-pattern {
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(20, 184, 166, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(8, 145, 178, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 50% 60%, rgba(6, 182, 212, 0.03) 0%, transparent 50%);
+  animation: wavePattern 25s ease-in-out infinite;
+}
+
+@keyframes wavePattern {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-20px); }
+}
+
+/* ============================================
+   EXPERIENCE PHASE INDICATORS
+   ============================================ */
+.ai-experience-container .phase-indicator {
+  background: linear-gradient(
+    135deg,
+    rgba(20, 184, 166, 0.1) 0%,
+    rgba(8, 145, 178, 0.05) 100%
+  );
+  border-left: 3px solid #14b8a6;
+}
+
+/* ============================================
+   EXPERIENCE CARD STYLES
+   ============================================ */
+.ai-experience-container .modal-card,
+.ai-experience-container .content-card {
+  border: 1px solid rgba(20, 184, 166, 0.1);
+  box-shadow: 
+    var(--shadow-elevated),
+    0 0 40px rgba(6, 182, 212, 0.05);
+}
+
+[data-theme="dark"] .ai-experience-container .modal-card,
+[data-theme="dark"] .ai-experience-container .content-card {
+  border: 1px solid rgba(20, 184, 166, 0.2);
+  box-shadow: 
+    var(--shadow-elevated),
+    0 0 60px rgba(6, 182, 212, 0.1);
+}
+
+/* ============================================
+   EXPERIENCE BUTTON OVERRIDES
+   ============================================ */
+.ai-experience-container .primary-button {
+  background: linear-gradient(135deg, #14b8a6 0%, #0891b2 100%);
+  box-shadow: 0 4px 15px rgba(20, 184, 166, 0.3);
+}
+
+.ai-experience-container .primary-button:hover {
+  box-shadow: 
+    0 4px 15px rgba(20, 184, 166, 0.3),
+    0 0 30px rgba(6, 182, 212, 0.3);
+}
+
+/* ============================================
+   CAREER CONTEXT CARD - EXPERIENCE THEME
+   ============================================ */
+.ai-experience-container .career-context-card {
+  background: var(--color-card);
+  border-radius: 24px;
+  padding: 32px;
+  max-width: 900px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(20, 184, 166, 0.3);
+  border: 2px solid #14b8a6;
+  animation: slideUp 0.4s ease;
+}
+
+.ai-experience-container .career-greeting {
+  font-size: 1.25rem;
+  color: var(--color-text);
+  padding: 16px;
+  background: rgba(20, 184, 166, 0.05);
+  border-radius: 12px;
+  border-left: 4px solid #14b8a6;
+}
+
+.ai-experience-container .career-start-button {
+  background: linear-gradient(135deg, #14b8a6 0%, #0891b2 100%);
+  color: white;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(20, 184, 166, 0.3);
+}
+
+/* ============================================
+   EXPERIENCE PROGRESS ELEMENTS
+   ============================================ */
+.ai-experience-container .progress-bar {
+  background: rgba(20, 184, 166, 0.1);
+}
+
+.ai-experience-container .progress-fill {
+  background: linear-gradient(90deg, #14b8a6 0%, #0891b2 100%);
+}
+
+.ai-experience-container .progress-dot.active {
+  background: linear-gradient(135deg, #14b8a6 0%, #0891b2 100%);
+  box-shadow: 0 0 20px rgba(20, 184, 166, 0.4);
+}
+
+/* ============================================
+   EXPERIENCE FEEDBACK STYLES
+   ============================================ */
+.ai-experience-container .feedback-correct {
+  background: linear-gradient(
+    135deg,
+    rgba(16, 185, 129, 0.1) 0%,
+    rgba(5, 150, 105, 0.05) 100%
+  );
+  border-left: 4px solid var(--color-success);
+}
+
+.ai-experience-container .feedback-incorrect {
+  background: linear-gradient(
+    135deg,
+    rgba(239, 68, 68, 0.1) 0%,
+    rgba(220, 38, 38, 0.05) 100%
+  );
+  border-left: 4px solid var(--color-error);
+}
+
+/* ============================================
+   EXPERIENCE COMPANION INTEGRATION
+   ============================================ */
+.ai-experience-container .companion-avatar {
+  background: linear-gradient(135deg, #14b8a6 0%, #0891b2 100%);
+  box-shadow: 
+    var(--shadow-md),
+    0 0 30px rgba(20, 184, 166, 0.2);
+}
+
+.ai-experience-container .companion-message {
+  background: linear-gradient(
+    135deg,
+    rgba(20, 184, 166, 0.05) 0%,
+    transparent 100%
+  );
+  border: 1px solid rgba(20, 184, 166, 0.1);
+}
+
+/* ============================================
+   EXPERIENCE GAMIFICATION
+   ============================================ */
+.ai-experience-container .xp-display {
+  background: linear-gradient(135deg, #14b8a6 0%, #0891b2 100%);
+  color: white;
+}
+
+.ai-experience-container .achievement-badge {
+  background: linear-gradient(
+    135deg,
+    #60a5fa 0%,
+    #3b82f6 100%
+  );
+  box-shadow: 0 0 20px rgba(96, 165, 250, 0.4);
+}
+
+/* ============================================
+   EXPERIENCE SPECIAL EFFECTS
+   ============================================ */
+/* Ripple effect for interactive elements */
+.ai-experience-container .ripple-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-experience-container .ripple-effect::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(20, 184, 166, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.ai-experience-container .ripple-effect:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* ============================================
+   EXPERIENCE ANIMATIONS
+   ============================================ */
+.ai-experience-container .animate-in {
+  animation: experienceSlideIn var(--duration-moderate) var(--easing-out);
+}
+
+@keyframes experienceSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+/* ============================================
+   REAL-WORLD CONNECTION PHASE STYLES
+   ============================================ */
+/* Connection step cards with enhanced readability */
+.connection-situation,
+.connection-challenge,
+.connection-solution,
+.connection-learning {
+  background: var(--bg-secondary, #f9fafb);
+  padding: 1.75rem;
+  border-radius: 0.75rem;
+  margin-bottom: 1.5rem;
+  border-left: 5px solid;
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Top gradient accent for each connection step */
+.connection-situation::before,
+.connection-challenge::before,
+.connection-solution::before,
+.connection-learning::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, currentColor, transparent);
+  opacity: 0.3;
+}
+
+/* Hover effect for better interactivity */
+.connection-situation:hover,
+.connection-challenge:hover,
+.connection-solution:hover,
+.connection-learning:hover {
+  transform: translateX(4px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Step 1: Situation - Blue theme */
+.connection-situation {
+  border-left-color: #3b82f6;
+  background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
+}
+
+/* Step 2: Challenge - Red theme */
+.connection-challenge {
+  border-left-color: #ef4444;
+  background: linear-gradient(135deg, #fef2f2 0%, #ffffff 100%);
+}
+
+/* Step 3: Solution - Green theme */
+.connection-solution {
+  border-left-color: #10b981;
+  background: linear-gradient(135deg, #ecfdf5 0%, #ffffff 100%);
+}
+
+/* Step 4: Learning Connection - Amber theme */
+.connection-learning {
+  border-left-color: #f59e0b;
+  background: linear-gradient(135deg, #fef3c7 0%, #ffffff 100%);
+}
+
+/* Connection step headers */
+.connection-situation h2,
+.connection-challenge h2,
+.connection-solution h2,
+.connection-learning h2 {
+  margin: 0 0 1.25rem 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #1f2937;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  letter-spacing: -0.02em;
+}
+
+/* Connection step content */
+.connection-situation p,
+.connection-challenge p,
+.connection-solution p,
+.connection-learning p {
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #374151;
+  font-weight: 400;
+}
+
+/* Special styling for learning connection emphasis */
+.connection-learning p.learning-connection {
+  font-weight: 600;
+  color: #1f2937;
+  background: linear-gradient(to right, transparent, rgba(245, 158, 11, 0.15), transparent);
+  padding: 1rem 1.25rem;
+  border-radius: 0.5rem;
+  margin: 0.75rem -0.5rem 0;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  position: relative;
+}
+
+/* Star indicator for learning connection */
+.connection-learning p.learning-connection::before {
+  content: '★';
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #f59e0b;
+  font-size: 1.2rem;
+}
+
+/* Connection navigation container */
+.connection-navigation {
+  margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+/* Connection progress dots container */
+.connection-dots {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+  border-radius: 2rem;
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.06),
+    0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Individual connection dot */
+.connection-dot {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  border: 3px solid #d1d5db;
+  background: white;
+  color: #6b7280;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Dot hover animation background */
+.connection-dot::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(59, 130, 246, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s;
+}
+
+/* Dot hover state */
+.connection-dot:hover {
+  transform: scale(1.15);
+  border-color: #3b82f6;
+  background: #eff6ff;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.connection-dot:hover::before {
+  width: 120%;
+  height: 120%;
+}
+
+/* Active connection dot */
+.connection-dot.active {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  border-color: #3b82f6;
+  transform: scale(1.2);
+  box-shadow: 
+    0 0 0 4px rgba(59, 130, 246, 0.1),
+    0 6px 20px rgba(59, 130, 246, 0.4);
+  font-size: 1.1rem;
+}
+
+/* Completed connection dot */
+.connection-dot.completed {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  border-color: #10b981;
+  position: relative;
+}
+
+/* Checkmark for completed dots */
+.connection-dot.completed::after {
+  content: '✓';
+  position: absolute;
+  top: -0.25rem;
+  right: -0.25rem;
+  background: white;
+  color: #10b981;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Touch-optimized connection dots */
+.connection-dot.touch-optimized {
+  width: 3.5rem;
+  height: 3.5rem;
+  font-size: 1.15rem;
+}
+
+/* Dark mode support for connection elements */
+[data-theme="dark"] .connection-situation,
+[data-theme="dark"] .connection-challenge,
+[data-theme="dark"] .connection-solution,
+[data-theme="dark"] .connection-learning {
+  background: #1f2937;
+  border-left-width: 4px;
+}
+
+[data-theme="dark"] .connection-situation {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), #1f2937);
+}
+
+[data-theme="dark"] .connection-challenge {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), #1f2937);
+}
+
+[data-theme="dark"] .connection-solution {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), #1f2937);
+}
+
+[data-theme="dark"] .connection-learning {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), #1f2937);
+}
+
+[data-theme="dark"] .connection-situation h2,
+[data-theme="dark"] .connection-challenge h2,
+[data-theme="dark"] .connection-solution h2,
+[data-theme="dark"] .connection-learning h2 {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .connection-situation p,
+[data-theme="dark"] .connection-challenge p,
+[data-theme="dark"] .connection-solution p,
+[data-theme="dark"] .connection-learning p {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .connection-learning p.learning-connection {
+  color: #f3f4f6;
+  background: linear-gradient(to right, transparent, rgba(245, 158, 11, 0.2), transparent);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+[data-theme="dark"] .connection-dots {
+  background: linear-gradient(135deg, #374151, #1f2937);
+}
+
+[data-theme="dark"] .connection-dot {
+  background: #374151;
+  border-color: #4b5563;
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .connection-dot:hover {
+  background: #4b5563;
+  border-color: #60a5fa;
+}
+
+/* ============================================
+   EXPERIENCE RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .ai-experience-container::before {
+    height: 2px;
+  }
+  
+  .ai-experience-container .container-pattern {
+    opacity: 0.02;
+  }
+  
+  /* Mobile connection styles */
+  .connection-situation,
+  .connection-challenge,
+  .connection-solution,
+  .connection-learning {
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    border-left-width: 4px;
+  }
+  
+  .connection-situation h2,
+  .connection-challenge h2,
+  .connection-solution h2,
+  .connection-learning h2 {
+    font-size: 1.15rem;
+    gap: 0.5rem;
+  }
+  
+  .connection-situation p,
+  .connection-challenge p,
+  .connection-solution p,
+  .connection-learning p {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+  
+  .connection-dots {
+    gap: 0.75rem;
+    padding: 0.75rem 1.25rem;
+  }
+  
+  .connection-dot {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 0.9rem;
+    border-width: 2px;
+  }
+  
+  .connection-dot.active {
+    transform: scale(1.15);
+  }
+  
+  .connection-navigation {
+    margin-top: 2rem;
+    gap: 1.5rem;
+  }
+}

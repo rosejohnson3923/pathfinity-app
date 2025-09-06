@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dual Modal Layout Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        /* Simulating TwoPanelModal container */
+        .two-panel-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100vw;
+            height: 100vh;
+        }
+        
+        .modal-container {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: 100% !important;
+            display: flex;
+            flex-direction: row;
+            margin: 0 !important;
+            padding: 0 !important;
+            background: transparent !important;
+        }
+        
+        .main-content-panel {
+            flex: 1;
+            background: linear-gradient(135deg, #F0F4F8 0%, #E2E8F0 100%);
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .gamification-sidebar {
+            position: relative;
+            width: 320px;
+            min-width: 320px;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            color: white;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        .content-area {
+            padding: 40px;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px 40px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 40px;
+        }
+        
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="two-panel-modal">
+        <div class="modal-container">
+            <!-- Main Content Panel -->
+            <div class="main-content-panel">
+                <div class="header">
+                    <h1>Dashboard Modal Content</h1>
+                    <p>This is the main content area - full screen with no double modal frames</p>
+                </div>
+                
+                <div class="cards-container">
+                    <div class="card">
+                        <h3>🚀 Career Choice</h3>
+                        <p>Select your career path for today's learning journey</p>
+                    </div>
+                    <div class="card">
+                        <h3>🤖 AI Companion</h3>
+                        <p>Choose your AI learning companion</p>
+                    </div>
+                    <div class="card">
+                        <h3>📚 Daily Learning</h3>
+                        <p>Complete your daily learning objectives</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Gamification Sidebar -->
+            <div class="gamification-sidebar">
+                <h2>🎮 Gamification Panel</h2>
+                <div style="margin-top: 20px;">
+                    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                        <h4 style="margin: 0 0 10px 0;">Level 12</h4>
+                        <div style="background: rgba(0,0,0,0.3); height: 8px; border-radius: 4px;">
+                            <div style="background: linear-gradient(90deg, #4caf50, #8bc34a); width: 65%; height: 100%; border-radius: 4px;"></div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                        <h4 style="margin: 0 0 10px 0;">🔥 5 Day Streak</h4>
+                    </div>
+                    
+                    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px;">
+                        <h4 style="margin: 0 0 10px 0;">Live Activity</h4>
+                        <p style="font-size: 14px; opacity: 0.9;">✨ Sarah just completed Math!</p>
+                        <p style="font-size: 14px; opacity: 0.9;">🏆 Alex earned a badge!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

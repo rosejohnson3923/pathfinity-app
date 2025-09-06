@@ -1,0 +1,518 @@
+/**
+ * PAGE HEADER MODULE
+ * ==================
+ * Universal header component styles for all screens
+ * Provides consistent navigation and context across Learn, Experience, and Discover
+ * 
+ * Created: 2025-08-22
+ */
+
+/* ============================================
+   HEADER CONTAINER
+   ============================================ */
+.headerContainer {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  width: 100%;
+  min-height: var(--header-height);
+  background: var(--header-bg);
+  backdrop-filter: blur(var(--blur-md));
+  -webkit-backdrop-filter: blur(var(--blur-md));
+  border-bottom: 1px solid var(--header-border);
+  padding: var(--space-4) var(--space-6);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all var(--duration-base) var(--easing-in-out);
+}
+
+/* Glass effect for header */
+.headerContainer.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--blur-lg));
+  -webkit-backdrop-filter: blur(var(--blur-lg));
+  border-bottom: 1px solid var(--glass-border);
+}
+
+/* Dark theme specific header */
+[data-theme="dark"] .headerContainer {
+  background: linear-gradient(
+    90deg, 
+    rgba(15, 20, 25, 0.95) 0%, 
+    rgba(26, 32, 44, 0.95) 100%
+  );
+  border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+/* ============================================
+   HEADER SECTIONS
+   ============================================ */
+.headerLeft {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.headerCenter {
+  flex: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+}
+
+.headerRight {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}
+
+/* ============================================
+   NAVIGATION BUTTONS
+   ============================================ */
+.navButton {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  color: var(--text-primary);
+  font-weight: var(--font-medium);
+  font-size: var(--text-base);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--easing-out);
+  white-space: nowrap;
+}
+
+.navButton:hover {
+  background: var(--bg-hover);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  transform: translateX(-2px);
+}
+
+.navButton:active {
+  transform: translateX(-1px);
+}
+
+.navButton.back {
+  padding-left: var(--space-3);
+}
+
+.navButton.home {
+  background: var(--bg-secondary);
+}
+
+.navButtonIcon {
+  font-size: var(--text-lg);
+  display: flex;
+  align-items: center;
+}
+
+.navButtonText {
+  font-size: var(--text-sm);
+}
+
+/* ============================================
+   SUBJECT & SKILL DISPLAY
+   ============================================ */
+.subjectBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: white;
+  box-shadow: var(--shadow-sm);
+  white-space: nowrap;
+}
+
+.subjectBadge.math {
+  background: var(--gradient-math);
+}
+
+.subjectBadge.ela {
+  background: var(--gradient-ela);
+}
+
+.subjectBadge.science {
+  background: var(--gradient-science);
+}
+
+.subjectBadge.socialStudies {
+  background: var(--gradient-social);
+}
+
+.subjectIcon {
+  font-size: var(--text-base);
+}
+
+.gradeBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--text-secondary);
+}
+
+.skillName {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 var(--space-2);
+  border-left: 1px solid var(--border-color);
+  margin-left: var(--space-2);
+}
+
+/* ============================================
+   PHASE INDICATOR
+   ============================================ */
+.phaseIndicator {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--text-primary);
+  position: relative;
+  overflow: hidden;
+}
+
+.phaseIndicator::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+}
+
+.phaseIndicator.lesson::before {
+  background: var(--color-info);
+}
+
+.phaseIndicator.practice::before {
+  background: var(--color-warning);
+}
+
+.phaseIndicator.assessment::before {
+  background: var(--color-error);
+}
+
+.phaseIndicator.complete::before {
+  background: var(--color-success);
+}
+
+.phaseIcon {
+  font-size: var(--text-base);
+}
+
+.phaseText {
+  font-weight: var(--font-semibold);
+}
+
+/* ============================================
+   PROGRESS SECTION
+   ============================================ */
+.progressSection {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.questionCounter {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  font-weight: var(--font-semibold);
+  white-space: nowrap;
+}
+
+.progressBarMini {
+  width: 120px;
+  height: 6px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  position: relative;
+}
+
+.progressFillMini {
+  height: 100%;
+  background: var(--gradient-primary);
+  transition: width var(--duration-moderate) var(--easing-out);
+  position: relative;
+}
+
+.progressFillMini::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 20px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3));
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-20px); }
+  100% { transform: translateX(20px); }
+}
+
+.timer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-sm);
+  font-weight: var(--font-mono);
+  color: var(--text-secondary);
+}
+
+.timer.warning {
+  background: var(--warning-bg-soft);
+  color: var(--warning-text);
+}
+
+.timer.danger {
+  background: var(--error-bg-soft);
+  color: var(--error-text);
+  animation: pulse var(--duration-slow) infinite;
+}
+
+/* ============================================
+   COMPANION MINI AVATAR
+   ============================================ */
+.companionMini {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background: var(--gradient-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-xl);
+  border: 2px solid var(--bg-primary);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--easing-out);
+  position: relative;
+}
+
+.companionMini:hover {
+  transform: scale(1.1);
+  box-shadow: var(--shadow-primary);
+}
+
+.companionMini.speaking {
+  animation: companionPulse 2s infinite;
+}
+
+.companionStatus {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-full);
+  background: var(--color-success);
+  border: 2px solid var(--bg-primary);
+}
+
+.companionStatus.thinking {
+  background: var(--color-warning);
+  animation: pulse var(--duration-slow) infinite;
+}
+
+@keyframes companionPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ============================================
+   SETTINGS & ACTIONS
+   ============================================ */
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.actionButton {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-lg);
+  background: transparent;
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--easing-out);
+  color: var(--text-secondary);
+  font-size: var(--text-lg);
+}
+
+.actionButton:hover {
+  background: var(--bg-hover);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.actionButton.active {
+  background: var(--gradient-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.settingsButton {
+  animation: rotate 4s linear infinite paused;
+}
+
+.settingsButton:hover {
+  animation-play-state: running;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================
+   SPECIAL STATES
+   ============================================ */
+.headerContainer.assessmentMode {
+  background: linear-gradient(
+    90deg,
+    rgba(239, 68, 68, 0.05) 0%,
+    rgba(239, 68, 68, 0.02) 100%
+  );
+  border-bottom-color: var(--color-error);
+}
+
+.headerContainer.celebrationMode {
+  background: var(--gradient-success);
+  animation: celebrationGradient 3s ease infinite;
+}
+
+@keyframes celebrationGradient {
+  0%, 100% { 
+    background: linear-gradient(90deg, #10b981 0%, #059669 50%, #10b981 100%);
+  }
+  50% { 
+    background: linear-gradient(90deg, #059669 0%, #10b981 50%, #059669 100%);
+  }
+}
+
+.headerContainer.connectionLost {
+  border-bottom: 2px solid var(--color-warning);
+}
+
+.connectionWarning {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  background: var(--warning-bg-soft);
+  color: var(--warning-text);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  animation: pulse var(--duration-slow) infinite;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 1024px) {
+  .headerContainer {
+    padding: var(--space-3) var(--space-4);
+  }
+  
+  .skillName {
+    max-width: 150px;
+  }
+}
+
+@media (max-width: 768px) {
+  .headerContainer {
+    padding: var(--space-3);
+    min-height: 60px;
+  }
+  
+  .headerLeft,
+  .headerRight {
+    flex: 0;
+  }
+  
+  .headerCenter {
+    flex: 1;
+  }
+  
+  .skillName,
+  .gradeBadge {
+    display: none;
+  }
+  
+  .navButtonText {
+    display: none;
+  }
+  
+  .progressBarMini {
+    width: 80px;
+  }
+  
+  .subjectBadge {
+    padding: var(--space-1) var(--space-3);
+    font-size: var(--text-xs);
+  }
+}
+
+@media (max-width: 480px) {
+  .headerCenter {
+    gap: var(--space-2);
+  }
+  
+  .phaseIndicator {
+    padding: var(--space-1) var(--space-2);
+    font-size: var(--text-xs);
+  }
+  
+  .phaseText {
+    display: none;
+  }
+  
+  .questionCounter {
+    font-size: var(--text-xs);
+  }
+  
+  .timer {
+    padding: var(--space-1) var(--space-2);
+    font-size: var(--text-xs);
+  }
+}

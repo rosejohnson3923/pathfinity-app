@@ -1,0 +1,81 @@
+/**
+ * Root Layout System - Clean 1400px Solution
+ * ==========================================
+ * Simple, clean CSS-only approach to width management
+ */
+
+/* Reset any problematic styles */
+* {
+  box-sizing: border-box;
+}
+
+/* HTML and Body - Full viewport */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+/* Root element - Default NO constraint for login page */
+#root {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+/* Apply 1400px constraint ONLY to dashboard pages */
+#root:has(.student-dashboard-wrapper),
+#root:has(.dashboard-modal),
+#root:has(.teacher-dashboard),
+#root:has(.admin-dashboard) {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Alternative approach for login page if :has() not supported */
+.login-page-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Dashboard and app content */
+.student-dashboard-wrapper,
+.dashboard-modal,
+.app-content {
+  width: 100%;
+  max-width: 100%;
+  padding: 0 20px;
+}
+
+/* Headers should stay within the 1400px constraint */
+header,
+.header,
+.progress-header {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Modals can break out of constraint */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Debug helper - remove in production */
+#root {
+  outline: 2px dashed rgba(255, 0, 0, 0.1);
+}

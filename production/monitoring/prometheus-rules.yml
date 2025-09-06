@@ -1,0 +1,421 @@
+# PATHFINITY PRODUCTION PROMETHEUS ALERTING RULES
+# Comprehensive monitoring rules for AI education platform
+
+groups:
+  # ================================================================
+  # CRITICAL SYSTEM ALERTS
+  # ================================================================
+  - name: critical-system
+    interval: 30s
+    rules:
+      - alert: ServiceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+          alerttype: availability
+        annotations:
+          summary: "Service {{ $labels.job }} is down"
+          description: "Service {{ $labels.job }} on {{ $labels.instance }} has been down for more than 1 minute"
+          runbook_url: "https://docs.pathfinity.ai/runbooks/service-down"
+          
+      - alert: HighErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[5m]) > 0.05
+        for: 2m
+        labels:
+          severity: critical
+          alerttype: availability
+        annotations:
+          summary: "High error rate detected"
+          description: "Error rate is {{ $value | humanizePercentage }} for {{ $labels.service }}"
+          runbook_url: "https://docs.pathfinity.ai/runbooks/high-error-rate"
+          
+      - alert: DatabaseDown
+        expr: pg_up == 0
+        for: 30s
+        labels:
+          severity: critical
+          alerttype: availability
+          service: database
+        annotations:
+          summary: "PostgreSQL database is down"
+          description: "PostgreSQL database {{ $labels.database }} is not responding"
+          runbook_url: "https://docs.pathfinity.ai/runbooks/database-down"
+          
+      - alert: AIServiceDown
+        expr: ai_service_health == 0
+        for: 2m
+        labels:
+          severity: critical
+          alerttype: availability
+          service: ai-characters
+        annotations:
+          summary: "AI character service is down"
+          description: "AI character service is not responding for more than 2 minutes"
+          runbook_url: "https://docs.pathfinity.ai/runbooks/ai-service-down"
+
+  # ================================================================
+  # PERFORMANCE ALERTS
+  # ================================================================
+  - name: performance
+    interval: 30s
+    rules:
+      - alert: HighResponseTime
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 2
+        for: 3m
+        labels:
+          severity: warning
+          alerttype: performance
+        annotations:
+          summary: "High response time detected"
+          description: "95th percentile response time is {{ $value }}s for {{ $labels.service }}"
+          runbook_url: "https://docs.pathfinity.ai/runbooks/high-response-time"
+          
+      - alert: HighAIResponseTime
+        expr: histogram_quantile(0.95, rate(ai_character_response_duration_seconds_bucket[5m])) > 5
+        for: 2m
+        labels:
+          severity: warning
+          alerttype: performance
+          service: ai-characters
+        annotations:
+          summary: "AI character response time is high"
+          description: "95th percentile AI response time is {{ $value }}s for character {{ $labels.character }}"
+          runbook_url: "https://docs.pathfinity.ai/runbooks/high-ai-response-time"
+          
+      - alert: HighCPUUsage
+        expr: (100 - (avg(rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)) > 80
+        for: 5m
+        labels:
+          severity: warning
+          alerttype: performance
+        annotations:
+          summary: "High CPU usage detected"
+          description: "CPU usage is {{ $value }}% on {{ $labels.instance }}"
+          runbook_url: "https://docs.pathfinity.ai/runbooks/high-cpu"
+          
+      - alert: HighMemoryUsage
+        expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+          alerttype: performance
+        annotations:
+          summary: "High memory usage detected"
+          description: "Memory usage is {{ $value }}% on {{ $labels.instance }}"
+          runbook_url: "https://docs.pathfinity.ai/runbooks/high-memory"
+          
+      - alert: DiskSpaceLow
+        expr: (node_filesystem_avail_bytes / node_filesystem_size_bytes) * 100 < 10
+        for: 5m
+        labels:
+          severity: warning
+          alerttype: performance
+        annotations:
+          summary: "Low disk space"
+          description: "Disk space is {{ $value }}% full on {{ $labels.instance }}"
+          runbook_url: "https://docs.pathfinity.ai/runbooks/low-disk-space"
+
+  # ================================================================
+  # DATABASE PERFORMANCE ALERTS
+  # ================================================================
+  - name: database-performance
+    interval: 30s
+    rules:
+      - alert: SlowDatabaseQuery
+        expr: rate(pg_stat_statements_mean_time_ms[5m]) > 1000
+        for: 3m
+        labels:
+          severity: warning
+          alerttype: performance
+          service: database
+        annotations:
+          summary: "Slow database queries detected"
+          description: "Average query time is {{ $value }}ms on database {{ $labels.database }}"
+          runbook_url: "https://docs.pathfinity.ai/runbooks/slow-queries"
+          
+      - alert: DatabaseConnectionsHigh
+        expr: pg_stat_database_numbackends > 80
+        for: 2m
+        labels:
+          severity: warning
+          alerttype: performance
+          service: database
+        annotations:
+          summary: "High database connections"
+          description: "Database {{ $labels.database }} has {{ $value }} active connections"
+          runbook_url: "https://docs.pathfinity.ai/runbooks/high-db-connections"
+          
+      - alert: DatabaseDeadlocks
+        expr: rate(pg_stat_database_deadlocks[5m]) > 0.1
+        for: 1m
+        labels:
+          severity: warning
+          alerttype: performance
+          service: database
+        annotations:
+          summary: "Database deadlocks detected"
+          description: "Database {{ $labels.database }} is experiencing {{ $value }} deadlocks per second"
+          runbook_url: "https://docs.pathfinity.ai/runbooks/database-deadlocks"
+
+  # ================================================================
+  # AI CHARACTER SYSTEM ALERTS
+  # ================================================================
+  - name: ai-characters
+    interval: 30s
+    rules:
+      - alert: AICharacterHighCost
+        expr: rate(ai_character_cost_total[1h]) > 10
+        for: 5m
+        labels:
+          severity: warning
+          alerttype: cost
+          service: ai-characters
+        annotations:
+          summary: "High AI character costs"
+          description: "AI character {{ $labels.character }} cost is ${{ $value }}/hour"
+          runbook_url: "https://docs.pathfinity.ai/runbooks/high-ai-cost"
+          
+      - alert: AICharacterHighTokenUsage
+        expr: rate(ai_character_tokens_total[5m]) > 1000
+        for: 3m
+        labels:
+          severity: info
+          alerttype: usage
+          service: ai-characters
+        annotations:
+          summary: "High AI token usage"
+          description: "AI character {{ $labels.character }} is using {{ $value }} tokens/min"
+          runbook_url: "https://docs.pathfinity.ai/runbooks/high-token-usage"
+          
+      - alert: AIContentFilteringFailure
+        expr: rate(ai_content_filtered_total[5m]) / rate(ai_requests_total[5m]) > 0.1
+        for: 2m
+        labels:
+          severity: critical
+          alerttype: security
+          service: ai-characters
+        annotations:
+          summary: "High content filtering rate"
+          description: "{{ $value | humanizePercentage }} of AI responses are being filtered"
+          runbook_url: "https://docs.pathfinity.ai/runbooks/content-filtering"
+          
+      - alert: AICharacterTimeout
+        expr: rate(ai_character_timeouts_total[5m]) > 0.05
+        for: 2m
+        labels:
+          severity: warning
+          alerttype: performance
+          service: ai-characters
+        annotations:
+          summary: "AI character timeouts"
+          description: "AI character {{ $labels.character }} is experiencing timeouts"
+          runbook_url: "https://docs.pathfinity.ai/runbooks/ai-timeouts"
+
+  # ================================================================
+  # SECURITY ALERTS
+  # ================================================================
+  - name: security
+    interval: 15s
+    rules:
+      - alert: UnauthorizedAccess
+        expr: rate(http_requests_total{status="401"}[5m]) > 10
+        for: 1m
+        labels:
+          severity: critical
+          alerttype: security
+        annotations:
+          summary: "High rate of unauthorized access attempts"
+          description: "{{ $value }} unauthorized access attempts per second on {{ $labels.service }}"
+          impact: "Potential security breach"
+          action: "Investigate source IPs and consider rate limiting"
+          runbook_url: "https://docs.pathfinity.ai/runbooks/unauthorized-access"
+          
+      - alert: BruteForceAttack
+        expr: rate(auth_failed_attempts_total[2m]) > 20
+        for: 30s
+        labels:
+          severity: critical
+          alerttype: security
+        annotations:
+          summary: "Possible brute force attack"
+          description: "{{ $value }} failed login attempts per second"
+          impact: "Account compromise risk"
+          action: "Block suspicious IPs immediately"
+          runbook_url: "https://docs.pathfinity.ai/runbooks/brute-force"
+          
+      - alert: SuspiciousFileUpload
+        expr: rate(file_upload_rejected_total[5m]) > 5
+        for: 1m
+        labels:
+          severity: warning
+          alerttype: security
+        annotations:
+          summary: "Suspicious file uploads detected"
+          description: "{{ $value }} file uploads rejected per second"
+          impact: "Potential malware upload attempts"
+          action: "Review upload patterns and strengthen validation"
+          runbook_url: "https://docs.pathfinity.ai/runbooks/suspicious-uploads"
+          
+      - alert: SQLInjectionAttempt
+        expr: rate(sql_injection_attempts_total[5m]) > 0
+        for: 0s
+        labels:
+          severity: critical
+          alerttype: security
+        annotations:
+          summary: "SQL injection attempts detected"
+          description: "SQL injection attempts detected on {{ $labels.endpoint }}"
+          impact: "Database compromise risk"
+          action: "Block source IP and review input validation"
+          runbook_url: "https://docs.pathfinity.ai/runbooks/sql-injection"
+
+  # ================================================================
+  # COMPLIANCE ALERTS
+  # ================================================================
+  - name: compliance
+    interval: 60s
+    rules:
+      - alert: UnauthorizedStudentDataAccess
+        expr: rate(student_data_access_unauthorized_total[5m]) > 0
+        for: 0s
+        labels:
+          severity: critical
+          alerttype: compliance
+          regulation: FERPA
+          data_affected: student_records
+        annotations:
+          summary: "Unauthorized access to student data"
+          description: "Unauthorized access to student data detected"
+          required_action: "Immediate investigation and notification to privacy officer"
+          runbook_url: "https://docs.pathfinity.ai/runbooks/unauthorized-student-data"
+          
+      - alert: MissingParentalConsent
+        expr: rate(underage_registration_without_consent_total[1h]) > 0
+        for: 0s
+        labels:
+          severity: critical
+          alerttype: compliance
+          regulation: COPPA
+          data_affected: child_information
+        annotations:
+          summary: "Underage registration without parental consent"
+          description: "Child under 13 registered without proper parental consent"
+          required_action: "Suspend account and obtain proper consent"
+          runbook_url: "https://docs.pathfinity.ai/runbooks/missing-consent"
+          
+      - alert: DataRetentionViolation
+        expr: data_retention_violation_total > 0
+        for: 0s
+        labels:
+          severity: warning
+          alerttype: compliance
+          regulation: FERPA
+          data_affected: historical_records
+        annotations:
+          summary: "Data retention policy violation"
+          description: "Data retained beyond policy limits detected"
+          required_action: "Review and delete expired data"
+          runbook_url: "https://docs.pathfinity.ai/runbooks/data-retention"
+          
+      - alert: AuditLogFailure
+        expr: rate(audit_log_failures_total[5m]) > 0
+        for: 1m
+        labels:
+          severity: warning
+          alerttype: compliance
+          regulation: FERPA
+        annotations:
+          summary: "Audit logging failures"
+          description: "Audit log system is failing to record events"
+          required_action: "Fix audit logging immediately"
+          runbook_url: "https://docs.pathfinity.ai/runbooks/audit-log-failure"
+
+  # ================================================================
+  # BUSINESS METRICS ALERTS
+  # ================================================================
+  - name: business-metrics
+    interval: 300s
+    rules:
+      - alert: LowUserEngagement
+        expr: rate(user_sessions_total[1h]) < 10
+        for: 30m
+        labels:
+          severity: warning
+          alerttype: business
+        annotations:
+          summary: "Low user engagement detected"
+          description: "User session rate has dropped to {{ $value }} sessions/hour"
+          runbook_url: "https://docs.pathfinity.ai/runbooks/low-engagement"
+          
+      - alert: HighUserDropoff
+        expr: rate(user_session_abandonment_total[1h]) / rate(user_sessions_total[1h]) > 0.3
+        for: 30m
+        labels:
+          severity: warning
+          alerttype: business
+        annotations:
+          summary: "High user session abandonment"
+          description: "{{ $value | humanizePercentage }} of users are abandoning sessions"
+          runbook_url: "https://docs.pathfinity.ai/runbooks/high-dropoff"
+          
+      - alert: AssessmentFailureRate
+        expr: rate(assessments_failed_total[1h]) / rate(assessments_completed_total[1h]) > 0.5
+        for: 1h
+        labels:
+          severity: info
+          alerttype: business
+        annotations:
+          summary: "High assessment failure rate"
+          description: "{{ $value | humanizePercentage }} of assessments are failing"
+          runbook_url: "https://docs.pathfinity.ai/runbooks/high-assessment-failure"
+
+  # ================================================================
+  # KUBERNETES ALERTS
+  # ================================================================
+  - name: kubernetes
+    interval: 30s
+    rules:
+      - alert: PodCrashLooping
+        expr: rate(kube_pod_container_status_restarts_total[15m]) > 0
+        for: 5m
+        labels:
+          severity: warning
+          alerttype: infrastructure
+        annotations:
+          summary: "Pod is crash looping"
+          description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} is crash looping"
+          runbook_url: "https://docs.pathfinity.ai/runbooks/pod-crash-loop"
+          
+      - alert: PodPending
+        expr: kube_pod_status_phase{phase="Pending"} == 1
+        for: 5m
+        labels:
+          severity: warning
+          alerttype: infrastructure
+        annotations:
+          summary: "Pod stuck in pending state"
+          description: "Pod {{ $labels.pod }} has been pending for more than 5 minutes"
+          runbook_url: "https://docs.pathfinity.ai/runbooks/pod-pending"
+          
+      - alert: DeploymentReplicasMismatch
+        expr: kube_deployment_spec_replicas != kube_deployment_status_ready_replicas
+        for: 10m
+        labels:
+          severity: warning
+          alerttype: infrastructure
+        annotations:
+          summary: "Deployment replicas mismatch"
+          description: "Deployment {{ $labels.deployment }} has {{ $value }} ready replicas but expects {{ $labels.spec_replicas }}"
+          runbook_url: "https://docs.pathfinity.ai/runbooks/replica-mismatch"
+          
+      - alert: NodeNotReady
+        expr: kube_node_status_condition{condition="Ready",status="true"} == 0
+        for: 5m
+        labels:
+          severity: critical
+          alerttype: infrastructure
+        annotations:
+          summary: "Kubernetes node not ready"
+          description: "Node {{ $labels.node }} is not ready"
+          runbook_url: "https://docs.pathfinity.ai/runbooks/node-not-ready"

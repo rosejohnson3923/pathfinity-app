@@ -1,0 +1,291 @@
+/**
+ * AI Experience Container V2 CSS Module
+ * ======================================
+ * Unified styles for the Experience Container
+ * Theme: Teal/Cyan for career exploration
+ */
+
+/* Container Base */
+.experienceContainer {
+  background: var(--gradient-experience);
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Theme Variables */
+.experienceContainer {
+  --container-primary: var(--color-teal-500);
+  --container-secondary: var(--color-cyan-500);
+  --container-accent: var(--color-teal-600);
+  --container-gradient: var(--gradient-experience);
+}
+
+/* Dark Theme Overrides */
+[data-theme="dark"] .experienceContainer {
+  --container-primary: var(--color-teal-400);
+  --container-secondary: var(--color-cyan-400);
+  --container-accent: var(--color-teal-500);
+  background: var(--gradient-experience-dark);
+}
+
+/* Content Wrapper */
+.contentWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-6);
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Career Exploration Sections */
+.careerCard {
+  background: var(--bg-primary);
+  border: 2px solid var(--container-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-4);
+  margin-bottom: var(--spacing-4);
+  transition: all var(--duration-fast) var(--easing-out);
+  cursor: pointer;
+}
+
+.careerCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(20, 184, 166, 0.2);
+  border-color: var(--container-accent);
+}
+
+.careerCardSelected {
+  background: linear-gradient(135deg, 
+    rgba(20, 184, 166, 0.1) 0%, 
+    rgba(6, 182, 212, 0.1) 100%);
+  border-color: var(--container-accent);
+  box-shadow: 0 5px 20px rgba(20, 184, 166, 0.3);
+}
+
+/* Simulation Environment */
+.simulationContainer {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-6);
+  position: relative;
+  overflow: hidden;
+  min-height: 400px;
+}
+
+.simulationOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg,
+    rgba(20, 184, 166, 0.05) 0%,
+    rgba(6, 182, 212, 0.05) 100%);
+  pointer-events: none;
+}
+
+/* Interactive Elements */
+.interactionZone {
+  border: 2px dashed var(--container-primary);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-3);
+  margin: var(--spacing-2);
+  transition: all var(--duration-fast) var(--easing-out);
+}
+
+.interactionZone:hover {
+  border-style: solid;
+  background: rgba(20, 184, 166, 0.05);
+}
+
+.interactionZoneActive {
+  border-style: solid;
+  background: rgba(20, 184, 166, 0.1);
+  border-color: var(--container-accent);
+}
+
+/* Tool Panel */
+.toolPanel {
+  background: var(--bg-primary);
+  border-left: 4px solid var(--container-primary);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-4);
+  margin-bottom: var(--spacing-3);
+}
+
+.toolButton {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-3);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--easing-out);
+  width: 100%;
+  margin-bottom: var(--spacing-2);
+}
+
+.toolButton:hover {
+  background: var(--container-primary);
+  color: var(--color-white);
+  transform: translateX(4px);
+}
+
+.toolButtonActive {
+  background: var(--container-primary);
+  color: var(--color-white);
+  border-color: var(--container-accent);
+}
+
+/* Feedback & Progress */
+.progressBar {
+  height: 8px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin: var(--spacing-3) 0;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, 
+    var(--container-primary) 0%, 
+    var(--container-secondary) 100%);
+  width: var(--progress, 0%);
+  transition: width var(--duration-moderate) var(--easing-out);
+  border-radius: var(--radius-full);
+}
+
+/* Experience Points Display */
+.xpGainAnimation {
+  animation: floatUp 2s var(--easing-out) forwards;
+  position: absolute;
+  font-size: var(--text-xl);
+  font-weight: bold;
+  color: var(--container-primary);
+}
+
+@keyframes floatUp {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+}
+
+/* Career Path Visualization */
+.pathVisualization {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-4);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  margin: var(--spacing-4) 0;
+}
+
+.pathNode {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 3px solid var(--container-primary);
+  background: var(--bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all var(--duration-fast) var(--easing-out);
+}
+
+.pathNode::after {
+  content: '';
+  position: absolute;
+  right: -30px;
+  width: 30px;
+  height: 2px;
+  background: var(--container-primary);
+}
+
+.pathNode:last-child::after {
+  display: none;
+}
+
+.pathNodeActive {
+  background: var(--container-primary);
+  color: var(--color-white);
+  transform: scale(1.1);
+}
+
+.pathNodeCompleted {
+  background: var(--container-secondary);
+  border-color: var(--container-secondary);
+  color: var(--color-white);
+}
+
+/* Loading State */
+.loadingScreen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--container-gradient);
+}
+
+/* Grade-Level Adaptations */
+[data-grade="K-2"] .careerCard {
+  font-size: var(--text-xl);
+  padding: var(--spacing-6);
+  border-width: 3px;
+}
+
+[data-grade="K-2"] .toolButton {
+  min-height: 48px;
+  font-size: var(--text-lg);
+}
+
+[data-grade="3-5"] .careerCard {
+  font-size: var(--text-lg);
+  padding: var(--spacing-5);
+}
+
+[data-grade="3-5"] .toolButton {
+  min-height: 44px;
+  font-size: var(--text-base);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .contentWrapper {
+    padding: var(--spacing-4);
+  }
+  
+  .pathVisualization {
+    flex-direction: column;
+    gap: var(--spacing-3);
+  }
+  
+  .pathNode::after {
+    display: none;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .experienceContainer {
+    background: white !important;
+  }
+  
+  .toolPanel,
+  .loadingScreen {
+    display: none !important;
+  }
+}

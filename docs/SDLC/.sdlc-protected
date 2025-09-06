@@ -1,0 +1,28 @@
+# SDLC Documentation Protection
+
+This folder contains critical SDLC documentation for the Pathfinity project.
+
+## DO NOT DELETE THIS FOLDER
+
+This documentation includes:
+- Phase 0-8 complete SDLC lifecycle
+- PathIQ Intelligence System specifications
+- IP Protection strategies
+- Marketing narratives and press releases
+- Testing frameworks and deployment strategies
+
+## If This Folder Gets Deleted:
+
+1. Check git history: `git log --oneline -- docs/SDLC/`
+2. Restore from git: `git checkout HEAD -- docs/SDLC/`
+3. Check for rogue processes: `ps aux | grep -E "rm|clean|delete"`
+4. Review recent commands: `history | grep -i sdlc`
+
+## Protection Measures Applied:
+
+1. Added to git tracking
+2. Explicit .gitignore protection: `!docs/SDLC/`
+3. This protection file as a canary
+4. Regular git commits for versioning
+
+Last protected: 2025-01-31

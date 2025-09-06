@@ -1,0 +1,931 @@
+/* BentoDiscoverCard.module.css */
+/* Discover container bento grid styles */
+
+.bentoContainer {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, minmax(120px, 1fr));
+  gap: 16px;
+  padding: 20px;
+  width: 100%;
+  height: 100%;
+  min-height: 600px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+/* Grade-specific configurations */
+.bentoContainer.grade-elementary {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, minmax(150px, 1fr));
+  gap: 24px;
+  padding: 28px;
+}
+
+.bentoContainer.grade-middle {
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, minmax(140px, 1fr));
+  gap: 20px;
+  padding: 24px;
+}
+
+.bentoContainer.grade-high {
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, minmax(110px, 1fr));
+  gap: 16px;
+  padding: 20px;
+}
+
+/* Base tile styles */
+.bentoTile {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.bentoTile:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Tile sizes */
+.smallTile {
+  grid-column: span 1;
+  grid-row: span 1;
+}
+
+.mediumTile {
+  grid-column: span 2;
+  grid-row: span 1;
+}
+
+.largeTile {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.wideTile {
+  grid-column: span 3;
+  grid-row: span 1;
+}
+
+.tallTile {
+  grid-column: span 1;
+  grid-row: span 2;
+}
+
+.heroTile {
+  grid-column: span 3;
+  grid-row: span 2;
+}
+
+/* Elementary adjustments */
+.grade-elementary .heroTile {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.grade-elementary .wideTile {
+  grid-column: span 3;
+}
+
+/* Screen 1 - Discovery Introduction */
+.discoveryTile {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.discoveryHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.discoveryIcon {
+  font-size: 36px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.discoveryTitle {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.discoveryContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.discoveryText {
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  opacity: 0.95;
+}
+
+.discoveryBadges {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  backdrop-filter: blur(10px);
+}
+
+/* Mission tile */
+.missionTile {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+}
+
+.tileTitle {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.missionContent {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  text-align: center;
+}
+
+.missionIcon {
+  font-size: 48px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.missionText {
+  font-size: 16px;
+  line-height: 1.6;
+  opacity: 0.95;
+}
+
+.missionProgress {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.progressBar {
+  flex: 1;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: white;
+  transition: width 0.5s ease;
+  border-radius: 4px;
+}
+
+/* Wonder tile */
+.wonderTile {
+  background: linear-gradient(135deg, #ffd93d 0%, #ff6b6b 100%);
+  color: white;
+}
+
+.wonderContent {
+  height: calc(100% - 48px);
+  overflow-y: auto;
+}
+
+.wonderQuestions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.wonderQuestion {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  padding: 12px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.wonderQuestion:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateX(4px);
+}
+
+.wonderQuestion.active {
+  background: rgba(255, 255, 255, 0.3);
+  border: 2px solid white;
+}
+
+.wonderIcon {
+  font-size: 20px;
+}
+
+.wonderText {
+  flex: 1;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* Explorer chat tile */
+.chatTile {
+  background: white;
+  border: 2px solid #e0e0e0;
+}
+
+.chatHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 12px;
+}
+
+.chatIcon {
+  font-size: 20px;
+}
+
+.chatTitle {
+  flex: 1;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.chatToggle {
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chatContent {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 48px);
+}
+
+.chatMessages {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 12px;
+  padding-right: 8px;
+}
+
+.chatWelcome {
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+  padding: 20px;
+}
+
+.chatMessage {
+  margin-bottom: 8px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  max-width: 80%;
+  word-wrap: break-word;
+}
+
+.chatMessage.user {
+  background: #667eea;
+  color: white;
+  margin-left: auto;
+  border-bottom-right-radius: 4px;
+}
+
+.chatMessage.explorer {
+  background: #f0f0f0;
+  color: #333;
+  margin-right: auto;
+  border-bottom-left-radius: 4px;
+}
+
+.typingIndicator {
+  animation: typing 1s infinite;
+}
+
+.chatInput {
+  display: flex;
+  gap: 8px;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 12px;
+}
+
+.chatInputField {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  font-size: 14px;
+  outline: none;
+}
+
+.chatInputField:focus {
+  border-color: #667eea;
+}
+
+.chatSendButton {
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.chatClosed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100% - 48px);
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+}
+
+.chatClosed p {
+  margin: 0;
+}
+
+/* Action tiles */
+.actionTile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.exploreButton, .completeButton {
+  width: 80%;
+  padding: 16px 24px;
+  background: #10b981;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.exploreButton:hover, .completeButton:hover:not(:disabled) {
+  background: #059669;
+  transform: scale(1.02);
+}
+
+.completeButton:disabled {
+  background: #cbd5e0;
+  cursor: not-allowed;
+}
+
+/* Screen 2 - Path Exploration */
+.pathHeaderTile {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+  color: white;
+}
+
+.pathHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+}
+
+.pathNumber {
+  font-weight: 600;
+}
+
+.pathType {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 6px 16px;
+  border-radius: 20px;
+}
+
+.xpReward {
+  background: gold;
+  color: #333;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+/* Question tile for path */
+.questionTile {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.questionContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+}
+
+.questionText {
+  font-size: 22px;
+  line-height: 1.5;
+  margin: 0 0 20px 0;
+}
+
+.questionImage {
+  width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+/* Answer tiles for discovery */
+.answerTile {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: white;
+  border: 2px solid #e0e0e0;
+}
+
+.answerTile:hover:not(.selected):not(.correct):not(.incorrect) {
+  border-color: #667eea;
+  background: #f7f8ff;
+}
+
+.answerTile.selected {
+  border-color: #667eea;
+  background: #f0f2ff;
+}
+
+.answerTile.correct {
+  border-color: #10b981;
+  background: #d1fae5;
+  animation: correctPulse 0.5s ease;
+}
+
+.answerTile.incorrect {
+  border-color: #ef4444;
+  background: #fee2e2;
+  animation: incorrectShake 0.3s ease;
+}
+
+.answerContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
+  gap: 8px;
+}
+
+.answerLabel {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.answerText {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* Notes tile */
+.notesTile {
+  background: #fef3c7;
+  border: 2px solid #fbbf24;
+}
+
+.notesContent {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 48px);
+}
+
+.notesList {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 12px;
+}
+
+.notesPrompt {
+  text-align: center;
+  color: #92400e;
+  font-size: 14px;
+  padding: 20px;
+}
+
+.note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+  padding: 8px;
+  background: white;
+  border-radius: 8px;
+}
+
+.noteIcon {
+  font-size: 16px;
+}
+
+.noteText {
+  flex: 1;
+  font-size: 14px;
+  color: #78350f;
+}
+
+.addNoteButton {
+  background: #fbbf24;
+  color: #78350f;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.addNoteButton:hover {
+  background: #f59e0b;
+}
+
+/* Progress tile */
+.progressTile {
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  color: white;
+}
+
+.progressContent {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: calc(100% - 48px);
+}
+
+.milestones {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.milestone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.milestone.completed {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+.milestoneIcon {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.milestoneLabel {
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.xpTracking {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+}
+
+.xpIcon {
+  font-size: 24px;
+}
+
+.xpValue {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.xpLabel {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* Feedback overlay */
+.feedbackOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.feedbackModal {
+  background: white;
+  border-radius: 20px;
+  padding: 32px;
+  text-align: center;
+  max-width: 400px;
+  animation: slideUp 0.3s ease;
+}
+
+.feedbackIcon {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.feedbackTitle {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0 0 12px 0;
+  color: #333;
+}
+
+.feedbackMessage {
+  font-size: 16px;
+  color: #666;
+  margin: 0 0 16px 0;
+}
+
+.xpMessage {
+  font-size: 18px;
+  font-weight: bold;
+  color: #fbbf24;
+  margin: 0 0 16px 0;
+}
+
+.discoveryBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 24px;
+  margin-top: 8px;
+}
+
+.badgeIcon {
+  font-size: 20px;
+}
+
+.badgeText {
+  font-weight: 600;
+}
+
+/* XP Animation */
+.xpAnimation {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 32px;
+  font-weight: bold;
+  color: gold;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+  animation: xpFloat 2s ease forwards;
+  z-index: 1001;
+  pointer-events: none;
+}
+
+/* Theme variations */
+.lightTheme {
+  background: #f7f7f7;
+}
+
+.darkTheme {
+  background: #1a1a1a;
+}
+
+.darkTheme .bentoTile:not(.discoveryTile):not(.missionTile):not(.wonderTile):not(.pathHeaderTile):not(.questionTile):not(.progressTile) {
+  background: rgba(30, 30, 30, 0.95);
+  border-color: #333;
+  color: #e0e0e0;
+}
+
+.darkTheme .tileTitle {
+  color: #e0e0e0;
+}
+
+.darkTheme .answerTile {
+  background: #2a2a2a;
+  border-color: #444;
+  color: #e0e0e0;
+}
+
+.darkTheme .answerTile:hover:not(.selected):not(.correct):not(.incorrect) {
+  background: #333;
+}
+
+.darkTheme .chatTile {
+  background: #2a2a2a;
+  border-color: #444;
+  color: #e0e0e0;
+}
+
+.darkTheme .chatMessage.explorer {
+  background: #444;
+  color: #e0e0e0;
+}
+
+.darkTheme .chatInputField {
+  background: #333;
+  border-color: #555;
+  color: #e0e0e0;
+}
+
+.darkTheme .notesTile {
+  background: #3a3a2a;
+  border-color: #666633;
+}
+
+.darkTheme .note {
+  background: #444;
+}
+
+.darkTheme .noteText {
+  color: #ffd700;
+}
+
+.darkTheme .notesPrompt {
+  color: #ffd700;
+}
+
+.darkTheme .feedbackModal {
+  background: #2a2a2a;
+  color: #e0e0e0;
+}
+
+.darkTheme .feedbackTitle {
+  color: #e0e0e0;
+}
+
+.darkTheme .feedbackMessage {
+  color: #aaa;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes correctPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes incorrectShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+@keyframes typing {
+  0%, 60%, 100% { opacity: 0.3; }
+  30% { opacity: 1; }
+}
+
+@keyframes xpFloat {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    transform: translate(-50%, -70%) scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -100%) scale(1);
+    opacity: 0;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .bentoContainer {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .heroTile {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  .wideTile {
+    grid-column: span 2;
+  }
+
+  .largeTile {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  .mediumTile {
+    grid-column: span 2;
+  }
+
+  .tallTile {
+    grid-column: span 1;
+    grid-row: span 2;
+  }
+
+  .discoveryTitle {
+    font-size: 22px;
+  }
+
+  .questionText {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .bentoContainer {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .heroTile,
+  .wideTile,
+  .largeTile,
+  .mediumTile,
+  .tallTile,
+  .smallTile {
+    grid-column: span 1;
+    grid-row: span 1;
+  }
+
+  .discoveryTitle {
+    font-size: 20px;
+  }
+
+  .questionText {
+    font-size: 16px;
+  }
+
+  .milestones {
+    grid-template-columns: 1fr;
+  }
+}

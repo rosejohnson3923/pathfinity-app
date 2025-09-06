@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Lightweight Practice Support Service</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        .test-title {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        .log-entry {
+            padding: 8px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            border-left: 3px solid #ddd;
+        }
+        .log-entry.success {
+            border-left-color: #10b981;
+            background: #f0fdf4;
+        }
+        .log-entry.info {
+            border-left-color: #3b82f6;
+            background: #eff6ff;
+        }
+        .log-entry.warning {
+            border-left-color: #f59e0b;
+            background: #fffbeb;
+        }
+        .log-entry.error {
+            border-left-color: #ef4444;
+            background: #fef2f2;
+        }
+        #output {
+            max-height: 400px;
+            overflow-y: auto;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border: 2px solid #e5e7eb;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-active {
+            background: #10b981;
+            animation: pulse 2s infinite;
+        }
+        .status-inactive {
+            background: #ef4444;
+        }
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+        .companion-message {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            position: relative;
+        }
+        .companion-message::before {
+            content: '🤖';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: white;
+            padding: 0 10px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Lightweight Practice Support Service Test Suite</h1>
+        
+        <div class="test-section">
+            <div class="test-title">
+                <span class="status-indicator status-inactive" id="status"></span>
+                Service Status
+            </div>
+            <button onclick="testInitialize()">1. Initialize Service</button>
+            <button onclick="testCleanup()">2. Cleanup Service</button>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">📝 Question Tracking Tests</div>
+            <button onclick="testStartQuestion()">Start Question Tracking</button>
+            <button onclick="testGetHint(1)">Get Hint (Level 1)</button>
+            <button onclick="testGetHint(2)">Get Hint (Level 2)</button>
+            <button onclick="testHandleAnswer(true)">Handle Correct Answer</button>
+            <button onclick="testHandleAnswer(false)">Handle Incorrect Answer</button>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">⏱️ Time-Based Support Tests</div>
+            <button onclick="testTimeBasedHint()">Test Time-Based Hints (30s)</button>
+            <button onclick="testTimeBasedHint60()">Test Time-Based Hints (60s)</button>
+            <button onclick="testEncouragement()">Test Struggle Encouragement</button>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">📊 Progress Feedback Tests</div>
+            <button onclick="testProgressFeedback(80)">Test Progress (80% Accuracy)</button>
+            <button onclick="testProgressFeedback(60)">Test Progress (60% Accuracy)</button>
+            <button onclick="testProgressFeedback(40)">Test Progress (40% Accuracy)</button>
+            <button onclick="testProgressFeedback(20)">Test Progress (20% Accuracy)</button>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">🔄 Remounting Detection</div>
+            <button onclick="testForRemounting()">Monitor for Remounting (10s)</button>
+            <button onclick="clearLogs()">Clear Logs</button>
+        </div>
+
+        <div id="output">
+            <div style="color: #999; text-align: center;">Test output will appear here...</div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import the lightweight service
+        import { lightweightPracticeSupportService } from './src/services/lightweightPracticeSupportService.js';
+        
+        let currentQuestionId = 1;
+        let remountCheckInterval = null;
+        let mountCount = 0;
+        
+        // Make functions globally available
+        window.lightweightPracticeSupportService = lightweightPracticeSupportService;
+        
+        window.log = function(message, type = 'info') {
+            const output = document.getElementById('output');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            const timestamp = new Date().toLocaleTimeString();
+            entry.textContent = `[${timestamp}] ${message}`;
+            output.appendChild(entry);
+            output.scrollTop = output.scrollHeight;
+        };
+        
+        window.testInitialize = function() {
+            try {
+                lightweightPracticeSupportService.initialize('test-student-123', '3', 'counting-101');
+                log('✅ Service initialized successfully', 'success');
+                document.getElementById('status').className = 'status-indicator status-active';
+                
+                // Check if service is active
+                const isActive = lightweightPracticeSupportService.isServiceActive();
+                log(`Service active status: ${isActive}`, isActive ? 'success' : 'error');
+            } catch (error) {
+                log(`❌ Initialization failed: ${error.message}`, 'error');
+            }
+        };
+        
+        window.testCleanup = function() {
+            try {
+                lightweightPracticeSupportService.cleanup();
+                log('✅ Service cleaned up successfully', 'success');
+                document.getElementById('status').className = 'status-indicator status-inactive';
+                
+                // Verify cleanup
+                const isActive = lightweightPracticeSupportService.isServiceActive();
+                log(`Service active after cleanup: ${isActive}`, !isActive ? 'success' : 'error');
+            } catch (error) {
+                log(`❌ Cleanup failed: ${error.message}`, 'error');
+            }
+        };
+        
+        window.testStartQuestion = function() {
+            try {
+                currentQuestionId++;
+                lightweightPracticeSupportService.startQuestion(currentQuestionId);
+                log(`✅ Started tracking question ID: ${currentQuestionId}`, 'success');
+            } catch (error) {
+                log(`❌ Start question failed: ${error.message}`, 'error');
+            }
+        };
+        
+        window.testGetHint = function(level) {
+            try {
+                // Simulate time passing for hint triggers
+                const hint = lightweightPracticeSupportService.getHintIfNeeded(
+                    currentQuestionId, 
+                    'Software Developer', 
+                    'Harmony'
+                );
+                
+                if (hint) {
+                    log(`💡 Hint received: "${hint}"`, 'info');
+                    showCompanionMessage(hint);
+                } else {
+                    log(`No hint available at this time (level ${level})`, 'warning');
+                }
+            } catch (error) {
+                log(`❌ Get hint failed: ${error.message}`, 'error');
+            }
+        };
+        
+        window.testHandleAnswer = function(isCorrect) {
+            try {
+                lightweightPracticeSupportService.handleAnswer(
+                    currentQuestionId,
+                    isCorrect,
+                    'Software Developer',
+                    'Harmony'
+                );
+                log(`✅ Answer handled - ${isCorrect ? 'CORRECT' : 'INCORRECT'}`, isCorrect ? 'success' : 'warning');
+            } catch (error) {
+                log(`❌ Handle answer failed: ${error.message}`, 'error');
+            }
+        };
+        
+        window.testTimeBasedHint = function() {
+            try {
+                // Start a new question
+                currentQuestionId++;
+                lightweightPracticeSupportService.startQuestion(currentQuestionId);
+                log(`Started question ${currentQuestionId} - waiting 30s for hint...`, 'info');
+                
+                // Override the start time to simulate 30 seconds passing
+                setTimeout(() => {
+                    const hint = lightweightPracticeSupportService.getHintIfNeeded(
+                        currentQuestionId,
+                        'Data Scientist',
+                        'Luna'
+                    );
+                    if (hint) {
+                        log(`✅ Time-based hint (30s): "${hint}"`, 'success');
+                        showCompanionMessage(hint);
+                    } else {
+                        log('No hint triggered at 30s', 'warning');
+                    }
+                }, 1000);
+            } catch (error) {
+                log(`❌ Time-based hint test failed: ${error.message}`, 'error');
+            }
+        };
+        
+        window.testTimeBasedHint60 = function() {
+            try {
+                // Start a new question
+                currentQuestionId++;
+                lightweightPracticeSupportService.startQuestion(currentQuestionId);
+                log(`Started question ${currentQuestionId} - simulating 60s for level 2 hint...`, 'info');
+                
+                setTimeout(() => {
+                    const hint = lightweightPracticeSupportService.getHintIfNeeded(
+                        currentQuestionId,
+                        'Game Developer',
+                        'Max'
+                    );
+                    if (hint) {
+                        log(`✅ Time-based hint (60s): "${hint}"`, 'success');
+                        showCompanionMessage(hint);
+                    }
+                }, 1000);
+            } catch (error) {
+                log(`❌ Time-based hint test failed: ${error.message}`, 'error');
+            }
+        };
+        
+        window.testEncouragement = function() {
+            try {
+                const encouragement = lightweightPracticeSupportService.getEncouragement(
+                    currentQuestionId,
+                    3, // Multiple attempts
+                    'Artist'
+                );
+                
+                if (encouragement) {
+                    log(`💪 Encouragement: "${encouragement}"`, 'info');
+                    showCompanionMessage(encouragement);
+                } else {
+                    log('No encouragement triggered', 'warning');
+                }
+            } catch (error) {
+                log(`❌ Encouragement test failed: ${error.message}`, 'error');
+            }
+        };
+        
+        window.testProgressFeedback = function(percentage) {
+            try {
+                const totalQuestions = 10;
+                const correctCount = Math.round(totalQuestions * percentage / 100);
+                
+                const feedback = lightweightPracticeSupportService.getProgressFeedback(
+                    correctCount,
+                    totalQuestions,
+                    'Engineer'
+                );
+                
+                log(`📊 Progress (${percentage}%): "${feedback}"`, percentage >= 60 ? 'success' : 'warning');
+                showCompanionMessage(feedback);
+            } catch (error) {
+                log(`❌ Progress feedback failed: ${error.message}`, 'error');
+            }
+        };
+        
+        window.testForRemounting = function() {
+            mountCount = 0;
+            log('🔍 Starting remount detection for 10 seconds...', 'info');
+            
+            // Simulate React component lifecycle
+            const mockComponentMount = () => {
+                mountCount++;
+                if (mountCount > 1) {
+                    log(`⚠️ REMOUNT DETECTED! Mount count: ${mountCount}`, 'error');
+                }
+            };
+            
+            // Initial mount
+            mockComponentMount();
+            
+            // Start monitoring with service active
+            lightweightPracticeSupportService.initialize('test-student', '3', 'test-skill');
+            
+            let checkCount = 0;
+            remountCheckInterval = setInterval(() => {
+                checkCount++;
+                
+                // Simulate various service operations
+                lightweightPracticeSupportService.startQuestion(100 + checkCount);
+                lightweightPracticeSupportService.getHintIfNeeded(100 + checkCount, 'Developer', 'Finn');
+                lightweightPracticeSupportService.handleAnswer(100 + checkCount, true, 'Developer', 'Finn');
+                
+                log(`Check ${checkCount}/10 - No remounting detected ✅`, 'success');
+                
+                if (checkCount >= 10) {
+                    clearInterval(remountCheckInterval);
+                    log('✅ Remount test complete - No remounting detected!', 'success');
+                    lightweightPracticeSupportService.cleanup();
+                }
+            }, 1000);
+        };
+        
+        window.clearLogs = function() {
+            const output = document.getElementById('output');
+            output.innerHTML = '<div style="color: #999; text-align: center;">Logs cleared. Ready for new tests...</div>';
+        };
+        
+        function showCompanionMessage(message) {
+            const output = document.getElementById('output');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'companion-message';
+            msgDiv.innerHTML = `<strong>Companion says:</strong><br>${message}`;
+            output.appendChild(msgDiv);
+            output.scrollTop = output.scrollHeight;
+        }
+        
+        // Auto-initialize on load
+        window.addEventListener('load', () => {
+            log('Test suite loaded. Click "Initialize Service" to begin.', 'info');
+        });
+    </script>
+</body>
+</html>

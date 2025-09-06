@@ -1,0 +1,822 @@
+// ================================================================
+// DISCOVER CONTAINER - Narrative-Based Skill Reinforcement
+// Third chance at mastery through engaging storytelling
+// ================================================================
+
+import React, { useState, useEffect } from 'react';
+import { Book, Star, Trophy, Gift, Sparkles, ArrowRight, ChevronLeft, Award, CheckCircle, Target } from 'lucide-react';
+import { 
+  ContainerHandoff, 
+  AssessmentResults,
+  NarrativeScenario,
+  SkillMasteryJourney 
+} from '../../types/LearningTypes';
+
+interface DiscoverContainerProps {
+  experienceHandoff: ContainerHandoff;
+  studentName: string;
+  gradeLevel: string;
+  onComplete: (journey: SkillMasteryJourney[]) => void;
+  onExit: () => void;
+}
+
+interface StoryQuestion {
+  skillCode: string;
+  storyContext: string;
+  question: string;
+  options: string[];
+  correctAnswer: string;
+  explanation: string;
+  storyTransition: string;
+}
+
+export const DiscoverContainer: React.FC<DiscoverContainerProps> = ({
+  experienceHandoff,
+  studentName,
+  gradeLevel,
+  onComplete,
+  onExit
+}) => {
+  const [phase, setPhase] = useState<'intro' | 'story' | 'questions' | 'rewards' | 'complete'>('intro');
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [storyQuestions, setStoryQuestions] = useState<StoryQuestion[]>([]);
+  const [studentAnswers, setStudentAnswers] = useState<{ [index: number]: string }>({});
+  const [discoverResults, setDiscoverResults] = useState<AssessmentResults[]>([]);
+  const [narrative, setNarrative] = useState<NarrativeScenario | null>(null);
+  const [totalXP, setTotalXP] = useState(0);
+  const [badges, setBadges] = useState<string[]>([]);
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [lastAnswerCorrect, setLastAnswerCorrect] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    generateNarrativeExperience();
+  }, [experienceHandoff]);
+
+  // Generate personalized narrative based on learning journey
+  const generateNarrativeExperience = () => {
+    console.log('📖 Generating narrative experience for:', experienceHandoff);
+    
+    // Analyze the complete learning journey
+    const allSkills = experienceHandoff.completedSkills;
+    const needsReinforcement = experienceHandoff.skillsNeedingMastery;
+    
+    // Create story that incorporates all learned skills
+    const story = createPersonalizedNarrative(allSkills, needsReinforcement);
+    setNarrative(story);
+    
+    // Generate story-embedded questions for ALL completed skills (reinforcement learning)
+    const questions = generateStoryQuestions(allSkills);
+    setStoryQuestions(questions);
+  };
+
+  const createPersonalizedNarrative = (skills: AssessmentResults[], needsWork: any[]): NarrativeScenario => {
+    // Use career context from Experience Container to create career-specific stories
+    const selectedCareer = experienceHandoff.selectedCareer;
+    let selectedTheme: string;
+    
+    if (selectedCareer) {
+      // Create career-specific story themes
+      const careerThemes: { [key: string]: string } = {
+        'chef': `Chef ${studentName}'s Recipe Challenge`,
+        'teacher': `Teacher ${studentName}'s Learning Adventure`,
+        'nurse': `Dr. ${studentName}'s Caring Mission`,
+        'firefighter': `Firefighter ${studentName} to the Rescue`,
+        'scientist': `Scientist ${studentName}'s Discovery Lab`,
+        'artist': `Artist ${studentName}'s Creative Quest`
+      };
+      
+      selectedTheme = careerThemes[selectedCareer.careerId] || `${selectedCareer.careerName} ${studentName}'s Adventure`;
+      console.log(`📖 Using career-specific story theme: ${selectedTheme} for ${selectedCareer.careerName}`);
+    } else {
+      // Fallback to grade-based themes if no career context
+      const themes = {
+        'Kindergarten': ['Adventure in Number Forest', 'The Counting Castle', 'Recipe Rescue Mission'],
+        '3rd': ['Mystery of the Missing Math', 'Science Fair Adventure', 'The Great Reading Quest'],
+        '7th': ['Time Travel Learning Lab', 'Island Survival Challenge', 'Space Station Problem Solving'],
+        '10th': ['Future Career Simulator', 'Innovation Challenge', 'Leadership Academy']
+      };
+
+      const gradeThemes = themes[gradeLevel as keyof typeof themes] || themes['Kindergarten'];
+      selectedTheme = gradeThemes[Math.floor(Math.random() * gradeThemes.length)];
+      console.log(`📖 Using fallback grade-based theme: ${selectedTheme}`);
+    }
+
+    // Create narrative that weaves together all skills
+    const mathSkills = skills.filter(s => s.skillCode.includes('CC') || s.skillCode.includes('NF'));
+    const scienceSkills = skills.filter(s => s.skillCode.includes('PS'));
+    const elaSkills = skills.filter(s => s.skillCode.includes('RL'));
+
+    return {
+      storyId: `story-${Date.now()}`,
+      title: selectedTheme,
+      theme: 'Multi-Subject Adventure',
+      gradeLevel,
+      embeddedSkills: skills.map(r => ({
+        skillCode: r.skillCode,
+        skillName: getSkillName(r.skillCode),
+        subject: getSubjectFromSkill(r.skillCode),
+        gradeLevel,
+        difficulty: 1
+      })),
+      narrative: generateStoryContent(selectedTheme, studentName, mathSkills, scienceSkills, elaSkills, selectedCareer),
+      storyQuestions: []
+    };
+  };
+
+  const generateStoryContent = (theme: string, name: string, math: AssessmentResults[], science: AssessmentResults[], ela: AssessmentResults[], selectedCareer?: { careerId: string; careerName: string; department: string }) => {
+    // Career-specific story generation
+    if (selectedCareer) {
+      const { careerId, careerName } = selectedCareer;
+      
+      switch (careerId) {
+        case 'chef':
+          return {
+            introduction: `Chef ${name} was working in the amazing Career, Inc. kitchen when they received a special request from the head chef. A famous cooking show wanted to feature their restaurant, but they needed to create the perfect menu using math, science, and reading skills!`,
+            mainStory: `In the kitchen, Chef ${name} discovered that cooking is full of learning! They used math to measure ingredients precisely (${math.length > 0 ? 'counting cups and fractions' : 'measuring spoons'}), science to understand how heat changes food (${science.length > 0 ? 'watching ingredients transform' : 'observing cooking reactions'}), and reading to follow complex recipes (${ela.length > 0 ? 'understanding cooking instructions' : 'reading ingredient lists'}).`,
+            climax: `Suddenly, the cooking show judges arrived early! Chef ${name} had to use all their skills at once - counting ingredients, understanding how cooking changes food, and reading the final recipe perfectly to create the winning dish.`,
+            resolution: `Thanks to Chef ${name}'s amazing combination of math, science, and reading skills, they created the most delicious dish ever! The judges were so impressed they asked Chef ${name} to be the youngest guest chef on their show!`
+          };
+          
+        case 'park-ranger':
+        case 'librarian':
+          const profession = careerId === 'park-ranger' ? 'Park Ranger' : 'Librarian';
+          const workplace = careerId === 'park-ranger' ? 'national park' : 'library';
+          const task = careerId === 'park-ranger' ? 'protect wildlife and help visitors' : 'help people find books and information';
+          
+          return {
+            introduction: `${profession} ${name} started their exciting day at Career, Inc.'s ${workplace}. They had an important mission: to use their math, science, and reading skills to ${task}!`,
+            mainStory: `Throughout the day, ${profession} ${name} discovered how much learning is needed for their job! They used math to ${careerId === 'park-ranger' ? 'count animals and measure trail distances' : 'organize books by numbers and help with library statistics'} (${math.length > 0 ? 'applying counting skills' : 'using number skills'}), science to ${careerId === 'park-ranger' ? 'understand nature and animal behavior' : 'help visitors learn about science topics'} (${science.length > 0 ? 'making scientific observations' : 'exploring how things work'}), and reading to ${careerId === 'park-ranger' ? 'create educational signs and reports' : 'recommend books and answer questions'} (${ela.length > 0 ? 'reading and writing clearly' : 'understanding information'}).`,
+            climax: `Just then, ${careerId === 'park-ranger' ? 'a group of lost hikers needed help finding their way back to safety' : 'a student needed help with a very important research project for school'}! ${profession} ${name} had to use all their skills together - math, science, and reading - to save the day.`,
+            resolution: `${profession} ${name} successfully ${careerId === 'park-ranger' ? 'guided the hikers to safety using their map reading, distance calculations, and nature knowledge' : 'helped the student find all the right books and information they needed'}! Everyone was so grateful, and ${name} realized that being a ${profession} means being a lifelong learner who uses all their skills every single day!`
+          };
+          
+        default:
+          // Generic career story
+          return {
+            introduction: `${name} was starting their exciting job at Career, Inc. as a ${careerName}! They were about to discover how much math, science, and reading are used in real careers.`,
+            mainStory: `During their workday, ${name} found that their job required lots of learning skills. They used math for calculations and measurements, science to understand how things work, and reading to communicate and follow instructions.`,
+            climax: `When a big challenge came up at work, ${name} realized they needed to combine all their learning skills - math, science, and reading - to solve the problem successfully.`,
+            resolution: `${name} solved the challenge perfectly by using everything they had learned! Their boss was so impressed and said that the best employees are those who never stop learning and growing.`
+          };
+      }
+    }
+    
+    // Fallback to theme-based stories if no career context
+    if (theme.includes('Number Forest')) {
+      return {
+        introduction: `Once upon a time, ${name} discovered a magical forest where numbers grew on trees and counting was the key to every adventure.`,
+        mainStory: `As ${name} walked deeper into the Number Forest, they met friendly creatures who needed help. The counting squirrels had lost track of their acorns, and the fraction fairies needed help dividing their magical crystals equally among their friends.`,
+        climax: `Suddenly, a mischievous math goblin appeared and mixed up all the numbers! ${name} would need to use everything they had learned to restore order to the forest.`,
+        resolution: `With clever thinking and careful counting, ${name} helped all the forest creatures and became the youngest Number Forest Guardian ever!`
+      };
+    } else if (theme.includes('Recipe Rescue')) {
+      return {
+        introduction: `Chef ${name} received an urgent message - the Grand Cooking Competition was in trouble! All the recipes had been scrambled and needed to be fixed before the big day.`,
+        mainStory: `In the kitchen, ${name} found recipes with missing measurements and confused ingredients. They needed to use their math skills to figure out the right amounts and their reading skills to understand what each recipe was supposed to make.`,
+        climax: `With only minutes left before the judges arrived, ${name} discovered that the final recipe needed perfect teamwork between math, science, and reading to create the ultimate winning dish.`,
+        resolution: `Thanks to ${name}'s amazing skills, the competition was saved and they were declared the youngest Master Chef Helper in history!`
+      };
+    } else {
+      return {
+        introduction: `${name} embarked on an incredible learning adventure where every skill they had learned became a superpower.`,
+        mainStory: `Along the way, ${name} met challenges that required creative thinking and all the knowledge they had gained.`,
+        climax: `The biggest challenge yet appeared, testing everything ${name} had learned in the most exciting way possible.`,
+        resolution: `With determination and smart thinking, ${name} triumphantly completed their adventure and discovered they could accomplish anything!`
+      };
+    }
+  };
+
+  const generateStoryQuestions = (skills: AssessmentResults[]): StoryQuestion[] => {
+    const selectedCareer = experienceHandoff.selectedCareer;
+    
+    // Generate questions embedded in the story context for ALL skills (reinforcement learning)
+    return skills.map((skill, index) => {
+      let storyContext = `In the middle of the adventure, ${studentName} encountered a challenge...`;
+      let explanation = `Great thinking! This helps ${studentName} continue their amazing adventure.`;
+      
+      // Career-specific story context
+      if (selectedCareer?.careerId === 'chef') {
+        storyContext = `While working in the Career, Inc. kitchen, Chef ${studentName} needed to solve an important cooking challenge...`;
+        explanation = `Excellent! Chef ${studentName} used their skills perfectly, just like real chefs do every day.`;
+      } else if (selectedCareer?.careerId === 'park-ranger') {
+        storyContext = `During their day at the national park, Park Ranger ${studentName} encountered a situation that needed their expertise...`;
+        explanation = `Outstanding! Park Ranger ${studentName} applied their knowledge just like real park rangers do to help visitors and protect nature.`;
+      } else if (selectedCareer?.careerId === 'librarian') {
+        storyContext = `While helping visitors at the Career, Inc. library, Librarian ${studentName} faced a challenge that required their skills...`;
+        explanation = `Wonderful! Librarian ${studentName} used their knowledge just like real librarians do to help people find information and learn.`;
+      }
+      
+      return {
+        skillCode: skill.skillCode,
+        storyContext,
+        question: generateContextualQuestion(skill),
+        options: generateOptions(skill),
+        correctAnswer: generateCorrectAnswer(skill),
+        explanation,
+        storyTransition: index < skills.length - 1 
+          ? (selectedCareer ? "With that work challenge solved, the day continues..." : "With that problem solved, the adventure continues...") 
+          : (selectedCareer ? "The workday challenge has been completed successfully!" : "The final challenge has been conquered!")
+      };
+    });
+  };
+
+  const generateContextualQuestion = (skill: any): string => {
+    const selectedCareer = experienceHandoff.selectedCareer;
+    
+    // Career-specific questions
+    if (selectedCareer?.careerId === 'chef') {
+      const careerQuestions: { [key: string]: string } = {
+        'K.CC.A.1': 'Chef needs to count the right number of ingredients for the special recipe. How many tomatoes are needed?',
+        'K.NF.1': 'The cake recipe needs to be divided equally among the cooking stations. How should Chef divide it?',
+        'K.PS.1': 'Chef is cooking and notices the water is changing. What happens when water gets very hot?',
+        'K.RL.1': 'Chef found a special recipe with important steps. What should Chef do first?'
+      };
+      if (careerQuestions[skill.skillCode]) {
+        return careerQuestions[skill.skillCode];
+      }
+    } else if (selectedCareer?.careerId === 'park-ranger') {
+      const careerQuestions: { [key: string]: string } = {
+        'K.CC.A.1': 'Park Ranger needs to count the animals for the daily wildlife report. How many deer are in the meadow?',
+        'K.NF.1': 'The trail map needs to be divided into equal sections for the hikers. How should it be split?',
+        'K.PS.1': 'Park Ranger is studying the weather. What happens to water when it gets very cold in winter?',
+        'K.RL.1': 'Park Ranger found trail safety instructions. What should visitors do first?'
+      };
+      if (careerQuestions[skill.skillCode]) {
+        return careerQuestions[skill.skillCode];
+      }
+    } else if (selectedCareer?.careerId === 'librarian') {
+      const careerQuestions: { [key: string]: string } = {
+        'K.CC.A.1': 'Librarian needs to count the returned books before shelving them. How many books are in the stack?',
+        'K.NF.1': 'The reading time needs to be shared equally among the story groups. How should it be divided?',
+        'K.PS.1': 'Librarian is explaining science to a visitor. What happens when ice melts?',
+        'K.RL.1': 'Librarian found the library rules for new visitors. What should they do first?'
+      };
+      if (careerQuestions[skill.skillCode]) {
+        return careerQuestions[skill.skillCode];
+      }
+    }
+    
+    // Fallback to generic story questions
+    const questionMap: { [key: string]: string } = {
+      'K.CC.A.1': 'The magical creatures need to be counted for the forest ceremony. How many do you see?',
+      'K.NF.1': 'The fairy cake needs to be shared equally among friends. How should it be divided?',
+      'K.PS.1': 'The wizard is changing water into different forms. What happens when it gets very cold?',
+      'K.RL.1': 'The ancient scroll has important instructions. What does it tell our hero to do first?'
+    };
+    return questionMap[skill.skillCode] || `Help ${studentName} solve this challenge in the story!`;
+  };
+
+  const generateOptions = (skill: any): string[] => {
+    const selectedCareer = experienceHandoff.selectedCareer;
+    
+    // Career-specific options
+    if (selectedCareer?.careerId === 'chef') {
+      const careerOptions: { [key: string]: string[] } = {
+        'K.CC.A.1': ['3 tomatoes', '5 tomatoes', '7 tomatoes', '10 tomatoes'],
+        'K.NF.1': ['Cut it in half', 'Keep it whole', 'Cut into quarters', 'Give it all to one friend'],
+        'K.PS.1': ['It becomes steam', 'It disappears', 'It becomes cold', 'It stays the same'],
+        'K.RL.1': ['Read the ingredients first', 'Start cooking immediately', 'Clean the kitchen', 'Call for help']
+      };
+      if (careerOptions[skill.skillCode]) {
+        return careerOptions[skill.skillCode];
+      }
+    } else if (selectedCareer?.careerId === 'park-ranger') {
+      const careerOptions: { [key: string]: string[] } = {
+        'K.CC.A.1': ['4 deer', '6 deer', '8 deer', '10 deer'],
+        'K.NF.1': ['Split in half', 'Keep together', 'Split in thirds', 'Make 4 sections'],
+        'K.PS.1': ['It becomes ice', 'It disappears', 'It becomes hot', 'It stays the same'],
+        'K.RL.1': ['Stay on marked trails', 'Run ahead quickly', 'Leave the group', 'Ignore the signs']
+      };
+      if (careerOptions[skill.skillCode]) {
+        return careerOptions[skill.skillCode];
+      }
+    } else if (selectedCareer?.careerId === 'librarian') {
+      const careerOptions: { [key: string]: string[] } = {
+        'K.CC.A.1': ['8 books', '12 books', '15 books', '20 books'],
+        'K.NF.1': ['Half time for each group', 'All time for one group', 'Quarter time each', 'No time limit'],
+        'K.PS.1': ['It becomes water', 'It disappears', 'It becomes colder', 'It stays frozen'],
+        'K.RL.1': ['Get a library card first', 'Run to the books', 'Talk loudly', 'Eat snacks']
+      };
+      if (careerOptions[skill.skillCode]) {
+        return careerOptions[skill.skillCode];
+      }
+    }
+    
+    // Fallback to original options
+    if (skill.skillCode === 'K.CC.A.1') {
+      return ['5 creatures', '7 creatures', '3 creatures', '10 creatures'];
+    } else if (skill.skillCode === 'K.NF.1') {
+      return ['Cut it in half', 'Keep it whole', 'Cut into quarters', 'Give it all to one friend'];
+    } else if (skill.skillCode === 'K.PS.1') {
+      return ['It becomes ice', 'It disappears', 'It becomes hot', 'It stays the same'];
+    } else if (skill.skillCode === 'K.RL.1') {
+      return ['Read instructions first', 'Start immediately', 'Ask for help', 'Try something else'];
+    } else {
+      return ['First option', 'Second option', 'Third option', 'Fourth option'];
+    }
+  };
+
+  const generateCorrectAnswer = (skill: any): string => {
+    const selectedCareer = experienceHandoff.selectedCareer;
+    
+    // Career-specific correct answers
+    if (selectedCareer?.careerId === 'chef') {
+      const careerAnswers: { [key: string]: string } = {
+        'K.CC.A.1': '7 tomatoes',
+        'K.NF.1': 'Cut it in half',
+        'K.PS.1': 'It becomes steam',
+        'K.RL.1': 'Read the ingredients first'
+      };
+      if (careerAnswers[skill.skillCode]) {
+        return careerAnswers[skill.skillCode];
+      }
+    } else if (selectedCareer?.careerId === 'park-ranger') {
+      const careerAnswers: { [key: string]: string } = {
+        'K.CC.A.1': '8 deer',
+        'K.NF.1': 'Split in half',
+        'K.PS.1': 'It becomes ice',
+        'K.RL.1': 'Stay on marked trails'
+      };
+      if (careerAnswers[skill.skillCode]) {
+        return careerAnswers[skill.skillCode];
+      }
+    } else if (selectedCareer?.careerId === 'librarian') {
+      const careerAnswers: { [key: string]: string } = {
+        'K.CC.A.1': '12 books',
+        'K.NF.1': 'Half time for each group',
+        'K.PS.1': 'It becomes water',
+        'K.RL.1': 'Get a library card first'
+      };
+      if (careerAnswers[skill.skillCode]) {
+        return careerAnswers[skill.skillCode];
+      }
+    }
+    
+    // Fallback answers
+    const answerMap: { [key: string]: string } = {
+      'K.CC.A.1': '7 creatures',
+      'K.NF.1': 'Cut it in half',
+      'K.PS.1': 'It becomes ice',
+      'K.RL.1': 'Read instructions first'
+    };
+    return answerMap[skill.skillCode] || 'First option';
+  };
+
+  // Helper functions
+  const getSkillName = (skillCode: string): string => {
+    const skillMap: { [key: string]: string } = {
+      'K.CC.A.1': 'Count to 10',
+      'K.NF.1': 'Simple Fractions',
+      'K.PS.1': 'States of Matter',
+      'K.RL.1': 'Reading Instructions'
+    };
+    return skillMap[skillCode] || 'Learning Skill';
+  };
+
+  const getSubjectFromSkill = (skillCode: string): string => {
+    if (skillCode.includes('CC') || skillCode.includes('NF')) return 'Math';
+    if (skillCode.includes('PS')) return 'Science';
+    if (skillCode.includes('RL')) return 'ELA';
+    return 'General';
+  };
+
+  // Handle answer selection
+  const selectAnswer = (questionIndex: number, answer: string) => {
+    setStudentAnswers(prev => ({ ...prev, [questionIndex]: answer }));
+  };
+
+  // Handle question submission
+  const submitAnswer = () => {
+    const currentQuestion = storyQuestions[currentQuestionIndex];
+    const selectedAnswer = studentAnswers[currentQuestionIndex];
+    const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
+
+    // Create assessment result for this attempt
+    const result: AssessmentResults = {
+      skillCode: currentQuestion.skillCode,
+      completed: true,
+      correct: isCorrect,
+      score: isCorrect ? 100 : 0,
+      attempts: 1,
+      timeSpent: 5000, // Simplified for prototype
+      selectedAnswer,
+      correctAnswer: currentQuestion.correctAnswer,
+      timestamp: new Date(),
+      context: 'discover'
+    };
+
+    setDiscoverResults(prev => [...prev, result]);
+
+    // Calculate XP and badges
+    if (isCorrect) {
+      setTotalXP(prev => prev + 15); // Base XP for story context
+      
+      // Check for new badges
+      const allResults = [...experienceHandoff.completedSkills, ...discoverResults, result];
+      const newBadges = calculateBadges(allResults);
+      setBadges(newBadges);
+    }
+
+    // Show feedback first
+    setLastAnswerCorrect(isCorrect);
+    setShowFeedback(true);
+  };
+
+  // Handle continuing after feedback
+  const continueToNext = () => {
+    setShowFeedback(false);
+    setLastAnswerCorrect(null);
+    
+    // Move to next question or complete
+    if (currentQuestionIndex < storyQuestions.length - 1) {
+      setCurrentQuestionIndex(prev => prev + 1);
+    } else {
+      setPhase('rewards');
+    }
+  };
+
+  const calculateBadges = (results: AssessmentResults[]): string[] => {
+    const badges: string[] = [];
+    
+    // Persistence Badge - attempted everything
+    if (results.length >= experienceHandoff.completedSkills.length) {
+      badges.push('Never Give Up');
+    }
+    
+    // Mastery Badge - got some right in each context
+    const learnCorrect = results.some(r => r.context === 'learn' && r.correct);
+    const experienceCorrect = results.some(r => r.context === 'experience' && r.correct);
+    const discoverCorrect = results.some(r => r.context === 'discover' && r.correct);
+    
+    if (learnCorrect && experienceCorrect && discoverCorrect) {
+      badges.push('Triple Threat');
+    }
+    
+    // Subject badges
+    const mathCorrect = results.filter(r => r.skillCode.includes('CC') || r.skillCode.includes('NF')).some(r => r.correct);
+    const scienceCorrect = results.filter(r => r.skillCode.includes('PS')).some(r => r.correct);
+    const elaCorrect = results.filter(r => r.skillCode.includes('RL')).some(r => r.correct);
+    
+    if (mathCorrect) badges.push('Math Explorer');
+    if (scienceCorrect) badges.push('Science Discoverer');
+    if (elaCorrect) badges.push('Reading Hero');
+    
+    return badges;
+  };
+
+  const completeJourney = () => {
+    // Compile complete mastery journey
+    const allResults = experienceHandoff.completedSkills.concat(discoverResults);
+    const journeys: SkillMasteryJourney[] = [];
+
+    // Group results by skill
+    const skillGroups = allResults.reduce((groups, result) => {
+      if (!groups[result.skillCode]) {
+        groups[result.skillCode] = [];
+      }
+      groups[result.skillCode].push(result);
+      return groups;
+    }, {} as { [skillCode: string]: AssessmentResults[] });
+
+    // Create journey for each skill
+    Object.entries(skillGroups).forEach(([skillCode, results]) => {
+      const journey: SkillMasteryJourney = {
+        skillCode,
+        studentId: experienceHandoff.studentId,
+        assignmentId: experienceHandoff.assignmentId,
+        attempts: {
+          learn: results.find(r => r.context === 'learn'),
+          experience: results.find(r => r.context === 'experience'),
+          discover: results.find(r => r.context === 'discover')
+        },
+        masteryAchieved: results.some(r => r.correct),
+        firstCorrectContext: results.find(r => r.correct)?.context as any,
+        preferredContext: determinePreferredContext(results),
+        totalAttempts: results.length,
+        finalScore: Math.max(...results.map(r => r.score))
+      };
+      journeys.push(journey);
+    });
+
+    onComplete(journeys);
+  };
+
+  const determinePreferredContext = (results: AssessmentResults[]): 'abstract' | 'applied' | 'narrative' => {
+    const correctResult = results.find(r => r.correct);
+    if (!correctResult) return 'abstract';
+    
+    if (correctResult.context === 'learn') return 'abstract';
+    if (correctResult.context === 'experience') return 'applied';
+    return 'narrative';
+  };
+
+  // Intro Phase
+  if (phase === 'intro') {
+    return (
+      <div className="min-h-screen pt-16 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-gray-900 dark:via-emerald-900/90 dark:to-teal-900/90 flex items-center justify-center">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full mx-4 text-center p-8">
+          <button
+            onClick={onExit}
+            className="absolute top-4 left-4 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+          
+          <div className="mb-6">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full mb-4">
+              <Book className="w-10 h-10 text-white" />
+            </div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+              Story Time, {studentName}!
+            </h1>
+            <p className="text-xl text-gray-600 dark:text-gray-400">
+              Your learning adventure becomes an amazing story
+            </p>
+          </div>
+
+          {narrative && (
+            <div className="bg-gradient-to-r from-emerald-100 to-teal-100 dark:from-emerald-900/30 dark:to-teal-900/30 rounded-xl p-6 mb-6">
+              <h3 className="font-bold text-gray-900 dark:text-white mb-3">
+                {narrative.title}
+              </h3>
+              <p className="text-gray-700 dark:text-gray-300">
+                {narrative.narrative.introduction}
+              </p>
+            </div>
+          )}
+
+          <div className="space-y-3 mb-6">
+            <div className="flex items-center justify-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+              <Sparkles className="w-4 h-4" />
+              <span>Interactive story with questions</span>
+            </div>
+            <div className="flex items-center justify-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+              <Star className="w-4 h-4" />
+              <span>Earn XP and unlock badges</span>
+            </div>
+            <div className="flex items-center justify-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+              <Trophy className="w-4 h-4" />
+              <span>Complete your learning journey</span>
+            </div>
+          </div>
+
+          <button
+            onClick={() => setPhase('story')}
+            className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white py-4 px-6 rounded-xl font-semibold text-lg hover:shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center justify-center space-x-2"
+          >
+            <span>Begin the Story</span>
+            <ArrowRight className="w-5 h-5" />
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Story Phase
+  if (phase === 'story' && narrative) {
+    return (
+      <div className="min-h-screen pt-16 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-gray-900 dark:via-emerald-900/90 dark:to-teal-900/90 flex items-center justify-center">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+          {/* Story Header */}
+          <div className="bg-gradient-to-r from-emerald-600 to-teal-600 p-6 text-white text-center">
+            <h1 className="text-2xl font-bold mb-2">{narrative.title}</h1>
+            <p className="opacity-90">Chapter 1: The Adventure Begins</p>
+          </div>
+
+          {/* Story Content */}
+          <div className="p-8 relative">
+            <div className="prose dark:prose-invert max-w-none relative z-10">
+              <p className="text-lg leading-relaxed mb-6 text-gray-900 dark:text-gray-100">
+                {narrative.narrative.introduction || "Once upon a time, Alex embarked on an exciting adventure..."}
+              </p>
+              <p className="text-lg leading-relaxed mb-6 text-gray-900 dark:text-gray-100">
+                {narrative.narrative.mainStory || "Along the way, Alex discovered amazing things and used the skills learned in class..."}
+              </p>
+              <p className="text-lg leading-relaxed mb-8 text-gray-900 dark:text-gray-100">
+                {narrative.narrative.climax || "With determination and knowledge, Alex overcame every challenge!"}
+              </p>
+            </div>
+
+            <div className="text-center">
+              <button
+                onClick={() => setPhase(storyQuestions.length > 0 ? 'questions' : 'rewards')}
+                className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white py-3 px-8 rounded-xl font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center justify-center space-x-2 mx-auto"
+              >
+                <span>Help {studentName} Continue</span>
+                <ArrowRight className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Questions Phase
+  if (phase === 'questions' && storyQuestions.length > 0) {
+    const currentQuestion = storyQuestions[currentQuestionIndex];
+    const selectedAnswer = studentAnswers[currentQuestionIndex];
+
+    return (
+      <div className="min-h-screen pt-16 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-gray-900 dark:via-emerald-900/90 dark:to-teal-900/90 flex items-center justify-center">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full mx-4">
+          {/* Progress Header */}
+          <div className="bg-gradient-to-r from-emerald-600 to-teal-600 p-4 text-white">
+            <div className="flex justify-between items-center">
+              <span className="font-semibold">Story Challenge</span>
+              <span className="text-sm opacity-90">
+                {currentQuestionIndex + 1} of {storyQuestions.length}
+              </span>
+            </div>
+            <div className="w-full bg-white bg-opacity-20 rounded-full h-2 mt-2">
+              <div 
+                className="bg-white h-2 rounded-full transition-all duration-500"
+                style={{ width: `${((currentQuestionIndex + 1) / storyQuestions.length) * 100}%` }}
+              ></div>
+            </div>
+          </div>
+
+          {/* Question Content */}
+          <div className="p-8">
+            <div className="mb-6">
+              <p className="text-gray-600 dark:text-gray-400 mb-4 italic">
+                {currentQuestion?.storyContext || 'Story context loading...'}
+              </p>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
+                {currentQuestion?.question || 'Question loading...'}
+              </h3>
+            </div>
+
+            {/* Answer Options */}
+            <div className="space-y-3 mb-8">
+              {currentQuestion.options.map((option, index) => (
+                <button
+                  key={index}
+                  onClick={() => selectAnswer(currentQuestionIndex, option)}
+                  className={`w-full p-4 rounded-xl border-2 transition-all duration-200 text-left ${
+                    selectedAnswer === option
+                      ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/30 dark:border-emerald-400'
+                      : 'border-gray-200 dark:border-gray-600 hover:border-emerald-300 dark:hover:border-emerald-500'
+                  }`}
+                >
+                  <span className={`font-medium ${
+                    selectedAnswer === option 
+                      ? 'text-emerald-700 dark:text-emerald-300' 
+                      : 'text-gray-700 dark:text-gray-300'
+                  }`}>
+                    {option}
+                  </span>
+                </button>
+              ))}
+            </div>
+
+            {/* Feedback Section */}
+            {showFeedback && (
+              <div 
+                className={`mb-6 p-4 rounded-xl border-2 ${
+                  lastAnswerCorrect 
+                    ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700'
+                    : 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-700'
+                }`}
+              >
+                <div className="flex items-start space-x-3">
+                  <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
+                    lastAnswerCorrect ? 'bg-green-100 dark:bg-green-800' : 'bg-yellow-100 dark:bg-yellow-800'
+                  }`}>
+                    {lastAnswerCorrect ? (
+                      <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
+                    ) : (
+                      <Target className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <h4 className={`font-semibold ${
+                      lastAnswerCorrect 
+                        ? 'text-green-800 dark:text-green-300'
+                        : 'text-yellow-800 dark:text-yellow-300'
+                    }`}>
+                      {lastAnswerCorrect ? 'Correct!' : 'Keep Learning!'}
+                    </h4>
+                    <p className={`text-sm mt-1 ${
+                      lastAnswerCorrect 
+                        ? 'text-green-700 dark:text-green-400'
+                        : 'text-yellow-700 dark:text-yellow-400'
+                    }`}>
+                      {currentQuestion.explanation || 
+                        (lastAnswerCorrect 
+                          ? `Great job! "${currentQuestion.correctAnswer}" was the right answer.`
+                          : `The correct answer was "${currentQuestion.correctAnswer}". ${currentQuestion.explanation || "Keep practicing!"}`)
+                      }
+                    </p>
+                    {lastAnswerCorrect && (
+                      <p className="text-green-600 dark:text-green-400 text-sm mt-2 font-medium">
+                        +15 XP earned! 🌟
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Submit/Continue Button */}
+            {!showFeedback ? (
+              <button
+                onClick={submitAnswer}
+                disabled={!selectedAnswer}
+                className={`w-full py-3 px-6 rounded-xl font-semibold transition-all duration-200 ${
+                  selectedAnswer
+                    ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white hover:shadow-lg transform hover:scale-105'
+                    : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                }`}
+              >
+                Submit Answer
+              </button>
+            ) : (
+              <button
+                onClick={continueToNext}
+                className="w-full py-3 px-6 rounded-xl font-semibold bg-gradient-to-r from-emerald-500 to-teal-600 text-white hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+              >
+                {currentQuestionIndex < storyQuestions.length - 1 ? 'Next Question' : 'See Results'}
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Rewards Phase
+  if (phase === 'rewards') {
+    return (
+      <div className="min-h-screen pt-16 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-gray-900 dark:via-emerald-900/90 dark:to-teal-900/90 flex items-center justify-center">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full mx-4 text-center p-8">
+          <div className="mb-6">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full mb-4 animate-bounce">
+              <Trophy className="w-10 h-10 text-white" />
+            </div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+              Amazing Job, {studentName}!
+            </h1>
+            <p className="text-xl text-gray-600 dark:text-gray-400">
+              You completed your learning adventure!
+            </p>
+          </div>
+
+          {/* XP Display */}
+          <div className="bg-gradient-to-r from-yellow-100 to-orange-100 dark:from-yellow-900 dark:to-orange-900 rounded-xl p-6 mb-6">
+            <div className="flex items-center justify-center space-x-3 mb-3">
+              <Star className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
+              <span className="text-2xl font-bold text-gray-900 dark:text-white">
+                +{totalXP} XP Earned!
+              </span>
+            </div>
+            <p className="text-gray-600 dark:text-gray-400">
+              You've grown stronger through your journey!
+            </p>
+          </div>
+
+          {/* Badges */}
+          {badges.length > 0 && (
+            <div className="mb-6">
+              <h3 className="font-bold text-gray-900 dark:text-white mb-3">
+                New Badges Unlocked!
+              </h3>
+              <div className="flex flex-wrap justify-center gap-3">
+                {badges.map((badge, index) => (
+                  <div
+                    key={index}
+                    className="bg-gradient-to-br from-emerald-500 to-teal-600 text-white px-4 py-2 rounded-full text-sm font-semibold flex items-center space-x-2"
+                  >
+                    <Award className="w-4 h-4" />
+                    <span>{badge}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Story Resolution */}
+          {narrative && (
+            <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-6 mb-6">
+              <p className="text-gray-700 dark:text-gray-300 italic">
+                {narrative.narrative.resolution}
+              </p>
+            </div>
+          )}
+
+          <button
+            onClick={completeJourney}
+            className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white py-4 px-6 rounded-xl font-semibold text-lg hover:shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center justify-center space-x-2"
+          >
+            <span>Complete Adventure</span>
+            <Sparkles className="w-5 h-5" />
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return null;
+};
+
+export default DiscoverContainer;

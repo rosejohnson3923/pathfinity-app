@@ -1,0 +1,749 @@
+/* BentoExperienceCard.module.css */
+/* Experience container bento grid styles */
+
+.bentoContainer {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, minmax(140px, 1fr));
+  gap: 16px;
+  padding: 20px;
+  width: 100%;
+  height: 100%;
+  min-height: 600px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+/* Grade-specific configurations */
+.bentoContainer.grade-elementary {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, minmax(160px, 1fr));
+  gap: 20px;
+  padding: 24px;
+}
+
+.bentoContainer.grade-middle {
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, minmax(140px, 1fr));
+  gap: 18px;
+  padding: 22px;
+}
+
+.bentoContainer.grade-high {
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, minmax(120px, 1fr));
+  gap: 14px;
+  padding: 18px;
+}
+
+/* Base tile styles */
+.bentoTile {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.bentoTile:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Tile sizes */
+.smallTile {
+  grid-column: span 1;
+  grid-row: span 1;
+}
+
+.mediumTile {
+  grid-column: span 2;
+  grid-row: span 1;
+}
+
+.largeTile {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.wideTile {
+  grid-column: span 3;
+  grid-row: span 1;
+}
+
+.tallTile {
+  grid-column: span 1;
+  grid-row: span 2;
+}
+
+.heroTile {
+  grid-column: span 3;
+  grid-row: span 2;
+}
+
+/* Elementary adjustments */
+.grade-elementary .heroTile {
+  grid-column: span 3;
+  grid-row: span 2;
+}
+
+/* Welcome tile - Screen 1 */
+.welcomeTile {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+  color: white;
+}
+
+.careerHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.careerIcon {
+  font-size: 48px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.careerTitle {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.welcomeContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.welcomeMessage {
+  font-size: 18px;
+  line-height: 1.6;
+  opacity: 0.95;
+}
+
+/* Guide tile */
+.guideTile {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.guideContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+}
+
+.guideAvatar {
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.guideIcon {
+  font-size: 48px;
+}
+
+.guideMessage {
+  font-size: 16px;
+  line-height: 1.5;
+  opacity: 0.95;
+}
+
+/* Skill use tile */
+.skillUseTile {
+  background: #f0f9ff;
+  border: 2px solid #0284c7;
+  color: #0c4a6e;
+}
+
+.skillUseContent {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.skillDescription {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #075985;
+}
+
+.skillExamples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.exampleBadge {
+  background: #0284c7;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Professional chat tile */
+.chatTile {
+  background: white;
+  border: 2px solid #e0e0e0;
+}
+
+.chatHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 12px;
+}
+
+.chatIcon {
+  font-size: 20px;
+}
+
+.chatTitle {
+  flex: 1;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.chatToggle {
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chatContent {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 48px);
+}
+
+.chatMessages {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 12px;
+  padding-right: 8px;
+}
+
+.chatMessage {
+  margin-bottom: 8px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  max-width: 80%;
+  word-wrap: break-word;
+}
+
+.chatMessage.user {
+  background: #667eea;
+  color: white;
+  margin-left: auto;
+  border-bottom-right-radius: 4px;
+}
+
+.chatMessage.professional {
+  background: #f0f0f0;
+  color: #333;
+  margin-right: auto;
+  border-bottom-left-radius: 4px;
+}
+
+.typingIndicator {
+  animation: typing 1s infinite;
+}
+
+.chatInput {
+  display: flex;
+  gap: 8px;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 12px;
+}
+
+.chatInputField {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  font-size: 14px;
+  outline: none;
+}
+
+.chatInputField:focus {
+  border-color: #667eea;
+}
+
+.chatSendButton {
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.chatClosed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100% - 48px);
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+}
+
+/* Continue button tile */
+.actionTile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.continueButton {
+  width: 80%;
+  padding: 16px 24px;
+  background: #10b981;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.continueButton:hover {
+  background: #059669;
+  transform: scale(1.02);
+}
+
+/* Screen 2 - Challenge styles */
+.situationTile {
+  background: #fef3c7;
+  border: 2px solid #fbbf24;
+  color: #78350f;
+}
+
+.situationText {
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.challengeTile {
+  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+  color: white;
+}
+
+.challengeHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.challengeNumber {
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.challengeType {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+.xpReward {
+  background: gold;
+  color: #333;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.challengeContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.challengeQuestion {
+  font-size: 20px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Answer tiles for challenges */
+.answerTile {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: white;
+  border: 2px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 16px;
+}
+
+.answerTile:hover:not(.selected):not(.correct):not(.incorrect) {
+  border-color: #8b5cf6;
+  background: #faf5ff;
+}
+
+.answerTile.selected {
+  border-color: #8b5cf6;
+  background: #f3e8ff;
+}
+
+.answerTile.correct {
+  border-color: #10b981;
+  background: #d1fae5;
+  animation: correctPulse 0.5s ease;
+}
+
+.answerTile.incorrect {
+  border-color: #ef4444;
+  background: #fee2e2;
+  animation: incorrectShake 0.3s ease;
+}
+
+.answerLabel {
+  font-weight: bold;
+  font-size: 16px;
+  color: #8b5cf6;
+  margin-right: 8px;
+}
+
+.answerText {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* Solution tile */
+.solutionTile {
+  background: #d1fae5;
+  border: 2px solid #10b981;
+  color: #064e3b;
+}
+
+.solutionText {
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Skill helps tile */
+.skillHelpsTile {
+  background: #e0e7ff;
+  border: 2px solid #6366f1;
+  color: #312e81;
+}
+
+.skillHelpsText {
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Response modal */
+.responseModal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.responseContent {
+  background: white;
+  border-radius: 20px;
+  padding: 32px;
+  text-align: center;
+  max-width: 450px;
+  animation: slideUp 0.3s ease;
+}
+
+.responseContent.correct {
+  border: 3px solid #10b981;
+}
+
+.responseContent.incorrect {
+  border: 3px solid #fbbf24;
+}
+
+.responseIcon {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.responseTitle {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0 0 12px 0;
+  color: #333;
+}
+
+.responseMessage {
+  font-size: 16px;
+  color: #666;
+  margin: 0 0 16px 0;
+}
+
+.xpMessage {
+  font-size: 18px;
+  font-weight: bold;
+  color: #fbbf24;
+  margin: 0 0 12px 0;
+}
+
+.autoAdvance {
+  font-size: 14px;
+  color: #999;
+  font-style: italic;
+}
+
+/* XP Animation */
+.xpAnimation {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 32px;
+  font-weight: bold;
+  color: gold;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+  animation: xpFloat 2s ease forwards;
+  z-index: 1001;
+  pointer-events: none;
+}
+
+/* Theme variations */
+.lightTheme {
+  background: #f7f7f7;
+}
+
+.darkTheme {
+  background: #1a1a1a;
+}
+
+.darkTheme .bentoTile:not(.welcomeTile):not(.guideTile):not(.challengeTile) {
+  background: rgba(30, 30, 30, 0.95);
+  border-color: #333;
+  color: #e0e0e0;
+}
+
+.darkTheme .tileTitle {
+  color: #e0e0e0;
+}
+
+.darkTheme .answerTile {
+  background: #2a2a2a;
+  border-color: #444;
+  color: #e0e0e0;
+}
+
+.darkTheme .answerTile:hover:not(.selected):not(.correct):not(.incorrect) {
+  background: #333;
+}
+
+.darkTheme .chatTile {
+  background: #2a2a2a;
+  border-color: #444;
+  color: #e0e0e0;
+}
+
+.darkTheme .chatMessage.professional {
+  background: #444;
+  color: #e0e0e0;
+}
+
+.darkTheme .chatInputField {
+  background: #333;
+  border-color: #555;
+  color: #e0e0e0;
+}
+
+.darkTheme .situationTile {
+  background: #3a3a2a;
+  border-color: #666633;
+  color: #ffd700;
+}
+
+.darkTheme .solutionTile {
+  background: #1a3a2a;
+  border-color: #10b981;
+  color: #86efac;
+}
+
+.darkTheme .skillHelpsTile {
+  background: #2a2a3a;
+  border-color: #6366f1;
+  color: #a5b4fc;
+}
+
+.darkTheme .skillUseTile {
+  background: #1a2a3a;
+  border-color: #0284c7;
+  color: #7dd3fc;
+}
+
+.darkTheme .responseContent {
+  background: #2a2a2a;
+  color: #e0e0e0;
+}
+
+.darkTheme .responseTitle {
+  color: #e0e0e0;
+}
+
+.darkTheme .responseMessage {
+  color: #aaa;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes correctPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes incorrectShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+@keyframes typing {
+  0%, 60%, 100% { opacity: 0.3; }
+  30% { opacity: 1; }
+}
+
+@keyframes xpFloat {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    transform: translate(-50%, -70%) scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -100%) scale(1);
+    opacity: 0;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .bentoContainer {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .heroTile {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  .wideTile {
+    grid-column: span 2;
+  }
+
+  .largeTile {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  .mediumTile {
+    grid-column: span 2;
+  }
+
+  .careerTitle {
+    font-size: 22px;
+  }
+
+  .challengeQuestion {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .bentoContainer {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .heroTile,
+  .wideTile,
+  .largeTile,
+  .mediumTile,
+  .tallTile,
+  .smallTile {
+    grid-column: span 1;
+    grid-row: span 1;
+  }
+
+  .careerTitle {
+    font-size: 20px;
+  }
+
+  .challengeQuestion {
+    font-size: 16px;
+  }
+}

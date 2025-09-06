@@ -1,0 +1,49 @@
+[
+  {
+    "id": "city_view_high",
+    "name": "City View High School",
+    "district_id": "plainview_isd",
+    "district_name": "Plainview ISD",
+    "school_type": "high_school",
+    "grade_levels": [
+      "9",
+      "10",
+      "11",
+      "12"
+    ],
+    "principal_name": "Dr. Sarah Martinez",
+    "created_at": "2025-07-12T19:11:49.022Z"
+  },
+  {
+    "id": "ocean_view_middle",
+    "name": "Ocean View Middle School",
+    "district_id": "plainview_isd",
+    "district_name": "Plainview ISD",
+    "school_type": "middle_school",
+    "grade_levels": [
+      "6",
+      "7",
+      "8"
+    ],
+    "principal_name": "Ms. Maria Rodriguez",
+    "created_at": "2025-07-12T19:11:49.023Z"
+  },
+  {
+    "id": "sand_view_elementary",
+    "name": "Sand View Elementary School",
+    "district_id": "plainview_isd",
+    "district_name": "Plainview ISD",
+    "school_type": "elementary_school",
+    "grade_levels": [
+      "Pre-K",
+      "K",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "principal_name": "Mr. David Wilson",
+    "created_at": "2025-07-12T19:11:49.023Z"
+  }
+]

@@ -1,0 +1,32 @@
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="128" cy="128" r="110" fill="#EC489920" stroke="#EC4899" stroke-width="3"/>
+  
+  <!-- Inner glow -->
+  <circle cx="128" cy="128" r="95" fill="#EC489920" opacity="0.5"/>
+  
+  <!-- Character emoji -->
+  <text x="128" y="140" font-family="Arial, sans-serif" font-size="80" text-anchor="middle" fill="#EC4899">
+    🌸
+  </text>
+  
+  <!-- Character name -->
+  <text x="128" y="200" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#EC4899">
+    Harmony
+  </text>
+  
+  <!-- Decorative elements -->
+  
+  
+  
+  
+  
+    <!-- Flower petals -->
+    <circle cx="88" cy="88" r="8" fill="#EC4899" opacity="0.3"/>
+    <circle cx="168" cy="88" r="8" fill="#EC4899" opacity="0.3"/>
+    <circle cx="88" cy="168" r="8" fill="#EC4899" opacity="0.3"/>
+    <circle cx="168" cy="168" r="8" fill="#EC4899" opacity="0.3"/>
+  
+  
+  
+</svg>

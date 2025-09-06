@@ -1,0 +1,464 @@
+/**
+ * NAVIGATION BUTTONS MODULE
+ * =========================
+ * Unified button styles for consistent CTAs across all containers
+ * Provides primary, secondary, tertiary button variants
+ * 
+ * Created: 2025-08-22
+ */
+
+/* ============================================
+   BASE BUTTON STYLES
+   ============================================ */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--button-padding-y) var(--button-padding-x);
+  border-radius: var(--button-radius);
+  font-weight: var(--font-semibold);
+  font-size: var(--text-base);
+  cursor: pointer;
+  transition: all var(--duration-base) var(--easing-out);
+  position: relative;
+  overflow: hidden;
+  border: none;
+  outline: none;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* ============================================
+   PRIMARY BUTTON (Purple Gradient)
+   ============================================ */
+.primary {
+  background: var(--gradient-primary);
+  color: white;
+  box-shadow: var(--shadow-md);
+  padding: var(--space-4) var(--space-8);
+  border-radius: var(--radius-full);
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+}
+
+.primary::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width var(--duration-slow), height var(--duration-slow);
+}
+
+.primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-primary);
+}
+
+.primary:hover:not(:disabled)::before {
+  width: 300px;
+  height: 300px;
+}
+
+.primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* Primary Large Variant */
+.primary.large {
+  padding: var(--space-5) var(--space-10);
+  font-size: var(--text-xl);
+}
+
+/* Primary Small Variant */
+.primary.small {
+  padding: var(--space-3) var(--space-6);
+  font-size: var(--text-base);
+}
+
+/* ============================================
+   SECONDARY BUTTON (Outlined)
+   ============================================ */
+.secondary {
+  background: transparent;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+  padding: var(--space-3) var(--space-6);
+  font-weight: var(--font-semibold);
+}
+
+.secondary:hover:not(:disabled) {
+  background: var(--color-primary);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.secondary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* Dark theme secondary */
+[data-theme="dark"] .secondary {
+  color: var(--color-primary-light);
+  border-color: var(--color-primary-light);
+}
+
+[data-theme="dark"] .secondary:hover:not(:disabled) {
+  background: var(--gradient-primary);
+  border-color: transparent;
+}
+
+/* ============================================
+   TERTIARY BUTTON (Text Only)
+   ============================================ */
+.tertiary {
+  background: transparent;
+  color: var(--text-secondary);
+  border: none;
+  padding: var(--space-2) var(--space-4);
+  font-weight: var(--font-medium);
+}
+
+.tertiary:hover:not(:disabled) {
+  color: var(--color-primary);
+  background: var(--bg-hover);
+}
+
+.tertiary:active:not(:disabled) {
+  background: var(--bg-secondary);
+}
+
+/* ============================================
+   NAVIGATION BUTTONS
+   ============================================ */
+.navButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  color: var(--text-primary);
+  font-weight: var(--font-medium);
+  transition: all var(--duration-fast) var(--easing-out);
+}
+
+.navButton:hover:not(:disabled) {
+  background: var(--bg-hover);
+  border-color: var(--color-primary);
+  transform: translateX(-2px);
+}
+
+.navButton.back {
+  padding-left: var(--space-3);
+}
+
+.navButton.back:hover:not(:disabled) {
+  transform: translateX(-4px);
+}
+
+.navButton.next {
+  padding-right: var(--space-3);
+}
+
+.navButton.next:hover:not(:disabled) {
+  transform: translateX(4px);
+}
+
+/* Navigation Icon */
+.navIcon {
+  font-size: var(--text-lg);
+  display: flex;
+  align-items: center;
+}
+
+/* ============================================
+   ICON BUTTONS
+   ============================================ */
+.iconButton {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: var(--text-xl);
+  transition: all var(--duration-fast) var(--easing-out);
+}
+
+.iconButton:hover:not(:disabled) {
+  background: var(--gradient-primary);
+  border-color: var(--color-primary);
+  color: white;
+  transform: scale(1.1);
+  box-shadow: var(--shadow-sm);
+}
+
+.iconButton:active:not(:disabled) {
+  transform: scale(1.05);
+}
+
+/* ============================================
+   BUTTON GROUPS
+   ============================================ */
+.buttonGroup {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.buttonGroup.center {
+  justify-content: center;
+}
+
+.buttonGroup.right {
+  justify-content: flex-end;
+}
+
+.buttonGroup.vertical {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* ============================================
+   SPECIAL BUTTON STATES
+   ============================================ */
+
+/* Success Button */
+.success {
+  background: var(--gradient-success);
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+
+.success:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-success);
+}
+
+/* Error Button */
+.error {
+  background: var(--gradient-error);
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+
+.error:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-error);
+}
+
+/* Warning Button */
+.warning {
+  background: var(--gradient-warning);
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+
+.warning:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(245, 158, 11, 0.3);
+}
+
+/* Info Button */
+.info {
+  background: var(--gradient-info);
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+
+.info:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+}
+
+/* ============================================
+   LOADING STATE
+   ============================================ */
+.loading {
+  position: relative;
+  color: transparent;
+  pointer-events: none;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 50%;
+  left: 50%;
+  margin-left: -10px;
+  margin-top: -10px;
+  border: 2px solid white;
+  border-radius: var(--radius-full);
+  border-top-color: transparent;
+  animation: buttonSpin 0.8s linear infinite;
+}
+
+@keyframes buttonSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================
+   PULSE ANIMATION
+   ============================================ */
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 20px rgba(139, 92, 246, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0);
+  }
+}
+
+/* ============================================
+   CONTAINER-SPECIFIC VARIANTS
+   ============================================ */
+
+/* Learn Container Buttons */
+.learnVariant.primary {
+  background: var(--gradient-primary);
+}
+
+/* Experience Container Buttons */
+.experienceVariant.primary {
+  background: linear-gradient(135deg, #14b8a6 0%, #0891b2 100%);
+}
+
+.experienceVariant.primary:hover:not(:disabled) {
+  box-shadow: 0 10px 30px rgba(20, 184, 166, 0.4);
+}
+
+/* Discover Container Buttons */
+.discoverVariant.primary {
+  background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
+}
+
+.discoverVariant.primary:hover:not(:disabled) {
+  box-shadow: 0 10px 30px rgba(236, 72, 153, 0.4);
+}
+
+/* ============================================
+   TOUCH OPTIMIZED STYLES
+   ============================================ */
+.touchOptimized {
+  padding: 1.5rem 3rem !important;
+  font-size: 1.2rem !important;
+  min-height: 60px;
+  touch-action: manipulation;
+}
+
+.touchOptimized.secondary {
+  padding: 1rem 2rem !important;
+  font-size: 1.1rem !important;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 768px) {
+  .button {
+    font-size: var(--text-sm);
+  }
+  
+  .primary {
+    padding: var(--space-3) var(--space-6);
+    font-size: var(--text-base);
+  }
+  
+  .primary.large {
+    padding: var(--space-4) var(--space-8);
+    font-size: var(--text-lg);
+  }
+  
+  .buttonGroup {
+    gap: var(--space-2);
+  }
+  
+  .navButton {
+    padding: var(--space-2) var(--space-3);
+  }
+}
+
+@media (max-width: 480px) {
+  .primary {
+    padding: var(--space-3) var(--space-5);
+    font-size: var(--text-sm);
+  }
+  
+  .secondary {
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--text-sm);
+  }
+  
+  .buttonGroup {
+    width: 100%;
+  }
+  
+  .buttonGroup:not(.vertical) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .buttonGroup .button {
+    width: 100%;
+  }
+}
+
+/* ============================================
+   TOUCH OPTIMIZED VARIANT
+   ============================================ */
+.touchOptimized {
+  padding: 1.5rem 3rem !important;
+  font-size: 1.2rem !important;
+  min-height: 60px;
+}
+
+@media (max-width: 768px) {
+  .touchOptimized {
+    padding: 1.2rem 2rem !important;
+    font-size: 1.1rem !important;
+    min-height: 52px;
+  }
+}
+
+@media (max-width: 480px) {
+  .touchOptimized {
+    padding: 1rem 1.5rem !important;
+    font-size: 1rem !important;
+    min-height: 48px;
+  }
+}

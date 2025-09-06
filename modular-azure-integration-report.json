@@ -1,0 +1,150 @@
+{
+  "timestamp": "2025-09-01T01:48:41.930Z",
+  "testType": "modular_azure_integration",
+  "previousBaseline": "0%",
+  "currentAccuracy": "60.0%",
+  "summary": {
+    "totalTests": 5,
+    "passed": 3,
+    "failed": 2,
+    "improvement": "+60.0%"
+  },
+  "criticalFixes": {
+    "whichQuestions": "FIXED",
+    "skillRelevance": "IMPROVED"
+  },
+  "results": [
+    {
+      "scenario": "Which number comparison MUST be multiple_choice",
+      "passed": true,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "An engineer is designing a cooling system and needs to compare temperatures. Which number is smaller: -15 or -22?",
+        "options": [
+          "-15",
+          "-22",
+          "They are equal",
+          "Cannot be determined"
+        ],
+        "correct_answer": 1,
+        "explanation": "Negative numbers become smaller as their absolute value increases. Since -22 is farther from zero than -15, -22 is smaller."
+      }
+    },
+    {
+      "scenario": "Kindergarten counting with visuals",
+      "passed": false,
+      "issues": [
+        "Missing required terms: count",
+        "Question not relevant to skill"
+      ],
+      "question": {
+        "type": "counting",
+        "question": "👩‍⚕️ A doctor has these pills: 💊💊💊💊💊💊💊. How many pills do you see?",
+        "options": [
+          "5",
+          "7",
+          "9",
+          "10"
+        ],
+        "correct_answer": 1,
+        "explanation": "Count the pills: 💊💊💊💊💊💊💊. There are 7 pills."
+      }
+    },
+    {
+      "scenario": "Letter recognition for 1st grade",
+      "passed": true,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "Which letter is the first letter in the word 'Apple'?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "correct_answer": 0,
+        "explanation": "The word 'Apple' starts with the letter 'A'."
+      }
+    },
+    {
+      "scenario": "Fraction comparison MUST be multiple_choice",
+      "passed": false,
+      "issues": [
+        "Missing required terms: fraction",
+        "Question not relevant to skill"
+      ],
+      "question": {
+        "type": "multiple_choice",
+        "question": "Chef Maria is baking two types of pies. She uses 3/4 of a cup of sugar for the apple pie and 2/3 of a cup of sugar for the cherry pie. Which pie uses more sugar?",
+        "options": [
+          "The apple pie uses more sugar.",
+          "The cherry pie uses more sugar.",
+          "Both pies use the same amount of sugar.",
+          "It cannot be determined."
+        ],
+        "correct_answer": 0,
+        "explanation": "To compare 3/4 and 2/3, find a common denominator. The least common denominator of 4 and 3 is 12. Converting the fractions: 3/4 = 9/12 and 2/3 = 8/12. Since 9/12 is greater than 8/12, the apple pie uses more sugar."
+      }
+    },
+    {
+      "scenario": "Which shape question MUST be multiple_choice",
+      "passed": true,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "An artist is drawing shapes. Which shape has more sides?",
+        "options": [
+          "Triangle",
+          "Square",
+          "Pentagon",
+          "Hexagon"
+        ],
+        "correct_answer": 3,
+        "explanation": "A triangle has 3 sides, a square has 4 sides, a pentagon has 5 sides, and a hexagon has 6 sides. The hexagon has the most sides."
+      }
+    }
+  ],
+  "consistencyTest": {
+    "passed": true,
+    "results": [
+      {
+        "type": "multiple_choice",
+        "question": "An engineer is designing a cooling system for a machine. The system needs to operate at the colder of two temperatures: -10°C or -5°C. Which temperature is smaller?",
+        "options": [
+          "-10°C",
+          "-5°C",
+          "0°C",
+          "5°C"
+        ],
+        "correct_answer": 0,
+        "explanation": "In mathematics, smaller numbers are further to the left on the number line. Since -10 is further left than -5, -10 is the smaller number."
+      },
+      {
+        "type": "multiple_choice",
+        "question": "An engineer is measuring temperatures in a lab. One reading is -10°C, and another is -5°C. Which temperature is smaller?",
+        "options": [
+          "-10°C",
+          "-5°C",
+          "Both are the same",
+          "It cannot be determined"
+        ],
+        "correct_answer": 0,
+        "explanation": "In mathematics, smaller numbers are further to the left on the number line. Since -10 is further left than -5, -10 is smaller."
+      },
+      {
+        "type": "multiple_choice",
+        "question": "An engineer is measuring temperatures in a lab. The temperature in one chamber is -10°C, and the temperature in another chamber is -5°C. Which temperature is smaller?",
+        "options": [
+          "-10°C",
+          "-5°C",
+          "0°C",
+          "5°C"
+        ],
+        "correct_answer": 0,
+        "explanation": "In mathematics, smaller numbers are further to the left on the number line. Since -10 is further left than -5, -10 is the smaller number."
+      }
+    ]
+  }
+}

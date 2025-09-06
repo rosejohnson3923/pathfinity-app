@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Grade 10 Math Loading</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+        }
+        .success {
+            border-left: 4px solid #4ade80;
+        }
+        .error {
+            border-left: 4px solid #f87171;
+        }
+        .warning {
+            border-left: 4px solid #fbbf24;
+        }
+        button {
+            background: #8b5cf6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        button:hover {
+            background: #7c3aed;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 Grade 10 Math Loading Test</h1>
+        
+        <div class="test-section">
+            <h2>Test 1: Direct SkillClusterService Test</h2>
+            <button onclick="testSkillClusterService()">Run Test</button>
+            <div id="skillClusterResult" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>Test 2: AdaptiveJourneyOrchestrator Test</h2>
+            <button onclick="testAdaptiveJourney()">Run Test</button>
+            <div id="adaptiveJourneyResult" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>Test 3: MultiSubjectContainerV2-UNIFIED Simulation</h2>
+            <button onclick="testContainerSimulation()">Run Test</button>
+            <div id="containerResult" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>Test 4: Career System Test</h2>
+            <button onclick="testCareerSystem()">Run Test</button>
+            <div id="careerResult" class="result"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import the services
+        import { skillClusterService } from './src/services/SkillClusterService.js';
+        import { adaptiveJourneyOrchestrator } from './src/services/AdaptiveJourneyOrchestrator.js';
+        import { careerProgressionSystem } from './src/rules-engine/career/CareerProgressionSystem.js';
+        
+        // Make functions available globally
+        window.skillClusterService = skillClusterService;
+        window.adaptiveJourneyOrchestrator = adaptiveJourneyOrchestrator;
+        window.careerProgressionSystem = careerProgressionSystem;
+        
+        window.testSkillClusterService = function() {
+            const resultDiv = document.getElementById('skillClusterResult');
+            let output = '';
+            
+            try {
+                // Test subject mapping for Grade 10
+                output += '📊 Testing Subject Mapping for Grade 10:\n\n';
+                
+                const testSubjects = ['Math', 'Mathematics', 'ELA', 'Science', 'Social Studies', 'Algebra I', 'Pre-Calculus'];
+                
+                testSubjects.forEach(subject => {
+                    const cluster = skillClusterService.loadCluster('10', subject, 'A');
+                    if (cluster) {
+                        output += `✅ ${subject} → Found ${cluster.totalSkills} skills in cluster ${cluster.categoryName}\n`;
+                        output += `   First skill: ${cluster.skills[0]?.skillName || 'N/A'}\n`;
+                    } else {
+                        output += `❌ ${subject} → No skills found\n`;
+                    }
+                });
+                
+                // Check available clusters for Math (should map to Algebra I)
+                output += '\n📚 Available clusters for Grade 10 Math:\n';
+                const mathClusters = skillClusterService.getAvailableClusters('10', 'Math');
+                output += `Found ${mathClusters.length} clusters: ${mathClusters.join(', ')}\n`;
+                
+                resultDiv.className = 'result success';
+            } catch (error) {
+                output += `❌ Error: ${error.message}\n${error.stack}`;
+                resultDiv.className = 'result error';
+            }
+            
+            resultDiv.innerHTML = `<pre>${output}</pre>`;
+        };
+        
+        window.testAdaptiveJourney = async function() {
+            const resultDiv = document.getElementById('adaptiveJourneyResult');
+            let output = '';
+            
+            try {
+                const studentId = 'test-student-grade10';
+                
+                // Initialize journey
+                output += '🚀 Initializing journey for Grade 10 student...\n\n';
+                const journey = await adaptiveJourneyOrchestrator.initializeJourney(studentId, '10');
+                
+                output += `Journey ID: ${journey.journeyId}\n`;
+                output += `Grade Level: ${journey.gradeLevel}\n`;
+                output += `Career Context: ${JSON.stringify(journey.careerContext, null, 2)}\n\n`;
+                
+                // Test getting skill for each subject
+                output += '📖 Getting current skills for each subject:\n\n';
+                const subjects = ['Math', 'ELA', 'Science', 'Social Studies'];
+                
+                subjects.forEach(subject => {
+                    const skill = adaptiveJourneyOrchestrator.getCurrentSkillForSubject(studentId, subject, '10');
+                    if (skill) {
+                        output += `✅ ${subject}: ${skill.skillName} (${skill.skillNumber})\n`;
+                    } else {
+                        output += `❌ ${subject}: No skill found\n`;
+                    }
+                });
+                
+                resultDiv.className = 'result success';
+            } catch (error) {
+                output += `❌ Error: ${error.message}\n${error.stack}`;
+                resultDiv.className = 'result error';
+            }
+            
+            resultDiv.innerHTML = `<pre>${output}</pre>`;
+        };
+        
+        window.testContainerSimulation = function() {
+            const resultDiv = document.getElementById('containerResult');
+            let output = '';
+            
+            try {
+                // Simulate what MultiSubjectContainerV2-UNIFIED does
+                output += '🎮 Simulating MultiSubjectContainerV2-UNIFIED behavior:\n\n';
+                
+                const student = {
+                    id: 'test-student-123',
+                    grade_level: '10',
+                    display_name: 'Test Student'
+                };
+                
+                const subjects = [
+                    { name: 'Math', icon: '🔢' },
+                    { name: 'ELA', icon: '📚' },
+                    { name: 'Science', icon: '🔬' },
+                    { name: 'Social Studies', icon: '🌍' }
+                ];
+                
+                // Initialize journey
+                const journey = adaptiveJourneyOrchestrator.getJourney(student.id);
+                if (!journey) {
+                    output += 'Initializing adaptive journey...\n';
+                    adaptiveJourneyOrchestrator.initializeJourney(student.id, student.grade_level);
+                }
+                
+                // Get skill for each subject
+                subjects.forEach(subject => {
+                    output += `\n${subject.icon} ${subject.name}:\n`;
+                    
+                    const skill = adaptiveJourneyOrchestrator.getCurrentSkillForSubject(
+                        student.id,
+                        subject.name,
+                        student.grade_level
+                    );
+                    
+                    if (skill) {
+                        output += `  ✅ Found skill: ${skill.skillName}\n`;
+                        output += `     ID: ${skill.id}\n`;
+                        output += `     Number: ${skill.skillNumber}\n`;
+                        output += `     Subject: ${skill.subject}\n`;
+                    } else {
+                        output += `  ⚠️ No skill found - `;
+                        
+                        // Check if it's expected for Grade 10
+                        if (student.grade_level === '10' && subject.name === 'Math') {
+                            output += 'Should map to Algebra I\n';
+                        } else if (student.grade_level === '10' && ['ELA', 'Science', 'Social Studies'].includes(subject.name)) {
+                            output += 'Expected - Grade 10 only has Math subjects\n';
+                        }
+                    }
+                });
+                
+                resultDiv.className = 'result success';
+            } catch (error) {
+                output += `❌ Error: ${error.message}\n${error.stack}`;
+                resultDiv.className = 'result error';
+            }
+            
+            resultDiv.innerHTML = `<pre>${output}</pre>`;
+        };
+        
+        window.testCareerSystem = function() {
+            const resultDiv = document.getElementById('careerResult');
+            let output = '';
+            
+            try {
+                output += '🎭 Testing Career Progression System:\n\n';
+                
+                // Test getting all careers
+                const allCareers = careerProgressionSystem.getAllCareers();
+                output += `Total careers available: ${allCareers.length}\n`;
+                allCareers.forEach(career => {
+                    output += `  - ${career.name} (${career.category})\n`;
+                });
+                
+                // Test exposure level for Grade 10
+                output += '\n📊 Grade 10 Career Exposure Level:\n';
+                const exposureLevel = careerProgressionSystem.getExposureLevelForGrade('10');
+                output += `Exposure Level: ${exposureLevel}\n`;
+                
+                // Test getting career content for Grade 10
+                if (allCareers.length > 0) {
+                    const firstCareer = allCareers[0];
+                    output += `\n🏥 Career content for "${firstCareer.name}" at Grade 10:\n`;
+                    const content = careerProgressionSystem.getCareerContentForGrade(firstCareer.id, '10');
+                    if (content) {
+                        output += `  Label: ${content.label}\n`;
+                        output += `  Tools: ${content.tools.slice(0, 3).join(', ')}\n`;
+                        output += `  Concepts: ${content.concepts.slice(0, 3).join(', ')}\n`;
+                    }
+                }
+                
+                resultDiv.className = 'result success';
+            } catch (error) {
+                output += `❌ Error: ${error.message}\n${error.stack}`;
+                resultDiv.className = 'result error';
+            }
+            
+            resultDiv.innerHTML = `<pre>${output}</pre>`;
+        };
+        
+        // Run all tests on load
+        window.addEventListener('load', () => {
+            console.log('Test page loaded - Services available:', {
+                skillClusterService: !!window.skillClusterService,
+                adaptiveJourneyOrchestrator: !!window.adaptiveJourneyOrchestrator,
+                careerProgressionSystem: !!window.careerProgressionSystem
+            });
+        });
+    </script>
+</body>
+</html>

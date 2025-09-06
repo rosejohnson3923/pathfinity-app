@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/images/pathfinity-logo-metallic-dark.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pathfinity - AI-Powered Learning Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Prevent flash of light mode -->
+    <script>
+      (function() {
+        try {
+          const savedMode = localStorage.getItem('pathfinity-mode');
+          if (savedMode === 'dark' || (!savedMode)) {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) {
+          // Default to dark mode if localStorage fails
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

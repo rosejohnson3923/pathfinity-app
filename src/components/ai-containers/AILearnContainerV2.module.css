@@ -1,0 +1,276 @@
+/**
+ * AI Learn Container V2 CSS Module
+ * =================================
+ * Unified styles for the Learn Container
+ * Consolidates multiple CSS imports into a single module
+ */
+
+/* Container Base */
+.learnContainer {
+  background: var(--gradient-learn);
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Theme Variables */
+.learnContainer {
+  --container-primary: var(--color-purple-500);
+  --container-secondary: var(--color-indigo-500);
+  --container-accent: var(--color-purple-600);
+  --container-gradient: var(--gradient-learn);
+}
+
+/* Dark Theme Overrides */
+[data-theme="dark"] .learnContainer {
+  --container-primary: var(--color-purple-400);
+  --container-secondary: var(--color-indigo-400);
+  --container-accent: var(--color-purple-500);
+  background: var(--gradient-learn-dark);
+}
+
+/* Content Wrapper */
+.contentWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-6);
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Phase Sections */
+.phaseContainer {
+  animation: fadeInUp var(--duration-moderate) var(--easing-out);
+}
+
+.lessonPhase,
+.practicePhase,
+.assessmentPhase,
+.completionPhase {
+  padding: var(--spacing-4);
+  background: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  margin-bottom: var(--spacing-4);
+}
+
+/* Question Card */
+.questionCard {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-4);
+  margin-bottom: var(--spacing-3);
+  transition: all var(--duration-fast) var(--easing-out);
+}
+
+.questionCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Loading Screen */
+.loadingScreen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--container-gradient);
+}
+
+.loadingContent {
+  text-align: center;
+  padding: var(--spacing-8);
+}
+
+.loadingSpinner {
+  width: 60px;
+  height: 60px;
+  border: 4px solid var(--container-primary);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto var(--spacing-4);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loadingMessage {
+  font-size: var(--text-lg);
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-2);
+}
+
+/* Feedback Messages */
+.feedbackMessage {
+  padding: var(--spacing-3) var(--spacing-4);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-3);
+  animation: slideInFromRight var(--duration-moderate) var(--easing-out);
+}
+
+.feedbackCorrect {
+  background: var(--color-success-light);
+  border: 2px solid var(--color-success);
+  color: var(--color-success-dark);
+}
+
+.feedbackIncorrect {
+  background: var(--color-error-light);
+  border: 2px solid var(--color-error);
+  color: var(--color-error-dark);
+}
+
+/* Navigation Buttons */
+.navigationButtons {
+  display: flex;
+  gap: var(--spacing-3);
+  justify-content: center;
+  margin-top: var(--spacing-4);
+}
+
+.primaryButton,
+.secondaryButton {
+  padding: var(--spacing-2) var(--spacing-4);
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  font-weight: 500;
+  transition: all var(--duration-fast) var(--easing-out);
+  cursor: pointer;
+  border: none;
+}
+
+.primaryButton {
+  background: var(--container-primary);
+  color: var(--color-white);
+}
+
+.primaryButton:hover {
+  background: var(--container-accent);
+  transform: translateY(-2px);
+}
+
+.secondaryButton {
+  background: transparent;
+  color: var(--container-primary);
+  border: 2px solid var(--container-primary);
+}
+
+.secondaryButton:hover {
+  background: var(--container-primary);
+  color: var(--color-white);
+}
+
+/* Completion Screen */
+.completionScreen {
+  text-align: center;
+  padding: var(--spacing-8);
+}
+
+.completionTitle {
+  font-size: var(--text-3xl);
+  color: var(--container-primary);
+  margin-bottom: var(--spacing-4);
+  animation: fadeInUp var(--duration-moderate) var(--easing-out);
+}
+
+.completionStats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--spacing-4);
+  margin: var(--spacing-6) 0;
+}
+
+.statCard {
+  background: var(--bg-secondary);
+  padding: var(--spacing-3);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.statValue {
+  font-size: var(--text-2xl);
+  font-weight: bold;
+  color: var(--container-primary);
+}
+
+.statLabel {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin-top: var(--spacing-1);
+}
+
+/* Grade-Level Adaptations */
+[data-grade="K-2"] .questionCard {
+  font-size: var(--text-xl);
+  padding: var(--spacing-6);
+}
+
+[data-grade="K-2"] .primaryButton,
+[data-grade="K-2"] .secondaryButton {
+  min-height: 48px;
+  font-size: var(--text-lg);
+  padding: var(--spacing-3) var(--spacing-6);
+}
+
+[data-grade="3-5"] .questionCard {
+  font-size: var(--text-lg);
+  padding: var(--spacing-5);
+}
+
+[data-grade="3-5"] .primaryButton,
+[data-grade="3-5"] .secondaryButton {
+  min-height: 44px;
+  font-size: var(--text-base);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .contentWrapper {
+    padding: var(--spacing-4);
+  }
+  
+  .completionStats {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Print Styles */
+@media print {
+  .learnContainer {
+    background: white !important;
+  }
+  
+  .navigationButtons,
+  .loadingScreen {
+    display: none !important;
+  }
+}

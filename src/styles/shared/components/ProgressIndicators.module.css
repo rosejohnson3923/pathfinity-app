@@ -1,0 +1,562 @@
+/**
+ * PROGRESS INDICATORS MODULE
+ * ==========================
+ * Unified progress display components for all learning phases
+ * Includes bars, dots, circles, and step indicators
+ * 
+ * Created: 2025-08-22
+ */
+
+/* ============================================
+   LINEAR PROGRESS BAR
+   ============================================ */
+.progressBar {
+  width: 100%;
+  height: 8px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  position: relative;
+}
+
+.progressBar.small {
+  height: 4px;
+}
+
+.progressBar.medium {
+  height: 8px;
+}
+
+.progressBar.large {
+  height: 12px;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-full);
+  transition: width var(--duration-moderate) var(--easing-out);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated Shimmer Effect */
+.progressFill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+/* Progress Bar with Label */
+.progressWrapper {
+  position: relative;
+}
+
+.progressLabel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: var(--text-xs);
+  font-weight: var(--font-bold);
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  z-index: 1;
+}
+
+.progressPercentage {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+/* ============================================
+   CIRCULAR PROGRESS
+   ============================================ */
+.circularProgress {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circularProgress.small {
+  width: 48px;
+  height: 48px;
+}
+
+.circularProgress.medium {
+  width: 80px;
+  height: 80px;
+}
+
+.circularProgress.large {
+  width: 120px;
+  height: 120px;
+}
+
+.circularSvg {
+  transform: rotate(-90deg);
+}
+
+.circularBackground {
+  fill: none;
+  stroke: var(--bg-tertiary);
+  stroke-width: 8;
+}
+
+.circularFill {
+  fill: none;
+  stroke: url(#gradient);
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset var(--duration-moderate) var(--easing-out);
+}
+
+.circularCenter {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.circularValue {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+}
+
+.circularLabel {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+}
+
+/* ============================================
+   PROGRESS DOTS
+   ============================================ */
+.progressDots {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: center;
+}
+
+.progressDot {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+  transition: all var(--duration-base) var(--easing-out);
+  cursor: pointer;
+  position: relative;
+}
+
+.progressDot:hover {
+  transform: scale(1.2);
+}
+
+.progressDot.completed {
+  background: var(--gradient-success);
+  animation: dotComplete 0.3s ease;
+}
+
+@keyframes dotComplete {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+.progressDot.active {
+  width: 24px;
+  background: var(--gradient-primary);
+  animation: dotPulse 1.5s infinite;
+}
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.progressDot.error {
+  background: var(--gradient-error);
+  animation: dotShake 0.5s ease;
+}
+
+@keyframes dotShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
+
+/* Dot Tooltip */
+.progressDot .tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg-elevated);
+  border-radius: var(--radius-md);
+  font-size: var(--text-xs);
+  color: var(--text-primary);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--duration-fast) var(--easing-out);
+  box-shadow: var(--shadow-sm);
+}
+
+.progressDot:hover .tooltip {
+  opacity: 1;
+}
+
+/* ============================================
+   STEP PROGRESS
+   ============================================ */
+.stepProgress {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  padding: 0 var(--space-4);
+}
+
+.stepProgress::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: var(--space-8);
+  right: var(--space-8);
+  height: 2px;
+  background: var(--border-color);
+  transform: translateY(-50%);
+  z-index: 0;
+}
+
+.step {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.stepCircle {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background: var(--bg-secondary);
+  border: 3px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--font-bold);
+  color: var(--text-secondary);
+  transition: all var(--duration-base) var(--easing-out);
+}
+
+.step.completed .stepCircle {
+  background: var(--gradient-success);
+  border-color: transparent;
+  color: white;
+  animation: stepComplete 0.5s ease;
+}
+
+@keyframes stepComplete {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.step.active .stepCircle {
+  background: var(--gradient-primary);
+  border-color: transparent;
+  color: white;
+  animation: stepPulse 2s infinite;
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+}
+
+@keyframes stepPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.6);
+  }
+}
+
+.stepLabel {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  text-align: center;
+  max-width: 100px;
+}
+
+.step.completed .stepLabel {
+  color: var(--success-text);
+  font-weight: var(--font-medium);
+}
+
+.step.active .stepLabel {
+  color: var(--text-primary);
+  font-weight: var(--font-semibold);
+}
+
+/* Step Connector Line */
+.stepConnector {
+  flex: 1;
+  height: 2px;
+  background: var(--border-color);
+  position: relative;
+  margin: 0 var(--space-2);
+}
+
+.stepConnector.completed {
+  background: var(--gradient-success);
+  animation: connectorFill 0.5s ease;
+}
+
+@keyframes connectorFill {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+/* ============================================
+   SKILL PROGRESS CARD
+   ============================================ */
+.skillProgress {
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--duration-base) var(--easing-out);
+}
+
+.skillProgress:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.skillHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-3);
+}
+
+.skillName {
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
+}
+
+.skillLevel {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.skillLevel .icon {
+  font-size: var(--text-lg);
+}
+
+/* ============================================
+   SEGMENTED PROGRESS
+   ============================================ */
+.segmentedProgress {
+  display: flex;
+  gap: var(--space-1);
+  width: 100%;
+}
+
+.segment {
+  flex: 1;
+  height: 8px;
+  background: var(--bg-tertiary);
+  transition: all var(--duration-base) var(--easing-out);
+}
+
+.segment:first-child {
+  border-radius: var(--radius-full) 0 0 var(--radius-full);
+}
+
+.segment:last-child {
+  border-radius: 0 var(--radius-full) var(--radius-full) 0;
+}
+
+.segment.completed {
+  background: var(--gradient-primary);
+  animation: segmentFill 0.3s ease;
+}
+
+@keyframes segmentFill {
+  from {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+/* ============================================
+   LOADING PROGRESS
+   ============================================ */
+.loadingProgress {
+  width: 100%;
+  height: 4px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  position: relative;
+}
+
+.loadingBar {
+  height: 100%;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-full);
+  animation: loading 2s ease-in-out infinite;
+}
+
+@keyframes loading {
+  0% {
+    width: 0;
+    transform: translateX(0);
+  }
+  50% {
+    width: 40%;
+    transform: translateX(100%);
+  }
+  100% {
+    width: 100%;
+    transform: translateX(0);
+  }
+}
+
+/* Indeterminate Progress */
+.indeterminate {
+  position: relative;
+  overflow: hidden;
+}
+
+.indeterminate::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--gradient-primary);
+  animation: indeterminate 1.5s ease-in-out infinite;
+}
+
+@keyframes indeterminate {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* ============================================
+   CONTAINER-SPECIFIC VARIANTS
+   ============================================ */
+
+/* Learn Container Progress */
+.learn .progressFill,
+.learn .circularFill,
+.learn .progressDot.active {
+  background: var(--gradient-primary);
+}
+
+/* Experience Container Progress */
+.experience .progressFill,
+.experience .circularFill,
+.experience .progressDot.active {
+  background: linear-gradient(135deg, #14b8a6 0%, #0891b2 100%);
+}
+
+/* Discover Container Progress */
+.discover .progressFill,
+.discover .circularFill,
+.discover .progressDot.active {
+  background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 768px) {
+  .stepProgress {
+    flex-direction: column;
+    gap: var(--space-4);
+    padding: 0;
+  }
+  
+  .stepProgress::before {
+    display: none;
+  }
+  
+  .stepConnector {
+    display: none;
+  }
+  
+  .progressDots {
+    gap: var(--space-1);
+  }
+  
+  .progressDot {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .progressDot.active {
+    width: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .circularProgress.large {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .circularValue {
+    font-size: var(--text-xl);
+  }
+  
+  .stepCircle {
+    width: 32px;
+    height: 32px;
+    font-size: var(--text-sm);
+  }
+  
+  .stepLabel {
+    font-size: var(--text-xs);
+  }
+}

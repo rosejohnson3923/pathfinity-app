@@ -1,0 +1,947 @@
+/**
+ * MULTI-SUBJECT CONTAINER MODULE
+ * ==============================
+ * Styles for the multi-subject learning container
+ * Handles transitions between subjects and progress tracking
+ * 
+ * Created: 2025-08-22
+ */
+
+/* ============================================
+   CONTAINER LAYOUT
+   ============================================ */
+.multiSubjectContainer {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-primary);
+  padding-top: 0; /* Remove any top padding */
+}
+
+/* ============================================
+   SUBJECT TRANSITION
+   ============================================ */
+.subjectTransition {
+  animation: fadeIn 0.5s ease-in-out;
+  background: transparent;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* ============================================
+   PROGRESS HEADER
+   ============================================ */
+.progressHeader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--bg-elevated);
+  backdrop-filter: blur(var(--blur-md));
+  border-bottom: 1px solid var(--border-color-soft);
+  padding: var(--space-4) var(--space-6);
+  z-index: var(--z-40);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  position: relative;
+}
+
+/* Header Controls - Top Right */
+.headerControls {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-6);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  z-index: 10;
+}
+
+/* Logout Button */
+.logoutButton {
+  background: linear-gradient(135deg, 
+    rgba(239, 68, 68, 0.9) 0%, 
+    rgba(220, 38, 38, 0.9) 100%);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    0 4px 12px rgba(239, 68, 68, 0.25);
+}
+
+.logoutButton:hover {
+  background: linear-gradient(135deg, 
+    rgba(220, 38, 38, 1) 0%, 
+    rgba(185, 28, 28, 1) 100%);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.15),
+    0 8px 20px rgba(239, 68, 68, 0.35);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.logoutButton:active {
+  transform: translateY(0);
+}
+
+/* Test Skip Button */
+.testSkipButton {
+  background: linear-gradient(135deg, 
+    rgba(251, 191, 36, 0.9) 0%, 
+    rgba(245, 158, 11, 0.9) 100%);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 2px 8px rgba(251, 191, 36, 0.3);
+  animation: testPulse 2s ease-in-out infinite;
+}
+
+@keyframes testPulse {
+  0%, 100% {
+    box-shadow: 0 2px 8px rgba(251, 191, 36, 0.3);
+  }
+  50% {
+    box-shadow: 0 2px 16px rgba(251, 191, 36, 0.5);
+  }
+}
+
+.testSkipButton:hover {
+  background: linear-gradient(135deg, 
+    rgba(245, 158, 11, 1) 0%, 
+    rgba(217, 119, 6, 1) 100%);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 4px 16px rgba(251, 191, 36, 0.4);
+}
+
+.testSkipButton:active {
+  transform: translateY(0) scale(1);
+}
+
+.headerTitle {
+  text-align: center;
+  color: var(--text-primary);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  line-height: 1.4;
+}
+
+/* Career line - most prominent */
+.headerCareer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+}
+
+/* Skill line - secondary emphasis */
+.headerSkill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-size: var(--text-md);
+  color: var(--text-secondary);
+}
+
+/* Subject line - smallest */
+.headerSubject {
+  font-size: var(--text-sm);
+  color: var(--text-tertiary);
+  font-weight: var(--font-medium);
+}
+
+/* Labels for "Exploring" and "Through" */
+.headerLabel {
+  color: var(--text-tertiary);
+  font-weight: var(--font-normal);
+  font-size: 0.9em;
+}
+
+/* Values - the actual career/skill names */
+.headerValue {
+  color: var(--text-primary);
+  font-weight: inherit;
+}
+
+/* Old h2 style - no longer used but kept for backward compatibility */
+.headerTitle h2 {
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  margin: 0;
+  padding: 0;
+}
+
+.subjectTabs {
+  display: flex;
+  gap: var(--space-4);
+  justify-content: center;
+  align-items: center;
+}
+
+.subjectTab {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color-soft);
+  transition: all 0.3s ease;
+}
+
+.subjectTab.active {
+  background: var(--gradient-primary);
+  color: white;
+  border-color: transparent;
+}
+
+.subjectTab.completed {
+  opacity: 0.7;
+  background: var(--bg-success);
+}
+
+.subjectTab .subjectIcon {
+  font-size: var(--text-xl);
+}
+
+.subjectTab .subjectName {
+  font-weight: var(--font-medium);
+}
+
+.progressContent {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+}
+
+.progressTitle {
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.progressIndicator {
+  animation: pulse 2s infinite;
+}
+
+/* ============================================
+   NO SKILL MESSAGE
+   ============================================ */
+.noSkillMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: var(--space-8);
+  text-align: center;
+  gap: var(--space-4);
+  margin-top: 100px; /* Account for header */
+  background: var(--bg-elevated);
+  border-radius: var(--radius-xl);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: var(--shadow-lg);
+}
+
+.noSkillIcon {
+  font-size: 4rem;
+  opacity: 0.7;
+  animation: bounce 2s infinite;
+}
+
+.noSkillMessage h3 {
+  font-size: var(--text-2xl);
+  color: var(--text-primary);
+  font-weight: var(--font-semibold);
+  margin: 0;
+}
+
+.noSkillMessage p {
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+  margin: 0;
+  max-width: 500px;
+}
+
+.nextSubjectHint {
+  font-size: var(--text-md) !important;
+  color: var(--text-primary) !important;
+  font-weight: var(--font-medium);
+  margin-top: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.skipButton {
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-6);
+  font-size: var(--text-lg);
+  font-weight: var(--font-medium);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-md);
+  margin-top: var(--space-4);
+}
+
+/* Small skip button for Experience screen */
+.skipButtonSmall {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  z-index: 10;
+}
+
+[data-theme="dark"] .skipButtonSmall {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.skipButtonSmall:hover {
+  background: var(--bg-secondary);
+  border-color: var(--color-primary);
+  color: var(--text-primary);
+}
+
+.skipButton:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  opacity: 0.95;
+}
+
+.skipButton:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ============================================
+   LOADING MESSAGE
+   ============================================ */
+.loadingMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: var(--space-4);
+  margin-top: 100px;
+}
+
+.loadingMessage h3 {
+  font-size: var(--text-xl);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.loadingSpinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid var(--border-color-soft);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================
+   SUBJECT PROGRESS TRACKER
+   ============================================ */
+.subjectProgress {
+  position: fixed;
+  top: 70px; /* Position below ContainerNavigationHeader */
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gradient-primary);
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color-soft);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 40; /* Below ContainerNavigationHeader but above content */
+  height: 60px;
+}
+
+.subjectItems {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  position: relative;
+}
+
+.subjectItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  position: relative;
+}
+
+.subjectDot {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.subjectIcon {
+  font-size: 1.25rem;
+  filter: grayscale(0);
+}
+
+.checkmark {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 18px;
+  height: 18px;
+  background: var(--color-success);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: bold;
+  border: 2px solid white;
+}
+
+.subjectDot.completed {
+  background: rgba(16, 185, 129, 0.9);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+}
+
+@keyframes completeAnimation {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.subjectDot.active {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: white;
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+.subjectDot.active .subjectIcon {
+  filter: grayscale(0);
+}
+
+@keyframes activePulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.6);
+  }
+}
+
+.subjectDot.upcoming {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  opacity: 0.7;
+}
+
+.subjectDot.upcoming .subjectIcon {
+  filter: grayscale(0.5);
+  opacity: 0.6;
+}
+
+.subjectLabel {
+  font-size: 0.75rem;
+  color: white;
+  text-align: center;
+  font-weight: 500;
+  margin-top: 0.25rem;
+  opacity: 0.9;
+}
+
+.subjectLabel.completed {
+  color: white;
+  font-weight: 600;
+}
+
+.subjectLabel.active {
+  color: white;
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+/* Subject Connector */
+.subjectConnector {
+  position: absolute;
+  top: 24px;
+  left: 56px;
+  width: calc(2rem - 8px);
+  height: 2px;
+  background: rgba(255, 255, 255, 0.3);
+  z-index: 0;
+}
+
+.subjectConnector.completed {
+  background: rgba(16, 185, 129, 0.6);
+}
+
+/* ============================================
+   TRANSITION OVERLAY & CONTAINER
+   ============================================ */
+.transitionContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  padding: 2rem;
+  width: 100%;
+  background: transparent;
+}
+
+.transitionOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(88, 28, 135, 0.95) 0%,
+    rgba(124, 58, 237, 0.95) 25%,
+    rgba(139, 92, 246, 0.95) 50%,
+    rgba(167, 139, 250, 0.95) 75%,
+    rgba(196, 181, 253, 0.95) 100%);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-50);
+  animation: overlayFade 0.3s ease;
+  overflow: hidden;
+}
+
+.transitionOverlay::before {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 20% 80%, rgba(168, 85, 247, 0.3) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.3) 0%, transparent 50%),
+              radial-gradient(circle at 40% 40%, rgba(59, 130, 246, 0.3) 0%, transparent 50%);
+  animation: floatBackground 20s ease-in-out infinite;
+}
+
+@keyframes floatBackground {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(-20px, -20px) rotate(120deg); }
+  66% { transform: translate(20px, -10px) rotate(240deg); }
+}
+
+@keyframes overlayFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.transitionCard {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
+  padding: 2.5rem;
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+  max-width: 500px;
+  min-width: 400px;
+  animation: transitionSlide 0.5s ease;
+  position: relative;
+}
+
+@keyframes transitionSlide {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.companionAvatar {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.4);
+  animation: avatarPulse 2s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+.companionImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.avatarPlaceholder {
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes avatarPulse {
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.4);
+  }
+  50% { 
+    transform: scale(1.05);
+    box-shadow: 0 12px 40px rgba(102, 126, 234, 0.6);
+  }
+}
+
+.nextSubject {
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 12px;
+  padding: 0.75rem 1.5rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 1rem;
+  display: inline-block;
+  animation: subtleGlow 2s ease-in-out infinite;
+}
+
+@keyframes subtleGlow {
+  0%, 100% { 
+    background: rgba(139, 92, 246, 0.2);
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+  }
+  50% { 
+    background: rgba(139, 92, 246, 0.25);
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
+  }
+}
+
+.transitionIcon {
+  font-size: var(--text-6xl);
+  margin-bottom: var(--space-4);
+  animation: transitionBounce 1s ease infinite;
+}
+
+@keyframes transitionBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+.transitionTitle {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.9) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.transitionMessage {
+  font-size: 1.125rem;
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.transitionProgress {
+  width: 100%;
+  height: 8px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-top: var(--space-4);
+}
+
+.transitionProgressFill {
+  height: 100%;
+  background: var(--gradient-primary);
+  animation: progressFill 2s ease-out forwards;
+}
+
+@keyframes progressFill {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+/* ============================================
+   CONTENT WRAPPER
+   ============================================ */
+.contentWrapper {
+  flex: 1;
+  padding-top: 130px; /* Account for both fixed headers: 70px + 60px */
+  position: relative;
+  background: var(--bg-primary);
+  min-height: calc(100vh - 130px);
+}
+
+/* ============================================
+   DEBUG PANEL
+   ============================================ */
+.debugPanel {
+  position: fixed;
+  bottom: var(--space-4);
+  right: var(--space-4);
+  z-index: var(--z-50);
+}
+
+/* ============================================
+   COMPLETION SUMMARY
+   ============================================ */
+.completionSummary {
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
+  padding: var(--space-8);
+  max-width: 800px;
+  margin: var(--space-8) auto;
+  box-shadow: var(--shadow-elevated);
+  text-align: center;
+}
+
+.completionTitle {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-4);
+  background: var(--gradient-success);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.completionStats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-4);
+  margin: var(--space-6) 0;
+}
+
+.statCard {
+  padding: var(--space-4);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  transition: all var(--duration-base) var(--easing-out);
+}
+
+.statCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.statValue {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+  color: var(--color-primary);
+  margin-bottom: var(--space-1);
+}
+
+.statLabel {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+}
+
+/* ============================================
+   DARK THEME OVERRIDES
+   ============================================ */
+[data-theme="dark"] .subjectProgress {
+  background: linear-gradient(135deg, 
+    rgba(30, 41, 59, 0.98) 0%, 
+    rgba(15, 23, 42, 0.98) 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+  position: fixed;
+  top: 70px;
+  height: 60px;
+}
+
+[data-theme="dark"] .subjectDot {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .subjectDot.active {
+  background: var(--gradient-primary);
+  border-color: transparent;
+}
+
+[data-theme="dark"] .subjectDot.completed {
+  background: rgba(16, 185, 129, 0.8);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+[data-theme="dark"] .subjectLabel {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .subjectConnector {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .subjectConnector.completed {
+  background: rgba(16, 185, 129, 0.5);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 768px) {
+  .progressHeader {
+    padding: var(--space-3) var(--space-4);
+  }
+  
+  .progressContent {
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  
+  .subjectProgress {
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding: var(--space-2) 0;
+  }
+  
+  .subjectDot {
+    width: 32px;
+    height: 32px;
+    font-size: var(--text-sm);
+  }
+  
+  .transitionCard {
+    padding: var(--space-6);
+    margin: var(--space-4);
+  }
+  
+  .completionStats {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .progressTitle {
+    font-size: var(--text-base);
+  }
+  
+  .subjectLabel {
+    display: none;
+  }
+  
+  .transitionTitle {
+    font-size: var(--text-xl);
+  }
+  
+  .transitionMessage {
+    font-size: var(--text-base);
+  }
+  
+  .completionTitle {
+    font-size: var(--text-2xl);
+  }
+}

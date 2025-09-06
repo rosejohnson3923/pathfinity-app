@@ -1,0 +1,657 @@
+/* Gamification Sidebar Styles */
+
+.gamification-sidebar {
+  position: relative;
+  width: 320px;
+  min-width: 320px;
+  max-width: 320px;
+  height: 100vh;
+  background: #FFFFFF;
+  border-left: 1px solid #E2E8F0;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.05);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s ease;
+  overflow: hidden;
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+.gamification-sidebar.right {
+  border-left: 1px solid #E2E8F0;
+}
+
+.gamification-sidebar.left {
+  order: -1;
+  border-right: 1px solid #E2E8F0;
+  border-left: none;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.gamification-sidebar.collapsed {
+  width: 60px;
+  min-width: 60px;
+}
+
+.gamification-sidebar.collapsed .expand-btn {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  background: #8B5CF6;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin: 10px auto;
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+  transition: transform 0.2s;
+  color: white;
+}
+
+.gamification-sidebar.collapsed .expand-btn:hover {
+  transform: scale(1.1);
+}
+
+.gamification-sidebar.collapsed .expand-btn .icon {
+  font-size: 24px;
+}
+
+.gamification-sidebar.collapsed .expand-btn .badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #ff6b6b;
+  color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  border: 2px solid white;
+}
+
+.collapse-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #F7FAFC;
+  border: 1px solid #E2E8F0;
+  color: #718096;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.collapse-btn:hover {
+  background: #E2E8F0;
+  color: #4A5568;
+}
+
+/* User Stats Header */
+.user-stats-header {
+  background: #F7FAFC;
+  padding: 20px;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.level-badge {
+  display: inline-block;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.level-number {
+  display: block;
+  font-size: 36px;
+  font-weight: bold;
+  color: #8B5CF6;
+  text-shadow: none;
+  line-height: 1;
+}
+
+.level-label {
+  display: block;
+  font-size: 10px;
+  color: #718096;
+  letter-spacing: 2px;
+  margin-top: 5px;
+  text-transform: uppercase;
+}
+
+.xp-section {
+  margin-bottom: 15px;
+}
+
+.xp-info {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+.xp-current {
+  font-size: 20px;
+  font-weight: bold;
+  color: #2D3748;
+}
+
+.xp-next {
+  font-size: 14px;
+  color: #718096;
+  margin-left: 5px;
+}
+
+.xp-bar {
+  height: 8px;
+  background: #E2E8F0;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.xp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10B981, #34D399);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+  position: relative;
+}
+
+.xp-glow {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4));
+  animation: xp-glow-move 2s infinite;
+}
+
+@keyframes xp-glow-move {
+  0% { transform: translateX(-30px); }
+  100% { transform: translateX(0); }
+}
+
+.xp-today {
+  font-size: 12px;
+  color: #10B981;
+  margin-top: 5px;
+}
+
+.quick-stats {
+  display: flex;
+  gap: 20px;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.stat-icon {
+  font-size: 20px;
+}
+
+.stat-value {
+  font-size: 16px;
+  font-weight: bold;
+  color: #2D3748;
+}
+
+/* Motivational Banner */
+.motivational-banner {
+  background: linear-gradient(90deg, #8B5CF6, #6366F1);
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.motivational-banner .sparkle {
+  font-size: 18px;
+  animation: sparkle 1s infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.2) rotate(180deg); }
+}
+
+.motivational-banner .message {
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  text-shadow: none;
+}
+
+/* Skill Comparison */
+.skill-comparison {
+  padding: 15px;
+  background: #F7FAFC;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.skill-comparison h3 {
+  color: #2D3748;
+  font-size: 14px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 600;
+}
+
+.comparison-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.comparison-item .label {
+  color: #718096;
+  font-size: 12px;
+}
+
+.comparison-item .value {
+  color: #2D3748;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.score-bars {
+  margin-bottom: 10px;
+}
+
+.score-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.score-bar span {
+  color: #4A5568;
+  font-size: 12px;
+  width: 40px;
+}
+
+.score-bar .bar {
+  flex: 1;
+  height: 20px;
+  background: #E2E8F0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.score-bar .fill {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 5px;
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  border-radius: 10px;
+  transition: width 0.5s ease;
+}
+
+.score-bar .fill.you {
+  background: linear-gradient(90deg, #10B981, #34D399);
+}
+
+.score-bar .fill.class {
+  background: linear-gradient(90deg, #6366F1, #818CF8);
+}
+
+.skill-stats {
+  display: flex;
+  gap: 10px;
+}
+
+.stat-pill {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.stat-pill.success {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10B981;
+  border: 1px solid #10B981;
+}
+
+.stat-pill.warning {
+  background: rgba(245, 158, 11, 0.1);
+  color: #F59E0B;
+  border: 1px solid #F59E0B;
+}
+
+/* Career Trends */
+.career-trends {
+  padding: 15px;
+  background: #F7FAFC;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.career-trends h3 {
+  color: #2D3748;
+  font-size: 14px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.trend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  background: white;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  margin-bottom: 5px;
+  transition: all 0.2s;
+}
+
+.trend-item:hover {
+  background: #F7FAFC;
+  border-color: #CBD5E0;
+}
+
+.trend-rank {
+  color: #8B5CF6;
+  font-weight: bold;
+  font-size: 12px;
+  width: 20px;
+}
+
+.trend-icon {
+  font-size: 20px;
+}
+
+.trend-name {
+  flex: 1;
+  color: #2D3748;
+  font-size: 13px;
+}
+
+.trend-growth {
+  color: #10B981;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* Live Activity Feed */
+.live-feed {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #CBD5E0 #F7FAFC;
+  background: white;
+}
+
+.live-feed::-webkit-scrollbar {
+  width: 6px;
+}
+
+.live-feed::-webkit-scrollbar-track {
+  background: #F7FAFC;
+}
+
+.live-feed::-webkit-scrollbar-thumb {
+  background: #CBD5E0;
+  border-radius: 3px;
+}
+
+.live-feed h3 {
+  color: #2D3748;
+  font-size: 14px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  background: #10B981;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.5); opacity: 0.5; }
+}
+
+.activities {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.activity-item {
+  background: #F7FAFC;
+  border: 1px solid #E2E8F0;
+  padding: 10px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.activity-item.new {
+  animation: slideIn 0.5s ease;
+  background: #EDF2F7;
+  border-color: #CBD5E0;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.activity-icon {
+  font-size: 18px;
+}
+
+.activity-content {
+  flex: 1;
+  color: #2D3748;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.activity-time {
+  color: #718096;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+/* Quick Actions */
+.quick-actions {
+  padding: 15px;
+  background: #F7FAFC;
+  border-top: 1px solid #E2E8F0;
+  display: flex;
+  gap: 10px;
+}
+
+.action-btn {
+  flex: 1;
+  padding: 10px;
+  background: white;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  color: #4A5568;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.action-btn:hover {
+  background: #8B5CF6;
+  color: white;
+  border-color: #8B5CF6;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+}
+
+.action-btn span {
+  font-size: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1400px) {
+  .gamification-sidebar {
+    width: 280px;
+    min-width: 280px;
+    max-width: 280px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .gamification-sidebar {
+    width: 250px;
+    min-width: 250px;
+    max-width: 250px;
+  }
+  
+  .level-number {
+    font-size: 28px;
+  }
+  
+  .xp-current {
+    font-size: 16px;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .gamification-sidebar {
+    background: #1E293B;
+    border-left-color: #334155;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  .gamification-sidebar.right {
+    border-left-color: #334155;
+  }
+  
+  .gamification-sidebar.left {
+    border-right-color: #334155;
+  }
+  
+  .collapse-btn {
+    background: #2D3748;
+    border-color: #4A5568;
+    color: #CBD5E0;
+  }
+  
+  .collapse-btn:hover {
+    background: #4A5568;
+    color: #F7FAFC;
+  }
+  
+  .user-stats-header {
+    background: #2D3748;
+    border-bottom-color: #334155;
+  }
+  
+  .level-label,
+  .xp-next,
+  .comparison-item .label,
+  .activity-time {
+    color: #94A3B8;
+  }
+  
+  .xp-current,
+  .stat-value,
+  .comparison-item .value,
+  .skill-comparison h3,
+  .career-trends h3,
+  .trend-name,
+  .live-feed h3,
+  .activity-content,
+  .score-bar span {
+    color: #F7FAFC;
+  }
+  
+  .xp-bar,
+  .score-bar .bar {
+    background: #334155;
+  }
+  
+  .skill-comparison,
+  .career-trends,
+  .quick-actions {
+    background: #2D3748;
+    border-color: #334155;
+  }
+  
+  .trend-item,
+  .activity-item,
+  .action-btn {
+    background: #334155;
+    border-color: #4A5568;
+  }
+  
+  .trend-item:hover,
+  .activity-item.new {
+    background: #4A5568;
+    border-color: #64748B;
+  }
+  
+  .action-btn {
+    color: #CBD5E0;
+  }
+  
+  .action-btn:hover {
+    background: #8B5CF6;
+    color: white;
+    border-color: #8B5CF6;
+  }
+  
+  .live-feed {
+    background: #1E293B;
+    scrollbar-color: #4A5568 #2D3748;
+  }
+  
+  .live-feed::-webkit-scrollbar-track {
+    background: #2D3748;
+  }
+  
+  .live-feed::-webkit-scrollbar-thumb {
+    background: #4A5568;
+  }
+}

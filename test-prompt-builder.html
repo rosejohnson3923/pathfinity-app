@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test PromptBuilder</title>
+    <style>
+        body { 
+            font-family: monospace; 
+            padding: 20px; 
+            background: #1a1a1a; 
+            color: #e0e0e0; 
+        }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+        .warning { color: #FFC107; }
+        .section { 
+            margin: 20px 0; 
+            padding: 15px; 
+            background: #2a2a2a; 
+            border-radius: 5px; 
+        }
+        pre { 
+            background: #0d0d0d; 
+            padding: 10px; 
+            border-radius: 3px; 
+            overflow-x: auto; 
+        }
+        h2 { color: #2196F3; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Testing PromptBuilder and AI Response</h1>
+    
+    <div id="results"></div>
+
+    <script type="module">
+        // Import through the app since we need the TypeScript compiled version
+        const resultsDiv = document.getElementById('results');
+        
+        function log(message, type = 'normal') {
+            const div = document.createElement('div');
+            div.className = type;
+            div.textContent = message;
+            resultsDiv.appendChild(div);
+        }
+        
+        function addSection(title, content) {
+            const section = document.createElement('div');
+            section.className = 'section';
+            section.innerHTML = `<h2>${title}</h2><pre>${content}</pre>`;
+            resultsDiv.appendChild(section);
+        }
+        
+        async function testPromptBuilder() {
+            log('🚀 Starting PromptBuilder test...', 'success');
+            
+            try {
+                // We'll test by triggering an actual AI request through the app
+                log('📝 Navigate to Learn > Math > Grade K and select a skill');
+                log('📋 Check console for:');
+                log('  1. "🚀 USING NEW PROMPT BUILDER" message');
+                log('  2. Prompt length in characters');
+                log('  3. AI response with correct_answer fields');
+                
+                // Provide instructions
+                addSection('Test Instructions', 
+`1. Open Developer Console (F12)
+2. Navigate to the app at http://localhost:3002
+3. Go to Learn > Math > Grade K
+4. Select any counting skill
+5. Watch console for these key messages:
+   - "🚀 USING NEW PROMPT BUILDER - Length: XXX characters"
+   - "📋 Question X correct_answer check:"
+   - Look for has_correct_answer: true
+
+6. Check the displayed questions:
+   - Multiple choice should show correct answer
+   - True/False should work properly
+   - All questions should have answers marked`);
+
+                addSection('Expected Console Output',
+`✅ Generated AI Learn content for [skill_number]
+🚀 USING NEW PROMPT BUILDER - Length: [4000+] characters
+📋 Question 1 correct_answer check: {
+  has_correct_answer: true,
+  correct_answer_value: [value],
+  correct_answer_type: [type],
+  is_undefined: false,
+  is_null: false
+}`);
+
+                addSection('What to Look For',
+`✅ GOOD Signs:
+- "USING NEW PROMPT BUILDER" appears
+- correct_answer is present in all questions
+- No "missing correct_answer" errors
+- Questions display properly with answers
+
+❌ BAD Signs:
+- "USING NEW PROMPT BUILDER" doesn't appear
+- "🚨 Question X missing correct_answer!" errors
+- "Defaulting to..." warnings
+- "Correct answer is not available" in UI`);
+
+                log('✅ Test setup complete. Follow instructions above.', 'success');
+                
+            } catch (error) {
+                log(`❌ Error: ${error.message}`, 'error');
+                console.error(error);
+            }
+        }
+        
+        // Run test
+        testPromptBuilder();
+    </script>
+</body>
+</html>

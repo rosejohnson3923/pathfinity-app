@@ -1,0 +1,551 @@
+/**
+ * Mobile Responsive Enhancements
+ * ================================
+ * Comprehensive mobile optimizations for Pathfinity
+ * Created: 2025-08-22
+ * 
+ * Breakpoints:
+ * - Mobile Small: 320px - 374px
+ * - Mobile: 375px - 479px  
+ * - Mobile Large: 480px - 767px
+ * - Tablet: 768px - 1023px
+ * - Desktop: 1024px+
+ */
+
+/* ============================================
+   GLOBAL MOBILE OPTIMIZATIONS
+   ============================================ */
+
+/* Prevent horizontal scroll and ensure proper viewport sizing */
+html {
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+body {
+  overflow-x: hidden;
+  min-width: 320px;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ensure all containers respect viewport boundaries */
+* {
+  max-width: 100%;
+}
+
+/* ============================================
+   MOBILE SMALL: 320px - 374px
+   ============================================ */
+@media (max-width: 374px) {
+  /* Typography scaling */
+  :root {
+    --text-xs: 0.65rem;
+    --text-sm: 0.75rem;
+    --text-base: 0.875rem;
+    --text-lg: 1rem;
+    --text-xl: 1.125rem;
+    --text-2xl: 1.25rem;
+    --text-3xl: 1.5rem;
+    --text-4xl: 1.75rem;
+    
+    /* Spacing adjustments */
+    --space-1: 2px;
+    --space-2: 4px;
+    --space-3: 8px;
+    --space-4: 12px;
+    --space-5: 16px;
+    --space-6: 20px;
+    --space-8: 28px;
+  }
+
+  /* Navigation header */
+  .container-navigation-header,
+  .nav-header {
+    height: 48px !important;
+    padding: 0 var(--space-3) !important;
+  }
+
+  .nav-title {
+    font-size: var(--text-base) !important;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .nav-btn {
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 16px !important;
+  }
+
+  /* Question cards */
+  .questionCard {
+    padding: var(--space-3) !important;
+    margin: var(--space-2) !important;
+  }
+
+  .questionText {
+    font-size: var(--text-base) !important;
+    line-height: 1.4 !important;
+  }
+
+  .answerOption {
+    padding: var(--space-3) var(--space-4) !important;
+    font-size: var(--text-sm) !important;
+    min-height: 40px !important;
+  }
+
+  /* Floating dock */
+  .floatingDock,
+  .floating-dock {
+    bottom: 10px !important;
+    padding: 6px !important;
+    gap: 6px !important;
+  }
+
+  .dockItem,
+  .dock-icon {
+    width: 38px !important;
+    height: 38px !important;
+    font-size: 16px !important;
+  }
+
+  /* Modals */
+  .modalContent,
+  .modal-content {
+    padding: var(--space-4) !important;
+    margin: var(--space-2) !important;
+    border-radius: 12px !important;
+  }
+
+  .modalTitle {
+    font-size: var(--text-lg) !important;
+  }
+
+  /* Buttons */
+  .primary,
+  .secondary,
+  .button {
+    padding: var(--space-3) var(--space-4) !important;
+    font-size: var(--text-sm) !important;
+    min-height: 40px !important;
+  }
+
+  /* Content areas */
+  .container-content {
+    padding: var(--space-2) !important;
+  }
+
+  .main-content {
+    padding-top: 56px !important;
+    padding-bottom: 70px !important;
+  }
+}
+
+/* ============================================
+   MOBILE: 375px - 479px (iPhone SE, etc)
+   ============================================ */
+@media (min-width: 375px) and (max-width: 479px) {
+  /* Typography */
+  :root {
+    --text-xs: 0.7rem;
+    --text-sm: 0.8rem;
+    --text-base: 0.9rem;
+    --text-lg: 1.05rem;
+    --text-xl: 1.2rem;
+    --text-2xl: 1.35rem;
+    --text-3xl: 1.6rem;
+    
+    /* Spacing */
+    --space-1: 3px;
+    --space-2: 6px;
+    --space-3: 10px;
+    --space-4: 14px;
+    --space-5: 18px;
+    --space-6: 22px;
+  }
+
+  /* Navigation */
+  .container-navigation-header {
+    height: 52px !important;
+    padding: 0 var(--space-4) !important;
+  }
+
+  .nav-title {
+    font-size: var(--text-base) !important;
+  }
+
+  /* Question cards */
+  .questionCard {
+    padding: var(--space-4) !important;
+  }
+
+  .answerOption {
+    padding: var(--space-3) var(--space-5) !important;
+    min-height: 44px !important;
+  }
+
+  /* Floating dock */
+  .floatingDock {
+    bottom: 15px !important;
+    padding: 8px !important;
+  }
+
+  .dockItem {
+    width: 42px !important;
+    height: 42px !important;
+  }
+}
+
+/* ============================================
+   MOBILE LARGE: 480px - 767px
+   ============================================ */
+@media (min-width: 480px) and (max-width: 767px) {
+  /* Typography remains closer to desktop */
+  :root {
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+  }
+
+  /* Navigation */
+  .container-navigation-header {
+    height: 56px !important;
+  }
+
+  /* Content spacing */
+  .container-content {
+    padding: var(--space-4) !important;
+  }
+
+  /* Floating dock can be vertical on larger phones */
+  .floatingDock.vertical {
+    flex-direction: column !important;
+    bottom: auto !important;
+    right: 20px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+  }
+}
+
+/* ============================================
+   TABLET: 768px - 1023px
+   ============================================ */
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Tablet-specific grid adjustments */
+  .sections-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .character-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+
+  .career-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Two-panel layouts */
+  .two-panel-modal {
+    flex-direction: row !important;
+  }
+
+  .main-content-panel {
+    flex: 1 !important;
+  }
+
+  .gamification-sidebar {
+    width: 250px !important;
+    height: auto !important;
+    position: relative !important;
+  }
+}
+
+/* ============================================
+   LANDSCAPE ORIENTATION
+   ============================================ */
+@media (orientation: landscape) and (max-height: 600px) {
+  /* Reduce vertical spacing in landscape */
+  .container-navigation-header {
+    height: 44px !important;
+  }
+
+  .main-content {
+    padding-top: 50px !important;
+    padding-bottom: 60px !important;
+  }
+
+  .floatingDock {
+    bottom: 10px !important;
+  }
+
+  .questionCard {
+    padding: var(--space-3) var(--space-5) !important;
+  }
+
+  /* Hide less critical elements in landscape */
+  .progress-indicator.vertical {
+    display: none !important;
+  }
+
+  /* Modal adjustments */
+  .modalContent {
+    max-height: 85vh !important;
+    overflow-y: auto !important;
+  }
+}
+
+/* ============================================
+   TOUCH DEVICE OPTIMIZATIONS
+   ============================================ */
+@media (hover: none) and (pointer: coarse) {
+  /* Ensure all interactive elements meet minimum touch target size */
+  button,
+  a,
+  .clickable,
+  .interactive,
+  input[type="button"],
+  input[type="submit"],
+  .dockItem,
+  .answerOption {
+    min-width: 44px !important;
+    min-height: 44px !important;
+    cursor: pointer;
+  }
+
+  /* Remove hover effects on touch devices */
+  button:hover,
+  a:hover,
+  .clickable:hover {
+    transform: none !important;
+  }
+
+  /* Add active states for better feedback */
+  button:active,
+  a:active,
+  .clickable:active {
+    opacity: 0.8;
+    transform: scale(0.98);
+  }
+
+  /* Improve input field usability */
+  input,
+  textarea,
+  select {
+    font-size: 16px !important; /* Prevents zoom on iOS */
+    padding: var(--space-3) !important;
+    min-height: 44px !important;
+  }
+
+  /* Disable text selection on buttons */
+  button,
+  .button {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* ============================================
+   SAFE AREA INSETS (for notched devices)
+   ============================================ */
+@supports (padding: max(0px)) {
+  .container-base {
+    padding-left: max(var(--space-4), env(safe-area-inset-left));
+    padding-right: max(var(--space-4), env(safe-area-inset-right));
+    padding-bottom: max(var(--space-4), env(safe-area-inset-bottom));
+  }
+
+  .container-navigation-header {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .floatingDock {
+    bottom: max(20px, calc(env(safe-area-inset-bottom) + 10px)) !important;
+  }
+
+  .modal {
+    padding: max(var(--space-4), env(safe-area-inset-top)) 
+             max(var(--space-4), env(safe-area-inset-right))
+             max(var(--space-4), env(safe-area-inset-bottom))
+             max(var(--space-4), env(safe-area-inset-left));
+  }
+}
+
+/* ============================================
+   SPECIFIC COMPONENT FIXES
+   ============================================ */
+
+/* Fix dashboard modal on mobile */
+@media (max-width: 767px) {
+  .dashboardModal {
+    width: 100% !important;
+    height: 100vh !important;
+    max-width: 100% !important;
+    border-radius: 0 !important;
+    padding: var(--space-3) !important;
+  }
+
+  .sectionsGrid {
+    grid-template-columns: 1fr !important;
+    gap: var(--space-3) !important;
+  }
+
+  .sectionCard {
+    padding: var(--space-4) !important;
+  }
+
+  .quickStats {
+    flex-direction: column !important;
+    gap: var(--space-3) !important;
+  }
+
+  .statCard {
+    width: 100% !important;
+  }
+}
+
+/* Fix companion chat box on mobile */
+@media (max-width: 480px) {
+  .companionChatBox {
+    max-width: calc(100% - 32px) !important;
+    left: 16px !important;
+    right: 16px !important;
+    bottom: 70px !important;
+  }
+
+  .chatAvatar {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .chatMessage {
+    font-size: var(--text-sm) !important;
+  }
+}
+
+/* Fix floating learning dock positioning */
+@media (max-width: 767px) {
+  .floatingLearningDock {
+    flex-direction: row !important;
+    bottom: 15px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    right: auto !important;
+    top: auto !important;
+  }
+
+  .dockExpanded {
+    width: auto !important;
+    max-width: calc(100% - 32px) !important;
+  }
+}
+
+/* Fix multi-subject container grid */
+@media (max-width: 767px) {
+  .subjectGrid {
+    grid-template-columns: 1fr !important;
+    gap: var(--space-3) !important;
+  }
+
+  .subjectCard {
+    padding: var(--space-4) !important;
+  }
+}
+
+/* ============================================
+   PERFORMANCE OPTIMIZATIONS
+   ============================================ */
+
+/* Reduce animations on low-end devices */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Hardware acceleration for smooth scrolling */
+.container-content,
+.modal-content,
+.scrollable {
+  -webkit-overflow-scrolling: touch;
+  transform: translateZ(0);
+  will-change: scroll-position;
+}
+
+/* ============================================
+   UTILITY CLASSES FOR RESPONSIVE DISPLAY
+   ============================================ */
+.mobile-only {
+  display: none !important;
+}
+
+.tablet-only {
+  display: none !important;
+}
+
+.desktop-only {
+  display: block !important;
+}
+
+@media (max-width: 767px) {
+  .mobile-only {
+    display: block !important;
+  }
+  
+  .tablet-only,
+  .desktop-only {
+    display: none !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .tablet-only {
+    display: block !important;
+  }
+  
+  .mobile-only {
+    display: none !important;
+  }
+  
+  .desktop-only {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .desktop-only {
+    display: block !important;
+  }
+  
+  .mobile-only,
+  .tablet-only {
+    display: none !important;
+  }
+}
+
+/* ============================================
+   DEBUGGING HELPERS (Remove in production)
+   ============================================ */
+/* Uncomment to visualize overflow issues */
+/* * {
+  outline: 1px solid red !important;
+} */
+
+/* Uncomment to find elements causing horizontal scroll */
+/* * {
+  max-width: 100% !important;
+} */

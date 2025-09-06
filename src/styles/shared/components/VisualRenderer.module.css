@@ -1,0 +1,196 @@
+/**
+ * VISUAL RENDERER MODULE STYLES
+ * ==============================
+ * Styles for visual content rendering in learning activities
+ * Properly handles theme switching and responsive layouts
+ */
+
+/* ============================================
+   VISUAL CONTAINER
+   ============================================ */
+.visualRenderer {
+  text-align: center;
+  margin: var(--space-8) 0;
+  padding: var(--space-6);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  border: 2px solid var(--border-color);
+  transition: all var(--duration-base) var(--easing-out);
+}
+
+/* Dark theme specific overrides */
+[data-theme="dark"] .visualRenderer,
+.theme-dark .visualRenderer {
+  background: var(--bg-secondary);
+  border-color: var(--border-color-soft);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ============================================
+   CONTENT LAYOUT
+   ============================================ */
+.visualContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  flex-wrap: wrap;
+}
+
+.visualContent.compact {
+  gap: var(--space-4);
+}
+
+/* ============================================
+   EMOJI DISPLAY
+   ============================================ */
+.emojiContainer {
+  font-size: var(--text-4xl);
+  line-height: 1.8;
+  letter-spacing: 0.5rem;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.emojiContainer.small {
+  font-size: var(--text-2xl);
+}
+
+.emojiContainer.medium {
+  font-size: var(--text-3xl);
+}
+
+.emojiContainer.large {
+  font-size: var(--text-5xl);
+}
+
+.emojiItem {
+  display: inline-block;
+  animation: bounceIn 0.5s ease-out;
+  animation-fill-mode: backwards;
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ============================================
+   NUMBER DISPLAY
+   ============================================ */
+.numberDisplay {
+  font-size: var(--text-6xl);
+  font-weight: var(--font-bold);
+  color: var(--color-primary);
+  margin: 0 var(--space-6);
+  text-shadow: var(--shadow-sm);
+}
+
+/* ============================================
+   ICON GRID (React Icons)
+   ============================================ */
+.iconGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+  gap: var(--space-4);
+  max-width: 400px;
+  margin: 0 auto;
+  padding: var(--space-4);
+}
+
+.iconItem {
+  font-size: var(--text-4xl);
+  color: var(--color-primary);
+  animation: iconPop 0.3s ease-out;
+  animation-fill-mode: backwards;
+}
+
+@keyframes iconPop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   DESCRIPTION TEXT
+   ============================================ */
+.description {
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.descriptionOnly {
+  font-size: var(--text-xl);
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.descriptionSubtle {
+  font-size: var(--text-sm);
+  color: var(--text-tertiary);
+  margin-top: var(--space-4);
+  font-style: italic;
+  opacity: 0.8;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 768px) {
+  .visualRenderer {
+    padding: var(--space-4);
+    margin: var(--space-4) 0;
+  }
+  
+  .visualContent {
+    gap: var(--space-4);
+  }
+  
+  .emojiContainer {
+    font-size: var(--text-3xl);
+    letter-spacing: 0.3rem;
+  }
+  
+  .numberDisplay {
+    font-size: var(--text-4xl);
+    margin: 0 var(--space-3);
+  }
+  
+  .iconGrid {
+    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+    gap: var(--space-2);
+  }
+}
+
+@media (max-width: 480px) {
+  .emojiContainer {
+    font-size: var(--text-2xl);
+    letter-spacing: 0.2rem;
+  }
+  
+  .numberDisplay {
+    font-size: var(--text-3xl);
+  }
+  
+  .iconItem {
+    font-size: var(--text-3xl);
+  }
+}

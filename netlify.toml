@@ -1,0 +1,58 @@
+# netlify.toml - Pathfinity Deployment Configuration
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "18"
+  NPM_VERSION = "9"
+
+# Production deployment
+[context.production]
+  environment = { VITE_ENVIRONMENT = "production", VITE_ANALYTICS_ENABLED = "true", VITE_SUPABASE_URL = "https://zohdmprtfyijneqnwjsu.supabase.co", VITE_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpvaGRtcHJ0Znlpam5lcW53anN1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MDI2MzU4NCwiZXhwIjoyMDY1ODM5NTg0fQ.aecsTt4HYBR8mQe_UwcyBXH_QoZb9uyAjeNfcHjTxbc" }
+
+# Staging deployment (from staging branch)
+[context.branch-deploy]
+  environment = { VITE_ENVIRONMENT = "staging", VITE_ANALYTICS_ENABLED = "false" }
+
+# Preview deployments
+[context.deploy-preview]
+  environment = { VITE_ENVIRONMENT = "preview", VITE_ANALYTICS_ENABLED = "false" }
+
+# Simple redirects - allow static files, redirect React routes
+[[redirects]]
+  from = "/dashboard"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/tools/*"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/login"
+  to = "/index.html"
+  status = 200
+
+# Catch-all for SPA routes - with force=false to allow static files
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = false
+
+# Security headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Cache optimization for assets
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

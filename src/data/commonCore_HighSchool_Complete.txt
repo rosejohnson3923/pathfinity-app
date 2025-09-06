@@ -1,0 +1,295 @@
+CommonCoreID	CommonCoreDescription	Subject	Grade	SkillsArea	SkillCluster	SkillNumber	SkillName	CareerRelevance
+HSN-RN.A.1	Explain how the definition of the meaning of rational exponents follows from extending the properties of integer exponents	Math	9	Number and Quantity	The Real Number System	HSN-RN.A.1	Rational exponents and properties	Engineering,Science,Technology,Finance,Architecture
+HSN-RN.A.2	Rewrite expressions involving radicals and rational exponents using the properties of exponents	Math	9	Number and Quantity	The Real Number System	HSN-RN.A.2	Rewrite radical expressions	Engineering,Physics,Computer Science,Data Science
+HSN-Q.A.1	Use units as a way to understand problems and to guide the solution of multi-step problems	Math	9	Number and Quantity	Quantities	HSN-Q.A.1	Dimensional analysis	Engineering,Medicine,Science,Construction,Manufacturing
+HSN-Q.A.2	Define appropriate quantities for the purpose of descriptive modeling	Math	9	Number and Quantity	Quantities	HSN-Q.A.2	Define modeling quantities	Data Science,Economics,Business Analytics,Research
+HSN-Q.A.3	Choose a level of accuracy appropriate to limitations on measurement	Math	9	Number and Quantity	Quantities	HSN-Q.A.3	Measurement accuracy	Engineering,Science,Medicine,Manufacturing,Quality Control
+HSN-CN.A.1	Know there is a complex number i such that i² = -1	Math	11	Number and Quantity	Complex Number System	HSN-CN.A.1	Complex number fundamentals	Engineering,Physics,Signal Processing,Quantum Computing
+HSN-CN.A.2	Use the relation i² = -1 and the commutative, associative, and distributive properties	Math	11	Number and Quantity	Complex Number System	HSN-CN.A.2	Complex number operations	Engineering,Electrical Engineering,Physics
+HSN-CN.A.3	Find the conjugate of a complex number	Math	11	Number and Quantity	Complex Number System	HSN-CN.A.3	Complex conjugates	Engineering,Signal Processing,Physics
+HSN-CN.B.4	Represent complex numbers on the complex plane in rectangular and polar form	Math	11	Number and Quantity	Complex Number System	HSN-CN.B.4	Complex plane representation	Engineering,Physics,Computer Graphics
+HSN-CN.B.5	Represent addition, subtraction, multiplication, and conjugation geometrically	Math	11	Number and Quantity	Complex Number System	HSN-CN.B.5	Geometric operations	Computer Graphics,Engineering,Animation
+HSN-CN.C.7	Solve quadratic equations with real coefficients that have complex solutions	Math	11	Number and Quantity	Complex Number System	HSN-CN.C.7	Complex solutions	Engineering,Physics,Mathematics
+HSN-VM.A.1	Recognize vector quantities as having both magnitude and direction	Math	10	Number and Quantity	Vector and Matrix	HSN-VM.A.1	Vector fundamentals	Game Development,Physics,Engineering,Animation,Robotics
+HSN-VM.A.2	Find the components of a vector by subtracting the coordinates	Math	10	Number and Quantity	Vector and Matrix	HSN-VM.A.2	Vector components	Computer Graphics,Navigation,Aviation,Marine Engineering
+HSN-VM.A.3	Solve problems involving velocity and other quantities represented by vectors	Math	10	Number and Quantity	Vector and Matrix	HSN-VM.A.3	Vector applications	Physics,Engineering,Game Development,Robotics
+HSN-VM.B.4	Add and subtract vectors	Math	10	Number and Quantity	Vector and Matrix	HSN-VM.B.4	Vector addition and subtraction	Physics,Engineering,Computer Graphics,Game Development
+HSN-VM.B.5	Multiply a vector by a scalar	Math	10	Number and Quantity	Vector and Matrix	HSN-VM.B.5	Scalar multiplication	Computer Graphics,Physics,Engineering
+HSN-VM.C.6	Use matrices to represent and manipulate data	Math	11	Number and Quantity	Vector and Matrix	HSN-VM.C.6	Matrix fundamentals	Data Science,Computer Graphics,Machine Learning,Economics
+HSN-VM.C.7	Multiply matrices by scalars to produce new matrices	Math	11	Number and Quantity	Vector and Matrix	HSN-VM.C.7	Matrix scalar multiplication	Computer Graphics,Data Science,Engineering
+HSN-VM.C.8	Add, subtract, and multiply matrices of appropriate dimensions	Math	11	Number and Quantity	Vector and Matrix	HSN-VM.C.8	Matrix operations	Machine Learning,Computer Graphics,Data Science
+HSA-SSE.A.1	Interpret expressions that represent a quantity in terms of its context	Math	9	Algebra	Structure in Expressions	HSA-SSE.A.1	Interpret expressions	Finance,Economics,Business,Data Analysis,Marketing
+HSA-SSE.A.1.a	Interpret parts of an expression, such as terms, factors, and coefficients	Math	9	Algebra	Structure in Expressions	HSA-SSE.A.1.a	Expression components	Finance,Engineering,Economics,Data Science
+HSA-SSE.A.1.b	Interpret complicated expressions by viewing one or more of their parts as a single entity	Math	9	Algebra	Structure in Expressions	HSA-SSE.A.1.b	Complex expressions	Programming,Engineering,Finance,Data Science
+HSA-SSE.A.2	Use the structure of an expression to identify ways to rewrite it	Math	9	Algebra	Structure in Expressions	HSA-SSE.A.2	Rewrite expressions	Computer Programming,Engineering,Mathematics,Cryptography
+HSA-SSE.B.3	Choose and produce an equivalent form of an expression to reveal properties	Math	10	Algebra	Structure in Expressions	HSA-SSE.B.3	Equivalent expressions	Engineering,Computer Science,Finance,Physics
+HSA-SSE.B.3.a	Factor a quadratic expression to reveal the zeros of the function	Math	10	Algebra	Structure in Expressions	HSA-SSE.B.3.a	Factor quadratics	Engineering,Physics,Computer Graphics
+HSA-SSE.B.3.b	Complete the square to reveal maximum or minimum value	Math	10	Algebra	Structure in Expressions	HSA-SSE.B.3.b	Complete the square	Engineering,Physics,Optimization,Economics
+HSA-SSE.B.3.c	Use properties of exponents to transform exponential expressions	Math	10	Algebra	Structure in Expressions	HSA-SSE.B.3.c	Transform exponentials	Finance,Biology,Chemistry,Physics
+HSA-SSE.B.4	Derive the formula for the sum of a finite geometric series	Math	11	Algebra	Structure in Expressions	HSA-SSE.B.4	Geometric series	Finance,Computer Science,Engineering,Economics
+HSA-APR.A.1	Understand that polynomials form a system analogous to the integers	Math	10	Algebra	Polynomial Arithmetic	HSA-APR.A.1	Polynomial system	Computer Science,Cryptography,Engineering,Signal Processing
+HSA-APR.B.2	Know and apply the Remainder Theorem	Math	11	Algebra	Polynomial Arithmetic	HSA-APR.B.2	Remainder Theorem	Computer Science,Engineering,Mathematics
+HSA-APR.B.3	Identify zeros of polynomials and use them to construct rough graph	Math	11	Algebra	Polynomial Arithmetic	HSA-APR.B.3	Polynomial zeros	Engineering,Physics,Computer Graphics,Economics
+HSA-APR.C.4	Prove polynomial identities and use them to describe numerical relationships	Math	11	Algebra	Polynomial Arithmetic	HSA-APR.C.4	Polynomial identities	Mathematics,Computer Science,Cryptography
+HSA-APR.C.5	Know and apply the Binomial Theorem	Math	11	Algebra	Polynomial Arithmetic	HSA-APR.C.5	Binomial Theorem	Statistics,Probability,Finance,Computer Science
+HSA-APR.D.6	Rewrite simple rational expressions in different forms	Math	11	Algebra	Polynomial Arithmetic	HSA-APR.D.6	Rational expressions	Engineering,Physics,Electronics
+HSA-APR.D.7	Understand that rational expressions form a system analogous to rational numbers	Math	12	Algebra	Polynomial Arithmetic	HSA-APR.D.7	Rational expression system	Advanced Mathematics,Engineering
+HSA-CED.A.1	Create equations and inequalities in one variable and use them to solve problems	Math	9	Algebra	Creating Equations	HSA-CED.A.1	One-variable equations	Business,Economics,Engineering,Science,Finance
+HSA-CED.A.2	Create equations in two or more variables to represent relationships	Math	9	Algebra	Creating Equations	HSA-CED.A.2	Multi-variable equations	Data Science,Economics,Physics,Engineering,Research
+HSA-CED.A.3	Represent constraints by equations or inequalities and by systems	Math	10	Algebra	Creating Equations	HSA-CED.A.3	Constraint representation	Operations Research,Economics,Business Analytics,Engineering
+HSA-CED.A.4	Rearrange formulas to highlight a quantity of interest	Math	9	Algebra	Creating Equations	HSA-CED.A.4	Formula manipulation	Physics,Chemistry,Engineering,Finance
+HSA-REI.A.1	Explain each step in solving a simple equation	Math	9	Algebra	Reasoning with Equations	HSA-REI.A.1	Explain solution steps	Teaching,Technical Writing,Quality Assurance,Auditing
+HSA-REI.A.2	Solve simple rational and radical equations in one variable	Math	11	Algebra	Reasoning with Equations	HSA-REI.A.2	Rational and radical equations	Engineering,Physics,Chemistry
+HSA-REI.B.3	Solve linear equations and inequalities in one variable	Math	9	Algebra	Reasoning with Equations	HSA-REI.B.3	Linear equations	All STEM fields,Business,Finance
+HSA-REI.B.4	Solve quadratic equations in one variable	Math	10	Algebra	Reasoning with Equations	HSA-REI.B.4	Quadratic equations	Engineering,Physics,Computer Graphics,Economics
+HSA-REI.B.4.a	Use the method of completing the square	Math	10	Algebra	Reasoning with Equations	HSA-REI.B.4.a	Completing square method	Engineering,Physics,Optimization
+HSA-REI.B.4.b	Solve quadratic equations using the quadratic formula	Math	10	Algebra	Reasoning with Equations	HSA-REI.B.4.b	Quadratic formula	Engineering,Physics,Computer Science
+HSA-REI.C.5	Prove that given a system of two equations, replacing one equation creates equivalent system	Math	10	Algebra	Reasoning with Equations	HSA-REI.C.5	System equivalence	Mathematics,Computer Science,Logic
+HSA-REI.C.6	Solve systems of linear equations exactly and approximately	Math	10	Algebra	Reasoning with Equations	HSA-REI.C.6	Linear systems	Engineering,Economics,Data Science,Operations Research
+HSA-REI.C.7	Solve a simple system consisting of a linear and quadratic equation	Math	11	Algebra	Reasoning with Equations	HSA-REI.C.7	Mixed systems	Engineering,Physics,Computer Graphics
+HSA-REI.C.8	Represent a system of linear equations as a single matrix equation	Math	12	Algebra	Reasoning with Equations	HSA-REI.C.8	Matrix equations	Computer Science,Engineering,Data Science,Machine Learning
+HSA-REI.C.9	Find the inverse of a matrix if it exists	Math	12	Algebra	Reasoning with Equations	HSA-REI.C.9	Matrix inverse	Computer Graphics,Engineering,Cryptography,Data Science
+HSA-REI.D.10	Understand that the graph of an equation is the set of all its solutions	Math	9	Algebra	Reasoning with Equations	HSA-REI.D.10	Graphical solutions	All fields using data visualization
+HSA-REI.D.11	Explain why x-coordinates of intersection points give solutions	Math	10	Algebra	Reasoning with Equations	HSA-REI.D.11	Intersection solutions	Engineering,Economics,Computer Graphics
+HSA-REI.D.12	Graph the solutions to a linear inequality in two variables	Math	9	Algebra	Reasoning with Equations	HSA-REI.D.12	Inequality graphs	Economics,Operations Research,Business Analytics
+HSF-IF.A.1	Understand that a function assigns exactly one output to each input	Math	9	Functions	Interpreting Functions	HSF-IF.A.1	Function definition	Programming,Database Design,Systems Analysis,Machine Learning
+HSF-IF.A.2	Use function notation, evaluate functions for inputs in their domains	Math	9	Functions	Interpreting Functions	HSF-IF.A.2	Function notation	Programming,Mathematics,Engineering,Data Science
+HSF-IF.A.3	Recognize that sequences are functions	Math	10	Functions	Interpreting Functions	HSF-IF.A.3	Sequences as functions	Computer Science,Mathematics,Finance
+HSF-IF.B.4	For a function that models a relationship, interpret key features of graphs	Math	9	Functions	Interpreting Functions	HSF-IF.B.4	Graph interpretation	Data Analysis,Economics,Environmental Science,Market Research
+HSF-IF.B.5	Relate the domain of a function to its graph and to quantitative relationship	Math	10	Functions	Interpreting Functions	HSF-IF.B.5	Domain and range	Engineering,Computer Science,Data Analysis
+HSF-IF.B.6	Calculate and interpret average rate of change	Math	10	Functions	Interpreting Functions	HSF-IF.B.6	Rate of change	Economics,Physics,Environmental Science,Finance
+HSF-IF.C.7	Graph functions expressed symbolically and show key features	Math	10	Functions	Interpreting Functions	HSF-IF.C.7	Function graphing	Engineering,Science,Economics,Data Visualization
+HSF-IF.C.7.a	Graph linear and quadratic functions	Math	9	Functions	Interpreting Functions	HSF-IF.C.7.a	Linear and quadratic graphs	All STEM fields,Economics,Business
+HSF-IF.C.7.b	Graph square root, cube root, and piecewise functions	Math	10	Functions	Interpreting Functions	HSF-IF.C.7.b	Root and piecewise graphs	Engineering,Computer Science,Physics
+HSF-IF.C.7.c	Graph polynomial functions	Math	11	Functions	Interpreting Functions	HSF-IF.C.7.c	Polynomial graphs	Engineering,Physics,Economics
+HSF-IF.C.7.d	Graph rational functions	Math	11	Functions	Interpreting Functions	HSF-IF.C.7.d	Rational graphs	Engineering,Electronics,Physics
+HSF-IF.C.7.e	Graph exponential and logarithmic functions	Math	11	Functions	Interpreting Functions	HSF-IF.C.7.e	Exponential and log graphs	Finance,Biology,Chemistry,Computer Science
+HSF-IF.C.8	Write a function defined by expression in different but equivalent forms	Math	10	Functions	Interpreting Functions	HSF-IF.C.8	Function forms	Engineering,Computer Science,Mathematics
+HSF-IF.C.8.a	Use factoring and completing square for quadratics	Math	10	Functions	Interpreting Functions	HSF-IF.C.8.a	Quadratic forms	Engineering,Physics,Optimization
+HSF-IF.C.8.b	Use properties of exponents for exponentials	Math	11	Functions	Interpreting Functions	HSF-IF.C.8.b	Exponential properties	Finance,Biology,Physics,Chemistry
+HSF-IF.C.9	Compare properties of two functions represented differently	Math	10	Functions	Interpreting Functions	HSF-IF.C.9	Function comparison	Data Analysis,Economics,Research
+HSF-BF.A.1	Write a function that describes a relationship between two quantities	Math	9	Functions	Building Functions	HSF-BF.A.1	Function modeling	Software Development,Financial Modeling,Scientific Research,Engineering
+HSF-BF.A.1.a	Determine an explicit expression or recursive process	Math	10	Functions	Building Functions	HSF-BF.A.1.a	Explicit and recursive	Computer Science,Mathematics,Finance
+HSF-BF.A.1.b	Combine standard function types using arithmetic operations	Math	10	Functions	Building Functions	HSF-BF.A.1.b	Function combinations	Engineering,Physics,Economics
+HSF-BF.A.1.c	Compose functions	Math	11	Functions	Building Functions	HSF-BF.A.1.c	Function composition	Computer Science,Mathematics,Engineering
+HSF-BF.A.2	Write arithmetic and geometric sequences recursively and explicitly	Math	10	Functions	Building Functions	HSF-BF.A.2	Sequence formulas	Finance,Computer Science,Mathematics
+HSF-BF.B.3	Identify the effect on graph of replacing f(x) with f(x)+k, kf(x), f(kx), f(x+k)	Math	10	Functions	Building Functions	HSF-BF.B.3	Function transformations	Computer Graphics,Engineering,Animation,Physics
+HSF-BF.B.4	Find inverse functions	Math	11	Functions	Building Functions	HSF-BF.B.4	Inverse functions	Cryptography,Engineering,Computer Science,Mathematics
+HSF-BF.B.4.a	Solve an equation f(x)=c by finding inverse	Math	11	Functions	Building Functions	HSF-BF.B.4.a	Solve using inverse	Engineering,Physics,Chemistry
+HSF-BF.B.5	Understand the inverse relationship between exponents and logarithms	Math	11	Functions	Building Functions	HSF-BF.B.5	Exponents and logarithms	Computer Science,Engineering,Finance,Science
+HSF-LE.A.1	Distinguish between situations modeled with linear vs exponential functions	Math	9	Functions	Linear and Exponential	HSF-LE.A.1	Linear vs exponential	Finance,Biology,Economics,Population Studies,Marketing
+HSF-LE.A.1.a	Prove linear functions grow by equal differences	Math	9	Functions	Linear and Exponential	HSF-LE.A.1.a	Linear growth	Economics,Business,Science
+HSF-LE.A.1.b	Prove exponential functions grow by equal factors	Math	9	Functions	Linear and Exponential	HSF-LE.A.1.b	Exponential growth	Finance,Biology,Chemistry,Marketing
+HSF-LE.A.1.c	Recognize situations where quantity grows by constant percent rate	Math	10	Functions	Linear and Exponential	HSF-LE.A.1.c	Percent growth	Finance,Economics,Business,Investment
+HSF-LE.A.2	Construct linear and exponential functions from graph, table, or description	Math	10	Functions	Linear and Exponential	HSF-LE.A.2	Construct functions	Data Analysis,Economics,Science,Business
+HSF-LE.A.3	Observe that exponential quantity increases by constant percent rate	Math	10	Functions	Linear and Exponential	HSF-LE.A.3	Exponential patterns	Finance,Biology,Chemistry,Economics
+HSF-LE.A.4	Express exponential models as logarithms to solve problems	Math	11	Functions	Linear and Exponential	HSF-LE.A.4	Logarithmic solutions	Science,Engineering,Finance,Medicine
+HSF-LE.B.5	Interpret parameters in linear or exponential function in context	Math	10	Functions	Linear and Exponential	HSF-LE.B.5	Parameter interpretation	Economics,Science,Business,Research
+HSF-TF.A.1	Understand radian measure of an angle	Math	11	Functions	Trigonometric Functions	HSF-TF.A.1	Radian measure	Engineering,Physics,Architecture,Navigation,Astronomy
+HSF-TF.A.2	Explain how unit circle enables extension of trig functions to all reals	Math	11	Functions	Trigonometric Functions	HSF-TF.A.2	Unit circle	Engineering,Physics,Computer Graphics,Signal Processing
+HSF-TF.A.3	Use special triangles to determine trig values	Math	11	Functions	Trigonometric Functions	HSF-TF.A.3	Special triangles	Engineering,Architecture,Physics,Navigation
+HSF-TF.A.4	Use unit circle to explain symmetry and periodicity of trig functions	Math	11	Functions	Trigonometric Functions	HSF-TF.A.4	Trig periodicity	Signal Processing,Engineering,Music,Physics
+HSF-TF.B.5	Choose trig functions to model periodic phenomena	Math	12	Functions	Trigonometric Functions	HSF-TF.B.5	Model periodic phenomena	Engineering,Physics,Music,Signal Processing,Astronomy
+HSF-TF.B.6	Understand that restricting domain allows inverse trig functions	Math	12	Functions	Trigonometric Functions	HSF-TF.B.6	Inverse trig functions	Engineering,Physics,Computer Graphics,Navigation
+HSF-TF.B.7	Use inverse functions to solve trig equations in modeling contexts	Math	12	Functions	Trigonometric Functions	HSF-TF.B.7	Solve trig equations	Engineering,Physics,Navigation,Architecture
+HSF-TF.C.8	Prove Pythagorean identity and use to find trig values	Math	11	Functions	Trigonometric Functions	HSF-TF.C.8	Pythagorean identity	Engineering,Physics,Mathematics
+HSF-TF.C.9	Prove addition and subtraction formulas for sine, cosine, tangent	Math	12	Functions	Trigonometric Functions	HSF-TF.C.9	Trig formulas	Advanced Mathematics,Physics,Engineering
+HSG-CO.A.1	Know precise definitions of angle, circle, perpendicular, parallel	Math	9	Geometry	Congruence	HSG-CO.A.1	Geometric definitions	Architecture,Engineering,Design,Construction,Surveying
+HSG-CO.A.2	Represent transformations in the plane	Math	9	Geometry	Congruence	HSG-CO.A.2	Transformations	Computer Graphics,Animation,Game Design,Architecture
+HSG-CO.A.3	Describe rotations and reflections that carry a figure onto itself	Math	9	Geometry	Congruence	HSG-CO.A.3	Symmetry	Design,Architecture,Art,Engineering
+HSG-CO.A.4	Develop definitions of rotations, reflections, translations	Math	9	Geometry	Congruence	HSG-CO.A.4	Transformation definitions	Computer Graphics,Animation,Game Design
+HSG-CO.A.5	Specify sequence of transformations to carry figure onto another	Math	10	Geometry	Congruence	HSG-CO.A.5	Transformation sequences	Animation,Computer Graphics,Robotics
+HSG-CO.B.6	Use geometric descriptions of rigid motions	Math	10	Geometry	Congruence	HSG-CO.B.6	Rigid motions	Engineering,Robotics,Animation,Physics
+HSG-CO.B.7	Use definition of congruence to show figures are congruent	Math	10	Geometry	Congruence	HSG-CO.B.7	Congruence proofs	Mathematics,Engineering,Architecture
+HSG-CO.B.8	Explain how criteria for triangle congruence follow from rigid motions	Math	10	Geometry	Congruence	HSG-CO.B.8	Triangle congruence	Engineering,Architecture,Construction
+HSG-CO.C.9	Prove theorems about lines and angles	Math	10	Geometry	Congruence	HSG-CO.C.9	Line and angle theorems	Mathematics,Engineering,Architecture
+HSG-CO.C.10	Prove theorems about triangles	Math	10	Geometry	Congruence	HSG-CO.C.10	Triangle theorems	Engineering,Architecture,Physics
+HSG-CO.C.11	Prove theorems about parallelograms	Math	10	Geometry	Congruence	HSG-CO.C.11	Parallelogram theorems	Engineering,Architecture,Design
+HSG-CO.D.12	Make formal geometric constructions	Math	10	Geometry	Congruence	HSG-CO.D.12	Geometric constructions	Architecture,Engineering,Design,Art
+HSG-CO.D.13	Construct inscribed and circumscribed figures	Math	11	Geometry	Congruence	HSG-CO.D.13	Inscribed figures	Engineering,Architecture,Design
+HSG-SRT.A.1	Verify experimentally the properties of dilations	Math	10	Geometry	Similarity and Trigonometry	HSG-SRT.A.1	Dilation properties	Computer Graphics,Animation,Architecture,Map Making
+HSG-SRT.A.2	Use definition of similarity to decide if figures are similar	Math	10	Geometry	Similarity and Trigonometry	HSG-SRT.A.2	Similarity definition	Architecture,Engineering,Design,Photography
+HSG-SRT.A.3	Use properties of similarity transformations to establish AA criterion	Math	10	Geometry	Similarity and Trigonometry	HSG-SRT.A.3	AA similarity	Engineering,Architecture,Surveying
+HSG-SRT.B.4	Prove theorems about triangles using similarity	Math	11	Geometry	Similarity and Trigonometry	HSG-SRT.B.4	Similarity theorems	Mathematics,Engineering,Architecture
+HSG-SRT.B.5	Use congruence and similarity criteria to solve problems and prove	Math	11	Geometry	Similarity and Trigonometry	HSG-SRT.B.5	Apply similarity	Engineering,Architecture,Design,Construction
+HSG-SRT.C.6	Understand that side ratios in right triangles are properties of angles	Math	10	Geometry	Similarity and Trigonometry	HSG-SRT.C.6	Trigonometric ratios	Engineering,Physics,Architecture,Navigation
+HSG-SRT.C.7	Explain and use the relationship between sine and cosine of complements	Math	10	Geometry	Similarity and Trigonometry	HSG-SRT.C.7	Complementary angles	Engineering,Physics,Mathematics
+HSG-SRT.C.8	Use trigonometric ratios and Pythagorean theorem to solve triangles	Math	10	Geometry	Similarity and Trigonometry	HSG-SRT.C.8	Solve triangles	Engineering,Architecture,Navigation,Surveying
+HSG-SRT.D.9	Derive formula for area of triangle	Math	11	Geometry	Similarity and Trigonometry	HSG-SRT.D.9	Triangle area formula	Engineering,Architecture,Construction
+HSG-SRT.D.10	Prove Laws of Sines and Cosines	Math	11	Geometry	Similarity and Trigonometry	HSG-SRT.D.10	Law of Sines and Cosines	Navigation,Engineering,Physics,Surveying
+HSG-SRT.D.11	Apply Law of Sines and Cosines to find unknown measurements	Math	11	Geometry	Similarity and Trigonometry	HSG-SRT.D.11	Apply trig laws	Engineering,Navigation,Architecture,Astronomy
+HSG-C.A.1	Prove all circles are similar	Math	10	Geometry	Circles	HSG-C.A.1	Circle similarity	Mathematics,Engineering,Design
+HSG-C.A.2	Identify and describe relationships among inscribed angles, radii, chords	Math	10	Geometry	Circles	HSG-C.A.2	Circle relationships	Engineering,Architecture,Design
+HSG-C.A.3	Construct inscribed and circumscribed circles of triangle	Math	11	Geometry	Circles	HSG-C.A.3	Circle constructions	Engineering,Architecture,Design
+HSG-C.A.4	Construct tangent line to circle from external point	Math	11	Geometry	Circles	HSG-C.A.4	Tangent construction	Engineering,Design,Architecture
+HSG-C.B.5	Derive using similarity that arc length is proportional to radius	Math	11	Geometry	Circles	HSG-C.B.5	Arc length	Engineering,Physics,Architecture
+HSG-GPE.A.1	Derive equation of circle given center and radius	Math	10	Geometry	Coordinate Geometry	HSG-GPE.A.1	Circle equations	Computer Graphics,Engineering,Navigation
+HSG-GPE.A.2	Derive equation of parabola given focus and directrix	Math	11	Geometry	Coordinate Geometry	HSG-GPE.A.2	Parabola equations	Engineering,Physics,Optics,Architecture
+HSG-GPE.A.3	Derive equations of ellipses and hyperbolas	Math	12	Geometry	Coordinate Geometry	HSG-GPE.A.3	Conic sections	Astronomy,Physics,Engineering,Architecture
+HSG-GPE.B.4	Use coordinates to prove simple geometric theorems algebraically	Math	10	Geometry	Coordinate Geometry	HSG-GPE.B.4	Coordinate proofs	Mathematics,Computer Science,Engineering
+HSG-GPE.B.5	Prove slope criteria for parallel and perpendicular lines	Math	9	Geometry	Coordinate Geometry	HSG-GPE.B.5	Slope relationships	Engineering,Architecture,Computer Graphics
+HSG-GPE.B.6	Find point on directed line segment that partitions in given ratio	Math	10	Geometry	Coordinate Geometry	HSG-GPE.B.6	Segment partition	Computer Graphics,Animation,Engineering
+HSG-GPE.B.7	Use coordinates to compute perimeters and areas	Math	10	Geometry	Coordinate Geometry	HSG-GPE.B.7	Coordinate measurements	Surveying,Architecture,Engineering,GIS
+HSG-GMD.A.1	Give informal argument for formulas for circumference, area, volume	Math	9	Geometry	Geometric Measurement	HSG-GMD.A.1	Measurement formulas	Engineering,Architecture,Manufacturing,Package Design
+HSG-GMD.A.2	Give informal argument using Cavalieri's principle	Math	12	Geometry	Geometric Measurement	HSG-GMD.A.2	Cavalieri's principle	Advanced Mathematics,Engineering
+HSG-GMD.A.3	Use volume formulas to solve problems	Math	10	Geometry	Geometric Measurement	HSG-GMD.A.3	Volume applications	Engineering,Architecture,Manufacturing,Construction
+HSG-GMD.B.4	Identify cross-sections of 3D objects and rotations of 2D objects	Math	10	Geometry	Geometric Measurement	HSG-GMD.B.4	Cross-sections	Engineering,Architecture,Medical Imaging,Manufacturing
+HSG-MG.A.1	Use geometric shapes to describe objects	Math	9	Geometry	Modeling with Geometry	HSG-MG.A.1	Geometric modeling	Industrial Design,Architecture,Game Design,3D Modeling
+HSG-MG.A.2	Apply concepts of density based on area and volume	Math	10	Geometry	Modeling with Geometry	HSG-MG.A.2	Density modeling	Engineering,Chemistry,Physics,Environmental Science
+HSG-MG.A.3	Apply geometric methods to solve design problems	Math	11	Geometry	Modeling with Geometry	HSG-MG.A.3	Design applications	Architecture,Engineering,Industrial Design,Urban Planning
+HSS-ID.A.1	Represent data with plots on the real number line	Math	9	Statistics	Interpreting Data	HSS-ID.A.1	Data plots	Data Science,Research,Marketing,Quality Control,Healthcare
+HSS-ID.A.2	Use statistics to compare center and spread of two data sets	Math	9	Statistics	Interpreting Data	HSS-ID.A.2	Compare distributions	Research,Quality Control,Business Analytics,Medicine
+HSS-ID.A.3	Interpret differences in shape, center, spread in context	Math	10	Statistics	Interpreting Data	HSS-ID.A.3	Interpret distributions	Data Science,Marketing,Research,Healthcare
+HSS-ID.A.4	Use mean and standard deviation to compare data sets	Math	10	Statistics	Interpreting Data	HSS-ID.A.4	Mean and standard deviation	Quality Control,Research,Finance,Healthcare
+HSS-ID.B.5	Summarize categorical data in two-way frequency tables	Math	10	Statistics	Interpreting Data	HSS-ID.B.5	Two-way tables	Research,Marketing,Healthcare,Social Sciences
+HSS-ID.B.6	Represent data on two quantitative variables on scatter plot	Math	9	Statistics	Interpreting Data	HSS-ID.B.6	Scatter plots	Scientific Research,Economics,Environmental Science,Sports Analytics
+HSS-ID.B.6.a	Fit a function to data	Math	10	Statistics	Interpreting Data	HSS-ID.B.6.a	Function fitting	Data Science,Research,Engineering,Economics
+HSS-ID.B.6.b	Assess fit of function by analyzing residuals	Math	11	Statistics	Interpreting Data	HSS-ID.B.6.b	Residual analysis	Statistics,Research,Quality Control,Data Science
+HSS-ID.B.6.c	Fit linear function for scatter plot suggesting linear association	Math	10	Statistics	Interpreting Data	HSS-ID.B.6.c	Linear regression	Economics,Research,Business Analytics,Science
+HSS-ID.C.7	Interpret slope and intercept of linear model in context	Math	10	Statistics	Interpreting Data	HSS-ID.C.7	Linear model interpretation	Economics,Business,Research,Environmental Science
+HSS-ID.C.8	Compute and interpret correlation coefficient for linear fit	Math	11	Statistics	Interpreting Data	HSS-ID.C.8	Correlation coefficient	Research,Psychology,Economics,Medicine
+HSS-ID.C.9	Distinguish between correlation and causation	Math	10	Statistics	Interpreting Data	HSS-ID.C.9	Correlation vs causation	Research,Medicine,Social Sciences,Data Science
+HSS-IC.A.1	Understand statistics as process for making inferences	Math	11	Statistics	Making Inferences	HSS-IC.A.1	Statistical inference	Medical Research,Market Research,Quality Assurance,Psychology
+HSS-IC.A.2	Decide if model is consistent with results from data-generating process	Math	11	Statistics	Making Inferences	HSS-IC.A.2	Model validation	Research,Data Science,Quality Control,Engineering
+HSS-IC.B.3	Recognize purposes and differences in sample surveys, experiments	Math	11	Statistics	Making Inferences	HSS-IC.B.3	Study design	Research,Marketing,Medicine,Social Sciences
+HSS-IC.B.4	Use data from sample survey to estimate population mean	Math	11	Statistics	Making Inferences	HSS-IC.B.4	Population estimates	Marketing,Political Polling,Research,Quality Control
+HSS-IC.B.5	Use data from randomized experiment to compare treatments	Math	12	Statistics	Making Inferences	HSS-IC.B.5	Treatment comparison	Medical Research,Agriculture,Product Development
+HSS-IC.B.6	Evaluate reports based on data	Math	11	Statistics	Making Inferences	HSS-IC.B.6	Evaluate reports	Journalism,Research,Policy Analysis,Business Intelligence
+HSS-CP.A.1	Describe events as subsets of sample space	Math	10	Statistics	Conditional Probability	HSS-CP.A.1	Event descriptions	Insurance,Risk Management,Game Design,Finance,Healthcare
+HSS-CP.A.2	Understand independence and conditional probability	Math	11	Statistics	Conditional Probability	HSS-CP.A.2	Independence	Statistics,Risk Assessment,Insurance,Finance
+HSS-CP.A.3	Understand conditional probability of A given B	Math	11	Statistics	Conditional Probability	HSS-CP.A.3	Conditional probability	Medical Testing,Insurance,Risk Management,Finance
+HSS-CP.A.4	Construct and interpret two-way frequency tables	Math	10	Statistics	Conditional Probability	HSS-CP.A.4	Frequency tables	Research,Marketing,Healthcare,Quality Control
+HSS-CP.A.5	Recognize and explain conditional probability and independence	Math	11	Statistics	Conditional Probability	HSS-CP.A.5	Probability concepts	Insurance,Finance,Medical Research,Risk Management
+HSS-CP.B.6	Find conditional probability of A given B	Math	11	Statistics	Conditional Probability	HSS-CP.B.6	Calculate conditional probability	Insurance,Finance,Healthcare,Risk Assessment
+HSS-CP.B.7	Apply Addition Rule and interpret in terms of model	Math	11	Statistics	Conditional Probability	HSS-CP.B.7	Addition Rule	Probability,Statistics,Insurance,Finance
+HSS-CP.B.8	Apply general Multiplication Rule	Math	12	Statistics	Conditional Probability	HSS-CP.B.8	Multiplication Rule	Advanced Statistics,Risk Management,Finance
+HSS-CP.B.9	Use permutations and combinations to compute probabilities	Math	12	Statistics	Conditional Probability	HSS-CP.B.9	Counting methods	Computer Science,Statistics,Game Design,Cryptography
+HSS-MD.A.1	Define random variable for quantity of interest	Math	12	Statistics	Using Probability	HSS-MD.A.1	Random variables	Statistics,Finance,Insurance,Data Science
+HSS-MD.A.2	Calculate expected values and use to solve problems	Math	12	Statistics	Using Probability	HSS-MD.A.2	Expected value	Finance,Insurance,Game Theory,Economics
+HSS-MD.A.3	Develop probability distribution for random variable	Math	12	Statistics	Using Probability	HSS-MD.A.3	Probability distributions	Statistics,Finance,Quality Control,Research
+HSS-MD.A.4	Develop probability distribution using theoretical probabilities	Math	12	Statistics	Using Probability	HSS-MD.A.4	Theoretical distributions	Statistics,Physics,Engineering,Finance
+HSS-MD.B.5	Weigh possible outcomes using probability	Math	12	Statistics	Using Probability	HSS-MD.B.5	Decision making	Business,Finance,Risk Management,Insurance
+HSS-MD.B.6	Use probabilities to make fair decisions	Math	11	Statistics	Using Probability	HSS-MD.B.6	Fair decisions	Game Design,Policy Making,Business,Law
+HSS-MD.B.7	Analyze decisions and strategies using probability concepts	Math	12	Statistics	Using Probability	HSS-MD.B.7	Strategic analysis	Business Strategy,Game Theory,Finance,Military Strategy
+RST.9-10.1	Cite textual evidence to support analysis of science and technical texts	ELA	9	Reading	Science & Technical	RST.9-10.1	Cite technical evidence	Research,Technical Writing,Science,Engineering,Medicine
+RST.9-10.2	Determine central ideas or conclusions of text	ELA	9	Reading	Science & Technical	RST.9-10.2	Identify main ideas	Law,Journalism,Research,Policy Analysis,Consulting
+RST.9-10.3	Follow precisely complex multistep procedure	ELA	9	Reading	Science & Technical	RST.9-10.3	Follow procedures	Laboratory Science,Manufacturing,Culinary Arts,Healthcare,Engineering
+RST.9-10.4	Determine meaning of symbols, key terms, domain-specific words	ELA	9	Reading	Science & Technical	RST.9-10.4	Technical vocabulary	Medicine,Law,Engineering,Science,Technology
+RST.9-10.5	Analyze structure of relationships in text	ELA	9	Reading	Science & Technical	RST.9-10.5	Text structure analysis	Research,Technical Writing,Documentation,Education
+RST.9-10.6	Analyze author's purpose in explaining or describing	ELA	9	Reading	Science & Technical	RST.9-10.6	Author's purpose	Journalism,Research,Marketing,Public Relations
+RST.9-10.7	Translate quantitative or technical information between words and visuals	ELA	9	Reading	Science & Technical	RST.9-10.7	Visual translation	Data Visualization,Technical Writing,UX Design,Architecture,Engineering
+RST.9-10.8	Assess extent to which evidence supports author's claim	ELA	10	Reading	Science & Technical	RST.9-10.8	Evaluate evidence	Law,Research,Journalism,Policy Analysis
+RST.9-10.9	Compare findings presented in text to other sources	ELA	10	Reading	Science & Technical	RST.9-10.9	Compare sources	Research,Journalism,Academia,Intelligence Analysis
+RST.9-10.10	Read and comprehend science/technical texts independently	ELA	10	Reading	Science & Technical	RST.9-10.10	Independent reading	All professional fields
+RST.11-12.1	Cite specific textual evidence, attending to important distinctions	ELA	11	Reading	Science & Technical	RST.11-12.1	Advanced citation	Law,Scientific Research,Medical Research,Policy Analysis
+RST.11-12.2	Determine central ideas, summarize complex concepts	ELA	11	Reading	Science & Technical	RST.11-12.2	Complex summarization	Consulting,Research,Executive Briefing,Intelligence
+RST.11-12.3	Follow complex multistep procedures, attending to special conditions	ELA	11	Reading	Science & Technical	RST.11-12.3	Complex procedures	Research,Laboratory Science,Engineering,Manufacturing
+RST.11-12.4	Determine meaning of symbols and domain-specific words in context	ELA	11	Reading	Science & Technical	RST.11-12.4	Advanced vocabulary	Medicine,Law,Research,Engineering
+RST.11-12.5	Analyze how text structures information into categories	ELA	11	Reading	Science & Technical	RST.11-12.5	Information organization	Information Architecture,Documentation,Research
+RST.11-12.6	Analyze author's purpose in providing explanation or description	ELA	11	Reading	Science & Technical	RST.11-12.6	Purpose analysis	Research,Journalism,Intelligence Analysis
+RST.11-12.7	Integrate multiple sources of information in diverse formats	ELA	11	Reading	Science & Technical	RST.11-12.7	Information integration	Research,Consulting,Intelligence,Journalism
+RST.11-12.8	Evaluate hypotheses, data, analysis, conclusions in text	ELA	12	Reading	Science & Technical	RST.11-12.8	Critical evaluation	Research Science,Quality Assurance,Medical Research,Environmental Science
+RST.11-12.9	Synthesize information from range of sources	ELA	12	Reading	Science & Technical	RST.11-12.9	Synthesis	Consulting,Research,Intelligence Analysis,Journalism,Academic Research
+RST.11-12.10	Read and comprehend technical texts in grades 11-12 complexity band	ELA	12	Reading	Science & Technical	RST.11-12.10	Advanced comprehension	All professional and technical fields
+W.9-10.1	Write arguments to support claims with valid reasoning	ELA	9	Writing	Argumentation	W.9-10.1	Argumentative writing	Law,Journalism,Marketing,Politics,Public Relations
+W.9-10.1.a	Introduce precise claims and distinguish from opposing claims	ELA	9	Writing	Argumentation	W.9-10.1.a	Claim development	Law,Debate,Policy Writing,Editorial Writing
+W.9-10.1.b	Develop claims fairly, supplying evidence for each	ELA	9	Writing	Argumentation	W.9-10.1.b	Evidence presentation	Law,Research,Journalism,Academic Writing
+W.9-10.1.c	Use words to link sections and clarify relationships	ELA	9	Writing	Argumentation	W.9-10.1.c	Transitions	All writing professions
+W.9-10.1.d	Establish and maintain formal style and objective tone	ELA	9	Writing	Argumentation	W.9-10.1.d	Formal writing	Business,Law,Academic,Government
+W.9-10.1.e	Provide concluding statement that follows from argument	ELA	9	Writing	Argumentation	W.9-10.1.e	Conclusions	All writing professions
+W.9-10.2	Write informative texts to examine complex ideas	ELA	9	Writing	Informative	W.9-10.2	Informative writing	Technical Writing,Journalism,Teaching,Documentation,Research
+W.9-10.2.a	Introduce topic and organize complex ideas	ELA	9	Writing	Informative	W.9-10.2.a	Topic introduction	Technical Writing,Journalism,Documentation
+W.9-10.2.b	Develop topic with well-chosen facts and details	ELA	9	Writing	Informative	W.9-10.2.b	Topic development	Research,Journalism,Technical Writing
+W.9-10.2.c	Use appropriate transitions to link sections	ELA	9	Writing	Informative	W.9-10.2.c	Informative transitions	All writing professions
+W.9-10.2.d	Use precise language and domain-specific vocabulary	ELA	9	Writing	Informative	W.9-10.2.d	Technical language	Technical Writing,Science Writing,Medical Writing
+W.9-10.2.e	Establish and maintain formal style and objective tone	ELA	9	Writing	Informative	W.9-10.2.e	Formal informative style	Business,Technical,Academic Writing
+W.9-10.2.f	Provide concluding statement that follows from information	ELA	9	Writing	Informative	W.9-10.2.f	Informative conclusions	All writing professions
+W.9-10.3	Write narratives to develop real or imagined experiences	ELA	9	Writing	Narrative	W.9-10.3	Narrative writing	Creative Writing,Marketing,Film,Game Design,Advertising
+W.9-10.3.a	Engage reader by setting out problem or situation	ELA	9	Writing	Narrative	W.9-10.3.a	Narrative engagement	Creative Writing,Marketing,Screenwriting
+W.9-10.3.b	Use narrative techniques like dialogue and pacing	ELA	9	Writing	Narrative	W.9-10.3.b	Narrative techniques	Creative Writing,Film,Game Writing,Marketing
+W.9-10.3.c	Use variety of techniques to sequence events	ELA	9	Writing	Narrative	W.9-10.3.c	Event sequencing	Film,Creative Writing,Game Design,Journalism
+W.9-10.3.d	Use precise words and telling details	ELA	9	Writing	Narrative	W.9-10.3.d	Descriptive language	Creative Writing,Marketing,Journalism
+W.9-10.3.e	Provide conclusion that follows from narrative	ELA	9	Writing	Narrative	W.9-10.3.e	Narrative conclusions	Creative Writing,Film,Storytelling
+W.9-10.4	Produce clear and coherent writing appropriate to task	ELA	9	Writing	Process	W.9-10.4	Writing process	All professional fields
+W.9-10.5	Develop and strengthen writing through planning and revising	ELA	9	Writing	Process	W.9-10.5	Revision process	All writing professions
+W.9-10.6	Use technology to produce, publish, update writing products	ELA	9	Writing	Technology	W.9-10.6	Digital writing	Digital Marketing,Web Development,Content Creation,Social Media Management
+W.9-10.7	Conduct research projects to answer question or solve problem	ELA	10	Writing	Research	W.9-10.7	Research projects	Scientific Research,Market Research,Academic Research,Product Development
+W.9-10.8	Gather relevant information from multiple sources	ELA	10	Writing	Research	W.9-10.8	Source gathering	Research,Journalism,Consulting,Intelligence
+W.9-10.9	Draw evidence from literary or informational texts	ELA	10	Writing	Research	W.9-10.9	Textual evidence	Literary Analysis,Research,Law,Academia
+W.9-10.10	Write routinely over extended and shorter time frames	ELA	10	Writing	Range	W.9-10.10	Writing stamina	All writing professions
+W.11-12.1	Write arguments using valid reasoning and relevant evidence	ELA	11	Writing	Argumentation	W.11-12.1	Advanced argumentation	Law,Policy Making,Editorial Writing,Academic Research,Debate
+W.11-12.1.a	Introduce precise, knowledgeable claims	ELA	11	Writing	Argumentation	W.11-12.1.a	Advanced claims	Law,Policy,Research,Academia
+W.11-12.1.b	Develop claims and counterclaims fairly and thoroughly	ELA	11	Writing	Argumentation	W.11-12.1.b	Claim analysis	Law,Debate,Policy Analysis,Research
+W.11-12.1.c	Use words to link sections and create cohesion	ELA	11	Writing	Argumentation	W.11-12.1.c	Advanced transitions	All advanced writing
+W.11-12.1.d	Establish and maintain formal style and objective tone	ELA	11	Writing	Argumentation	W.11-12.1.d	Professional style	Law,Business,Government,Academia
+W.11-12.1.e	Provide concluding statement that follows from argument	ELA	11	Writing	Argumentation	W.11-12.1.e	Strong conclusions	All professional writing
+W.11-12.2	Write informative texts to examine complex ideas clearly	ELA	11	Writing	Informative	W.11-12.2	Advanced informative	Technical Writing,Research,Documentation,Journalism
+W.11-12.2.a	Introduce topic and organize complex ideas for comprehension	ELA	11	Writing	Informative	W.11-12.2.a	Complex organization	Technical Writing,Research,Documentation
+W.11-12.2.b	Develop topic thoroughly with significant facts	ELA	11	Writing	Informative	W.11-12.2.b	Thorough development	Research,Technical Writing,Journalism
+W.11-12.2.c	Use appropriate transitions and syntax for cohesion	ELA	11	Writing	Informative	W.11-12.2.c	Sophisticated transitions	All advanced writing
+W.11-12.2.d	Use precise language and techniques like metaphor	ELA	11	Writing	Informative	W.11-12.2.d	Advanced language	Science Writing,Technical Writing,Journalism
+W.11-12.2.e	Establish and maintain formal style and objective tone	ELA	11	Writing	Informative	W.11-12.2.e	Professional informative	Business,Technical,Government Writing
+W.11-12.2.f	Provide concluding statement that articulates significance	ELA	11	Writing	Informative	W.11-12.2.f	Significant conclusions	Research,Technical Writing,Policy
+W.11-12.3	Write narratives to develop real or imagined experiences effectively	ELA	11	Writing	Narrative	W.11-12.3	Advanced narrative	Creative Writing,Film,Marketing,Game Design
+W.11-12.4	Produce clear, coherent writing for task, purpose, audience	ELA	11	Writing	Process	W.11-12.4	Audience awareness	All professional communication
+W.11-12.5	Develop and strengthen writing through planning and editing	ELA	11	Writing	Process	W.11-12.5	Advanced revision	All professional writing
+W.11-12.6	Use technology to produce and publish sophisticated writing	ELA	11	Writing	Technology	W.11-12.6	Digital publishing	Digital Marketing,Web Content,Publishing,Media
+W.11-12.7	Conduct sustained research projects using advanced searches	ELA	12	Writing	Research	W.11-12.7	Extended research	Academic Research,Scientific Research,Market Research,Policy Research
+W.11-12.8	Gather information from authoritative sources, assess credibility	ELA	12	Writing	Research	W.11-12.8	Source evaluation	Journalism,Research,Intelligence Analysis,Due Diligence,Fact-Checking
+W.11-12.9	Draw evidence from texts to support analysis and research	ELA	12	Writing	Research	W.11-12.9	Evidence synthesis	Research,Law,Academia,Policy Analysis
+W.11-12.10	Write routinely for range of tasks, purposes, audiences	ELA	12	Writing	Range	W.11-12.10	Professional writing	All professional fields
+SL.9-10.1	Initiate and participate effectively in collaborative discussions	ELA	9	Speaking & Listening	Discussion	SL.9-10.1	Discussion skills	Management,Team Leadership,Consulting,Project Management,Teaching
+SL.9-10.1.a	Come to discussions prepared with research	ELA	9	Speaking & Listening	Discussion	SL.9-10.1.a	Preparation	All collaborative professions
+SL.9-10.1.b	Work with peers to set rules for discussions	ELA	9	Speaking & Listening	Discussion	SL.9-10.1.b	Collaboration rules	Project Management,Team Leadership
+SL.9-10.1.c	Propel conversations by posing and responding to questions	ELA	9	Speaking & Listening	Discussion	SL.9-10.1.c	Discussion leadership	Facilitation,Management,Consulting
+SL.9-10.1.d	Respond thoughtfully to diverse perspectives	ELA	9	Speaking & Listening	Discussion	SL.9-10.1.d	Perspective-taking	Management,HR,Diversity & Inclusion
+SL.9-10.2	Integrate multiple sources of information presented in diverse media	ELA	9	Speaking & Listening	Integration	SL.9-10.2	Information integration	Research,Consulting,Intelligence,Media
+SL.9-10.3	Evaluate speaker's point of view, reasoning, and evidence	ELA	9	Speaking & Listening	Evaluation	SL.9-10.3	Critical listening	Law,HR,Journalism,Management
+SL.9-10.4	Present information clearly, concisely, and logically	ELA	9	Speaking & Listening	Presentation	SL.9-10.4	Presentation skills	Sales,Teaching,Public Speaking,Business Development,Training
+SL.9-10.5	Make strategic use of digital media in presentations	ELA	9	Speaking & Listening	Media Use	SL.9-10.5	Digital presentations	Marketing,Sales,Teaching,Design,Business Presentations
+SL.9-10.6	Adapt speech to variety of contexts and tasks	ELA	10	Speaking & Listening	Adaptation	SL.9-10.6	Speech adaptation	Public Relations,Sales,Politics,Teaching
+SL.11-12.1	Lead collaborative discussions, synthesize comments and claims	ELA	11	Speaking & Listening	Leadership	SL.11-12.1	Discussion leadership	Executive Leadership,Project Management,Facilitation,Consulting
+SL.11-12.1.a	Come to discussions with thorough preparation	ELA	11	Speaking & Listening	Leadership	SL.11-12.1.a	Advanced preparation	Executive Leadership,Consulting
+SL.11-12.1.b	Work with peers to promote civil democratic discussions	ELA	11	Speaking & Listening	Leadership	SL.11-12.1.b	Democratic discussion	Politics,Community Leadership,Board Governance
+SL.11-12.1.c	Propel conversations by posing probing questions	ELA	11	Speaking & Listening	Leadership	SL.11-12.1.c	Probing questions	Executive Leadership,Consulting,Coaching
+SL.11-12.1.d	Respond thoughtfully and synthesize comments	ELA	11	Speaking & Listening	Leadership	SL.11-12.1.d	Synthesis	Executive Leadership,Facilitation,Consulting
+SL.11-12.2	Integrate multiple sources in diverse formats and media	ELA	11	Speaking & Listening	Integration	SL.11-12.2	Media integration	Media Production,Research,Consulting
+SL.11-12.3	Evaluate speaker's point of view, reasoning, rhetoric	ELA	11	Speaking & Listening	Evaluation	SL.11-12.3	Rhetorical analysis	Law,Human Resources,Journalism,Intelligence Analysis,Negotiation
+SL.11-12.4	Present information with organization, development, substance	ELA	11	Speaking & Listening	Presentation	SL.11-12.4	Advanced presentation	Executive Presentations,Conference Speaking,Teaching
+SL.11-12.5	Make strategic use of digital media to enhance understanding	ELA	11	Speaking & Listening	Media Use	SL.11-12.5	Strategic media	Marketing,Advertising,Media Production,Training
+SL.11-12.6	Adapt speech to variety of contexts demonstrating command	ELA	12	Speaking & Listening	Adaptation	SL.11-12.6	Professional adaptation	Executive Communication,Diplomacy,Public Relations
+L.9-10.1	Demonstrate command of conventions of standard English	ELA	9	Language	Conventions	L.9-10.1	Grammar and usage	All Professional Careers,Writing,Communication,Teaching
+L.9-10.1.a	Use parallel structure	ELA	9	Language	Conventions	L.9-10.1.a	Parallel structure	Writing,Marketing,Communications
+L.9-10.1.b	Use various types of phrases and clauses	ELA	9	Language	Conventions	L.9-10.1.b	Phrase and clause use	Writing,Journalism,Communications
+L.9-10.2	Demonstrate command of capitalization, punctuation, spelling	ELA	9	Language	Mechanics	L.9-10.2	Writing mechanics	All written communication
+L.9-10.2.a	Use semicolon to link independent clauses	ELA	9	Language	Mechanics	L.9-10.2.a	Semicolon use	Writing,Editing,Publishing
+L.9-10.2.b	Use colon to introduce list or quotation	ELA	9	Language	Mechanics	L.9-10.2.b	Colon use	Writing,Documentation,Publishing
+L.9-10.2.c	Spell correctly	ELA	9	Language	Mechanics	L.9-10.2.c	Spelling	All written communication
+L.9-10.3	Apply knowledge of language to make effective choices	ELA	9	Language	Style	L.9-10.3	Style choices	Marketing,Advertising,Creative Writing,Public Relations,Brand Management
+L.9-10.3.a	Write and edit work for style and tone	ELA	9	Language	Style	L.9-10.3.a	Style editing	Editing,Publishing,Marketing,Communications
+L.9-10.4	Determine or clarify meaning of unknown words	ELA	9	Language	Vocabulary	L.9-10.4	Vocabulary strategies	All professional fields
+L.9-10.4.a	Use context as clue to meaning	ELA	9	Language	Vocabulary	L.9-10.4.a	Context clues	Reading,Research,Communications
+L.9-10.4.b	Identify and use patterns of word changes	ELA	9	Language	Vocabulary	L.9-10.4.b	Word patterns	Language Learning,Communications
+L.9-10.4.c	Consult reference materials	ELA	9	Language	Vocabulary	L.9-10.4.c	Reference use	Research,Writing,Editing
+L.9-10.4.d	Verify preliminary determination of meaning	ELA	9	Language	Vocabulary	L.9-10.4.d	Meaning verification	Research,Writing,Translation
+L.9-10.5	Demonstrate understanding of figurative language	ELA	10	Language	Figurative Language	L.9-10.5	Figurative language	Creative Writing,Marketing,Literature,Advertising
+L.9-10.5.a	Interpret figures of speech in context	ELA	10	Language	Figurative Language	L.9-10.5.a	Figure interpretation	Literature,Creative Writing,Marketing
+L.9-10.5.b	Analyze nuances in word meanings	ELA	10	Language	Figurative Language	L.9-10.5.b	Word nuances	Writing,Translation,Communications,Law
+L.9-10.6	Acquire and use academic and domain-specific vocabulary	ELA	10	Language	Academic Vocabulary	L.9-10.6	Academic vocabulary	All Professional Careers,Specialized Fields,Technical Roles
+L.11-12.1	Demonstrate command of conventions in writing and speaking	ELA	11	Language	Conventions	L.11-12.1	Advanced conventions	Professional Writing,Public Speaking,Leadership
+L.11-12.1.a	Apply understanding of syntax for effect	ELA	11	Language	Conventions	L.11-12.1.a	Syntax for effect	Creative Writing,Speechwriting,Marketing
+L.11-12.1.b	Resolve issues of complex or contested usage	ELA	11	Language	Conventions	L.11-12.1.b	Usage resolution	Editing,Publishing,Technical Writing
+L.11-12.2	Demonstrate command of capitalization, punctuation, spelling	ELA	11	Language	Mechanics	L.11-12.2	Advanced mechanics	Professional Writing,Editing,Publishing
+L.11-12.2.a	Observe hyphenation conventions	ELA	11	Language	Mechanics	L.11-12.2.a	Hyphenation	Editing,Publishing,Technical Writing
+L.11-12.2.b	Spell correctly	ELA	11	Language	Mechanics	L.11-12.2.b	Advanced spelling	All professional writing
+L.11-12.3	Apply knowledge to vary syntax for effect	ELA	11	Language	Style	L.11-12.3	Syntax variation	Creative Writing,Speechwriting,Marketing,Advertising
+L.11-12.3.a	Vary syntax for effect, apply understanding	ELA	11	Language	Style	L.11-12.3.a	Stylistic variation	Creative Writing,Marketing,Speechwriting
+L.11-12.4	Determine or clarify meaning of unknown words systematically	ELA	11	Language	Vocabulary	L.11-12.4	Systematic vocabulary	Research,Professional Development,Academia
+L.11-12.4.a	Use context as clue to meaning of word or phrase	ELA	11	Language	Vocabulary	L.11-12.4.a	Advanced context	Professional Reading,Research
+L.11-12.4.b	Identify and correctly use patterns of word changes	ELA	11	Language	Vocabulary	L.11-12.4.b	Advanced patterns	Technical Writing,Academia,Translation
+L.11-12.4.c	Consult specialized reference materials	ELA	11	Language	Vocabulary	L.11-12.4.c	Specialized references	Research,Technical Fields,Academia
+L.11-12.4.d	Verify determination by checking in context	ELA	11	Language	Vocabulary	L.11-12.4.d	Advanced verification	Research,Editing,Translation
+L.11-12.5	Demonstrate understanding of figurative language and nuances	ELA	12	Language	Figurative Language	L.11-12.5	Advanced figurative	Literature,Creative Writing,Marketing,Criticism
+L.11-12.5.a	Interpret figures of speech and analyze role in text	ELA	12	Language	Figurative Language	L.11-12.5.a	Literary analysis	Literary Criticism,Publishing,Academia
+L.11-12.5.b	Analyze nuances in words with similar denotations	ELA	12	Language	Figurative Language	L.11-12.5.b	Nuance analysis	Law,Diplomacy,Translation,Writing
+L.11-12.6	Acquire and use general academic and domain-specific words	ELA	12	Language	Academic Vocabulary	L.11-12.6	Professional vocabulary	All Professional Fields,Specialized Careers,Academia

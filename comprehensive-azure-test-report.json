@@ -1,0 +1,2506 @@
+{
+  "timestamp": "2025-09-01T01:26:54.585Z",
+  "summary": {
+    "totalTests": 18,
+    "passed": 0,
+    "failed": 18,
+    "successRate": "0.0%"
+  },
+  "results": [
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "K",
+          "career": "Doctor"
+        },
+        "system": {
+          "subject": "Math",
+          "skillName": "Counting to 10",
+          "skillId": "MATH.K.CC.1"
+        }
+      },
+      "success": false,
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "questionType": "counting",
+      "question": "How many stars do you see?"
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "K",
+          "career": "Chef"
+        },
+        "system": {
+          "subject": "Math",
+          "skillName": "Counting to 10",
+          "skillId": "MATH.K.CC.1"
+        }
+      },
+      "success": false,
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "questionType": "counting",
+      "question": "How many stars do you see?"
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "1",
+          "career": "Teacher"
+        },
+        "system": {
+          "subject": "ELA",
+          "skillName": "Letter Recognition",
+          "skillId": "ELA.1.RF.1"
+        }
+      },
+      "success": false,
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "questionType": "multiple_choice",
+      "question": "Which is the largest balance?"
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "1",
+          "career": "Artist"
+        },
+        "system": {
+          "subject": "Math",
+          "skillName": "Addition within 20",
+          "skillId": "MATH.1.OA.1"
+        }
+      },
+      "success": false,
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "questionType": "multiple_choice",
+      "question": "Which is the largest balance?"
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "2",
+          "career": "Builder"
+        },
+        "system": {
+          "subject": "Math",
+          "skillName": "Addition within 100",
+          "skillId": "MATH.2.NBT.5"
+        }
+      },
+      "success": false,
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "questionType": "multiple_choice",
+      "question": "Which is the largest balance?"
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "3",
+          "career": "Engineer"
+        },
+        "system": {
+          "subject": "Math",
+          "skillName": "Comparing numbers including negatives",
+          "skillId": "MATH.3.NBT.1"
+        }
+      },
+      "success": false,
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "questionType": "multiple_choice",
+      "question": "Which is the largest balance?"
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "4",
+          "career": "Scientist"
+        },
+        "system": {
+          "subject": "Math",
+          "skillName": "Which is larger or smaller comparisons",
+          "skillId": "MATH.4.NBT.2"
+        }
+      },
+      "success": false,
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "questionType": "multiple_choice",
+      "question": "Which is the largest balance?"
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "5",
+          "career": "Accountant"
+        },
+        "system": {
+          "subject": "Math",
+          "skillName": "Comparing positive and negative numbers",
+          "skillId": "MATH.5.NBT.3"
+        }
+      },
+      "success": false,
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "questionType": "multiple_choice",
+      "question": "Which is the largest balance?"
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "5",
+          "career": "Data Scientist"
+        },
+        "system": {
+          "subject": "Math",
+          "skillName": "Decimal comparisons",
+          "skillId": "MATH.5.NBT.3b"
+        }
+      },
+      "success": false,
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "questionType": "multiple_choice",
+      "question": "Which is the largest balance?"
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "6",
+          "career": "Architect"
+        },
+        "system": {
+          "subject": "Math",
+          "skillName": "Ratios and Proportions",
+          "skillId": "MATH.6.RP.1"
+        }
+      },
+      "success": false,
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "questionType": "multiple_choice",
+      "question": "Which is the largest balance?"
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "7",
+          "career": "Environmental Scientist"
+        },
+        "system": {
+          "subject": "Science",
+          "skillName": "Ecosystems",
+          "skillId": "SCI.7.LS.2"
+        }
+      },
+      "success": false,
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "questionType": "multiple_choice",
+      "question": "Which is the largest balance?"
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "8",
+          "career": "Lawyer"
+        },
+        "system": {
+          "subject": "Social Studies",
+          "skillName": "US Constitution",
+          "skillId": "SS.8.CG.3"
+        }
+      },
+      "success": false,
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "questionType": "multiple_choice",
+      "question": "Which is the largest balance?"
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "9",
+          "career": "Geneticist"
+        },
+        "system": {
+          "subject": "Science",
+          "skillName": "DNA and Heredity",
+          "skillId": "SCI.9.LS.3"
+        }
+      },
+      "success": false,
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "questionType": "multiple_choice",
+      "question": "Which is the largest balance?"
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "10",
+          "career": "Economist"
+        },
+        "system": {
+          "subject": "Math",
+          "skillName": "Quadratic Functions",
+          "skillId": "MATH.10.A.REI.4"
+        }
+      },
+      "success": false,
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "questionType": "multiple_choice",
+      "question": "Which is the largest balance?"
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "11",
+          "career": "Research Scientist"
+        },
+        "system": {
+          "subject": "Science",
+          "skillName": "Chemical Reactions",
+          "skillId": "SCI.11.PS.1"
+        }
+      },
+      "success": false,
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "questionType": "multiple_choice",
+      "question": "Which is the largest balance?"
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "3",
+          "career": "Teacher"
+        },
+        "system": {
+          "subject": "Math",
+          "skillName": "Which number is smaller",
+          "skillId": "MATH.3.COMP.1"
+        }
+      },
+      "success": false,
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "questionType": "multiple_choice",
+      "question": "Which is the largest balance?"
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "4",
+          "career": "Engineer"
+        },
+        "system": {
+          "subject": "Math",
+          "skillName": "Which fraction is larger",
+          "skillId": "MATH.4.NF.2"
+        }
+      },
+      "success": false,
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "questionType": "multiple_choice",
+      "question": "Which is the largest balance?"
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "5",
+          "career": "Banker"
+        },
+        "system": {
+          "subject": "Math",
+          "skillName": "Compare negative decimals",
+          "skillId": "MATH.5.NBT.4"
+        }
+      },
+      "success": false,
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "questionType": "multiple_choice",
+      "question": "Which is the largest balance?"
+    }
+  ],
+  "consistencyTest": {
+    "results": [
+      {
+        "run": 1,
+        "type": "multiple_choice",
+        "question": "Which is the largest balance?"
+      },
+      {
+        "run": 2,
+        "type": "multiple_choice",
+        "question": "Which is the largest balance?"
+      },
+      {
+        "run": 3,
+        "type": "multiple_choice",
+        "question": "Which is the largest balance?"
+      },
+      {
+        "run": 4,
+        "type": "multiple_choice",
+        "question": "Which is the largest balance?"
+      },
+      {
+        "run": 5,
+        "type": "multiple_choice",
+        "question": "Which is the largest balance?"
+      }
+    ],
+    "allSameType": true,
+    "allCorrectType": true
+  },
+  "failures": [
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "K",
+          "career": "Doctor"
+        },
+        "system": {
+          "subject": "Math",
+          "skillName": "Counting to 10",
+          "skillId": "MATH.K.CC.1"
+        }
+      },
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "result": {
+        "success": true,
+        "stages": {
+          "userSelection": true,
+          "systemContext": true,
+          "aiGeneration": true,
+          "contentConversion": true,
+          "questionRendering": true,
+          "answerValidation": true,
+          "feedbackDisplay": true
+        },
+        "question": {
+          "id": "assessment-1756689991528-1",
+          "type": "counting",
+          "content": "How many stars do you see?",
+          "topic": "Counting to 10",
+          "subject": "Math",
+          "difficulty": "easy",
+          "points": 10,
+          "visualElements": {
+            "type": "objects",
+            "description": "⭐ ⭐ ⭐"
+          },
+          "correctCount": 3,
+          "countWhat": "items",
+          "minCount": 0,
+          "maxCount": 10,
+          "explanation": "There are 3 stars: one, two, three",
+          "metadata": {
+            "bloomsLevel": "remember",
+            "estimatedTime": 30
+          }
+        },
+        "renderData": {
+          "question": {
+            "id": "assessment-1756689991528-1",
+            "type": "counting",
+            "content": "How many stars do you see?",
+            "topic": "Counting to 10",
+            "subject": "Math",
+            "difficulty": "easy",
+            "points": 10,
+            "visualElements": {
+              "type": "objects",
+              "description": "⭐ ⭐ ⭐"
+            },
+            "correctCount": 3,
+            "countWhat": "items",
+            "minCount": 0,
+            "maxCount": 10,
+            "explanation": "There are 3 stars: one, two, three",
+            "metadata": {
+              "bloomsLevel": "remember",
+              "estimatedTime": 30
+            }
+          },
+          "theme": "light",
+          "disabled": false,
+          "showFeedback": false,
+          "containerType": "learn",
+          "animations": true
+        },
+        "validationResult": {
+          "isValid": false,
+          "isCorrect": false,
+          "score": 0,
+          "maxScore": 10,
+          "feedback": "Please enter a valid number",
+          "errors": [
+            "Answer is not a valid number"
+          ],
+          "correctAnswerDisplay": "3",
+          "correctAnswerValue": 3
+        },
+        "feedback": "Not quite right. Count carefully - the correct answer is 3. Keep practicing - you're learning like a future Doctor!"
+      }
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "K",
+          "career": "Chef"
+        },
+        "system": {
+          "subject": "Math",
+          "skillName": "Counting to 10",
+          "skillId": "MATH.K.CC.1"
+        }
+      },
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "result": {
+        "success": true,
+        "stages": {
+          "userSelection": true,
+          "systemContext": true,
+          "aiGeneration": true,
+          "contentConversion": true,
+          "questionRendering": true,
+          "answerValidation": true,
+          "feedbackDisplay": true
+        },
+        "question": {
+          "id": "assessment-1756689992530-2",
+          "type": "counting",
+          "content": "How many stars do you see?",
+          "topic": "Counting to 10",
+          "subject": "Math",
+          "difficulty": "easy",
+          "points": 10,
+          "visualElements": {
+            "type": "objects",
+            "description": "⭐ ⭐ ⭐"
+          },
+          "correctCount": 3,
+          "countWhat": "items",
+          "minCount": 0,
+          "maxCount": 10,
+          "explanation": "There are 3 stars: one, two, three",
+          "metadata": {
+            "bloomsLevel": "remember",
+            "estimatedTime": 30
+          }
+        },
+        "renderData": {
+          "question": {
+            "id": "assessment-1756689992530-2",
+            "type": "counting",
+            "content": "How many stars do you see?",
+            "topic": "Counting to 10",
+            "subject": "Math",
+            "difficulty": "easy",
+            "points": 10,
+            "visualElements": {
+              "type": "objects",
+              "description": "⭐ ⭐ ⭐"
+            },
+            "correctCount": 3,
+            "countWhat": "items",
+            "minCount": 0,
+            "maxCount": 10,
+            "explanation": "There are 3 stars: one, two, three",
+            "metadata": {
+              "bloomsLevel": "remember",
+              "estimatedTime": 30
+            }
+          },
+          "theme": "light",
+          "disabled": false,
+          "showFeedback": false,
+          "containerType": "learn",
+          "animations": true
+        },
+        "validationResult": {
+          "isValid": false,
+          "isCorrect": false,
+          "score": 0,
+          "maxScore": 10,
+          "feedback": "Please enter a valid number",
+          "errors": [
+            "Answer is not a valid number"
+          ],
+          "correctAnswerDisplay": "3",
+          "correctAnswerValue": 3
+        },
+        "feedback": "Not quite right. Count carefully - the correct answer is 3. Keep practicing - you're learning like a future Chef!"
+      }
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "1",
+          "career": "Teacher"
+        },
+        "system": {
+          "subject": "ELA",
+          "skillName": "Letter Recognition",
+          "skillId": "ELA.1.RF.1"
+        }
+      },
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "result": {
+        "success": true,
+        "stages": {
+          "userSelection": true,
+          "systemContext": true,
+          "aiGeneration": true,
+          "contentConversion": true,
+          "questionRendering": true,
+          "answerValidation": true,
+          "feedbackDisplay": true
+        },
+        "question": {
+          "id": "assessment-1756689993533-3",
+          "type": "multiple_choice",
+          "content": "Which is the largest balance?",
+          "topic": "Letter Recognition",
+          "subject": "ELA",
+          "difficulty": "medium",
+          "points": 10,
+          "options": [
+            {
+              "id": "opt-0",
+              "text": "-350",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-1",
+              "text": "200",
+              "isCorrect": true
+            },
+            {
+              "id": "opt-2",
+              "text": "-150",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-3",
+              "text": "50",
+              "isCorrect": false
+            }
+          ],
+          "allowMultiple": false,
+          "randomizeOptions": false,
+          "explanation": "200 is the only positive number and is larger than all the negative values",
+          "metadata": {
+            "bloomsLevel": "understand",
+            "estimatedTime": 45
+          }
+        },
+        "renderData": {
+          "question": {
+            "id": "assessment-1756689993533-3",
+            "type": "multiple_choice",
+            "content": "Which is the largest balance?",
+            "topic": "Letter Recognition",
+            "subject": "ELA",
+            "difficulty": "medium",
+            "points": 10,
+            "options": [
+              {
+                "id": "opt-0",
+                "text": "-350",
+                "isCorrect": false
+              },
+              {
+                "id": "opt-1",
+                "text": "200",
+                "isCorrect": true
+              },
+              {
+                "id": "opt-2",
+                "text": "-150",
+                "isCorrect": false
+              },
+              {
+                "id": "opt-3",
+                "text": "50",
+                "isCorrect": false
+              }
+            ],
+            "allowMultiple": false,
+            "randomizeOptions": false,
+            "explanation": "200 is the only positive number and is larger than all the negative values",
+            "metadata": {
+              "bloomsLevel": "understand",
+              "estimatedTime": 45
+            }
+          },
+          "theme": "light",
+          "disabled": false,
+          "showFeedback": false,
+          "containerType": "learn",
+          "animations": true
+        },
+        "validationResult": {
+          "isValid": true,
+          "isCorrect": false,
+          "score": 0,
+          "maxScore": 10,
+          "feedback": "Incorrect. The correct answer is 200",
+          "correctAnswerDisplay": "200",
+          "correctAnswerValue": "opt-1"
+        },
+        "feedback": "Not quite right. The correct answer is 200. Keep practicing - you're learning like a future Teacher!"
+      }
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "1",
+          "career": "Artist"
+        },
+        "system": {
+          "subject": "Math",
+          "skillName": "Addition within 20",
+          "skillId": "MATH.1.OA.1"
+        }
+      },
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "result": {
+        "success": true,
+        "stages": {
+          "userSelection": true,
+          "systemContext": true,
+          "aiGeneration": true,
+          "contentConversion": true,
+          "questionRendering": true,
+          "answerValidation": true,
+          "feedbackDisplay": true
+        },
+        "question": {
+          "id": "assessment-1756689994538-4",
+          "type": "multiple_choice",
+          "content": "Which is the largest balance?",
+          "topic": "Addition within 20",
+          "subject": "Math",
+          "difficulty": "medium",
+          "points": 10,
+          "options": [
+            {
+              "id": "opt-0",
+              "text": "-350",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-1",
+              "text": "200",
+              "isCorrect": true
+            },
+            {
+              "id": "opt-2",
+              "text": "-150",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-3",
+              "text": "50",
+              "isCorrect": false
+            }
+          ],
+          "allowMultiple": false,
+          "randomizeOptions": false,
+          "explanation": "200 is the only positive number and is larger than all the negative values",
+          "metadata": {
+            "bloomsLevel": "understand",
+            "estimatedTime": 45
+          }
+        },
+        "renderData": {
+          "question": {
+            "id": "assessment-1756689994538-4",
+            "type": "multiple_choice",
+            "content": "Which is the largest balance?",
+            "topic": "Addition within 20",
+            "subject": "Math",
+            "difficulty": "medium",
+            "points": 10,
+            "options": [
+              {
+                "id": "opt-0",
+                "text": "-350",
+                "isCorrect": false
+              },
+              {
+                "id": "opt-1",
+                "text": "200",
+                "isCorrect": true
+              },
+              {
+                "id": "opt-2",
+                "text": "-150",
+                "isCorrect": false
+              },
+              {
+                "id": "opt-3",
+                "text": "50",
+                "isCorrect": false
+              }
+            ],
+            "allowMultiple": false,
+            "randomizeOptions": false,
+            "explanation": "200 is the only positive number and is larger than all the negative values",
+            "metadata": {
+              "bloomsLevel": "understand",
+              "estimatedTime": 45
+            }
+          },
+          "theme": "light",
+          "disabled": false,
+          "showFeedback": false,
+          "containerType": "learn",
+          "animations": true
+        },
+        "validationResult": {
+          "isValid": true,
+          "isCorrect": false,
+          "score": 0,
+          "maxScore": 10,
+          "feedback": "Incorrect. The correct answer is 200",
+          "correctAnswerDisplay": "200",
+          "correctAnswerValue": "opt-1"
+        },
+        "feedback": "Not quite right. The correct answer is 200. Keep practicing - you're learning like a future Artist!"
+      }
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "2",
+          "career": "Builder"
+        },
+        "system": {
+          "subject": "Math",
+          "skillName": "Addition within 100",
+          "skillId": "MATH.2.NBT.5"
+        }
+      },
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "result": {
+        "success": true,
+        "stages": {
+          "userSelection": true,
+          "systemContext": true,
+          "aiGeneration": true,
+          "contentConversion": true,
+          "questionRendering": true,
+          "answerValidation": true,
+          "feedbackDisplay": true
+        },
+        "question": {
+          "id": "assessment-1756689995540-5",
+          "type": "multiple_choice",
+          "content": "Which is the largest balance?",
+          "topic": "Addition within 100",
+          "subject": "Math",
+          "difficulty": "medium",
+          "points": 10,
+          "options": [
+            {
+              "id": "opt-0",
+              "text": "-350",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-1",
+              "text": "200",
+              "isCorrect": true
+            },
+            {
+              "id": "opt-2",
+              "text": "-150",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-3",
+              "text": "50",
+              "isCorrect": false
+            }
+          ],
+          "allowMultiple": false,
+          "randomizeOptions": false,
+          "explanation": "200 is the only positive number and is larger than all the negative values",
+          "metadata": {
+            "bloomsLevel": "understand",
+            "estimatedTime": 45
+          }
+        },
+        "renderData": {
+          "question": {
+            "id": "assessment-1756689995540-5",
+            "type": "multiple_choice",
+            "content": "Which is the largest balance?",
+            "topic": "Addition within 100",
+            "subject": "Math",
+            "difficulty": "medium",
+            "points": 10,
+            "options": [
+              {
+                "id": "opt-0",
+                "text": "-350",
+                "isCorrect": false
+              },
+              {
+                "id": "opt-1",
+                "text": "200",
+                "isCorrect": true
+              },
+              {
+                "id": "opt-2",
+                "text": "-150",
+                "isCorrect": false
+              },
+              {
+                "id": "opt-3",
+                "text": "50",
+                "isCorrect": false
+              }
+            ],
+            "allowMultiple": false,
+            "randomizeOptions": false,
+            "explanation": "200 is the only positive number and is larger than all the negative values",
+            "metadata": {
+              "bloomsLevel": "understand",
+              "estimatedTime": 45
+            }
+          },
+          "theme": "light",
+          "disabled": false,
+          "showFeedback": false,
+          "containerType": "learn",
+          "animations": true
+        },
+        "validationResult": {
+          "isValid": true,
+          "isCorrect": false,
+          "score": 0,
+          "maxScore": 10,
+          "feedback": "Incorrect. The correct answer is 200",
+          "correctAnswerDisplay": "200",
+          "correctAnswerValue": "opt-1"
+        },
+        "feedback": "Not quite right. The correct answer is 200. Keep practicing - you're learning like a future Builder!"
+      }
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "3",
+          "career": "Engineer"
+        },
+        "system": {
+          "subject": "Math",
+          "skillName": "Comparing numbers including negatives",
+          "skillId": "MATH.3.NBT.1"
+        }
+      },
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "result": {
+        "success": true,
+        "stages": {
+          "userSelection": true,
+          "systemContext": true,
+          "aiGeneration": true,
+          "contentConversion": true,
+          "questionRendering": true,
+          "answerValidation": true,
+          "feedbackDisplay": true
+        },
+        "question": {
+          "id": "assessment-1756689996542-6",
+          "type": "multiple_choice",
+          "content": "Which is the largest balance?",
+          "topic": "Comparing numbers including negatives",
+          "subject": "Math",
+          "difficulty": "medium",
+          "points": 10,
+          "options": [
+            {
+              "id": "opt-0",
+              "text": "-350",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-1",
+              "text": "200",
+              "isCorrect": true
+            },
+            {
+              "id": "opt-2",
+              "text": "-150",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-3",
+              "text": "50",
+              "isCorrect": false
+            }
+          ],
+          "allowMultiple": false,
+          "randomizeOptions": false,
+          "explanation": "200 is the only positive number and is larger than all the negative values",
+          "metadata": {
+            "bloomsLevel": "understand",
+            "estimatedTime": 45
+          }
+        },
+        "renderData": {
+          "question": {
+            "id": "assessment-1756689996542-6",
+            "type": "multiple_choice",
+            "content": "Which is the largest balance?",
+            "topic": "Comparing numbers including negatives",
+            "subject": "Math",
+            "difficulty": "medium",
+            "points": 10,
+            "options": [
+              {
+                "id": "opt-0",
+                "text": "-350",
+                "isCorrect": false
+              },
+              {
+                "id": "opt-1",
+                "text": "200",
+                "isCorrect": true
+              },
+              {
+                "id": "opt-2",
+                "text": "-150",
+                "isCorrect": false
+              },
+              {
+                "id": "opt-3",
+                "text": "50",
+                "isCorrect": false
+              }
+            ],
+            "allowMultiple": false,
+            "randomizeOptions": false,
+            "explanation": "200 is the only positive number and is larger than all the negative values",
+            "metadata": {
+              "bloomsLevel": "understand",
+              "estimatedTime": 45
+            }
+          },
+          "theme": "light",
+          "disabled": false,
+          "showFeedback": false,
+          "containerType": "learn",
+          "animations": true
+        },
+        "validationResult": {
+          "isValid": true,
+          "isCorrect": false,
+          "score": 0,
+          "maxScore": 10,
+          "feedback": "Incorrect. The correct answer is 200",
+          "correctAnswerDisplay": "200",
+          "correctAnswerValue": "opt-1"
+        },
+        "feedback": "Not quite right. The correct answer is 200. Keep practicing - you're learning like a future Engineer!"
+      }
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "4",
+          "career": "Scientist"
+        },
+        "system": {
+          "subject": "Math",
+          "skillName": "Which is larger or smaller comparisons",
+          "skillId": "MATH.4.NBT.2"
+        }
+      },
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "result": {
+        "success": true,
+        "stages": {
+          "userSelection": true,
+          "systemContext": true,
+          "aiGeneration": true,
+          "contentConversion": true,
+          "questionRendering": true,
+          "answerValidation": true,
+          "feedbackDisplay": true
+        },
+        "question": {
+          "id": "assessment-1756689997545-7",
+          "type": "multiple_choice",
+          "content": "Which is the largest balance?",
+          "topic": "Which is larger or smaller comparisons",
+          "subject": "Math",
+          "difficulty": "medium",
+          "points": 10,
+          "options": [
+            {
+              "id": "opt-0",
+              "text": "-350",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-1",
+              "text": "200",
+              "isCorrect": true
+            },
+            {
+              "id": "opt-2",
+              "text": "-150",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-3",
+              "text": "50",
+              "isCorrect": false
+            }
+          ],
+          "allowMultiple": false,
+          "randomizeOptions": false,
+          "explanation": "200 is the only positive number and is larger than all the negative values",
+          "metadata": {
+            "bloomsLevel": "understand",
+            "estimatedTime": 45
+          }
+        },
+        "renderData": {
+          "question": {
+            "id": "assessment-1756689997545-7",
+            "type": "multiple_choice",
+            "content": "Which is the largest balance?",
+            "topic": "Which is larger or smaller comparisons",
+            "subject": "Math",
+            "difficulty": "medium",
+            "points": 10,
+            "options": [
+              {
+                "id": "opt-0",
+                "text": "-350",
+                "isCorrect": false
+              },
+              {
+                "id": "opt-1",
+                "text": "200",
+                "isCorrect": true
+              },
+              {
+                "id": "opt-2",
+                "text": "-150",
+                "isCorrect": false
+              },
+              {
+                "id": "opt-3",
+                "text": "50",
+                "isCorrect": false
+              }
+            ],
+            "allowMultiple": false,
+            "randomizeOptions": false,
+            "explanation": "200 is the only positive number and is larger than all the negative values",
+            "metadata": {
+              "bloomsLevel": "understand",
+              "estimatedTime": 45
+            }
+          },
+          "theme": "light",
+          "disabled": false,
+          "showFeedback": false,
+          "containerType": "learn",
+          "animations": true
+        },
+        "validationResult": {
+          "isValid": true,
+          "isCorrect": false,
+          "score": 0,
+          "maxScore": 10,
+          "feedback": "Incorrect. The correct answer is 200",
+          "correctAnswerDisplay": "200",
+          "correctAnswerValue": "opt-1"
+        },
+        "feedback": "Not quite right. The correct answer is 200. Keep practicing - you're learning like a future Scientist!"
+      }
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "5",
+          "career": "Accountant"
+        },
+        "system": {
+          "subject": "Math",
+          "skillName": "Comparing positive and negative numbers",
+          "skillId": "MATH.5.NBT.3"
+        }
+      },
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "result": {
+        "success": true,
+        "stages": {
+          "userSelection": true,
+          "systemContext": true,
+          "aiGeneration": true,
+          "contentConversion": true,
+          "questionRendering": true,
+          "answerValidation": true,
+          "feedbackDisplay": true
+        },
+        "question": {
+          "id": "assessment-1756689998547-8",
+          "type": "multiple_choice",
+          "content": "Which is the largest balance?",
+          "topic": "Comparing positive and negative numbers",
+          "subject": "Math",
+          "difficulty": "medium",
+          "points": 10,
+          "options": [
+            {
+              "id": "opt-0",
+              "text": "-350",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-1",
+              "text": "200",
+              "isCorrect": true
+            },
+            {
+              "id": "opt-2",
+              "text": "-150",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-3",
+              "text": "50",
+              "isCorrect": false
+            }
+          ],
+          "allowMultiple": false,
+          "randomizeOptions": false,
+          "explanation": "200 is the only positive number and is larger than all the negative values",
+          "metadata": {
+            "bloomsLevel": "understand",
+            "estimatedTime": 45
+          }
+        },
+        "renderData": {
+          "question": {
+            "id": "assessment-1756689998547-8",
+            "type": "multiple_choice",
+            "content": "Which is the largest balance?",
+            "topic": "Comparing positive and negative numbers",
+            "subject": "Math",
+            "difficulty": "medium",
+            "points": 10,
+            "options": [
+              {
+                "id": "opt-0",
+                "text": "-350",
+                "isCorrect": false
+              },
+              {
+                "id": "opt-1",
+                "text": "200",
+                "isCorrect": true
+              },
+              {
+                "id": "opt-2",
+                "text": "-150",
+                "isCorrect": false
+              },
+              {
+                "id": "opt-3",
+                "text": "50",
+                "isCorrect": false
+              }
+            ],
+            "allowMultiple": false,
+            "randomizeOptions": false,
+            "explanation": "200 is the only positive number and is larger than all the negative values",
+            "metadata": {
+              "bloomsLevel": "understand",
+              "estimatedTime": 45
+            }
+          },
+          "theme": "light",
+          "disabled": false,
+          "showFeedback": false,
+          "containerType": "learn",
+          "animations": true
+        },
+        "validationResult": {
+          "isValid": true,
+          "isCorrect": false,
+          "score": 0,
+          "maxScore": 10,
+          "feedback": "Incorrect. The correct answer is 200",
+          "correctAnswerDisplay": "200",
+          "correctAnswerValue": "opt-1"
+        },
+        "feedback": "Not quite right. The correct answer is 200. Keep practicing - you're learning like a future Accountant!"
+      }
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "5",
+          "career": "Data Scientist"
+        },
+        "system": {
+          "subject": "Math",
+          "skillName": "Decimal comparisons",
+          "skillId": "MATH.5.NBT.3b"
+        }
+      },
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "result": {
+        "success": true,
+        "stages": {
+          "userSelection": true,
+          "systemContext": true,
+          "aiGeneration": true,
+          "contentConversion": true,
+          "questionRendering": true,
+          "answerValidation": true,
+          "feedbackDisplay": true
+        },
+        "question": {
+          "id": "assessment-1756689999548-9",
+          "type": "multiple_choice",
+          "content": "Which is the largest balance?",
+          "topic": "Decimal comparisons",
+          "subject": "Math",
+          "difficulty": "medium",
+          "points": 10,
+          "options": [
+            {
+              "id": "opt-0",
+              "text": "-350",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-1",
+              "text": "200",
+              "isCorrect": true
+            },
+            {
+              "id": "opt-2",
+              "text": "-150",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-3",
+              "text": "50",
+              "isCorrect": false
+            }
+          ],
+          "allowMultiple": false,
+          "randomizeOptions": false,
+          "explanation": "200 is the only positive number and is larger than all the negative values",
+          "metadata": {
+            "bloomsLevel": "understand",
+            "estimatedTime": 45
+          }
+        },
+        "renderData": {
+          "question": {
+            "id": "assessment-1756689999548-9",
+            "type": "multiple_choice",
+            "content": "Which is the largest balance?",
+            "topic": "Decimal comparisons",
+            "subject": "Math",
+            "difficulty": "medium",
+            "points": 10,
+            "options": [
+              {
+                "id": "opt-0",
+                "text": "-350",
+                "isCorrect": false
+              },
+              {
+                "id": "opt-1",
+                "text": "200",
+                "isCorrect": true
+              },
+              {
+                "id": "opt-2",
+                "text": "-150",
+                "isCorrect": false
+              },
+              {
+                "id": "opt-3",
+                "text": "50",
+                "isCorrect": false
+              }
+            ],
+            "allowMultiple": false,
+            "randomizeOptions": false,
+            "explanation": "200 is the only positive number and is larger than all the negative values",
+            "metadata": {
+              "bloomsLevel": "understand",
+              "estimatedTime": 45
+            }
+          },
+          "theme": "light",
+          "disabled": false,
+          "showFeedback": false,
+          "containerType": "learn",
+          "animations": true
+        },
+        "validationResult": {
+          "isValid": true,
+          "isCorrect": false,
+          "score": 0,
+          "maxScore": 10,
+          "feedback": "Incorrect. The correct answer is 200",
+          "correctAnswerDisplay": "200",
+          "correctAnswerValue": "opt-1"
+        },
+        "feedback": "Not quite right. The correct answer is 200. Keep practicing - you're learning like a future Data Scientist!"
+      }
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "6",
+          "career": "Architect"
+        },
+        "system": {
+          "subject": "Math",
+          "skillName": "Ratios and Proportions",
+          "skillId": "MATH.6.RP.1"
+        }
+      },
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "result": {
+        "success": true,
+        "stages": {
+          "userSelection": true,
+          "systemContext": true,
+          "aiGeneration": true,
+          "contentConversion": true,
+          "questionRendering": true,
+          "answerValidation": true,
+          "feedbackDisplay": true
+        },
+        "question": {
+          "id": "assessment-1756690000550-10",
+          "type": "multiple_choice",
+          "content": "Which is the largest balance?",
+          "topic": "Ratios and Proportions",
+          "subject": "Math",
+          "difficulty": "medium",
+          "points": 10,
+          "options": [
+            {
+              "id": "opt-0",
+              "text": "-350",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-1",
+              "text": "200",
+              "isCorrect": true
+            },
+            {
+              "id": "opt-2",
+              "text": "-150",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-3",
+              "text": "50",
+              "isCorrect": false
+            }
+          ],
+          "allowMultiple": false,
+          "randomizeOptions": false,
+          "explanation": "200 is the only positive number and is larger than all the negative values",
+          "metadata": {
+            "bloomsLevel": "understand",
+            "estimatedTime": 45
+          }
+        },
+        "renderData": {
+          "question": {
+            "id": "assessment-1756690000550-10",
+            "type": "multiple_choice",
+            "content": "Which is the largest balance?",
+            "topic": "Ratios and Proportions",
+            "subject": "Math",
+            "difficulty": "medium",
+            "points": 10,
+            "options": [
+              {
+                "id": "opt-0",
+                "text": "-350",
+                "isCorrect": false
+              },
+              {
+                "id": "opt-1",
+                "text": "200",
+                "isCorrect": true
+              },
+              {
+                "id": "opt-2",
+                "text": "-150",
+                "isCorrect": false
+              },
+              {
+                "id": "opt-3",
+                "text": "50",
+                "isCorrect": false
+              }
+            ],
+            "allowMultiple": false,
+            "randomizeOptions": false,
+            "explanation": "200 is the only positive number and is larger than all the negative values",
+            "metadata": {
+              "bloomsLevel": "understand",
+              "estimatedTime": 45
+            }
+          },
+          "theme": "light",
+          "disabled": false,
+          "showFeedback": false,
+          "containerType": "learn",
+          "animations": true
+        },
+        "validationResult": {
+          "isValid": true,
+          "isCorrect": false,
+          "score": 0,
+          "maxScore": 10,
+          "feedback": "Incorrect. The correct answer is 200",
+          "correctAnswerDisplay": "200",
+          "correctAnswerValue": "opt-1"
+        },
+        "feedback": "Not quite right. The correct answer is 200. Keep practicing - you're learning like a future Architect!"
+      }
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "7",
+          "career": "Environmental Scientist"
+        },
+        "system": {
+          "subject": "Science",
+          "skillName": "Ecosystems",
+          "skillId": "SCI.7.LS.2"
+        }
+      },
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "result": {
+        "success": true,
+        "stages": {
+          "userSelection": true,
+          "systemContext": true,
+          "aiGeneration": true,
+          "contentConversion": true,
+          "questionRendering": true,
+          "answerValidation": true,
+          "feedbackDisplay": true
+        },
+        "question": {
+          "id": "assessment-1756690001553-11",
+          "type": "multiple_choice",
+          "content": "Which is the largest balance?",
+          "topic": "Ecosystems",
+          "subject": "Science",
+          "difficulty": "medium",
+          "points": 10,
+          "options": [
+            {
+              "id": "opt-0",
+              "text": "-350",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-1",
+              "text": "200",
+              "isCorrect": true
+            },
+            {
+              "id": "opt-2",
+              "text": "-150",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-3",
+              "text": "50",
+              "isCorrect": false
+            }
+          ],
+          "allowMultiple": false,
+          "randomizeOptions": false,
+          "explanation": "200 is the only positive number and is larger than all the negative values",
+          "metadata": {
+            "bloomsLevel": "understand",
+            "estimatedTime": 45
+          }
+        },
+        "renderData": {
+          "question": {
+            "id": "assessment-1756690001553-11",
+            "type": "multiple_choice",
+            "content": "Which is the largest balance?",
+            "topic": "Ecosystems",
+            "subject": "Science",
+            "difficulty": "medium",
+            "points": 10,
+            "options": [
+              {
+                "id": "opt-0",
+                "text": "-350",
+                "isCorrect": false
+              },
+              {
+                "id": "opt-1",
+                "text": "200",
+                "isCorrect": true
+              },
+              {
+                "id": "opt-2",
+                "text": "-150",
+                "isCorrect": false
+              },
+              {
+                "id": "opt-3",
+                "text": "50",
+                "isCorrect": false
+              }
+            ],
+            "allowMultiple": false,
+            "randomizeOptions": false,
+            "explanation": "200 is the only positive number and is larger than all the negative values",
+            "metadata": {
+              "bloomsLevel": "understand",
+              "estimatedTime": 45
+            }
+          },
+          "theme": "light",
+          "disabled": false,
+          "showFeedback": false,
+          "containerType": "learn",
+          "animations": true
+        },
+        "validationResult": {
+          "isValid": true,
+          "isCorrect": false,
+          "score": 0,
+          "maxScore": 10,
+          "feedback": "Incorrect. The correct answer is 200",
+          "correctAnswerDisplay": "200",
+          "correctAnswerValue": "opt-1"
+        },
+        "feedback": "Not quite right. The correct answer is 200. Keep practicing - you're learning like a future Environmental Scientist!"
+      }
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "8",
+          "career": "Lawyer"
+        },
+        "system": {
+          "subject": "Social Studies",
+          "skillName": "US Constitution",
+          "skillId": "SS.8.CG.3"
+        }
+      },
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "result": {
+        "success": true,
+        "stages": {
+          "userSelection": true,
+          "systemContext": true,
+          "aiGeneration": true,
+          "contentConversion": true,
+          "questionRendering": true,
+          "answerValidation": true,
+          "feedbackDisplay": true
+        },
+        "question": {
+          "id": "assessment-1756690002556-12",
+          "type": "multiple_choice",
+          "content": "Which is the largest balance?",
+          "topic": "US Constitution",
+          "subject": "Social Studies",
+          "difficulty": "medium",
+          "points": 10,
+          "options": [
+            {
+              "id": "opt-0",
+              "text": "-350",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-1",
+              "text": "200",
+              "isCorrect": true
+            },
+            {
+              "id": "opt-2",
+              "text": "-150",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-3",
+              "text": "50",
+              "isCorrect": false
+            }
+          ],
+          "allowMultiple": false,
+          "randomizeOptions": false,
+          "explanation": "200 is the only positive number and is larger than all the negative values",
+          "metadata": {
+            "bloomsLevel": "understand",
+            "estimatedTime": 45
+          }
+        },
+        "renderData": {
+          "question": {
+            "id": "assessment-1756690002556-12",
+            "type": "multiple_choice",
+            "content": "Which is the largest balance?",
+            "topic": "US Constitution",
+            "subject": "Social Studies",
+            "difficulty": "medium",
+            "points": 10,
+            "options": [
+              {
+                "id": "opt-0",
+                "text": "-350",
+                "isCorrect": false
+              },
+              {
+                "id": "opt-1",
+                "text": "200",
+                "isCorrect": true
+              },
+              {
+                "id": "opt-2",
+                "text": "-150",
+                "isCorrect": false
+              },
+              {
+                "id": "opt-3",
+                "text": "50",
+                "isCorrect": false
+              }
+            ],
+            "allowMultiple": false,
+            "randomizeOptions": false,
+            "explanation": "200 is the only positive number and is larger than all the negative values",
+            "metadata": {
+              "bloomsLevel": "understand",
+              "estimatedTime": 45
+            }
+          },
+          "theme": "light",
+          "disabled": false,
+          "showFeedback": false,
+          "containerType": "learn",
+          "animations": true
+        },
+        "validationResult": {
+          "isValid": true,
+          "isCorrect": false,
+          "score": 0,
+          "maxScore": 10,
+          "feedback": "Incorrect. The correct answer is 200",
+          "correctAnswerDisplay": "200",
+          "correctAnswerValue": "opt-1"
+        },
+        "feedback": "Not quite right. The correct answer is 200. Keep practicing - you're learning like a future Lawyer!"
+      }
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "9",
+          "career": "Geneticist"
+        },
+        "system": {
+          "subject": "Science",
+          "skillName": "DNA and Heredity",
+          "skillId": "SCI.9.LS.3"
+        }
+      },
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "result": {
+        "success": true,
+        "stages": {
+          "userSelection": true,
+          "systemContext": true,
+          "aiGeneration": true,
+          "contentConversion": true,
+          "questionRendering": true,
+          "answerValidation": true,
+          "feedbackDisplay": true
+        },
+        "question": {
+          "id": "assessment-1756690003560-13",
+          "type": "multiple_choice",
+          "content": "Which is the largest balance?",
+          "topic": "DNA and Heredity",
+          "subject": "Science",
+          "difficulty": "medium",
+          "points": 10,
+          "options": [
+            {
+              "id": "opt-0",
+              "text": "-350",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-1",
+              "text": "200",
+              "isCorrect": true
+            },
+            {
+              "id": "opt-2",
+              "text": "-150",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-3",
+              "text": "50",
+              "isCorrect": false
+            }
+          ],
+          "allowMultiple": false,
+          "randomizeOptions": false,
+          "explanation": "200 is the only positive number and is larger than all the negative values",
+          "metadata": {
+            "bloomsLevel": "understand",
+            "estimatedTime": 45
+          }
+        },
+        "renderData": {
+          "question": {
+            "id": "assessment-1756690003560-13",
+            "type": "multiple_choice",
+            "content": "Which is the largest balance?",
+            "topic": "DNA and Heredity",
+            "subject": "Science",
+            "difficulty": "medium",
+            "points": 10,
+            "options": [
+              {
+                "id": "opt-0",
+                "text": "-350",
+                "isCorrect": false
+              },
+              {
+                "id": "opt-1",
+                "text": "200",
+                "isCorrect": true
+              },
+              {
+                "id": "opt-2",
+                "text": "-150",
+                "isCorrect": false
+              },
+              {
+                "id": "opt-3",
+                "text": "50",
+                "isCorrect": false
+              }
+            ],
+            "allowMultiple": false,
+            "randomizeOptions": false,
+            "explanation": "200 is the only positive number and is larger than all the negative values",
+            "metadata": {
+              "bloomsLevel": "understand",
+              "estimatedTime": 45
+            }
+          },
+          "theme": "light",
+          "disabled": false,
+          "showFeedback": false,
+          "containerType": "learn",
+          "animations": true
+        },
+        "validationResult": {
+          "isValid": true,
+          "isCorrect": false,
+          "score": 0,
+          "maxScore": 10,
+          "feedback": "Incorrect. The correct answer is 200",
+          "correctAnswerDisplay": "200",
+          "correctAnswerValue": "opt-1"
+        },
+        "feedback": "Not quite right. The correct answer is 200. Keep practicing - you're learning like a future Geneticist!"
+      }
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "10",
+          "career": "Economist"
+        },
+        "system": {
+          "subject": "Math",
+          "skillName": "Quadratic Functions",
+          "skillId": "MATH.10.A.REI.4"
+        }
+      },
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "result": {
+        "success": true,
+        "stages": {
+          "userSelection": true,
+          "systemContext": true,
+          "aiGeneration": true,
+          "contentConversion": true,
+          "questionRendering": true,
+          "answerValidation": true,
+          "feedbackDisplay": true
+        },
+        "question": {
+          "id": "assessment-1756690004562-14",
+          "type": "multiple_choice",
+          "content": "Which is the largest balance?",
+          "topic": "Quadratic Functions",
+          "subject": "Math",
+          "difficulty": "medium",
+          "points": 10,
+          "options": [
+            {
+              "id": "opt-0",
+              "text": "-350",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-1",
+              "text": "200",
+              "isCorrect": true
+            },
+            {
+              "id": "opt-2",
+              "text": "-150",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-3",
+              "text": "50",
+              "isCorrect": false
+            }
+          ],
+          "allowMultiple": false,
+          "randomizeOptions": false,
+          "explanation": "200 is the only positive number and is larger than all the negative values",
+          "metadata": {
+            "bloomsLevel": "understand",
+            "estimatedTime": 45
+          }
+        },
+        "renderData": {
+          "question": {
+            "id": "assessment-1756690004562-14",
+            "type": "multiple_choice",
+            "content": "Which is the largest balance?",
+            "topic": "Quadratic Functions",
+            "subject": "Math",
+            "difficulty": "medium",
+            "points": 10,
+            "options": [
+              {
+                "id": "opt-0",
+                "text": "-350",
+                "isCorrect": false
+              },
+              {
+                "id": "opt-1",
+                "text": "200",
+                "isCorrect": true
+              },
+              {
+                "id": "opt-2",
+                "text": "-150",
+                "isCorrect": false
+              },
+              {
+                "id": "opt-3",
+                "text": "50",
+                "isCorrect": false
+              }
+            ],
+            "allowMultiple": false,
+            "randomizeOptions": false,
+            "explanation": "200 is the only positive number and is larger than all the negative values",
+            "metadata": {
+              "bloomsLevel": "understand",
+              "estimatedTime": 45
+            }
+          },
+          "theme": "light",
+          "disabled": false,
+          "showFeedback": false,
+          "containerType": "learn",
+          "animations": true
+        },
+        "validationResult": {
+          "isValid": true,
+          "isCorrect": false,
+          "score": 0,
+          "maxScore": 10,
+          "feedback": "Incorrect. The correct answer is 200",
+          "correctAnswerDisplay": "200",
+          "correctAnswerValue": "opt-1"
+        },
+        "feedback": "Not quite right. The correct answer is 200. Keep practicing - you're learning like a future Economist!"
+      }
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "11",
+          "career": "Research Scientist"
+        },
+        "system": {
+          "subject": "Science",
+          "skillName": "Chemical Reactions",
+          "skillId": "SCI.11.PS.1"
+        }
+      },
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "result": {
+        "success": true,
+        "stages": {
+          "userSelection": true,
+          "systemContext": true,
+          "aiGeneration": true,
+          "contentConversion": true,
+          "questionRendering": true,
+          "answerValidation": true,
+          "feedbackDisplay": true
+        },
+        "question": {
+          "id": "assessment-1756690005564-15",
+          "type": "multiple_choice",
+          "content": "Which is the largest balance?",
+          "topic": "Chemical Reactions",
+          "subject": "Science",
+          "difficulty": "medium",
+          "points": 10,
+          "options": [
+            {
+              "id": "opt-0",
+              "text": "-350",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-1",
+              "text": "200",
+              "isCorrect": true
+            },
+            {
+              "id": "opt-2",
+              "text": "-150",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-3",
+              "text": "50",
+              "isCorrect": false
+            }
+          ],
+          "allowMultiple": false,
+          "randomizeOptions": false,
+          "explanation": "200 is the only positive number and is larger than all the negative values",
+          "metadata": {
+            "bloomsLevel": "understand",
+            "estimatedTime": 45
+          }
+        },
+        "renderData": {
+          "question": {
+            "id": "assessment-1756690005564-15",
+            "type": "multiple_choice",
+            "content": "Which is the largest balance?",
+            "topic": "Chemical Reactions",
+            "subject": "Science",
+            "difficulty": "medium",
+            "points": 10,
+            "options": [
+              {
+                "id": "opt-0",
+                "text": "-350",
+                "isCorrect": false
+              },
+              {
+                "id": "opt-1",
+                "text": "200",
+                "isCorrect": true
+              },
+              {
+                "id": "opt-2",
+                "text": "-150",
+                "isCorrect": false
+              },
+              {
+                "id": "opt-3",
+                "text": "50",
+                "isCorrect": false
+              }
+            ],
+            "allowMultiple": false,
+            "randomizeOptions": false,
+            "explanation": "200 is the only positive number and is larger than all the negative values",
+            "metadata": {
+              "bloomsLevel": "understand",
+              "estimatedTime": 45
+            }
+          },
+          "theme": "light",
+          "disabled": false,
+          "showFeedback": false,
+          "containerType": "learn",
+          "animations": true
+        },
+        "validationResult": {
+          "isValid": true,
+          "isCorrect": false,
+          "score": 0,
+          "maxScore": 10,
+          "feedback": "Incorrect. The correct answer is 200",
+          "correctAnswerDisplay": "200",
+          "correctAnswerValue": "opt-1"
+        },
+        "feedback": "Not quite right. The correct answer is 200. Keep practicing - you're learning like a future Research Scientist!"
+      }
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "3",
+          "career": "Teacher"
+        },
+        "system": {
+          "subject": "Math",
+          "skillName": "Which number is smaller",
+          "skillId": "MATH.3.COMP.1"
+        }
+      },
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "result": {
+        "success": true,
+        "stages": {
+          "userSelection": true,
+          "systemContext": true,
+          "aiGeneration": true,
+          "contentConversion": true,
+          "questionRendering": true,
+          "answerValidation": true,
+          "feedbackDisplay": true
+        },
+        "question": {
+          "id": "assessment-1756690006566-16",
+          "type": "multiple_choice",
+          "content": "Which is the largest balance?",
+          "topic": "Which number is smaller",
+          "subject": "Math",
+          "difficulty": "medium",
+          "points": 10,
+          "options": [
+            {
+              "id": "opt-0",
+              "text": "-350",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-1",
+              "text": "200",
+              "isCorrect": true
+            },
+            {
+              "id": "opt-2",
+              "text": "-150",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-3",
+              "text": "50",
+              "isCorrect": false
+            }
+          ],
+          "allowMultiple": false,
+          "randomizeOptions": false,
+          "explanation": "200 is the only positive number and is larger than all the negative values",
+          "metadata": {
+            "bloomsLevel": "understand",
+            "estimatedTime": 45
+          }
+        },
+        "renderData": {
+          "question": {
+            "id": "assessment-1756690006566-16",
+            "type": "multiple_choice",
+            "content": "Which is the largest balance?",
+            "topic": "Which number is smaller",
+            "subject": "Math",
+            "difficulty": "medium",
+            "points": 10,
+            "options": [
+              {
+                "id": "opt-0",
+                "text": "-350",
+                "isCorrect": false
+              },
+              {
+                "id": "opt-1",
+                "text": "200",
+                "isCorrect": true
+              },
+              {
+                "id": "opt-2",
+                "text": "-150",
+                "isCorrect": false
+              },
+              {
+                "id": "opt-3",
+                "text": "50",
+                "isCorrect": false
+              }
+            ],
+            "allowMultiple": false,
+            "randomizeOptions": false,
+            "explanation": "200 is the only positive number and is larger than all the negative values",
+            "metadata": {
+              "bloomsLevel": "understand",
+              "estimatedTime": 45
+            }
+          },
+          "theme": "light",
+          "disabled": false,
+          "showFeedback": false,
+          "containerType": "learn",
+          "animations": true
+        },
+        "validationResult": {
+          "isValid": true,
+          "isCorrect": false,
+          "score": 0,
+          "maxScore": 10,
+          "feedback": "Incorrect. The correct answer is 200",
+          "correctAnswerDisplay": "200",
+          "correctAnswerValue": "opt-1"
+        },
+        "feedback": "Not quite right. The correct answer is 200. Keep practicing - you're learning like a future Teacher!"
+      }
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "4",
+          "career": "Engineer"
+        },
+        "system": {
+          "subject": "Math",
+          "skillName": "Which fraction is larger",
+          "skillId": "MATH.4.NF.2"
+        }
+      },
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "result": {
+        "success": true,
+        "stages": {
+          "userSelection": true,
+          "systemContext": true,
+          "aiGeneration": true,
+          "contentConversion": true,
+          "questionRendering": true,
+          "answerValidation": true,
+          "feedbackDisplay": true
+        },
+        "question": {
+          "id": "assessment-1756690007570-17",
+          "type": "multiple_choice",
+          "content": "Which is the largest balance?",
+          "topic": "Which fraction is larger",
+          "subject": "Math",
+          "difficulty": "medium",
+          "points": 10,
+          "options": [
+            {
+              "id": "opt-0",
+              "text": "-350",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-1",
+              "text": "200",
+              "isCorrect": true
+            },
+            {
+              "id": "opt-2",
+              "text": "-150",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-3",
+              "text": "50",
+              "isCorrect": false
+            }
+          ],
+          "allowMultiple": false,
+          "randomizeOptions": false,
+          "explanation": "200 is the only positive number and is larger than all the negative values",
+          "metadata": {
+            "bloomsLevel": "understand",
+            "estimatedTime": 45
+          }
+        },
+        "renderData": {
+          "question": {
+            "id": "assessment-1756690007570-17",
+            "type": "multiple_choice",
+            "content": "Which is the largest balance?",
+            "topic": "Which fraction is larger",
+            "subject": "Math",
+            "difficulty": "medium",
+            "points": 10,
+            "options": [
+              {
+                "id": "opt-0",
+                "text": "-350",
+                "isCorrect": false
+              },
+              {
+                "id": "opt-1",
+                "text": "200",
+                "isCorrect": true
+              },
+              {
+                "id": "opt-2",
+                "text": "-150",
+                "isCorrect": false
+              },
+              {
+                "id": "opt-3",
+                "text": "50",
+                "isCorrect": false
+              }
+            ],
+            "allowMultiple": false,
+            "randomizeOptions": false,
+            "explanation": "200 is the only positive number and is larger than all the negative values",
+            "metadata": {
+              "bloomsLevel": "understand",
+              "estimatedTime": 45
+            }
+          },
+          "theme": "light",
+          "disabled": false,
+          "showFeedback": false,
+          "containerType": "learn",
+          "animations": true
+        },
+        "validationResult": {
+          "isValid": true,
+          "isCorrect": false,
+          "score": 0,
+          "maxScore": 10,
+          "feedback": "Incorrect. The correct answer is 200",
+          "correctAnswerDisplay": "200",
+          "correctAnswerValue": "opt-1"
+        },
+        "feedback": "Not quite right. The correct answer is 200. Keep practicing - you're learning like a future Engineer!"
+      }
+    },
+    {
+      "scenario": {
+        "user": {
+          "gradeLevel": "5",
+          "career": "Banker"
+        },
+        "system": {
+          "subject": "Math",
+          "skillName": "Compare negative decimals",
+          "skillId": "MATH.5.NBT.4"
+        }
+      },
+      "issues": [
+        "❌ Final validation failed"
+      ],
+      "result": {
+        "success": true,
+        "stages": {
+          "userSelection": true,
+          "systemContext": true,
+          "aiGeneration": true,
+          "contentConversion": true,
+          "questionRendering": true,
+          "answerValidation": true,
+          "feedbackDisplay": true
+        },
+        "question": {
+          "id": "assessment-1756690008571-18",
+          "type": "multiple_choice",
+          "content": "Which is the largest balance?",
+          "topic": "Compare negative decimals",
+          "subject": "Math",
+          "difficulty": "medium",
+          "points": 10,
+          "options": [
+            {
+              "id": "opt-0",
+              "text": "-350",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-1",
+              "text": "200",
+              "isCorrect": true
+            },
+            {
+              "id": "opt-2",
+              "text": "-150",
+              "isCorrect": false
+            },
+            {
+              "id": "opt-3",
+              "text": "50",
+              "isCorrect": false
+            }
+          ],
+          "allowMultiple": false,
+          "randomizeOptions": false,
+          "explanation": "200 is the only positive number and is larger than all the negative values",
+          "metadata": {
+            "bloomsLevel": "understand",
+            "estimatedTime": 45
+          }
+        },
+        "renderData": {
+          "question": {
+            "id": "assessment-1756690008571-18",
+            "type": "multiple_choice",
+            "content": "Which is the largest balance?",
+            "topic": "Compare negative decimals",
+            "subject": "Math",
+            "difficulty": "medium",
+            "points": 10,
+            "options": [
+              {
+                "id": "opt-0",
+                "text": "-350",
+                "isCorrect": false
+              },
+              {
+                "id": "opt-1",
+                "text": "200",
+                "isCorrect": true
+              },
+              {
+                "id": "opt-2",
+                "text": "-150",
+                "isCorrect": false
+              },
+              {
+                "id": "opt-3",
+                "text": "50",
+                "isCorrect": false
+              }
+            ],
+            "allowMultiple": false,
+            "randomizeOptions": false,
+            "explanation": "200 is the only positive number and is larger than all the negative values",
+            "metadata": {
+              "bloomsLevel": "understand",
+              "estimatedTime": 45
+            }
+          },
+          "theme": "light",
+          "disabled": false,
+          "showFeedback": false,
+          "containerType": "learn",
+          "animations": true
+        },
+        "validationResult": {
+          "isValid": true,
+          "isCorrect": false,
+          "score": 0,
+          "maxScore": 10,
+          "feedback": "Incorrect. The correct answer is 200",
+          "correctAnswerDisplay": "200",
+          "correctAnswerValue": "opt-1"
+        },
+        "feedback": "Not quite right. The correct answer is 200. Keep practicing - you're learning like a future Banker!"
+      }
+    }
+  ]
+}

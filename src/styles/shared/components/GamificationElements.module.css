@@ -1,0 +1,954 @@
+/**
+ * GAMIFICATION ELEMENTS MODULE
+ * ============================
+ * Styles for XP, badges, achievements, leaderboards, and rewards
+ * Provides engaging visual feedback for student progress
+ * 
+ * Created: 2025-08-22
+ */
+
+/* ============================================
+   XP DISPLAY
+   ============================================ */
+.xpDisplay {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: var(--gradient-primary);
+  color: white;
+  border-radius: var(--radius-full);
+  font-weight: var(--font-bold);
+  font-size: var(--text-base);
+  box-shadow: var(--shadow-sm);
+  animation: xpAppear 0.5s ease;
+}
+
+@keyframes xpAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.xpIcon {
+  font-size: var(--text-xl);
+  display: flex;
+  align-items: center;
+}
+
+.xpValue {
+  font-family: var(--font-mono);
+  font-size: var(--text-lg);
+}
+
+.xpLabel {
+  font-size: var(--text-sm);
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+}
+
+/* XP Animation */
+.xpGain {
+  position: fixed;
+  z-index: var(--z-50);
+  pointer-events: none;
+  animation: xpFloat 2s ease-out forwards;
+}
+
+@keyframes xpFloat {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100px) scale(1.5);
+  }
+}
+
+.xpGainText {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  color: var(--color-warning);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ============================================
+   XP PROGRESS BAR
+   ============================================ */
+.xpProgressBar {
+  width: 100%;
+  max-width: 400px;
+}
+
+.xpProgressHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-2);
+}
+
+.xpLevel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.levelBadge {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background: var(--gradient-warning);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--font-bold);
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.levelText {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+}
+
+.xpProgressTrack {
+  height: 12px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  position: relative;
+}
+
+.xpProgressFill {
+  height: 100%;
+  background: var(--gradient-warning);
+  border-radius: var(--radius-full);
+  transition: width var(--duration-slow) var(--easing-out);
+  position: relative;
+  overflow: hidden;
+}
+
+.xpProgressFill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+/* ============================================
+   ACHIEVEMENT BADGES
+   ============================================ */
+.achievementBadge {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-full);
+  background: var(--gradient-warning);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: 
+    var(--shadow-md),
+    inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all var(--duration-base) var(--easing-out);
+}
+
+.achievementBadge:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 
+    var(--shadow-elevated),
+    inset 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+.achievementBadge.locked {
+  background: var(--bg-tertiary);
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.achievementBadge.locked:hover {
+  transform: none;
+}
+
+.badgeIcon {
+  font-size: var(--text-4xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badgeShine {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  width: 30%;
+  height: 30%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.6) 0%,
+    transparent 70%
+  );
+  border-radius: var(--radius-full);
+  animation: shine 3s infinite;
+}
+
+@keyframes shine {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+.badgeRarity {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: var(--space-1) var(--space-2);
+  background: var(--bg-elevated);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: var(--font-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  box-shadow: var(--shadow-sm);
+}
+
+.badgeRarity.common {
+  color: var(--text-secondary);
+  background: var(--bg-secondary);
+}
+
+.badgeRarity.rare {
+  color: #3b82f6;
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+}
+
+.badgeRarity.epic {
+  color: #a855f7;
+  background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+}
+
+.badgeRarity.legendary {
+  color: #f59e0b;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+}
+
+/* ============================================
+   ACHIEVEMENT CARD
+   ============================================ */
+.achievementCard {
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  transition: all var(--duration-base) var(--easing-out);
+  cursor: pointer;
+}
+
+.achievementCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.achievementCard.unlocked {
+  background: linear-gradient(
+    135deg,
+    rgba(251, 191, 36, 0.1) 0%,
+    rgba(245, 158, 11, 0.05) 100%
+  );
+  border: 1px solid var(--warning-border);
+  animation: achievementUnlock 0.5s ease;
+}
+
+@keyframes achievementUnlock {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.achievementInfo {
+  flex: 1;
+}
+
+.achievementName {
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-1);
+}
+
+.achievementDescription {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+}
+
+.achievementProgress {
+  margin-top: var(--space-2);
+}
+
+.achievementProgressBar {
+  height: 4px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.achievementProgressFill {
+  height: 100%;
+  background: var(--gradient-warning);
+  transition: width var(--duration-moderate) var(--easing-out);
+}
+
+/* ============================================
+   STREAK COUNTER
+   ============================================ */
+.streakCounter {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: var(--gradient-warning);
+  color: white;
+  border-radius: var(--radius-full);
+  font-weight: var(--font-bold);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  animation: streakPulse 2s infinite;
+}
+
+@keyframes streakPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: var(--shadow-md);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 0 30px rgba(245, 158, 11, 0.4);
+  }
+}
+
+.streakIcon {
+  font-size: var(--text-2xl);
+  animation: fireAnimation 2s infinite;
+}
+
+@keyframes fireAnimation {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.1) rotate(-5deg); }
+  75% { transform: scale(1.1) rotate(5deg); }
+}
+
+.streakNumber {
+  font-size: var(--text-2xl);
+  font-family: var(--font-mono);
+}
+
+.streakLabel {
+  font-size: var(--text-sm);
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+}
+
+/* ============================================
+   LEADERBOARD
+   ============================================ */
+.leaderboard {
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-md);
+}
+
+.leaderboardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-6);
+}
+
+.leaderboardTitle {
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.leaderboardList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.leaderboardItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  transition: all var(--duration-base) var(--easing-out);
+}
+
+.leaderboardItem:hover {
+  background: var(--bg-hover);
+  transform: translateX(4px);
+}
+
+.leaderboardRank {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--font-bold);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+}
+
+.leaderboardItem:nth-child(1) .leaderboardRank {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: white;
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
+}
+
+.leaderboardItem:nth-child(2) .leaderboardRank {
+  background: linear-gradient(135deg, #cbd5e1 0%, #94a3b8 100%);
+  color: white;
+}
+
+.leaderboardItem:nth-child(3) .leaderboardRank {
+  background: linear-gradient(135deg, #fed7aa 0%, #fb923c 100%);
+  color: white;
+}
+
+.leaderboardUser {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.leaderboardAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background: var(--gradient-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: var(--font-bold);
+}
+
+.leaderboardName {
+  font-size: var(--text-base);
+  color: var(--text-primary);
+  font-weight: var(--font-medium);
+}
+
+.leaderboardScore {
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  color: var(--color-primary);
+  font-family: var(--font-mono);
+}
+
+/* ============================================
+   REWARD POPUP
+   ============================================ */
+.rewardPopup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
+  padding: var(--space-8);
+  box-shadow: var(--shadow-elevated);
+  text-align: center;
+  z-index: var(--z-50);
+  animation: rewardBounce 0.5s ease;
+}
+
+@keyframes rewardBounce {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.rewardIcon {
+  font-size: var(--text-6xl);
+  margin-bottom: var(--space-4);
+  animation: rewardSpin 1s ease;
+}
+
+@keyframes rewardSpin {
+  from { transform: rotate(0deg) scale(0); }
+  to { transform: rotate(360deg) scale(1); }
+}
+
+.rewardTitle {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-2);
+  background: var(--gradient-warning);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.rewardDescription {
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-6);
+}
+
+.rewardActions {
+  display: flex;
+  gap: var(--space-4);
+  justify-content: center;
+}
+
+/* ============================================
+   ENGAGEMENT INDICATOR
+   ============================================ */
+.engagementIndicator {
+  position: fixed;
+  bottom: var(--space-5);
+  left: var(--space-5);
+  padding: var(--space-2) var(--space-5);
+  border-radius: var(--radius-full);
+  color: white;
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  opacity: 0.85;
+  transition: all var(--duration-base) var(--easing-out);
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(10px);
+  z-index: var(--z-30);
+}
+
+.engagementIndicator.high {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+}
+
+.engagementIndicator.medium {
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+}
+
+.engagementIndicator.low {
+  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+}
+
+.engagementIndicator:hover {
+  opacity: 1;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ============================================
+   REWARDS OVERLAY
+   ============================================ */
+.rewardsOverlay {
+  position: fixed;
+  top: var(--space-5);
+  right: var(--space-5);
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  color: white;
+  padding: var(--space-4) var(--space-6);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+  max-width: 300px;
+  z-index: var(--z-50);
+  animation: slideDown 0.3s ease-out;
+}
+
+.rewardsOverlay h4 {
+  margin: 0 0 var(--space-3) 0;
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+}
+
+.rewardItem {
+  margin-bottom: var(--space-2);
+  font-size: var(--text-base);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   DISCOVERY STATS WIDGET
+   ============================================ */
+.discoveryStats {
+  position: fixed;
+  bottom: var(--space-5);
+  right: var(--space-5);
+  background: linear-gradient(135deg, #7C3AED 0%, #A855F7 100%);
+  color: white;
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 4px 20px rgba(124, 58, 237, 0.3);
+  max-width: 300px;
+  z-index: var(--z-40);
+  animation: slideUp 0.3s ease-out;
+}
+
+.discoveryStats h4 {
+  margin: 0 0 var(--space-3) 0;
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+}
+
+.statsContent {
+  font-size: var(--text-xs);
+}
+
+.statsContent p {
+  margin: var(--space-1) 0;
+  opacity: 0.95;
+}
+
+.progressBarContainer {
+  margin-top: var(--space-3);
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progressBar {
+  height: 100%;
+  background: white;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* ============================================
+   MILESTONE POPUP
+   ============================================ */
+.milestonePopup {
+  position: fixed;
+  bottom: var(--space-5);
+  left: var(--space-5);
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  color: white;
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+  max-width: 250px;
+  z-index: var(--z-40);
+  animation: bounceIn 0.5s ease;
+}
+
+.milestonePopup h4 {
+  margin: 0 0 var(--space-2) 0;
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+}
+
+.milestoneItem {
+  font-size: var(--text-xs);
+  margin-bottom: var(--space-1);
+}
+
+/* ============================================
+   SCAFFOLDING INDICATOR
+   ============================================ */
+.scaffoldingIndicator {
+  position: fixed;
+  bottom: var(--space-5);
+  left: var(--space-5);
+  padding: var(--space-2) var(--space-5);
+  border-radius: var(--radius-full);
+  color: white;
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  opacity: 0.85;
+  transition: all var(--duration-base) var(--easing-out);
+  box-shadow: var(--shadow-md);
+  z-index: var(--z-30);
+}
+
+.scaffoldingIndicator.high {
+  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+}
+
+.scaffoldingIndicator.medium {
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+}
+
+.scaffoldingIndicator.low {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ============================================
+   DISCOVERY TRACKER
+   ============================================ */
+.discoveryTracker {
+  position: fixed;
+  top: 80px;
+  right: var(--space-5);
+  background: var(--card-bg);
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-xl);
+  padding: var(--space-4);
+  max-width: 200px;
+  box-shadow: var(--shadow-md);
+  z-index: var(--z-30);
+}
+
+.discoveryTracker h4 {
+  margin: 0 0 var(--space-3) 0;
+  color: var(--color-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+}
+
+.trackerContent {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+
+.trackerContent > div {
+  margin-bottom: var(--space-1);
+}
+
+.curiosityStatus {
+  margin-top: var(--space-2);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--border-color);
+  font-weight: var(--font-semibold);
+}
+
+.curiosityStatus.high {
+  color: var(--color-success);
+}
+
+.curiosityStatus.medium {
+  color: var(--color-warning);
+}
+
+.curiosityStatus.low {
+  color: var(--text-tertiary);
+}
+
+/* ============================================
+   DISCOVERY REWARDS
+   ============================================ */
+.discoveryRewards {
+  position: fixed;
+  bottom: 80px;
+  right: var(--space-5);
+  background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+  color: white;
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+  max-width: 250px;
+  z-index: var(--z-40);
+  animation: slideIn 0.3s ease;
+}
+
+.discoveryRewards h4 {
+  margin: 0 0 var(--space-2) 0;
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ============================================
+   COIN/CURRENCY DISPLAY
+   ============================================ */
+.coinDisplay {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: white;
+  border-radius: var(--radius-full);
+  font-weight: var(--font-bold);
+  box-shadow: var(--shadow-sm);
+}
+
+.coinIcon {
+  width: 24px;
+  height: 24px;
+  background: white;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f59e0b;
+  font-weight: var(--font-bold);
+  animation: coinRotate 3s linear infinite;
+}
+
+@keyframes coinRotate {
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(360deg); }
+}
+
+.coinValue {
+  font-family: var(--font-mono);
+  font-size: var(--text-lg);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 768px) {
+  .achievementBadge {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .badgeIcon {
+    font-size: var(--text-2xl);
+  }
+  
+  .streakCounter {
+    padding: var(--space-2) var(--space-3);
+  }
+  
+  .streakNumber {
+    font-size: var(--text-xl);
+  }
+  
+  .leaderboard {
+    padding: var(--space-4);
+  }
+  
+  .rewardPopup {
+    padding: var(--space-6);
+    width: 90%;
+    max-width: 400px;
+  }
+}
+
+@media (max-width: 480px) {
+  .xpDisplay {
+    padding: var(--space-1) var(--space-3);
+    font-size: var(--text-sm);
+  }
+  
+  .xpValue {
+    font-size: var(--text-base);
+  }
+  
+  .achievementBadge {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .badgeIcon {
+    font-size: var(--text-xl);
+  }
+  
+  .leaderboardItem {
+    padding: var(--space-2);
+  }
+  
+  .rewardTitle {
+    font-size: var(--text-2xl);
+  }
+  
+  .rewardIcon {
+    font-size: var(--text-5xl);
+  }
+}

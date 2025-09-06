@@ -1,0 +1,519 @@
+/**
+ * Multi-Container Visualization Styles
+ * =====================================
+ * Unified styling for visualization across all containers
+ * Adapts to grade levels and container themes
+ * 
+ * Created: 2025-08-30
+ */
+
+@import '../../styles/MasterTheme.css';
+
+/* ============================================
+   BASE VISUALIZATION CONTAINER
+   ============================================ */
+.multi-container-visualization {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 400px;
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  background: var(--color-background-elevated);
+  box-shadow: var(--shadow-elevated);
+}
+
+/* Canvas for advanced visualizations */
+.visualization-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+/* Main stage area */
+.visualization-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+}
+
+/* ============================================
+   VISUAL ELEMENTS
+   ============================================ */
+.visual-element {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.visual-element.particle {
+  font-size: 2rem;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+}
+
+.visual-element.shape {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-md);
+  opacity: 0.8;
+}
+
+.visual-element.text {
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  background: var(--color-background-subtle);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border-light);
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  25% { transform: translateY(-15px); }
+  75% { transform: translateY(5px); }
+}
+
+@keyframes orbit {
+  from { 
+    transform: rotate(0deg) translateX(50px) rotate(0deg);
+  }
+  to { 
+    transform: rotate(360deg) translateX(50px) rotate(-360deg);
+  }
+}
+
+@keyframes wave {
+  0%, 100% { transform: translateX(0) translateY(0); }
+  25% { transform: translateX(20px) translateY(-10px); }
+  50% { transform: translateX(0) translateY(-20px); }
+  75% { transform: translateX(-20px) translateY(-10px); }
+}
+
+@keyframes spiral {
+  from {
+    transform: rotate(0deg) scale(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: rotate(720deg) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes quantum {
+  0% { transform: scale(1) rotate(0deg); opacity: 1; }
+  25% { transform: scale(0.8) rotate(90deg); opacity: 0.6; }
+  50% { transform: scale(1.2) rotate(180deg); opacity: 0.8; }
+  75% { transform: scale(0.9) rotate(270deg); opacity: 0.7; }
+  100% { transform: scale(1) rotate(360deg); opacity: 1; }
+}
+
+/* Apply animations */
+.visual-element.float { animation: float 4s ease-in-out infinite; }
+.visual-element.pulse { animation: pulse 2s ease-in-out infinite; }
+.visual-element.rotate { animation: rotate 8s linear infinite; }
+.visual-element.bounce { animation: bounce 3s ease-in-out infinite; }
+.visual-element.orbit { animation: orbit 10s linear infinite; }
+.visual-element.wave { animation: wave 5s ease-in-out infinite; }
+.visual-element.spiral { animation: spiral 6s ease-in-out infinite; }
+.visual-element.quantum { animation: quantum 4s ease-in-out infinite; }
+
+/* ============================================
+   PROGRESS INDICATOR
+   ============================================ */
+.progress-indicator {
+  position: absolute;
+  bottom: var(--space-6);
+  left: var(--space-6);
+  right: var(--space-6);
+  z-index: 10;
+}
+
+.progress-track {
+  height: 12px;
+  background: var(--color-background-subtle);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width var(--duration-moderate) var(--easing-out);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.progress-label {
+  margin-top: var(--space-2);
+  text-align: center;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+}
+
+/* ============================================
+   PHASE INFORMATION
+   ============================================ */
+.phase-info {
+  position: absolute;
+  top: var(--space-6);
+  left: var(--space-6);
+  right: var(--space-6);
+  text-align: center;
+  z-index: 10;
+}
+
+.phase-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-2);
+}
+
+.encouragement {
+  font-size: 1.125rem;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+/* ============================================
+   INTERACTIVE ELEMENTS
+   ============================================ */
+.interactive-elements {
+  position: absolute;
+  bottom: calc(var(--space-6) + 60px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 15;
+}
+
+.fun-button {
+  padding: var(--space-3) var(--space-6);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: white;
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all var(--duration-fast) var(--easing-out);
+}
+
+.fun-button:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   ACHIEVEMENT NOTIFICATION
+   ============================================ */
+.achievement-notification {
+  position: absolute;
+  bottom: var(--space-8);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-6);
+  border-radius: var(--radius-full);
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  z-index: 20;
+}
+
+.achievement-icon {
+  font-size: 1.5rem;
+}
+
+.achievement-text {
+  font-size: 1rem;
+}
+
+/* ============================================
+   CONTAINER-SPECIFIC THEMES
+   ============================================ */
+/* Learn Container Theme */
+.multi-container-visualization.learn {
+  --container-primary: #14b8a6;
+  --container-secondary: #06b6d4;
+  --container-accent: #0891b2;
+}
+
+.multi-container-visualization.learn .progress-fill {
+  background: linear-gradient(90deg, #14b8a6 0%, #06b6d4 100%);
+}
+
+.multi-container-visualization.learn .visual-element.shape {
+  background: linear-gradient(135deg, #14b8a6 0%, #06b6d4 100%);
+}
+
+/* Experience Container Theme */
+.multi-container-visualization.experience {
+  --container-primary: #f97316;
+  --container-secondary: #ea580c;
+  --container-accent: #dc2626;
+}
+
+.multi-container-visualization.experience .progress-fill {
+  background: linear-gradient(90deg, #f97316 0%, #ea580c 100%);
+}
+
+.multi-container-visualization.experience .visual-element.shape {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+}
+
+/* Discover Container Theme */
+.multi-container-visualization.discover {
+  --container-primary: #ec4899;
+  --container-secondary: #a855f7;
+  --container-accent: #d946ef;
+}
+
+.multi-container-visualization.discover .progress-fill {
+  background: linear-gradient(90deg, #ec4899 0%, #a855f7 100%);
+}
+
+.multi-container-visualization.discover .visual-element.shape {
+  background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
+}
+
+/* ============================================
+   GRADE-SPECIFIC ADJUSTMENTS
+   ============================================ */
+/* K-2: Large, simple, colorful */
+.multi-container-visualization.grade-K-2 {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.9) 0%, 
+    rgba(var(--container-primary-rgb), 0.05) 100%);
+}
+
+.multi-container-visualization.grade-K-2 .visual-element.particle {
+  font-size: 3rem;
+  animation-duration: 6s;
+}
+
+.multi-container-visualization.grade-K-2 .visual-element.shape {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+.multi-container-visualization.grade-K-2 .phase-title {
+  font-size: 2rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.multi-container-visualization.grade-K-2 .progress-track {
+  height: 20px;
+}
+
+.multi-container-visualization.grade-K-2 .fun-button {
+  font-size: 1.5rem;
+  padding: var(--space-4) var(--space-8);
+  animation: bounce 2s infinite;
+}
+
+/* 3-5: Balanced, engaging */
+.multi-container-visualization.grade-3-5 .visual-element.particle {
+  font-size: 2.5rem;
+}
+
+.multi-container-visualization.grade-3-5 .visual-element.shape {
+  width: 70px;
+  height: 70px;
+}
+
+.multi-container-visualization.grade-3-5 .phase-title {
+  font-size: 1.75rem;
+}
+
+.multi-container-visualization.grade-3-5 .progress-track {
+  height: 16px;
+}
+
+/* 6-8: More sophisticated */
+.multi-container-visualization.grade-6-8 {
+  background: linear-gradient(135deg, 
+    var(--color-background-elevated) 0%, 
+    rgba(var(--container-primary-rgb), 0.02) 100%);
+}
+
+.multi-container-visualization.grade-6-8 .visual-element {
+  opacity: 0.7;
+}
+
+.multi-container-visualization.grade-6-8 .visual-element.particle {
+  font-size: 1.5rem;
+}
+
+.multi-container-visualization.grade-6-8 .visual-element.shape {
+  width: 50px;
+  height: 50px;
+  border-radius: var(--radius-sm);
+}
+
+.multi-container-visualization.grade-6-8 .phase-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+/* 9-12: Professional, minimal */
+.multi-container-visualization.grade-9-12 {
+  background: var(--color-background-elevated);
+  border: 1px solid var(--color-border-light);
+}
+
+.multi-container-visualization.grade-9-12 .visual-element {
+  opacity: 0.5;
+}
+
+.multi-container-visualization.grade-9-12 .visual-element.particle {
+  font-size: 1rem;
+  display: none; /* Hide emojis for professional look */
+}
+
+.multi-container-visualization.grade-9-12 .visual-element.shape {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-xs);
+  opacity: 0.3;
+}
+
+.multi-container-visualization.grade-9-12 .phase-title {
+  font-size: 1rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.multi-container-visualization.grade-9-12 .progress-track {
+  height: 8px;
+}
+
+.multi-container-visualization.grade-9-12 .encouragement {
+  display: none;
+}
+
+/* ============================================
+   DARK MODE ADJUSTMENTS
+   ============================================ */
+[data-theme="dark"] .multi-container-visualization {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+[data-theme="dark"] .visualization-canvas {
+  opacity: 0.2;
+}
+
+[data-theme="dark"] .visual-element.text {
+  background: rgba(30, 41, 59, 0.9);
+  border-color: rgba(148, 163, 184, 0.2);
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .progress-track {
+  background: rgba(30, 41, 59, 0.5);
+}
+
+[data-theme="dark"] .achievement-notification {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 768px) {
+  .multi-container-visualization {
+    min-height: 300px;
+  }
+  
+  .visualization-stage {
+    padding: var(--space-4);
+  }
+  
+  .phase-title {
+    font-size: 1.25rem;
+  }
+  
+  .visual-element.particle {
+    font-size: 1.5rem;
+  }
+  
+  .visual-element.shape {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .progress-indicator {
+    left: var(--space-4);
+    right: var(--space-4);
+    bottom: var(--space-4);
+  }
+}
+
+@media (max-width: 480px) {
+  .multi-container-visualization {
+    min-height: 250px;
+    border-radius: var(--radius-lg);
+  }
+  
+  .visualization-stage {
+    padding: var(--space-3);
+  }
+  
+  .phase-info {
+    left: var(--space-3);
+    right: var(--space-3);
+    top: var(--space-3);
+  }
+  
+  .phase-title {
+    font-size: 1rem;
+  }
+  
+  .encouragement {
+    font-size: 0.875rem;
+  }
+  
+  .interactive-elements {
+    bottom: calc(var(--space-4) + 40px);
+  }
+  
+  .fun-button {
+    font-size: 1rem;
+    padding: var(--space-2) var(--space-4);
+  }
+}

@@ -1,0 +1,353 @@
+[
+  {
+    "id": "taylor_cityview_geometry",
+    "user_id": "test_user_taylor_cityview",
+    "first_name": "Taylor",
+    "last_name": "Johnson",
+    "display_name": "Taylor",
+    "grade_level": "10",
+    "age": 16,
+    "school_id": "city_view_high",
+    "school_name": "City View High School",
+    "subject": "Geometry",
+    "teacher_id": "patricia_summit",
+    "teacher_name": "Ms Patricia Summit",
+    "learning_preferences": {
+      "learning_style": "visual",
+      "favorite_subjects": [
+        "Math",
+        "Science"
+      ],
+      "attention_span": "long",
+      "collaboration_preference": "mixed",
+      "technology_comfort": "high"
+    },
+    "enrollment_date": "2024-07-12",
+    "is_active": true,
+    "created_at": "2025-07-12T19:11:49.023Z"
+  },
+  {
+    "id": "taylor_cityview_chemistry",
+    "user_id": "test_user_taylor_cityview",
+    "first_name": "Taylor",
+    "last_name": "Johnson",
+    "display_name": "Taylor",
+    "grade_level": "10",
+    "age": 16,
+    "school_id": "city_view_high",
+    "school_name": "City View High School",
+    "subject": "Chemistry",
+    "teacher_id": "laura_canyon",
+    "teacher_name": "Ms Laura Canyon",
+    "learning_preferences": {
+      "learning_style": "visual",
+      "favorite_subjects": [
+        "Math",
+        "Science"
+      ],
+      "attention_span": "long",
+      "collaboration_preference": "mixed",
+      "technology_comfort": "high"
+    },
+    "enrollment_date": "2024-07-12",
+    "is_active": true,
+    "created_at": "2025-07-12T19:11:49.023Z"
+  },
+  {
+    "id": "taylor_cityview_english_ii",
+    "user_id": "test_user_taylor_cityview",
+    "first_name": "Taylor",
+    "last_name": "Johnson",
+    "display_name": "Taylor",
+    "grade_level": "10",
+    "age": 16,
+    "school_id": "city_view_high",
+    "school_name": "City View High School",
+    "subject": "English II",
+    "teacher_id": "jennifer_slope",
+    "teacher_name": "Ms Jennifer Slope",
+    "learning_preferences": {
+      "learning_style": "visual",
+      "favorite_subjects": [
+        "Math",
+        "Science"
+      ],
+      "attention_span": "long",
+      "collaboration_preference": "mixed",
+      "technology_comfort": "high"
+    },
+    "enrollment_date": "2024-07-12",
+    "is_active": true,
+    "created_at": "2025-07-12T19:11:49.023Z"
+  },
+  {
+    "id": "jordan_oceanview_math",
+    "user_id": "test_user_jordan_oceanview",
+    "first_name": "Jordan",
+    "last_name": "Smith",
+    "display_name": "Jordan",
+    "grade_level": "7",
+    "age": 13,
+    "school_id": "ocean_view_middle",
+    "school_name": "Ocean View Middle School",
+    "subject": "Math",
+    "teacher_id": "derek_ocean",
+    "teacher_name": "Mr Derek Ocean",
+    "learning_preferences": {
+      "learning_style": "auditory",
+      "favorite_subjects": [
+        "ELA",
+        "Social Studies"
+      ],
+      "attention_span": "medium",
+      "collaboration_preference": "group_work",
+      "technology_comfort": "medium"
+    },
+    "enrollment_date": "2024-07-12",
+    "is_active": true,
+    "created_at": "2025-07-12T19:11:49.023Z"
+  },
+  {
+    "id": "jordan_oceanview_science",
+    "user_id": "test_user_jordan_oceanview",
+    "first_name": "Jordan",
+    "last_name": "Smith",
+    "display_name": "Jordan",
+    "grade_level": "7",
+    "age": 13,
+    "school_id": "ocean_view_middle",
+    "school_name": "Ocean View Middle School",
+    "subject": "Science",
+    "teacher_id": "sandra_wave",
+    "teacher_name": "Ms Sandra Wave",
+    "learning_preferences": {
+      "learning_style": "auditory",
+      "favorite_subjects": [
+        "ELA",
+        "Social Studies"
+      ],
+      "attention_span": "medium",
+      "collaboration_preference": "group_work",
+      "technology_comfort": "medium"
+    },
+    "enrollment_date": "2024-07-12",
+    "is_active": true,
+    "created_at": "2025-07-12T19:11:49.023Z"
+  },
+  {
+    "id": "jordan_oceanview_ela",
+    "user_id": "test_user_jordan_oceanview",
+    "first_name": "Jordan",
+    "last_name": "Smith",
+    "display_name": "Jordan",
+    "grade_level": "7",
+    "age": 13,
+    "school_id": "ocean_view_middle",
+    "school_name": "Ocean View Middle School",
+    "subject": "ELA",
+    "teacher_id": "brenda_sea",
+    "teacher_name": "Ms Brenda Sea",
+    "learning_preferences": {
+      "learning_style": "auditory",
+      "favorite_subjects": [
+        "ELA",
+        "Social Studies"
+      ],
+      "attention_span": "medium",
+      "collaboration_preference": "group_work",
+      "technology_comfort": "medium"
+    },
+    "enrollment_date": "2024-07-12",
+    "is_active": true,
+    "created_at": "2025-07-12T19:11:49.023Z"
+  },
+  {
+    "id": "jordan_oceanview_social_studies",
+    "user_id": "test_user_jordan_oceanview",
+    "first_name": "Jordan",
+    "last_name": "Smith",
+    "display_name": "Jordan",
+    "grade_level": "7",
+    "age": 13,
+    "school_id": "ocean_view_middle",
+    "school_name": "Ocean View Middle School",
+    "subject": "Social Studies",
+    "teacher_id": "tony_bay",
+    "teacher_name": "Mr Tony Bay",
+    "learning_preferences": {
+      "learning_style": "auditory",
+      "favorite_subjects": [
+        "ELA",
+        "Social Studies"
+      ],
+      "attention_span": "medium",
+      "collaboration_preference": "group_work",
+      "technology_comfort": "medium"
+    },
+    "enrollment_date": "2024-07-12",
+    "is_active": true,
+    "created_at": "2025-07-12T19:11:49.023Z"
+  },
+  {
+    "id": "alex_sandview_math",
+    "user_id": "test_user_alex_sandview",
+    "first_name": "Alex",
+    "last_name": "Davis",
+    "display_name": "Alex",
+    "grade_level": "1",
+    "age": 7,
+    "school_id": "sand_view_elementary",
+    "school_name": "Sand View Elementary School",
+    "subject": "Math",
+    "teacher_id": "jenna_grain",
+    "teacher_name": "Ms Jenna Grain",
+    "learning_preferences": {
+      "learning_style": "kinesthetic",
+      "favorite_subjects": [
+        "Math",
+        "Science"
+      ],
+      "attention_span": "short",
+      "collaboration_preference": "individual",
+      "technology_comfort": "beginner"
+    },
+    "enrollment_date": "2024-07-12",
+    "is_active": true,
+    "created_at": "2025-07-12T19:11:49.023Z"
+  },
+  {
+    "id": "alex_sandview_science",
+    "user_id": "test_user_alex_sandview",
+    "first_name": "Alex",
+    "last_name": "Davis",
+    "display_name": "Alex",
+    "grade_level": "1",
+    "age": 7,
+    "school_id": "sand_view_elementary",
+    "school_name": "Sand View Elementary School",
+    "subject": "Science",
+    "teacher_id": "diana_forest",
+    "teacher_name": "Ms Diana Forest",
+    "learning_preferences": {
+      "learning_style": "kinesthetic",
+      "favorite_subjects": [
+        "Math",
+        "Science"
+      ],
+      "attention_span": "short",
+      "collaboration_preference": "individual",
+      "technology_comfort": "beginner"
+    },
+    "enrollment_date": "2024-07-12",
+    "is_active": true,
+    "created_at": "2025-07-12T19:11:49.023Z"
+  },
+  {
+    "id": "alex_sandview_ela",
+    "user_id": "test_user_alex_sandview",
+    "first_name": "Alex",
+    "last_name": "Davis",
+    "display_name": "Alex",
+    "grade_level": "1",
+    "age": 7,
+    "school_id": "sand_view_elementary",
+    "school_name": "Sand View Elementary School",
+    "subject": "ELA",
+    "teacher_id": "marcus_river",
+    "teacher_name": "Mr Marcus River",
+    "learning_preferences": {
+      "learning_style": "kinesthetic",
+      "favorite_subjects": [
+        "Math",
+        "Science"
+      ],
+      "attention_span": "short",
+      "collaboration_preference": "individual",
+      "technology_comfort": "beginner"
+    },
+    "enrollment_date": "2024-07-12",
+    "is_active": true,
+    "created_at": "2025-07-12T19:11:49.023Z"
+  },
+  {
+    "id": "sam_sandview_math",
+    "user_id": "test_user_sam_sandview",
+    "first_name": "Sam",
+    "last_name": "Brown",
+    "display_name": "Sam",
+    "grade_level": "K",
+    "age": 6,
+    "school_id": "sand_view_elementary",
+    "school_name": "Sand View Elementary School",
+    "subject": "Math",
+    "teacher_id": "jenna_grain",
+    "teacher_name": "Ms Jenna Grain",
+    "learning_preferences": {
+      "learning_style": "visual",
+      "favorite_subjects": [
+        "ELA",
+        "Art"
+      ],
+      "attention_span": "short",
+      "collaboration_preference": "small_groups",
+      "technology_comfort": "beginner"
+    },
+    "enrollment_date": "2024-07-12",
+    "is_active": true,
+    "created_at": "2025-07-12T19:11:49.023Z"
+  },
+  {
+    "id": "sam_sandview_science",
+    "user_id": "test_user_sam_sandview",
+    "first_name": "Sam",
+    "last_name": "Brown",
+    "display_name": "Sam",
+    "grade_level": "K",
+    "age": 6,
+    "school_id": "sand_view_elementary",
+    "school_name": "Sand View Elementary School",
+    "subject": "Science",
+    "teacher_id": "diana_forest",
+    "teacher_name": "Ms Diana Forest",
+    "learning_preferences": {
+      "learning_style": "visual",
+      "favorite_subjects": [
+        "ELA",
+        "Art"
+      ],
+      "attention_span": "short",
+      "collaboration_preference": "small_groups",
+      "technology_comfort": "beginner"
+    },
+    "enrollment_date": "2024-07-12",
+    "is_active": true,
+    "created_at": "2025-07-12T19:11:49.023Z"
+  },
+  {
+    "id": "sam_sandview_ela",
+    "user_id": "test_user_sam_sandview",
+    "first_name": "Sam",
+    "last_name": "Brown",
+    "display_name": "Sam",
+    "grade_level": "K",
+    "age": 6,
+    "school_id": "sand_view_elementary",
+    "school_name": "Sand View Elementary School",
+    "subject": "ELA",
+    "teacher_id": "marcus_river",
+    "teacher_name": "Mr Marcus River",
+    "learning_preferences": {
+      "learning_style": "visual",
+      "favorite_subjects": [
+        "ELA",
+        "Art"
+      ],
+      "attention_span": "short",
+      "collaboration_preference": "small_groups",
+      "technology_comfort": "beginner"
+    },
+    "enrollment_date": "2024-07-12",
+    "is_active": true,
+    "created_at": "2025-07-12T19:11:49.023Z"
+  }
+]

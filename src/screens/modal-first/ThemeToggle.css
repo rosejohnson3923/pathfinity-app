@@ -1,0 +1,77 @@
+/**
+ * Theme Toggle Button Styles
+ */
+
+.theme-toggle {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+}
+
+.theme-toggle:active {
+  transform: scale(0.98);
+}
+
+/* Light theme styles */
+[data-theme="light"] .theme-toggle {
+  background-color: white;
+  border: 2px solid #E2E8F0;
+  color: #4A5568;
+}
+
+[data-theme="light"] .theme-toggle:hover {
+  background-color: #F7FAFC;
+  border-color: #CBD5E0;
+}
+
+/* Dark theme styles */
+[data-theme="dark"] .theme-toggle {
+  background-color: #8B5CF6;
+  border: 2px solid #8B5CF6;
+  color: white;
+}
+
+[data-theme="dark"] .theme-toggle:hover {
+  background-color: #7C3AED;
+  border-color: #7C3AED;
+}
+
+/* Animation for theme switch */
+.theme-toggle::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(139, 92, 246, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.5s, height 0.5s;
+}
+
+.theme-toggle:active::before {
+  width: 100px;
+  height: 100px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .theme-toggle {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+}

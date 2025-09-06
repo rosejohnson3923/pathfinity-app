@@ -1,0 +1,226 @@
+/**
+ * BASE CONTAINER STYLES
+ * =====================
+ * Shared layout and structure for all learning containers
+ * Extended by LearnContainer.css, ExperienceContainer.css, DiscoverContainer.css
+ * 
+ * Created: 2025-08-22
+ */
+
+/* ============================================
+   BASE CONTAINER LAYOUT
+   ============================================ */
+.container-base {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: background var(--duration-moderate) var(--easing-in-out);
+  overflow-x: hidden;
+}
+
+/* Container wrapper for content */
+.container-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+}
+
+/* Main content area */
+.container-content {
+  flex: 1;
+  padding: var(--space-6);
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* ============================================
+   CONTAINER BACKGROUNDS
+   ============================================ */
+/* Base gradient backgrounds are defined in MasterTheme.css */
+/* These classes apply them to containers */
+.container-learn {
+  background: var(--bg-gradient-learn);
+}
+
+.container-experience {
+  background: var(--bg-gradient-experience);
+}
+
+.container-discover {
+  background: var(--bg-gradient-discover);
+}
+
+/* ============================================
+   CONTAINER OVERLAYS
+   ============================================ */
+/* Subtle pattern overlay for depth */
+.container-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  opacity: 0.03;
+  z-index: 0;
+}
+
+/* Gradient overlay for better text contrast */
+.container-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.1) 0%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+[data-theme="dark"] .container-overlay {
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.3) 0%,
+    transparent 100%
+  );
+}
+
+/* ============================================
+   CONTAINER TRANSITIONS
+   ============================================ */
+/* Phase transitions */
+.container-transition-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.container-transition-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all var(--duration-moderate) var(--easing-out);
+}
+
+.container-transition-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.container-transition-exit-active {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: all var(--duration-moderate) var(--easing-in);
+}
+
+/* ============================================
+   CONTAINER SECTIONS
+   ============================================ */
+.container-header {
+  position: relative;
+  z-index: 2;
+}
+
+.container-main {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.container-footer {
+  position: relative;
+  z-index: 2;
+  padding: var(--space-6);
+  border-top: 1px solid var(--border-color-soft);
+  background: var(--bg-primary);
+  backdrop-filter: blur(var(--blur-md));
+}
+
+/* ============================================
+   FLOATING ELEMENTS POSITIONING
+   ============================================ */
+.container-floating-elements {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: var(--z-50);
+}
+
+.container-floating-elements > * {
+  pointer-events: auto;
+}
+
+/* ============================================
+   ERROR & LOADING STATES
+   ============================================ */
+.container-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  padding: var(--space-8);
+}
+
+.container-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+@media (max-width: 1024px) {
+  .container-content {
+    padding: var(--space-4);
+  }
+}
+
+@media (max-width: 768px) {
+  .container-content {
+    padding: var(--space-3);
+  }
+  
+  .container-footer {
+    padding: var(--space-4);
+  }
+}
+
+@media (max-width: 480px) {
+  .container-content {
+    padding: var(--space-2);
+  }
+  
+  .container-footer {
+    padding: var(--space-3);
+  }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+  .container-base {
+    background: white !important;
+  }
+  
+  .container-pattern,
+  .container-overlay,
+  .container-floating-elements {
+    display: none !important;
+  }
+}

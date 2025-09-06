@@ -1,0 +1,99 @@
+/**
+ * Global Theme Variables and Styles
+ */
+
+:root {
+  /* Light theme colors */
+  --color-background: #F0F4F8;
+  --color-background-secondary: #E2E8F0;
+  --color-card: #FFFFFF;
+  --color-text: #1A202C;
+  --color-text-secondary: #718096;
+  --color-border: #E2E8F0;
+  --color-primary: #8B5CF6;
+  --color-secondary: #6366F1;
+  --color-accent: #10B981;
+  --color-error: #EF4444;
+  --color-warning: #F59E0B;
+  --color-success: #10B981;
+}
+
+[data-theme="dark"] {
+  /* Dark theme colors */
+  --color-background: #0F1419;
+  --color-background-secondary: #1A202C;
+  --color-card: #1E293B;
+  --color-text: #F7FAFC;
+  --color-text-secondary: #94A3B8;
+  --color-border: #334155;
+  --color-primary: #8B5CF6;
+  --color-secondary: #7C3AED;
+  --color-accent: #10B981;
+  --color-error: #F87171;
+  --color-warning: #FCD34D;
+  --color-success: #34D399;
+}
+
+/* Apply theme to gamification sidebar */
+[data-theme="dark"] .gamification-sidebar {
+  background: var(--color-card) !important;
+  border-left-color: var(--color-border) !important;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] .user-stats-header {
+  background: var(--color-background-secondary) !important;
+  border-bottom-color: var(--color-border) !important;
+}
+
+[data-theme="dark"] .level-label,
+[data-theme="dark"] .xp-next,
+[data-theme="dark"] .comparison-item .label,
+[data-theme="dark"] .activity-time {
+  color: var(--color-text-secondary) !important;
+}
+
+[data-theme="dark"] .xp-current,
+[data-theme="dark"] .stat-value,
+[data-theme="dark"] .comparison-item .value,
+[data-theme="dark"] .skill-comparison h3,
+[data-theme="dark"] .career-trends h3,
+[data-theme="dark"] .trend-name,
+[data-theme="dark"] .live-feed h3,
+[data-theme="dark"] .activity-content,
+[data-theme="dark"] .score-bar span {
+  color: var(--color-text) !important;
+}
+
+[data-theme="dark"] .xp-bar,
+[data-theme="dark"] .score-bar .bar {
+  background: var(--color-border) !important;
+}
+
+[data-theme="dark"] .skill-comparison,
+[data-theme="dark"] .career-trends,
+[data-theme="dark"] .quick-actions {
+  background: var(--color-background-secondary) !important;
+  border-color: var(--color-border) !important;
+}
+
+[data-theme="dark"] .trend-item,
+[data-theme="dark"] .activity-item,
+[data-theme="dark"] .action-btn {
+  background: var(--color-border) !important;
+  border-color: #4A5568 !important;
+}
+
+[data-theme="dark"] .live-feed {
+  background: var(--color-card) !important;
+}
+
+/* Smooth theme transitions */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Prevent transition on initial load */
+.no-transitions * {
+  transition: none !important;
+}

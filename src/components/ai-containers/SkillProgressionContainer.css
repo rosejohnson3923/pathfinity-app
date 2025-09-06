@@ -1,0 +1,240 @@
+/**
+ * Multi-Subject Learn Container Styles
+ */
+
+.multi-subject-container {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Header with progress tracking */
+.multi-subject-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1.5rem;
+  border-radius: 1rem 1rem 0 0;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.category-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.category-info h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.skill-number {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.25rem 0.75rem;
+  border-radius: 2rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* Subject progress indicators */
+.subject-progress {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.subject-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2rem;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.subject-indicator.completed {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: #10b981;
+}
+
+.subject-indicator.current {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: white;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+}
+
+.subject-indicator.pending {
+  opacity: 0.6;
+}
+
+.subject-emoji {
+  font-size: 1.2rem;
+}
+
+.subject-name {
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.checkmark {
+  color: #10b981;
+  font-weight: bold;
+  margin-left: 0.25rem;
+}
+
+/* Progress bar */
+.progress-bar {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #34d399);
+  transition: width 0.5s ease;
+  position: relative;
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  to {
+    left: 100%;
+  }
+}
+
+/* Current subject wrapper */
+.current-subject-wrapper {
+  position: relative;
+}
+
+.subject-label {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 0 1.5rem;
+}
+
+.subject-label h2 {
+  margin: 0;
+  color: #1f2937;
+  font-size: 1.8rem;
+}
+
+.subject-label .subject-emoji {
+  font-size: 2rem;
+}
+
+/* Transition screen */
+.multi-subject-container.transitioning {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.transition-message {
+  text-align: center;
+  color: white;
+  animation: fadeIn 0.5s ease;
+}
+
+.transition-message h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.transition-message p {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+.transition-animation {
+  font-size: 4rem;
+  animation: bounce 1s ease infinite;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+/* Loading state */
+.multi-subject-container.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.multi-subject-container.loading h2 {
+  color: #6b7280;
+  font-size: 1.5rem;
+}
+
+/* Dark theme support */
+[data-theme="dark"] .multi-subject-header {
+  background: linear-gradient(135deg, #4c1d95 0%, #5b21b6 100%);
+}
+
+[data-theme="dark"] .subject-label h2 {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .multi-subject-container.loading h2 {
+  color: #9ca3af;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .subject-progress {
+    flex-direction: column;
+  }
+  
+  .subject-indicator {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .category-info {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+}

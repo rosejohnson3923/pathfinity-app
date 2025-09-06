@@ -1,0 +1,114 @@
+{
+  "date": "2025-08-26T21:49:03.937Z",
+  "totalTypes": 15,
+  "totalTests": 45,
+  "passedTests": 45,
+  "successRate": "100.0%",
+  "results": [
+    {
+      "type": "multiple_choice",
+      "name": "Multiple Choice",
+      "dbExists": true,
+      "renderTest": "multiple_choice",
+      "validationTest": true
+    },
+    {
+      "type": "true_false",
+      "name": "True/False",
+      "dbExists": true,
+      "renderTest": "true_false",
+      "validationTest": true
+    },
+    {
+      "type": "true_false_w_image",
+      "name": "True/False with Image",
+      "dbExists": true,
+      "renderTest": "true_false_w_image",
+      "validationTest": true
+    },
+    {
+      "type": "true_false_wo_image",
+      "name": "True/False without Image",
+      "dbExists": true,
+      "renderTest": "true_false_wo_image",
+      "validationTest": true
+    },
+    {
+      "type": "fill_blank",
+      "name": "Fill in the Blank",
+      "dbExists": true,
+      "renderTest": "fill_blank",
+      "validationTest": true
+    },
+    {
+      "type": "numeric",
+      "name": "Numeric",
+      "dbExists": true,
+      "renderTest": "numeric",
+      "validationTest": true
+    },
+    {
+      "type": "short_answer",
+      "name": "Short Answer",
+      "dbExists": true,
+      "renderTest": "short_answer",
+      "validationTest": true
+    },
+    {
+      "type": "matching",
+      "name": "Matching",
+      "dbExists": true,
+      "renderTest": "matching",
+      "validationTest": true
+    },
+    {
+      "type": "sequencing",
+      "name": "Sequencing/Ordering",
+      "dbExists": true,
+      "renderTest": "sequencing",
+      "validationTest": true
+    },
+    {
+      "type": "visual_pattern",
+      "name": "Visual Pattern Recognition",
+      "dbExists": true,
+      "renderTest": "visual_pattern",
+      "validationTest": true
+    },
+    {
+      "type": "counting",
+      "name": "Counting",
+      "dbExists": true,
+      "renderTest": "counting",
+      "validationTest": true
+    },
+    {
+      "type": "word_problem",
+      "name": "Word Problem",
+      "dbExists": true,
+      "renderTest": "word_problem",
+      "validationTest": true
+    },
+    {
+      "type": "drawing",
+      "name": "Drawing",
+      "dbExists": true,
+      "renderTest": "drawing",
+      "validationTest": true
+    },
+    {
+      "type": "coding",
+      "name": "Coding",
+      "dbExists": true,
+      "renderTest": "coding",
+      "validationTest": true
+    },
+    {
+      "type": "creative_writing",
+      "name": "Creative Writing",
+      "dbExists": true,
+      "renderTest": "creative_writing",
+      "validationTest": true
+    }
+  ]
+}

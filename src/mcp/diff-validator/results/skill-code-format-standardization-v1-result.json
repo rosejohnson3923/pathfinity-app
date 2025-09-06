@@ -1,0 +1,719 @@
+{
+  "changeId": "skill-code-format-standardization-v1",
+  "timestamp": "2025-07-22T22:07:02.502Z",
+  "overallRisk": "critical",
+  "recommendation": "requires_modifications",
+  "summary": "Analysis of Standardize Skill Code Format to A.1 Across All Master Containers: 1 components show benefits, 3 components show significant risk. Overall risk: critical. This change addresses critical architecture inconsistency between containers.",
+  "componentImpacts": [
+    {
+      "component": "LearnMasterContainer",
+      "impactLevel": "low",
+      "description": "Already uses simplified A.1 format consistently. No changes required.",
+      "breakingChanges": [],
+      "mitigationSteps": [
+        "Verify existing A.1 format handling remains unchanged",
+        "Ensure skill progression logic is not affected"
+      ],
+      "testingRequired": [
+        "Regression testing of existing skill progression",
+        "Verify A.1 skill code processing",
+        "Test cross-subject navigation"
+      ],
+      "rollbackSteps": [
+        "No rollback required - no changes to LearnMasterContainer"
+      ],
+      "crossContainerEffects": [
+        {
+          "sourceContainer": "LearnMasterContainer",
+          "targetContainer": "ExperienceMasterContainer",
+          "dataFlow": "Skill completion data with A.1 format",
+          "potentialIssue": "Format mismatch if ExperienceMasterContainer expects K.RL.1",
+          "validationRequired": "Test skill data handoff between containers"
+        }
+      ]
+    },
+    {
+      "component": "ExperienceMasterContainer",
+      "impactLevel": "high",
+      "description": "Major impact: resolving format inconsistency by standardizing to A.1 format. Fixes template lookup failures.",
+      "breakingChanges": [
+        "Template registry keys need updating from K.RL.1 to A.1",
+        "Skill code normalization logic changes",
+        "Template file naming convention changes"
+      ],
+      "mitigationSteps": [
+        "Update experienceTemplateService.ts normalizeSkillCode function",
+        "Update template registry mapping",
+        "Rename existing template files",
+        "Add backward compatibility layer during transition"
+      ],
+      "testingRequired": [
+        "Template resolution for all Grade/Subject/Career combinations",
+        "Career-specific template loading",
+        "Cross-subject progression within experience flow",
+        "Fallback behavior when templates are missing"
+      ],
+      "rollbackSteps": [
+        "Revert normalizeSkillCode to convert A.1 → K.RL.1",
+        "Restore original template registry keys",
+        "Revert template file names"
+      ],
+      "crossContainerEffects": [
+        {
+          "sourceContainer": "LearnMasterContainer",
+          "targetContainer": "ExperienceMasterContainer",
+          "dataFlow": "Completed skills in A.1 format",
+          "potentialIssue": "Template lookup now works correctly with consistent format",
+          "validationRequired": "Test Learn → Experience skill progression"
+        }
+      ]
+    },
+    {
+      "component": "DiscoverMasterContainer",
+      "impactLevel": "medium",
+      "description": "Medium impact: likely uses career-applied skill data from Experience. Format consistency will improve data flow.",
+      "breakingChanges": [
+        "May expect specific skill code format from Experience container",
+        "Career progression data format dependencies"
+      ],
+      "mitigationSteps": [
+        "Verify DiscoverMasterContainer skill code processing",
+        "Update any hardcoded skill format expectations",
+        "Ensure career progression data compatibility",
+        "Test skill-to-project mapping with A.1 format"
+      ],
+      "testingRequired": [
+        "Experience → Discover container progression",
+        "Career-applied skill data processing",
+        "Project recommendation based on skills",
+        "Skill validation in Discover phase"
+      ],
+      "rollbackSteps": [
+        "Revert any skill code format changes in Discover container",
+        "Restore format conversion if previously implemented"
+      ],
+      "crossContainerEffects": [
+        {
+          "sourceContainer": "ExperienceMasterContainer",
+          "targetContainer": "DiscoverMasterContainer",
+          "dataFlow": "Career-applied skills with A.1 format",
+          "potentialIssue": "May expect different format for project recommendations",
+          "validationRequired": "Test Experience → Discover skill data handoff"
+        },
+        {
+          "sourceContainer": "LearnMasterContainer",
+          "targetContainer": "DiscoverMasterContainer",
+          "dataFlow": "Base skill mastery data",
+          "potentialIssue": "Skill combination logic may depend on format",
+          "validationRequired": "Verify skill-based project suggestions work correctly"
+        }
+      ]
+    },
+    {
+      "component": "TemplateSystem",
+      "impactLevel": "critical",
+      "description": "Complete restructuring of template registry and file naming system. High risk of breaking existing templates.",
+      "breakingChanges": [
+        "Template registry key format change (K.RL.1 → A.1)",
+        "Template file naming convention change",
+        "Template metadata skillCode property changes",
+        "Potential loss of Common Core standards compliance in primary keys"
+      ],
+      "mitigationSteps": [
+        "Create migration script for existing templates",
+        "Implement dual-key lookup during transition",
+        "Add Common Core standards as metadata field",
+        "Maintain template functionality tests"
+      ],
+      "testingRequired": [
+        "Template loading for all existing templates",
+        "Template registry key resolution",
+        "Career-specific template selection",
+        "Template metadata integrity",
+        "Missing template fallback behavior"
+      ],
+      "rollbackSteps": [
+        "Restore original template registry",
+        "Revert template file names",
+        "Remove Common Core metadata fields",
+        "Restore original skillCode properties in templates"
+      ],
+      "crossContainerEffects": []
+    },
+    {
+      "component": "SkillProgressTracking",
+      "impactLevel": "medium",
+      "description": "Positive impact: enables consistent skill tracking across all containers with unified A.1 format.",
+      "breakingChanges": [],
+      "mitigationSteps": [
+        "Verify skill progression data consistency",
+        "Update any hardcoded skill code references",
+        "Ensure database skill codes align with A.1 format"
+      ],
+      "testingRequired": [
+        "Cross-container skill progression tracking",
+        "Skill completion data integrity",
+        "Progress reporting accuracy"
+      ],
+      "rollbackSteps": [
+        "Revert any skill tracking format changes",
+        "Restore inconsistent format handling if necessary"
+      ],
+      "crossContainerEffects": [
+        {
+          "sourceContainer": "LearnMasterContainer",
+          "targetContainer": "ExperienceMasterContainer",
+          "dataFlow": "Skill completion status",
+          "potentialIssue": "None - this change fixes the existing format mismatch",
+          "validationRequired": "Verify end-to-end skill progression tracking"
+        },
+        {
+          "sourceContainer": "ExperienceMasterContainer",
+          "targetContainer": "DiscoverMasterContainer",
+          "dataFlow": "Career-applied skills",
+          "potentialIssue": "DiscoverMasterContainer may expect consistent format",
+          "validationRequired": "Test Experience → Discover progression"
+        }
+      ]
+    },
+    {
+      "component": "CrossContainerDataFlow",
+      "impactLevel": "high",
+      "description": "Major benefit: resolves data format inconsistency that was breaking skill progression between containers.",
+      "breakingChanges": [],
+      "mitigationSteps": [
+        "Verify all container handoffs use consistent A.1 format",
+        "Update ThreeContainerOrchestrator if needed",
+        "Test full Learn → Experience → Discover flow"
+      ],
+      "testingRequired": [
+        "Complete three-phase flow testing",
+        "Skill data integrity across container transitions",
+        "Container orchestration logic"
+      ],
+      "rollbackSteps": [
+        "Restore format conversion logic between containers",
+        "Accept broken skill progression as previous state"
+      ],
+      "crossContainerEffects": [
+        {
+          "sourceContainer": "All Containers",
+          "targetContainer": "All Containers",
+          "dataFlow": "Unified skill format",
+          "potentialIssue": "None - this fixes existing issues",
+          "validationRequired": "End-to-end flow testing"
+        }
+      ]
+    }
+  ],
+  "crossContainerAnalysis": [
+    {
+      "sourceContainer": "LearnMasterContainer",
+      "targetContainer": "ExperienceMasterContainer",
+      "dataFlow": "Skill completion data with A.1 format",
+      "potentialIssue": "Format mismatch if ExperienceMasterContainer expects K.RL.1",
+      "validationRequired": "Test skill data handoff between containers"
+    },
+    {
+      "sourceContainer": "LearnMasterContainer",
+      "targetContainer": "ExperienceMasterContainer",
+      "dataFlow": "Completed skills in A.1 format",
+      "potentialIssue": "Template lookup now works correctly with consistent format",
+      "validationRequired": "Test Learn → Experience skill progression"
+    },
+    {
+      "sourceContainer": "ExperienceMasterContainer",
+      "targetContainer": "DiscoverMasterContainer",
+      "dataFlow": "Career-applied skills with A.1 format",
+      "potentialIssue": "May expect different format for project recommendations",
+      "validationRequired": "Test Experience → Discover skill data handoff"
+    },
+    {
+      "sourceContainer": "LearnMasterContainer",
+      "targetContainer": "DiscoverMasterContainer",
+      "dataFlow": "Base skill mastery data",
+      "potentialIssue": "Skill combination logic may depend on format",
+      "validationRequired": "Verify skill-based project suggestions work correctly"
+    },
+    {
+      "sourceContainer": "LearnMasterContainer",
+      "targetContainer": "ExperienceMasterContainer",
+      "dataFlow": "Skill completion status",
+      "potentialIssue": "None - this change fixes the existing format mismatch",
+      "validationRequired": "Verify end-to-end skill progression tracking"
+    },
+    {
+      "sourceContainer": "ExperienceMasterContainer",
+      "targetContainer": "DiscoverMasterContainer",
+      "dataFlow": "Career-applied skills",
+      "potentialIssue": "DiscoverMasterContainer may expect consistent format",
+      "validationRequired": "Test Experience → Discover progression"
+    },
+    {
+      "sourceContainer": "All Containers",
+      "targetContainer": "All Containers",
+      "dataFlow": "Unified skill format",
+      "potentialIssue": "None - this fixes existing issues",
+      "validationRequired": "End-to-end flow testing"
+    }
+  ],
+  "migrationPlan": [
+    {
+      "order": 1,
+      "description": "Verify existing A.1 format handling remains unchanged",
+      "component": "LearnMasterContainer",
+      "estimatedTime": "15-30 minutes",
+      "dependencies": [],
+      "validationCriteria": [
+        "LearnMasterContainer functionality validated"
+      ]
+    },
+    {
+      "order": 2,
+      "description": "Ensure skill progression logic is not affected",
+      "component": "LearnMasterContainer",
+      "estimatedTime": "15-30 minutes",
+      "dependencies": [],
+      "validationCriteria": [
+        "LearnMasterContainer functionality validated"
+      ]
+    },
+    {
+      "order": 3,
+      "description": "Update experienceTemplateService.ts normalizeSkillCode function",
+      "component": "ExperienceMasterContainer",
+      "estimatedTime": "15-30 minutes",
+      "dependencies": [],
+      "validationCriteria": [
+        "ExperienceMasterContainer functionality validated"
+      ]
+    },
+    {
+      "order": 4,
+      "description": "Update template registry mapping",
+      "component": "ExperienceMasterContainer",
+      "estimatedTime": "15-30 minutes",
+      "dependencies": [
+        "Template system analysis",
+        "Template registry updates"
+      ],
+      "validationCriteria": [
+        "ExperienceMasterContainer functionality validated"
+      ]
+    },
+    {
+      "order": 5,
+      "description": "Rename existing template files",
+      "component": "ExperienceMasterContainer",
+      "estimatedTime": "15-30 minutes",
+      "dependencies": [
+        "Template system analysis"
+      ],
+      "validationCriteria": [
+        "ExperienceMasterContainer functionality validated"
+      ]
+    },
+    {
+      "order": 6,
+      "description": "Add backward compatibility layer during transition",
+      "component": "ExperienceMasterContainer",
+      "estimatedTime": "15-30 minutes",
+      "dependencies": [],
+      "validationCriteria": [
+        "ExperienceMasterContainer functionality validated"
+      ]
+    },
+    {
+      "order": 7,
+      "description": "Verify DiscoverMasterContainer skill code processing",
+      "component": "DiscoverMasterContainer",
+      "estimatedTime": "15-30 minutes",
+      "dependencies": [],
+      "validationCriteria": [
+        "DiscoverMasterContainer functionality validated"
+      ]
+    },
+    {
+      "order": 8,
+      "description": "Update any hardcoded skill format expectations",
+      "component": "DiscoverMasterContainer",
+      "estimatedTime": "15-30 minutes",
+      "dependencies": [],
+      "validationCriteria": [
+        "DiscoverMasterContainer functionality validated"
+      ]
+    },
+    {
+      "order": 9,
+      "description": "Ensure career progression data compatibility",
+      "component": "DiscoverMasterContainer",
+      "estimatedTime": "15-30 minutes",
+      "dependencies": [],
+      "validationCriteria": [
+        "DiscoverMasterContainer functionality validated"
+      ]
+    },
+    {
+      "order": 10,
+      "description": "Test skill-to-project mapping with A.1 format",
+      "component": "DiscoverMasterContainer",
+      "estimatedTime": "15-30 minutes",
+      "dependencies": [],
+      "validationCriteria": [
+        "DiscoverMasterContainer functionality validated"
+      ]
+    },
+    {
+      "order": 11,
+      "description": "Create migration script for existing templates",
+      "component": "TemplateSystem",
+      "estimatedTime": "2-4 hours",
+      "dependencies": [
+        "Template system analysis"
+      ],
+      "validationCriteria": [
+        "TemplateSystem functionality validated"
+      ]
+    },
+    {
+      "order": 12,
+      "description": "Implement dual-key lookup during transition",
+      "component": "TemplateSystem",
+      "estimatedTime": "15-30 minutes",
+      "dependencies": [],
+      "validationCriteria": [
+        "TemplateSystem functionality validated"
+      ]
+    },
+    {
+      "order": 13,
+      "description": "Add Common Core standards as metadata field",
+      "component": "TemplateSystem",
+      "estimatedTime": "15-30 minutes",
+      "dependencies": [],
+      "validationCriteria": [
+        "TemplateSystem functionality validated"
+      ]
+    },
+    {
+      "order": 14,
+      "description": "Maintain template functionality tests",
+      "component": "TemplateSystem",
+      "estimatedTime": "15-30 minutes",
+      "dependencies": [
+        "Template system analysis"
+      ],
+      "validationCriteria": [
+        "TemplateSystem functionality validated"
+      ]
+    },
+    {
+      "order": 15,
+      "description": "Verify skill progression data consistency",
+      "component": "SkillProgressTracking",
+      "estimatedTime": "15-30 minutes",
+      "dependencies": [],
+      "validationCriteria": [
+        "SkillProgressTracking functionality validated"
+      ]
+    },
+    {
+      "order": 16,
+      "description": "Update any hardcoded skill code references",
+      "component": "SkillProgressTracking",
+      "estimatedTime": "15-30 minutes",
+      "dependencies": [],
+      "validationCriteria": [
+        "SkillProgressTracking functionality validated"
+      ]
+    },
+    {
+      "order": 17,
+      "description": "Ensure database skill codes align with A.1 format",
+      "component": "SkillProgressTracking",
+      "estimatedTime": "15-30 minutes",
+      "dependencies": [],
+      "validationCriteria": [
+        "SkillProgressTracking functionality validated"
+      ]
+    },
+    {
+      "order": 18,
+      "description": "Verify all container handoffs use consistent A.1 format",
+      "component": "CrossContainerDataFlow",
+      "estimatedTime": "15-30 minutes",
+      "dependencies": [],
+      "validationCriteria": [
+        "CrossContainerDataFlow functionality validated"
+      ]
+    },
+    {
+      "order": 19,
+      "description": "Update ThreeContainerOrchestrator if needed",
+      "component": "CrossContainerDataFlow",
+      "estimatedTime": "15-30 minutes",
+      "dependencies": [],
+      "validationCriteria": [
+        "CrossContainerDataFlow functionality validated"
+      ]
+    },
+    {
+      "order": 20,
+      "description": "Test full Learn → Experience → Discover flow",
+      "component": "CrossContainerDataFlow",
+      "estimatedTime": "15-30 minutes",
+      "dependencies": [],
+      "validationCriteria": [
+        "CrossContainerDataFlow functionality validated"
+      ]
+    }
+  ],
+  "testingPlan": [
+    {
+      "category": "cross_container",
+      "description": "Test LearnMasterContainer functionality",
+      "components": [
+        "LearnMasterContainer"
+      ],
+      "testData": [
+        "A.1 skill codes",
+        "Grade/Subject combinations"
+      ],
+      "successCriteria": [
+        "Regression testing of existing skill progression",
+        "Verify A.1 skill code processing",
+        "Test cross-subject navigation"
+      ]
+    },
+    {
+      "category": "cross_container",
+      "description": "Test ExperienceMasterContainer functionality",
+      "components": [
+        "ExperienceMasterContainer"
+      ],
+      "testData": [
+        "A.1 skill codes",
+        "Grade/Subject combinations"
+      ],
+      "successCriteria": [
+        "Template resolution for all Grade/Subject/Career combinations",
+        "Career-specific template loading",
+        "Cross-subject progression within experience flow",
+        "Fallback behavior when templates are missing"
+      ]
+    },
+    {
+      "category": "cross_container",
+      "description": "Test DiscoverMasterContainer functionality",
+      "components": [
+        "DiscoverMasterContainer"
+      ],
+      "testData": [
+        "A.1 skill codes",
+        "Grade/Subject combinations"
+      ],
+      "successCriteria": [
+        "Experience → Discover container progression",
+        "Career-applied skill data processing",
+        "Project recommendation based on skills",
+        "Skill validation in Discover phase"
+      ]
+    },
+    {
+      "category": "integration",
+      "description": "Test TemplateSystem functionality",
+      "components": [
+        "TemplateSystem"
+      ],
+      "testData": [
+        "A.1 skill codes",
+        "Grade/Subject combinations"
+      ],
+      "successCriteria": [
+        "Template loading for all existing templates",
+        "Template registry key resolution",
+        "Career-specific template selection",
+        "Template metadata integrity",
+        "Missing template fallback behavior"
+      ]
+    },
+    {
+      "category": "unit",
+      "description": "Test SkillProgressTracking functionality",
+      "components": [
+        "SkillProgressTracking"
+      ],
+      "testData": [
+        "A.1 skill codes",
+        "Grade/Subject combinations"
+      ],
+      "successCriteria": [
+        "Cross-container skill progression tracking",
+        "Skill completion data integrity",
+        "Progress reporting accuracy"
+      ]
+    },
+    {
+      "category": "cross_container",
+      "description": "Test CrossContainerDataFlow functionality",
+      "components": [
+        "CrossContainerDataFlow"
+      ],
+      "testData": [
+        "A.1 skill codes",
+        "Grade/Subject combinations"
+      ],
+      "successCriteria": [
+        "Complete three-phase flow testing",
+        "Skill data integrity across container transitions",
+        "Container orchestration logic"
+      ]
+    },
+    {
+      "category": "cross_container",
+      "description": "Test skill progression across all containers",
+      "components": [
+        "LearnMasterContainer",
+        "ExperienceMasterContainer",
+        "DiscoverMasterContainer"
+      ],
+      "testData": [
+        "Multi-subject skill sequences",
+        "Career progression data"
+      ],
+      "successCriteria": [
+        "End-to-end skill tracking",
+        "Consistent data format",
+        "No data loss"
+      ]
+    }
+  ],
+  "rollbackPlan": [
+    {
+      "order": 1,
+      "description": "No rollback required - no changes to LearnMasterContainer",
+      "component": "LearnMasterContainer",
+      "files": [
+        "src/components/mastercontainers/LearnMasterContainer.tsx"
+      ],
+      "backupRequired": false
+    },
+    {
+      "order": 2,
+      "description": "Revert normalizeSkillCode to convert A.1 → K.RL.1",
+      "component": "ExperienceMasterContainer",
+      "files": [
+        "src/services/experienceTemplateService.ts",
+        "src/components/mastercontainers/ExperienceMasterContainer.tsx"
+      ],
+      "backupRequired": true
+    },
+    {
+      "order": 3,
+      "description": "Restore original template registry keys",
+      "component": "ExperienceMasterContainer",
+      "files": [
+        "src/services/experienceTemplateService.ts",
+        "src/components/mastercontainers/ExperienceMasterContainer.tsx"
+      ],
+      "backupRequired": true
+    },
+    {
+      "order": 4,
+      "description": "Revert template file names",
+      "component": "ExperienceMasterContainer",
+      "files": [
+        "src/services/experienceTemplateService.ts",
+        "src/components/mastercontainers/ExperienceMasterContainer.tsx"
+      ],
+      "backupRequired": true
+    },
+    {
+      "order": 5,
+      "description": "Revert any skill code format changes in Discover container",
+      "component": "DiscoverMasterContainer",
+      "files": [
+        "src/components/mastercontainers/DiscoverMasterContainer.tsx"
+      ],
+      "backupRequired": false
+    },
+    {
+      "order": 6,
+      "description": "Restore format conversion if previously implemented",
+      "component": "DiscoverMasterContainer",
+      "files": [
+        "src/components/mastercontainers/DiscoverMasterContainer.tsx"
+      ],
+      "backupRequired": false
+    },
+    {
+      "order": 7,
+      "description": "Restore original template registry",
+      "component": "TemplateSystem",
+      "files": [
+        "src/services/experienceTemplateService.ts",
+        "src/data/experienceTemplates/kindergarten/ela/K.RL.1-librarian.ts"
+      ],
+      "backupRequired": true
+    },
+    {
+      "order": 8,
+      "description": "Revert template file names",
+      "component": "TemplateSystem",
+      "files": [
+        "src/services/experienceTemplateService.ts",
+        "src/data/experienceTemplates/kindergarten/ela/K.RL.1-librarian.ts"
+      ],
+      "backupRequired": true
+    },
+    {
+      "order": 9,
+      "description": "Remove Common Core metadata fields",
+      "component": "TemplateSystem",
+      "files": [
+        "src/services/experienceTemplateService.ts",
+        "src/data/experienceTemplates/kindergarten/ela/K.RL.1-librarian.ts"
+      ],
+      "backupRequired": true
+    },
+    {
+      "order": 10,
+      "description": "Restore original skillCode properties in templates",
+      "component": "TemplateSystem",
+      "files": [
+        "src/services/experienceTemplateService.ts",
+        "src/data/experienceTemplates/kindergarten/ela/K.RL.1-librarian.ts"
+      ],
+      "backupRequired": true
+    },
+    {
+      "order": 11,
+      "description": "Revert any skill tracking format changes",
+      "component": "SkillProgressTracking",
+      "files": [],
+      "backupRequired": false
+    },
+    {
+      "order": 12,
+      "description": "Restore inconsistent format handling if necessary",
+      "component": "SkillProgressTracking",
+      "files": [],
+      "backupRequired": false
+    },
+    {
+      "order": 13,
+      "description": "Restore format conversion logic between containers",
+      "component": "CrossContainerDataFlow",
+      "files": [],
+      "backupRequired": true
+    },
+    {
+      "order": 14,
+      "description": "Accept broken skill progression as previous state",
+      "component": "CrossContainerDataFlow",
+      "files": [],
+      "backupRequired": true
+    }
+  ],
+  "conversationContext": "MCP Diff Analysis - 2025-07-22T22:07:02.502Z - Skill Code Format Standardization"
+}

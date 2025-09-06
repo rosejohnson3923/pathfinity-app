@@ -1,0 +1,425 @@
+/**
+ * Comprehensive Responsive Fixes
+ * Ensures optimal display across all device sizes
+ */
+
+/* ============================================
+   MOBILE FIRST APPROACH - Base Mobile Styles
+   ============================================ */
+
+/* Prevent horizontal scroll on mobile */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* ============================================
+   MOBILE: 320px - 768px
+   ============================================ */
+@media (max-width: 768px) {
+  /* Modal Containers */
+  .modal-wrapper,
+  .modal-container,
+  .modal-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 1rem !important;
+    border-radius: 0 !important;
+  }
+
+  /* Dashboard Modal */
+  .dashboard-modal {
+    padding: 1rem !important;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    padding: 1rem !important;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .sections-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+    padding: 0 !important;
+  }
+
+  .quick-stats {
+    flex-direction: column !important;
+    gap: 1rem !important;
+  }
+
+  .stat-card {
+    width: 100% !important;
+    padding: 1rem !important;
+  }
+
+  /* Two Panel Modal */
+  .two-panel-modal {
+    flex-direction: column !important;
+  }
+
+  .main-content-panel {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: calc(100vh - 200px) !important;
+  }
+
+  .gamification-sidebar {
+    width: 100% !important;
+    height: 200px !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    border-radius: 20px 20px 0 0 !important;
+    overflow-x: auto !important;
+  }
+
+  /* Floating Dock - Horizontal Bottom */
+  .floating-dock {
+    flex-direction: row !important;
+    bottom: 20px !important;
+    top: auto !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    gap: 15px !important;
+  }
+
+  .dock-icon {
+    width: 50px !important;
+    height: 50px !important;
+  }
+
+  .dock-icon .icon-main {
+    font-size: 24px !important;
+  }
+
+  /* Modal Content */
+  .modal-content {
+    max-height: 85vh !important;
+    margin: 1rem !important;
+  }
+
+  /* Buttons */
+  .primary-button,
+  .secondary-button,
+  .action-button {
+    width: 100% !important;
+    padding: 1rem !important;
+    font-size: 1rem !important;
+  }
+
+  /* Forms */
+  .form-group {
+    margin-bottom: 1rem !important;
+  }
+
+  .form-input,
+  .form-select {
+    width: 100% !important;
+    padding: 0.75rem !important;
+    font-size: 16px !important; /* Prevents zoom on iOS */
+  }
+
+  /* AI Containers */
+  .ai-learn-container,
+  .ai-experience-container,
+  .ai-discover-container {
+    padding: 1rem !important;
+    max-width: 100% !important;
+  }
+
+  .phase-header h1 {
+    font-size: 1.5rem !important;
+  }
+
+  .practice-question h2,
+  .challenge-scenario h2 {
+    font-size: 1.25rem !important;
+  }
+
+  /* Career Choice Modal */
+  .career-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .career-card {
+    padding: 1rem !important;
+  }
+
+  /* Character Selection */
+  .character-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1rem !important;
+  }
+
+  /* Navigation Headers */
+  .container-navigation-header {
+    padding: 0.75rem 1rem !important;
+  }
+
+  .nav-title {
+    font-size: 1.1rem !important;
+  }
+
+  /* Theme Toggle */
+  .theme-toggle {
+    position: fixed !important;
+    top: 10px !important;
+    right: 10px !important;
+    z-index: 9999 !important;
+  }
+
+  /* Text Adjustments */
+  h1 {
+    font-size: 1.75rem !important;
+  }
+
+  h2 {
+    font-size: 1.5rem !important;
+  }
+
+  h3 {
+    font-size: 1.25rem !important;
+  }
+
+  p, li {
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+  }
+
+  /* Hide non-essential elements on mobile */
+  .desktop-only {
+    display: none !important;
+  }
+
+  /* Show mobile-specific elements */
+  .mobile-only {
+    display: block !important;
+  }
+}
+
+/* ============================================
+   TABLET: 768px - 1024px
+   ============================================ */
+@media (min-width: 768px) and (max-width: 1024px) {
+  /* Modal Containers */
+  .modal-wrapper,
+  .modal-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+
+  /* Dashboard Grid */
+  .sections-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Two Panel Modal */
+  .two-panel-modal:not(.sidebar-collapsed) .main-content-panel {
+    flex: 1 !important;
+    width: auto !important;
+    max-width: none !important;
+  }
+
+  .gamification-sidebar {
+    width: 250px !important;
+  }
+
+  /* Character Grid */
+  .character-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+
+  /* Career Grid */
+  .career-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* ============================================
+   SMALL DESKTOP: 1024px - 1440px
+   ============================================ */
+@media (min-width: 1024px) and (max-width: 1440px) {
+  .modal-container {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  .two-panel-modal:not(.sidebar-collapsed) .main-content-panel {
+    flex: 1 !important;
+    width: auto !important;
+    max-width: none !important;
+  }
+  
+  /* Force all modal content to use full width */
+  .main-content-panel > * {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+/* ============================================
+   LARGE DESKTOP: 1440px+
+   ============================================ */
+@media (min-width: 1440px) {
+  .modal-container {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  .two-panel-modal:not(.sidebar-collapsed) .main-content-panel {
+    flex: 1 !important;
+    width: auto !important;
+    max-width: none !important;
+  }
+  
+  /* Force all modal content to use full width */
+  .main-content-panel > * {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .sections-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+
+/* ============================================
+   ORIENTATION SPECIFIC
+   ============================================ */
+
+/* Landscape phones */
+@media (max-height: 500px) and (orientation: landscape) {
+  .modal-content {
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+  }
+
+  .floating-dock {
+    bottom: 10px !important;
+  }
+
+  .dock-icon {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .gamification-sidebar {
+    height: 150px !important;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY & TOUCH TARGETS
+   ============================================ */
+@media (hover: none) and (pointer: coarse) {
+  /* Ensure touch targets are at least 44x44px for mobile */
+  button,
+  .button,
+  .dock-icon,
+  .clickable {
+    min-height: 44px !important;
+    min-width: 44px !important;
+  }
+
+  /* Remove hover effects on touch devices */
+  .dock-icon:hover {
+    transform: none !important;
+  }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+  .floating-dock,
+  .gamification-sidebar,
+  .theme-toggle,
+  .logout-btn,
+  .nav-buttons {
+    display: none !important;
+  }
+
+  .modal-container {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+  }
+}
+
+/* ============================================
+   HIGH DPI DISPLAYS
+   ============================================ */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* Use higher resolution images/icons if available */
+  .logo,
+  .avatar {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+.mobile-only {
+  display: none;
+}
+
+.desktop-only {
+  display: block;
+}
+
+.tablet-only {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-only {
+    display: block;
+  }
+  .desktop-only,
+  .tablet-only {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .tablet-only {
+    display: block;
+  }
+  .mobile-only {
+    display: none;
+  }
+}
+
+/* ============================================
+   SAFE AREAS (for notched devices)
+   ============================================ */
+@supports (padding: max(0px)) {
+  .modal-container {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+
+  .floating-dock {
+    bottom: max(20px, env(safe-area-inset-bottom)) !important;
+  }
+}

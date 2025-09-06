@@ -1,0 +1,492 @@
+/**
+ * Accessibility Enhancements
+ * ===========================
+ * WCAG 2.1 AA Compliance Styles
+ * Created: 2025-08-22
+ */
+
+/* ============================================
+   FOCUS INDICATORS
+   ============================================ */
+
+/* Remove default outlines */
+*:focus {
+  outline: none;
+}
+
+/* High visibility focus for keyboard navigation */
+*:focus-visible {
+  outline: 3px solid #ffd700 !important;
+  outline-offset: 2px !important;
+  z-index: 9999;
+  position: relative;
+}
+
+/* Alternative focus style for dark backgrounds */
+.dark-mode *:focus-visible,
+[data-theme="dark"] *:focus-visible {
+  outline-color: #00d4ff !important;
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.25);
+}
+
+/* Button specific focus */
+button:focus-visible,
+.button:focus-visible,
+a.button:focus-visible {
+  outline: 3px solid #ffd700 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.25);
+}
+
+/* Form element focus */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--primary-color, #667eea) !important;
+  outline-offset: 0 !important;
+  border-color: var(--primary-color, #667eea) !important;
+}
+
+/* ============================================
+   SKIP LINKS
+   ============================================ */
+
+.skip-link,
+.skip-to-content {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  background: var(--primary-color, #667eea);
+  color: white;
+  padding: 12px 24px;
+  text-decoration: none;
+  border-radius: 0 0 8px 0;
+  z-index: 100000;
+  font-weight: 600;
+  transition: top 0.3s ease;
+}
+
+.skip-link:focus,
+.skip-to-content:focus {
+  top: 0;
+  outline: 3px solid #ffd700;
+  outline-offset: 2px;
+}
+
+/* ============================================
+   SCREEN READER ONLY TEXT
+   ============================================ */
+
+.sr-only,
+.visually-hidden,
+.screen-reader-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Show on focus (for skip links) */
+.sr-only-focusable:focus,
+.visually-hidden-focusable:focus {
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  padding: inherit !important;
+  margin: inherit !important;
+  overflow: visible !important;
+  clip: auto !important;
+  white-space: normal !important;
+}
+
+/* ============================================
+   COLOR CONTRAST ENHANCEMENTS
+   ============================================ */
+
+/* Ensure minimum contrast ratios */
+body {
+  color: var(--text-primary, #000);
+  background-color: var(--bg-primary, #fff);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  * {
+    border-width: 2px !important;
+  }
+
+  button,
+  .button {
+    border: 2px solid currentColor !important;
+  }
+
+  input,
+  textarea,
+  select {
+    border: 2px solid currentColor !important;
+  }
+
+  a {
+    text-decoration: underline !important;
+    text-decoration-thickness: 2px !important;
+  }
+}
+
+/* Forced colors mode (Windows High Contrast) */
+@media (forced-colors: active) {
+  button {
+    border: 2px solid ButtonText;
+  }
+
+  a {
+    forced-color-adjust: none;
+    color: LinkText;
+  }
+
+  a:visited {
+    color: VisitedText;
+  }
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate,
+  .transition,
+  .animated {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ============================================
+   INTERACTIVE ELEMENT STATES
+   ============================================ */
+
+/* Disabled state styling */
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled,
+.disabled,
+[aria-disabled="true"] {
+  opacity: 0.6;
+  cursor: not-allowed !important;
+  filter: grayscale(0.3);
+}
+
+/* Loading states */
+[aria-busy="true"] {
+  cursor: wait;
+}
+
+.loading {
+  position: relative;
+  color: transparent !important;
+}
+
+.loading::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin-left: -8px;
+  margin-top: -8px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spinner 0.6s linear infinite;
+}
+
+@keyframes spinner {
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================
+   ARIA LIVE REGIONS
+   ============================================ */
+
+[aria-live="polite"],
+.announcement {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+[aria-live="assertive"],
+.alert-announcement {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* ============================================
+   ERROR STATES & VALIDATION
+   ============================================ */
+
+/* Invalid input styling */
+[aria-invalid="true"],
+.error,
+.invalid {
+  border-color: var(--error-color, #ff4757) !important;
+  background-color: rgba(255, 71, 87, 0.05);
+}
+
+/* Error messages */
+[role="alert"],
+.error-message,
+.validation-error {
+  color: var(--error-color, #ff4757);
+  font-weight: 600;
+  margin-top: 4px;
+  font-size: 0.9em;
+}
+
+/* Success states */
+[aria-invalid="false"],
+.success,
+.valid {
+  border-color: var(--success-color, #2ed573) !important;
+  background-color: rgba(46, 213, 115, 0.05);
+}
+
+/* ============================================
+   FORM ACCESSIBILITY
+   ============================================ */
+
+/* Required field indicators */
+.required::after,
+[aria-required="true"]::after,
+[required]::after {
+  content: " *";
+  color: var(--error-color, #ff4757);
+  font-weight: bold;
+}
+
+/* Label association */
+label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Fieldset and legend styling */
+fieldset {
+  border: 2px solid var(--border-color, #ccc);
+  padding: 16px;
+  margin-bottom: 16px;
+  border-radius: 8px;
+}
+
+legend {
+  font-weight: bold;
+  padding: 0 8px;
+}
+
+/* ============================================
+   KEYBOARD NAVIGATION HELPERS
+   ============================================ */
+
+/* Tab focus order indicator */
+[tabindex]:not([tabindex="-1"]):focus {
+  outline: 3px solid #ffd700 !important;
+}
+
+/* Modal focus trap indicator */
+[role="dialog"] *:focus,
+[aria-modal="true"] *:focus {
+  outline: 3px solid #00d4ff !important;
+}
+
+/* ============================================
+   TEXT READABILITY
+   ============================================ */
+
+/* Minimum font sizes */
+body {
+  font-size: max(16px, 1rem);
+  line-height: 1.5;
+}
+
+p,
+li,
+td {
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+}
+
+/* Maximum line length for readability */
+.content,
+.text-content,
+article {
+  max-width: 70ch;
+}
+
+/* ============================================
+   LINK ACCESSIBILITY
+   ============================================ */
+
+/* Underline links in content */
+main a:not(.button),
+article a:not(.button),
+.content a:not(.button) {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+/* External link indicator */
+a[target="_blank"]::after {
+  content: " ↗";
+  font-size: 0.8em;
+  vertical-align: super;
+}
+
+/* Visited link differentiation */
+a:visited {
+  color: var(--visited-color, #9b59b6);
+}
+
+/* ============================================
+   IMAGE ACCESSIBILITY
+   ============================================ */
+
+/* Broken image indicator */
+img:not([alt]) {
+  outline: 3px solid red !important;
+}
+
+img[alt=""] {
+  outline: 3px solid orange !important;
+}
+
+/* Decorative images */
+img[role="presentation"],
+img[aria-hidden="true"] {
+  outline: none !important;
+}
+
+/* ============================================
+   TABLE ACCESSIBILITY
+   ============================================ */
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th {
+  text-align: left;
+  font-weight: bold;
+  background-color: var(--bg-secondary, #f5f5f5);
+}
+
+th,
+td {
+  padding: 12px;
+  border: 1px solid var(--border-color, #ddd);
+}
+
+/* Zebra striping for better row distinction */
+tbody tr:nth-child(odd) {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* ============================================
+   MODAL & OVERLAY ACCESSIBILITY
+   ============================================ */
+
+/* Ensure modals are above everything */
+[role="dialog"],
+[aria-modal="true"] {
+  z-index: 10000;
+}
+
+/* Overlay background for focus */
+.modal-overlay,
+.dialog-overlay {
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+/* ============================================
+   TOOLTIP ACCESSIBILITY
+   ============================================ */
+
+[role="tooltip"] {
+  position: absolute;
+  z-index: 10001;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  border-radius: 4px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* ============================================
+   PROGRESS INDICATORS
+   ============================================ */
+
+[role="progressbar"] {
+  position: relative;
+  height: 20px;
+  background: var(--bg-secondary, #e0e0e0);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+[role="progressbar"]::before {
+  content: attr(aria-valuenow) "% complete";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* ============================================
+   PRINT ACCESSIBILITY
+   ============================================ */
+
+@media print {
+  /* Ensure links are visible in print */
+  a[href]::after {
+    content: " (" attr(href) ")";
+  }
+
+  /* Hide decorative elements */
+  [aria-hidden="true"],
+  [role="presentation"] {
+    display: none !important;
+  }
+
+  /* Improve contrast for printing */
+  * {
+    color: black !important;
+    background: white !important;
+  }
+}

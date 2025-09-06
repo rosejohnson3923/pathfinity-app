@@ -1,0 +1,198 @@
+{
+  "timestamp": "2025-09-01T01:57:05.546Z",
+  "testType": "comprehensive_accuracy",
+  "metrics": {
+    "overallAccuracy": "100.0%",
+    "criticalAccuracy": "100.0%",
+    "passed": 10,
+    "failed": 0,
+    "total": 10
+  },
+  "bySubject": {
+    "Math": {
+      "passed": 6,
+      "total": 6
+    },
+    "ELA": {
+      "passed": 2,
+      "total": 2
+    },
+    "Science": {
+      "passed": 1,
+      "total": 1
+    },
+    "Social Studies": {
+      "passed": 1,
+      "total": 1
+    }
+  },
+  "results": [
+    {
+      "scenario": "Which number is smaller (negative)",
+      "passed": true,
+      "isCritical": true,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "An engineer is designing a bridge and needs to calculate the smallest temperature change that the materials can handle. Which number is smaller: -10 or -5?",
+        "options": {
+          "A": "-10",
+          "B": "-5",
+          "C": "0",
+          "D": "10"
+        },
+        "correct_answer": "A",
+        "explanation": "Negative numbers represent values below zero, and the smaller the number, the farther it is from zero. -10 is smaller than -5 because it is farther below zero."
+      }
+    },
+    {
+      "scenario": "Which fraction is larger",
+      "passed": true,
+      "isCritical": true,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "As a chef, you are preparing two recipes. For the first recipe, you need 3/4 cup of sugar, and for the second recipe, you need 2/3 cup of sugar. Which recipe uses more sugar?",
+        "options": {
+          "A": "The first recipe (3/4 cup)",
+          "B": "The second recipe (2/3 cup)",
+          "C": "Both recipes use the same amount of sugar",
+          "D": "Not enough information to compare"
+        },
+        "correct_answer": "A",
+        "explanation": "To compare 3/4 and 2/3, find a common denominator. The least common denominator of 4 and 3 is 12. Convert the fractions: 3/4 = 9/12 and 2/3 = 8/12. Since 9/12 is greater than 8/12, the first recipe uses more sugar."
+      }
+    },
+    {
+      "scenario": "Kindergarten counting",
+      "passed": true,
+      "isCritical": false,
+      "issues": [],
+      "question": {
+        "type": "counting",
+        "question": "A doctor has these pills to give to a patient: 💊💊💊💊💊💊💊. How many pills are there?",
+        "correct_answer": 7,
+        "explanation": "Count the number of pill emojis (💊) to find the total. There are 7 pills."
+      }
+    },
+    {
+      "scenario": "Even/Odd statement",
+      "passed": true,
+      "isCritical": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "Police officers often count the number of cars parked on a street. If there are 8 cars parked, is the number 8 even or odd?",
+        "options": {
+          "A": "Even",
+          "B": "Odd"
+        },
+        "correct_answer": "A",
+        "explanation": "The number 8 is even because it can be divided into two equal groups without any leftovers."
+      }
+    },
+    {
+      "scenario": "Letter recognition",
+      "passed": true,
+      "isCritical": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "Ms. Taylor, a teacher, is helping her students learn letters. Which of these is the letter 'B'?",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "correct_answer": "B",
+        "explanation": "The letter 'B' is the second letter in the alphabet and looks like two circles stacked vertically on a straight line."
+      }
+    },
+    {
+      "scenario": "Main idea identification",
+      "passed": true,
+      "isCritical": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "A writer is working on a story about a brave dog that saves its owner during a storm. What is the main idea of this story?",
+        "options": {
+          "A": "The dog is very brave and helps its owner during a storm.",
+          "B": "The writer enjoys writing stories about animals.",
+          "C": "The storm was very loud and scary.",
+          "D": "The owner bought the dog a new toy after the storm."
+        },
+        "correct_answer": "A",
+        "explanation": "The main idea is the most important point of the story. In this case, the story is about the brave dog saving its owner during the storm."
+      }
+    },
+    {
+      "scenario": "States of matter",
+      "passed": true,
+      "isCritical": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "A scientist is studying water in different states of matter. Which of these is an example of water in its gas state?",
+        "options": {
+          "a": "Ice cubes in a tray",
+          "b": "Steam rising from a pot",
+          "c": "Water in a glass",
+          "d": "Rain falling from the sky"
+        },
+        "correct_answer": "b",
+        "explanation": "Steam is water in its gas state, while ice is solid, water in a glass is liquid, and rain is liquid water falling from the sky."
+      }
+    },
+    {
+      "scenario": "Community helpers",
+      "passed": true,
+      "isCritical": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "Who helps put out fires and keeps people safe?",
+        "options": [
+          "Doctor",
+          "Firefighter",
+          "Teacher",
+          "Police Officer"
+        ],
+        "correct_answer": "Firefighter",
+        "explanation": "Firefighters are community helpers who put out fires and make sure everyone is safe."
+      }
+    },
+    {
+      "scenario": "Algebra equation solving",
+      "passed": true,
+      "isCritical": false,
+      "issues": [],
+      "question": {
+        "type": "multiple_choice",
+        "question": "An engineer is designing a bridge and needs to calculate the load distribution. The equation representing the load on one section of the bridge is 3x - 7 = 11, where x represents the load in tons. Solve for x to determine the load on this section of the bridge.",
+        "options": {
+          "A": "4 tons",
+          "B": "6 tons",
+          "C": "5 tons",
+          "D": "7 tons"
+        },
+        "correct_answer": "B",
+        "explanation": "To solve the equation 3x - 7 = 11, first add 7 to both sides to get 3x = 18. Then divide both sides by 3 to find x = 6. Therefore, the load on this section of the bridge is 6 tons."
+      }
+    },
+    {
+      "scenario": "Area calculation",
+      "passed": true,
+      "isCritical": false,
+      "issues": [],
+      "question": {
+        "type": "numeric",
+        "question": "As an architect, you are designing a rectangular room for a new house. The room is 12 feet long and 9 feet wide. What is the area of the room in square feet?",
+        "correct_answer": 108,
+        "explanation": "To calculate the area of a rectangle, multiply the length by the width. 12 feet × 9 feet = 108 square feet."
+      }
+    }
+  ],
+  "conclusion": "SYSTEM_READY"
+}

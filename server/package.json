@@ -1,0 +1,21 @@
+{
+  "name": "pathiq-license-server",
+  "version": "1.0.0",
+  "description": "PathIQ™ License Validation Server",
+  "main": "license-validator.js",
+  "scripts": {
+    "start": "node license-validator.js",
+    "dev": "nodemon license-validator.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "express-rate-limit": "^6.10.0",
+    "crypto": "^1.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "author": "Esposure Inc.",
+  "license": "PROPRIETARY"
+}

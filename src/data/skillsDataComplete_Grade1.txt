@@ -1,0 +1,751 @@
+Subject	Grade	SkillsArea	SkillCluster	SkillNumber	SkillName
+Math	1	Math Foundations	A.	A.0	Counting to 100
+Math	1	Math Foundations	A.	A.1	Counting review - up to 10
+Math	1	Math Foundations	A.	A.2	Count to fill a ten frame
+Math	1	Math Foundations	A.	A.3	Counting review - up to 20
+Math	1	Math Foundations	A.	A.4	Count on ten frames - up to 40
+Math	1	Math Foundations	A.	A.5	Counting objects to 100
+Math	1	Math Foundations	A.	A.6	Counting forward - up to 100
+Math	1	Math Foundations	A.	A.7	Counting backward - up to 100
+Math	1	Math Foundations	A.	A.8	Number lines - up to 100
+Math	1	Math Foundations	A.	A.9	Counting on the hundred chart
+Math	1	Math Foundations	A.	A.10	Hundred chart
+Math	1	Math Foundations	A.	A.11	Ordinal numbers
+Math	1	Math Foundations	B.	B.0	Counting to 120
+Math	1	Math Foundations	B.	B.1	Counting objects to 120
+Math	1	Math Foundations	B.	B.2	Counting forward - up to 120
+Math	1	Math Foundations	B.	B.3	Counting backward - up to 120
+Math	1	Math Foundations	B.	B.4	Number lines - up to 120
+Math	1	Math Foundations	B.	B.5	Counting on a number chart - up to 120
+Math	1	Math Foundations	B.	B.6	Sequences - count up and down by 1
+Math	1	Math Foundations	B.	B.7	Writing numbers in words - convert words to digits
+Math	1	Math Foundations	B.	B.8	Writing numbers in words - convert digits to words
+Math	1	Math Foundations	C.	C.0	Skip-counting
+Math	1	Math Foundations	C.	C.1	Skip-counting by twos
+Math	1	Math Foundations	C.	C.2	Skip-counting by fives
+Math	1	Math Foundations	C.	C.3	Skip-counting by tens
+Math	1	Math Foundations	C.	C.4	Skip-counting by tens - up to 120
+Math	1	Math Foundations	C.	C.5	Skip-counting by twos, fives, and tens
+Math	1	Math Foundations	C.	C.6	Counting by twos, fives, and tens
+Math	1	Math Foundations	C.	C.7	Skip-counting patterns - with tables
+Math	1	Math Foundations	C.	C.8	Sequences - count up and down by 1, 2, 5, and 10
+Math	1	Math Foundations	D.	D.0	Comparing up to 10
+Math	1	Math Foundations	D.	D.1	Comparing: more or fewer?
+Math	1	Math Foundations	D.	D.2	Comparing: how many more?
+Math	1	Math Foundations	D.	D.3	Comparing: how many fewer?
+Math	1	Math Foundations	D.	D.4	Comparing: how many more or fewer?
+Math	1	Math Foundations	D.	D.5	Compare numbers up to 10 using words
+Math	1	Math Foundations	D.	D.6	Compare numbers up to 10 using symbols
+Math	1	Math Foundations	E.	E.0	Understand addition
+Math	1	Math Foundations	E.	E.1	Add with cubes - sums up to 10
+Math	1	Math Foundations	E.	E.2	Add with pictures - sums up to 10
+Math	1	Math Foundations	E.	E.3	Addition sentences up to 10: which model matches?
+Math	1	Math Foundations	E.	E.4	Addition sentences up to 10: what does the model show?
+Math	1	Math Foundations	E.	E.5	Write addition sentences for pictures - sums up to 10
+Math	1	Math Foundations	E.	E.6	Addition sentences using number lines - sums up to 10
+Math	1	Math Foundations	E.	E.7	Turn words into an addition sentence - sums up to 10
+Math	1	Math Foundations	F.	F.0	Addition strategies up to 10
+Math	1	Math Foundations	F.	F.1	Add in any order
+Math	1	Math Foundations	F.	F.2	Add by counting on - sums up to 10
+Math	1	Math Foundations	F.	F.3	Complete the addition sentence to make ten - with models
+Math	1	Math Foundations	F.	F.4	Complete the addition sentence to make ten
+Math	1	Math Foundations	G.	G.0	Addition up to 10
+Math	1	Math Foundations	G.	G.1	Addition facts - sums up to 10
+Math	1	Math Foundations	G.	G.2	Take apart numbers in different ways - sums up to 10
+Math	1	Math Foundations	G.	G.3	Make a number using addition - sums up to 10
+Math	1	Math Foundations	G.	G.4	Ways to make a number - addition sentences up to 10
+Math	1	Math Foundations	H.	H.0	Addition word problems up to 10
+Math	1	Math Foundations	H.	H.1	Addition word problems with pictures - sums up to 10
+Math	1	Math Foundations	H.	H.2	Write addition sentences for word problems with pictures - sums up to 10
+Math	1	Math Foundations	H.	H.3	Build cube trains to solve addition word problems - sums up to 10
+Math	1	Math Foundations	H.	H.4	Addition word problems - sums up to 10
+Math	1	Math Foundations	H.	H.5	Model and write addition sentences for word problems - sums up to 10
+Math	1	Math Foundations	H.	H.6	Addition sentences for word problems - sums up to 10
+Math	1	Math Foundations	I.	I.0	Understand subtraction
+Math	1	Math Foundations	I.	I.1	Subtract with cubes - up to 10
+Math	1	Math Foundations	I.	I.2	Subtract with pictures - up to 10
+Math	1	Math Foundations	I.	I.3	Subtraction sentences up to 10: which model matches?
+Math	1	Math Foundations	I.	I.4	Subtraction sentences up to 10: what does the model show?
+Math	1	Math Foundations	I.	I.5	Subtraction sentences up to 10: what does the cube train show?
+Math	1	Math Foundations	I.	I.6	Write subtraction sentences for pictures - up to 10
+Math	1	Math Foundations	I.	I.7	Subtraction sentences using number lines - up to 10
+Math	1	Math Foundations	I.	I.8	Turn words into a subtraction sentence - up to 10
+Math	1	Math Foundations	I.	I.9	Subtract zero and all
+Math	1	Math Foundations	J.	J.0	Subtraction strategies up to 10
+Math	1	Math Foundations	J.	J.1	Subtract by counting back - up to 10
+Math	1	Math Foundations	J.	J.2	Subtract by counting on - up to 10
+Math	1	Math Foundations	J.	J.3	Relate addition and subtraction sentences - up to 10
+Math	1	Math Foundations	J.	J.4	Use addition to subtract - up to 10
+Math	1	Math Foundations	K.	K.0	Subtraction up to 10
+Math	1	Math Foundations	K.	K.1	Subtraction facts - up to 10
+Math	1	Math Foundations	K.	K.2	Make a number using subtraction - up to 10
+Math	1	Math Foundations	K.	K.3	Ways to make a number - subtraction sentences up to 10
+Math	1	Math Foundations	K.	K.4	Ways to subtract from a number - subtraction sentences up to 10
+Math	1	Math Foundations	L.	L.0	Subtraction word problems up to 10
+Math	1	Math Foundations	L.	L.1	Subtraction word problems with pictures - up to 10
+Math	1	Math Foundations	L.	L.2	Write subtraction sentences for word problems with pictures - up to 10
+Math	1	Math Foundations	L.	L.3	Use cube trains to solve subtraction word problems - up to 10
+Math	1	Math Foundations	L.	L.4	Subtraction word problems - up to 10
+Math	1	Math Foundations	L.	L.5	Model and write subtraction sentences for word problems - up to 10
+Math	1	Math Foundations	L.	L.6	Subtraction sentences for "take apart" word problems - up to 10
+Math	1	Math Foundations	L.	L.7	Subtraction sentences for word problems - up to 10
+Math	1	Math Foundations	M.	M.0	Addition and subtraction up to 10
+Math	1	Math Foundations	M.	M.1	Fact families - up to 10
+Math	1	Math Foundations	M.	M.2	Add and subtract with 0
+Math	1	Math Foundations	M.	M.3	Addition and subtraction facts - up to 10
+Math	1	Math Foundations	M.	M.4	Sort addition and subtraction facts - up to 10
+Math	1	Math Foundations	N.	N.0	Comparison word problems up to 10
+Math	1	Math Foundations	N.	N.1	Comparison word problems up to 10: how many more?
+Math	1	Math Foundations	N.	N.2	Subtraction sentences for comparison word problems up to 10: how many more?
+Math	1	Math Foundations	N.	N.3	Comparison word problems up to 10: how many fewer?
+Math	1	Math Foundations	N.	N.4	Subtraction sentences for comparison word problems up to 10: how many fewer?
+Math	1	Math Foundations	N.	N.5	Comparison word problems up to 10: how many more or fewer?
+Math	1	Math Foundations	N.	N.6	Subtraction sentences for comparison word problems up to 10: how many more or fewer?
+Math	1	Math Foundations	N.	N.7	Comparison word problems up to 10: what is the larger amount?
+Math	1	Math Foundations	N.	N.8	Comparison word problems up to 10: what is the smaller amount?
+Math	1	Math Foundations	N.	N.9	Comparison word problems up to 10
+Math	1	Math Foundations	O.	O.0	Addition and subtraction word problems up to 10
+Math	1	Math Foundations	O.	O.1	Addition and subtraction word problems with pictures - up to 10
+Math	1	Math Foundations	O.	O.2	Use cube trains to solve addition and subtraction word problems - up to 10
+Math	1	Math Foundations	O.	O.3	Word problems with unknown sums and differences - up to 10
+Math	1	Math Foundations	O.	O.4	Addition and subtraction sentences for word problems - up to 10
+Math	1	Math Foundations	O.	O.5	Word problems with change unknown - up to 10
+Math	1	Math Foundations	O.	O.6	Word problems with start unknown - up to 10
+Math	1	Math Foundations	O.	O.7	Word problems with one addend unknown - up to 10
+Math	1	Math Foundations	O.	O.8	Word problems with both addends unknown - up to 10
+Math	1	Math Foundations	O.	O.9	Word problems involving addition and subtraction - up to 10
+Math	1	Math Foundations	O.	O.10	Match word problems to addition and subtraction sentences - up to 10
+Math	1	Math Foundations	P.	P.0	Addition strategies up to 20
+Math	1	Math Foundations	P.	P.1	Related addition facts
+Math	1	Math Foundations	P.	P.2	Addition sentences using number lines - sums up to 20
+Math	1	Math Foundations	P.	P.3	Add by counting on - sums up to 20
+Math	1	Math Foundations	P.	P.4	Add doubles - with models
+Math	1	Math Foundations	P.	P.5	Add doubles
+Math	1	Math Foundations	P.	P.6	Add doubles - complete the sentence
+Math	1	Math Foundations	P.	P.7	Add using doubles plus one
+Math	1	Math Foundations	P.	P.8	Add using doubles minus one
+Math	1	Math Foundations	P.	P.9	Add near doubles
+Math	1	Math Foundations	P.	P.10	Add three numbers - use doubles
+Math	1	Math Foundations	P.	P.11	Use ten frames to add
+Math	1	Math Foundations	P.	P.12	Make ten to add
+Math	1	Math Foundations	P.	P.13	Add three numbers - make ten
+Math	1	Math Foundations	Q.	Q.0	Addition up to 20
+Math	1	Math Foundations	Q.	Q.1	Adding 1
+Math	1	Math Foundations	Q.	Q.2	Adding 2
+Math	1	Math Foundations	Q.	Q.3	Adding 3
+Math	1	Math Foundations	Q.	Q.4	Adding 4
+Math	1	Math Foundations	Q.	Q.5	Adding 5
+Math	1	Math Foundations	Q.	Q.6	Adding 6
+Math	1	Math Foundations	Q.	Q.7	Adding 7
+Math	1	Math Foundations	Q.	Q.8	Adding 8
+Math	1	Math Foundations	Q.	Q.9	Adding 9
+Math	1	Math Foundations	Q.	Q.10	Adding 10
+Math	1	Math Foundations	Q.	Q.11	Adding 0
+Math	1	Math Foundations	Q.	Q.12	Addition facts - sums up to 20
+Math	1	Math Foundations	Q.	Q.13	Sort addition facts - sums up to 20
+Math	1	Math Foundations	Q.	Q.14	Make a number using addition - sums up to 20
+Math	1	Math Foundations	Q.	Q.15	Add three numbers
+Math	1	Math Foundations	R.	R.0	Addition word problems up to 20
+Math	1	Math Foundations	R.	R.1	Addition word problems with models - sums up to 20
+Math	1	Math Foundations	R.	R.2	Addition word problems - sums up to 20
+Math	1	Math Foundations	R.	R.3	Addition sentences for word problems - sums up to 20
+Math	1	Math Foundations	R.	R.4	Add three numbers - word problems
+Math	1	Math Foundations	S.	S.0	Subtraction strategies up to 20
+Math	1	Math Foundations	S.	S.1	Related subtraction facts
+Math	1	Math Foundations	S.	S.2	Relate addition and subtraction sentences - up to 20
+Math	1	Math Foundations	S.	S.3	Subtraction sentences using number lines - up to 20
+Math	1	Math Foundations	S.	S.4	Subtract by counting back - up to 20
+Math	1	Math Foundations	S.	S.5	Subtracting to and from 10
+Math	1	Math Foundations	S.	S.6	Use ten frames to subtract
+Math	1	Math Foundations	S.	S.7	Use ten to subtract
+Math	1	Math Foundations	S.	S.8	Use addition to subtract - up to 20
+Math	1	Math Foundations	S.	S.9	Subtract by counting on - up to 20
+Math	1	Math Foundations	S.	S.10	Count on and use ten to subtract - up to 20
+Math	1	Math Foundations	S.	S.11	Subtract doubles
+Math	1	Math Foundations	T.	T.0	Subtraction up to 20
+Math	1	Math Foundations	T.	T.1	Subtracting 1
+Math	1	Math Foundations	T.	T.2	Subtracting 2
+Math	1	Math Foundations	T.	T.3	Subtracting 3
+Math	1	Math Foundations	T.	T.4	Subtracting 4
+Math	1	Math Foundations	T.	T.5	Subtracting 5
+Math	1	Math Foundations	T.	T.6	Subtracting 6
+Math	1	Math Foundations	T.	T.7	Subtracting 7
+Math	1	Math Foundations	T.	T.8	Subtracting 8
+Math	1	Math Foundations	T.	T.9	Subtracting 9
+Math	1	Math Foundations	T.	T.10	Subtracting 10
+Math	1	Math Foundations	T.	T.11	Subtracting 0
+Math	1	Math Foundations	T.	T.12	Subtraction facts - up to 20
+Math	1	Math Foundations	T.	T.13	Sort subtraction facts - up to 20
+Math	1	Math Foundations	T.	T.14	Make a number using subtraction - up to 20
+Math	1	Math Foundations	U.	U.0	Subtraction word problems up to 20
+Math	1	Math Foundations	U.	U.1	Subtraction word problems with models - up to 20
+Math	1	Math Foundations	U.	U.2	Subtraction word problems - up to 20
+Math	1	Math Foundations	U.	U.3	Subtraction sentences for word problems - up to 20
+Math	1	Math Foundations	V.	V.0	Addition and subtraction up to 20
+Math	1	Math Foundations	V.	V.1	Addition and subtraction facts - up to 20
+Math	1	Math Foundations	V.	V.2	Addition and subtraction - ways to make a number
+Math	1	Math Foundations	W.	W.0	Comparison word problems up to 20
+Math	1	Math Foundations	W.	W.1	Comparison word problems up to 20: how many more or fewer?
+Math	1	Math Foundations	W.	W.2	Comparison word problems up to 20: what is the larger amount?
+Math	1	Math Foundations	W.	W.3	Comparison word problems up to 20: what is the smaller amount?
+Math	1	Math Foundations	W.	W.4	Comparison word problems up to 20: part 1
+Math	1	Math Foundations	W.	W.5	Comparison word problems up to 20: part 2
+Math	1	Math Foundations	X.	X.0	Addition and subtraction word problems up to 20
+Math	1	Math Foundations	X.	X.1	Word problems with sum or difference unknown - up to 20
+Math	1	Math Foundations	X.	X.2	Word problems with change unknown - up to 20
+Math	1	Math Foundations	X.	X.3	Word problems with start unknown - up to 20
+Math	1	Math Foundations	X.	X.4	Word problems with one addend unknown - up to 20
+Math	1	Math Foundations	X.	X.5	Word problems with both addends unknown - up to 20
+Math	1	Math Foundations	X.	X.6	Use models to solve word problems involving addition and subtraction - up to 20
+Math	1	Math Foundations	X.	X.7	Word problems involving addition and subtraction without comparisons - up to 20
+Math	1	Math Foundations	X.	X.8	Word problems involving addition and subtraction - up to 20
+Math	1	Math Foundations	X.	X.9	Addition and subtraction sentences for word problems - up to 20
+Math	1	Math Foundations	X.	X.10	Match word problems to addition and subtraction sentences - up to 20
+Math	1	Math Foundations	Y.	Y.0	True or false equations
+Math	1	Math Foundations	Y.	Y.1	Addition and subtraction sentences to 10: which is true?
+Math	1	Math Foundations	Y.	Y.2	Which sign makes the number sentence true? - up to 10
+Math	1	Math Foundations	Y.	Y.3	Addition sentences: true or false?
+Math	1	Math Foundations	Y.	Y.4	Addition sentences: which is true?
+Math	1	Math Foundations	Y.	Y.5	Subtraction sentences: true or false?
+Math	1	Math Foundations	Y.	Y.6	Subtraction sentences: which is true?
+Math	1	Math Foundations	Y.	Y.7	Addition and subtraction sentences to 20: which is true?
+Math	1	Math Foundations	Y.	Y.8	Which sign makes the number sentence true?
+Math	1	Math Foundations	Z.	Z.0	Complete the equation
+Math	1	Math Foundations	Z.	Z.1	Complete the addition sentence - sums up to 10
+Math	1	Math Foundations	Z.	Z.2	Complete the subtraction sentence - up to 10
+Math	1	Math Foundations	Z.	Z.3	Complete the addition sentence - sums up to 20
+Math	1	Math Foundations	Z.	Z.4	Complete the subtraction sentence - up to 20
+Math	1	Math Foundations	Z.	Z.5	Complete the addition or subtraction sentence - up to 20
+Math	1	Math Foundations	Z.	Z.6	Complete the addition and subtraction equations - up to 20
+Math	1	Math Foundations	AA.	AA.0	Place value
+Math	1	Math Foundations	AA.	AA.1	Counting tens and ones - up to 20
+Math	1	Math Foundations	AA.	AA.2	Place value models up to 20
+Math	1	Math Foundations	AA.	AA.3	Write numbers as tens and ones up to 20
+Math	1	Math Foundations	AA.	AA.4	Counting tens and ones - up to 99
+Math	1	Math Foundations	AA.	AA.5	Place value models up to 100
+Math	1	Math Foundations	AA.	AA.6	Convert between tens and ones - multiples of ten
+Math	1	Math Foundations	AA.	AA.7	Write numbers as tens and ones
+Math	1	Math Foundations	AA.	AA.8	Regroup tens and ones - ways to make a number
+Math	1	Math Foundations	AA.	AA.9	Regroup tens and ones
+Math	1	Math Foundations	BB.	BB.0	Comparing up to 100
+Math	1	Math Foundations	BB.	BB.1	Use place value to compare numbers up to 100
+Math	1	Math Foundations	BB.	BB.2	Compare numbers up to 100 using words
+Math	1	Math Foundations	BB.	BB.3	Compare numbers up to 100 using symbols
+Math	1	Math Foundations	BB.	BB.4	Compare numbers up to 100: word problems
+Math	1	Math Foundations	BB.	BB.5	Put numbers in order - up to 100
+Math	1	Math Foundations	CC.	CC.0	Addition and subtraction: multiples of ten
+Math	1	Math Foundations	CC.	CC.1	Ten more or less
+Math	1	Math Foundations	CC.	CC.2	Add multiples of ten
+Math	1	Math Foundations	CC.	CC.3	Subtract multiples of ten
+Math	1	Math Foundations	CC.	CC.4	Add and subtract multiples of ten
+Math	1	Math Foundations	DD.	DD.0	Addition: two digits
+Math	1	Math Foundations	DD.	DD.1	Use models to add a multiple of ten and a one-digit number
+Math	1	Math Foundations	DD.	DD.2	Add a multiple of ten and a one-digit number
+Math	1	Math Foundations	DD.	DD.3	Use models to add a multiple of ten and a two-digit number
+Math	1	Math Foundations	DD.	DD.4	Add a multiple of ten and a two-digit number
+Math	1	Math Foundations	DD.	DD.5	Use models to add a two-digit and a one-digit number - without regrouping
+Math	1	Math Foundations	DD.	DD.6	Add a two-digit and a one-digit number - without regrouping
+Math	1	Math Foundations	DD.	DD.7	Use models to add a two-digit and a one-digit number - with regrouping
+Math	1	Math Foundations	DD.	DD.8	Add a two-digit and a one-digit number - with regrouping
+Math	1	Math Foundations	DD.	DD.9	Use models to add two-digit numbers - without regrouping
+Math	1	Math Foundations	DD.	DD.10	Add two-digit numbers without regrouping - sums to 100
+Math	1	Math Foundations	DD.	DD.11	Use models to add two-digit numbers - with regrouping
+Math	1	Math Foundations	DD.	DD.12	Add two-digit numbers with regrouping - sums to 100
+Math	1	Math Foundations	DD.	DD.13	Addition word problems - one-digit plus two-digit numbers
+Math	1	Math Foundations	DD.	DD.14	Addition sentences for word problems - one-digit plus two-digit numbers
+Math	1	Math Foundations	DD.	DD.15	Addition word problems - up to two-digit numbers
+Math	1	Math Foundations	EE.	EE.0	Measurement
+Math	1	Math Foundations	EE.	EE.1	Compare objects: length and height
+Math	1	Math Foundations	EE.	EE.2	Order objects: length and height
+Math	1	Math Foundations	EE.	EE.3	Wide and narrow
+Math	1	Math Foundations	EE.	EE.4	Light and heavy
+Math	1	Math Foundations	EE.	EE.5	Holds more or less
+Math	1	Math Foundations	EE.	EE.6	Compare size, weight, and capacity
+Math	1	Math Foundations	EE.	EE.7	Measure length with objects
+Math	1	Math Foundations	EE.	EE.8	Build cube trains to measure length
+Math	1	Math Foundations	EE.	EE.9	Build cube trains to measure height
+Math	1	Math Foundations	EE.	EE.10	Measure using an inch ruler
+Math	1	Math Foundations	EE.	EE.11	Customary units of length: word problems
+Math	1	Math Foundations	EE.	EE.12	Measure using a centimeter ruler
+Math	1	Math Foundations	EE.	EE.13	Metric units of length: word problems
+Math	1	Math Foundations	FF.	FF.0	Time
+Math	1	Math Foundations	FF.	FF.1	Match analog and digital clocks: to the hour
+Math	1	Math Foundations	FF.	FF.2	Match digital clocks and times
+Math	1	Math Foundations	FF.	FF.3	Match analog clocks and times: to the hour
+Math	1	Math Foundations	FF.	FF.4	Match analog clocks and times: to the half hour
+Math	1	Math Foundations	FF.	FF.5	Match analog and digital clocks: to the half hour
+Math	1	Math Foundations	FF.	FF.6	Read clocks and write times
+Math	1	Math Foundations	FF.	FF.7	Times of everyday events
+Math	1	Math Foundations	FF.	FF.8	Compare clocks
+Math	1	Math Foundations	FF.	FF.9	Time and clocks: word problems
+Math	1	Math Foundations	GG.	GG.0	Days, months, and seasons
+Math	1	Math Foundations	GG.	GG.1	Days of the week
+Math	1	Math Foundations	GG.	GG.2	Months of the year
+Math	1	Math Foundations	GG.	GG.3	Seasons of the year
+Math	1	Math Foundations	GG.	GG.4	Read a calendar
+Math	1	Math Foundations	HH.	HH.0	Money
+Math	1	Math Foundations	HH.	HH.1	Names and values of common coins
+Math	1	Math Foundations	HH.	HH.2	Names and values of all coins
+Math	1	Math Foundations	HH.	HH.3	Count groups of like coins: pennies, nickels, or dimes
+Math	1	Math Foundations	HH.	HH.4	Count groups of like coins: pennies, nickels, dimes, or quarters
+Math	1	Math Foundations	HH.	HH.5	Count pennies, nickels, and dimes
+Math	1	Math Foundations	HH.	HH.6	Count pennies, nickels, dimes, and quarters
+Math	1	Math Foundations	HH.	HH.7	Equivalent groups of coins
+Math	1	Math Foundations	HH.	HH.8	Exchanging coins - with pictures
+Math	1	Math Foundations	HH.	HH.9	Exchanging coins
+Math	1	Math Foundations	HH.	HH.10	Money - word problems
+Math	1	Math Foundations	HH.	HH.11	Purchases: do you have enough money?
+Math	1	Math Foundations	HH.	HH.12	Compare money amounts
+Math	1	Math Foundations	II.	II.0	Data and graphs
+Math	1	Math Foundations	II.	II.1	Which picture graph is correct?
+Math	1	Math Foundations	II.	II.2	Interpret picture graphs
+Math	1	Math Foundations	II.	II.3	Tally marks - up to 10
+Math	1	Math Foundations	II.	II.4	Which tally chart is correct?
+Math	1	Math Foundations	II.	II.5	Interpret tally charts
+Math	1	Math Foundations	II.	II.6	Which table is correct?
+Math	1	Math Foundations	II.	II.7	Interpret data in tables
+Math	1	Math Foundations	II.	II.8	Interpret bar graphs I
+Math	1	Math Foundations	II.	II.9	Interpret bar graphs II
+Math	1	Math Foundations	II.	II.10	Which bar graph is correct?
+Math	1	Math Foundations	JJ.	JJ.0	Patterns
+Math	1	Math Foundations	JJ.	JJ.1	Complete a pattern
+Math	1	Math Foundations	JJ.	JJ.2	Make a pattern
+Math	1	Math Foundations	JJ.	JJ.3	Growing patterns
+Math	1	Math Foundations	JJ.	JJ.4	Find the next shape in a growing pattern
+Math	1	Math Foundations	JJ.	JJ.5	Find the next row in a growing pattern
+Math	1	Math Foundations	KK.	KK.0	Two-dimensional shapes
+Math	1	Math Foundations	KK.	KK.1	Select two-dimensional shapes
+Math	1	Math Foundations	KK.	KK.2	Name the two-dimensional shape
+Math	1	Math Foundations	KK.	KK.3	Rhombuses
+Math	1	Math Foundations	KK.	KK.4	Count sides and corners
+Math	1	Math Foundations	KK.	KK.5	Compare sides and corners
+Math	1	Math Foundations	KK.	KK.6	Sort two-dimensional shapes
+Math	1	Math Foundations	KK.	KK.7	Square corners
+Math	1	Math Foundations	KK.	KK.8	Equal sides
+Math	1	Math Foundations	KK.	KK.9	Open and closed shapes
+Math	1	Math Foundations	KK.	KK.10	Compose two-dimensional shapes
+Math	1	Math Foundations	LL.	LL.0	Three-dimensional shapes
+Math	1	Math Foundations	LL.	LL.1	Two-dimensional and three-dimensional shapes
+Math	1	Math Foundations	LL.	LL.2	Cubes and rectangular prisms
+Math	1	Math Foundations	LL.	LL.3	Select three-dimensional shapes
+Math	1	Math Foundations	LL.	LL.4	Name the three-dimensional shape
+Math	1	Math Foundations	LL.	LL.5	Count vertices, edges, and faces
+Math	1	Math Foundations	LL.	LL.6	Compare vertices, edges, and faces
+Math	1	Math Foundations	LL.	LL.7	Identify faces of three-dimensional shapes
+Math	1	Math Foundations	LL.	LL.8	Identify shapes traced from solids
+Math	1	Math Foundations	LL.	LL.9	Shapes of everyday objects I
+Math	1	Math Foundations	LL.	LL.10	Shapes of everyday objects II
+Math	1	Math Foundations	MM.	MM.0	Venn diagrams
+Math	1	Math Foundations	MM.	MM.1	Count shapes in a Venn diagram
+Math	1	Math Foundations	MM.	MM.2	Sort shapes into a Venn diagram
+Math	1	Math Foundations	NN.	NN.0	Fractions
+Math	1	Math Foundations	NN.	NN.1	Equal parts - 2 and 4 equal parts
+Math	1	Math Foundations	NN.	NN.2	Equal parts - 2, 3, and 4 equal parts
+Math	1	Math Foundations	NN.	NN.3	Identify halves
+Math	1	Math Foundations	NN.	NN.4	Identify fourths
+Math	1	Math Foundations	NN.	NN.5	Identify halves and fourths
+Math	1	Math Foundations	NN.	NN.6	Make halves
+Math	1	Math Foundations	NN.	NN.7	Make fourths
+Math	1	Math Foundations	NN.	NN.8	Make halves and fourths
+Math	1	Math Foundations	NN.	NN.9	Make halves and fourths in different ways
+Subject	Grade	SkillsArea	SkillCluster	SkillNumber	SkillName
+ELA	1	Reading Foundations	A.	A.0	Consonants and vowels
+ELA	1	Reading Foundations	A.	A.1	Sort consonants and vowels
+ELA	1	Reading Foundations	A.	A.2	Find the vowels in a word
+ELA	1	Reading Foundations	B.	B.0	Syllables
+ELA	1	Reading Foundations	B.	B.1	How many syllables does the word have?
+ELA	1	Reading Foundations	B.	B.2	Sort by the number of syllables
+ELA	1	Reading Foundations	C.	C.0	Rhyming
+ELA	1	Reading Foundations	C.	C.1	Choose the picture that rhymes with the word
+ELA	1	Reading Foundations	C.	C.2	Which word does not rhyme?
+ELA	1	Reading Foundations	C.	C.3	Complete the rhyme
+ELA	1	Reading Foundations	C.	C.4	Complete the poem with a word that rhymes
+ELA	1	Reading Foundations	D.	D.0	Blending and segmenting
+ELA	1	Reading Foundations	D.	D.1	Blend each sound in a word together
+ELA	1	Reading Foundations	D.	D.2	Identify each sound in a word
+ELA	1	Reading Foundations	D.	D.3	Put the sounds in order
+ELA	1	Reading Foundations	E.	E.0	Phoneme manipulation
+ELA	1	Reading Foundations	E.	E.1	Change the first sound in a word
+ELA	1	Reading Foundations	E.	E.2	Change the last sound in a word
+ELA	1	Reading Foundations	E.	E.3	Change the vowel sound in a word
+ELA	1	Reading Foundations	E.	E.4	Change the sound in a word: review
+ELA	1	Reading Foundations	F.	F.0	Consonant sounds and letters
+ELA	1	Reading Foundations	F.	F.1	Which two words start with the same sound?
+ELA	1	Reading Foundations	F.	F.2	Which two words end with the same sound?
+ELA	1	Reading Foundations	F.	F.3	Which letter does the word start with?
+ELA	1	Reading Foundations	F.	F.4	Which letter does the word end with?
+ELA	1	Reading Foundations	G.	G.0	Consonant digraphs
+ELA	1	Reading Foundations	G.	G.1	Complete the word to match the picture: -ss, -ll, -ff, -zz, -ck
+ELA	1	Reading Foundations	G.	G.2	Choose the correct digraph
+ELA	1	Reading Foundations	G.	G.3	Complete the word with the right digraph
+ELA	1	Reading Foundations	G.	G.4	Spell the digraph word
+ELA	1	Reading Foundations	H.	H.0	Consonant blends
+ELA	1	Reading Foundations	H.	H.1	Complete the word with the right initial consonant blend
+ELA	1	Reading Foundations	H.	H.2	Does the word start with a consonant blend?
+ELA	1	Reading Foundations	H.	H.3	Choose the picture that matches the word: ng, nk
+ELA	1	Reading Foundations	H.	H.4	Complete the word with the right final consonant blend
+ELA	1	Reading Foundations	H.	H.5	Does the word end with a consonant blend?
+ELA	1	Reading Foundations	H.	H.6	Fill in the missing consonant blend
+ELA	1	Reading Foundations	H.	H.7	Sort by initial consonant blend or digraph
+ELA	1	Reading Foundations	I.	I.0	Short a
+ELA	1	Reading Foundations	I.	I.1	Choose the short a word that matches the picture
+ELA	1	Reading Foundations	I.	I.2	Read words with am and an
+ELA	1	Reading Foundations	I.	I.3	Complete the short a word
+ELA	1	Reading Foundations	I.	I.4	Choose the short a sentence that matches the picture
+ELA	1	Reading Foundations	J.	J.0	Short e
+ELA	1	Reading Foundations	J.	J.1	Choose the picture that matches the short e word
+ELA	1	Reading Foundations	J.	J.2	Complete the short e word
+ELA	1	Reading Foundations	J.	J.3	Choose the short e sentence that matches the picture
+ELA	1	Reading Foundations	K.	K.0	Short i
+ELA	1	Reading Foundations	K.	K.1	Choose the short i word that matches the picture
+ELA	1	Reading Foundations	K.	K.2	Complete the short i words
+ELA	1	Reading Foundations	K.	K.3	Choose the short i sentence that matches the picture
+ELA	1	Reading Foundations	L.	L.0	Short o
+ELA	1	Reading Foundations	L.	L.1	Choose the short o word that matches the picture
+ELA	1	Reading Foundations	L.	L.2	Complete the short o word
+ELA	1	Reading Foundations	L.	L.3	Choose the short o sentence that matches the picture
+ELA	1	Reading Foundations	M.	M.0	Short u
+ELA	1	Reading Foundations	M.	M.1	Choose the picture that matches the short u word
+ELA	1	Reading Foundations	M.	M.2	Complete the short u word
+ELA	1	Reading Foundations	M.	M.3	Choose the short u sentence that matches the picture
+ELA	1	Reading Foundations	N.	N.0	Short vowels
+ELA	1	Reading Foundations	N.	N.1	Identify the short vowel sound in a word
+ELA	1	Reading Foundations	N.	N.2	Complete the word with the right short vowel
+ELA	1	Reading Foundations	N.	N.3	Spell the short vowel word
+ELA	1	Reading Foundations	N.	N.4	Complete the sentence with the correct short vowel word
+ELA	1	Reading Foundations	O.	O.0	Short and long vowel sounds
+ELA	1	Reading Foundations	O.	O.1	Find the word with the same vowel sound
+ELA	1	Reading Foundations	O.	O.2	Which two words have the same vowel sound?
+ELA	1	Reading Foundations	O.	O.3	Sort short and long vowel words
+ELA	1	Reading Foundations	P.	P.0	Silent e
+ELA	1	Reading Foundations	P.	P.1	Choose the silent e word that matches the picture
+ELA	1	Reading Foundations	P.	P.2	Complete the silent e words
+ELA	1	Reading Foundations	P.	P.3	Spell the silent e word
+ELA	1	Reading Foundations	P.	P.4	Choose the silent e sentence that matches the picture
+ELA	1	Reading Foundations	Q.	Q.0	Vowel teams
+ELA	1	Reading Foundations	Q.	Q.1	Choose the picture that matches the vowel team word
+ELA	1	Reading Foundations	Q.	Q.2	Complete the vowel team words
+ELA	1	Reading Foundations	Q.	Q.3	Complete the word with the right vowel team
+ELA	1	Reading Foundations	Q.	Q.4	Choose the vowel team sentence that matches the picture
+ELA	1	Reading Foundations	R.	R.0	Short and long vowel patterns
+ELA	1	Reading Foundations	R.	R.1	Match the short a and long a words to pictures
+ELA	1	Reading Foundations	R.	R.2	Match the short e and long e words to pictures
+ELA	1	Reading Foundations	R.	R.3	Choose the short i or long i word that matches the picture
+ELA	1	Reading Foundations	R.	R.4	Choose the short o or long o word that matches the picture
+ELA	1	Reading Foundations	R.	R.5	Choose the short u or long u word that matches the picture
+ELA	1	Reading Foundations	R.	R.6	Use spelling patterns to sort long and short vowel words
+ELA	1	Reading Foundations	S.	S.0	R-controlled vowels
+ELA	1	Reading Foundations	S.	S.1	Choose the r-control word that matches the picture
+ELA	1	Reading Foundations	S.	S.2	Complete the word with the right r-controlled vowel: ar, er, ir, or, ur
+ELA	1	Reading Foundations	T.	T.0	Diphthongs: oi, oy, ou, ow
+ELA	1	Reading Foundations	T.	T.1	Choose the diphthong word that matches the picture
+ELA	1	Reading Foundations	T.	T.2	Complete the word with the right diphthong: oi, oy, ou, ow
+ELA	1	Reading Foundations	U.	U.0	Two-syllable words
+ELA	1	Reading Foundations	U.	U.1	Put two syllables together to create a word: easier
+ELA	1	Reading Foundations	U.	U.2	Put two syllables together to create a word: harder
+ELA	1	Reading Foundations	U.	U.3	Complete the two-syllable words
+ELA	1	Reading Foundations	U.	U.4	Complete the sentence with a two-syllable word
+ELA	1	Reading Foundations	V.	V.0	Sight words
+ELA	1	Reading Foundations	V.	V.1	Read sight words set 1: again, each, from, may, stop, than, when
+ELA	1	Reading Foundations	V.	V.2	Read sight words set 2: after, best, gave, has, once, them, were
+ELA	1	Reading Foundations	V.	V.3	Read sight words set 3: as, by, four, her, more, some, think, way
+ELA	1	Reading Foundations	V.	V.4	Read sight words: review sets 1, 2, 3
+ELA	1	Reading Foundations	V.	V.5	Read sight words set 4: every, could, how, over, put, there, who
+ELA	1	Reading Foundations	V.	V.6	Read sight words set 5: ask, five, just, long, read, then, want
+ELA	1	Reading Foundations	V.	V.7	Read sight words set 6: any, give, his, new, open, sleep, wish
+ELA	1	Reading Foundations	V.	V.8	Read sight words set 7: also, fly, know, live, old, soon, why
+ELA	1	Reading Foundations	V.	V.9	Read sight words: review sets 4, 5, 6, 7
+ELA	1	Reading Foundations	V.	V.10	Read sight words: review sets 1–7
+ELA	1	Reading Foundations	V.	V.11	Complete the sentence with the correct sight word: sets 1, 2, 3
+ELA	1	Reading Foundations	V.	V.12	Complete the sentence with the correct sight word: sets 4, 5, 6, 7
+ELA	1	Reading Foundations	V.	V.13	Complete the sentence with the correct sight word: review sets 1–7
+ELA	1	Reading Foundations	V.	V.14	Spell the sight word
+ELA	1	Reading Foundations	W.	W.0	Decodable texts
+ELA	1	Reading Foundations	W.	W.1	Read short a stories
+ELA	1	Reading Foundations	W.	W.2	Read short i stories
+ELA	1	Reading Foundations	W.	W.3	Read short u stories
+ELA	1	Reading Foundations	W.	W.4	Coming soon: Read short e stories
+ELA	1	Reading Foundations	W.	W.5	Coming soon: Read short o stories
+ELA	1	Reading Strategies	X.	X.0	Reality vs. fiction
+ELA	1	Reading Strategies	X.	X.1	Which could happen in real life?
+ELA	1	Reading Strategies	Y.	Y.0	Main idea
+ELA	1	Reading Strategies	Y.	Y.1	What is the picture about?
+ELA	1	Reading Strategies	Z.	Z.0	Sequence
+ELA	1	Reading Strategies	Z.	Z.1	Order images in a story
+ELA	1	Reading Strategies	AA.	AA.0	Point of view
+ELA	1	Reading Strategies	AA.	AA.1	Who is the narrator?
+ELA	1	Reading Strategies	BB.	BB.0	Inference and analysis
+ELA	1	Reading Strategies	BB.	BB.1	Which feeling matches the picture?
+ELA	1	Reading Strategies	BB.	BB.2	What will happen next?
+ELA	1	Reading Strategies	BB.	BB.3	What am I?
+ELA	1	Reading Strategies	BB.	BB.4	Use actions and dialogue to understand characters
+ELA	1	Reading Strategies	CC.	CC.0	Setting and character
+ELA	1	Reading Strategies	CC.	CC.1	Choose the picture that matches the setting or character
+ELA	1	Reading Strategies	DD.	DD.0	Text features
+ELA	1	Reading Strategies	DD.	DD.1	Use text features
+ELA	1	Reading Strategies	EE.	EE.0	Read-along literary texts
+ELA	1	Reading Strategies	EE.	EE.1	Read along with fantasy
+ELA	1	Reading Strategies	EE.	EE.2	Read along with realistic fiction
+ELA	1	Reading Strategies	FF.	FF.0	Read-alone literary texts
+ELA	1	Reading Strategies	FF.	FF.1	Read animal fantasy
+ELA	1	Reading Strategies	FF.	FF.2	Read realistic fiction
+ELA	1	Reading Strategies	FF.	FF.3	Read myths, legends, and fables
+ELA	1	Reading Strategies	GG.	GG.0	Read-along informational texts
+ELA	1	Reading Strategies	GG.	GG.1	Read along about science and nature
+ELA	1	Reading Strategies	GG.	GG.2	Read along about famous people
+ELA	1	Reading Strategies	GG.	GG.3	Read along about food
+ELA	1	Reading Strategies	HH.	HH.0	Read-alone informational texts
+ELA	1	Reading Strategies	HH.	HH.1	Read about animals
+ELA	1	Reading Strategies	HH.	HH.2	Read about sports and hobbies
+ELA	1	Reading Strategies	HH.	HH.3	Read about famous places
+ELA	1	Vocabulary	II.	II.0	Nouns and adjectives
+ELA	1	Vocabulary	II.	II.1	Complete the sentence with a noun to match the picture
+ELA	1	Vocabulary	II.	II.2	Compare pictures using adjectives
+ELA	1	Vocabulary	II.	II.3	Use number words
+ELA	1	Vocabulary	JJ.	JJ.0	Categories
+ELA	1	Vocabulary	JJ.	JJ.1	Sort words into categories
+ELA	1	Vocabulary	JJ.	JJ.2	Which word is not like the others?
+ELA	1	Vocabulary	KK.	KK.0	Synonyms and antonyms
+ELA	1	Vocabulary	KK.	KK.1	Choose the synonyms
+ELA	1	Vocabulary	KK.	KK.2	Choose the antonyms
+ELA	1	Vocabulary	LL.	LL.0	Multiple-meaning words
+ELA	1	Vocabulary	LL.	LL.1	Multiple-meaning words with pictures
+ELA	1	Vocabulary	MM.	MM.0	Shades of meaning
+ELA	1	Vocabulary	MM.	MM.1	Find the words with related meanings
+ELA	1	Vocabulary	MM.	MM.2	Describe the difference between related words
+ELA	1	Vocabulary	MM.	MM.3	Order related words based on meaning
+ELA	1	Vocabulary	NN.	NN.0	Prefixes and suffixes
+ELA	1	Vocabulary	NN.	NN.1	Use words with prefixes and suffixes
+ELA	1	Vocabulary	NN.	NN.2	Understand words with prefixes and suffixes
+ELA	1	Vocabulary	OO.	OO.0	Context clues
+ELA	1	Vocabulary	OO.	OO.1	Use context to identify the meaning of a word
+ELA	1	Vocabulary	PP.	PP.0	Reference skills
+ELA	1	Vocabulary	PP.	PP.1	Put the letters in ABC order
+ELA	1	Vocabulary	PP.	PP.2	Put the words in ABC order
+ELA	1	Grammar and Mechanics	QQ.	QQ.0	Sentences
+ELA	1	Grammar and Mechanics	QQ.	QQ.1	Identify statements
+ELA	1	Grammar and Mechanics	QQ.	QQ.2	Identify questions
+ELA	1	Grammar and Mechanics	QQ.	QQ.3	Identify exclamations
+ELA	1	Grammar and Mechanics	QQ.	QQ.4	Identify commands
+ELA	1	Grammar and Mechanics	QQ.	QQ.5	Choose the right end mark
+ELA	1	Grammar and Mechanics	QQ.	QQ.6	Statement, question, command, or exclamation?
+ELA	1	Grammar and Mechanics	QQ.	QQ.7	Who, what, when, where, or why?
+ELA	1	Grammar and Mechanics	QQ.	QQ.8	Is it the naming or action part of the sentence?
+ELA	1	Grammar and Mechanics	QQ.	QQ.9	Find the complete sentences
+ELA	1	Grammar and Mechanics	QQ.	QQ.10	Complete the sentence
+ELA	1	Grammar and Mechanics	QQ.	QQ.11	Unscramble the words to make a complete sentence
+ELA	1	Grammar and Mechanics	RR.	RR.0	Nouns
+ELA	1	Grammar and Mechanics	RR.	RR.1	Is the noun a person, animal, place, or thing?
+ELA	1	Grammar and Mechanics	RR.	RR.2	Select the nouns
+ELA	1	Grammar and Mechanics	RR.	RR.3	Identify nouns in a sentence
+ELA	1	Grammar and Mechanics	RR.	RR.4	Sort common and proper nouns
+ELA	1	Grammar and Mechanics	RR.	RR.5	Identify proper nouns
+ELA	1	Grammar and Mechanics	RR.	RR.6	Regular plurals: select the word that matches the picture
+ELA	1	Grammar and Mechanics	RR.	RR.7	Form regular plurals with -s and -es
+ELA	1	Grammar and Mechanics	RR.	RR.8	Use singular and plural nouns
+ELA	1	Grammar and Mechanics	RR.	RR.9	Irregular plurals: select the word that matches the picture
+ELA	1	Grammar and Mechanics	RR.	RR.10	Select the possessive noun that matches the picture
+ELA	1	Grammar and Mechanics	RR.	RR.11	Form the singular possessive
+ELA	1	Grammar and Mechanics	SS.	SS.0	Pronouns
+ELA	1	Grammar and Mechanics	SS.	SS.1	Choose between subject and object personal pronouns
+ELA	1	Grammar and Mechanics	SS.	SS.2	Choose the correct personal pronoun
+ELA	1	Grammar and Mechanics	SS.	SS.3	Complete the sentence with the correct personal pronoun
+ELA	1	Grammar and Mechanics	SS.	SS.4	Choose the correct possessive pronoun
+ELA	1	Grammar and Mechanics	SS.	SS.5	Use the correct possessive pronoun
+ELA	1	Grammar and Mechanics	TT.	TT.0	Verbs
+ELA	1	Grammar and Mechanics	TT.	TT.1	Complete the sentence with an action verb to match the picture
+ELA	1	Grammar and Mechanics	TT.	TT.2	Identify action verbs
+ELA	1	Grammar and Mechanics	TT.	TT.3	Use action verbs
+ELA	1	Grammar and Mechanics	UU.	UU.0	Subject-verb agreement
+ELA	1	Grammar and Mechanics	UU.	UU.1	One or more than one?
+ELA	1	Grammar and Mechanics	UU.	UU.2	Complete the sentence with the best verb
+ELA	1	Grammar and Mechanics	UU.	UU.3	Complete the sentence with the best subject
+ELA	1	Grammar and Mechanics	UU.	UU.4	Pronoun-verb agreement: Complete the sentence with the best verb
+ELA	1	Grammar and Mechanics	UU.	UU.5	Pronoun-verb agreement: Complete the sentence with the best subject
+ELA	1	Grammar and Mechanics	VV.	VV.0	Verb tense
+ELA	1	Grammar and Mechanics	VV.	VV.1	Select the sentence that tells about the present
+ELA	1	Grammar and Mechanics	VV.	VV.2	Select the sentence that tells about the past
+ELA	1	Grammar and Mechanics	VV.	VV.3	Select the sentence that tells about the future
+ELA	1	Grammar and Mechanics	VV.	VV.4	Place sentences on a timeline
+ELA	1	Grammar and Mechanics	VV.	VV.5	Form and use the regular past tense
+ELA	1	Grammar and Mechanics	VV.	VV.6	Identify the irregular past tense
+ELA	1	Grammar and Mechanics	VV.	VV.7	Place sentences with irregular verbs on a timeline
+ELA	1	Grammar and Mechanics	VV.	VV.8	Complete the verb with the ending that you hear
+ELA	1	Grammar and Mechanics	VV.	VV.9	Match the -ed and -ing sentences to the pictures
+ELA	1	Grammar and Mechanics	VV.	VV.10	To be: use the correct present tense form
+ELA	1	Grammar and Mechanics	VV.	VV.11	To be: use the correct past tense form
+ELA	1	Grammar and Mechanics	VV.	VV.12	To be: use the correct form
+ELA	1	Grammar and Mechanics	VV.	VV.13	To have: use the correct form
+ELA	1	Grammar and Mechanics	WW.	WW.0	Articles
+ELA	1	Grammar and Mechanics	WW.	WW.1	Use the correct article: a or an
+ELA	1	Grammar and Mechanics	WW.	WW.2	Identify articles
+ELA	1	Grammar and Mechanics	XX.	XX.0	Adjectives
+ELA	1	Grammar and Mechanics	XX.	XX.1	Use sense words
+ELA	1	Grammar and Mechanics	XX.	XX.2	Does the adjective tell you what kind or how many?
+ELA	1	Grammar and Mechanics	XX.	XX.3	Identify adjectives
+ELA	1	Grammar and Mechanics	XX.	XX.4	Compare pictures using comparative and superlative adjectives
+ELA	1	Grammar and Mechanics	XX.	XX.5	Identify comparative and superlative adjectives
+ELA	1	Grammar and Mechanics	XX.	XX.6	Does the adjective compare two or more than two?
+ELA	1	Grammar and Mechanics	YY.	YY.0	Prepositions
+ELA	1	Grammar and Mechanics	YY.	YY.1	Select the best preposition to match the picture
+ELA	1	Grammar and Mechanics	YY.	YY.2	Select the best preposition to complete the sentence
+ELA	1	Grammar and Mechanics	ZZ.	ZZ.0	Linking words
+ELA	1	Grammar and Mechanics	ZZ.	ZZ.1	Use conjunctions
+ELA	1	Grammar and Mechanics	ZZ.	ZZ.2	Identify time-order words
+ELA	1	Grammar and Mechanics	ZZ.	ZZ.3	Put the sentences in order
+ELA	1	Grammar and Mechanics	AAA.	AAA.0	Contractions
+ELA	1	Grammar and Mechanics	AAA.	AAA.1	Match the contractions
+ELA	1	Grammar and Mechanics	AAA.	AAA.2	Form pronoun-verb contractions
+ELA	1	Grammar and Mechanics	AAA.	AAA.3	Form contractions with "not"
+ELA	1	Grammar and Mechanics	AAA.	AAA.4	Complete the sentence with the correct contraction
+ELA	1	Grammar and Mechanics	BBB.	BBB.0	Capitalization
+ELA	1	Grammar and Mechanics	BBB.	BBB.1	Capitalize the names of people and pets
+ELA	1	Grammar and Mechanics	BBB.	BBB.2	Capitalize days and months
+ELA	1	Grammar and Mechanics	BBB.	BBB.3	Capitalize sentences and the pronoun "I"
+Subject	Grade	SkillsArea	SkillCluster	SkillNumber	SkillName
+Science	1	Science Foundations	A.	A.0	Shapes and colors
+Science	1	Science Foundations	A.	A.1	Classify objects by two-dimensional shape
+Science	1	Science Foundations	A.	A.2	Sort objects by two-dimensional shape
+Science	1	Science Foundations	A.	A.3	Classify objects by three-dimensional shape
+Science	1	Science Foundations	A.	A.4	Sort objects by three-dimensional shape
+Science	1	Science Foundations	A.	A.5	Classify objects by color
+Science	1	Science Foundations	A.	A.6	Sort objects by color
+Science	1	Science Foundations	B.	B.0	Materials
+Science	1	Science Foundations	B.	B.1	Classify objects by texture
+Science	1	Science Foundations	B.	B.2	Sort objects by texture
+Science	1	Science Foundations	B.	B.3	Classify objects by material
+Science	1	Science Foundations	B.	B.4	Sort objects by material
+Science	1	Science Foundations	B.	B.5	Classify objects by shape, color, material, and texture
+Science	1	Science Foundations	B.	B.6	Describe objects
+Science	1	Science Foundations	C.	C.0	Comparing
+Science	1	Science Foundations	C.	C.1	Long and short
+Science	1	Science Foundations	C.	C.2	Light and heavy
+Science	1	Science Foundations	C.	C.3	Hot and cold
+Science	1	Science Foundations	C.	C.4	Fast and slow
+Science	1	Science Foundations	D.	D.0	States of matter
+Science	1	Science Foundations	D.	D.1	Classify solids and liquids
+Science	1	Science Foundations	D.	D.2	Identify solids and liquids
+Science	1	Science Foundations	E.	E.0	Heating and cooling
+Science	1	Science Foundations	E.	E.1	Changes caused by heating and cooling
+Science	1	Science Foundations	F.	F.0	Light and sound
+Science	1	Science Foundations	F.	F.1	More light or less light
+Science	1	Science Foundations	F.	F.2	Investigate shadows
+Science	1	Science Foundations	F.	F.3	Which lets light go through?
+Science	1	Science Foundations	F.	F.4	How do we use light and sound to communicate?
+Science	1	Science Foundations	G.	G.0	Force and motion
+Science	1	Science Foundations	G.	G.1	Push and pull
+Science	1	Science Foundations	G.	G.2	Investigate pushes and pulls
+Science	1	Science Foundations	G.	G.3	The way things move
+Science	1	Science Foundations	G.	G.4	What objects can a magnet pull?
+Science	1	Science Foundations	H.	H.0	Animals
+Science	1	Science Foundations	H.	H.1	What do animals need to survive?
+Science	1	Science Foundations	H.	H.2	How do animals use their body parts?
+Science	1	Science Foundations	H.	H.3	Match animals to their parents
+Science	1	Science Foundations	H.	H.4	Where do dromedary camels and polar bears live?
+Science	1	Science Foundations	H.	H.5	Where do giraffes and beavers live?
+Science	1	Science Foundations	H.	H.6	Where do whale sharks and tree frogs live?
+Science	1	Science Foundations	H.	H.7	The five senses
+Science	1	Science Foundations	H.	H.8	Read animal life cycle diagrams
+Science	1	Science Foundations	I.	I.0	Plants
+Science	1	Science Foundations	I.	I.1	What do plants need to survive?
+Science	1	Science Foundations	I.	I.2	Identify plant parts
+Science	1	Science Foundations	I.	I.3	Identify what plant parts do
+Science	1	Science Foundations	I.	I.4	Match plants to their parents
+Science	1	Science Foundations	I.	I.5	Identify types of plants
+Science	1	Science Foundations	I.	I.6	Where do water lilies and saguaros live?
+Science	1	Science Foundations	I.	I.7	Where do bearberries and powdery strap air plants live?
+Science	1	Science Foundations	I.	I.8	Where do turtle grass and giant sequoias live?
+Science	1	Science Foundations	J.	J.0	Living things
+Science	1	Science Foundations	J.	J.1	Identify living and nonliving things
+Science	1	Science Foundations	J.	J.2	Identify plants and animals
+Science	1	Science Foundations	J.	J.3	Compare plants and animals
+Science	1	Science Foundations	J.	J.4	Compare young living things to their parents
+Science	1	Science Foundations	K.	K.0	Ecosystems
+Science	1	Science Foundations	K.	K.1	How do living things change their environments to meet their needs?
+Science	1	Science Foundations	K.	K.2	How do gray squirrels change the forest to meet their needs?
+Science	1	Science Foundations	L.	L.0	Earth's resources
+Science	1	Science Foundations	L.	L.1	Earth materials: water, rocks, and soil
+Science	1	Science Foundations	L.	L.2	Bodies of water
+Science	1	Science Foundations	L.	L.3	Classify rocks and minerals
+Science	1	Science Foundations	L.	L.4	Types of soils
+Science	1	Science Foundations	L.	L.5	Natural resources
+Science	1	Science Foundations	M.	M.0	Human impacts
+Science	1	Science Foundations	M.	M.1	Reduce, reuse, recycle
+Science	1	Science Foundations	N.	N.0	Weather
+Science	1	Science Foundations	N.	N.1	Describe the weather
+Science	1	Science Foundations	N.	N.2	Investigate sunlight and shade
+Science	1	Science Foundations	N.	N.3	Types of precipitation
+Science	1	Science Foundations	N.	N.4	Weather patterns
+Science	1	Science Foundations	N.	N.5	Severe weather: blizzards
+Science	1	Science Foundations	N.	N.6	Severe weather: tornadoes
+Science	1	Science Foundations	N.	N.7	Severe weather: hurricanes
+Science	1	Science Foundations	O.	O.0	Astronomy
+Science	1	Science Foundations	O.	O.1	The daytime sky
+Science	1	Science Foundations	O.	O.2	The night sky
+Science	1	Science Foundations	P.	P.0	Engineering practices
+Science	1	Science Foundations	P.	P.1	Design a race car track
+Science	1	Science Foundations	P.	P.2	Design a sunshade
+Subject	Grade	SkillsArea	SkillCluster	SkillNumber	SkillName
+Social Studies	1	SS Foundations	A.	A.0	Civics
+Social Studies	1	SS Foundations	A.	A.1	Rules and laws
+Social Studies	1	SS Foundations	A.	A.2	Authority figures
+Social Studies	1	SS Foundations	A.	A.3	Government services
+Social Studies	1	SS Foundations	A.	A.4	Good citizenship
+Social Studies	1	SS Foundations	B.	B.0	American symbols and landmarks
+Social Studies	1	SS Foundations	B.	B.1	Identify American symbols
+Social Studies	1	SS Foundations	B.	B.2	Identify American landmarks and monuments
+Social Studies	1	SS Foundations	B.	B.3	The American flag
+Social Studies	1	SS Foundations	B.	B.4	Pledge of Allegiance
+Social Studies	1	SS Foundations	C.	C.0	Community
+Social Studies	1	SS Foundations	C.	C.1	What is a community?
+Social Studies	1	SS Foundations	C.	C.2	Jobs community helpers do
+Social Studies	1	SS Foundations	C.	C.3	Tools community helpers use
+Social Studies	1	SS Foundations	C.	C.4	Compare cities and rural areas
+Social Studies	1	SS Foundations	D.	D.0	Read along about holidays
+Social Studies	1	SS Foundations	D.	D.1	Easter
+Social Studies	1	SS Foundations	D.	D.2	Hanukkah
+Social Studies	1	SS Foundations	D.	D.3	Holi
+Social Studies	1	SS Foundations	D.	D.4	Independence Day
+Social Studies	1	SS Foundations	D.	D.5	Kwanzaa
+Social Studies	1	SS Foundations	D.	D.6	Lunar New Year
+Social Studies	1	SS Foundations	D.	D.7	Martin Luther King Jr. Day
+Social Studies	1	SS Foundations	D.	D.8	Memorial Day
+Social Studies	1	SS Foundations	D.	D.9	Presidents' Day
+Social Studies	1	SS Foundations	D.	D.10	Rosh Hashanah
+Social Studies	1	SS Foundations	D.	D.11	Thanksgiving
+Social Studies	1	SS Foundations	E.	E.0	Then and now
+Social Studies	1	SS Foundations	E.	E.1	Then and now: transportation and communication
+Social Studies	1	SS Foundations	E.	E.2	Then and now: home and school
+Social Studies	1	SS Foundations	E.	E.3	Then and now: work and play
+Social Studies	1	SS Foundations	F.	F.0	Read along about famous people
+Social Studies	1	SS Foundations	F.	F.1	George Washington
+Social Studies	1	SS Foundations	F.	F.2	Abraham Lincoln
+Social Studies	1	SS Foundations	F.	F.3	Helen Keller
+Social Studies	1	SS Foundations	F.	F.4	Rosa Parks
+Social Studies	1	SS Foundations	G.	G.0	Physical geography
+Social Studies	1	SS Foundations	G.	G.1	Identify Earth's land features
+Social Studies	1	SS Foundations	G.	G.2	Identify Earth's water features
+Social Studies	1	SS Foundations	G.	G.3	Identify human and physical features
+Social Studies	1	SS Foundations	H.	H.0	Location words
+Social Studies	1	SS Foundations	H.	H.1	Left and right
+Social Studies	1	SS Foundations	H.	H.2	Above, below, next to, and between
+Social Studies	1	SS Foundations	H.	H.3	Use location words
+Social Studies	1	SS Foundations	I.	I.0	Maps
+Social Studies	1	SS Foundations	I.	I.1	Introduction to maps
+Social Studies	1	SS Foundations	I.	I.2	Use cardinal directions
+Social Studies	1	SS Foundations	I.	I.3	Use a map key
+Social Studies	1	SS Foundations	I.	I.4	Use maps of the community
+Social Studies	1	SS Foundations	J.	J.0	Economics
+Social Studies	1	SS Foundations	J.	J.1	Needs and wants
+Social Studies	1	SS Foundations	J.	J.2	Scarcity and choices
+Social Studies	1	SS Foundations	J.	J.3	Goods and services
+Social Studies	1	SS Foundations	J.	J.4	Producers and consumers
+Social Studies	1	SS Foundations	J.	J.5	Natural resources
+Social Studies	1	SS Foundations	J.	J.6	Trade and money
+Social Studies	1	SS Foundations	K.	K.0	Using sources
+Social Studies	1	SS Foundations	K.	K.1	Which source should you use?
+Social Studies	1	SS Foundations	L.	L.0	Ordering events
+Social Studies	1	SS Foundations	L.	L.1	Days of the week
+Social Studies	1	SS Foundations	L.	L.2	Months of the year
+Social Studies	1	SS Foundations	L.	L.3	Use time-order words
+Social Studies	1	SS Foundations	L.	L.4	Introduction to timelines

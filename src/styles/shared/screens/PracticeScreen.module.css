@@ -1,0 +1,467 @@
+/**
+ * PRACTICE SCREEN MODULE
+ * ======================
+ * Styles for the practice phase across all containers
+ * Coordinates with QuestionCard.module.css for question display
+ * 
+ * Created: 2025-08-22
+ */
+
+/* ============================================
+   PRACTICE PHASE CONTAINER
+   ============================================ */
+.practicePhase {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-6);
+  animation: fadeIn var(--duration-base) var(--easing-out);
+}
+
+.practicePhase.withHeader {
+  padding-top: 5rem;
+}
+
+/* ============================================
+   PRACTICE HEADER
+   ============================================ */
+.practiceHeader {
+  text-align: center;
+  margin-bottom: var(--space-8);
+  animation: slideDown var(--duration-moderate) var(--easing-out);
+}
+
+.practiceTitle {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-2);
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.practiceSubtitle {
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-4);
+}
+
+/* ============================================
+   QUESTION COUNTER
+   ============================================ */
+.questionCounter {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-4);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-full);
+  font-size: var(--text-base);
+  color: var(--text-primary);
+  font-weight: var(--font-semibold);
+  margin-bottom: var(--space-4);
+}
+
+.questionCounter .current {
+  color: var(--color-primary);
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+}
+
+.questionCounter .total {
+  color: var(--text-secondary);
+}
+
+/* ============================================
+   PRACTICE PROGRESS
+   ============================================ */
+.practiceProgress {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+}
+
+.progressDot {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+  transition: all var(--duration-base) var(--easing-out);
+  cursor: pointer;
+  position: relative;
+}
+
+.progressDot:hover {
+  transform: scale(1.2);
+}
+
+.progressDot.active {
+  width: 24px;
+  background: var(--gradient-primary);
+  animation: activePulse 1.5s infinite;
+}
+
+.progressDot.correct {
+  background: var(--gradient-success);
+}
+
+.progressDot.incorrect {
+  background: var(--gradient-error);
+}
+
+.progressDot.skipped {
+  background: var(--gradient-warning);
+}
+
+@keyframes activePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Progress Bar Alternative */
+.progressBar {
+  width: 100%;
+  max-width: 600px;
+  height: 8px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+  margin: 0 auto var(--space-6);
+  overflow: hidden;
+  position: relative;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--gradient-primary);
+  transition: width var(--duration-moderate) var(--easing-out);
+  position: relative;
+}
+
+.progressFill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 50px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3));
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  from { transform: translateX(-50px); }
+  to { transform: translateX(50px); }
+}
+
+/* ============================================
+   PRACTICE QUESTIONS CONTAINER
+   ============================================ */
+.practiceQuestions {
+  position: relative;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Single question display (one at a time) */
+.questionWrapper {
+  width: 100%;
+  animation: questionSlide var(--duration-moderate) var(--easing-out);
+}
+
+@keyframes questionSlide {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ============================================
+   PRACTICE SUBMIT BUTTON
+   ============================================ */
+.practiceSubmit {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-4);
+  animation: fadeIn var(--duration-fast) var(--easing-out);
+}
+
+/* ============================================
+   PRACTICE NAVIGATION
+   ============================================ */
+.practiceNavigation {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-4);
+  margin-top: var(--space-8);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--border-color-soft);
+}
+
+.navigationButton {
+  min-width: 150px;
+}
+
+/* ============================================
+   TIMER DISPLAY
+   ============================================ */
+.timerDisplay {
+  position: fixed;
+  top: calc(var(--header-height) + var(--space-4));
+  right: var(--space-6);
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg-elevated);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-lg);
+  color: var(--text-primary);
+  z-index: var(--z-40);
+}
+
+.timerIcon {
+  font-size: var(--text-xl);
+  animation: tick 1s steps(1) infinite;
+}
+
+@keyframes tick {
+  0%, 50% { transform: rotate(0deg); }
+  50.01%, 100% { transform: rotate(15deg); }
+}
+
+.timerDisplay.warning {
+  background: var(--warning-bg-soft);
+  color: var(--warning-text);
+  animation: warningPulse 1s infinite;
+}
+
+@keyframes warningPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+/* ============================================
+   HINT SECTION
+   ============================================ */
+.hintSection {
+  margin-top: var(--space-6);
+  padding: var(--space-4);
+  background: var(--info-bg-soft);
+  border-radius: var(--radius-xl);
+  border-left: 4px solid var(--info-border);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  animation: slideUp var(--duration-base) var(--easing-out);
+}
+
+.hintIcon {
+  font-size: var(--text-2xl);
+  color: var(--info-text);
+}
+
+.hintContent {
+  flex: 1;
+}
+
+.hintText {
+  font-size: var(--text-base);
+  color: var(--info-text);
+  line-height: var(--leading-relaxed);
+  margin: 0;
+}
+
+.hintButton {
+  padding: var(--space-2) var(--space-4);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--easing-out);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.hintButton:hover {
+  background: var(--info-bg);
+  color: white;
+  border-color: var(--info-border);
+}
+
+/* ============================================
+   PRACTICE STATS
+   ============================================ */
+.practiceStats {
+  position: fixed;
+  bottom: var(--space-6);
+  left: var(--space-6);
+  padding: var(--space-4);
+  background: var(--bg-elevated);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-elevated);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 200px;
+  z-index: var(--z-40);
+}
+
+.statItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--text-sm);
+}
+
+.statLabel {
+  color: var(--text-secondary);
+  font-weight: var(--font-medium);
+}
+
+.statValue {
+  color: var(--text-primary);
+  font-weight: var(--font-bold);
+}
+
+.statValue.correct {
+  color: var(--color-success);
+}
+
+.statValue.incorrect {
+  color: var(--color-error);
+}
+
+/* ============================================
+   STREAK INDICATOR
+   ============================================ */
+.streakIndicator {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--gradient-warning);
+  color: white;
+  border-radius: var(--radius-full);
+  font-weight: var(--font-bold);
+  animation: streakBounce 0.5s ease;
+}
+
+.streakIndicator.fire {
+  animation: fireAnimation 2s infinite;
+}
+
+@keyframes streakBounce {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+@keyframes fireAnimation {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.05) rotate(-2deg); }
+  75% { transform: scale(1.05) rotate(2deg); }
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 768px) {
+  .practicePhase {
+    padding: var(--space-4);
+  }
+  
+  .practiceTitle {
+    font-size: var(--text-2xl);
+  }
+  
+  .timerDisplay {
+    position: static;
+    margin: 0 auto var(--space-4);
+    width: fit-content;
+  }
+  
+  .practiceStats {
+    position: static;
+    margin-top: var(--space-6);
+    width: 100%;
+  }
+  
+  .practiceNavigation {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .navigationButton {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .practicePhase {
+    padding: var(--space-3);
+  }
+  
+  .practiceTitle {
+    font-size: var(--text-xl);
+  }
+  
+  .practiceSubtitle {
+    font-size: var(--text-base);
+  }
+  
+  .progressDot {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .progressDot.active {
+    width: 20px;
+  }
+}

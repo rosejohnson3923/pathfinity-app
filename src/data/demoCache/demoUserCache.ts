@@ -1,0 +1,4036 @@
+// Auto-generated demo cache - DO NOT EDIT MANUALLY
+// Generated on: 2025-07-16T19:29:40.574Z
+
+export const DEMO_USER_CACHE = {
+  "Sam Brown": {
+    "user": {
+      "name": "Sam Brown",
+      "grade": "K",
+      "gradeLevel": "Kindergarten"
+    },
+    "dashboardCards": [
+      {
+        "subject": "Math",
+        "title": "Numbers to 3",
+        "description": "Learn Math fundamentals",
+        "skillNumber": "A.0"
+      },
+      {
+        "subject": "ELA",
+        "title": "Letter identification",
+        "description": "Learn ELA fundamentals",
+        "skillNumber": "A.0"
+      },
+      {
+        "subject": "Science",
+        "title": "Shapes and colors",
+        "description": "Learn Science fundamentals",
+        "skillNumber": "A.0"
+      },
+      {
+        "subject": "SocialStudies",
+        "title": "Community",
+        "description": "Learn SocialStudies fundamentals",
+        "skillNumber": "A.0"
+      }
+    ],
+    "skills": {
+      "Math": {
+        "A.0": {
+          "id": "a9e40d1d-214e-4f0c-b3be-3cf8b3e85828",
+          "subject": "Math",
+          "grade": "K",
+          "skills_area": "Math Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.0",
+          "skill_name": "Numbers to 3",
+          "skill_description": null,
+          "difficulty_level": 3,
+          "estimated_time_minutes": 25,
+          "prerequisites": null,
+          "created_at": "2025-07-14T00:41:21.658811+00:00",
+          "updated_at": "2025-07-14T00:41:21.658811+00:00"
+        },
+        "A.1": {
+          "id": "d47dce3f-9657-4608-8b34-49014b3af061",
+          "subject": "Math",
+          "grade": "K",
+          "skills_area": "Math Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.1",
+          "skill_name": "Identify numbers - up to 3",
+          "skill_description": null,
+          "difficulty_level": 4,
+          "estimated_time_minutes": 30,
+          "prerequisites": null,
+          "created_at": "2025-07-14T00:41:21.735879+00:00",
+          "updated_at": "2025-07-14T00:41:21.735879+00:00"
+        }
+      },
+      "ELA": {
+        "A.0": {
+          "id": "d2775446-e317-4fc4-a533-2a5a59618903",
+          "subject": "ELA",
+          "grade": "K",
+          "skills_area": "Reading Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.0",
+          "skill_name": "Letter identification",
+          "skill_description": null,
+          "difficulty_level": 3,
+          "estimated_time_minutes": 35,
+          "prerequisites": null,
+          "created_at": "2025-07-14T00:41:24.586335+00:00",
+          "updated_at": "2025-07-14T00:41:24.586335+00:00"
+        },
+        "A.1": {
+          "id": "666b2b4a-9983-405b-b0e0-1bb3a7d203df",
+          "subject": "ELA",
+          "grade": "K",
+          "skills_area": "Reading Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.1",
+          "skill_name": "Find the letter in the alphabet: uppercase",
+          "skill_description": null,
+          "difficulty_level": 3,
+          "estimated_time_minutes": 35,
+          "prerequisites": null,
+          "created_at": "2025-07-14T00:41:24.586335+00:00",
+          "updated_at": "2025-07-14T00:41:24.586335+00:00"
+        }
+      },
+      "Science": {
+        "A.0": {
+          "id": "ce8679b2-473f-45eb-baf1-a13ee7567cc7",
+          "subject": "Science",
+          "grade": "K",
+          "skills_area": "Science Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.0",
+          "skill_name": "Shapes and colors",
+          "skill_description": null,
+          "difficulty_level": 3,
+          "estimated_time_minutes": 30,
+          "prerequisites": null,
+          "created_at": "2025-07-14T00:41:24.903138+00:00",
+          "updated_at": "2025-07-14T00:41:24.903138+00:00"
+        },
+        "A.1": {
+          "id": "dba96531-ae0f-43ce-bbca-02b5eb903de3",
+          "subject": "Science",
+          "grade": "K",
+          "skills_area": "Science Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.1",
+          "skill_name": "Classify objects by two-dimensional shape",
+          "skill_description": null,
+          "difficulty_level": 3,
+          "estimated_time_minutes": 30,
+          "prerequisites": null,
+          "created_at": "2025-07-14T00:41:24.903138+00:00",
+          "updated_at": "2025-07-14T00:41:24.903138+00:00"
+        }
+      },
+      "SocialStudies": {
+        "A.0": {
+          "id": "c2d9059a-72cd-4042-b08f-9b5c48ab6d1b",
+          "subject": "SocialStudies",
+          "grade": "K",
+          "skills_area": "SS Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.0",
+          "skill_name": "Community",
+          "skill_description": null,
+          "difficulty_level": 3,
+          "estimated_time_minutes": 25,
+          "prerequisites": null,
+          "created_at": "2025-07-14T00:41:24.997354+00:00",
+          "updated_at": "2025-07-14T00:41:24.997354+00:00"
+        },
+        "A.1": {
+          "id": "b56319d6-676c-4005-a337-3c200b22e14b",
+          "subject": "SocialStudies",
+          "grade": "K",
+          "skills_area": "SS Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.1",
+          "skill_name": "What is a community?",
+          "skill_description": null,
+          "difficulty_level": 3,
+          "estimated_time_minutes": 25,
+          "prerequisites": null,
+          "created_at": "2025-07-14T00:41:24.997354+00:00",
+          "updated_at": "2025-07-14T00:41:24.997354+00:00"
+        }
+      }
+    },
+    "learnContent": {
+      "Math": {
+        "instruction": {
+          "title": "Let's Learn About Numbers!",
+          "content": "Hi Sam Brown! Today we're learning to count and recognize numbers.",
+          "concept": "Numbers help us count things and understand how many we have.",
+          "examples": [
+            {
+              "question": "What does the number 2 mean?",
+              "answer": "The number 2 means we have 2 things.",
+              "explanation": "If we have 2 apples, we can count: 1, 2."
+            }
+          ],
+          "keyPoints": [
+            "Numbers help us count things",
+            "We can see numbers all around us",
+            "Counting helps us understand \"how many\""
+          ]
+        },
+        "practice": {
+          "title": "Practice Counting",
+          "exercises": [
+            {
+              "question": "Count these dots: • • How many dots are there?",
+              "hint": "Count each dot: 1, 2, 3...",
+              "expectedAnswer": "2",
+              "feedback": "Great counting! There are 2 dots."
+            }
+          ]
+        },
+        "assessment": {
+          "question": "Which number comes after 2?",
+          "options": [
+            "3",
+            "1",
+            "2",
+            "0"
+          ],
+          "correctAnswer": "3",
+          "explanation": "Numbers go in order: 1, 2, 3... So 3 comes after 2!",
+          "feedback": {
+            "correct": "Perfect Sam Brown! You know your number order!",
+            "incorrect": "Not quite, but keep practicing! Numbers go in order."
+          }
+        }
+      },
+      "ELA": {
+        "instruction": {
+          "title": "Let's Learn About Letters!",
+          "content": "Hi Sam Brown! Today we're learning to find and recognize letters in the alphabet.",
+          "concept": "Letters are the building blocks of words. Each letter has a shape and a sound.",
+          "examples": [
+            {
+              "question": "What does the letter C look like?",
+              "answer": "The letter C is an uppercase letter that looks like this: C",
+              "explanation": "We can find the letter C in many words, like \"Apple\" or \"Ball\"."
+            }
+          ],
+          "keyPoints": [
+            "Every letter has a special shape",
+            "We can find letters in the alphabet",
+            "Letters help us read and write words"
+          ]
+        },
+        "practice": {
+          "title": "Practice Finding Letters",
+          "exercises": [
+            {
+              "question": "Can you find the letter C in this row? A B C D E",
+              "hint": "Look for the letter that matches: C",
+              "expectedAnswer": "C",
+              "feedback": "Great job finding the letter C!"
+            }
+          ]
+        },
+        "assessment": {
+          "question": "Which letter comes after C in the alphabet?",
+          "options": [
+            "D",
+            "B",
+            "E",
+            "C"
+          ],
+          "correctAnswer": "D",
+          "explanation": "The letters go in order: A, B, C, D, E... So D comes after C!",
+          "feedback": {
+            "correct": "Perfect Sam Brown! You know your alphabet order!",
+            "incorrect": "Not quite, but keep practicing! The alphabet has a special order."
+          }
+        }
+      },
+      "Science": {
+        "instruction": {
+          "title": "Let's Explore Science!",
+          "content": "Hi Sam Brown! Today we're discovering the amazing world of science.",
+          "concept": "Science helps us understand how things work and why things happen.",
+          "examples": [
+            {
+              "question": "What can we learn from science?",
+              "answer": "Science teaches us about animals, plants, weather, and how things move.",
+              "explanation": "Scientists ask questions and do experiments to learn new things!"
+            }
+          ],
+          "keyPoints": [
+            "Science helps us understand the world",
+            "We can observe and ask questions",
+            "Science is all around us"
+          ]
+        },
+        "practice": {
+          "title": "Practice Science Skills",
+          "exercises": [
+            {
+              "question": "Look at a leaf. What do you notice about its color and shape?",
+              "hint": "Use your eyes to observe carefully",
+              "expectedAnswer": "Various observations possible",
+              "feedback": "Great observation! Scientists use their senses to learn."
+            }
+          ]
+        },
+        "assessment": {
+          "question": "What do scientists do?",
+          "options": [
+            "They only read books",
+            "They ask questions and explore",
+            "They stay inside all day",
+            "They don't like learning"
+          ],
+          "correctAnswer": "They ask questions and explore",
+          "explanation": "Scientists are curious and love to ask questions about how things work!",
+          "feedback": {
+            "correct": "Perfect Sam Brown! You think like a scientist!",
+            "incorrect": "Keep exploring! Scientists are curious and ask lots of questions."
+          }
+        }
+      },
+      "SocialStudies": {
+        "instruction": {
+          "title": "Let's Learn About Our Community!",
+          "content": "Hi Sam Brown! Today we're learning about the people and places around us.",
+          "concept": "A community is all the people who live and work together in the same place.",
+          "examples": [
+            {
+              "question": "Who are the helpers in our community?",
+              "answer": "Teachers, firefighters, doctors, and store workers help make our community great.",
+              "explanation": "Everyone in our community has a job that helps other people!"
+            }
+          ],
+          "keyPoints": [
+            "We are part of a community",
+            "People in our community help each other",
+            "Communities have schools, stores, and parks"
+          ]
+        },
+        "practice": {
+          "title": "Practice Community Skills",
+          "exercises": [
+            {
+              "question": "Name a place in your community where people go to learn.",
+              "hint": "Think about where children go during the day to learn new things",
+              "expectedAnswer": "school",
+              "feedback": "Yes! Schools are where people go to learn in our community."
+            }
+          ]
+        },
+        "assessment": {
+          "question": "What makes a good community?",
+          "options": [
+            "People who never talk to each other",
+            "People who help and care for each other",
+            "Only one type of person",
+            "No rules or helpers"
+          ],
+          "correctAnswer": "People who help and care for each other",
+          "explanation": "Good communities have people who work together and help each other!",
+          "feedback": {
+            "correct": "Wonderful Sam Brown! You understand what makes communities special!",
+            "incorrect": "Keep learning! Good communities have people who care for each other."
+          }
+        }
+      }
+    },
+    "careerContent": {
+      "Chef": {
+        "experience": {
+          "Math": {
+            "roleSetup": {
+              "title": "Working as a Chef",
+              "roleDescription": "Today you're a professional Chef in a restaurant kitchen!",
+              "challenge": "Your mission: calculating recipe proportions for a large dinner party",
+              "context": "As a Chef, you'll use your Identify numbers - up to 3 skills to help with this Math challenge",
+              "tools": "You have these tools: ingredients, recipes, cooking equipment"
+            },
+            "applySkills": {
+              "title": "Chef Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Chef needs to apply Identify numbers - up to 3 skills for Math",
+                  "task": "Use your Identify numbers - up to 3 knowledge to calculating recipe proportions for a large dinner party",
+                  "expectedOutcome": "Successfully complete the Math-focused Chef task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Identify numbers - up to 3",
+                  "application": "How a Chef uses Identify numbers - up to 3 for Math tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Identify numbers - up to 3 to complete this Chef challenge?",
+              "options": [
+                "Apply Identify numbers - up to 3 step by step",
+                "Skip the Math part and focus on other things",
+                "Ask someone else to handle the Math work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Identify numbers - up to 3 step by step",
+              "explanation": "Great Chefs know that applying Identify numbers - up to 3 systematically leads to the best results in Math tasks!",
+              "success": "Congratulations Sam Brown! You've successfully used Identify numbers - up to 3 to complete your Chef challenge!"
+            }
+          },
+          "ELA": {
+            "roleSetup": {
+              "title": "Working as a Chef",
+              "roleDescription": "Today you're a professional Chef in a restaurant kitchen!",
+              "challenge": "Your mission: writing clear menu descriptions for diverse customers",
+              "context": "As a Chef, you'll use your Find the letter in the alphabet: uppercase skills to help with this ELA challenge",
+              "tools": "You have these tools: ingredients, recipes, cooking equipment"
+            },
+            "applySkills": {
+              "title": "Chef Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Chef needs to apply Find the letter in the alphabet: uppercase skills for ELA",
+                  "task": "Use your Find the letter in the alphabet: uppercase knowledge to writing clear menu descriptions for diverse customers",
+                  "expectedOutcome": "Successfully complete the ELA-focused Chef task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Find the letter in the alphabet: uppercase",
+                  "application": "How a Chef uses Find the letter in the alphabet: uppercase for ELA tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Find the letter in the alphabet: uppercase to complete this Chef challenge?",
+              "options": [
+                "Apply Find the letter in the alphabet: uppercase step by step",
+                "Skip the ELA part and focus on other things",
+                "Ask someone else to handle the ELA work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Find the letter in the alphabet: uppercase step by step",
+              "explanation": "Great Chefs know that applying Find the letter in the alphabet: uppercase systematically leads to the best results in ELA tasks!",
+              "success": "Congratulations Sam Brown! You've successfully used Find the letter in the alphabet: uppercase to complete your Chef challenge!"
+            }
+          },
+          "Science": {
+            "roleSetup": {
+              "title": "Working as a Chef",
+              "roleDescription": "Today you're a professional Chef in a restaurant kitchen!",
+              "challenge": "Your mission: understanding cooking temperatures and food safety",
+              "context": "As a Chef, you'll use your Classify objects by two-dimensional shape skills to help with this Science challenge",
+              "tools": "You have these tools: ingredients, recipes, cooking equipment"
+            },
+            "applySkills": {
+              "title": "Chef Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Chef needs to apply Classify objects by two-dimensional shape skills for Science",
+                  "task": "Use your Classify objects by two-dimensional shape knowledge to understanding cooking temperatures and food safety",
+                  "expectedOutcome": "Successfully complete the Science-focused Chef task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Classify objects by two-dimensional shape",
+                  "application": "How a Chef uses Classify objects by two-dimensional shape for Science tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Classify objects by two-dimensional shape to complete this Chef challenge?",
+              "options": [
+                "Apply Classify objects by two-dimensional shape step by step",
+                "Skip the Science part and focus on other things",
+                "Ask someone else to handle the Science work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Classify objects by two-dimensional shape step by step",
+              "explanation": "Great Chefs know that applying Classify objects by two-dimensional shape systematically leads to the best results in Science tasks!",
+              "success": "Congratulations Sam Brown! You've successfully used Classify objects by two-dimensional shape to complete your Chef challenge!"
+            }
+          },
+          "SocialStudies": {
+            "roleSetup": {
+              "title": "Working as a Chef",
+              "roleDescription": "Today you're a professional Chef in a restaurant kitchen!",
+              "challenge": "Your mission: creating culturally diverse menu options for the community",
+              "context": "As a Chef, you'll use your What is a community? skills to help with this SocialStudies challenge",
+              "tools": "You have these tools: ingredients, recipes, cooking equipment"
+            },
+            "applySkills": {
+              "title": "Chef Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Chef needs to apply What is a community? skills for SocialStudies",
+                  "task": "Use your What is a community? knowledge to creating culturally diverse menu options for the community",
+                  "expectedOutcome": "Successfully complete the SocialStudies-focused Chef task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "What is a community?",
+                  "application": "How a Chef uses What is a community? for SocialStudies tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use What is a community? to complete this Chef challenge?",
+              "options": [
+                "Apply What is a community? step by step",
+                "Skip the SocialStudies part and focus on other things",
+                "Ask someone else to handle the SocialStudies work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply What is a community? step by step",
+              "explanation": "Great Chefs know that applying What is a community? systematically leads to the best results in SocialStudies tasks!",
+              "success": "Congratulations Sam Brown! You've successfully used What is a community? to complete your Chef challenge!"
+            }
+          }
+        },
+        "discover": {
+          "storySetup": {
+            "title": "Sam Brown's Chef Adventure",
+            "setting": "In a magical kitchen in the clouds...",
+            "characters": [
+              "Sam Brown",
+              "Master Chef",
+              "Helpful Companion"
+            ],
+            "plot": "The kingdom needs Sam Brown to save the Kingdom's Grand Feast using Chef skills!",
+            "skillConnection": "This adventure requires: Identify numbers - up to 3, Find the letter in the alphabet: uppercase, Classify objects by two-dimensional shape, What is a community?"
+          },
+          "adventure": {
+            "title": "The Chef Quest",
+            "storyEvents": [
+              {
+                "event": "the Sour Wizard has appeared and threatens the kingdom!",
+                "choice": "Use your Chef training and learned skills",
+                "outcome": "Sam Brown bravely steps forward to help",
+                "skillApplication": "Time to use: Identify numbers - up to 3, Find the letter in the alphabet: uppercase, Classify objects by two-dimensional shape, What is a community?"
+              },
+              {
+                "event": "You must find the golden recipes to succeed",
+                "choice": "Combine all your learned skills",
+                "outcome": "The skills work together like magic!",
+                "skillApplication": "Each skill adds power to your quest"
+              }
+            ]
+          },
+          "herosChoice": {
+            "question": "How does Sam Brown save the kingdom?",
+            "options": [
+              "Use only the strongest skill",
+              "Try each skill one by one",
+              "Combine all skills with wisdom",
+              "Ask others to solve it instead"
+            ],
+            "correctAnswer": "Combine all skills with wisdom",
+            "explanation": "True heroes know that all skills working together create the most powerful magic!",
+            "ending": "🌟 Sam Brown becomes the legendary Chef hero, saving the kingdom with wisdom and skill! The people cheer as golden recipes glow brightly once more!"
+          }
+        }
+      },
+      "Librarian": {
+        "experience": {
+          "Math": {
+            "roleSetup": {
+              "title": "Working as a Librarian",
+              "roleDescription": "Today you're a professional Librarian in a community library!",
+              "challenge": "Your mission: organizing books by number classification and calculating reading statistics",
+              "context": "As a Librarian, you'll use your Identify numbers - up to 3 skills to help with this Math challenge",
+              "tools": "You have these tools: books, computers, display materials"
+            },
+            "applySkills": {
+              "title": "Librarian Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Librarian needs to apply Identify numbers - up to 3 skills for Math",
+                  "task": "Use your Identify numbers - up to 3 knowledge to organizing books by number classification and calculating reading statistics",
+                  "expectedOutcome": "Successfully complete the Math-focused Librarian task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Identify numbers - up to 3",
+                  "application": "How a Librarian uses Identify numbers - up to 3 for Math tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Identify numbers - up to 3 to complete this Librarian challenge?",
+              "options": [
+                "Apply Identify numbers - up to 3 step by step",
+                "Skip the Math part and focus on other things",
+                "Ask someone else to handle the Math work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Identify numbers - up to 3 step by step",
+              "explanation": "Great Librarians know that applying Identify numbers - up to 3 systematically leads to the best results in Math tasks!",
+              "success": "Congratulations Sam Brown! You've successfully used Identify numbers - up to 3 to complete your Librarian challenge!"
+            }
+          },
+          "ELA": {
+            "roleSetup": {
+              "title": "Working as a Librarian",
+              "roleDescription": "Today you're a professional Librarian in a community library!",
+              "challenge": "Your mission: curating age-appropriate reading materials and leading story sessions",
+              "context": "As a Librarian, you'll use your Find the letter in the alphabet: uppercase skills to help with this ELA challenge",
+              "tools": "You have these tools: books, computers, display materials"
+            },
+            "applySkills": {
+              "title": "Librarian Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Librarian needs to apply Find the letter in the alphabet: uppercase skills for ELA",
+                  "task": "Use your Find the letter in the alphabet: uppercase knowledge to curating age-appropriate reading materials and leading story sessions",
+                  "expectedOutcome": "Successfully complete the ELA-focused Librarian task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Find the letter in the alphabet: uppercase",
+                  "application": "How a Librarian uses Find the letter in the alphabet: uppercase for ELA tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Find the letter in the alphabet: uppercase to complete this Librarian challenge?",
+              "options": [
+                "Apply Find the letter in the alphabet: uppercase step by step",
+                "Skip the ELA part and focus on other things",
+                "Ask someone else to handle the ELA work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Find the letter in the alphabet: uppercase step by step",
+              "explanation": "Great Librarians know that applying Find the letter in the alphabet: uppercase systematically leads to the best results in ELA tasks!",
+              "success": "Congratulations Sam Brown! You've successfully used Find the letter in the alphabet: uppercase to complete your Librarian challenge!"
+            }
+          },
+          "Science": {
+            "roleSetup": {
+              "title": "Working as a Librarian",
+              "roleDescription": "Today you're a professional Librarian in a community library!",
+              "challenge": "Your mission: setting up a science book display and demonstration area",
+              "context": "As a Librarian, you'll use your Classify objects by two-dimensional shape skills to help with this Science challenge",
+              "tools": "You have these tools: books, computers, display materials"
+            },
+            "applySkills": {
+              "title": "Librarian Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Librarian needs to apply Classify objects by two-dimensional shape skills for Science",
+                  "task": "Use your Classify objects by two-dimensional shape knowledge to setting up a science book display and demonstration area",
+                  "expectedOutcome": "Successfully complete the Science-focused Librarian task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Classify objects by two-dimensional shape",
+                  "application": "How a Librarian uses Classify objects by two-dimensional shape for Science tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Classify objects by two-dimensional shape to complete this Librarian challenge?",
+              "options": [
+                "Apply Classify objects by two-dimensional shape step by step",
+                "Skip the Science part and focus on other things",
+                "Ask someone else to handle the Science work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Classify objects by two-dimensional shape step by step",
+              "explanation": "Great Librarians know that applying Classify objects by two-dimensional shape systematically leads to the best results in Science tasks!",
+              "success": "Congratulations Sam Brown! You've successfully used Classify objects by two-dimensional shape to complete your Librarian challenge!"
+            }
+          },
+          "SocialStudies": {
+            "roleSetup": {
+              "title": "Working as a Librarian",
+              "roleDescription": "Today you're a professional Librarian in a community library!",
+              "challenge": "Your mission: creating exhibits about diverse cultures and community history",
+              "context": "As a Librarian, you'll use your What is a community? skills to help with this SocialStudies challenge",
+              "tools": "You have these tools: books, computers, display materials"
+            },
+            "applySkills": {
+              "title": "Librarian Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Librarian needs to apply What is a community? skills for SocialStudies",
+                  "task": "Use your What is a community? knowledge to creating exhibits about diverse cultures and community history",
+                  "expectedOutcome": "Successfully complete the SocialStudies-focused Librarian task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "What is a community?",
+                  "application": "How a Librarian uses What is a community? for SocialStudies tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use What is a community? to complete this Librarian challenge?",
+              "options": [
+                "Apply What is a community? step by step",
+                "Skip the SocialStudies part and focus on other things",
+                "Ask someone else to handle the SocialStudies work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply What is a community? step by step",
+              "explanation": "Great Librarians know that applying What is a community? systematically leads to the best results in SocialStudies tasks!",
+              "success": "Congratulations Sam Brown! You've successfully used What is a community? to complete your Librarian challenge!"
+            }
+          }
+        },
+        "discover": {
+          "storySetup": {
+            "title": "Sam Brown's Librarian Adventure",
+            "setting": "In a enchanted library with talking books...",
+            "characters": [
+              "Sam Brown",
+              "Master Librarian",
+              "Helpful Companion"
+            ],
+            "plot": "The kingdom needs Sam Brown to restore the lost stories using Librarian skills!",
+            "skillConnection": "This adventure requires: Identify numbers - up to 3, Find the letter in the alphabet: uppercase, Classify objects by two-dimensional shape, What is a community?"
+          },
+          "adventure": {
+            "title": "The Librarian Quest",
+            "storyEvents": [
+              {
+                "event": "the Silent Specter has appeared and threatens the kingdom!",
+                "choice": "Use your Librarian training and learned skills",
+                "outcome": "Sam Brown bravely steps forward to help",
+                "skillApplication": "Time to use: Identify numbers - up to 3, Find the letter in the alphabet: uppercase, Classify objects by two-dimensional shape, What is a community?"
+              },
+              {
+                "event": "You must find the glowing knowledge crystals to succeed",
+                "choice": "Combine all your learned skills",
+                "outcome": "The skills work together like magic!",
+                "skillApplication": "Each skill adds power to your quest"
+              }
+            ]
+          },
+          "herosChoice": {
+            "question": "How does Sam Brown save the kingdom?",
+            "options": [
+              "Use only the strongest skill",
+              "Try each skill one by one",
+              "Combine all skills with wisdom",
+              "Ask others to solve it instead"
+            ],
+            "correctAnswer": "Combine all skills with wisdom",
+            "explanation": "True heroes know that all skills working together create the most powerful magic!",
+            "ending": "🌟 Sam Brown becomes the legendary Librarian hero, saving the kingdom with wisdom and skill! The people cheer as glowing knowledge crystals glow brightly once more!"
+          }
+        }
+      },
+      "Park Ranger": {
+        "experience": {
+          "Math": {
+            "roleSetup": {
+              "title": "Working as a Park Ranger",
+              "roleDescription": "Today you're a professional Park Ranger in a national park!",
+              "challenge": "Your mission: calculating trail distances and visitor capacity for safety",
+              "context": "As a Park Ranger, you'll use your Identify numbers - up to 3 skills to help with this Math challenge",
+              "tools": "You have these tools: maps, field guides, safety equipment"
+            },
+            "applySkills": {
+              "title": "Park Ranger Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Park Ranger needs to apply Identify numbers - up to 3 skills for Math",
+                  "task": "Use your Identify numbers - up to 3 knowledge to calculating trail distances and visitor capacity for safety",
+                  "expectedOutcome": "Successfully complete the Math-focused Park Ranger task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Identify numbers - up to 3",
+                  "application": "How a Park Ranger uses Identify numbers - up to 3 for Math tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Identify numbers - up to 3 to complete this Park Ranger challenge?",
+              "options": [
+                "Apply Identify numbers - up to 3 step by step",
+                "Skip the Math part and focus on other things",
+                "Ask someone else to handle the Math work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Identify numbers - up to 3 step by step",
+              "explanation": "Great Park Rangers know that applying Identify numbers - up to 3 systematically leads to the best results in Math tasks!",
+              "success": "Congratulations Sam Brown! You've successfully used Identify numbers - up to 3 to complete your Park Ranger challenge!"
+            }
+          },
+          "ELA": {
+            "roleSetup": {
+              "title": "Working as a Park Ranger",
+              "roleDescription": "Today you're a professional Park Ranger in a national park!",
+              "challenge": "Your mission: writing informative trail guides and interpretive signs",
+              "context": "As a Park Ranger, you'll use your Find the letter in the alphabet: uppercase skills to help with this ELA challenge",
+              "tools": "You have these tools: maps, field guides, safety equipment"
+            },
+            "applySkills": {
+              "title": "Park Ranger Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Park Ranger needs to apply Find the letter in the alphabet: uppercase skills for ELA",
+                  "task": "Use your Find the letter in the alphabet: uppercase knowledge to writing informative trail guides and interpretive signs",
+                  "expectedOutcome": "Successfully complete the ELA-focused Park Ranger task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Find the letter in the alphabet: uppercase",
+                  "application": "How a Park Ranger uses Find the letter in the alphabet: uppercase for ELA tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Find the letter in the alphabet: uppercase to complete this Park Ranger challenge?",
+              "options": [
+                "Apply Find the letter in the alphabet: uppercase step by step",
+                "Skip the ELA part and focus on other things",
+                "Ask someone else to handle the ELA work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Find the letter in the alphabet: uppercase step by step",
+              "explanation": "Great Park Rangers know that applying Find the letter in the alphabet: uppercase systematically leads to the best results in ELA tasks!",
+              "success": "Congratulations Sam Brown! You've successfully used Find the letter in the alphabet: uppercase to complete your Park Ranger challenge!"
+            }
+          },
+          "Science": {
+            "roleSetup": {
+              "title": "Working as a Park Ranger",
+              "roleDescription": "Today you're a professional Park Ranger in a national park!",
+              "challenge": "Your mission: explaining ecosystem relationships and wildlife behaviors",
+              "context": "As a Park Ranger, you'll use your Classify objects by two-dimensional shape skills to help with this Science challenge",
+              "tools": "You have these tools: maps, field guides, safety equipment"
+            },
+            "applySkills": {
+              "title": "Park Ranger Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Park Ranger needs to apply Classify objects by two-dimensional shape skills for Science",
+                  "task": "Use your Classify objects by two-dimensional shape knowledge to explaining ecosystem relationships and wildlife behaviors",
+                  "expectedOutcome": "Successfully complete the Science-focused Park Ranger task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Classify objects by two-dimensional shape",
+                  "application": "How a Park Ranger uses Classify objects by two-dimensional shape for Science tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Classify objects by two-dimensional shape to complete this Park Ranger challenge?",
+              "options": [
+                "Apply Classify objects by two-dimensional shape step by step",
+                "Skip the Science part and focus on other things",
+                "Ask someone else to handle the Science work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Classify objects by two-dimensional shape step by step",
+              "explanation": "Great Park Rangers know that applying Classify objects by two-dimensional shape systematically leads to the best results in Science tasks!",
+              "success": "Congratulations Sam Brown! You've successfully used Classify objects by two-dimensional shape to complete your Park Ranger challenge!"
+            }
+          },
+          "SocialStudies": {
+            "roleSetup": {
+              "title": "Working as a Park Ranger",
+              "roleDescription": "Today you're a professional Park Ranger in a national park!",
+              "challenge": "Your mission: sharing indigenous history and cultural significance of the land",
+              "context": "As a Park Ranger, you'll use your What is a community? skills to help with this SocialStudies challenge",
+              "tools": "You have these tools: maps, field guides, safety equipment"
+            },
+            "applySkills": {
+              "title": "Park Ranger Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Park Ranger needs to apply What is a community? skills for SocialStudies",
+                  "task": "Use your What is a community? knowledge to sharing indigenous history and cultural significance of the land",
+                  "expectedOutcome": "Successfully complete the SocialStudies-focused Park Ranger task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "What is a community?",
+                  "application": "How a Park Ranger uses What is a community? for SocialStudies tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use What is a community? to complete this Park Ranger challenge?",
+              "options": [
+                "Apply What is a community? step by step",
+                "Skip the SocialStudies part and focus on other things",
+                "Ask someone else to handle the SocialStudies work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply What is a community? step by step",
+              "explanation": "Great Park Rangers know that applying What is a community? systematically leads to the best results in SocialStudies tasks!",
+              "success": "Congratulations Sam Brown! You've successfully used What is a community? to complete your Park Ranger challenge!"
+            }
+          }
+        },
+        "discover": {
+          "storySetup": {
+            "title": "Sam Brown's Park Ranger Adventure",
+            "setting": "In a mystical forest with ancient trees...",
+            "characters": [
+              "Sam Brown",
+              "Master Park Ranger",
+              "Helpful Companion"
+            ],
+            "plot": "The kingdom needs Sam Brown to protect the Sacred Grove using Park Ranger skills!",
+            "skillConnection": "This adventure requires: Identify numbers - up to 3, Find the letter in the alphabet: uppercase, Classify objects by two-dimensional shape, What is a community?"
+          },
+          "adventure": {
+            "title": "The Park Ranger Quest",
+            "storyEvents": [
+              {
+                "event": "the Shadow Destroyer has appeared and threatens the kingdom!",
+                "choice": "Use your Park Ranger training and learned skills",
+                "outcome": "Sam Brown bravely steps forward to help",
+                "skillApplication": "Time to use: Identify numbers - up to 3, Find the letter in the alphabet: uppercase, Classify objects by two-dimensional shape, What is a community?"
+              },
+              {
+                "event": "You must find the nature's harmony stones to succeed",
+                "choice": "Combine all your learned skills",
+                "outcome": "The skills work together like magic!",
+                "skillApplication": "Each skill adds power to your quest"
+              }
+            ]
+          },
+          "herosChoice": {
+            "question": "How does Sam Brown save the kingdom?",
+            "options": [
+              "Use only the strongest skill",
+              "Try each skill one by one",
+              "Combine all skills with wisdom",
+              "Ask others to solve it instead"
+            ],
+            "correctAnswer": "Combine all skills with wisdom",
+            "explanation": "True heroes know that all skills working together create the most powerful magic!",
+            "ending": "🌟 Sam Brown becomes the legendary Park Ranger hero, saving the kingdom with wisdom and skill! The people cheer as nature's harmony stones glow brightly once more!"
+          }
+        }
+      }
+    },
+    "generatedAt": "2025-07-16T19:29:37.750Z",
+    "subjects": [
+      "Math",
+      "ELA",
+      "Science",
+      "SocialStudies"
+    ],
+    "careers": [
+      "Chef",
+      "Librarian",
+      "Park Ranger"
+    ]
+  },
+  "Alex Davis": {
+    "user": {
+      "name": "Alex Davis",
+      "grade": "1",
+      "gradeLevel": "1st Grade"
+    },
+    "dashboardCards": [
+      {
+        "subject": "Math",
+        "title": "Counting to 100",
+        "description": "Learn Math fundamentals",
+        "skillNumber": "A.0"
+      },
+      {
+        "subject": "ELA",
+        "title": "Consonants and vowels",
+        "description": "Learn ELA fundamentals",
+        "skillNumber": "A.0"
+      },
+      {
+        "subject": "Science",
+        "title": "Shapes and colors",
+        "description": "Learn Science fundamentals",
+        "skillNumber": "A.0"
+      },
+      {
+        "subject": "SocialStudies",
+        "title": "Civics",
+        "description": "Learn SocialStudies fundamentals",
+        "skillNumber": "A.0"
+      }
+    ],
+    "skills": {
+      "Math": {
+        "A.0": {
+          "id": "e50be6b3-fa3a-4a8f-b2d3-2b260fc49918",
+          "subject": "Math",
+          "grade": "1",
+          "skills_area": "Math Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.0",
+          "skill_name": "Counting to 100",
+          "skill_description": null,
+          "difficulty_level": 6,
+          "estimated_time_minutes": 50,
+          "prerequisites": null,
+          "created_at": "2025-07-14T00:41:25.186703+00:00",
+          "updated_at": "2025-07-14T00:41:25.186703+00:00"
+        },
+        "A.1": {
+          "id": "c6c3de3c-9d7f-40d9-9e6b-079fa36b4ad6",
+          "subject": "Math",
+          "grade": "1",
+          "skills_area": "Math Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.1",
+          "skill_name": "Counting review - up to 10",
+          "skill_description": null,
+          "difficulty_level": 6,
+          "estimated_time_minutes": 50,
+          "prerequisites": null,
+          "created_at": "2025-07-14T00:41:25.186703+00:00",
+          "updated_at": "2025-07-14T00:41:25.186703+00:00"
+        }
+      },
+      "ELA": {
+        "A.0": {
+          "id": "cb844b6b-301e-4b71-b47c-6715597ef0db",
+          "subject": "ELA",
+          "grade": "1",
+          "skills_area": "Reading Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.0",
+          "skill_name": "Consonants and vowels",
+          "skill_description": null,
+          "difficulty_level": 4,
+          "estimated_time_minutes": 55,
+          "prerequisites": null,
+          "created_at": "2025-07-14T00:41:34.044831+00:00",
+          "updated_at": "2025-07-14T00:41:34.044831+00:00"
+        },
+        "A.1": {
+          "id": "7a93cc28-18c6-4592-b25c-535b5b07f517",
+          "subject": "ELA",
+          "grade": "1",
+          "skills_area": "Reading Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.1",
+          "skill_name": "Sort consonants and vowels",
+          "skill_description": null,
+          "difficulty_level": 4,
+          "estimated_time_minutes": 55,
+          "prerequisites": null,
+          "created_at": "2025-07-14T00:41:34.044831+00:00",
+          "updated_at": "2025-07-14T00:41:34.044831+00:00"
+        }
+      },
+      "Science": {
+        "A.0": {
+          "id": "d3572214-7881-49ed-ae49-d2e70c11b745",
+          "subject": "Science",
+          "grade": "1",
+          "skills_area": "Science Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.0",
+          "skill_name": "Shapes and colors",
+          "skill_description": null,
+          "difficulty_level": 4,
+          "estimated_time_minutes": 50,
+          "prerequisites": null,
+          "created_at": "2025-07-14T00:41:34.415625+00:00",
+          "updated_at": "2025-07-14T00:41:34.415625+00:00"
+        },
+        "A.1": {
+          "id": "1476447b-3745-45f8-80ed-460b6b0d3226",
+          "subject": "Science",
+          "grade": "1",
+          "skills_area": "Science Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.1",
+          "skill_name": "Classify objects by two-dimensional shape",
+          "skill_description": null,
+          "difficulty_level": 4,
+          "estimated_time_minutes": 50,
+          "prerequisites": null,
+          "created_at": "2025-07-14T00:41:34.415625+00:00",
+          "updated_at": "2025-07-14T00:41:34.415625+00:00"
+        }
+      },
+      "SocialStudies": {
+        "A.0": {
+          "id": "2ca7ff82-6c92-46a1-8722-9d64d9c8e5c2",
+          "subject": "SocialStudies",
+          "grade": "1",
+          "skills_area": "SS Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.0",
+          "skill_name": "Civics",
+          "skill_description": null,
+          "difficulty_level": 4,
+          "estimated_time_minutes": 45,
+          "prerequisites": null,
+          "created_at": "2025-07-14T00:41:34.499266+00:00",
+          "updated_at": "2025-07-14T00:41:34.499266+00:00"
+        },
+        "A.1": {
+          "id": "4258185e-875c-4a4d-8fbb-54c5b9d99502",
+          "subject": "SocialStudies",
+          "grade": "1",
+          "skills_area": "SS Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.1",
+          "skill_name": "Rules and laws",
+          "skill_description": null,
+          "difficulty_level": 4,
+          "estimated_time_minutes": 45,
+          "prerequisites": null,
+          "created_at": "2025-07-14T00:41:34.499266+00:00",
+          "updated_at": "2025-07-14T00:41:34.499266+00:00"
+        }
+      }
+    },
+    "learnContent": {
+      "Math": {
+        "instruction": {
+          "title": "Let's Learn Math!",
+          "content": "Hi Alex Davis! Today we're exploring the wonderful world of math.",
+          "concept": "Math helps us solve problems and understand the world around us.",
+          "examples": [
+            {
+              "question": "How do we use math every day?",
+              "answer": "We use math to count toys, share snacks, and measure things.",
+              "explanation": "Math is everywhere! We use it for cooking, shopping, and playing games."
+            }
+          ],
+          "keyPoints": [
+            "Math helps us solve problems",
+            "We use math every day",
+            "Math can be fun and useful"
+          ]
+        },
+        "practice": {
+          "title": "Practice Math Skills",
+          "exercises": [
+            {
+              "question": "If you have 2 apples and get 1 more, how many apples do you have?",
+              "hint": "Count: 2 + 1 = ?",
+              "expectedAnswer": "3",
+              "feedback": "Yes! 2 + 1 = 3 apples."
+            }
+          ]
+        },
+        "assessment": {
+          "question": "What do we use math for?",
+          "options": [
+            "Only for homework",
+            "Just for tests",
+            "To solve problems and count things",
+            "Nothing important"
+          ],
+          "correctAnswer": "To solve problems and count things",
+          "explanation": "Math helps us solve problems and understand numbers in our daily life!",
+          "feedback": {
+            "correct": "Excellent Alex Davis! You understand why math is important!",
+            "incorrect": "Keep learning! Math is useful for many things."
+          }
+        }
+      },
+      "ELA": {
+        "instruction": {
+          "title": "Let's Learn About Reading!",
+          "content": "Hi Alex Davis! Today we're building our reading skills.",
+          "concept": "Reading helps us understand stories and learn new things.",
+          "examples": [
+            {
+              "question": "Why is reading important?",
+              "answer": "Reading helps us learn about the world and understand stories.",
+              "explanation": "When we read, we can discover new places, meet new characters, and learn amazing facts!"
+            }
+          ],
+          "keyPoints": [
+            "Reading opens up new worlds",
+            "We can read books, signs, and stories",
+            "Practice makes reading easier and more fun"
+          ]
+        },
+        "practice": {
+          "title": "Practice Reading Skills",
+          "exercises": [
+            {
+              "question": "Read this simple sentence: \"The cat sat on the mat.\" What animal is mentioned?",
+              "hint": "Look for the animal word in the sentence",
+              "expectedAnswer": "cat",
+              "feedback": "Yes! The cat is the animal in the sentence."
+            }
+          ]
+        },
+        "assessment": {
+          "question": "What do good readers do?",
+          "options": [
+            "They skip words they don't know",
+            "They read too fast to understand",
+            "They think about what they're reading",
+            "They only read short words"
+          ],
+          "correctAnswer": "They think about what they're reading",
+          "explanation": "Good readers think about the story and try to understand what's happening!",
+          "feedback": {
+            "correct": "Excellent Alex Davis! You understand what good reading is!",
+            "incorrect": "Keep learning! Good readers take time to understand the story."
+          }
+        }
+      },
+      "Science": {
+        "instruction": {
+          "title": "Let's Explore Science!",
+          "content": "Hi Alex Davis! Today we're discovering the amazing world of science.",
+          "concept": "Science helps us understand how things work and why things happen.",
+          "examples": [
+            {
+              "question": "What can we learn from science?",
+              "answer": "Science teaches us about animals, plants, weather, and how things move.",
+              "explanation": "Scientists ask questions and do experiments to learn new things!"
+            }
+          ],
+          "keyPoints": [
+            "Science helps us understand the world",
+            "We can observe and ask questions",
+            "Science is all around us"
+          ]
+        },
+        "practice": {
+          "title": "Practice Science Skills",
+          "exercises": [
+            {
+              "question": "Look at a leaf. What do you notice about its color and shape?",
+              "hint": "Use your eyes to observe carefully",
+              "expectedAnswer": "Various observations possible",
+              "feedback": "Great observation! Scientists use their senses to learn."
+            }
+          ]
+        },
+        "assessment": {
+          "question": "What do scientists do?",
+          "options": [
+            "They only read books",
+            "They ask questions and explore",
+            "They stay inside all day",
+            "They don't like learning"
+          ],
+          "correctAnswer": "They ask questions and explore",
+          "explanation": "Scientists are curious and love to ask questions about how things work!",
+          "feedback": {
+            "correct": "Perfect Alex Davis! You think like a scientist!",
+            "incorrect": "Keep exploring! Scientists are curious and ask lots of questions."
+          }
+        }
+      },
+      "SocialStudies": {
+        "instruction": {
+          "title": "Let's Learn About Our Community!",
+          "content": "Hi Alex Davis! Today we're learning about the people and places around us.",
+          "concept": "A community is all the people who live and work together in the same place.",
+          "examples": [
+            {
+              "question": "Who are the helpers in our community?",
+              "answer": "Teachers, firefighters, doctors, and store workers help make our community great.",
+              "explanation": "Everyone in our community has a job that helps other people!"
+            }
+          ],
+          "keyPoints": [
+            "We are part of a community",
+            "People in our community help each other",
+            "Communities have schools, stores, and parks"
+          ]
+        },
+        "practice": {
+          "title": "Practice Community Skills",
+          "exercises": [
+            {
+              "question": "Name a place in your community where people go to learn.",
+              "hint": "Think about where children go during the day to learn new things",
+              "expectedAnswer": "school",
+              "feedback": "Yes! Schools are where people go to learn in our community."
+            }
+          ]
+        },
+        "assessment": {
+          "question": "What makes a good community?",
+          "options": [
+            "People who never talk to each other",
+            "People who help and care for each other",
+            "Only one type of person",
+            "No rules or helpers"
+          ],
+          "correctAnswer": "People who help and care for each other",
+          "explanation": "Good communities have people who work together and help each other!",
+          "feedback": {
+            "correct": "Wonderful Alex Davis! You understand what makes communities special!",
+            "incorrect": "Keep learning! Good communities have people who care for each other."
+          }
+        }
+      }
+    },
+    "careerContent": {
+      "Chef": {
+        "experience": {
+          "Math": {
+            "roleSetup": {
+              "title": "Working as a Chef",
+              "roleDescription": "Today you're a professional Chef in a restaurant kitchen!",
+              "challenge": "Your mission: calculating recipe proportions for a large dinner party",
+              "context": "As a Chef, you'll use your Counting review - up to 10 skills to help with this Math challenge",
+              "tools": "You have these tools: ingredients, recipes, cooking equipment"
+            },
+            "applySkills": {
+              "title": "Chef Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Chef needs to apply Counting review - up to 10 skills for Math",
+                  "task": "Use your Counting review - up to 10 knowledge to calculating recipe proportions for a large dinner party",
+                  "expectedOutcome": "Successfully complete the Math-focused Chef task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Counting review - up to 10",
+                  "application": "How a Chef uses Counting review - up to 10 for Math tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Counting review - up to 10 to complete this Chef challenge?",
+              "options": [
+                "Apply Counting review - up to 10 step by step",
+                "Skip the Math part and focus on other things",
+                "Ask someone else to handle the Math work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Counting review - up to 10 step by step",
+              "explanation": "Great Chefs know that applying Counting review - up to 10 systematically leads to the best results in Math tasks!",
+              "success": "Congratulations Alex Davis! You've successfully used Counting review - up to 10 to complete your Chef challenge!"
+            }
+          },
+          "ELA": {
+            "roleSetup": {
+              "title": "Working as a Chef",
+              "roleDescription": "Today you're a professional Chef in a restaurant kitchen!",
+              "challenge": "Your mission: writing clear menu descriptions for diverse customers",
+              "context": "As a Chef, you'll use your Sort consonants and vowels skills to help with this ELA challenge",
+              "tools": "You have these tools: ingredients, recipes, cooking equipment"
+            },
+            "applySkills": {
+              "title": "Chef Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Chef needs to apply Sort consonants and vowels skills for ELA",
+                  "task": "Use your Sort consonants and vowels knowledge to writing clear menu descriptions for diverse customers",
+                  "expectedOutcome": "Successfully complete the ELA-focused Chef task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Sort consonants and vowels",
+                  "application": "How a Chef uses Sort consonants and vowels for ELA tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Sort consonants and vowels to complete this Chef challenge?",
+              "options": [
+                "Apply Sort consonants and vowels step by step",
+                "Skip the ELA part and focus on other things",
+                "Ask someone else to handle the ELA work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Sort consonants and vowels step by step",
+              "explanation": "Great Chefs know that applying Sort consonants and vowels systematically leads to the best results in ELA tasks!",
+              "success": "Congratulations Alex Davis! You've successfully used Sort consonants and vowels to complete your Chef challenge!"
+            }
+          },
+          "Science": {
+            "roleSetup": {
+              "title": "Working as a Chef",
+              "roleDescription": "Today you're a professional Chef in a restaurant kitchen!",
+              "challenge": "Your mission: understanding cooking temperatures and food safety",
+              "context": "As a Chef, you'll use your Classify objects by two-dimensional shape skills to help with this Science challenge",
+              "tools": "You have these tools: ingredients, recipes, cooking equipment"
+            },
+            "applySkills": {
+              "title": "Chef Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Chef needs to apply Classify objects by two-dimensional shape skills for Science",
+                  "task": "Use your Classify objects by two-dimensional shape knowledge to understanding cooking temperatures and food safety",
+                  "expectedOutcome": "Successfully complete the Science-focused Chef task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Classify objects by two-dimensional shape",
+                  "application": "How a Chef uses Classify objects by two-dimensional shape for Science tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Classify objects by two-dimensional shape to complete this Chef challenge?",
+              "options": [
+                "Apply Classify objects by two-dimensional shape step by step",
+                "Skip the Science part and focus on other things",
+                "Ask someone else to handle the Science work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Classify objects by two-dimensional shape step by step",
+              "explanation": "Great Chefs know that applying Classify objects by two-dimensional shape systematically leads to the best results in Science tasks!",
+              "success": "Congratulations Alex Davis! You've successfully used Classify objects by two-dimensional shape to complete your Chef challenge!"
+            }
+          },
+          "SocialStudies": {
+            "roleSetup": {
+              "title": "Working as a Chef",
+              "roleDescription": "Today you're a professional Chef in a restaurant kitchen!",
+              "challenge": "Your mission: creating culturally diverse menu options for the community",
+              "context": "As a Chef, you'll use your Rules and laws skills to help with this SocialStudies challenge",
+              "tools": "You have these tools: ingredients, recipes, cooking equipment"
+            },
+            "applySkills": {
+              "title": "Chef Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Chef needs to apply Rules and laws skills for SocialStudies",
+                  "task": "Use your Rules and laws knowledge to creating culturally diverse menu options for the community",
+                  "expectedOutcome": "Successfully complete the SocialStudies-focused Chef task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Rules and laws",
+                  "application": "How a Chef uses Rules and laws for SocialStudies tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Rules and laws to complete this Chef challenge?",
+              "options": [
+                "Apply Rules and laws step by step",
+                "Skip the SocialStudies part and focus on other things",
+                "Ask someone else to handle the SocialStudies work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Rules and laws step by step",
+              "explanation": "Great Chefs know that applying Rules and laws systematically leads to the best results in SocialStudies tasks!",
+              "success": "Congratulations Alex Davis! You've successfully used Rules and laws to complete your Chef challenge!"
+            }
+          }
+        },
+        "discover": {
+          "storySetup": {
+            "title": "Alex Davis's Chef Adventure",
+            "setting": "In a magical kitchen in the clouds...",
+            "characters": [
+              "Alex Davis",
+              "Master Chef",
+              "Helpful Companion"
+            ],
+            "plot": "The kingdom needs Alex Davis to save the Kingdom's Grand Feast using Chef skills!",
+            "skillConnection": "This adventure requires: Counting review - up to 10, Sort consonants and vowels, Classify objects by two-dimensional shape, Rules and laws"
+          },
+          "adventure": {
+            "title": "The Chef Quest",
+            "storyEvents": [
+              {
+                "event": "the Sour Wizard has appeared and threatens the kingdom!",
+                "choice": "Use your Chef training and learned skills",
+                "outcome": "Alex Davis bravely steps forward to help",
+                "skillApplication": "Time to use: Counting review - up to 10, Sort consonants and vowels, Classify objects by two-dimensional shape, Rules and laws"
+              },
+              {
+                "event": "You must find the golden recipes to succeed",
+                "choice": "Combine all your learned skills",
+                "outcome": "The skills work together like magic!",
+                "skillApplication": "Each skill adds power to your quest"
+              }
+            ]
+          },
+          "herosChoice": {
+            "question": "How does Alex Davis save the kingdom?",
+            "options": [
+              "Use only the strongest skill",
+              "Try each skill one by one",
+              "Combine all skills with wisdom",
+              "Ask others to solve it instead"
+            ],
+            "correctAnswer": "Combine all skills with wisdom",
+            "explanation": "True heroes know that all skills working together create the most powerful magic!",
+            "ending": "🌟 Alex Davis becomes the legendary Chef hero, saving the kingdom with wisdom and skill! The people cheer as golden recipes glow brightly once more!"
+          }
+        }
+      },
+      "Librarian": {
+        "experience": {
+          "Math": {
+            "roleSetup": {
+              "title": "Working as a Librarian",
+              "roleDescription": "Today you're a professional Librarian in a community library!",
+              "challenge": "Your mission: organizing books by number classification and calculating reading statistics",
+              "context": "As a Librarian, you'll use your Counting review - up to 10 skills to help with this Math challenge",
+              "tools": "You have these tools: books, computers, display materials"
+            },
+            "applySkills": {
+              "title": "Librarian Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Librarian needs to apply Counting review - up to 10 skills for Math",
+                  "task": "Use your Counting review - up to 10 knowledge to organizing books by number classification and calculating reading statistics",
+                  "expectedOutcome": "Successfully complete the Math-focused Librarian task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Counting review - up to 10",
+                  "application": "How a Librarian uses Counting review - up to 10 for Math tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Counting review - up to 10 to complete this Librarian challenge?",
+              "options": [
+                "Apply Counting review - up to 10 step by step",
+                "Skip the Math part and focus on other things",
+                "Ask someone else to handle the Math work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Counting review - up to 10 step by step",
+              "explanation": "Great Librarians know that applying Counting review - up to 10 systematically leads to the best results in Math tasks!",
+              "success": "Congratulations Alex Davis! You've successfully used Counting review - up to 10 to complete your Librarian challenge!"
+            }
+          },
+          "ELA": {
+            "roleSetup": {
+              "title": "Working as a Librarian",
+              "roleDescription": "Today you're a professional Librarian in a community library!",
+              "challenge": "Your mission: curating age-appropriate reading materials and leading story sessions",
+              "context": "As a Librarian, you'll use your Sort consonants and vowels skills to help with this ELA challenge",
+              "tools": "You have these tools: books, computers, display materials"
+            },
+            "applySkills": {
+              "title": "Librarian Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Librarian needs to apply Sort consonants and vowels skills for ELA",
+                  "task": "Use your Sort consonants and vowels knowledge to curating age-appropriate reading materials and leading story sessions",
+                  "expectedOutcome": "Successfully complete the ELA-focused Librarian task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Sort consonants and vowels",
+                  "application": "How a Librarian uses Sort consonants and vowels for ELA tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Sort consonants and vowels to complete this Librarian challenge?",
+              "options": [
+                "Apply Sort consonants and vowels step by step",
+                "Skip the ELA part and focus on other things",
+                "Ask someone else to handle the ELA work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Sort consonants and vowels step by step",
+              "explanation": "Great Librarians know that applying Sort consonants and vowels systematically leads to the best results in ELA tasks!",
+              "success": "Congratulations Alex Davis! You've successfully used Sort consonants and vowels to complete your Librarian challenge!"
+            }
+          },
+          "Science": {
+            "roleSetup": {
+              "title": "Working as a Librarian",
+              "roleDescription": "Today you're a professional Librarian in a community library!",
+              "challenge": "Your mission: setting up a science book display and demonstration area",
+              "context": "As a Librarian, you'll use your Classify objects by two-dimensional shape skills to help with this Science challenge",
+              "tools": "You have these tools: books, computers, display materials"
+            },
+            "applySkills": {
+              "title": "Librarian Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Librarian needs to apply Classify objects by two-dimensional shape skills for Science",
+                  "task": "Use your Classify objects by two-dimensional shape knowledge to setting up a science book display and demonstration area",
+                  "expectedOutcome": "Successfully complete the Science-focused Librarian task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Classify objects by two-dimensional shape",
+                  "application": "How a Librarian uses Classify objects by two-dimensional shape for Science tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Classify objects by two-dimensional shape to complete this Librarian challenge?",
+              "options": [
+                "Apply Classify objects by two-dimensional shape step by step",
+                "Skip the Science part and focus on other things",
+                "Ask someone else to handle the Science work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Classify objects by two-dimensional shape step by step",
+              "explanation": "Great Librarians know that applying Classify objects by two-dimensional shape systematically leads to the best results in Science tasks!",
+              "success": "Congratulations Alex Davis! You've successfully used Classify objects by two-dimensional shape to complete your Librarian challenge!"
+            }
+          },
+          "SocialStudies": {
+            "roleSetup": {
+              "title": "Working as a Librarian",
+              "roleDescription": "Today you're a professional Librarian in a community library!",
+              "challenge": "Your mission: creating exhibits about diverse cultures and community history",
+              "context": "As a Librarian, you'll use your Rules and laws skills to help with this SocialStudies challenge",
+              "tools": "You have these tools: books, computers, display materials"
+            },
+            "applySkills": {
+              "title": "Librarian Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Librarian needs to apply Rules and laws skills for SocialStudies",
+                  "task": "Use your Rules and laws knowledge to creating exhibits about diverse cultures and community history",
+                  "expectedOutcome": "Successfully complete the SocialStudies-focused Librarian task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Rules and laws",
+                  "application": "How a Librarian uses Rules and laws for SocialStudies tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Rules and laws to complete this Librarian challenge?",
+              "options": [
+                "Apply Rules and laws step by step",
+                "Skip the SocialStudies part and focus on other things",
+                "Ask someone else to handle the SocialStudies work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Rules and laws step by step",
+              "explanation": "Great Librarians know that applying Rules and laws systematically leads to the best results in SocialStudies tasks!",
+              "success": "Congratulations Alex Davis! You've successfully used Rules and laws to complete your Librarian challenge!"
+            }
+          }
+        },
+        "discover": {
+          "storySetup": {
+            "title": "Alex Davis's Librarian Adventure",
+            "setting": "In a enchanted library with talking books...",
+            "characters": [
+              "Alex Davis",
+              "Master Librarian",
+              "Helpful Companion"
+            ],
+            "plot": "The kingdom needs Alex Davis to restore the lost stories using Librarian skills!",
+            "skillConnection": "This adventure requires: Counting review - up to 10, Sort consonants and vowels, Classify objects by two-dimensional shape, Rules and laws"
+          },
+          "adventure": {
+            "title": "The Librarian Quest",
+            "storyEvents": [
+              {
+                "event": "the Silent Specter has appeared and threatens the kingdom!",
+                "choice": "Use your Librarian training and learned skills",
+                "outcome": "Alex Davis bravely steps forward to help",
+                "skillApplication": "Time to use: Counting review - up to 10, Sort consonants and vowels, Classify objects by two-dimensional shape, Rules and laws"
+              },
+              {
+                "event": "You must find the glowing knowledge crystals to succeed",
+                "choice": "Combine all your learned skills",
+                "outcome": "The skills work together like magic!",
+                "skillApplication": "Each skill adds power to your quest"
+              }
+            ]
+          },
+          "herosChoice": {
+            "question": "How does Alex Davis save the kingdom?",
+            "options": [
+              "Use only the strongest skill",
+              "Try each skill one by one",
+              "Combine all skills with wisdom",
+              "Ask others to solve it instead"
+            ],
+            "correctAnswer": "Combine all skills with wisdom",
+            "explanation": "True heroes know that all skills working together create the most powerful magic!",
+            "ending": "🌟 Alex Davis becomes the legendary Librarian hero, saving the kingdom with wisdom and skill! The people cheer as glowing knowledge crystals glow brightly once more!"
+          }
+        }
+      },
+      "Park Ranger": {
+        "experience": {
+          "Math": {
+            "roleSetup": {
+              "title": "Working as a Park Ranger",
+              "roleDescription": "Today you're a professional Park Ranger in a national park!",
+              "challenge": "Your mission: calculating trail distances and visitor capacity for safety",
+              "context": "As a Park Ranger, you'll use your Counting review - up to 10 skills to help with this Math challenge",
+              "tools": "You have these tools: maps, field guides, safety equipment"
+            },
+            "applySkills": {
+              "title": "Park Ranger Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Park Ranger needs to apply Counting review - up to 10 skills for Math",
+                  "task": "Use your Counting review - up to 10 knowledge to calculating trail distances and visitor capacity for safety",
+                  "expectedOutcome": "Successfully complete the Math-focused Park Ranger task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Counting review - up to 10",
+                  "application": "How a Park Ranger uses Counting review - up to 10 for Math tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Counting review - up to 10 to complete this Park Ranger challenge?",
+              "options": [
+                "Apply Counting review - up to 10 step by step",
+                "Skip the Math part and focus on other things",
+                "Ask someone else to handle the Math work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Counting review - up to 10 step by step",
+              "explanation": "Great Park Rangers know that applying Counting review - up to 10 systematically leads to the best results in Math tasks!",
+              "success": "Congratulations Alex Davis! You've successfully used Counting review - up to 10 to complete your Park Ranger challenge!"
+            }
+          },
+          "ELA": {
+            "roleSetup": {
+              "title": "Working as a Park Ranger",
+              "roleDescription": "Today you're a professional Park Ranger in a national park!",
+              "challenge": "Your mission: writing informative trail guides and interpretive signs",
+              "context": "As a Park Ranger, you'll use your Sort consonants and vowels skills to help with this ELA challenge",
+              "tools": "You have these tools: maps, field guides, safety equipment"
+            },
+            "applySkills": {
+              "title": "Park Ranger Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Park Ranger needs to apply Sort consonants and vowels skills for ELA",
+                  "task": "Use your Sort consonants and vowels knowledge to writing informative trail guides and interpretive signs",
+                  "expectedOutcome": "Successfully complete the ELA-focused Park Ranger task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Sort consonants and vowels",
+                  "application": "How a Park Ranger uses Sort consonants and vowels for ELA tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Sort consonants and vowels to complete this Park Ranger challenge?",
+              "options": [
+                "Apply Sort consonants and vowels step by step",
+                "Skip the ELA part and focus on other things",
+                "Ask someone else to handle the ELA work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Sort consonants and vowels step by step",
+              "explanation": "Great Park Rangers know that applying Sort consonants and vowels systematically leads to the best results in ELA tasks!",
+              "success": "Congratulations Alex Davis! You've successfully used Sort consonants and vowels to complete your Park Ranger challenge!"
+            }
+          },
+          "Science": {
+            "roleSetup": {
+              "title": "Working as a Park Ranger",
+              "roleDescription": "Today you're a professional Park Ranger in a national park!",
+              "challenge": "Your mission: explaining ecosystem relationships and wildlife behaviors",
+              "context": "As a Park Ranger, you'll use your Classify objects by two-dimensional shape skills to help with this Science challenge",
+              "tools": "You have these tools: maps, field guides, safety equipment"
+            },
+            "applySkills": {
+              "title": "Park Ranger Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Park Ranger needs to apply Classify objects by two-dimensional shape skills for Science",
+                  "task": "Use your Classify objects by two-dimensional shape knowledge to explaining ecosystem relationships and wildlife behaviors",
+                  "expectedOutcome": "Successfully complete the Science-focused Park Ranger task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Classify objects by two-dimensional shape",
+                  "application": "How a Park Ranger uses Classify objects by two-dimensional shape for Science tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Classify objects by two-dimensional shape to complete this Park Ranger challenge?",
+              "options": [
+                "Apply Classify objects by two-dimensional shape step by step",
+                "Skip the Science part and focus on other things",
+                "Ask someone else to handle the Science work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Classify objects by two-dimensional shape step by step",
+              "explanation": "Great Park Rangers know that applying Classify objects by two-dimensional shape systematically leads to the best results in Science tasks!",
+              "success": "Congratulations Alex Davis! You've successfully used Classify objects by two-dimensional shape to complete your Park Ranger challenge!"
+            }
+          },
+          "SocialStudies": {
+            "roleSetup": {
+              "title": "Working as a Park Ranger",
+              "roleDescription": "Today you're a professional Park Ranger in a national park!",
+              "challenge": "Your mission: sharing indigenous history and cultural significance of the land",
+              "context": "As a Park Ranger, you'll use your Rules and laws skills to help with this SocialStudies challenge",
+              "tools": "You have these tools: maps, field guides, safety equipment"
+            },
+            "applySkills": {
+              "title": "Park Ranger Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Park Ranger needs to apply Rules and laws skills for SocialStudies",
+                  "task": "Use your Rules and laws knowledge to sharing indigenous history and cultural significance of the land",
+                  "expectedOutcome": "Successfully complete the SocialStudies-focused Park Ranger task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Rules and laws",
+                  "application": "How a Park Ranger uses Rules and laws for SocialStudies tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Rules and laws to complete this Park Ranger challenge?",
+              "options": [
+                "Apply Rules and laws step by step",
+                "Skip the SocialStudies part and focus on other things",
+                "Ask someone else to handle the SocialStudies work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Rules and laws step by step",
+              "explanation": "Great Park Rangers know that applying Rules and laws systematically leads to the best results in SocialStudies tasks!",
+              "success": "Congratulations Alex Davis! You've successfully used Rules and laws to complete your Park Ranger challenge!"
+            }
+          }
+        },
+        "discover": {
+          "storySetup": {
+            "title": "Alex Davis's Park Ranger Adventure",
+            "setting": "In a mystical forest with ancient trees...",
+            "characters": [
+              "Alex Davis",
+              "Master Park Ranger",
+              "Helpful Companion"
+            ],
+            "plot": "The kingdom needs Alex Davis to protect the Sacred Grove using Park Ranger skills!",
+            "skillConnection": "This adventure requires: Counting review - up to 10, Sort consonants and vowels, Classify objects by two-dimensional shape, Rules and laws"
+          },
+          "adventure": {
+            "title": "The Park Ranger Quest",
+            "storyEvents": [
+              {
+                "event": "the Shadow Destroyer has appeared and threatens the kingdom!",
+                "choice": "Use your Park Ranger training and learned skills",
+                "outcome": "Alex Davis bravely steps forward to help",
+                "skillApplication": "Time to use: Counting review - up to 10, Sort consonants and vowels, Classify objects by two-dimensional shape, Rules and laws"
+              },
+              {
+                "event": "You must find the nature's harmony stones to succeed",
+                "choice": "Combine all your learned skills",
+                "outcome": "The skills work together like magic!",
+                "skillApplication": "Each skill adds power to your quest"
+              }
+            ]
+          },
+          "herosChoice": {
+            "question": "How does Alex Davis save the kingdom?",
+            "options": [
+              "Use only the strongest skill",
+              "Try each skill one by one",
+              "Combine all skills with wisdom",
+              "Ask others to solve it instead"
+            ],
+            "correctAnswer": "Combine all skills with wisdom",
+            "explanation": "True heroes know that all skills working together create the most powerful magic!",
+            "ending": "🌟 Alex Davis becomes the legendary Park Ranger hero, saving the kingdom with wisdom and skill! The people cheer as nature's harmony stones glow brightly once more!"
+          }
+        }
+      }
+    },
+    "generatedAt": "2025-07-16T19:29:38.794Z",
+    "subjects": [
+      "Math",
+      "ELA",
+      "Science",
+      "SocialStudies"
+    ],
+    "careers": [
+      "Chef",
+      "Librarian",
+      "Park Ranger"
+    ]
+  },
+  "Jordan Smith": {
+    "user": {
+      "name": "Jordan Smith",
+      "grade": "7",
+      "gradeLevel": "7th Grade"
+    },
+    "dashboardCards": [
+      {
+        "subject": "Math",
+        "title": "Integers",
+        "description": "Learn Math fundamentals",
+        "skillNumber": "A.0"
+      },
+      {
+        "subject": "ELA",
+        "title": "Main idea",
+        "description": "Learn ELA fundamentals",
+        "skillNumber": "A.0"
+      },
+      {
+        "subject": "Science",
+        "title": "Science practices and tools",
+        "description": "Learn Science fundamentals",
+        "skillNumber": "A.0"
+      },
+      {
+        "subject": "SocialStudies",
+        "title": "Read maps",
+        "description": "Learn SocialStudies fundamentals",
+        "skillNumber": "A.0"
+      }
+    ],
+    "skills": {
+      "Math": {
+        "A.0": {
+          "id": "73377818-d6f3-4d00-9202-80d580633635",
+          "subject": "Math",
+          "grade": "7",
+          "skills_area": "Math Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.0",
+          "skill_name": "Integers",
+          "skill_description": null,
+          "difficulty_level": 7,
+          "estimated_time_minutes": 80,
+          "prerequisites": null,
+          "created_at": "2025-07-14T00:41:28.629852+00:00",
+          "updated_at": "2025-07-14T00:41:28.629852+00:00"
+        },
+        "A.1": {
+          "id": "da4b47ce-407e-4d1a-9412-a7f77dbab5b0",
+          "subject": "Math",
+          "grade": "7",
+          "skills_area": "Math Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.1",
+          "skill_name": "Understanding integers",
+          "skill_description": null,
+          "difficulty_level": 8,
+          "estimated_time_minutes": 85,
+          "prerequisites": null,
+          "created_at": "2025-07-14T00:41:28.711474+00:00",
+          "updated_at": "2025-07-14T00:41:28.711474+00:00"
+        }
+      },
+      "ELA": {
+        "A.0": {
+          "id": "a368956b-cc28-4a1c-8597-1409bb94caaa",
+          "subject": "ELA",
+          "grade": "7",
+          "skills_area": "ELA Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.0",
+          "skill_name": "Main idea",
+          "skill_description": null,
+          "difficulty_level": 7,
+          "estimated_time_minutes": 95,
+          "prerequisites": null,
+          "created_at": "2025-07-14T00:41:31.712129+00:00",
+          "updated_at": "2025-07-14T00:41:31.712129+00:00"
+        },
+        "A.1": {
+          "id": "f694abe2-1650-442b-8ec0-cdd900a36ad3",
+          "subject": "ELA",
+          "grade": "7",
+          "skills_area": "ELA Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.1",
+          "skill_name": "Determine the main idea of a passage",
+          "skill_description": null,
+          "difficulty_level": 8,
+          "estimated_time_minutes": 105,
+          "prerequisites": null,
+          "created_at": "2025-07-14T00:41:31.712129+00:00",
+          "updated_at": "2025-07-14T00:41:31.712129+00:00"
+        }
+      },
+      "Science": {
+        "A.0": {
+          "id": "98b28b93-a2b9-423b-aa7a-395c338c213b",
+          "subject": "Science",
+          "grade": "7",
+          "skills_area": "Science Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.0",
+          "skill_name": "Science practices and tools",
+          "skill_description": null,
+          "difficulty_level": 7,
+          "estimated_time_minutes": 110,
+          "prerequisites": null,
+          "created_at": "2025-07-14T00:41:32.026977+00:00",
+          "updated_at": "2025-07-14T00:41:32.026977+00:00"
+        },
+        "A.1": {
+          "id": "9becce08-b8bb-4beb-94ca-e37d1dd8f83e",
+          "subject": "Science",
+          "grade": "7",
+          "skills_area": "Science Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.1",
+          "skill_name": "The process of scientific inquiry",
+          "skill_description": null,
+          "difficulty_level": 8,
+          "estimated_time_minutes": 120,
+          "prerequisites": null,
+          "created_at": "2025-07-14T00:41:32.026977+00:00",
+          "updated_at": "2025-07-14T00:41:32.026977+00:00"
+        }
+      },
+      "SocialStudies": {
+        "A.0": {
+          "id": "b86c46c7-af1a-45cb-9238-b612becc1cee",
+          "subject": "SocialStudies",
+          "grade": "7",
+          "skills_area": "SS Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.0",
+          "skill_name": "Read maps",
+          "skill_description": null,
+          "difficulty_level": 7,
+          "estimated_time_minutes": 105,
+          "prerequisites": null,
+          "created_at": "2025-07-14T00:41:32.359024+00:00",
+          "updated_at": "2025-07-14T00:41:32.359024+00:00"
+        },
+        "A.1": {
+          "id": "aedce536-2eac-4bdb-a599-35becb609949",
+          "subject": "SocialStudies",
+          "grade": "7",
+          "skills_area": "SS Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.1",
+          "skill_name": "Identify lines of latitude and longitude",
+          "skill_description": null,
+          "difficulty_level": 8,
+          "estimated_time_minutes": 110,
+          "prerequisites": null,
+          "created_at": "2025-07-14T00:41:32.359024+00:00",
+          "updated_at": "2025-07-14T00:41:32.359024+00:00"
+        }
+      }
+    },
+    "learnContent": {
+      "Math": {
+        "instruction": {
+          "title": "Let's Learn Math!",
+          "content": "Hi Jordan Smith! Today we're exploring the wonderful world of math.",
+          "concept": "Math helps us solve problems and understand the world around us.",
+          "examples": [
+            {
+              "question": "How do we use math every day?",
+              "answer": "We use math to count toys, share snacks, and measure things.",
+              "explanation": "Math is everywhere! We use it for cooking, shopping, and playing games."
+            }
+          ],
+          "keyPoints": [
+            "Math helps us solve problems",
+            "We use math every day",
+            "Math can be fun and useful"
+          ]
+        },
+        "practice": {
+          "title": "Practice Math Skills",
+          "exercises": [
+            {
+              "question": "If you have 2 apples and get 1 more, how many apples do you have?",
+              "hint": "Count: 2 + 1 = ?",
+              "expectedAnswer": "3",
+              "feedback": "Yes! 2 + 1 = 3 apples."
+            }
+          ]
+        },
+        "assessment": {
+          "question": "What do we use math for?",
+          "options": [
+            "Only for homework",
+            "Just for tests",
+            "To solve problems and count things",
+            "Nothing important"
+          ],
+          "correctAnswer": "To solve problems and count things",
+          "explanation": "Math helps us solve problems and understand numbers in our daily life!",
+          "feedback": {
+            "correct": "Excellent Jordan Smith! You understand why math is important!",
+            "incorrect": "Keep learning! Math is useful for many things."
+          }
+        }
+      },
+      "ELA": {
+        "instruction": {
+          "title": "Let's Learn About Reading!",
+          "content": "Hi Jordan Smith! Today we're building our reading skills.",
+          "concept": "Reading helps us understand stories and learn new things.",
+          "examples": [
+            {
+              "question": "Why is reading important?",
+              "answer": "Reading helps us learn about the world and understand stories.",
+              "explanation": "When we read, we can discover new places, meet new characters, and learn amazing facts!"
+            }
+          ],
+          "keyPoints": [
+            "Reading opens up new worlds",
+            "We can read books, signs, and stories",
+            "Practice makes reading easier and more fun"
+          ]
+        },
+        "practice": {
+          "title": "Practice Reading Skills",
+          "exercises": [
+            {
+              "question": "Read this simple sentence: \"The cat sat on the mat.\" What animal is mentioned?",
+              "hint": "Look for the animal word in the sentence",
+              "expectedAnswer": "cat",
+              "feedback": "Yes! The cat is the animal in the sentence."
+            }
+          ]
+        },
+        "assessment": {
+          "question": "What do good readers do?",
+          "options": [
+            "They skip words they don't know",
+            "They read too fast to understand",
+            "They think about what they're reading",
+            "They only read short words"
+          ],
+          "correctAnswer": "They think about what they're reading",
+          "explanation": "Good readers think about the story and try to understand what's happening!",
+          "feedback": {
+            "correct": "Excellent Jordan Smith! You understand what good reading is!",
+            "incorrect": "Keep learning! Good readers take time to understand the story."
+          }
+        }
+      },
+      "Science": {
+        "instruction": {
+          "title": "Let's Explore Science!",
+          "content": "Hi Jordan Smith! Today we're discovering the amazing world of science.",
+          "concept": "Science helps us understand how things work and why things happen.",
+          "examples": [
+            {
+              "question": "What can we learn from science?",
+              "answer": "Science teaches us about animals, plants, weather, and how things move.",
+              "explanation": "Scientists ask questions and do experiments to learn new things!"
+            }
+          ],
+          "keyPoints": [
+            "Science helps us understand the world",
+            "We can observe and ask questions",
+            "Science is all around us"
+          ]
+        },
+        "practice": {
+          "title": "Practice Science Skills",
+          "exercises": [
+            {
+              "question": "Look at a leaf. What do you notice about its color and shape?",
+              "hint": "Use your eyes to observe carefully",
+              "expectedAnswer": "Various observations possible",
+              "feedback": "Great observation! Scientists use their senses to learn."
+            }
+          ]
+        },
+        "assessment": {
+          "question": "What do scientists do?",
+          "options": [
+            "They only read books",
+            "They ask questions and explore",
+            "They stay inside all day",
+            "They don't like learning"
+          ],
+          "correctAnswer": "They ask questions and explore",
+          "explanation": "Scientists are curious and love to ask questions about how things work!",
+          "feedback": {
+            "correct": "Perfect Jordan Smith! You think like a scientist!",
+            "incorrect": "Keep exploring! Scientists are curious and ask lots of questions."
+          }
+        }
+      },
+      "SocialStudies": {
+        "instruction": {
+          "title": "Let's Learn About Our Community!",
+          "content": "Hi Jordan Smith! Today we're learning about the people and places around us.",
+          "concept": "A community is all the people who live and work together in the same place.",
+          "examples": [
+            {
+              "question": "Who are the helpers in our community?",
+              "answer": "Teachers, firefighters, doctors, and store workers help make our community great.",
+              "explanation": "Everyone in our community has a job that helps other people!"
+            }
+          ],
+          "keyPoints": [
+            "We are part of a community",
+            "People in our community help each other",
+            "Communities have schools, stores, and parks"
+          ]
+        },
+        "practice": {
+          "title": "Practice Community Skills",
+          "exercises": [
+            {
+              "question": "Name a place in your community where people go to learn.",
+              "hint": "Think about where children go during the day to learn new things",
+              "expectedAnswer": "school",
+              "feedback": "Yes! Schools are where people go to learn in our community."
+            }
+          ]
+        },
+        "assessment": {
+          "question": "What makes a good community?",
+          "options": [
+            "People who never talk to each other",
+            "People who help and care for each other",
+            "Only one type of person",
+            "No rules or helpers"
+          ],
+          "correctAnswer": "People who help and care for each other",
+          "explanation": "Good communities have people who work together and help each other!",
+          "feedback": {
+            "correct": "Wonderful Jordan Smith! You understand what makes communities special!",
+            "incorrect": "Keep learning! Good communities have people who care for each other."
+          }
+        }
+      }
+    },
+    "careerContent": {
+      "Engineer": {
+        "experience": {
+          "Math": {
+            "roleSetup": {
+              "title": "Working as a Engineer",
+              "roleDescription": "Today you're a professional Engineer in a design workshop!",
+              "challenge": "Your mission: calculating structural loads and material requirements",
+              "context": "As a Engineer, you'll use your Understanding integers skills to help with this Math challenge",
+              "tools": "You have these tools: blueprints, calculations, building materials"
+            },
+            "applySkills": {
+              "title": "Engineer Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Engineer needs to apply Understanding integers skills for Math",
+                  "task": "Use your Understanding integers knowledge to calculating structural loads and material requirements",
+                  "expectedOutcome": "Successfully complete the Math-focused Engineer task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Understanding integers",
+                  "application": "How a Engineer uses Understanding integers for Math tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Understanding integers to complete this Engineer challenge?",
+              "options": [
+                "Apply Understanding integers step by step",
+                "Skip the Math part and focus on other things",
+                "Ask someone else to handle the Math work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Understanding integers step by step",
+              "explanation": "Great Engineers know that applying Understanding integers systematically leads to the best results in Math tasks!",
+              "success": "Congratulations Jordan Smith! You've successfully used Understanding integers to complete your Engineer challenge!"
+            }
+          },
+          "ELA": {
+            "roleSetup": {
+              "title": "Working as a Engineer",
+              "roleDescription": "Today you're a professional Engineer in a design workshop!",
+              "challenge": "Your mission: writing technical specifications and project proposals",
+              "context": "As a Engineer, you'll use your Determine the main idea of a passage skills to help with this ELA challenge",
+              "tools": "You have these tools: blueprints, calculations, building materials"
+            },
+            "applySkills": {
+              "title": "Engineer Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Engineer needs to apply Determine the main idea of a passage skills for ELA",
+                  "task": "Use your Determine the main idea of a passage knowledge to writing technical specifications and project proposals",
+                  "expectedOutcome": "Successfully complete the ELA-focused Engineer task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Determine the main idea of a passage",
+                  "application": "How a Engineer uses Determine the main idea of a passage for ELA tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Determine the main idea of a passage to complete this Engineer challenge?",
+              "options": [
+                "Apply Determine the main idea of a passage step by step",
+                "Skip the ELA part and focus on other things",
+                "Ask someone else to handle the ELA work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Determine the main idea of a passage step by step",
+              "explanation": "Great Engineers know that applying Determine the main idea of a passage systematically leads to the best results in ELA tasks!",
+              "success": "Congratulations Jordan Smith! You've successfully used Determine the main idea of a passage to complete your Engineer challenge!"
+            }
+          },
+          "Science": {
+            "roleSetup": {
+              "title": "Working as a Engineer",
+              "roleDescription": "Today you're a professional Engineer in a design workshop!",
+              "challenge": "Your mission: applying physics principles to design solutions",
+              "context": "As a Engineer, you'll use your The process of scientific inquiry skills to help with this Science challenge",
+              "tools": "You have these tools: blueprints, calculations, building materials"
+            },
+            "applySkills": {
+              "title": "Engineer Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Engineer needs to apply The process of scientific inquiry skills for Science",
+                  "task": "Use your The process of scientific inquiry knowledge to applying physics principles to design solutions",
+                  "expectedOutcome": "Successfully complete the Science-focused Engineer task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "The process of scientific inquiry",
+                  "application": "How a Engineer uses The process of scientific inquiry for Science tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use The process of scientific inquiry to complete this Engineer challenge?",
+              "options": [
+                "Apply The process of scientific inquiry step by step",
+                "Skip the Science part and focus on other things",
+                "Ask someone else to handle the Science work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply The process of scientific inquiry step by step",
+              "explanation": "Great Engineers know that applying The process of scientific inquiry systematically leads to the best results in Science tasks!",
+              "success": "Congratulations Jordan Smith! You've successfully used The process of scientific inquiry to complete your Engineer challenge!"
+            }
+          },
+          "SocialStudies": {
+            "roleSetup": {
+              "title": "Working as a Engineer",
+              "roleDescription": "Today you're a professional Engineer in a design workshop!",
+              "challenge": "Your mission: considering community needs and cultural impacts",
+              "context": "As a Engineer, you'll use your Identify lines of latitude and longitude skills to help with this SocialStudies challenge",
+              "tools": "You have these tools: blueprints, calculations, building materials"
+            },
+            "applySkills": {
+              "title": "Engineer Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Engineer needs to apply Identify lines of latitude and longitude skills for SocialStudies",
+                  "task": "Use your Identify lines of latitude and longitude knowledge to considering community needs and cultural impacts",
+                  "expectedOutcome": "Successfully complete the SocialStudies-focused Engineer task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Identify lines of latitude and longitude",
+                  "application": "How a Engineer uses Identify lines of latitude and longitude for SocialStudies tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Identify lines of latitude and longitude to complete this Engineer challenge?",
+              "options": [
+                "Apply Identify lines of latitude and longitude step by step",
+                "Skip the SocialStudies part and focus on other things",
+                "Ask someone else to handle the SocialStudies work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Identify lines of latitude and longitude step by step",
+              "explanation": "Great Engineers know that applying Identify lines of latitude and longitude systematically leads to the best results in SocialStudies tasks!",
+              "success": "Congratulations Jordan Smith! You've successfully used Identify lines of latitude and longitude to complete your Engineer challenge!"
+            }
+          }
+        },
+        "discover": {
+          "storySetup": {
+            "title": "Jordan Smith's Engineer Adventure",
+            "setting": "In a floating city of inventions...",
+            "characters": [
+              "Jordan Smith",
+              "Master Engineer",
+              "Helpful Companion"
+            ],
+            "plot": "The kingdom needs Jordan Smith to rebuild the Great Machine using Engineer skills!",
+            "skillConnection": "This adventure requires: Understanding integers, Determine the main idea of a passage, The process of scientific inquiry, Identify lines of latitude and longitude"
+          },
+          "adventure": {
+            "title": "The Engineer Quest",
+            "storyEvents": [
+              {
+                "event": "the Chaos Constructor has appeared and threatens the kingdom!",
+                "choice": "Use your Engineer training and learned skills",
+                "outcome": "Jordan Smith bravely steps forward to help",
+                "skillApplication": "Time to use: Understanding integers, Determine the main idea of a passage, The process of scientific inquiry, Identify lines of latitude and longitude"
+              },
+              {
+                "event": "You must find the blueprint gems to succeed",
+                "choice": "Combine all your learned skills",
+                "outcome": "The skills work together like magic!",
+                "skillApplication": "Each skill adds power to your quest"
+              }
+            ]
+          },
+          "herosChoice": {
+            "question": "How does Jordan Smith save the kingdom?",
+            "options": [
+              "Use only the strongest skill",
+              "Try each skill one by one",
+              "Combine all skills with wisdom",
+              "Ask others to solve it instead"
+            ],
+            "correctAnswer": "Combine all skills with wisdom",
+            "explanation": "True heroes know that all skills working together create the most powerful magic!",
+            "ending": "🌟 Jordan Smith becomes the legendary Engineer hero, saving the kingdom with wisdom and skill! The people cheer as blueprint gems glow brightly once more!"
+          }
+        }
+      },
+      "Scientist": {
+        "experience": {
+          "Math": {
+            "roleSetup": {
+              "title": "Working as a Scientist",
+              "roleDescription": "Today you're a professional Scientist in a research laboratory!",
+              "challenge": "Your mission: analyzing experimental data and calculating statistical significance",
+              "context": "As a Scientist, you'll use your Understanding integers skills to help with this Math challenge",
+              "tools": "You have these tools: laboratory equipment, data charts, research notes"
+            },
+            "applySkills": {
+              "title": "Scientist Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Scientist needs to apply Understanding integers skills for Math",
+                  "task": "Use your Understanding integers knowledge to analyzing experimental data and calculating statistical significance",
+                  "expectedOutcome": "Successfully complete the Math-focused Scientist task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Understanding integers",
+                  "application": "How a Scientist uses Understanding integers for Math tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Understanding integers to complete this Scientist challenge?",
+              "options": [
+                "Apply Understanding integers step by step",
+                "Skip the Math part and focus on other things",
+                "Ask someone else to handle the Math work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Understanding integers step by step",
+              "explanation": "Great Scientists know that applying Understanding integers systematically leads to the best results in Math tasks!",
+              "success": "Congratulations Jordan Smith! You've successfully used Understanding integers to complete your Scientist challenge!"
+            }
+          },
+          "ELA": {
+            "roleSetup": {
+              "title": "Working as a Scientist",
+              "roleDescription": "Today you're a professional Scientist in a research laboratory!",
+              "challenge": "Your mission: writing research reports and presenting findings clearly",
+              "context": "As a Scientist, you'll use your Determine the main idea of a passage skills to help with this ELA challenge",
+              "tools": "You have these tools: laboratory equipment, data charts, research notes"
+            },
+            "applySkills": {
+              "title": "Scientist Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Scientist needs to apply Determine the main idea of a passage skills for ELA",
+                  "task": "Use your Determine the main idea of a passage knowledge to writing research reports and presenting findings clearly",
+                  "expectedOutcome": "Successfully complete the ELA-focused Scientist task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Determine the main idea of a passage",
+                  "application": "How a Scientist uses Determine the main idea of a passage for ELA tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Determine the main idea of a passage to complete this Scientist challenge?",
+              "options": [
+                "Apply Determine the main idea of a passage step by step",
+                "Skip the ELA part and focus on other things",
+                "Ask someone else to handle the ELA work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Determine the main idea of a passage step by step",
+              "explanation": "Great Scientists know that applying Determine the main idea of a passage systematically leads to the best results in ELA tasks!",
+              "success": "Congratulations Jordan Smith! You've successfully used Determine the main idea of a passage to complete your Scientist challenge!"
+            }
+          },
+          "Science": {
+            "roleSetup": {
+              "title": "Working as a Scientist",
+              "roleDescription": "Today you're a professional Scientist in a research laboratory!",
+              "challenge": "Your mission: designing controlled experiments and testing hypotheses",
+              "context": "As a Scientist, you'll use your The process of scientific inquiry skills to help with this Science challenge",
+              "tools": "You have these tools: laboratory equipment, data charts, research notes"
+            },
+            "applySkills": {
+              "title": "Scientist Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Scientist needs to apply The process of scientific inquiry skills for Science",
+                  "task": "Use your The process of scientific inquiry knowledge to designing controlled experiments and testing hypotheses",
+                  "expectedOutcome": "Successfully complete the Science-focused Scientist task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "The process of scientific inquiry",
+                  "application": "How a Scientist uses The process of scientific inquiry for Science tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use The process of scientific inquiry to complete this Scientist challenge?",
+              "options": [
+                "Apply The process of scientific inquiry step by step",
+                "Skip the Science part and focus on other things",
+                "Ask someone else to handle the Science work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply The process of scientific inquiry step by step",
+              "explanation": "Great Scientists know that applying The process of scientific inquiry systematically leads to the best results in Science tasks!",
+              "success": "Congratulations Jordan Smith! You've successfully used The process of scientific inquiry to complete your Scientist challenge!"
+            }
+          },
+          "SocialStudies": {
+            "roleSetup": {
+              "title": "Working as a Scientist",
+              "roleDescription": "Today you're a professional Scientist in a research laboratory!",
+              "challenge": "Your mission: considering ethical implications and societal impact of research",
+              "context": "As a Scientist, you'll use your Identify lines of latitude and longitude skills to help with this SocialStudies challenge",
+              "tools": "You have these tools: laboratory equipment, data charts, research notes"
+            },
+            "applySkills": {
+              "title": "Scientist Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Scientist needs to apply Identify lines of latitude and longitude skills for SocialStudies",
+                  "task": "Use your Identify lines of latitude and longitude knowledge to considering ethical implications and societal impact of research",
+                  "expectedOutcome": "Successfully complete the SocialStudies-focused Scientist task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Identify lines of latitude and longitude",
+                  "application": "How a Scientist uses Identify lines of latitude and longitude for SocialStudies tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Identify lines of latitude and longitude to complete this Scientist challenge?",
+              "options": [
+                "Apply Identify lines of latitude and longitude step by step",
+                "Skip the SocialStudies part and focus on other things",
+                "Ask someone else to handle the SocialStudies work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Identify lines of latitude and longitude step by step",
+              "explanation": "Great Scientists know that applying Identify lines of latitude and longitude systematically leads to the best results in SocialStudies tasks!",
+              "success": "Congratulations Jordan Smith! You've successfully used Identify lines of latitude and longitude to complete your Scientist challenge!"
+            }
+          }
+        },
+        "discover": {
+          "storySetup": {
+            "title": "Jordan Smith's Scientist Adventure",
+            "setting": "In a crystal laboratory in space...",
+            "characters": [
+              "Jordan Smith",
+              "Master Scientist",
+              "Helpful Companion"
+            ],
+            "plot": "The kingdom needs Jordan Smith to discover the formula for peace using Scientist skills!",
+            "skillConnection": "This adventure requires: Understanding integers, Determine the main idea of a passage, The process of scientific inquiry, Identify lines of latitude and longitude"
+          },
+          "adventure": {
+            "title": "The Scientist Quest",
+            "storyEvents": [
+              {
+                "event": "the Discord Doctor has appeared and threatens the kingdom!",
+                "choice": "Use your Scientist training and learned skills",
+                "outcome": "Jordan Smith bravely steps forward to help",
+                "skillApplication": "Time to use: Understanding integers, Determine the main idea of a passage, The process of scientific inquiry, Identify lines of latitude and longitude"
+              },
+              {
+                "event": "You must find the wisdom spheres to succeed",
+                "choice": "Combine all your learned skills",
+                "outcome": "The skills work together like magic!",
+                "skillApplication": "Each skill adds power to your quest"
+              }
+            ]
+          },
+          "herosChoice": {
+            "question": "How does Jordan Smith save the kingdom?",
+            "options": [
+              "Use only the strongest skill",
+              "Try each skill one by one",
+              "Combine all skills with wisdom",
+              "Ask others to solve it instead"
+            ],
+            "correctAnswer": "Combine all skills with wisdom",
+            "explanation": "True heroes know that all skills working together create the most powerful magic!",
+            "ending": "🌟 Jordan Smith becomes the legendary Scientist hero, saving the kingdom with wisdom and skill! The people cheer as wisdom spheres glow brightly once more!"
+          }
+        }
+      },
+      "Chef": {
+        "experience": {
+          "Math": {
+            "roleSetup": {
+              "title": "Working as a Chef",
+              "roleDescription": "Today you're a professional Chef in a restaurant kitchen!",
+              "challenge": "Your mission: calculating recipe proportions for a large dinner party",
+              "context": "As a Chef, you'll use your Understanding integers skills to help with this Math challenge",
+              "tools": "You have these tools: ingredients, recipes, cooking equipment"
+            },
+            "applySkills": {
+              "title": "Chef Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Chef needs to apply Understanding integers skills for Math",
+                  "task": "Use your Understanding integers knowledge to calculating recipe proportions for a large dinner party",
+                  "expectedOutcome": "Successfully complete the Math-focused Chef task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Understanding integers",
+                  "application": "How a Chef uses Understanding integers for Math tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Understanding integers to complete this Chef challenge?",
+              "options": [
+                "Apply Understanding integers step by step",
+                "Skip the Math part and focus on other things",
+                "Ask someone else to handle the Math work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Understanding integers step by step",
+              "explanation": "Great Chefs know that applying Understanding integers systematically leads to the best results in Math tasks!",
+              "success": "Congratulations Jordan Smith! You've successfully used Understanding integers to complete your Chef challenge!"
+            }
+          },
+          "ELA": {
+            "roleSetup": {
+              "title": "Working as a Chef",
+              "roleDescription": "Today you're a professional Chef in a restaurant kitchen!",
+              "challenge": "Your mission: writing clear menu descriptions for diverse customers",
+              "context": "As a Chef, you'll use your Determine the main idea of a passage skills to help with this ELA challenge",
+              "tools": "You have these tools: ingredients, recipes, cooking equipment"
+            },
+            "applySkills": {
+              "title": "Chef Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Chef needs to apply Determine the main idea of a passage skills for ELA",
+                  "task": "Use your Determine the main idea of a passage knowledge to writing clear menu descriptions for diverse customers",
+                  "expectedOutcome": "Successfully complete the ELA-focused Chef task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Determine the main idea of a passage",
+                  "application": "How a Chef uses Determine the main idea of a passage for ELA tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Determine the main idea of a passage to complete this Chef challenge?",
+              "options": [
+                "Apply Determine the main idea of a passage step by step",
+                "Skip the ELA part and focus on other things",
+                "Ask someone else to handle the ELA work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Determine the main idea of a passage step by step",
+              "explanation": "Great Chefs know that applying Determine the main idea of a passage systematically leads to the best results in ELA tasks!",
+              "success": "Congratulations Jordan Smith! You've successfully used Determine the main idea of a passage to complete your Chef challenge!"
+            }
+          },
+          "Science": {
+            "roleSetup": {
+              "title": "Working as a Chef",
+              "roleDescription": "Today you're a professional Chef in a restaurant kitchen!",
+              "challenge": "Your mission: understanding cooking temperatures and food safety",
+              "context": "As a Chef, you'll use your The process of scientific inquiry skills to help with this Science challenge",
+              "tools": "You have these tools: ingredients, recipes, cooking equipment"
+            },
+            "applySkills": {
+              "title": "Chef Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Chef needs to apply The process of scientific inquiry skills for Science",
+                  "task": "Use your The process of scientific inquiry knowledge to understanding cooking temperatures and food safety",
+                  "expectedOutcome": "Successfully complete the Science-focused Chef task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "The process of scientific inquiry",
+                  "application": "How a Chef uses The process of scientific inquiry for Science tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use The process of scientific inquiry to complete this Chef challenge?",
+              "options": [
+                "Apply The process of scientific inquiry step by step",
+                "Skip the Science part and focus on other things",
+                "Ask someone else to handle the Science work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply The process of scientific inquiry step by step",
+              "explanation": "Great Chefs know that applying The process of scientific inquiry systematically leads to the best results in Science tasks!",
+              "success": "Congratulations Jordan Smith! You've successfully used The process of scientific inquiry to complete your Chef challenge!"
+            }
+          },
+          "SocialStudies": {
+            "roleSetup": {
+              "title": "Working as a Chef",
+              "roleDescription": "Today you're a professional Chef in a restaurant kitchen!",
+              "challenge": "Your mission: creating culturally diverse menu options for the community",
+              "context": "As a Chef, you'll use your Identify lines of latitude and longitude skills to help with this SocialStudies challenge",
+              "tools": "You have these tools: ingredients, recipes, cooking equipment"
+            },
+            "applySkills": {
+              "title": "Chef Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Chef needs to apply Identify lines of latitude and longitude skills for SocialStudies",
+                  "task": "Use your Identify lines of latitude and longitude knowledge to creating culturally diverse menu options for the community",
+                  "expectedOutcome": "Successfully complete the SocialStudies-focused Chef task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Identify lines of latitude and longitude",
+                  "application": "How a Chef uses Identify lines of latitude and longitude for SocialStudies tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Identify lines of latitude and longitude to complete this Chef challenge?",
+              "options": [
+                "Apply Identify lines of latitude and longitude step by step",
+                "Skip the SocialStudies part and focus on other things",
+                "Ask someone else to handle the SocialStudies work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Identify lines of latitude and longitude step by step",
+              "explanation": "Great Chefs know that applying Identify lines of latitude and longitude systematically leads to the best results in SocialStudies tasks!",
+              "success": "Congratulations Jordan Smith! You've successfully used Identify lines of latitude and longitude to complete your Chef challenge!"
+            }
+          }
+        },
+        "discover": {
+          "storySetup": {
+            "title": "Jordan Smith's Chef Adventure",
+            "setting": "In a magical kitchen in the clouds...",
+            "characters": [
+              "Jordan Smith",
+              "Master Chef",
+              "Helpful Companion"
+            ],
+            "plot": "The kingdom needs Jordan Smith to save the Kingdom's Grand Feast using Chef skills!",
+            "skillConnection": "This adventure requires: Understanding integers, Determine the main idea of a passage, The process of scientific inquiry, Identify lines of latitude and longitude"
+          },
+          "adventure": {
+            "title": "The Chef Quest",
+            "storyEvents": [
+              {
+                "event": "the Sour Wizard has appeared and threatens the kingdom!",
+                "choice": "Use your Chef training and learned skills",
+                "outcome": "Jordan Smith bravely steps forward to help",
+                "skillApplication": "Time to use: Understanding integers, Determine the main idea of a passage, The process of scientific inquiry, Identify lines of latitude and longitude"
+              },
+              {
+                "event": "You must find the golden recipes to succeed",
+                "choice": "Combine all your learned skills",
+                "outcome": "The skills work together like magic!",
+                "skillApplication": "Each skill adds power to your quest"
+              }
+            ]
+          },
+          "herosChoice": {
+            "question": "How does Jordan Smith save the kingdom?",
+            "options": [
+              "Use only the strongest skill",
+              "Try each skill one by one",
+              "Combine all skills with wisdom",
+              "Ask others to solve it instead"
+            ],
+            "correctAnswer": "Combine all skills with wisdom",
+            "explanation": "True heroes know that all skills working together create the most powerful magic!",
+            "ending": "🌟 Jordan Smith becomes the legendary Chef hero, saving the kingdom with wisdom and skill! The people cheer as golden recipes glow brightly once more!"
+          }
+        }
+      },
+      "Librarian": {
+        "experience": {
+          "Math": {
+            "roleSetup": {
+              "title": "Working as a Librarian",
+              "roleDescription": "Today you're a professional Librarian in a community library!",
+              "challenge": "Your mission: organizing books by number classification and calculating reading statistics",
+              "context": "As a Librarian, you'll use your Understanding integers skills to help with this Math challenge",
+              "tools": "You have these tools: books, computers, display materials"
+            },
+            "applySkills": {
+              "title": "Librarian Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Librarian needs to apply Understanding integers skills for Math",
+                  "task": "Use your Understanding integers knowledge to organizing books by number classification and calculating reading statistics",
+                  "expectedOutcome": "Successfully complete the Math-focused Librarian task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Understanding integers",
+                  "application": "How a Librarian uses Understanding integers for Math tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Understanding integers to complete this Librarian challenge?",
+              "options": [
+                "Apply Understanding integers step by step",
+                "Skip the Math part and focus on other things",
+                "Ask someone else to handle the Math work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Understanding integers step by step",
+              "explanation": "Great Librarians know that applying Understanding integers systematically leads to the best results in Math tasks!",
+              "success": "Congratulations Jordan Smith! You've successfully used Understanding integers to complete your Librarian challenge!"
+            }
+          },
+          "ELA": {
+            "roleSetup": {
+              "title": "Working as a Librarian",
+              "roleDescription": "Today you're a professional Librarian in a community library!",
+              "challenge": "Your mission: curating age-appropriate reading materials and leading story sessions",
+              "context": "As a Librarian, you'll use your Determine the main idea of a passage skills to help with this ELA challenge",
+              "tools": "You have these tools: books, computers, display materials"
+            },
+            "applySkills": {
+              "title": "Librarian Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Librarian needs to apply Determine the main idea of a passage skills for ELA",
+                  "task": "Use your Determine the main idea of a passage knowledge to curating age-appropriate reading materials and leading story sessions",
+                  "expectedOutcome": "Successfully complete the ELA-focused Librarian task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Determine the main idea of a passage",
+                  "application": "How a Librarian uses Determine the main idea of a passage for ELA tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Determine the main idea of a passage to complete this Librarian challenge?",
+              "options": [
+                "Apply Determine the main idea of a passage step by step",
+                "Skip the ELA part and focus on other things",
+                "Ask someone else to handle the ELA work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Determine the main idea of a passage step by step",
+              "explanation": "Great Librarians know that applying Determine the main idea of a passage systematically leads to the best results in ELA tasks!",
+              "success": "Congratulations Jordan Smith! You've successfully used Determine the main idea of a passage to complete your Librarian challenge!"
+            }
+          },
+          "Science": {
+            "roleSetup": {
+              "title": "Working as a Librarian",
+              "roleDescription": "Today you're a professional Librarian in a community library!",
+              "challenge": "Your mission: setting up a science book display and demonstration area",
+              "context": "As a Librarian, you'll use your The process of scientific inquiry skills to help with this Science challenge",
+              "tools": "You have these tools: books, computers, display materials"
+            },
+            "applySkills": {
+              "title": "Librarian Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Librarian needs to apply The process of scientific inquiry skills for Science",
+                  "task": "Use your The process of scientific inquiry knowledge to setting up a science book display and demonstration area",
+                  "expectedOutcome": "Successfully complete the Science-focused Librarian task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "The process of scientific inquiry",
+                  "application": "How a Librarian uses The process of scientific inquiry for Science tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use The process of scientific inquiry to complete this Librarian challenge?",
+              "options": [
+                "Apply The process of scientific inquiry step by step",
+                "Skip the Science part and focus on other things",
+                "Ask someone else to handle the Science work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply The process of scientific inquiry step by step",
+              "explanation": "Great Librarians know that applying The process of scientific inquiry systematically leads to the best results in Science tasks!",
+              "success": "Congratulations Jordan Smith! You've successfully used The process of scientific inquiry to complete your Librarian challenge!"
+            }
+          },
+          "SocialStudies": {
+            "roleSetup": {
+              "title": "Working as a Librarian",
+              "roleDescription": "Today you're a professional Librarian in a community library!",
+              "challenge": "Your mission: creating exhibits about diverse cultures and community history",
+              "context": "As a Librarian, you'll use your Identify lines of latitude and longitude skills to help with this SocialStudies challenge",
+              "tools": "You have these tools: books, computers, display materials"
+            },
+            "applySkills": {
+              "title": "Librarian Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Librarian needs to apply Identify lines of latitude and longitude skills for SocialStudies",
+                  "task": "Use your Identify lines of latitude and longitude knowledge to creating exhibits about diverse cultures and community history",
+                  "expectedOutcome": "Successfully complete the SocialStudies-focused Librarian task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Identify lines of latitude and longitude",
+                  "application": "How a Librarian uses Identify lines of latitude and longitude for SocialStudies tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Identify lines of latitude and longitude to complete this Librarian challenge?",
+              "options": [
+                "Apply Identify lines of latitude and longitude step by step",
+                "Skip the SocialStudies part and focus on other things",
+                "Ask someone else to handle the SocialStudies work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Identify lines of latitude and longitude step by step",
+              "explanation": "Great Librarians know that applying Identify lines of latitude and longitude systematically leads to the best results in SocialStudies tasks!",
+              "success": "Congratulations Jordan Smith! You've successfully used Identify lines of latitude and longitude to complete your Librarian challenge!"
+            }
+          }
+        },
+        "discover": {
+          "storySetup": {
+            "title": "Jordan Smith's Librarian Adventure",
+            "setting": "In a enchanted library with talking books...",
+            "characters": [
+              "Jordan Smith",
+              "Master Librarian",
+              "Helpful Companion"
+            ],
+            "plot": "The kingdom needs Jordan Smith to restore the lost stories using Librarian skills!",
+            "skillConnection": "This adventure requires: Understanding integers, Determine the main idea of a passage, The process of scientific inquiry, Identify lines of latitude and longitude"
+          },
+          "adventure": {
+            "title": "The Librarian Quest",
+            "storyEvents": [
+              {
+                "event": "the Silent Specter has appeared and threatens the kingdom!",
+                "choice": "Use your Librarian training and learned skills",
+                "outcome": "Jordan Smith bravely steps forward to help",
+                "skillApplication": "Time to use: Understanding integers, Determine the main idea of a passage, The process of scientific inquiry, Identify lines of latitude and longitude"
+              },
+              {
+                "event": "You must find the glowing knowledge crystals to succeed",
+                "choice": "Combine all your learned skills",
+                "outcome": "The skills work together like magic!",
+                "skillApplication": "Each skill adds power to your quest"
+              }
+            ]
+          },
+          "herosChoice": {
+            "question": "How does Jordan Smith save the kingdom?",
+            "options": [
+              "Use only the strongest skill",
+              "Try each skill one by one",
+              "Combine all skills with wisdom",
+              "Ask others to solve it instead"
+            ],
+            "correctAnswer": "Combine all skills with wisdom",
+            "explanation": "True heroes know that all skills working together create the most powerful magic!",
+            "ending": "🌟 Jordan Smith becomes the legendary Librarian hero, saving the kingdom with wisdom and skill! The people cheer as glowing knowledge crystals glow brightly once more!"
+          }
+        }
+      },
+      "Park Ranger": {
+        "experience": {
+          "Math": {
+            "roleSetup": {
+              "title": "Working as a Park Ranger",
+              "roleDescription": "Today you're a professional Park Ranger in a national park!",
+              "challenge": "Your mission: calculating trail distances and visitor capacity for safety",
+              "context": "As a Park Ranger, you'll use your Understanding integers skills to help with this Math challenge",
+              "tools": "You have these tools: maps, field guides, safety equipment"
+            },
+            "applySkills": {
+              "title": "Park Ranger Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Park Ranger needs to apply Understanding integers skills for Math",
+                  "task": "Use your Understanding integers knowledge to calculating trail distances and visitor capacity for safety",
+                  "expectedOutcome": "Successfully complete the Math-focused Park Ranger task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Understanding integers",
+                  "application": "How a Park Ranger uses Understanding integers for Math tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Understanding integers to complete this Park Ranger challenge?",
+              "options": [
+                "Apply Understanding integers step by step",
+                "Skip the Math part and focus on other things",
+                "Ask someone else to handle the Math work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Understanding integers step by step",
+              "explanation": "Great Park Rangers know that applying Understanding integers systematically leads to the best results in Math tasks!",
+              "success": "Congratulations Jordan Smith! You've successfully used Understanding integers to complete your Park Ranger challenge!"
+            }
+          },
+          "ELA": {
+            "roleSetup": {
+              "title": "Working as a Park Ranger",
+              "roleDescription": "Today you're a professional Park Ranger in a national park!",
+              "challenge": "Your mission: writing informative trail guides and interpretive signs",
+              "context": "As a Park Ranger, you'll use your Determine the main idea of a passage skills to help with this ELA challenge",
+              "tools": "You have these tools: maps, field guides, safety equipment"
+            },
+            "applySkills": {
+              "title": "Park Ranger Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Park Ranger needs to apply Determine the main idea of a passage skills for ELA",
+                  "task": "Use your Determine the main idea of a passage knowledge to writing informative trail guides and interpretive signs",
+                  "expectedOutcome": "Successfully complete the ELA-focused Park Ranger task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Determine the main idea of a passage",
+                  "application": "How a Park Ranger uses Determine the main idea of a passage for ELA tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Determine the main idea of a passage to complete this Park Ranger challenge?",
+              "options": [
+                "Apply Determine the main idea of a passage step by step",
+                "Skip the ELA part and focus on other things",
+                "Ask someone else to handle the ELA work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Determine the main idea of a passage step by step",
+              "explanation": "Great Park Rangers know that applying Determine the main idea of a passage systematically leads to the best results in ELA tasks!",
+              "success": "Congratulations Jordan Smith! You've successfully used Determine the main idea of a passage to complete your Park Ranger challenge!"
+            }
+          },
+          "Science": {
+            "roleSetup": {
+              "title": "Working as a Park Ranger",
+              "roleDescription": "Today you're a professional Park Ranger in a national park!",
+              "challenge": "Your mission: explaining ecosystem relationships and wildlife behaviors",
+              "context": "As a Park Ranger, you'll use your The process of scientific inquiry skills to help with this Science challenge",
+              "tools": "You have these tools: maps, field guides, safety equipment"
+            },
+            "applySkills": {
+              "title": "Park Ranger Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Park Ranger needs to apply The process of scientific inquiry skills for Science",
+                  "task": "Use your The process of scientific inquiry knowledge to explaining ecosystem relationships and wildlife behaviors",
+                  "expectedOutcome": "Successfully complete the Science-focused Park Ranger task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "The process of scientific inquiry",
+                  "application": "How a Park Ranger uses The process of scientific inquiry for Science tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use The process of scientific inquiry to complete this Park Ranger challenge?",
+              "options": [
+                "Apply The process of scientific inquiry step by step",
+                "Skip the Science part and focus on other things",
+                "Ask someone else to handle the Science work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply The process of scientific inquiry step by step",
+              "explanation": "Great Park Rangers know that applying The process of scientific inquiry systematically leads to the best results in Science tasks!",
+              "success": "Congratulations Jordan Smith! You've successfully used The process of scientific inquiry to complete your Park Ranger challenge!"
+            }
+          },
+          "SocialStudies": {
+            "roleSetup": {
+              "title": "Working as a Park Ranger",
+              "roleDescription": "Today you're a professional Park Ranger in a national park!",
+              "challenge": "Your mission: sharing indigenous history and cultural significance of the land",
+              "context": "As a Park Ranger, you'll use your Identify lines of latitude and longitude skills to help with this SocialStudies challenge",
+              "tools": "You have these tools: maps, field guides, safety equipment"
+            },
+            "applySkills": {
+              "title": "Park Ranger Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Park Ranger needs to apply Identify lines of latitude and longitude skills for SocialStudies",
+                  "task": "Use your Identify lines of latitude and longitude knowledge to sharing indigenous history and cultural significance of the land",
+                  "expectedOutcome": "Successfully complete the SocialStudies-focused Park Ranger task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Identify lines of latitude and longitude",
+                  "application": "How a Park Ranger uses Identify lines of latitude and longitude for SocialStudies tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Identify lines of latitude and longitude to complete this Park Ranger challenge?",
+              "options": [
+                "Apply Identify lines of latitude and longitude step by step",
+                "Skip the SocialStudies part and focus on other things",
+                "Ask someone else to handle the SocialStudies work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Identify lines of latitude and longitude step by step",
+              "explanation": "Great Park Rangers know that applying Identify lines of latitude and longitude systematically leads to the best results in SocialStudies tasks!",
+              "success": "Congratulations Jordan Smith! You've successfully used Identify lines of latitude and longitude to complete your Park Ranger challenge!"
+            }
+          }
+        },
+        "discover": {
+          "storySetup": {
+            "title": "Jordan Smith's Park Ranger Adventure",
+            "setting": "In a mystical forest with ancient trees...",
+            "characters": [
+              "Jordan Smith",
+              "Master Park Ranger",
+              "Helpful Companion"
+            ],
+            "plot": "The kingdom needs Jordan Smith to protect the Sacred Grove using Park Ranger skills!",
+            "skillConnection": "This adventure requires: Understanding integers, Determine the main idea of a passage, The process of scientific inquiry, Identify lines of latitude and longitude"
+          },
+          "adventure": {
+            "title": "The Park Ranger Quest",
+            "storyEvents": [
+              {
+                "event": "the Shadow Destroyer has appeared and threatens the kingdom!",
+                "choice": "Use your Park Ranger training and learned skills",
+                "outcome": "Jordan Smith bravely steps forward to help",
+                "skillApplication": "Time to use: Understanding integers, Determine the main idea of a passage, The process of scientific inquiry, Identify lines of latitude and longitude"
+              },
+              {
+                "event": "You must find the nature's harmony stones to succeed",
+                "choice": "Combine all your learned skills",
+                "outcome": "The skills work together like magic!",
+                "skillApplication": "Each skill adds power to your quest"
+              }
+            ]
+          },
+          "herosChoice": {
+            "question": "How does Jordan Smith save the kingdom?",
+            "options": [
+              "Use only the strongest skill",
+              "Try each skill one by one",
+              "Combine all skills with wisdom",
+              "Ask others to solve it instead"
+            ],
+            "correctAnswer": "Combine all skills with wisdom",
+            "explanation": "True heroes know that all skills working together create the most powerful magic!",
+            "ending": "🌟 Jordan Smith becomes the legendary Park Ranger hero, saving the kingdom with wisdom and skill! The people cheer as nature's harmony stones glow brightly once more!"
+          }
+        }
+      }
+    },
+    "generatedAt": "2025-07-16T19:29:40.000Z",
+    "subjects": [
+      "Math",
+      "ELA",
+      "Science",
+      "SocialStudies"
+    ],
+    "careers": [
+      "Engineer",
+      "Scientist",
+      "Chef",
+      "Librarian",
+      "Park Ranger"
+    ]
+  },
+  "Taylor Johnson": {
+    "user": {
+      "name": "Taylor Johnson",
+      "grade": "10",
+      "gradeLevel": "10th Grade"
+    },
+    "dashboardCards": [
+      {
+        "subject": "Algebra1",
+        "title": "Numbers and operations",
+        "description": "Learn Algebra1 fundamentals",
+        "skillNumber": "A.0"
+      },
+      {
+        "subject": "Precalculus",
+        "title": "Function concepts",
+        "description": "Learn Precalculus fundamentals",
+        "skillNumber": "A.0"
+      }
+    ],
+    "skills": {
+      "Algebra1": {
+        "A.0": {
+          "id": "9bb4df6d-8d65-4377-bc05-de9c7bd7a401",
+          "subject": "Algebra1",
+          "grade": "10",
+          "skills_area": "Algebra1",
+          "skills_cluster": "A.",
+          "skill_number": "A.0",
+          "skill_name": "Numbers and operations",
+          "skill_description": null,
+          "difficulty_level": 3,
+          "estimated_time_minutes": 15,
+          "prerequisites": null,
+          "created_at": "2025-07-14T00:41:32.745886+00:00",
+          "updated_at": "2025-07-14T00:41:32.745886+00:00"
+        },
+        "A.1": {
+          "id": "04dca320-2e9b-4857-bcaf-ebf23725eba5",
+          "subject": "Algebra1",
+          "grade": "10",
+          "skills_area": "Algebra1",
+          "skills_cluster": "A.",
+          "skill_number": "A.1",
+          "skill_name": "Add, subtract, multiply, and divide integers",
+          "skill_description": null,
+          "difficulty_level": 3,
+          "estimated_time_minutes": 15,
+          "prerequisites": null,
+          "created_at": "2025-07-14T00:41:32.745886+00:00",
+          "updated_at": "2025-07-14T00:41:32.745886+00:00"
+        }
+      },
+      "Precalculus": {
+        "A.0": {
+          "id": "70372248-c0e6-4527-8913-b7b3fe63e434",
+          "subject": "Precalculus",
+          "grade": "10",
+          "skills_area": "Precalculus",
+          "skills_cluster": "A.",
+          "skill_number": "A.0",
+          "skill_name": "Function concepts",
+          "skill_description": null,
+          "difficulty_level": 3,
+          "estimated_time_minutes": 15,
+          "prerequisites": null,
+          "created_at": "2025-07-14T00:41:33.50185+00:00",
+          "updated_at": "2025-07-14T00:41:33.50185+00:00"
+        },
+        "A.1": {
+          "id": "a69c3963-a7d5-4b8e-9fe2-19c08b5cc56e",
+          "subject": "Precalculus",
+          "grade": "10",
+          "skills_area": "Precalculus",
+          "skills_cluster": "A.",
+          "skill_number": "A.1",
+          "skill_name": "Domain and range",
+          "skill_description": null,
+          "difficulty_level": 3,
+          "estimated_time_minutes": 15,
+          "prerequisites": null,
+          "created_at": "2025-07-14T00:41:33.50185+00:00",
+          "updated_at": "2025-07-14T00:41:33.50185+00:00"
+        }
+      }
+    },
+    "learnContent": {
+      "Algebra1": {
+        "instruction": {
+          "title": "Let's Learn Add, subtract, multiply, and divide integers!",
+          "content": "Welcome Taylor Johnson! Today we're exploring Add, subtract, multiply, and divide integers in Algebra1.",
+          "concept": "Understanding Add, subtract, multiply, and divide integers",
+          "examples": [
+            {
+              "question": "What is Add, subtract, multiply, and divide integers?",
+              "answer": "Add, subtract, multiply, and divide integers is an important Algebra1 concept.",
+              "explanation": "This helps us understand how to use Add, subtract, multiply, and divide integers in real situations."
+            }
+          ],
+          "keyPoints": [
+            "Add, subtract, multiply, and divide integers is fundamental to Algebra1",
+            "Practice makes perfect with Add, subtract, multiply, and divide integers",
+            "You can use Add, subtract, multiply, and divide integers in many ways"
+          ]
+        },
+        "practice": {
+          "title": "Practice Add, subtract, multiply, and divide integers",
+          "exercises": [
+            {
+              "question": "Try this Add, subtract, multiply, and divide integers activity",
+              "hint": "Remember what we learned about Add, subtract, multiply, and divide integers",
+              "expectedAnswer": "Various answers possible",
+              "feedback": "Great job practicing Add, subtract, multiply, and divide integers!"
+            }
+          ]
+        },
+        "assessment": {
+          "question": "Which best describes Add, subtract, multiply, and divide integers?",
+          "options": [
+            "It helps with Algebra1 skills",
+            "It's used in daily life",
+            "It connects to other subjects",
+            "All of the above"
+          ],
+          "correctAnswer": "All of the above",
+          "explanation": "Add, subtract, multiply, and divide integers is useful in many ways and connects to other learning!",
+          "feedback": {
+            "correct": "Excellent work, Taylor Johnson! You understand Add, subtract, multiply, and divide integers!",
+            "incorrect": "Not quite, but keep learning! Add, subtract, multiply, and divide integers takes practice."
+          }
+        }
+      },
+      "Precalculus": {
+        "instruction": {
+          "title": "Let's Learn Domain and range!",
+          "content": "Welcome Taylor Johnson! Today we're exploring Domain and range in Precalculus.",
+          "concept": "Understanding Domain and range",
+          "examples": [
+            {
+              "question": "What is Domain and range?",
+              "answer": "Domain and range is an important Precalculus concept.",
+              "explanation": "This helps us understand how to use Domain and range in real situations."
+            }
+          ],
+          "keyPoints": [
+            "Domain and range is fundamental to Precalculus",
+            "Practice makes perfect with Domain and range",
+            "You can use Domain and range in many ways"
+          ]
+        },
+        "practice": {
+          "title": "Practice Domain and range",
+          "exercises": [
+            {
+              "question": "Try this Domain and range activity",
+              "hint": "Remember what we learned about Domain and range",
+              "expectedAnswer": "Various answers possible",
+              "feedback": "Great job practicing Domain and range!"
+            }
+          ]
+        },
+        "assessment": {
+          "question": "Which best describes Domain and range?",
+          "options": [
+            "It helps with Precalculus skills",
+            "It's used in daily life",
+            "It connects to other subjects",
+            "All of the above"
+          ],
+          "correctAnswer": "All of the above",
+          "explanation": "Domain and range is useful in many ways and connects to other learning!",
+          "feedback": {
+            "correct": "Excellent work, Taylor Johnson! You understand Domain and range!",
+            "incorrect": "Not quite, but keep learning! Domain and range takes practice."
+          }
+        }
+      }
+    },
+    "careerContent": {
+      "Engineer": {
+        "experience": {
+          "Algebra1": {
+            "roleSetup": {
+              "title": "Working as a Engineer",
+              "roleDescription": "Today you're a professional Engineer in a design workshop!",
+              "challenge": "Your mission: solving a community problem",
+              "context": "As a Engineer, you'll use your Add, subtract, multiply, and divide integers skills to help with this Algebra1 challenge",
+              "tools": "You have these tools: blueprints, calculations, building materials"
+            },
+            "applySkills": {
+              "title": "Engineer Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Engineer needs to apply Add, subtract, multiply, and divide integers skills for Algebra1",
+                  "task": "Use your Add, subtract, multiply, and divide integers knowledge to solving a community problem",
+                  "expectedOutcome": "Successfully complete the Algebra1-focused Engineer task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Add, subtract, multiply, and divide integers",
+                  "application": "How a Engineer uses Add, subtract, multiply, and divide integers for Algebra1 tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Add, subtract, multiply, and divide integers to complete this Engineer challenge?",
+              "options": [
+                "Apply Add, subtract, multiply, and divide integers step by step",
+                "Skip the Algebra1 part and focus on other things",
+                "Ask someone else to handle the Algebra1 work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Add, subtract, multiply, and divide integers step by step",
+              "explanation": "Great Engineers know that applying Add, subtract, multiply, and divide integers systematically leads to the best results in Algebra1 tasks!",
+              "success": "Congratulations Taylor Johnson! You've successfully used Add, subtract, multiply, and divide integers to complete your Engineer challenge!"
+            }
+          },
+          "Precalculus": {
+            "roleSetup": {
+              "title": "Working as a Engineer",
+              "roleDescription": "Today you're a professional Engineer in a design workshop!",
+              "challenge": "Your mission: solving a community problem",
+              "context": "As a Engineer, you'll use your Domain and range skills to help with this Precalculus challenge",
+              "tools": "You have these tools: blueprints, calculations, building materials"
+            },
+            "applySkills": {
+              "title": "Engineer Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Engineer needs to apply Domain and range skills for Precalculus",
+                  "task": "Use your Domain and range knowledge to solving a community problem",
+                  "expectedOutcome": "Successfully complete the Precalculus-focused Engineer task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Domain and range",
+                  "application": "How a Engineer uses Domain and range for Precalculus tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Domain and range to complete this Engineer challenge?",
+              "options": [
+                "Apply Domain and range step by step",
+                "Skip the Precalculus part and focus on other things",
+                "Ask someone else to handle the Precalculus work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Domain and range step by step",
+              "explanation": "Great Engineers know that applying Domain and range systematically leads to the best results in Precalculus tasks!",
+              "success": "Congratulations Taylor Johnson! You've successfully used Domain and range to complete your Engineer challenge!"
+            }
+          }
+        },
+        "discover": {
+          "storySetup": {
+            "title": "Taylor Johnson's Engineer Adventure",
+            "setting": "In a floating city of inventions...",
+            "characters": [
+              "Taylor Johnson",
+              "Master Engineer",
+              "Helpful Companion"
+            ],
+            "plot": "The kingdom needs Taylor Johnson to rebuild the Great Machine using Engineer skills!",
+            "skillConnection": "This adventure requires: Add, subtract, multiply, and divide integers, Domain and range"
+          },
+          "adventure": {
+            "title": "The Engineer Quest",
+            "storyEvents": [
+              {
+                "event": "the Chaos Constructor has appeared and threatens the kingdom!",
+                "choice": "Use your Engineer training and learned skills",
+                "outcome": "Taylor Johnson bravely steps forward to help",
+                "skillApplication": "Time to use: Add, subtract, multiply, and divide integers, Domain and range"
+              },
+              {
+                "event": "You must find the blueprint gems to succeed",
+                "choice": "Combine all your learned skills",
+                "outcome": "The skills work together like magic!",
+                "skillApplication": "Each skill adds power to your quest"
+              }
+            ]
+          },
+          "herosChoice": {
+            "question": "How does Taylor Johnson save the kingdom?",
+            "options": [
+              "Use only the strongest skill",
+              "Try each skill one by one",
+              "Combine all skills with wisdom",
+              "Ask others to solve it instead"
+            ],
+            "correctAnswer": "Combine all skills with wisdom",
+            "explanation": "True heroes know that all skills working together create the most powerful magic!",
+            "ending": "🌟 Taylor Johnson becomes the legendary Engineer hero, saving the kingdom with wisdom and skill! The people cheer as blueprint gems glow brightly once more!"
+          }
+        }
+      },
+      "Scientist": {
+        "experience": {
+          "Algebra1": {
+            "roleSetup": {
+              "title": "Working as a Scientist",
+              "roleDescription": "Today you're a professional Scientist in a research laboratory!",
+              "challenge": "Your mission: conducting an important experiment",
+              "context": "As a Scientist, you'll use your Add, subtract, multiply, and divide integers skills to help with this Algebra1 challenge",
+              "tools": "You have these tools: laboratory equipment, data charts, research notes"
+            },
+            "applySkills": {
+              "title": "Scientist Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Scientist needs to apply Add, subtract, multiply, and divide integers skills for Algebra1",
+                  "task": "Use your Add, subtract, multiply, and divide integers knowledge to conducting an important experiment",
+                  "expectedOutcome": "Successfully complete the Algebra1-focused Scientist task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Add, subtract, multiply, and divide integers",
+                  "application": "How a Scientist uses Add, subtract, multiply, and divide integers for Algebra1 tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Add, subtract, multiply, and divide integers to complete this Scientist challenge?",
+              "options": [
+                "Apply Add, subtract, multiply, and divide integers step by step",
+                "Skip the Algebra1 part and focus on other things",
+                "Ask someone else to handle the Algebra1 work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Add, subtract, multiply, and divide integers step by step",
+              "explanation": "Great Scientists know that applying Add, subtract, multiply, and divide integers systematically leads to the best results in Algebra1 tasks!",
+              "success": "Congratulations Taylor Johnson! You've successfully used Add, subtract, multiply, and divide integers to complete your Scientist challenge!"
+            }
+          },
+          "Precalculus": {
+            "roleSetup": {
+              "title": "Working as a Scientist",
+              "roleDescription": "Today you're a professional Scientist in a research laboratory!",
+              "challenge": "Your mission: conducting an important experiment",
+              "context": "As a Scientist, you'll use your Domain and range skills to help with this Precalculus challenge",
+              "tools": "You have these tools: laboratory equipment, data charts, research notes"
+            },
+            "applySkills": {
+              "title": "Scientist Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Scientist needs to apply Domain and range skills for Precalculus",
+                  "task": "Use your Domain and range knowledge to conducting an important experiment",
+                  "expectedOutcome": "Successfully complete the Precalculus-focused Scientist task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Domain and range",
+                  "application": "How a Scientist uses Domain and range for Precalculus tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Domain and range to complete this Scientist challenge?",
+              "options": [
+                "Apply Domain and range step by step",
+                "Skip the Precalculus part and focus on other things",
+                "Ask someone else to handle the Precalculus work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Domain and range step by step",
+              "explanation": "Great Scientists know that applying Domain and range systematically leads to the best results in Precalculus tasks!",
+              "success": "Congratulations Taylor Johnson! You've successfully used Domain and range to complete your Scientist challenge!"
+            }
+          }
+        },
+        "discover": {
+          "storySetup": {
+            "title": "Taylor Johnson's Scientist Adventure",
+            "setting": "In a crystal laboratory in space...",
+            "characters": [
+              "Taylor Johnson",
+              "Master Scientist",
+              "Helpful Companion"
+            ],
+            "plot": "The kingdom needs Taylor Johnson to discover the formula for peace using Scientist skills!",
+            "skillConnection": "This adventure requires: Add, subtract, multiply, and divide integers, Domain and range"
+          },
+          "adventure": {
+            "title": "The Scientist Quest",
+            "storyEvents": [
+              {
+                "event": "the Discord Doctor has appeared and threatens the kingdom!",
+                "choice": "Use your Scientist training and learned skills",
+                "outcome": "Taylor Johnson bravely steps forward to help",
+                "skillApplication": "Time to use: Add, subtract, multiply, and divide integers, Domain and range"
+              },
+              {
+                "event": "You must find the wisdom spheres to succeed",
+                "choice": "Combine all your learned skills",
+                "outcome": "The skills work together like magic!",
+                "skillApplication": "Each skill adds power to your quest"
+              }
+            ]
+          },
+          "herosChoice": {
+            "question": "How does Taylor Johnson save the kingdom?",
+            "options": [
+              "Use only the strongest skill",
+              "Try each skill one by one",
+              "Combine all skills with wisdom",
+              "Ask others to solve it instead"
+            ],
+            "correctAnswer": "Combine all skills with wisdom",
+            "explanation": "True heroes know that all skills working together create the most powerful magic!",
+            "ending": "🌟 Taylor Johnson becomes the legendary Scientist hero, saving the kingdom with wisdom and skill! The people cheer as wisdom spheres glow brightly once more!"
+          }
+        }
+      },
+      "Chef": {
+        "experience": {
+          "Algebra1": {
+            "roleSetup": {
+              "title": "Working as a Chef",
+              "roleDescription": "Today you're a professional Chef in a restaurant kitchen!",
+              "challenge": "Your mission: preparing a special meal",
+              "context": "As a Chef, you'll use your Add, subtract, multiply, and divide integers skills to help with this Algebra1 challenge",
+              "tools": "You have these tools: ingredients, recipes, cooking equipment"
+            },
+            "applySkills": {
+              "title": "Chef Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Chef needs to apply Add, subtract, multiply, and divide integers skills for Algebra1",
+                  "task": "Use your Add, subtract, multiply, and divide integers knowledge to preparing a special meal",
+                  "expectedOutcome": "Successfully complete the Algebra1-focused Chef task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Add, subtract, multiply, and divide integers",
+                  "application": "How a Chef uses Add, subtract, multiply, and divide integers for Algebra1 tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Add, subtract, multiply, and divide integers to complete this Chef challenge?",
+              "options": [
+                "Apply Add, subtract, multiply, and divide integers step by step",
+                "Skip the Algebra1 part and focus on other things",
+                "Ask someone else to handle the Algebra1 work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Add, subtract, multiply, and divide integers step by step",
+              "explanation": "Great Chefs know that applying Add, subtract, multiply, and divide integers systematically leads to the best results in Algebra1 tasks!",
+              "success": "Congratulations Taylor Johnson! You've successfully used Add, subtract, multiply, and divide integers to complete your Chef challenge!"
+            }
+          },
+          "Precalculus": {
+            "roleSetup": {
+              "title": "Working as a Chef",
+              "roleDescription": "Today you're a professional Chef in a restaurant kitchen!",
+              "challenge": "Your mission: preparing a special meal",
+              "context": "As a Chef, you'll use your Domain and range skills to help with this Precalculus challenge",
+              "tools": "You have these tools: ingredients, recipes, cooking equipment"
+            },
+            "applySkills": {
+              "title": "Chef Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Chef needs to apply Domain and range skills for Precalculus",
+                  "task": "Use your Domain and range knowledge to preparing a special meal",
+                  "expectedOutcome": "Successfully complete the Precalculus-focused Chef task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Domain and range",
+                  "application": "How a Chef uses Domain and range for Precalculus tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Domain and range to complete this Chef challenge?",
+              "options": [
+                "Apply Domain and range step by step",
+                "Skip the Precalculus part and focus on other things",
+                "Ask someone else to handle the Precalculus work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Domain and range step by step",
+              "explanation": "Great Chefs know that applying Domain and range systematically leads to the best results in Precalculus tasks!",
+              "success": "Congratulations Taylor Johnson! You've successfully used Domain and range to complete your Chef challenge!"
+            }
+          }
+        },
+        "discover": {
+          "storySetup": {
+            "title": "Taylor Johnson's Chef Adventure",
+            "setting": "In a magical kitchen in the clouds...",
+            "characters": [
+              "Taylor Johnson",
+              "Master Chef",
+              "Helpful Companion"
+            ],
+            "plot": "The kingdom needs Taylor Johnson to save the Kingdom's Grand Feast using Chef skills!",
+            "skillConnection": "This adventure requires: Add, subtract, multiply, and divide integers, Domain and range"
+          },
+          "adventure": {
+            "title": "The Chef Quest",
+            "storyEvents": [
+              {
+                "event": "the Sour Wizard has appeared and threatens the kingdom!",
+                "choice": "Use your Chef training and learned skills",
+                "outcome": "Taylor Johnson bravely steps forward to help",
+                "skillApplication": "Time to use: Add, subtract, multiply, and divide integers, Domain and range"
+              },
+              {
+                "event": "You must find the golden recipes to succeed",
+                "choice": "Combine all your learned skills",
+                "outcome": "The skills work together like magic!",
+                "skillApplication": "Each skill adds power to your quest"
+              }
+            ]
+          },
+          "herosChoice": {
+            "question": "How does Taylor Johnson save the kingdom?",
+            "options": [
+              "Use only the strongest skill",
+              "Try each skill one by one",
+              "Combine all skills with wisdom",
+              "Ask others to solve it instead"
+            ],
+            "correctAnswer": "Combine all skills with wisdom",
+            "explanation": "True heroes know that all skills working together create the most powerful magic!",
+            "ending": "🌟 Taylor Johnson becomes the legendary Chef hero, saving the kingdom with wisdom and skill! The people cheer as golden recipes glow brightly once more!"
+          }
+        }
+      },
+      "Librarian": {
+        "experience": {
+          "Algebra1": {
+            "roleSetup": {
+              "title": "Working as a Librarian",
+              "roleDescription": "Today you're a professional Librarian in a community library!",
+              "challenge": "Your mission: organizing a reading event",
+              "context": "As a Librarian, you'll use your Add, subtract, multiply, and divide integers skills to help with this Algebra1 challenge",
+              "tools": "You have these tools: books, computers, display materials"
+            },
+            "applySkills": {
+              "title": "Librarian Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Librarian needs to apply Add, subtract, multiply, and divide integers skills for Algebra1",
+                  "task": "Use your Add, subtract, multiply, and divide integers knowledge to organizing a reading event",
+                  "expectedOutcome": "Successfully complete the Algebra1-focused Librarian task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Add, subtract, multiply, and divide integers",
+                  "application": "How a Librarian uses Add, subtract, multiply, and divide integers for Algebra1 tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Add, subtract, multiply, and divide integers to complete this Librarian challenge?",
+              "options": [
+                "Apply Add, subtract, multiply, and divide integers step by step",
+                "Skip the Algebra1 part and focus on other things",
+                "Ask someone else to handle the Algebra1 work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Add, subtract, multiply, and divide integers step by step",
+              "explanation": "Great Librarians know that applying Add, subtract, multiply, and divide integers systematically leads to the best results in Algebra1 tasks!",
+              "success": "Congratulations Taylor Johnson! You've successfully used Add, subtract, multiply, and divide integers to complete your Librarian challenge!"
+            }
+          },
+          "Precalculus": {
+            "roleSetup": {
+              "title": "Working as a Librarian",
+              "roleDescription": "Today you're a professional Librarian in a community library!",
+              "challenge": "Your mission: organizing a reading event",
+              "context": "As a Librarian, you'll use your Domain and range skills to help with this Precalculus challenge",
+              "tools": "You have these tools: books, computers, display materials"
+            },
+            "applySkills": {
+              "title": "Librarian Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Librarian needs to apply Domain and range skills for Precalculus",
+                  "task": "Use your Domain and range knowledge to organizing a reading event",
+                  "expectedOutcome": "Successfully complete the Precalculus-focused Librarian task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Domain and range",
+                  "application": "How a Librarian uses Domain and range for Precalculus tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Domain and range to complete this Librarian challenge?",
+              "options": [
+                "Apply Domain and range step by step",
+                "Skip the Precalculus part and focus on other things",
+                "Ask someone else to handle the Precalculus work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Domain and range step by step",
+              "explanation": "Great Librarians know that applying Domain and range systematically leads to the best results in Precalculus tasks!",
+              "success": "Congratulations Taylor Johnson! You've successfully used Domain and range to complete your Librarian challenge!"
+            }
+          }
+        },
+        "discover": {
+          "storySetup": {
+            "title": "Taylor Johnson's Librarian Adventure",
+            "setting": "In a enchanted library with talking books...",
+            "characters": [
+              "Taylor Johnson",
+              "Master Librarian",
+              "Helpful Companion"
+            ],
+            "plot": "The kingdom needs Taylor Johnson to restore the lost stories using Librarian skills!",
+            "skillConnection": "This adventure requires: Add, subtract, multiply, and divide integers, Domain and range"
+          },
+          "adventure": {
+            "title": "The Librarian Quest",
+            "storyEvents": [
+              {
+                "event": "the Silent Specter has appeared and threatens the kingdom!",
+                "choice": "Use your Librarian training and learned skills",
+                "outcome": "Taylor Johnson bravely steps forward to help",
+                "skillApplication": "Time to use: Add, subtract, multiply, and divide integers, Domain and range"
+              },
+              {
+                "event": "You must find the glowing knowledge crystals to succeed",
+                "choice": "Combine all your learned skills",
+                "outcome": "The skills work together like magic!",
+                "skillApplication": "Each skill adds power to your quest"
+              }
+            ]
+          },
+          "herosChoice": {
+            "question": "How does Taylor Johnson save the kingdom?",
+            "options": [
+              "Use only the strongest skill",
+              "Try each skill one by one",
+              "Combine all skills with wisdom",
+              "Ask others to solve it instead"
+            ],
+            "correctAnswer": "Combine all skills with wisdom",
+            "explanation": "True heroes know that all skills working together create the most powerful magic!",
+            "ending": "🌟 Taylor Johnson becomes the legendary Librarian hero, saving the kingdom with wisdom and skill! The people cheer as glowing knowledge crystals glow brightly once more!"
+          }
+        }
+      },
+      "Park Ranger": {
+        "experience": {
+          "Algebra1": {
+            "roleSetup": {
+              "title": "Working as a Park Ranger",
+              "roleDescription": "Today you're a professional Park Ranger in a national park!",
+              "challenge": "Your mission: leading an educational nature tour",
+              "context": "As a Park Ranger, you'll use your Add, subtract, multiply, and divide integers skills to help with this Algebra1 challenge",
+              "tools": "You have these tools: maps, field guides, safety equipment"
+            },
+            "applySkills": {
+              "title": "Park Ranger Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Park Ranger needs to apply Add, subtract, multiply, and divide integers skills for Algebra1",
+                  "task": "Use your Add, subtract, multiply, and divide integers knowledge to leading an educational nature tour",
+                  "expectedOutcome": "Successfully complete the Algebra1-focused Park Ranger task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Add, subtract, multiply, and divide integers",
+                  "application": "How a Park Ranger uses Add, subtract, multiply, and divide integers for Algebra1 tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Add, subtract, multiply, and divide integers to complete this Park Ranger challenge?",
+              "options": [
+                "Apply Add, subtract, multiply, and divide integers step by step",
+                "Skip the Algebra1 part and focus on other things",
+                "Ask someone else to handle the Algebra1 work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Add, subtract, multiply, and divide integers step by step",
+              "explanation": "Great Park Rangers know that applying Add, subtract, multiply, and divide integers systematically leads to the best results in Algebra1 tasks!",
+              "success": "Congratulations Taylor Johnson! You've successfully used Add, subtract, multiply, and divide integers to complete your Park Ranger challenge!"
+            }
+          },
+          "Precalculus": {
+            "roleSetup": {
+              "title": "Working as a Park Ranger",
+              "roleDescription": "Today you're a professional Park Ranger in a national park!",
+              "challenge": "Your mission: leading an educational nature tour",
+              "context": "As a Park Ranger, you'll use your Domain and range skills to help with this Precalculus challenge",
+              "tools": "You have these tools: maps, field guides, safety equipment"
+            },
+            "applySkills": {
+              "title": "Park Ranger Skills in Action",
+              "scenarios": [
+                {
+                  "situation": "A Park Ranger needs to apply Domain and range skills for Precalculus",
+                  "task": "Use your Domain and range knowledge to leading an educational nature tour",
+                  "expectedOutcome": "Successfully complete the Precalculus-focused Park Ranger task"
+                }
+              ],
+              "skillConnections": [
+                {
+                  "skill": "Domain and range",
+                  "application": "How a Park Ranger uses Domain and range for Precalculus tasks"
+                }
+              ]
+            },
+            "solveChallenge": {
+              "question": "How would you use Domain and range to complete this Park Ranger challenge?",
+              "options": [
+                "Apply Domain and range step by step",
+                "Skip the Precalculus part and focus on other things",
+                "Ask someone else to handle the Precalculus work",
+                "Use trial and error without applying the skill"
+              ],
+              "correctAnswer": "Apply Domain and range step by step",
+              "explanation": "Great Park Rangers know that applying Domain and range systematically leads to the best results in Precalculus tasks!",
+              "success": "Congratulations Taylor Johnson! You've successfully used Domain and range to complete your Park Ranger challenge!"
+            }
+          }
+        },
+        "discover": {
+          "storySetup": {
+            "title": "Taylor Johnson's Park Ranger Adventure",
+            "setting": "In a mystical forest with ancient trees...",
+            "characters": [
+              "Taylor Johnson",
+              "Master Park Ranger",
+              "Helpful Companion"
+            ],
+            "plot": "The kingdom needs Taylor Johnson to protect the Sacred Grove using Park Ranger skills!",
+            "skillConnection": "This adventure requires: Add, subtract, multiply, and divide integers, Domain and range"
+          },
+          "adventure": {
+            "title": "The Park Ranger Quest",
+            "storyEvents": [
+              {
+                "event": "the Shadow Destroyer has appeared and threatens the kingdom!",
+                "choice": "Use your Park Ranger training and learned skills",
+                "outcome": "Taylor Johnson bravely steps forward to help",
+                "skillApplication": "Time to use: Add, subtract, multiply, and divide integers, Domain and range"
+              },
+              {
+                "event": "You must find the nature's harmony stones to succeed",
+                "choice": "Combine all your learned skills",
+                "outcome": "The skills work together like magic!",
+                "skillApplication": "Each skill adds power to your quest"
+              }
+            ]
+          },
+          "herosChoice": {
+            "question": "How does Taylor Johnson save the kingdom?",
+            "options": [
+              "Use only the strongest skill",
+              "Try each skill one by one",
+              "Combine all skills with wisdom",
+              "Ask others to solve it instead"
+            ],
+            "correctAnswer": "Combine all skills with wisdom",
+            "explanation": "True heroes know that all skills working together create the most powerful magic!",
+            "ending": "🌟 Taylor Johnson becomes the legendary Park Ranger hero, saving the kingdom with wisdom and skill! The people cheer as nature's harmony stones glow brightly once more!"
+          }
+        }
+      }
+    },
+    "generatedAt": "2025-07-16T19:29:40.555Z",
+    "subjects": [
+      "Algebra1",
+      "Precalculus"
+    ],
+    "careers": [
+      "Engineer",
+      "Scientist",
+      "Chef",
+      "Librarian",
+      "Park Ranger"
+    ]
+  }
+} as const;
+
+export type DemoUserName = keyof typeof DEMO_USER_CACHE;
+
+export type DemoUserData = {
+  user: {
+    name: string;
+    grade: string;
+    gradeLevel: string;
+  };
+  dashboardCards: Array<{
+    subject: string;
+    title: string;
+    description: string;
+    skillNumber: string;
+  }>;
+  skills: Record<string, Record<string, any>>;
+  learnContent: Record<string, any>;
+  careerContent: Record<string, {
+    experience: any;
+    discover: any;
+  }>;
+  generatedAt: string;
+  subjects: string[];
+  careers: string[];
+};

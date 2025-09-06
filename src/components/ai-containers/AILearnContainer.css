@@ -1,0 +1,502 @@
+/**
+ * AI Learn Container Styles
+ */
+
+/* Visual Renderer Animations */
+@keyframes bounceIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.ai-learn-container {
+  position: relative;
+  z-index: 100;
+  width: 100%;
+  min-height: 100vh;
+  background-color: inherit;
+}
+
+/* Practice Phase Styling */
+.ai-learn-container .practice-phase {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.ai-learn-container .phase-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.ai-learn-container .phase-header h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #1a202c;
+  margin-bottom: 1rem;
+}
+
+.ai-learn-container[data-theme="dark"] .phase-header h1 {
+  color: #f7fafc;
+}
+
+.ai-learn-container .phase-header p {
+  font-size: 1.2rem;
+  color: #4a5568;
+}
+
+.ai-learn-container[data-theme="dark"] .phase-header p {
+  color: #cbd5e0;
+}
+
+.ai-learn-container .progress-indicator {
+  display: inline-block;
+  padding: 0.5rem 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 2rem;
+  font-weight: 600;
+}
+
+/* Practice Question Styling */
+.ai-learn-container .practice-question {
+  background: white;
+  border-radius: 1.5rem;
+  padding: 3rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.ai-learn-container[data-theme="dark"] .practice-question {
+  background: #2d3748;
+}
+
+.ai-learn-container .practice-question h2 {
+  font-size: 1.8rem;
+  color: #2d3748;
+  margin-bottom: 2rem;
+}
+
+.ai-learn-container[data-theme="dark"] .practice-question h2 {
+  color: #f7fafc;
+}
+
+/* Multiple Choice Styling */
+.ai-learn-container .multiple-choice {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.ai-learn-container .choice-button {
+  padding: 1.5rem;
+  background: #f7fafc;
+  border: 3px solid transparent;
+  border-radius: 1rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+}
+
+.ai-learn-container .choice-button:hover:not(:disabled) {
+  background: #e2e8f0;
+  transform: translateX(0.5rem);
+}
+
+.ai-learn-container .choice-button.selected {
+  background: #5a67d8;
+  color: white;
+  border-color: #4c51bf;
+}
+
+.ai-learn-container .choice-button.correct {
+  background: #48bb78;
+  color: white;
+  border-color: #38a169;
+}
+
+.ai-learn-container .choice-button.incorrect {
+  background: #f56565;
+  color: white;
+  border-color: #e53e3e;
+}
+
+.ai-learn-container .choice-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+/* True/False Styling */
+.ai-learn-container .true-false {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.ai-learn-container .tf-button {
+  padding: 2rem 4rem;
+  background: #f7fafc;
+  border: 3px solid #e2e8f0;
+  border-radius: 1rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ai-learn-container .tf-button:hover:not(:disabled) {
+  background: #e2e8f0;
+  transform: scale(1.05);
+}
+
+.ai-learn-container .tf-button.selected {
+  background: #5a67d8;
+  color: white;
+  border-color: #4c51bf;
+}
+
+/* Fill in the Blank Styling */
+.ai-learn-container .fill-blank-input {
+  width: 100%;
+  max-width: 400px;
+  padding: 1.5rem;
+  font-size: 1.5rem;
+  border: 3px solid #5a67d8;
+  border-radius: 0.75rem;
+  text-align: center;
+  background: white;
+  box-shadow: 0 4px 12px rgba(90, 103, 216, 0.15);
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.ai-learn-container .fill-blank-input:focus {
+  outline: none;
+  border-color: #4c51bf;
+  box-shadow: 0 0 0 3px rgba(90, 103, 216, 0.2);
+}
+
+/* Feedback Styling */
+.ai-learn-container .feedback {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  animation: slideIn 0.5s ease;
+}
+
+.ai-learn-container .feedback.correct {
+  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+  color: white;
+}
+
+.ai-learn-container .feedback.incorrect {
+  background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+  color: white;
+}
+
+.ai-learn-container .feedback-result {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.ai-learn-container .feedback-explanation {
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.ai-learn-container .feedback-hint {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+}
+
+/* Assessment Phase Styling */
+.ai-learn-container .assessment-phase {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.ai-learn-container .assessment-question {
+  background: white;
+  border-radius: 1.5rem;
+  padding: 3rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.ai-learn-container[data-theme="dark"] .assessment-question {
+  background: #2d3748;
+}
+
+.ai-learn-container .assessment-question h2 {
+  font-size: 1.8rem;
+  color: #2d3748;
+  margin-bottom: 2rem;
+}
+
+.ai-learn-container[data-theme="dark"] .assessment-question h2 {
+  color: #f7fafc;
+}
+
+.ai-learn-container .assessment-choices {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.ai-learn-container .assessment-choice {
+  padding: 1.5rem;
+  background: #f7fafc;
+  border: 3px solid transparent;
+  border-radius: 1rem;
+  font-size: 1.2rem;
+  color: #2d3748;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+}
+
+.ai-learn-container[data-theme="dark"] .assessment-choice {
+  background: #374151;
+  color: #f3f4f6;
+}
+
+.ai-learn-container .assessment-choice:hover:not(:disabled) {
+  background: #e2e8f0;
+  transform: translateX(0.5rem);
+}
+
+.ai-learn-container[data-theme="dark"] .assessment-choice:hover:not(:disabled) {
+  background: #4b5563;
+}
+
+.ai-learn-container .assessment-choice.selected {
+  background: #5a67d8;
+  color: white;
+  border-color: #4c51bf;
+}
+
+.ai-learn-container .assessment-choice.correct {
+  background: #48bb78;
+  color: white;
+  border-color: #38a169;
+}
+
+.ai-learn-container .assessment-choice.incorrect {
+  background: #f56565;
+  color: white;
+  border-color: #e53e3e;
+}
+
+.ai-learn-container .assessment-actions {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.ai-learn-container .submit-button {
+  padding: 1rem 3rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 2rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ai-learn-container .submit-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+}
+
+.ai-learn-container .assessment-result {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  animation: slideIn 0.5s ease;
+}
+
+.ai-learn-container .assessment-result.success {
+  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+  color: white;
+}
+
+.ai-learn-container .assessment-result.retry {
+  background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+  color: white;
+}
+
+/* Completion Phase Styling */
+.ai-learn-container .completion-phase {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.ai-learn-container .completion-header h1 {
+  font-size: 3rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1rem;
+}
+
+.ai-learn-container .completion-header p {
+  font-size: 1.5rem;
+  color: #4a5568;
+}
+
+.ai-learn-container[data-theme="dark"] .completion-header p {
+  color: #cbd5e0;
+}
+
+.ai-learn-container .completion-summary {
+  background: white;
+  border-radius: 1.5rem;
+  padding: 3rem;
+  margin: 2rem 0;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.ai-learn-container[data-theme="dark"] .completion-summary {
+  background: #2d3748;
+}
+
+.ai-learn-container .skill-mastery {
+  margin-bottom: 2rem;
+}
+
+.ai-learn-container .skill-mastery h2 {
+  font-size: 1.5rem;
+  color: #48bb78;
+  margin-bottom: 0.5rem;
+}
+
+.ai-learn-container .skill-mastery p {
+  font-size: 1.2rem;
+  color: #2d3748;
+}
+
+.ai-learn-container[data-theme="dark"] .skill-mastery p {
+  color: #f7fafc;
+}
+
+.ai-learn-container .next-steps h2 {
+  font-size: 1.5rem;
+  color: #5a67d8;
+  margin-bottom: 0.5rem;
+}
+
+.ai-learn-container .next-steps p {
+  font-size: 1.1rem;
+  color: #4a5568;
+}
+
+.ai-learn-container[data-theme="dark"] .next-steps p {
+  color: #cbd5e0;
+}
+
+.ai-learn-container .completion-actions {
+  margin-top: 2rem;
+}
+
+.ai-learn-container .next-container-button {
+  padding: 1.5rem 3rem;
+  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+  color: white;
+  border: none;
+  border-radius: 2rem;
+  font-size: 1.3rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ai-learn-container .next-container-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 30px rgba(72, 187, 120, 0.4);
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Dark Mode Support */
+.ai-learn-container[data-theme="dark"] {
+  background: #1a202c;
+}
+
+.ai-learn-container[data-theme="dark"] .choice-button {
+  background: #374151;
+  color: #e2e8f0;
+}
+
+.ai-learn-container[data-theme="dark"] .choice-button:hover:not(:disabled) {
+  background: #4b5563;
+}
+
+.ai-learn-container[data-theme="dark"] .tf-button {
+  background: #374151;
+  color: #e2e8f0;
+  border-color: #4b5563;
+}
+
+.ai-learn-container[data-theme="dark"] .tf-button:hover:not(:disabled) {
+  background: #4b5563;
+}
+
+.ai-learn-container[data-theme="dark"] .fill-blank-input {
+  background: #374151;
+  color: #f7fafc;
+  border-color: #5a67d8;
+}
+
+.ai-learn-container[data-theme="dark"] .assessment-choice {
+  background: #374151;
+  color: #e2e8f0;
+}
+
+.ai-learn-container[data-theme="dark"] .assessment-choice:hover:not(:disabled) {
+  background: #4b5563;
+}

@@ -1,0 +1,147 @@
+PATHFINITY REVOLUTIONARY - DIRECTORY STRUCTURE
+==============================================
+
+📁 Project Root
+├── 📁 .bolt/                           # Bolt configuration
+│   ├── config.json
+│   ├── ignore
+│   └── prompt
+├── 📁 .claude/                         # Claude settings
+│   └── settings.local.json
+├── 📁 documentation/                   # Project documentation
+│   └── finn_orchestration_docs.md
+├── 📁 flow/                           # App flow documentation
+│   └── Pathfinity-app-flow-20250630.md
+├── 📁 public/                         # Static assets
+│   ├── ai-demo.html
+│   ├── finn-enhanced.jpeg
+│   └── pathfinity-logo-enhanced.jpeg
+├── 📁 src/                            # Source code
+│   ├── 📁 components/                 # React components
+│   │   ├── 📁 auth/                   # Authentication components
+│   │   │   ├── Login.tsx
+│   │   │   ├── ProtectedRoute.tsx
+│   │   │   ├── TenantSelector.tsx
+│   │   │   └── Unauthorized.tsx
+│   │   ├── 📁 brand/                  # Brand components
+│   │   │   └── BrandStudio.tsx
+│   │   ├── 📁 collab/                 # Collaboration components
+│   │   │   └── CollabSpace.tsx
+│   │   ├── 📁 dashboards/             # Dashboard components
+│   │   │   ├── AdminDashboard.tsx
+│   │   │   ├── DashboardRouter.tsx
+│   │   │   ├── StudentDashboard-Standalone.tsx
+│   │   │   ├── StudentDashboard.tsx
+│   │   │   ├── StudentDashboard_Enhanced.tsx
+│   │   │   ├── StudentDashboard_Original_Backup.tsx
+│   │   │   └── TeacherDashboard.tsx
+│   │   ├── 📁 meet/                   # Meeting components
+│   │   │   └── MeetHub.tsx
+│   │   ├── 📁 stream/                 # Streaming components
+│   │   │   └── StreamLive.tsx
+│   │   ├── 📁 subscription/           # Subscription components
+│   │   │   ├── FeatureAvailability.tsx
+│   │   │   ├── FeatureComparison.tsx
+│   │   │   ├── PricingPlans.tsx
+│   │   │   ├── SubscriptionBadge.tsx
+│   │   │   ├── SubscriptionBanner.tsx
+│   │   │   ├── SubscriptionInfo.tsx
+│   │   │   ├── SubscriptionSettings.tsx
+│   │   │   └── UpgradeModal.tsx
+│   │   ├── 📁 test/                   # Test components
+│   │   │   └── ToolManifestationTest.tsx
+│   │   ├── 📁 tools/ ⭐               # REVOLUTIONARY EDUCATIONAL TOOLS
+│   │   │   ├── BrandStudio.tsx               # 🎨 Complete visual design toolkit
+│   │   │   ├── FinnSeeChemicalVisualization.tsx  # 🧪 3D molecular visualization
+│   │   │   ├── FinnSeeMathVisualizer.tsx     # 🧮 Interactive calculus solver
+│   │   │   └── FinnThinkPhysicsSolver.tsx    # 🧠 Physics problem solver
+│   │   ├── AIAssistant.tsx
+│   │   ├── Achievements.tsx
+│   │   ├── AdminMenu.tsx
+│   │   ├── CreativeTools.tsx
+│   │   ├── Header.tsx
+│   │   ├── IntelligentToolSuggestions.tsx ⭐ # AI tool recommendation engine
+│   │   ├── LearningModeCard.tsx
+│   │   ├── LearningModes.tsx
+│   │   ├── LearningProgress.tsx
+│   │   ├── RecentActivity.tsx
+│   │   ├── SearchResultsOverlay.tsx
+│   │   ├── ThemeToggle.tsx
+│   │   ├── WelcomeCard.tsx
+│   │   └── intelligent_tool_suggestions.ts
+│   ├── 📁 contexts/ ⭐                # AI ORCHESTRATION SYSTEM
+│   │   ├── AuthContext.tsx
+│   │   ├── DashboardViewContext.tsx
+│   │   ├── FinnOrchestrationContext.tsx ⭐    # Core AI brain (739 lines)
+│   │   ├── ThemeContext.tsx
+│   │   ├── ToolManifestationContext.tsx ⭐   # Tool suggestion engine
+│   │   └── tool_manifestation_engine.ts
+│   ├── 📁 data/                       # Mock data
+│   │   ├── mockAuthData.ts
+│   │   └── mockData.ts
+│   ├── 📁 hooks/                      # Custom React hooks
+│   │   ├── useAuth.ts
+│   │   ├── useSubscription.ts
+│   │   ├── useSupabaseQuery.ts
+│   │   └── useTheme.ts
+│   ├── 📁 lib/                        # Library integrations
+│   │   └── supabase.ts
+│   ├── 📁 pages/                      # Page components
+│   │   ├── 📁 tools/                  # Tool page templates
+│   │   │   ├── BrandStudio.tsx.ts
+│   │   │   ├── CollabHub.tsx.ts
+│   │   │   ├── MeetDiscuss.tsx.ts
+│   │   │   └── StreamPlatform.tsx.ts
+│   │   ├── LessonDetailPage.tsx
+│   │   ├── SubjectDetailPage.tsx
+│   │   └── SubscriptionPage.tsx
+│   ├── 📁 services/                   # Business logic services
+│   │   ├── authService.ts
+│   │   ├── gamificationService.ts
+│   │   ├── learningService.ts
+│   │   ├── projectService.ts
+│   │   └── searchService.ts
+│   ├── 📁 types/                      # TypeScript type definitions
+│   │   ├── index.ts
+│   │   ├── physics.ts ⭐                      # Physics solver types
+│   │   └── subscription.ts
+│   ├── 📁 utils/                      # Utility functions
+│   │   └── debugFinnComponents.ts
+│   ├── App-simple.tsx
+│   ├── App.tsx
+│   ├── index.css
+│   ├── main.tsx ⭐                            # Main entry point with all tools
+│   └── vite-env.d.ts
+├── 📁 supabase/                       # Database migrations
+│   └── 📁 migrations/                 # 17 migration files
+├── .env.example
+├── README.md
+├── dev.log
+├── enhanced-finn-demo.html
+├── eslint.config.js
+├── index.html
+├── netlify.toml
+├── package-lock.json
+├── package.json
+├── postcss.config.js
+├── tailwind.config.js
+├── test-ai-demo.html
+├── tsconfig.app.json
+├── tsconfig.json
+├── tsconfig.node.json
+└── vite.config.ts
+
+==============================================
+KEY REVOLUTIONARY COMPONENTS:
+⭐ /src/contexts/FinnOrchestrationContext.tsx - Core AI orchestration brain
+⭐ /src/contexts/ToolManifestationContext.tsx - Intelligent tool recommendations
+⭐ /src/components/tools/ - Complete educational tool suite:
+   • BrandStudio.tsx - Visual design toolkit
+   • FinnSeeChemicalVisualization.tsx - 3D chemistry
+   • FinnSeeMathVisualizer.tsx - Interactive calculus
+   • FinnThinkPhysicsSolver.tsx - Physics problem solver
+⭐ /src/main.tsx - Integrated tool testing environment
+
+TOTAL FILES: 95 files across 25 directories
+CORE INNOVATION: AI-orchestrated educational experience
+==============================================

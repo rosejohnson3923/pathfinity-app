@@ -1,0 +1,244 @@
+# PATHFINITY PRODUCTION ALERT MANAGER CONFIGURATION
+# Comprehensive alerting for AI education platform
+
+global:
+  smtp_smarthost: 'smtp.sendgrid.net:587'
+  smtp_from: 'alerts@pathfinity.ai'
+  smtp_auth_username: 'apikey'
+  smtp_auth_password: '${SENDGRID_API_KEY}'
+  
+  slack_api_url: '${SLACK_WEBHOOK_URL}'
+  
+  pagerduty_url: 'https://events.pagerduty.com/v2/enqueue'
+
+# Alert routing configuration
+route:
+  group_by: ['alertname', 'cluster', 'service']
+  group_wait: 10s
+  group_interval: 5m
+  repeat_interval: 12h
+  receiver: 'default'
+  
+  routes:
+    # Critical alerts - immediate notification
+    - match:
+        severity: critical
+      receiver: 'critical-alerts'
+      group_wait: 0s
+      repeat_interval: 5m
+      
+    # Security alerts - immediate security team notification
+    - match:
+        alerttype: security
+      receiver: 'security-team'
+      group_wait: 0s
+      repeat_interval: 1m
+      
+    # Compliance alerts - legal and education team
+    - match:
+        alerttype: compliance
+      receiver: 'compliance-team'
+      group_wait: 30s
+      repeat_interval: 30m
+      
+    # AI character alerts - AI team notification
+    - match:
+        service: ai-characters
+      receiver: 'ai-team'
+      group_wait: 30s
+      repeat_interval: 15m
+      
+    # Database alerts - DBA team
+    - match:
+        service: database
+      receiver: 'database-team'
+      group_wait: 30s
+      repeat_interval: 10m
+      
+    # Performance alerts - DevOps team
+    - match:
+        alerttype: performance
+      receiver: 'devops-team'
+      group_wait: 1m
+      repeat_interval: 30m
+
+# Alert receivers configuration
+receivers:
+  - name: 'default'
+    slack_configs:
+      - channel: '#pathfinity-alerts'
+        title: 'Pathfinity Alert - {{ .GroupLabels.alertname }}'
+        text: |
+          {{ range .Alerts }}
+          *Alert:* {{ .Annotations.summary }}
+          *Description:* {{ .Annotations.description }}
+          *Severity:* {{ .Labels.severity }}
+          *Time:* {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+          {{ end }}
+        
+  - name: 'critical-alerts'
+    pagerduty_configs:
+      - routing_key: '${PAGERDUTY_CRITICAL_KEY}'
+        description: '{{ .GroupLabels.alertname }} - Critical Alert'
+        details:
+          summary: '{{ range .Alerts }}{{ .Annotations.summary }}{{ end }}'
+          environment: 'production'
+          service: '{{ .GroupLabels.service }}'
+          
+    slack_configs:
+      - channel: '#pathfinity-critical'
+        color: 'danger'
+        title: '🚨 CRITICAL ALERT - {{ .GroupLabels.alertname }}'
+        text: |
+          {{ range .Alerts }}
+          *Environment:* Production
+          *Service:* {{ .Labels.service }}
+          *Alert:* {{ .Annotations.summary }}
+          *Description:* {{ .Annotations.description }}
+          *Runbook:* {{ .Annotations.runbook_url }}
+          *Time:* {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+          {{ end }}
+          
+    email_configs:
+      - to: 'cto@pathfinity.ai,devops-lead@pathfinity.ai'
+        subject: '🚨 CRITICAL: {{ .GroupLabels.alertname }}'
+        body: |
+          Critical alert fired in Pathfinity production environment.
+          
+          Alert: {{ range .Alerts }}{{ .Annotations.summary }}{{ end }}
+          Description: {{ range .Alerts }}{{ .Annotations.description }}{{ end }}
+          Service: {{ .GroupLabels.service }}
+          Time: {{ range .Alerts }}{{ .StartsAt.Format "2006-01-02 15:04:05" }}{{ end }}
+          
+          Please respond immediately.
+          
+  - name: 'security-team'
+    slack_configs:
+      - channel: '#pathfinity-security'
+        color: 'danger'
+        title: '🔒 SECURITY ALERT - {{ .GroupLabels.alertname }}'
+        text: |
+          {{ range .Alerts }}
+          *Alert:* {{ .Annotations.summary }}
+          *Description:* {{ .Annotations.description }}
+          *Affected Component:* {{ .Labels.component }}
+          *Potential Impact:* {{ .Annotations.impact }}
+          *Recommended Action:* {{ .Annotations.action }}
+          *Time:* {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+          {{ end }}
+          
+    email_configs:
+      - to: 'security@pathfinity.ai,ciso@pathfinity.ai'
+        subject: '🔒 SECURITY ALERT: {{ .GroupLabels.alertname }}'
+        body: |
+          Security alert detected in Pathfinity production environment.
+          
+          Alert: {{ range .Alerts }}{{ .Annotations.summary }}{{ end }}
+          Description: {{ range .Alerts }}{{ .Annotations.description }}{{ end }}
+          Component: {{ range .Alerts }}{{ .Labels.component }}{{ end }}
+          Potential Impact: {{ range .Alerts }}{{ .Annotations.impact }}{{ end }}
+          Time: {{ range .Alerts }}{{ .StartsAt.Format "2006-01-02 15:04:05" }}{{ end }}
+          
+          Immediate investigation required.
+          
+  - name: 'compliance-team'
+    slack_configs:
+      - channel: '#pathfinity-compliance'
+        color: 'warning'
+        title: '⚖️ COMPLIANCE ALERT - {{ .GroupLabels.alertname }}'
+        text: |
+          {{ range .Alerts }}
+          *Alert:* {{ .Annotations.summary }}
+          *Description:* {{ .Annotations.description }}
+          *Regulation:* {{ .Labels.regulation }}
+          *Student Data Affected:* {{ .Labels.data_affected }}
+          *Required Action:* {{ .Annotations.required_action }}
+          *Time:* {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+          {{ end }}
+          
+    email_configs:
+      - to: 'legal@pathfinity.ai,privacy@pathfinity.ai,education-lead@pathfinity.ai'
+        subject: '⚖️ COMPLIANCE ALERT: {{ .GroupLabels.alertname }}'
+        body: |
+          Compliance issue detected in Pathfinity production environment.
+          
+          Alert: {{ range .Alerts }}{{ .Annotations.summary }}{{ end }}
+          Description: {{ range .Alerts }}{{ .Annotations.description }}{{ end }}
+          Regulation: {{ range .Alerts }}{{ .Labels.regulation }}{{ end }}
+          Data Affected: {{ range .Alerts }}{{ .Labels.data_affected }}{{ end }}
+          Time: {{ range .Alerts }}{{ .StartsAt.Format "2006-01-02 15:04:05" }}{{ end }}
+          
+          Please review and take appropriate action.
+          
+  - name: 'ai-team'
+    slack_configs:
+      - channel: '#pathfinity-ai'
+        color: 'warning'
+        title: '🤖 AI CHARACTER ALERT - {{ .GroupLabels.alertname }}'
+        text: |
+          {{ range .Alerts }}
+          *Alert:* {{ .Annotations.summary }}
+          *Character:* {{ .Labels.character }}
+          *Response Time:* {{ .Labels.response_time }}ms
+          *Token Usage:* {{ .Labels.token_usage }}
+          *Cost Impact:* ${{ .Labels.cost_impact }}
+          *Description:* {{ .Annotations.description }}
+          *Time:* {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+          {{ end }}
+          
+    email_configs:
+      - to: 'ai-team@pathfinity.ai'
+        subject: '🤖 AI Alert: {{ .GroupLabels.alertname }}'
+        
+  - name: 'database-team'
+    slack_configs:
+      - channel: '#pathfinity-database'
+        color: 'warning'
+        title: '🗄️ DATABASE ALERT - {{ .GroupLabels.alertname }}'
+        text: |
+          {{ range .Alerts }}
+          *Alert:* {{ .Annotations.summary }}
+          *Database:* {{ .Labels.database }}
+          *Query Time:* {{ .Labels.query_time }}ms
+          *Connections:* {{ .Labels.connections }}
+          *Description:* {{ .Annotations.description }}
+          *Time:* {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+          {{ end }}
+          
+  - name: 'devops-team'
+    slack_configs:
+      - channel: '#pathfinity-devops'
+        title: '⚡ PERFORMANCE ALERT - {{ .GroupLabels.alertname }}'
+        text: |
+          {{ range .Alerts }}
+          *Alert:* {{ .Annotations.summary }}
+          *Service:* {{ .Labels.service }}
+          *Metric:* {{ .Labels.metric_name }}
+          *Current Value:* {{ .Labels.current_value }}
+          *Threshold:* {{ .Labels.threshold }}
+          *Description:* {{ .Annotations.description }}
+          *Time:* {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+          {{ end }}
+
+# Inhibition rules - prevent spam from related alerts
+inhibit_rules:
+  # If a service is down, don't alert on high response times
+  - source_match:
+      alertname: 'ServiceDown'
+    target_match:
+      alertname: 'HighResponseTime'
+    equal: ['service']
+    
+  # If database is down, don't alert on high query times
+  - source_match:
+      alertname: 'DatabaseDown'
+    target_match:
+      alertname: 'SlowDatabaseQuery'
+    equal: ['database']
+    
+  # If AI service is down, don't alert on high AI response times
+  - source_match:
+      alertname: 'AIServiceDown'
+    target_match:
+      alertname: 'HighAIResponseTime'
+    equal: ['ai_service']

@@ -1,0 +1,496 @@
+{
+  "metadata": {
+    "title": "Common Core High School Skills Mapped to Standards and Careers",
+    "description": "Detailed skills and competencies for each Common Core standard with career alignment",
+    "grades": ["9", "10", "11", "12"],
+    "last_updated": "2024-01-26"
+  },
+  "mathematics": {
+    "HSN-RN": {
+      "standard": "The Real Number System",
+      "skills": [
+        {
+          "id": "HSN-RN.A.1.1",
+          "standard_id": "HSN-RN.A.1",
+          "skill": "Convert between radical and exponential form",
+          "description": "Rewrite √x as x^(1/2) and understand why this notation makes sense",
+          "career_relevance": ["Engineering", "Physics", "Computer Graphics"],
+          "difficulty": 3,
+          "prerequisites": ["integer_exponents", "square_roots"]
+        },
+        {
+          "id": "HSN-RN.A.1.2",
+          "standard_id": "HSN-RN.A.1",
+          "skill": "Apply properties of exponents to rational exponents",
+          "description": "Use rules like (x^a)^b = x^(ab) with fractional exponents",
+          "career_relevance": ["Engineering", "Data Science", "Financial Modeling"],
+          "difficulty": 4,
+          "prerequisites": ["HSN-RN.A.1.1"]
+        },
+        {
+          "id": "HSN-RN.A.2.1",
+          "standard_id": "HSN-RN.A.2",
+          "skill": "Simplify radical expressions",
+          "description": "Simplify expressions like √(8x³) to 2x√(2x)",
+          "career_relevance": ["Engineering", "Architecture", "Physics"],
+          "difficulty": 3,
+          "prerequisites": ["factoring", "prime_factorization"]
+        },
+        {
+          "id": "HSN-RN.A.2.2",
+          "standard_id": "HSN-RN.A.2",
+          "skill": "Rationalize denominators",
+          "description": "Rewrite 1/√x as √x/x and understand why",
+          "career_relevance": ["Engineering", "Scientific Computing"],
+          "difficulty": 3,
+          "prerequisites": ["HSN-RN.A.2.1"]
+        }
+      ]
+    },
+    "HSN-Q": {
+      "standard": "Quantities",
+      "skills": [
+        {
+          "id": "HSN-Q.A.1.1",
+          "standard_id": "HSN-Q.A.1",
+          "skill": "Dimensional analysis",
+          "description": "Convert units using multiplication by conversion factors",
+          "career_relevance": ["Engineering", "Medicine", "Chemistry", "Physics"],
+          "difficulty": 2,
+          "prerequisites": ["basic_units", "multiplication"]
+        },
+        {
+          "id": "HSN-Q.A.1.2",
+          "standard_id": "HSN-Q.A.1",
+          "skill": "Check solutions using unit analysis",
+          "description": "Verify that final units match expected answer units",
+          "career_relevance": ["Engineering", "Science", "Healthcare"],
+          "difficulty": 3,
+          "prerequisites": ["HSN-Q.A.1.1"]
+        },
+        {
+          "id": "HSN-Q.A.2.1",
+          "standard_id": "HSN-Q.A.2",
+          "skill": "Choose appropriate units for modeling",
+          "description": "Select whether to measure in meters, kilometers, or millimeters based on context",
+          "career_relevance": ["Data Science", "Research", "Engineering"],
+          "difficulty": 2,
+          "prerequisites": ["measurement_concepts"]
+        },
+        {
+          "id": "HSN-Q.A.2.2",
+          "standard_id": "HSN-Q.A.2",
+          "skill": "Define derived quantities",
+          "description": "Create quantities like population density (people/km²)",
+          "career_relevance": ["Urban Planning", "Economics", "Environmental Science"],
+          "difficulty": 3,
+          "prerequisites": ["rates", "ratios"]
+        }
+      ]
+    },
+    "HSA-SSE": {
+      "standard": "Seeing Structure in Expressions",
+      "skills": [
+        {
+          "id": "HSA-SSE.A.1.1",
+          "standard_id": "HSA-SSE.A.1",
+          "skill": "Interpret parts of an expression",
+          "description": "Identify terms, factors, and coefficients in context",
+          "career_relevance": ["Finance", "Economics", "Engineering"],
+          "difficulty": 2,
+          "prerequisites": ["algebraic_expressions"]
+        },
+        {
+          "id": "HSA-SSE.A.1.2",
+          "standard_id": "HSA-SSE.A.1",
+          "skill": "Interpret complicated expressions",
+          "description": "Understand P(1+r)^t as principal with compound interest",
+          "career_relevance": ["Finance", "Banking", "Investment", "Economics"],
+          "difficulty": 3,
+          "prerequisites": ["HSA-SSE.A.1.1", "exponential_functions"]
+        },
+        {
+          "id": "HSA-SSE.A.2.1",
+          "standard_id": "HSA-SSE.A.2",
+          "skill": "Factor quadratic expressions",
+          "description": "Rewrite x² + 5x + 6 as (x + 2)(x + 3)",
+          "career_relevance": ["Engineering", "Computer Science", "Physics"],
+          "difficulty": 3,
+          "prerequisites": ["distributive_property", "multiplication"]
+        },
+        {
+          "id": "HSA-SSE.A.2.2",
+          "standard_id": "HSA-SSE.A.2",
+          "skill": "Complete the square",
+          "description": "Rewrite x² + 6x + 5 as (x + 3)² - 4",
+          "career_relevance": ["Engineering", "Physics", "Computer Graphics"],
+          "difficulty": 4,
+          "prerequisites": ["HSA-SSE.A.2.1"]
+        }
+      ]
+    },
+    "HSA-CED": {
+      "standard": "Creating Equations",
+      "skills": [
+        {
+          "id": "HSA-CED.A.1.1",
+          "standard_id": "HSA-CED.A.1",
+          "skill": "Create linear equations from word problems",
+          "description": "Write equations like cost = fixed_cost + variable_cost × quantity",
+          "career_relevance": ["Business", "Economics", "Engineering"],
+          "difficulty": 2,
+          "prerequisites": ["variables", "linear_relationships"]
+        },
+        {
+          "id": "HSA-CED.A.1.2",
+          "standard_id": "HSA-CED.A.1",
+          "skill": "Create exponential equations",
+          "description": "Model population growth with P = P₀(1 + r)^t",
+          "career_relevance": ["Biology", "Finance", "Environmental Science"],
+          "difficulty": 3,
+          "prerequisites": ["exponential_functions"]
+        },
+        {
+          "id": "HSA-CED.A.2.1",
+          "standard_id": "HSA-CED.A.2",
+          "skill": "Create systems of equations",
+          "description": "Write multiple equations to represent constraints",
+          "career_relevance": ["Economics", "Engineering", "Operations Research"],
+          "difficulty": 3,
+          "prerequisites": ["HSA-CED.A.1.1"]
+        },
+        {
+          "id": "HSA-CED.A.2.2",
+          "standard_id": "HSA-CED.A.2",
+          "skill": "Graph equations and inequalities",
+          "description": "Represent solution regions for systems of inequalities",
+          "career_relevance": ["Economics", "Business Analytics", "Engineering"],
+          "difficulty": 3,
+          "prerequisites": ["graphing", "inequalities"]
+        }
+      ]
+    },
+    "HSF-IF": {
+      "standard": "Interpreting Functions",
+      "skills": [
+        {
+          "id": "HSF-IF.A.1.1",
+          "standard_id": "HSF-IF.A.1",
+          "skill": "Understand function notation",
+          "description": "Use f(x) notation and evaluate functions at specific values",
+          "career_relevance": ["Programming", "Engineering", "Data Science"],
+          "difficulty": 2,
+          "prerequisites": ["variables", "substitution"]
+        },
+        {
+          "id": "HSF-IF.B.4.1",
+          "standard_id": "HSF-IF.B.4",
+          "skill": "Identify key features of graphs",
+          "description": "Find intercepts, maxima, minima, and intervals of increase/decrease",
+          "career_relevance": ["Data Analysis", "Economics", "Science"],
+          "difficulty": 3,
+          "prerequisites": ["graphing", "HSF-IF.A.1.1"]
+        },
+        {
+          "id": "HSF-IF.B.4.2",
+          "standard_id": "HSF-IF.B.4",
+          "skill": "Interpret graphs in context",
+          "description": "Explain what maximum profit means in a business model",
+          "career_relevance": ["Business", "Economics", "Marketing"],
+          "difficulty": 3,
+          "prerequisites": ["HSF-IF.B.4.1"]
+        }
+      ]
+    },
+    "HSG-CO": {
+      "standard": "Congruence",
+      "skills": [
+        {
+          "id": "HSG-CO.A.1.1",
+          "standard_id": "HSG-CO.A.1",
+          "skill": "Use precise geometric definitions",
+          "description": "Apply definitions of perpendicular, parallel, angle bisector",
+          "career_relevance": ["Architecture", "Engineering", "Construction"],
+          "difficulty": 2,
+          "prerequisites": ["basic_geometry"]
+        },
+        {
+          "id": "HSG-CO.A.1.2",
+          "standard_id": "HSG-CO.A.1",
+          "skill": "Construct geometric figures",
+          "description": "Use compass and straightedge to create precise figures",
+          "career_relevance": ["Architecture", "Design", "Engineering"],
+          "difficulty": 3,
+          "prerequisites": ["HSG-CO.A.1.1"]
+        }
+      ]
+    },
+    "HSS-ID": {
+      "standard": "Interpreting Categorical and Quantitative Data",
+      "skills": [
+        {
+          "id": "HSS-ID.A.1.1",
+          "standard_id": "HSS-ID.A.1",
+          "skill": "Create dot plots and histograms",
+          "description": "Represent data distributions graphically",
+          "career_relevance": ["Data Science", "Research", "Quality Control"],
+          "difficulty": 2,
+          "prerequisites": ["data_collection", "graphing"]
+        },
+        {
+          "id": "HSS-ID.B.6.1",
+          "standard_id": "HSS-ID.B.6",
+          "skill": "Create and interpret scatter plots",
+          "description": "Plot bivariate data and identify patterns",
+          "career_relevance": ["Research", "Economics", "Sports Analytics"],
+          "difficulty": 3,
+          "prerequisites": ["coordinate_plane", "HSS-ID.A.1.1"]
+        },
+        {
+          "id": "HSS-ID.B.6.2",
+          "standard_id": "HSS-ID.B.6",
+          "skill": "Fit linear models to data",
+          "description": "Find lines of best fit and interpret slope and intercept",
+          "career_relevance": ["Data Science", "Economics", "Research"],
+          "difficulty": 4,
+          "prerequisites": ["HSS-ID.B.6.1", "linear_functions"]
+        }
+      ]
+    }
+  },
+  "english_language_arts": {
+    "RST.9-10": {
+      "standard": "Reading Science & Technical Texts (Grades 9-10)",
+      "skills": [
+        {
+          "id": "RST.9-10.1.1",
+          "standard_id": "RST.9-10.1",
+          "skill": "Cite textual evidence from technical sources",
+          "description": "Quote and paraphrase scientific texts accurately with proper attribution",
+          "career_relevance": ["Research", "Technical Writing", "Science"],
+          "difficulty": 3,
+          "prerequisites": ["reading_comprehension", "citation_basics"]
+        },
+        {
+          "id": "RST.9-10.1.2",
+          "standard_id": "RST.9-10.1",
+          "skill": "Distinguish between correlation and causation in texts",
+          "description": "Identify when sources claim causation vs correlation",
+          "career_relevance": ["Research", "Medicine", "Data Science"],
+          "difficulty": 4,
+          "prerequisites": ["RST.9-10.1.1", "critical_thinking"]
+        },
+        {
+          "id": "RST.9-10.3.1",
+          "standard_id": "RST.9-10.3",
+          "skill": "Follow laboratory procedures",
+          "description": "Execute multi-step technical procedures accurately",
+          "career_relevance": ["Laboratory Science", "Healthcare", "Manufacturing"],
+          "difficulty": 3,
+          "prerequisites": ["reading_comprehension", "attention_to_detail"]
+        },
+        {
+          "id": "RST.9-10.3.2",
+          "standard_id": "RST.9-10.3",
+          "skill": "Troubleshoot procedures",
+          "description": "Identify where procedures fail and suggest corrections",
+          "career_relevance": ["Engineering", "IT Support", "Quality Assurance"],
+          "difficulty": 4,
+          "prerequisites": ["RST.9-10.3.1", "problem_solving"]
+        },
+        {
+          "id": "RST.9-10.4.1",
+          "standard_id": "RST.9-10.4",
+          "skill": "Decode technical vocabulary",
+          "description": "Use context, roots, and affixes to determine meaning",
+          "career_relevance": ["Medicine", "Law", "Engineering"],
+          "difficulty": 3,
+          "prerequisites": ["vocabulary_strategies", "context_clues"]
+        },
+        {
+          "id": "RST.9-10.7.1",
+          "standard_id": "RST.9-10.7",
+          "skill": "Convert text to visual representations",
+          "description": "Create diagrams, charts, or graphs from written descriptions",
+          "career_relevance": ["Data Visualization", "UX Design", "Technical Writing"],
+          "difficulty": 4,
+          "prerequisites": ["reading_comprehension", "visual_literacy"]
+        }
+      ]
+    },
+    "W.9-10": {
+      "standard": "Writing Standards (Grades 9-10)",
+      "skills": [
+        {
+          "id": "W.9-10.1.1",
+          "standard_id": "W.9-10.1",
+          "skill": "Construct logical arguments",
+          "description": "Build claims with evidence and reasoning",
+          "career_relevance": ["Law", "Marketing", "Politics"],
+          "difficulty": 3,
+          "prerequisites": ["thesis_statements", "evidence_evaluation"]
+        },
+        {
+          "id": "W.9-10.1.2",
+          "standard_id": "W.9-10.1",
+          "skill": "Address counterarguments",
+          "description": "Acknowledge and refute opposing viewpoints",
+          "career_relevance": ["Law", "Debate", "Negotiation"],
+          "difficulty": 4,
+          "prerequisites": ["W.9-10.1.1", "critical_thinking"]
+        },
+        {
+          "id": "W.9-10.2.1",
+          "standard_id": "W.9-10.2",
+          "skill": "Explain complex processes",
+          "description": "Write clear explanations of multi-step procedures",
+          "career_relevance": ["Technical Writing", "Teaching", "Documentation"],
+          "difficulty": 3,
+          "prerequisites": ["organization", "clarity"]
+        },
+        {
+          "id": "W.9-10.2.2",
+          "standard_id": "W.9-10.2",
+          "skill": "Use appropriate formatting",
+          "description": "Apply headings, bullets, graphics for clarity",
+          "career_relevance": ["Technical Writing", "Web Content", "Documentation"],
+          "difficulty": 2,
+          "prerequisites": ["document_design"]
+        },
+        {
+          "id": "W.9-10.6.1",
+          "standard_id": "W.9-10.6",
+          "skill": "Collaborate using digital tools",
+          "description": "Use Google Docs, wikis, or other platforms for group writing",
+          "career_relevance": ["All collaborative careers", "Remote Work"],
+          "difficulty": 2,
+          "prerequisites": ["basic_technology", "collaboration"]
+        },
+        {
+          "id": "W.9-10.7.1",
+          "standard_id": "W.9-10.7",
+          "skill": "Develop research questions",
+          "description": "Formulate focused, answerable research questions",
+          "career_relevance": ["Research", "Consulting", "Product Development"],
+          "difficulty": 3,
+          "prerequisites": ["critical_thinking", "topic_refinement"]
+        },
+        {
+          "id": "W.9-10.7.2",
+          "standard_id": "W.9-10.7",
+          "skill": "Synthesize multiple sources",
+          "description": "Combine information from various sources into coherent analysis",
+          "career_relevance": ["Research", "Journalism", "Intelligence Analysis"],
+          "difficulty": 4,
+          "prerequisites": ["W.9-10.7.1", "source_evaluation"]
+        }
+      ]
+    },
+    "SL.9-10": {
+      "standard": "Speaking and Listening (Grades 9-10)",
+      "skills": [
+        {
+          "id": "SL.9-10.1.1",
+          "standard_id": "SL.9-10.1",
+          "skill": "Facilitate group discussions",
+          "description": "Lead productive team meetings and discussions",
+          "career_relevance": ["Management", "Project Management", "Teaching"],
+          "difficulty": 3,
+          "prerequisites": ["active_listening", "communication"]
+        },
+        {
+          "id": "SL.9-10.1.2",
+          "standard_id": "SL.9-10.1",
+          "skill": "Build on others' ideas",
+          "description": "Synthesize and extend team members' contributions",
+          "career_relevance": ["Consulting", "Design Thinking", "Innovation"],
+          "difficulty": 3,
+          "prerequisites": ["SL.9-10.1.1", "active_listening"]
+        },
+        {
+          "id": "SL.9-10.4.1",
+          "standard_id": "SL.9-10.4",
+          "skill": "Deliver organized presentations",
+          "description": "Present information with clear structure and transitions",
+          "career_relevance": ["Sales", "Teaching", "Business"],
+          "difficulty": 3,
+          "prerequisites": ["public_speaking", "organization"]
+        },
+        {
+          "id": "SL.9-10.5.1",
+          "standard_id": "SL.9-10.5",
+          "skill": "Create multimedia presentations",
+          "description": "Integrate slides, videos, and interactive elements effectively",
+          "career_relevance": ["Marketing", "Sales", "Teaching"],
+          "difficulty": 3,
+          "prerequisites": ["SL.9-10.4.1", "digital_literacy"]
+        }
+      ]
+    }
+  },
+  "career_skill_mapping": {
+    "Engineering": {
+      "essential_skills": [
+        "HSN-RN.A.1.1", "HSN-RN.A.1.2", "HSN-Q.A.1.1", "HSN-Q.A.1.2",
+        "HSA-SSE.A.2.1", "HSA-CED.A.1.1", "HSG-CO.A.1.1",
+        "RST.9-10.1.1", "RST.9-10.3.1", "W.9-10.2.1"
+      ],
+      "advanced_skills": [
+        "HSN-RN.A.2.2", "HSA-SSE.A.2.2", "HSF-IF.B.4.1",
+        "RST.9-10.3.2", "W.9-10.7.2"
+      ]
+    },
+    "Data_Science": {
+      "essential_skills": [
+        "HSS-ID.A.1.1", "HSS-ID.B.6.1", "HSS-ID.B.6.2",
+        "HSF-IF.A.1.1", "HSF-IF.B.4.1",
+        "RST.9-10.1.2", "RST.9-10.7.1", "W.9-10.7.2"
+      ],
+      "advanced_skills": [
+        "HSA-SSE.A.1.2", "HSA-CED.A.2.1",
+        "W.9-10.2.1", "SL.9-10.4.1"
+      ]
+    },
+    "Healthcare_Medicine": {
+      "essential_skills": [
+        "HSN-Q.A.1.1", "HSN-Q.A.1.2", "HSS-ID.A.1.1",
+        "RST.9-10.1.1", "RST.9-10.3.1", "RST.9-10.4.1",
+        "W.9-10.2.1", "W.9-10.7.1"
+      ],
+      "advanced_skills": [
+        "HSS-ID.B.6.2", "RST.9-10.1.2", "RST.9-10.3.2"
+      ]
+    },
+    "Business_Finance": {
+      "essential_skills": [
+        "HSA-SSE.A.1.1", "HSA-SSE.A.1.2", "HSA-CED.A.1.1",
+        "HSF-IF.B.4.2", "HSS-ID.B.6.1",
+        "W.9-10.1.1", "W.9-10.2.1", "SL.9-10.1.1", "SL.9-10.4.1"
+      ],
+      "advanced_skills": [
+        "HSA-CED.A.2.2", "HSS-ID.B.6.2",
+        "W.9-10.1.2", "SL.9-10.5.1"
+      ]
+    },
+    "Law": {
+      "essential_skills": [
+        "W.9-10.1.1", "W.9-10.1.2", "W.9-10.7.1", "W.9-10.7.2",
+        "RST.9-10.1.1", "RST.9-10.1.2",
+        "SL.9-10.1.1", "SL.9-10.4.1"
+      ],
+      "advanced_skills": [
+        "RST.9-10.4.1", "SL.9-10.1.2"
+      ]
+    },
+    "Creative_Design": {
+      "essential_skills": [
+        "HSG-CO.A.1.1", "HSG-CO.A.1.2",
+        "W.9-10.2.2", "W.9-10.6.1",
+        "SL.9-10.5.1", "RST.9-10.7.1"
+      ],
+      "advanced_skills": [
+        "HSA-SSE.A.2.1", "W.9-10.2.1"
+      ]
+    }
+  }
+}

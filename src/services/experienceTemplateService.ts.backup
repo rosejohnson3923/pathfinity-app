@@ -1,0 +1,305 @@
+// Experience Template Service
+// Loads and manages career-specific educational templates
+
+import { libraryCountingKTemplate } from '../data/experienceTemplates/kindergarten/math/K.CC.A.1-librarian';
+import { libraryReadingKTemplate } from '../data/experienceTemplates/kindergarten/ela/K.RL.1-librarian';
+import { libraryCountingFirstTemplate } from '../data/experienceTemplates/first/math/1.NBT.A.1-librarian';
+import { chefCountingKTemplate } from '../data/experienceTemplates/kindergarten/math/K.CC.A.1-chef';
+import { teacherCountingKTemplate } from '../data/experienceTemplates/kindergarten/math/K.CC.A.1-teacher';
+
+export interface ExperienceTemplate {
+  metadata: {
+    career: string;
+    careerTitle: string;
+    subject: string;
+    gradeLevel: string;
+    skillCode: string;
+    skillName: string;
+    difficulty: number;
+    interactionType: string;
+  };
+  roleSetup: {
+    congratulations: string;
+    challenge: string;
+    yourRole: string;
+    actionPlan: Array<{ step: string; icon: string }>;
+    encouragement: string;
+  };
+  practiceScenarios: Array<{
+    id: string;
+    customer: string;
+    customerEmoji: string;
+    order: string;
+    instruction: string;
+    visual: any;
+    correctAnswer: number;
+    feedbackCorrect: string;
+    feedbackIncorrect: string;
+    hint: string;
+    [key: string]: any; // Allow additional scenario-specific fields
+  }>;
+  assessmentChallenge: {
+    setup: string;
+    question: string;
+    options: string[];
+    correctAnswer: string;
+    explanation: string;
+  };
+  toolConfiguration: {
+    toolType: string;
+    instructions: string;
+    showProgressBar: boolean;
+    allowHints: boolean;
+    celebrateCorrect: boolean;
+    maxAttempts: number;
+    features?: any;
+  };
+}
+
+// Template registry
+const templateRegistry: { [key: string]: ExperienceTemplate } = {
+  // Kindergarten templates
+  'K-Math-K.CC.A.1-librarian': libraryCountingKTemplate,
+  'K-Math-K.CC.A.1-chef': chefCountingKTemplate,
+  'K-Math-K.CC.A.1-teacher': teacherCountingKTemplate,
+  'K-ELA-A.1-librarian': libraryReadingKTemplate,
+  
+  // First grade templates
+  '1-Math-1.NBT.A.1-librarian': libraryCountingFirstTemplate,
+  
+  // Add more templates as they're created
+};
+
+export class ExperienceTemplateService {
+  /**
+   * Get a specific template by grade, subject, skill, and career
+   */
+  static getTemplate(
+    gradeLevel: string, 
+    subject: string, 
+    skillCode: string, 
+    career: string
+  ): ExperienceTemplate | null {
+    // Normalize grade level (handle Kindergarten -> K)
+    const normalizedGrade = gradeLevel.toLowerCase() === 'kindergarten' ? 'K' : gradeLevel;
+    
+    // Map skill codes from A.x format to full standard format
+    const normalizedSkillCode = ExperienceTemplateService.normalizeSkillCode(skillCode, normalizedGrade, subject);
+    
+    const key = `${normalizedGrade}-${subject}-${normalizedSkillCode}-${career}`;
+    
+    console.log('🔍 Looking for template:', {
+      grade: gradeLevel,
+      normalizedGrade,
+      subject,
+      skillCode,
+      normalizedSkillCode,
+      career,
+      key,
+      exists: key in templateRegistry
+    });
+    console.log('🔍 Available template keys:', Object.keys(templateRegistry));
+    
+    const exactTemplate = templateRegistry[key];
+    if (exactTemplate) {
+      console.log('✅ Found exact template:', key);
+      return exactTemplate;
+    }
+    
+    // Try fallback logic: first try same grade/subject/career with different skill, then different career
+    console.log('🔄 Exact template not found, trying fallback...');
+    
+    // First: try to find same career with different skill
+    const sameCareeFallbackKey = Object.keys(templateRegistry).find(registryKey => {
+      const parts = registryKey.split('-');
+      return parts[0] === normalizedGrade && parts[1] === subject && registryKey.includes(career);
+    });
+    
+    if (sameCareeFallbackKey) {
+      console.log('✅ Using same career fallback template:', sameCareeFallbackKey);
+      return templateRegistry[sameCareeFallbackKey];
+    }
+    
+    // Second: try any template with same grade/subject (different career)
+    console.log('🔄 No same career template found, trying different career fallback...');
+    const differentCareerFallbackKey = Object.keys(templateRegistry).find(registryKey => {
+      const parts = registryKey.split('-');
+      return parts[0] === normalizedGrade && parts[1] === subject;
+    });
+    
+    if (differentCareerFallbackKey) {
+      console.log('⚠️ Using different career fallback template:', differentCareerFallbackKey);
+      return templateRegistry[differentCareerFallbackKey];
+    }
+    
+    console.log('❌ No template found, using default content');
+    return null;
+  }
+
+  /**
+   * Normalize skill codes from A.x format to full standard format
+   */
+  private static normalizeSkillCode(skillCode: string, grade: string, subject: string): string {
+    // Handle A.1 style codes
+    if (skillCode.startsWith('A.')) {
+      const skillNumber = skillCode.split('.')[1];
+      
+      // Map based on grade and subject
+      if (grade === 'K' && subject === 'Math') {
+        // Map K Math A.1 to K.CC.A.1 (counting)
+        if (skillNumber === '1') return 'K.CC.A.1';
+        if (skillNumber === '2') return 'K.CC.A.2';
+        if (skillNumber === '3') return 'K.CC.A.3';
+      }
+      
+      // Keep ELA skills in A.x format for consistency
+      if (grade === 'K' && subject === 'ELA') {
+        if (skillNumber === '1') return 'A.1';
+        if (skillNumber === '2') return 'A.2';
+        if (skillNumber === '3') return 'A.3';
+      }
+      
+      if (grade === '1' && subject === 'Math') {
+        // Map 1st Grade Math A.1 to 1.NBT.A.1 (number and base ten)
+        if (skillNumber === '1') return '1.NBT.A.1';
+        if (skillNumber === '2') return '1.NBT.A.2';
+        if (skillNumber === '3') return '1.NBT.A.3';
+      }
+    }
+    
+    // Return original if no mapping found
+    return skillCode;
+  }
+
+  /**
+   * Get all available templates for a grade level
+   */
+  static getTemplatesForGrade(gradeLevel: string): ExperienceTemplate[] {
+    return Object.entries(templateRegistry)
+      .filter(([key]) => key.startsWith(`${gradeLevel}-`))
+      .map(([_, template]) => template);
+  }
+
+  /**
+   * Get all available templates for a career
+   */
+  static getTemplatesForCareer(career: string): ExperienceTemplate[] {
+    return Object.entries(templateRegistry)
+      .filter(([key]) => key.endsWith(`-${career}`))
+      .map(([_, template]) => template);
+  }
+
+  /**
+   * Check if a template exists
+   */
+  static hasTemplate(
+    gradeLevel: string, 
+    subject: string, 
+    skillCode: string, 
+    career: string
+  ): boolean {
+    const key = `${gradeLevel}-${subject}-${skillCode}-${career}`;
+    return key in templateRegistry;
+  }
+
+  /**
+   * Get fallback template when specific one doesn't exist
+   */
+  static getFallbackTemplate(
+    gradeLevel: string,
+    subject: string,
+    career: string
+  ): ExperienceTemplate | null {
+    // Try to find any template matching grade, subject, and career
+    const templates = Object.entries(templateRegistry)
+      .filter(([key]) => {
+        const parts = key.split('-');
+        return parts[0] === gradeLevel && 
+               parts[1] === subject && 
+               parts[parts.length - 1] === career;
+      })
+      .map(([_, template]) => template);
+    
+    return templates[0] || null;
+  }
+
+  /**
+   * Convert template scenarios to Master Tool questions
+   */
+  static convertToToolQuestions(template: ExperienceTemplate, assignment?: any): any[] {
+    // Filter scenarios based on actual learned skill level
+    let filteredScenarios = template.practiceScenarios;
+    
+    if (assignment?.skillName) {
+      const maxCount = ExperienceTemplateService.extractMaxCountFromSkillName(assignment.skillName);
+      if (maxCount > 0) {
+        console.log(`🔢 Filtering scenarios for skill "${assignment.skillName}" - max count: ${maxCount}`);
+        filteredScenarios = template.practiceScenarios.filter(scenario => 
+          scenario.correctAnswer <= maxCount
+        );
+        console.log(`🔢 Scenarios filtered: ${template.practiceScenarios.length} → ${filteredScenarios.length}`);
+      }
+    }
+    
+    return filteredScenarios.map((scenario, index) => ({
+      id: scenario.id,
+      type: template.metadata.interactionType,
+      question: scenario.order,
+      instruction: scenario.instruction,
+      visual: scenario.visual,
+      correctAnswer: scenario.correctAnswer,
+      feedback: {
+        correct: scenario.feedbackCorrect,
+        incorrect: scenario.feedbackIncorrect
+      },
+      hint: scenario.hint,
+      customerInfo: {
+        name: scenario.customer,
+        emoji: scenario.customerEmoji
+      },
+      difficulty: template.metadata.difficulty,
+      index: index + 1,
+      total: filteredScenarios.length
+    }));
+  }
+
+  /**
+   * Extract maximum count from skill name (e.g., "Counting to 3" → 3)
+   */
+  static extractMaxCountFromSkillName(skillName: string): number {
+    const match = skillName.match(/(?:to|up to)\s+(\d+)/i);
+    return match ? parseInt(match[1], 10) : 0;
+  }
+
+  /**
+   * Get template content for Experience Container steps
+   */
+  static getTemplateContent(template: ExperienceTemplate) {
+    return {
+      instruction: {
+        title: template.roleSetup.congratulations,
+        roleDescription: template.roleSetup.yourRole,
+        challenge: template.roleSetup.challenge,
+        steps: template.roleSetup.actionPlan,
+        encouragement: template.roleSetup.encouragement
+      },
+      practice: {
+        scenarios: template.practiceScenarios,
+        toolConfig: template.toolConfiguration
+      },
+      assessment: {
+        question: template.assessmentChallenge.question,
+        options: template.assessmentChallenge.options,
+        correctAnswer: template.assessmentChallenge.correctAnswer,
+        explanation: template.assessmentChallenge.explanation,
+        setup: template.assessmentChallenge.setup
+      }
+    };
+  }
+}
+
+// Export convenience functions
+export const getExperienceTemplate = ExperienceTemplateService.getTemplate;
+export const hasExperienceTemplate = ExperienceTemplateService.hasTemplate;
+export const getTemplateContent = ExperienceTemplateService.getTemplateContent;
+export const convertToToolQuestions = ExperienceTemplateService.convertToToolQuestions;

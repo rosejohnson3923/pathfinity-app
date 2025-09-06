@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test AI Content Generation with Storyline Continuity</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .test-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .status-box {
+            background: #f0f0f0;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .success {
+            border-left-color: #4CAF50;
+            background: #e8f5e9;
+        }
+        .error {
+            border-left-color: #f44336;
+            background: #ffebee;
+        }
+        .warning {
+            border-left-color: #ff9800;
+            background: #fff3e0;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .container-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .result-card {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .result-card h3 {
+            color: #667eea;
+            margin-top: 0;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+        .storyline-indicator {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        #console-log {
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🎯 AI Content Generation with Storyline Continuity Test</h1>
+        
+        <div class="status-box warning">
+            <strong>⚡ Test Purpose:</strong> Verify that JIT service uses AI content generation with cohesive storyline across Learn, Experience, and Discover containers.
+        </div>
+
+        <div class="button-group">
+            <button onclick="loginAndTest('sam', 'K', 'Doctor', 'Finn')">Test Sam (K) - Doctor</button>
+            <button onclick="loginAndTest('jordan', '7', 'Engineer', 'Nova')">Test Jordan (7) - Engineer</button>
+            <button onclick="loginAndTest('taylor', '10', 'Scientist', 'Atlas')">Test Taylor (10) - Scientist</button>
+        </div>
+
+        <div id="status" class="status-box"></div>
+        
+        <div id="results" class="container-results"></div>
+
+        <h3>Console Output:</h3>
+        <div id="console-log"></div>
+    </div>
+
+    <script>
+        const consoleLog = document.getElementById('console-log');
+        const originalConsoleLog = console.log;
+        const originalConsoleError = console.error;
+        
+        // Capture console logs
+        console.log = function(...args) {
+            originalConsoleLog(...args);
+            const message = args.map(arg => 
+                typeof arg === 'object' ? JSON.stringify(arg, null, 2) : arg
+            ).join(' ');
+            
+            // Check for key indicators
+            if (message.includes('[JIT] 🎯 Using AI content generation')) {
+                consoleLog.innerHTML += `<div style="color: #4CAF50; font-weight: bold;">✅ ${message}</div>`;
+            } else if (message.includes('📚 Using existing storyline context')) {
+                consoleLog.innerHTML += `<div style="color: #2196F3; font-weight: bold;">🔄 ${message}</div>`;
+            } else if (message.includes('📖 Created new storyline context')) {
+                consoleLog.innerHTML += `<div style="color: #9C27B0; font-weight: bold;">📖 ${message}</div>`;
+            } else if (message.includes('[JIT]')) {
+                consoleLog.innerHTML += `<div style="color: #FFC107;">${message}</div>`;
+            } else if (message.includes('🤖') || message.includes('🎯') || message.includes('🔍')) {
+                consoleLog.innerHTML += `<div style="color: #00BCD4;">${message}</div>`;
+            } else {
+                consoleLog.innerHTML += `<div>${message}</div>`;
+            }
+            consoleLog.scrollTop = consoleLog.scrollHeight;
+        };
+        
+        console.error = function(...args) {
+            originalConsoleError(...args);
+            const message = args.map(arg => 
+                typeof arg === 'object' ? JSON.stringify(arg, null, 2) : arg
+            ).join(' ');
+            consoleLog.innerHTML += `<div style="color: #f44336;">❌ ERROR: ${message}</div>`;
+            consoleLog.scrollTop = consoleLog.scrollHeight;
+        };
+
+        async function loginAndTest(username, grade, career, companion) {
+            const statusDiv = document.getElementById('status');
+            const resultsDiv = document.getElementById('results');
+            
+            statusDiv.className = 'status-box';
+            statusDiv.innerHTML = `<strong>🚀 Testing:</strong> ${username} (Grade ${grade}) - ${career} Career with ${companion} companion`;
+            resultsDiv.innerHTML = '';
+            consoleLog.innerHTML = '<div style="color: #FFC107;">--- Starting new test ---</div>';
+
+            try {
+                // Login
+                statusDiv.innerHTML += '<br>📝 Logging in...';
+                const loginResponse = await fetch('http://localhost:3000/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password: 'password123' }),
+                    credentials: 'include'
+                });
+                
+                if (!loginResponse.ok) throw new Error('Login failed');
+                const loginData = await loginResponse.json();
+                
+                statusDiv.innerHTML += '<br>✅ Logged in successfully';
+                statusDiv.innerHTML += `<br>👤 Student: ${loginData.user.display_name} (Grade ${loginData.user.grade_level})`;
+                
+                // Test skill for counting
+                const testSkill = {
+                    skill_number: 'MATH.K.1',
+                    skill_name: 'Identify numbers - up to 3',
+                    name: 'Identify numbers - up to 3',
+                    subject: 'Math',
+                    gradeLevel: loginData.user.grade_level
+                };
+
+                statusDiv.innerHTML += `<br>📚 Testing skill: ${testSkill.skill_name}`;
+                statusDiv.innerHTML += '<br><br><strong>🎭 Testing Storyline Continuity:</strong>';
+
+                // Test each container
+                const containers = ['Learn', 'Experience', 'Discover'];
+                
+                for (const containerName of containers) {
+                    statusDiv.innerHTML += `<br>⏳ Generating ${containerName} content...`;
+                    
+                    const response = await fetch('http://localhost:3000/api/test/jit-content', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            userId: loginData.user.id,
+                            containerType: containerName.toLowerCase(),
+                            skill: testSkill,
+                            student: loginData.user,
+                            career: { name: career, description: `${career} professional` },
+                            companion: companion
+                        }),
+                        credentials: 'include'
+                    });
+
+                    if (!response.ok) {
+                        const error = await response.text();
+                        throw new Error(`${containerName} generation failed: ${error}`);
+                    }
+
+                    const content = await response.json();
+                    
+                    // Display results
+                    const resultCard = document.createElement('div');
+                    resultCard.className = 'result-card';
+                    resultCard.innerHTML = `
+                        <h3>${containerName} Container</h3>
+                        <div class="storyline-indicator">📖 Storyline Check</div>
+                        ${extractStorylineElements(content, containerName)}
+                        <details>
+                            <summary>View Full Content</summary>
+                            <pre>${JSON.stringify(content, null, 2)}</pre>
+                        </details>
+                    `;
+                    resultsDiv.appendChild(resultCard);
+                    
+                    statusDiv.innerHTML += `<br>✅ ${containerName} content generated`;
+                }
+
+                statusDiv.className = 'status-box success';
+                statusDiv.innerHTML += '<br><br><strong>✅ All containers tested successfully!</strong>';
+                statusDiv.innerHTML += '<br>Check console output for:[JIT] 🎯 Using AI content generation';
+
+            } catch (error) {
+                statusDiv.className = 'status-box error';
+                statusDiv.innerHTML += `<br><br>❌ Error: ${error.message}`;
+                console.error('Test failed:', error);
+            }
+        }
+
+        function extractStorylineElements(content, containerType) {
+            let storylineHtml = '<div style="background: #f5f5f5; padding: 10px; border-radius: 5px; margin: 10px 0;">';
+            
+            // Look for storyline elements
+            if (containerType === 'Learn') {
+                if (content.greeting) {
+                    storylineHtml += `<p><strong>Greeting:</strong> ${content.greeting.substring(0, 150)}...</p>`;
+                }
+                if (content.concept) {
+                    storylineHtml += `<p><strong>Concept:</strong> ${content.concept.substring(0, 150)}...</p>`;
+                }
+            } else if (containerType === 'Experience') {
+                if (content.scenario) {
+                    storylineHtml += `<p><strong>Scenario:</strong> ${content.scenario.substring(0, 150)}...</p>`;
+                }
+                if (content.character_context) {
+                    storylineHtml += `<p><strong>Character Context:</strong> ${content.character_context.substring(0, 150)}...</p>`;
+                }
+            } else if (containerType === 'Discover') {
+                if (content.exploration_intro) {
+                    storylineHtml += `<p><strong>Exploration:</strong> ${content.exploration_intro.substring(0, 150)}...</p>`;
+                }
+                if (content.real_world_connections) {
+                    storylineHtml += `<p><strong>Real World:</strong> ${JSON.stringify(content.real_world_connections[0]).substring(0, 150)}...</p>`;
+                }
+            }
+            
+            // Check for career references
+            const contentStr = JSON.stringify(content);
+            const careerMentions = (contentStr.match(/doctor|engineer|scientist|chef|teacher|artist|athlete/gi) || []).length;
+            storylineHtml += `<p><strong>Career References:</strong> ${careerMentions} mentions found</p>`;
+            
+            // Check for consistent character/setting
+            if (content.questions && content.questions.length > 0) {
+                storylineHtml += `<p><strong>Questions:</strong> ${content.questions.length} questions with career context</p>`;
+            }
+            
+            storylineHtml += '</div>';
+            return storylineHtml;
+        }
+
+        // Initial message
+        document.getElementById('status').innerHTML = '<strong>Ready to test!</strong> Click a button above to begin.';
+    </script>
+</body>
+</html>

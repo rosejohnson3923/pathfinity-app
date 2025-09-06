@@ -1,0 +1,523 @@
+{
+  "iteration": 2,
+  "timestamp": "2025-09-01T12:27:10.776Z",
+  "metrics": {
+    "accuracy": "91.7%",
+    "averageScore": "77.5",
+    "criticalAccuracy": "100.0%",
+    "passed": 11,
+    "failed": 1,
+    "total": 12
+  },
+  "comparison": {
+    "previousAccuracy": "83.9%",
+    "currentAccuracy": "91.7%",
+    "improvement": "7.8%"
+  },
+  "problemAreasFixed": [
+    "Grade 11 Math",
+    "Grade 12 Social Studies",
+    "Grade 11 ELA",
+    "Grade 12 Science"
+  ],
+  "stillProblematic": [],
+  "results": [
+    {
+      "test": {
+        "grade": "11",
+        "career": "Teacher",
+        "subject": "Math",
+        "skill": "Trigonometry - Finding sin(60°)",
+        "expectedType": [
+          "numeric",
+          "multiple_choice"
+        ],
+        "validation": {
+          "mustContain": [
+            "sin",
+            "trig",
+            "60",
+            "angle"
+          ],
+          "gradeAppropriate": true,
+          "careerRelevant": true
+        }
+      },
+      "passed": true,
+      "score": 80,
+      "isCritical": true,
+      "issues": [
+        "Missing some terms: angle",
+        "Multiple choice should have exactly 4 options"
+      ],
+      "strengths": [
+        "Correct type: multiple_choice",
+        "Grade-appropriate language",
+        "Good career integration"
+      ],
+      "question": {
+        "type": "multiple_choice",
+        "question": "A teacher is preparing a lesson on trigonometric functions and asks their students to calculate the value of sin(60°). Which of the following options correctly represents this value?",
+        "options": {
+          "A": "√3/2",
+          "B": "1/2",
+          "C": "√2/2",
+          "D": "1"
+        },
+        "correct_answer": "A",
+        "explanation": "The sine of 60° can be derived using the properties of a 30°-60°-90° triangle, where the ratio of the side opposite the 60° angle to the hypotenuse is √3/2. This is a fundamental trigonometric value that students should memorize for solving problems involving angles and triangles."
+      }
+    },
+    {
+      "test": {
+        "grade": "12",
+        "career": "Police Officer",
+        "subject": "Social Studies",
+        "skill": "Constitutional Rights - Fourth Amendment",
+        "expectedType": [
+          "multiple_choice",
+          "true_false"
+        ],
+        "validation": {
+          "mustContain": [
+            "right",
+            "amendment",
+            "constitution"
+          ],
+          "gradeAppropriate": true
+        }
+      },
+      "passed": true,
+      "score": 70,
+      "isCritical": true,
+      "issues": [
+        "Missing key terms: right, constitution",
+        "Multiple choice should have exactly 4 options"
+      ],
+      "strengths": [
+        "Correct type: multiple_choice",
+        "Grade-appropriate language"
+      ],
+      "question": {
+        "type": "multiple_choice",
+        "question": "Evaluate the implications of the Fourth Amendment in the context of modern digital privacy. Which of the following scenarios would most likely be considered a violation of Fourth Amendment protections?",
+        "options": {
+          "A": "Law enforcement accesses a suspect's phone records without a warrant during an investigation.",
+          "B": "A private company collects user data from its own app with user consent.",
+          "C": "A school administrator searches a student's locker after receiving a tip about prohibited items.",
+          "D": "A government agency uses publicly available social media posts for research purposes."
+        },
+        "correct_answer": "A",
+        "explanation": "The Fourth Amendment protects individuals from unreasonable searches and seizures, requiring law enforcement to obtain a warrant based on probable cause. Accessing phone records without a warrant would likely be considered a violation, as it infringes on the expectation of privacy in personal communications."
+      }
+    },
+    {
+      "test": {
+        "grade": "11",
+        "career": "Writer",
+        "subject": "ELA",
+        "skill": "Literary Analysis of Themes",
+        "expectedType": [
+          "multiple_choice"
+        ],
+        "validation": {
+          "mustContain": [
+            "theme",
+            "literary",
+            "analyze"
+          ],
+          "gradeAppropriate": true
+        }
+      },
+      "passed": true,
+      "score": 70,
+      "isCritical": true,
+      "issues": [
+        "Missing key terms: literary, analyze",
+        "Multiple choice should have exactly 4 options"
+      ],
+      "strengths": [
+        "Correct type: multiple_choice",
+        "Grade-appropriate language"
+      ],
+      "question": {
+        "type": "multiple_choice",
+        "question": "Evaluate the author's use of symbolism in the novel 'The Great Gatsby' by F. Scott Fitzgerald. How does the green light at the end of Daisy's dock contribute to the overarching theme of the American Dream?",
+        "options": {
+          "A": "The green light represents Gatsby's unattainable dreams and the illusion of the American Dream.",
+          "B": "The green light symbolizes wealth and material success as the ultimate goal of the American Dream.",
+          "C": "The green light is a literal object with no deeper symbolic meaning in the context of the novel.",
+          "D": "The green light reflects the societal barriers that prevent Gatsby from achieving his dreams, unrelated to the American Dream."
+        },
+        "correct_answer": "A",
+        "explanation": "The green light in 'The Great Gatsby' serves as a powerful symbol of Gatsby's aspirations and the broader theme of the American Dream. It represents the elusive and often unattainable nature of dreams, as well as the illusion of success and fulfillment promised by the American Dream."
+      }
+    },
+    {
+      "test": {
+        "grade": "12",
+        "career": "Doctor",
+        "subject": "Science",
+        "skill": "Genetics and DNA Structure",
+        "expectedType": [
+          "multiple_choice"
+        ],
+        "validation": {
+          "mustContain": [
+            "DNA",
+            "genetic",
+            "gene"
+          ],
+          "gradeAppropriate": true
+        }
+      },
+      "passed": true,
+      "score": 90,
+      "isCritical": true,
+      "issues": [
+        "Multiple choice should have exactly 4 options"
+      ],
+      "strengths": [
+        "Correct type: multiple_choice",
+        "All required terms present",
+        "Grade-appropriate language"
+      ],
+      "question": {
+        "type": "multiple_choice",
+        "question": "A doctor needs to evaluate a patient's genetic predisposition to a hereditary disease. The patient's DNA sequence reveals a mutation in the gene responsible for producing a crucial enzyme. Analyze the following DNA sequences and determine which mutation is most likely to disrupt the enzyme's function.",
+        "options": {
+          "A": "A substitution mutation resulting in a codon change from GAA (Glutamic acid) to GUA (Valine).",
+          "B": "A silent mutation where the codon changes from GAA (Glutamic acid) to GAG (Glutamic acid).",
+          "C": "A deletion mutation removing a single nucleotide, causing a frameshift in the sequence.",
+          "D": "An insertion mutation adding three nucleotides, resulting in an additional amino acid in the sequence."
+        },
+        "correct_answer": "C",
+        "explanation": "A frameshift mutation caused by the deletion of a single nucleotide is most likely to disrupt the enzyme's function because it alters the reading frame of the entire sequence, potentially changing all downstream amino acids. Substitution mutations may or may not affect function depending on the specific amino acid change, while silent mutations do not alter the protein. Insertion mutations adding three nucleotides may have less impact as they do not cause a frameshift."
+      }
+    },
+    {
+      "test": {
+        "grade": "K",
+        "career": "Chef",
+        "subject": "Math",
+        "skill": "Shapes Recognition - Circle, Square, Triangle",
+        "expectedType": [
+          "multiple_choice"
+        ],
+        "validation": {
+          "mustContain": [
+            "shape",
+            "circle",
+            "square",
+            "triangle"
+          ],
+          "mustBeSimple": true,
+          "noComplexWords": true
+        }
+      },
+      "passed": true,
+      "score": 80,
+      "isCritical": false,
+      "issues": [
+        "Missing some terms: square, triangle",
+        "Multiple choice should have exactly 4 options"
+      ],
+      "strengths": [
+        "Correct type: multiple_choice",
+        "Appropriately simple language"
+      ],
+      "question": {
+        "type": "multiple_choice",
+        "question": "A chef is making cookies. 🍪 Look at the shapes of the cookie cutters. Which one is a circle?",
+        "options": {
+          "A": "🔵",
+          "B": "🔺",
+          "C": "⬜"
+        },
+        "correct_answer": "A",
+        "explanation": "The circle is round like 🔵. The triangle 🔺 has three sides, and the square ⬜ has four sides."
+      }
+    },
+    {
+      "test": {
+        "grade": "5",
+        "career": "Engineer",
+        "subject": "Math",
+        "skill": "Which number is smaller: -10 or -5",
+        "expectedType": [
+          "multiple_choice"
+        ],
+        "notType": "true_false",
+        "validation": {
+          "mustContain": [
+            "which",
+            "smaller",
+            "-10",
+            "-5"
+          ],
+          "criticalWhichQuestion": true
+        }
+      },
+      "passed": true,
+      "score": 90,
+      "isCritical": true,
+      "issues": [
+        "Multiple choice should have exactly 4 options"
+      ],
+      "strengths": [
+        "Correct type: multiple_choice",
+        "All required terms present",
+        "✅ \"Which\" question correctly formatted"
+      ],
+      "question": {
+        "type": "multiple_choice",
+        "question": "An engineer is designing a machine that needs to operate at different temperatures. The machine can work at temperatures as low as -10 degrees and as high as -5 degrees. Which temperature is smaller?",
+        "options": [
+          "-10",
+          "-5"
+        ],
+        "correct_answer": "-10",
+        "explanation": "Negative numbers represent values below zero. The smaller the number, the further it is from zero. Since -10 is farther from zero than -5, it is the smaller number."
+      }
+    },
+    {
+      "test": {
+        "grade": "4",
+        "career": "Chef",
+        "subject": "Math",
+        "skill": "Which fraction is larger: 1/2 or 1/3",
+        "expectedType": [
+          "multiple_choice"
+        ],
+        "notType": "true_false",
+        "validation": {
+          "mustContain": [
+            "which",
+            "fraction",
+            "1/2",
+            "1/3"
+          ],
+          "criticalWhichQuestion": true
+        }
+      },
+      "passed": true,
+      "score": 90,
+      "isCritical": true,
+      "issues": [
+        "Multiple choice should have exactly 4 options"
+      ],
+      "strengths": [
+        "Correct type: multiple_choice",
+        "All required terms present",
+        "✅ \"Which\" question correctly formatted"
+      ],
+      "question": {
+        "type": "multiple_choice",
+        "question": "A chef is making a fruit salad and needs to decide how to divide the fruits. One recipe says to use 1/2 of the strawberries, and another recipe says to use 1/3 of the strawberries. Which fraction is larger, 1/2 or 1/3?",
+        "options": {
+          "A": "1/2",
+          "B": "1/3",
+          "C": "They are the same",
+          "D": "It depends on the number of strawberries"
+        },
+        "correct_answer": "A",
+        "explanation": "1/2 is larger than 1/3 because when you divide something into 2 parts, each part is bigger than when you divide it into 3 parts."
+      }
+    },
+    {
+      "test": {
+        "grade": "1",
+        "career": "Doctor",
+        "subject": "ELA",
+        "skill": "Identifying Beginning Sounds",
+        "expectedType": [
+          "multiple_choice"
+        ],
+        "validation": {
+          "mustContain": [
+            "sound",
+            "begin",
+            "letter"
+          ],
+          "mustBeSimple": true
+        }
+      },
+      "passed": true,
+      "score": 90,
+      "isCritical": false,
+      "issues": [
+        "Missing some terms: letter"
+      ],
+      "strengths": [
+        "Correct type: multiple_choice",
+        "Appropriately simple language",
+        "Proper multiple choice format"
+      ],
+      "question": {
+        "type": "multiple_choice",
+        "question": "A doctor needs to check the beginning sounds of words to help a patient learn. Which word starts with the same sound as 'medicine'?",
+        "options": [
+          "moon",
+          "table",
+          "cat",
+          "sun"
+        ],
+        "correct_answer": "moon",
+        "explanation": "The word 'medicine' starts with the 'm' sound. 'Moon' also starts with the 'm' sound."
+      }
+    },
+    {
+      "test": {
+        "grade": "3",
+        "career": "Scientist",
+        "subject": "Science",
+        "skill": "Plant Life Cycle",
+        "expectedType": [
+          "multiple_choice",
+          "true_false"
+        ],
+        "validation": {
+          "mustContain": [
+            "plant",
+            "grow",
+            "seed",
+            "life"
+          ],
+          "gradeAppropriate": true
+        }
+      },
+      "passed": true,
+      "score": 70,
+      "isCritical": false,
+      "issues": [
+        "Type should be: multiple_choice or true_false, got open_ended"
+      ],
+      "strengths": [
+        "All required terms present",
+        "Grade-appropriate language"
+      ],
+      "question": {
+        "type": "open_ended",
+        "question": "A scientist is studying the life cycle of a sunflower. She plants sunflower seeds in different types of soil and observes how they grow. Describe the steps in the sunflower's life cycle, starting from the seed. Then explain how the type of soil might affect the growth of the sunflower.",
+        "correct_answer": "The sunflower's life cycle starts with the seed, which germinates when planted in soil and watered. Next, the seedling grows into a mature plant with leaves and a stem. The mature sunflower produces flowers, which eventually create seeds. The type of soil can affect the growth by providing different amounts of nutrients, water retention, and support for the roots.",
+        "explanation": "The sunflower's life cycle includes germination, growth, flowering, and seed production. Soil quality can influence how well the sunflower grows by affecting nutrient availability and water absorption."
+      }
+    },
+    {
+      "test": {
+        "grade": "6",
+        "career": "Artist",
+        "subject": "Math",
+        "skill": "Finding Area of Complex Shapes",
+        "expectedType": [
+          "numeric",
+          "multiple_choice"
+        ],
+        "validation": {
+          "mustContain": [
+            "area",
+            "shape",
+            "square",
+            "calculate"
+          ],
+          "gradeAppropriate": true
+        }
+      },
+      "passed": false,
+      "score": 50,
+      "isCritical": false,
+      "issues": [
+        "Type should be: numeric or multiple_choice, got open_ended",
+        "Missing key terms: shape, square, calculate"
+      ],
+      "strengths": [
+        "Grade-appropriate language"
+      ],
+      "question": {
+        "type": "open_ended",
+        "question": "An artist is designing a mural that includes a large rectangular section measuring 12 feet by 8 feet and a semicircular section with a diameter of 8 feet attached to one of the shorter sides of the rectangle. Determine the total area of the mural that the artist will paint. Show your calculations and explain your reasoning.",
+        "correct_answer": "The total area of the mural is 144 + 25.12 = 169.12 square feet.",
+        "explanation": "First, calculate the area of the rectangular section: 12 feet × 8 feet = 96 square feet. Next, calculate the area of the semicircular section. The radius of the semicircle is half the diameter, so r = 8 ÷ 2 = 4 feet. The area of a full circle is πr², so the area of the semicircle is (1/2) × π × 4² = (1/2) × π × 16 ≈ 25.12 square feet. Add the areas together: 96 + 25.12 = 121.12 square feet."
+      }
+    },
+    {
+      "test": {
+        "grade": "8",
+        "career": "Engineer",
+        "subject": "Science",
+        "skill": "Newton's Laws of Motion",
+        "expectedType": [
+          "multiple_choice"
+        ],
+        "validation": {
+          "mustContain": [
+            "Newton",
+            "force",
+            "motion",
+            "law"
+          ],
+          "gradeAppropriate": true
+        }
+      },
+      "passed": true,
+      "score": 70,
+      "isCritical": false,
+      "issues": [
+        "Type should be: multiple_choice, got open_ended"
+      ],
+      "strengths": [
+        "All required terms present",
+        "Grade-appropriate language"
+      ],
+      "question": {
+        "type": "open_ended",
+        "question": "An engineer is designing a bridge and needs to ensure it can withstand the forces exerted by vehicles traveling across it. Using Newton's Laws of Motion, explain how the engineer can calculate the forces acting on the bridge and determine the materials needed to prevent structural failure.",
+        "correct_answer": "The engineer can use Newton's Second Law of Motion (F = ma) to calculate the forces acting on the bridge by determining the mass of the vehicles and their acceleration. Newton's Third Law of Motion can be applied to understand how the bridge must exert an equal and opposite force to support the vehicles. Based on these calculations, the engineer can evaluate the stress and strain on the bridge materials and select materials with sufficient strength and durability to withstand these forces.",
+        "explanation": "Newton's Second Law helps calculate the force exerted by moving vehicles, while Newton's Third Law explains the interaction between the bridge and the vehicles. By analyzing these forces, the engineer can ensure the bridge's design is safe and effective."
+      }
+    },
+    {
+      "test": {
+        "grade": "10",
+        "career": "Writer",
+        "subject": "ELA",
+        "skill": "Identifying Rhetorical Devices",
+        "expectedType": [
+          "multiple_choice"
+        ],
+        "validation": {
+          "mustContain": [
+            "rhetorical",
+            "device",
+            "metaphor",
+            "simile"
+          ],
+          "gradeAppropriate": true
+        }
+      },
+      "passed": true,
+      "score": 80,
+      "isCritical": false,
+      "issues": [
+        "Missing some terms: metaphor, simile",
+        "Multiple choice should have exactly 4 options"
+      ],
+      "strengths": [
+        "Correct type: multiple_choice",
+        "Grade-appropriate language"
+      ],
+      "question": {
+        "type": "multiple_choice",
+        "question": "Evaluate the author's use of rhetorical devices in the following excerpt from a persuasive speech: 'We stand at the crossroads of history, where the decisions we make today will echo through generations. Let us not falter, but rise with courage and conviction.' Which rhetorical device is primarily used to inspire the audience?",
+        "options": {
+          "A": "Hyperbole",
+          "B": "Metaphor",
+          "C": "Anaphora",
+          "D": "Pathos"
+        },
+        "correct_answer": "D",
+        "explanation": "The author uses pathos, appealing to the audience's emotions by emphasizing the significance of their decisions and invoking a sense of courage and responsibility. While metaphor and anaphora are present, the primary device driving inspiration is emotional appeal."
+      }
+    }
+  ]
+}

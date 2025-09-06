@@ -1,0 +1,164 @@
+/**
+ * Introduction Modal Styles
+ * Welcome experience and journey overview animations
+ */
+
+.introduction-modal {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Animated fade in */
+.animated-fade-in {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Pulsing animation for Finn avatar */
+.animated-pulse {
+  animation: pulse 2s infinite;
+}
+
+/* Floating dots animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-20px) scale(1.1);
+  }
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Fade in up animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fade in down animation */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Pulse animation */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Loading dots container */
+.loading-dots {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Finn avatar styles */
+.finn-avatar-large {
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+}
+
+/* Journey card hover effects */
+.intro-journey-container > div > div {
+  position: relative;
+  overflow: hidden;
+}
+
+.intro-journey-container > div > div::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transition: left 0.5s;
+}
+
+.intro-journey-container > div > div:hover::before {
+  left: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .intro-welcome-container h1 {
+    font-size: 2rem !important;
+  }
+  
+  .intro-journey-container {
+    padding: 1rem !important;
+  }
+}
+
+/* Theme-specific styles */
+.introduction-modal.theme-dark {
+  color: #F7FAFC;
+}
+
+.introduction-modal.theme-light {
+  color: #1A202C;
+}
+
+/* Button hover animations */
+button {
+  position: relative;
+  overflow: hidden;
+}
+
+button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+button:active::after {
+  width: 300px;
+  height: 300px;
+}

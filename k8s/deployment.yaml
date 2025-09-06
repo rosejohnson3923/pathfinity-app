@@ -1,0 +1,399 @@
+# ================================================================
+# PATHFINITY KUBERNETES DEPLOYMENT
+# Production-ready deployment with auto-scaling and health checks
+# ================================================================
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pathfinity-app
+  namespace: pathfinity-production
+  labels:
+    app: pathfinity
+    component: web-app
+    version: "1.0.0"
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: pathfinity
+      component: web-app
+  template:
+    metadata:
+      labels:
+        app: pathfinity
+        component: web-app
+        version: "1.0.0"
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "3000"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: pathfinity-app
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        fsGroup: 1001
+      
+      containers:
+        - name: pathfinity-app
+          image: pathfinity/app:1.0.0
+          imagePullPolicy: Always
+          
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+            - name: metrics
+              containerPort: 9090
+              protocol: TCP
+          
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: PORT
+              value: "3000"
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: pathfinity-secrets
+                  key: database-url
+            - name: AZURE_OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: pathfinity-secrets
+                  key: azure-openai-api-key
+            - name: AZURE_OPENAI_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: pathfinity-config
+                  key: azure-openai-endpoint
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: pathfinity-secrets
+                  key: redis-url
+          
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1Gi
+            limits:
+              cpu: 2000m
+              memory: 4Gi
+          
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 3
+          
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          
+          startupProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 12
+          
+          volumeMounts:
+            - name: app-logs
+              mountPath: /app/logs
+            - name: temp-storage
+              mountPath: /app/temp
+            - name: config-volume
+              mountPath: /app/config
+              readOnly: true
+          
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1001
+            capabilities:
+              drop:
+                - ALL
+      
+      volumes:
+        - name: app-logs
+          emptyDir:
+            sizeLimit: 1Gi
+        - name: temp-storage
+          emptyDir:
+            sizeLimit: 2Gi
+        - name: config-volume
+          configMap:
+            name: pathfinity-config
+      
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - pathfinity
+                topologyKey: kubernetes.io/hostname
+      
+      terminationGracePeriodSeconds: 30
+
+---
+# ================================================================
+# AI WORKER DEPLOYMENT
+# ================================================================
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pathfinity-ai-worker
+  namespace: pathfinity-production
+  labels:
+    app: pathfinity
+    component: ai-worker
+    version: "1.0.0"
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: pathfinity
+      component: ai-worker
+  template:
+    metadata:
+      labels:
+        app: pathfinity
+        component: ai-worker
+        version: "1.0.0"
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "3001"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: pathfinity-worker
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        fsGroup: 1001
+      
+      containers:
+        - name: ai-worker
+          image: pathfinity/ai-worker:1.0.0
+          imagePullPolicy: Always
+          
+          ports:
+            - name: http
+              containerPort: 3001
+              protocol: TCP
+          
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: WORKER_TYPE
+              value: "ai-content-generation"
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: pathfinity-secrets
+                  key: database-url
+            - name: AZURE_OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: pathfinity-secrets
+                  key: azure-openai-api-key
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: pathfinity-secrets
+                  key: redis-url
+          
+          resources:
+            requests:
+              cpu: 200m
+              memory: 512Mi
+            limits:
+              cpu: 1000m
+              memory: 2Gi
+          
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 10
+          
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 5
+          
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1001
+            capabilities:
+              drop:
+                - ALL
+
+---
+# ================================================================
+# HORIZONTAL POD AUTOSCALER
+# ================================================================
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: pathfinity-app-hpa
+  namespace: pathfinity-production
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: pathfinity-app
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+    - type: Pods
+      pods:
+        metric:
+          name: pathfinity_http_requests_per_second
+        target:
+          type: AverageValue
+          averageValue: "100"
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 300
+      policies:
+        - type: Percent
+          value: 100
+          periodSeconds: 60
+        - type: Pods
+          value: 2
+          periodSeconds: 60
+      selectPolicy: Max
+    scaleDown:
+      stabilizationWindowSeconds: 600
+      policies:
+        - type: Percent
+          value: 50
+          periodSeconds: 60
+        - type: Pods
+          value: 1
+          periodSeconds: 60
+      selectPolicy: Min
+
+---
+# ================================================================
+# AI WORKER AUTOSCALER
+# ================================================================
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: pathfinity-ai-worker-hpa
+  namespace: pathfinity-production
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: pathfinity-ai-worker
+  minReplicas: 2
+  maxReplicas: 6
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 75
+    - type: Pods
+      pods:
+        metric:
+          name: pathfinity_ai_queue_length
+        target:
+          type: AverageValue
+          averageValue: "10"
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 180
+      policies:
+        - type: Pods
+          value: 1
+          periodSeconds: 60
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+        - type: Pods
+          value: 1
+          periodSeconds: 120
+
+---
+# ================================================================
+# POD DISRUPTION BUDGET
+# ================================================================
+
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: pathfinity-app-pdb
+  namespace: pathfinity-production
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: pathfinity
+      component: web-app
+
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: pathfinity-ai-worker-pdb
+  namespace: pathfinity-production
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: pathfinity
+      component: ai-worker

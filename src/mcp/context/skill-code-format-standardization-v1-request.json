@@ -1,0 +1,54 @@
+{
+  "changeId": "skill-code-format-standardization-v1",
+  "title": "Standardize Skill Code Format to A.1 Across All Master Containers",
+  "description": "Change from inconsistent format (A.1 input → K.RL.1 lookup) to consistent A.1 format throughout the system while preserving Common Core compliance as metadata",
+  "proposedChanges": [
+    {
+      "component": "ExperienceMasterContainer",
+      "currentState": "A.1 input converted to K.RL.1 for template lookup, causing mismatches",
+      "proposedState": "A.1 input used directly for template lookup with A.1 template keys",
+      "changeType": "format",
+      "files": [
+        "src/services/experienceTemplateService.ts",
+        "src/components/mastercontainers/ExperienceMasterContainer.tsx"
+      ]
+    },
+    {
+      "component": "TemplateSystem",
+      "currentState": "Template registry uses K.RL.1 format keys (K-ELA-K.RL.1-librarian)",
+      "proposedState": "Template registry uses A.1 format keys (K-ELA-A.1-librarian) + Common Core metadata",
+      "changeType": "structure",
+      "files": [
+        "src/services/experienceTemplateService.ts",
+        "src/data/experienceTemplates/kindergarten/ela/K.RL.1-librarian.ts"
+      ]
+    },
+    {
+      "component": "LearnMasterContainer",
+      "currentState": "Already uses A.1 format consistently",
+      "proposedState": "No changes - maintain existing A.1 format",
+      "changeType": "data",
+      "files": [
+        "src/components/mastercontainers/LearnMasterContainer.tsx"
+      ]
+    },
+    {
+      "component": "DiscoverMasterContainer",
+      "currentState": "Unknown skill format dependencies",
+      "proposedState": "Ensure compatibility with consistent A.1 format from upstream containers",
+      "changeType": "integration",
+      "files": [
+        "src/components/mastercontainers/DiscoverMasterContainer.tsx"
+      ]
+    }
+  ],
+  "affectedComponents": [
+    "LearnMasterContainer",
+    "ExperienceMasterContainer",
+    "DiscoverMasterContainer",
+    "TemplateSystem",
+    "SkillProgressTracking",
+    "CrossContainerDataFlow"
+  ],
+  "riskThreshold": "high"
+}

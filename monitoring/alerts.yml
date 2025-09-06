@@ -1,0 +1,366 @@
+# ================================================================
+# PATHFINITY PROMETHEUS ALERTS
+# Comprehensive alerting for AI education platform
+# ================================================================
+
+groups:
+  # ================================================================
+  # APPLICATION HEALTH ALERTS
+  # ================================================================
+  - name: pathfinity_application
+    rules:
+      - alert: PathfinityAppDown
+        expr: up{job="pathfinity-app"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: pathfinity
+        annotations:
+          summary: "Pathfinity application is down"
+          description: "The Pathfinity application has been down for more than 1 minute."
+          runbook_url: "https://docs.pathfinity.ai/runbooks/app-down"
+
+      - alert: PathfinityHighErrorRate
+        expr: rate(pathfinity_http_requests_total{status_code=~"5.."}[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+          service: pathfinity
+        annotations:
+          summary: "High error rate detected"
+          description: "Error rate is {{ $value | humanizePercentage }} for the last 5 minutes."
+
+      - alert: PathfinityHighResponseTime
+        expr: histogram_quantile(0.95, rate(pathfinity_http_request_duration_seconds_bucket[5m])) > 2
+        for: 10m
+        labels:
+          severity: warning
+          service: pathfinity
+        annotations:
+          summary: "High response time detected"
+          description: "95th percentile response time is {{ $value }}s for the last 10 minutes."
+
+  # ================================================================
+  # AI CHARACTER ALERTS
+  # ================================================================
+  - name: pathfinity_ai_characters
+    rules:
+      - alert: AICharacterHighLatency
+        expr: histogram_quantile(0.95, rate(pathfinity_ai_response_time_seconds_bucket[10m])) > 10
+        for: 5m
+        labels:
+          severity: warning
+          service: ai_characters
+        annotations:
+          summary: "AI character response time is high"
+          description: "95th percentile AI response time is {{ $value }}s for character {{ $labels.character }}."
+
+      - alert: AICharacterHighCost
+        expr: rate(pathfinity_ai_cost_cents_total[1h]) > 1000
+        for: 15m
+        labels:
+          severity: warning
+          service: ai_characters
+        annotations:
+          summary: "AI costs are increasing rapidly"
+          description: "AI costs are increasing at {{ $value }} cents per hour."
+
+      - alert: AICharacterLowSatisfaction
+        expr: avg_over_time(pathfinity_ai_interactions_total{satisfaction_rating="1"}[1h]) / avg_over_time(pathfinity_ai_interactions_total[1h]) > 0.2
+        for: 30m
+        labels:
+          severity: warning
+          service: ai_characters
+        annotations:
+          summary: "Low AI character satisfaction"
+          description: "AI character satisfaction rating is below acceptable levels."
+
+      - alert: AzureOpenAIQuotaExceeded
+        expr: rate(pathfinity_ai_service_errors_total{error_type="quota_exceeded"}[5m]) > 0
+        for: 1m
+        labels:
+          severity: critical
+          service: azure_openai
+        annotations:
+          summary: "Azure OpenAI quota exceeded"
+          description: "Azure OpenAI API quota has been exceeded."
+
+  # ================================================================
+  # DATABASE ALERTS
+  # ================================================================
+  - name: pathfinity_database
+    rules:
+      - alert: DatabaseDown
+        expr: up{job="postgres-exporter"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: database
+        annotations:
+          summary: "PostgreSQL database is down"
+          description: "The PostgreSQL database has been unreachable for more than 1 minute."
+
+      - alert: DatabaseHighConnections
+        expr: pg_stat_activity_count > 80
+        for: 5m
+        labels:
+          severity: warning
+          service: database
+        annotations:
+          summary: "High database connection count"
+          description: "Database has {{ $value }} active connections (>80)."
+
+      - alert: DatabaseSlowQueries
+        expr: rate(pg_stat_activity_max_tx_duration[5m]) > 300
+        for: 10m
+        labels:
+          severity: warning
+          service: database
+        annotations:
+          summary: "Slow database queries detected"
+          description: "Database queries are taking longer than 5 minutes."
+
+      - alert: DatabaseDiskUsage
+        expr: (pg_database_size_bytes / 1024 / 1024 / 1024) > 50
+        for: 5m
+        labels:
+          severity: warning
+          service: database
+        annotations:
+          summary: "Database disk usage is high"
+          description: "Database size is {{ $value }}GB (>50GB threshold)."
+
+      - alert: DatabaseReplicationLag
+        expr: pg_replication_lag_seconds > 300
+        for: 5m
+        labels:
+          severity: warning
+          service: database
+        annotations:
+          summary: "Database replication lag is high"
+          description: "Replication lag is {{ $value }} seconds."
+
+  # ================================================================
+  # REDIS ALERTS
+  # ================================================================
+  - name: pathfinity_redis
+    rules:
+      - alert: RedisDown
+        expr: up{job="redis-exporter"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: redis
+        annotations:
+          summary: "Redis is down"
+          description: "Redis has been unreachable for more than 1 minute."
+
+      - alert: RedisHighMemoryUsage
+        expr: redis_memory_used_bytes / redis_memory_max_bytes > 0.9
+        for: 5m
+        labels:
+          severity: warning
+          service: redis
+        annotations:
+          summary: "Redis memory usage is high"
+          description: "Redis memory usage is {{ $value | humanizePercentage }}."
+
+      - alert: RedisConnectionsHigh
+        expr: redis_connected_clients > 1000
+        for: 5m
+        labels:
+          severity: warning
+          service: redis
+        annotations:
+          summary: "Redis connection count is high"
+          description: "Redis has {{ $value }} connected clients."
+
+  # ================================================================
+  # SYSTEM RESOURCE ALERTS
+  # ================================================================
+  - name: pathfinity_system
+    rules:
+      - alert: HighCPUUsage
+        expr: 100 - (avg by(instance)(rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+        for: 10m
+        labels:
+          severity: warning
+          service: system
+        annotations:
+          summary: "High CPU usage detected"
+          description: "CPU usage is {{ $value }}% on {{ $labels.instance }}."
+
+      - alert: HighMemoryUsage
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 85
+        for: 10m
+        labels:
+          severity: warning
+          service: system
+        annotations:
+          summary: "High memory usage detected"
+          description: "Memory usage is {{ $value }}% on {{ $labels.instance }}."
+
+      - alert: LowDiskSpace
+        expr: (1 - (node_filesystem_avail_bytes{fstype!="tmpfs"} / node_filesystem_size_bytes)) * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+          service: system
+        annotations:
+          summary: "Low disk space detected"
+          description: "Disk usage is {{ $value }}% on {{ $labels.instance }} filesystem {{ $labels.mountpoint }}."
+
+      - alert: HighDiskIOWait
+        expr: rate(node_cpu_seconds_total{mode="iowait"}[5m]) * 100 > 20
+        for: 10m
+        labels:
+          severity: warning
+          service: system
+        annotations:
+          summary: "High disk I/O wait detected"
+          description: "I/O wait is {{ $value }}% on {{ $labels.instance }}."
+
+  # ================================================================
+  # NGINX LOAD BALANCER ALERTS
+  # ================================================================
+  - name: pathfinity_nginx
+    rules:
+      - alert: NginxDown
+        expr: up{job="nginx-exporter"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: nginx
+        annotations:
+          summary: "Nginx is down"
+          description: "Nginx load balancer has been down for more than 1 minute."
+
+      - alert: NginxHighErrorRate
+        expr: rate(nginx_http_requests_total{status=~"4..|5.."}[5m]) / rate(nginx_http_requests_total[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+          service: nginx
+        annotations:
+          summary: "High Nginx error rate"
+          description: "Nginx error rate is {{ $value | humanizePercentage }}."
+
+  # ================================================================
+  # LEARNING ANALYTICS ALERTS
+  # ================================================================
+  - name: pathfinity_learning_analytics
+    rules:
+      - alert: LowLearningActivity
+        expr: rate(pathfinity_learning_events_total[1h]) < 10
+        for: 30m
+        labels:
+          severity: warning
+          service: learning_analytics
+        annotations:
+          summary: "Low learning activity detected"
+          description: "Learning events rate is {{ $value }} per hour (below 10/hour threshold)."
+
+      - alert: HighAssessmentFailureRate
+        expr: rate(pathfinity_assessment_submissions_total{status="failed"}[1h]) / rate(pathfinity_assessment_submissions_total[1h]) > 0.3
+        for: 15m
+        labels:
+          severity: warning
+          service: learning_analytics
+        annotations:
+          summary: "High assessment failure rate"
+          description: "Assessment failure rate is {{ $value | humanizePercentage }}."
+
+      - alert: ContentGenerationFailures
+        expr: rate(pathfinity_errors_total{component="content_generation"}[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+          service: content_generation
+        annotations:
+          summary: "Content generation failures detected"
+          description: "Content generation is failing at {{ $value }} errors per second."
+
+  # ================================================================
+  # COMPLIANCE AND SECURITY ALERTS
+  # ================================================================
+  - name: pathfinity_compliance
+    rules:
+      - alert: SuspiciousDataAccess
+        expr: rate(pathfinity_profile_audit_log_total{action="unauthorized_access"}[5m]) > 0
+        for: 1m
+        labels:
+          severity: critical
+          service: compliance
+        annotations:
+          summary: "Suspicious data access detected"
+          description: "Unauthorized access attempts detected in audit logs."
+
+      - alert: FERPAComplianceViolation
+        expr: rate(pathfinity_compliance_violations_total{type="ferpa"}[5m]) > 0
+        for: 1m
+        labels:
+          severity: critical
+          service: compliance
+        annotations:
+          summary: "FERPA compliance violation detected"
+          description: "Potential FERPA compliance violation detected."
+
+      - alert: COPPAComplianceViolation
+        expr: rate(pathfinity_compliance_violations_total{type="coppa"}[5m]) > 0
+        for: 1m
+        labels:
+          severity: critical
+          service: compliance
+        annotations:
+          summary: "COPPA compliance violation detected"
+          description: "Potential COPPA compliance violation detected."
+
+  # ================================================================
+  # BACKUP AND DISASTER RECOVERY ALERTS
+  # ================================================================
+  - name: pathfinity_backup
+    rules:
+      - alert: BackupFailure
+        expr: pathfinity_backup_status{status="failed"} > 0
+        for: 1m
+        labels:
+          severity: critical
+          service: backup
+        annotations:
+          summary: "Database backup failed"
+          description: "Database backup has failed. Check backup logs immediately."
+
+      - alert: BackupNotRunning
+        expr: time() - pathfinity_backup_last_successful_time > 86400
+        for: 1m
+        labels:
+          severity: warning
+          service: backup
+        annotations:
+          summary: "No recent successful backup"
+          description: "No successful backup has run in the last 24 hours."
+
+  # ================================================================
+  # BUSINESS METRICS ALERTS
+  # ================================================================
+  - name: pathfinity_business
+    rules:
+      - alert: LowActiveUsers
+        expr: pathfinity_active_users < 50
+        for: 1h
+        labels:
+          severity: info
+          service: business
+        annotations:
+          summary: "Low active user count"
+          description: "Active user count is {{ $value }} (below 50 users)."
+
+      - alert: HighUserDropoffRate
+        expr: rate(pathfinity_user_sessions_ended_total{reason="error"}[1h]) / rate(pathfinity_user_sessions_total[1h]) > 0.2
+        for: 30m
+        labels:
+          severity: warning
+          service: business
+        annotations:
+          summary: "High user session dropoff rate"
+          description: "User session dropoff rate is {{ $value | humanizePercentage }}."

@@ -1,0 +1,95 @@
+{
+  "timestamp": "2025-09-01T01:51:35.667Z",
+  "validationType": "original_problem_fix",
+  "originalProblem": {
+    "description": "Which number is smaller: -10 or -5?",
+    "previousBehavior": "Showing as true_false",
+    "expectedBehavior": "Should be multiple_choice",
+    "currentStatus": "FIXED",
+    "consistency": "100%",
+    "results": [
+      {
+        "type": "multiple_choice",
+        "question": "An engineer is analyzing temperature changes in a system. Which number is smaller: -10 or -5?",
+        "options": [
+          "-10",
+          "-5",
+          "Both are equal",
+          "Neither is smaller"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "question": "An engineer is designing a system that measures temperatures. If the system records two temperatures, -10 degrees and -5 degrees, which number is smaller?",
+        "options": [
+          "-10",
+          "-5",
+          "0",
+          "5"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "question": "An engineer is analyzing temperature changes in a system. Which number is smaller: -10 or -5?",
+        "options": [
+          "-10",
+          "-5",
+          "Both are equal",
+          "Neither is smaller"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "question": "An engineer is designing a temperature control system and needs to compare two temperatures: -10°C and -5°C. Which number is smaller?",
+        "options": [
+          "-10",
+          "-5",
+          "0",
+          "5"
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "question": "An engineer is designing a temperature control system and needs to determine which number is smaller: -10 or -5. Which number is smaller?",
+        "options": [
+          "-10",
+          "-5",
+          "0",
+          "5"
+        ]
+      }
+    ]
+  },
+  "whichQuestions": {
+    "totalTested": 4,
+    "passed": 4,
+    "passRate": "100%",
+    "results": [
+      {
+        "scenario": "Which number is larger",
+        "passed": true,
+        "type": "multiple_choice",
+        "question": "A scientist is comparing two measurements: 345 and 354. Which number is larger?"
+      },
+      {
+        "scenario": "Which fraction is greater",
+        "passed": true,
+        "type": "multiple_choice",
+        "question": "A chef is preparing two recipes and needs to compare the fractions of ingredients used. One recipe uses 2/3 of a cup of sugar, and the other uses 3/4 of a cup of sugar. Which fraction is greater?"
+      },
+      {
+        "scenario": "Which shape has more sides",
+        "passed": true,
+        "type": "multiple_choice",
+        "question": "An artist is drawing shapes for a painting. Which shape has more sides: a triangle or a pentagon?"
+      },
+      {
+        "scenario": "Which word comes first alphabetically",
+        "passed": true,
+        "type": "multiple_choice",
+        "question": "Which word comes first alphabetically?"
+      }
+    ]
+  },
+  "conclusion": "PRIMARY_ISSUE_RESOLVED"
+}

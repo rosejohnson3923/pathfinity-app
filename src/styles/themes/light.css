@@ -1,0 +1,248 @@
+/**
+ * LIGHT THEME OVERRIDES
+ * ======================
+ * Light mode specific variable overrides and extensions
+ * Imported after MasterTheme.css when light mode is active
+ * 
+ * Created: 2025-08-22
+ */
+
+/* Light theme base is already defined in MasterTheme.css via :root */
+/* This file is for any additional light-specific styles or component overrides */
+
+[data-theme="light"] {
+  /* ==== EXTENDED LIGHT COLORS ==== */
+  /* Additional light mode specific colors */
+  --bg-code: #f6f8fa;
+  --bg-code-highlight: #fff8dc;
+  --bg-input-focus: #ffffff;
+  --bg-tooltip: #1f2937;
+  
+  /* Glass morphism effects for light mode */
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(139, 92, 246, 0.2);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+  
+  /* Soft shadows for light mode */
+  --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --shadow-strong: 0 8px 24px rgba(0, 0, 0, 0.08);
+  
+  /* Pastel gradients for light mode */
+  --gradient-light-primary: linear-gradient(135deg, #c084fc 0%, #a78bfa 50%, #818cf8 100%);
+  --gradient-light-soft: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #fcd34d 100%);
+  --gradient-light-pastel: linear-gradient(135deg, #fae8ff 0%, #f3e8ff 50%, #e9d5ff 100%);
+  
+  /* Soft accent colors for light mode */
+  --accent-lavender: #e9d5ff;
+  --accent-mint: #d1fae5;
+  --accent-sky: #e0f2fe;
+  --accent-peach: #fed7aa;
+}
+
+/* ==== LIGHT MODE SPECIFIC STYLES ==== */
+
+/* Scrollbar styling for light mode */
+[data-theme="light"] ::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+[data-theme="light"] ::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-full);
+}
+
+[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: var(--color-gray-400);
+  border-radius: var(--radius-full);
+  border: 2px solid var(--bg-secondary);
+}
+
+[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+/* Selection colors for light mode */
+[data-theme="light"] ::selection {
+  background: rgba(139, 92, 246, 0.2);
+  color: var(--text-primary);
+}
+
+/* Focus rings for light mode */
+[data-theme="light"] *:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Input placeholders for light mode */
+[data-theme="light"] input::placeholder,
+[data-theme="light"] textarea::placeholder {
+  color: var(--text-tertiary);
+  opacity: 0.6;
+}
+
+/* Code blocks for light mode */
+[data-theme="light"] pre,
+[data-theme="light"] code {
+  background: var(--bg-code);
+  color: #24292f;
+  border: 1px solid var(--border-color);
+}
+
+/* Table styles for light mode */
+[data-theme="light"] table {
+  border-color: var(--border-color);
+}
+
+[data-theme="light"] th {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-weight: var(--font-semibold);
+}
+
+[data-theme="light"] td {
+  border-color: var(--border-color-soft);
+}
+
+[data-theme="light"] tr:hover {
+  background: var(--bg-hover);
+}
+
+/* Link styles for light mode */
+[data-theme="light"] a {
+  color: var(--text-link);
+}
+
+[data-theme="light"] a:hover {
+  color: var(--color-primary-dark);
+  text-decoration: underline;
+}
+
+/* Disabled state for light mode */
+[data-theme="light"] [disabled],
+[data-theme="light"] .disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Loading skeleton for light mode */
+[data-theme="light"] .skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-secondary) 0%,
+    var(--bg-tertiary) 50%,
+    var(--bg-secondary) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-light 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-light {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Glass effect overlays for light mode */
+[data-theme="light"] .glass-effect {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+/* Soft shadow effects for light mode buttons */
+[data-theme="light"] .btn-soft:hover {
+  box-shadow: var(--shadow-medium);
+  transform: translateY(-1px);
+}
+
+/* Enhanced shadows for elevated elements */
+[data-theme="light"] .elevated {
+  box-shadow: 
+    0 4px 6px rgba(0, 0, 0, 0.04),
+    0 10px 15px rgba(0, 0, 0, 0.06),
+    0 2px 4px rgba(139, 92, 246, 0.06);
+}
+
+/* Gradient text for light mode */
+[data-theme="light"] .gradient-text {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Container-specific light mode enhancements */
+[data-theme="light"] .container-learn {
+  position: relative;
+  border-top: 3px solid transparent;
+  border-image: var(--gradient-primary) 1;
+}
+
+[data-theme="light"] .container-experience {
+  position: relative;
+  border-top: 3px solid transparent;
+  border-image: linear-gradient(90deg, #14b8a6 0%, #0891b2 100%) 1;
+}
+
+[data-theme="light"] .container-discover {
+  position: relative;
+  border-top: 3px solid transparent;
+  border-image: linear-gradient(90deg, #ec4899 0%, #a855f7 100%) 1;
+}
+
+/* Soft backgrounds for content areas */
+[data-theme="light"] .content-soft {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(249, 250, 251, 0.9) 100%);
+}
+
+/* Hover effects for interactive elements */
+[data-theme="light"] .interactive:hover {
+  background: var(--bg-hover);
+  box-shadow: var(--shadow-soft);
+}
+
+/* Card hover effects for light mode */
+[data-theme="light"] .card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Badge styles for light mode */
+[data-theme="light"] .badge {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+[data-theme="light"] .badge-primary {
+  background: var(--color-primary-soft);
+  color: var(--color-primary-dark);
+  border-color: var(--color-primary-light);
+}
+
+[data-theme="light"] .badge-success {
+  background: var(--color-accent-soft);
+  color: var(--color-accent-dark);
+  border-color: var(--color-accent-light);
+}
+
+/* Tooltip styles for light mode */
+[data-theme="light"] .tooltip {
+  background: var(--bg-tooltip);
+  color: var(--color-white);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Progress bar styles for light mode */
+[data-theme="light"] .progress-bar {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+}
+
+[data-theme="light"] .progress-fill {
+  background: var(--gradient-primary);
+  box-shadow: 0 2px 4px rgba(139, 92, 246, 0.2);
+}
