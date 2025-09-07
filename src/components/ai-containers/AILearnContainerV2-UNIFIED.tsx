@@ -112,7 +112,6 @@ interface AILearnContainerV2Props {
   onNext: () => void;
   onBack?: () => void;
   onLoadingChange?: (loading: boolean) => void;
-  onSkipToExperience?: () => void; // Testing skip button
 }
 
 type LearningPhase = 'loading' | 'instruction' | 'practice' | 'assessment' | 'complete';
@@ -130,7 +129,6 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   onNext,
   onBack,
   onLoadingChange,
-  onSkipToExperience
 }) => {
   
   // Initialize JIT Services
@@ -926,7 +924,7 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   });
 
   return (
-    <div className="ai-learn-container container-learn" data-theme={theme}>
+    <div className={`ai-learn-container container-learn phase-${phase}`} data-theme={theme}>
       {/* Comprehensive Progress Header */}
       <ProgressHeader
         containerType="LEARN"
@@ -955,50 +953,6 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
       />
       
       {features.showXP && <XPDisplay />}
-      
-      {/* Testing Skip Button - Always show in dev mode */}
-      {(onSkipToExperience || import.meta.env.DEV) && (
-        <button
-          onClick={onSkipToExperience || (() => {
-            console.log('🚀 Skip to Experience clicked (dev mode)');
-            
-            // Store current selections to preserve them across reload
-            if (selectedCareer) {
-              sessionStorage.setItem('devSelectedCareer', JSON.stringify(selectedCareer));
-            }
-            if (selectedCharacter) {
-              sessionStorage.setItem('devSelectedCharacter', selectedCharacter);
-            }
-            
-            // Set session storage to force Experience container and reload
-            sessionStorage.setItem('forceContainerType', 'EXPERIENCE');
-            window.location.reload();
-          })}
-          style={{
-            position: 'fixed',
-            top: '120px',
-            right: '20px',
-            padding: '10px 20px',
-            backgroundColor: '#fbbf24',
-            color: '#000',
-            border: '2px solid #f59e0b',
-            borderRadius: '8px',
-            cursor: 'pointer',
-            fontWeight: 'bold',
-            fontSize: '14px',
-            zIndex: 99999,
-            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = '#f59e0b';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = '#fbbf24';
-          }}
-        >
-          🚀 Skip to Experience →
-        </button>
-      )}
       
       <div className="container-content">
         {/* Debug instruction phase */}

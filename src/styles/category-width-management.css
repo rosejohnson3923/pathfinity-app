@@ -51,11 +51,11 @@ html, body, #root {
 }
 
 /* Modal content containers - flexible sizing */
-/* IMPORTANT: Exclude Bento components, Dashboard content, and TwoPanelModal */
-/* EXCLUDING DashboardModal and TwoPanelModal which should be full width */
+/* IMPORTANT: Exclude Bento components, Dashboard content, TwoPanelModal, and AI Companion Modal */
+/* EXCLUDING DashboardModal, TwoPanelModal, and AI Companion Modal which should be full width */
 .modal-container:not(.dashboardModal):not(.two-panel-modal .modal-container),
 .modal-content:not(.bento-content):not([class*="dashboard"]):not(.two-panel-modal .modal-content),
-[class*="Modal"]:not(.modal-overlay):not(.modal-backdrop):not([class*="Bento"]):not([class*="Dashboard"]):not(.introduction-modal):not(.dashboardModal):not([class*="dashboardModal"]):not(.two-panel-modal),
+[class*="Modal"]:not(.modal-overlay):not(.modal-backdrop):not([class*="Bento"]):not([class*="Dashboard"]):not(.introduction-modal):not(.dashboardModal):not([class*="dashboardModal"]):not(.two-panel-modal):not(.ai-companion-modal),
 .settings-modal,
 .companion-chat-modal {
   position: relative !important;
@@ -79,6 +79,12 @@ html, body, #root {
 /* Large modals */
 .career-choice-modal {
   max-width: min(95vw, 1200px) !important;
+}
+
+/* AI Companion Modal - Full width (1400px) */
+.ai-companion-modal {
+  width: 1400px !important;
+  max-width: 95vw !important;
 }
 
 /* Special full-width modals (1400px) */

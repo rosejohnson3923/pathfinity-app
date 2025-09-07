@@ -11,12 +11,12 @@
    CONTAINER LAYOUT
    ============================================ */
 .multiSubjectContainer {
-  min-height: 100vh;
+  height: auto;
   width: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
-  background: var(--bg-primary);
+  background: transparent;
   padding-top: 0; /* Remove any top padding */
 }
 

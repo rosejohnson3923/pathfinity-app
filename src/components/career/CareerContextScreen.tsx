@@ -89,7 +89,7 @@ export const CareerContextScreen: React.FC<CareerContextScreenProps> = ({
   autoPlayAudio = true
 }) => {
   // Debug: Log that component is rendering
-  console.log('🎯 CareerContextScreen rendering with emergency buttons');
+  console.log('🎯 CareerContextScreen rendering');
   const { theme } = useTheme();
   const [isVisible, setIsVisible] = useState(true);
   const [isAnimatingOut, setIsAnimatingOut] = useState(false);
@@ -269,134 +269,7 @@ export const CareerContextScreen: React.FC<CareerContextScreenProps> = ({
   if (!isVisible) return null;
   
   return (
-    <>
-      {/* SUPER EMERGENCY SKIP - Absolutely top level */}
-      {import.meta.env.DEV && (
-        <div style={{
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          zIndex: 2147483647,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '20px',
-          alignItems: 'center'
-        }}>
-          <button 
-            onClick={handleStart}
-            style={{
-              padding: '30px 80px',
-              backgroundColor: '#ff0000',
-              color: 'white',
-              border: '5px solid #ffffff',
-              borderRadius: '20px',
-              cursor: 'pointer',
-              fontWeight: 'bold',
-              fontSize: '24px',
-              boxShadow: '0 10px 30px rgba(0, 0, 0, 0.8)',
-              textTransform: 'uppercase',
-              letterSpacing: '2px'
-            }}
-          >
-            🚨 EMERGENCY SKIP 🚨
-          </button>
-          <div style={{
-            color: 'white',
-            fontSize: '14px',
-            textAlign: 'center',
-            background: 'rgba(0,0,0,0.8)',
-            padding: '10px',
-            borderRadius: '8px'
-          }}>
-            Dev Mode: Click to continue
-          </div>
-        </div>
-      )}
-      
-      {/* Emergency Skip Buttons Overlay - Outside main container to ensure visibility */}
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        zIndex: 2147483646,
-        pointerEvents: 'none'
-      }}>
-        {/* Emergency Skip Button - Top Left */}
-        <button 
-          onClick={handleStart}
-          className="emergency-skip-green"
-          style={{
-            position: 'absolute',
-            top: '20px',
-            left: '20px',
-            padding: '15px 30px',
-            backgroundColor: '#10b981',
-            color: 'white',
-            border: '3px solid #059669',
-            borderRadius: '12px',
-            cursor: 'pointer',
-            fontWeight: 'bold',
-            fontSize: '16px',
-            boxShadow: '0 8px 16px rgba(0, 0, 0, 0.4)',
-            pointerEvents: 'auto'
-          }}
-        >
-          ⏭️ SKIP / CONTINUE
-        </button>
-        
-        {/* Emergency Skip Button - Top Right */}
-        <button 
-          onClick={handleStart}
-          className="emergency-skip-yellow"
-          style={{
-            position: 'absolute',
-            top: '20px',
-            right: '20px',
-            padding: '15px 30px',
-            backgroundColor: '#f59e0b',
-            color: 'black',
-            border: '3px solid #d97706',
-            borderRadius: '12px',
-            cursor: 'pointer',
-            fontWeight: 'bold',
-            fontSize: '16px',
-            boxShadow: '0 8px 16px rgba(0, 0, 0, 0.4)',
-            pointerEvents: 'auto'
-          }}
-        >
-          🚀 SKIP TO NEXT
-        </button>
-        
-        {/* Emergency Skip Button - Center Bottom */}
-        <button 
-          onClick={handleStart}
-          className="emergency-skip-red"
-          style={{
-            position: 'absolute',
-            bottom: '20px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            padding: '20px 60px',
-            backgroundColor: '#ef4444',
-            color: 'white',
-            border: '3px solid #dc2626',
-            borderRadius: '50px',
-            cursor: 'pointer',
-            fontWeight: 'bold',
-            fontSize: '20px',
-            boxShadow: '0 8px 24px rgba(239, 68, 68, 0.5)',
-            animation: 'pulse 2s infinite',
-            pointerEvents: 'auto'
-          }}
-        >
-          ➡️ CONTINUE TO NEXT SCREEN ➡️
-        </button>
-      </div>
-      
-      <div className={`career-context-screen ${theme} ${isAnimatingOut ? 'animating-out' : ''}`}>
+    <div className={`career-context-screen ${theme} ${isAnimatingOut ? 'animating-out' : ''}`}>
         <canvas ref={canvasRef} className="particle-canvas" />
       
       <div className="career-context-content">
@@ -513,6 +386,5 @@ export const CareerContextScreen: React.FC<CareerContextScreenProps> = ({
         </div>
       </div>
     </div>
-    </>
   );
 };

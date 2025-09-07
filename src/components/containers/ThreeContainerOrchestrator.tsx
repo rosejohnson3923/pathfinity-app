@@ -178,17 +178,6 @@ export const ThreeContainerOrchestrator: React.FC<ThreeContainerOrchestratorProp
     }
   }, [isPreGenerating, currentPhase, studentId, assignment.id, currentSessionId]);
 
-  // Handle Skip to Experience (for testing)
-  const handleSkipToExperience = () => {
-    console.log('🚀 Skipping Learn container, jumping to Experience for testing');
-    
-    // Create mock learn results for testing
-    const mockLearnHandoff: ContainerHandoff = {
-      assignmentId: assignment.id,
-      studentId: studentId,
-      completedSkills: [
-        {
-          skill_number: 'A.1',
           subject: 'Math',
           correct: true,
           timeSpent: 300,
@@ -749,16 +738,6 @@ export const ThreeContainerOrchestrator: React.FC<ThreeContainerOrchestratorProp
             onExtensionRequest={handleExtensionRequest}
             variant="compact"
           />
-          
-          {/* Skip to Experience Button (Testing) */}
-          <button
-            onClick={handleSkipToExperience}
-            className="fixed top-4 right-4 z-50 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium shadow-lg flex items-center space-x-2 transition-all duration-200 hover:scale-105"
-            title="Skip to Experience Container (Testing)"
-          >
-            <FastForward className="w-4 h-4" />
-            <span className="hidden sm:inline">Skip to Experience</span>
-          </button>
         </>
       );
     }
@@ -785,16 +764,6 @@ export const ThreeContainerOrchestrator: React.FC<ThreeContainerOrchestratorProp
           onExtensionRequest={handleExtensionRequest}
           variant="compact"
         />
-        
-        {/* Skip to Experience Button (Testing) */}
-        <button
-          onClick={handleSkipToExperience}
-          className="fixed top-4 right-4 z-50 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium shadow-lg flex items-center space-x-2 transition-all duration-200 hover:scale-105"
-          title="Skip to Experience Container (Testing)"
-        >
-          <FastForward className="w-4 h-4" />
-          <span className="hidden sm:inline">Skip to Experience</span>
-        </button>
       </>
     );
   }

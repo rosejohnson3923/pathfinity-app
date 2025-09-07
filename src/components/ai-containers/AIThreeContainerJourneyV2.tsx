@@ -434,12 +434,6 @@ export const AIThreeContainerJourneyV2: React.FC<AIThreeContainerJourneyV2Props>
             {...commonProps}
             onComplete={handleLearnComplete}
             onNext={handleLearnNext}
-            onSkipToExperience={() => {
-              console.log('🔄 Skipping to Experience Container (Testing)');
-              recordContainerTime('learn');
-              setCompletedContainers(prev => [...prev, 'learn']);
-              setCurrentContainer('experience');
-            }}
           />
         );
 

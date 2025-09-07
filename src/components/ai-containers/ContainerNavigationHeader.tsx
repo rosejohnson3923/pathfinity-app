@@ -22,8 +22,6 @@ interface ContainerNavigationHeaderProps {
   career?: string;
   skill?: string;
   subject?: string;
-  // Testing navigation
-  onSkipToExperience?: () => void;
 }
 
 export const ContainerNavigationHeader: React.FC<ContainerNavigationHeaderProps> = ({
@@ -36,8 +34,7 @@ export const ContainerNavigationHeader: React.FC<ContainerNavigationHeaderProps>
   score,
   career,
   skill,
-  subject,
-  onSkipToExperience
+  subject
 }) => {
   const navigate = useNavigate();
   const { signOut } = useAuth();
@@ -148,17 +145,6 @@ export const ContainerNavigationHeader: React.FC<ContainerNavigationHeaderProps>
             <span className={styles.scoreLabel}>Score:</span>
             <span className={styles.scoreValue}>{score}</span>
           </div>
-        )}
-        
-        {onSkipToExperience && (
-          <button
-            onClick={onSkipToExperience}
-            className={styles.skipButton}
-            title="Skip to Experience (Testing)"
-          >
-            <span>⏭️</span>
-            <span>Skip to Experience</span>
-          </button>
         )}
         
         <button

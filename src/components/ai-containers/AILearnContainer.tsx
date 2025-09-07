@@ -1252,7 +1252,7 @@ export const AILearnContainer: React.FC<AILearnContainerProps> = ({
             theme={theme}
           />
         )}
-        <div className="max-w-4xl mx-auto" style={{ paddingTop: onBack ? '5rem' : '0' }}>
+        <div className="w-full" style={{ paddingTop: onBack ? '5rem' : '0' }}>
           <header className="text-center mb-8">
             <div className="flex justify-between items-start mb-4">
               <div className="flex-1">
