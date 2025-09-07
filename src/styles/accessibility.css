@@ -9,17 +9,26 @@
    FOCUS INDICATORS
    ============================================ */
 
-/* Remove default outlines */
-*:focus {
+/* Preserve focus for keyboard users, remove for mouse users */
+*:focus:not(:focus-visible) {
   outline: none;
 }
 
 /* High visibility focus for keyboard navigation */
-*:focus-visible {
+*:focus-visible,
+*:focus {
   outline: 3px solid #ffd700 !important;
   outline-offset: 2px !important;
   z-index: 9999;
   position: relative;
+}
+
+/* For browsers that don't support :focus-visible, provide fallback */
+@supports not selector(:focus-visible) {
+  *:focus {
+    outline: 3px solid #ffd700 !important;
+    outline-offset: 2px !important;
+  }
 }
 
 /* Alternative focus style for dark backgrounds */

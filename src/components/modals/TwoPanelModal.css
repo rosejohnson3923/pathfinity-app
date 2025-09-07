@@ -16,8 +16,8 @@
 
 /* Override any external CSS that might interfere */
 .two-panel-modal .modal-container {
-  width: 1400px !important;
-  max-width: 100vw !important;
+  width: 100% !important;
+  max-width: min(1400px, 100vw) !important;
 }
 
 /* Backdrop removed - using integrated full-screen layout */
@@ -32,8 +32,8 @@
 
 .modal-container {
   position: relative !important;
-  width: 1400px !important; /* Force exact width */
-  max-width: 100vw !important; /* But don't exceed viewport on small screens */
+  width: 100% !important;
+  max-width: min(1400px, 100vw) !important;
   height: 100vh !important;
   display: flex;
   flex-direction: row;
@@ -382,6 +382,23 @@
   }
 }
 
+/* Tablet breakpoint */
+@media (max-width: 1024px) {
+  .modal-container {
+    max-width: 100vw !important;
+  }
+  
+  .main-content-panel {
+    width: calc(100% - 240px) !important;
+  }
+  
+  .gamification-sidebar {
+    width: 240px !important;
+    min-width: 240px !important;
+  }
+}
+
+/* Mobile breakpoint */
 @media (max-width: 768px) {
   .modal-container {
     flex-direction: column;

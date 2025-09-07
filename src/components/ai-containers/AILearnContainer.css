@@ -46,15 +46,24 @@
   background: transparent !important;
 }
 
+/* Remove constraints and background during practice phase */
+.ai-learn-container.phase-practice {
+  overflow: visible !important;
+  height: auto !important;
+  min-height: auto !important;
+  position: static !important;
+  background: transparent !important;
+}
+
 /* Practice Phase Styling */
 .ai-learn-container .practice-phase {
   max-width: 100%;
   width: 100%;
-  height: 100%;
+  height: auto;
   margin: 0 auto;
   padding: 1rem;
   box-sizing: border-box;
-  overflow-y: auto;
+  overflow-y: visible;
 }
 
 .ai-learn-container .phase-header {

@@ -366,7 +366,13 @@ export const FloatingLearningDock: React.FC<FloatingLearningDockProps> = ({
                 {activeModal === 'hint' && '💡 Get a Hint'}
                 {activeModal === 'chat' && `💬 Chat with ${companionName}`}
               </h3>
-              <button className={styles.closeButton} onClick={() => setActiveModal(null)}>×</button>
+              <button 
+                className={styles.closeButton} 
+                onClick={() => setActiveModal(null)}
+                aria-label="Close modal"
+              >
+                ×
+              </button>
             </div>
 
             {/* Points Modal */}

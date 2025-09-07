@@ -81,10 +81,41 @@ html, body, #root {
   max-width: min(95vw, 1200px) !important;
 }
 
-/* AI Companion Modal - Full width (1400px) */
+/* AI Companion Modal - Responsive full width */
 .ai-companion-modal {
-  width: 1400px !important;
-  max-width: 95vw !important;
+  width: 100% !important;
+  max-width: min(1400px, 95vw) !important;
+}
+
+/* AI Companion Modal - Tablet breakpoint */
+@media (max-width: 1024px) {
+  .ai-companion-modal {
+    max-width: 100vw !important;
+    height: 100vh !important;
+  }
+  
+  .ai-companion-modal .companions-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    padding: 1rem !important;
+  }
+}
+
+/* AI Companion Modal - Mobile breakpoint */
+@media (max-width: 768px) {
+  .ai-companion-modal {
+    width: 100vw !important;
+    height: 100vh !important;
+    border-radius: 0 !important;
+  }
+  
+  .ai-companion-modal .companions-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.5rem !important;
+  }
+  
+  .ai-companion-modal .companion-card {
+    min-height: auto !important;
+  }
 }
 
 /* Special full-width modals (1400px) */
@@ -101,8 +132,8 @@ html, body, #root {
 }
 
 .two-panel-modal .modal-container {
-  width: 1400px !important;
-  max-width: 100vw !important;
+  width: 100% !important;
+  max-width: min(1400px, 100vw) !important;
   height: 100vh !important;
   margin: 0 auto !important;
   padding: 0 !important;
@@ -110,10 +141,10 @@ html, body, #root {
   flex-direction: row !important;
 }
 
-/* Daily Learning Modal - Also needs 1400px */
+/* Daily Learning Modal - Responsive width */
 .daily-learning-modal {
-  width: 1400px !important;
-  max-width: 100vw !important;
+  width: 100% !important;
+  max-width: min(1400px, 100vw) !important;
   left: 50% !important;
   transform: translateX(-50%) !important;
 }
@@ -192,7 +223,7 @@ html, body, #root {
 [class*="BentoExperience"],
 [class*="BentoDiscover"] {
   width: 100% !important;
-  max-width: 1400px !important;
+  max-width: min(1400px, 95vw) !important;
   margin: 0 auto !important;
   padding: 0 20px !important;
   box-sizing: border-box !important;
@@ -304,7 +335,7 @@ header[class*="_dashboardHeader_"] {
 [class*="Container"][class*="AI"],
 .multi-subject-container {
   width: 100% !important;
-  max-width: 1400px !important;
+  max-width: min(1400px, 95vw) !important;
   margin: 0 auto !important;
   padding: 0 20px !important;
   box-sizing: border-box !important;
@@ -384,7 +415,7 @@ header[class*="_dashboardHeader_"] {
   left: 50% !important;
   transform: translateX(-50%) !important;
   width: 100% !important;
-  max-width: 1400px !important;
+  max-width: min(1400px, 95vw) !important;
   z-index: 1000 !important;
   box-sizing: border-box !important;
 }

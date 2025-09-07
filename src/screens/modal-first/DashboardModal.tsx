@@ -537,6 +537,10 @@ export const DashboardModal: React.FC<DashboardModalProps> = ({
               <div
                 key={companion.id}
                 className={`companion-card ${selectedCompanionTemp === companion.id ? 'selected' : ''}`}
+                role="button"
+                tabIndex={0}
+                aria-label={`Select ${companion.name} as your AI companion`}
+                aria-pressed={selectedCompanionTemp === companion.id}
                 style={{ 
                   backgroundColor: colors.cardBg,
                   border: `2px solid ${selectedCompanionTemp === companion.id ? companion.color : colors.border}`,
@@ -552,6 +556,12 @@ export const DashboardModal: React.FC<DashboardModalProps> = ({
                   flexDirection: 'column'
                 }}
                 onClick={() => setSelectedCompanionTemp(companion.id)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setSelectedCompanionTemp(companion.id);
+                  }
+                }}
                 onMouseEnter={() => setHoveredCompanion(companion.id)}
                 onMouseLeave={() => setHoveredCompanion(null)}
               >
