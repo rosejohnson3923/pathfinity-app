@@ -64,16 +64,23 @@
   flex-direction: column;
   box-shadow: none !important;
   margin: 0 !important;
-  padding: 0 2rem !important; /* Add horizontal padding for better content spacing */
+  padding: 0 2rem !important;
   position: relative;
 }
 
 /* Remove any padding from direct children */
 .main-content-panel > div {
-  padding: 0 !important;
-  margin: 0 !important;
   width: 100% !important;
   max-width: 100% !important;
+  height: 100%;
+  position: relative;
+}
+
+/* Special handling for instruction phase - allow content to expand */
+.main-content-panel > .ai-learn-container.phase-instruction {
+  height: auto !important;
+  min-height: auto !important;
+  overflow: visible !important;
 }
 
 /* Remove slideUp animation for full-screen layout */

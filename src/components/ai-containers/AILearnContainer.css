@@ -21,18 +21,21 @@
   position: relative;
   z-index: 100;
   width: 100%;
-  height: 100vh;
+  height: 100%;
+  min-height: 100%;
   overflow: hidden;
   background-color: inherit;
 }
 
-/* When showing CareerContextScreen (instruction phase), remove all constraints */
+/* When showing CareerContextScreen (instruction phase), treat like practice phase */
 .ai-learn-container:has(.career-context-screen),
 .ai-learn-container.phase-instruction {
   overflow: visible !important;
   height: auto !important;
   min-height: auto !important;
+  max-height: none !important;
   position: static !important;
+  background: transparent !important;
 }
 
 /* Ensure career-context-screen can expand fully */
@@ -40,6 +43,26 @@
   height: auto !important;
   min-height: auto !important;
 }
+
+/* Remove container-content height constraints during instruction phase */
+.ai-learn-container.phase-instruction .container-content {
+  height: 100% !important;
+  min-height: 100% !important;
+  max-height: none !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+/* Fix main-content-panel clipping during instruction phase - allow scrolling */
+.main-content-panel:has(.ai-learn-container.phase-instruction) {
+  overflow: auto !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* TwoPanelModal for instruction phase - remove constraints */
 
 /* Remove any extra background from the container during instruction phase */
 .ai-learn-container.phase-instruction {

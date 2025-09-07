@@ -269,7 +269,7 @@ export const CareerContextScreen: React.FC<CareerContextScreenProps> = ({
   if (!isVisible) return null;
   
   return (
-    <div className={`career-context-screen ${theme} ${isAnimatingOut ? 'animating-out' : ''}`}>
+    <div className={`career-context-screen ${theme || ''} ${isAnimatingOut ? 'animating-out' : ''}`}>
         <canvas ref={canvasRef} className="particle-canvas" />
       
       <div className="career-context-content">

@@ -279,24 +279,13 @@ html, body, #root {
   max-width: min(90vw, 1400px) !important; /* Use full dashboard width */
 }
 
-/* Fix CareerContextScreen height constraint */
+/* CareerContextScreen - Allow natural flow like practice cards */
 .career-context-screen {
-  min-height: 100vh !important;
-  height: 100vh !important;
-  overflow: hidden !important; /* No scrollbar for full-screen experience */
+  /* Remove all height constraints to allow content to flow naturally */
 }
 
 .career-context-content {
-  height: 85vh !important; /* Ensure it uses 85% of viewport height */
-  min-height: 85vh !important;
-  max-height: 85vh !important; /* Cap at 85vh to prevent overflow */
-  overflow: hidden !important; /* No scrollbar on content */
-}
-
-/* Ensure particle canvas is visible */
-.particle-canvas {
-  opacity: 1 !important; /* Make particles fully visible */
-  z-index: 1 !important; /* Ensure it's above background but below content */
+  /* Remove height constraints to allow scrolling */
 }
 
 /* Dashboard headers should match dashboard width */
