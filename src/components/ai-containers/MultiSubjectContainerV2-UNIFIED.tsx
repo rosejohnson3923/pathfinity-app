@@ -460,6 +460,7 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
       student,
       skill: getCurrentSkill,
       onComplete: handleSubjectComplete,
+      onNext: handleSubjectComplete, // Continue Learning button uses onNext
       onBack,
       selectedCharacter,
       selectedCareer,

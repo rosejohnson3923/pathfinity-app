@@ -39,6 +39,7 @@ interface BentoLearnCardV2Props {
   skill: string;
   userId?: string;
   companionId?: string;
+  totalXP?: number;
 }
 
 type DockItem = 'xp' | 'chat' | 'progress' | 'hints' | 'tools' | null;
@@ -61,8 +62,10 @@ export const BentoLearnCardV2: React.FC<BentoLearnCardV2Props> = ({
   subject,
   skill,
   userId,
-  companionId = 'finn'
+  companionId = 'finn',
+  totalXP = 0
 }) => {
+  console.log('🎨 BentoLearnCardV2 is being used for practice questions');
   const { theme } = useTheme();
   const [selectedAnswer, setSelectedAnswer] = useState<string | string[]>('');
   const [showHint, setShowHint] = useState(false);
@@ -77,7 +80,7 @@ export const BentoLearnCardV2: React.FC<BentoLearnCardV2Props> = ({
   
   // Gamification state
   const [hintsRemaining, setHintsRemaining] = useState(3);
-  const [xpEarned, setXpEarned] = useState(0);
+  const [xpEarned, setXpEarned] = useState(totalXP);
   const [streak, setStreak] = useState(0);
   const [showXPAnimation, setShowXPAnimation] = useState(false);
   
@@ -206,14 +209,70 @@ export const BentoLearnCardV2: React.FC<BentoLearnCardV2Props> = ({
   
   return (
     <div className={`${styles.bentoContainerV2} ${styles[`grade-${gradeCategory}`]} ${styles[`theme-${theme}`]}`} data-active-dock={activeDockItem || 'none'}>
-      {/* Main Question & Answer Area - Takes up most space */}
+      {/* Horizontal Dock - Above Question */}
+      <div className={styles.horizontalDock}>
+        {/* Support Tools - Related to Current Question */}
+        <div className={styles.dockGroupSupport}>
+          <button
+            className={`${styles.dockItem} ${activeDockItem === 'hints' ? styles.active : ''}`}
+            onClick={() => handleDockItemClick('hints')}
+            aria-label="Hints & Help"
+          >
+            <span className={styles.dockIcon}>💡</span>
+            <span className={styles.dockLabel}>Hints</span>
+          </button>
+          
+          <button
+            className={`${styles.dockItem} ${activeDockItem === 'tools' ? styles.active : ''}`}
+            onClick={() => handleDockItemClick('tools')}
+            aria-label="Learning Tools"
+          >
+            <span className={styles.dockIcon}>🛠️</span>
+            <span className={styles.dockLabel}>Tools</span>
+          </button>
+          
+          <button
+            className={`${styles.dockItem} ${activeDockItem === 'chat' ? styles.active : ''}`}
+            onClick={() => handleDockItemClick('chat')}
+            aria-label="Chat with companion"
+          >
+            <span className={styles.dockIcon}>💬</span>
+            <span className={styles.dockLabel}>Chat</span>
+          </button>
+        </div>
+        
+        {/* Journey Info - Related to Overall Progress */}
+        <div className={styles.dockGroupInfo}>
+          <button
+            className={`${styles.dockItem} ${activeDockItem === 'progress' ? styles.active : ''}`}
+            onClick={() => handleDockItemClick('progress')}
+            aria-label="Progress & XP"
+          >
+            <span className={styles.dockIcon}>📊</span>
+            <span className={styles.dockLabel}>Progress</span>
+          </button>
+          
+          <button
+            className={`${styles.dockItem} ${activeDockItem === 'xp' ? styles.active : ''} ${styles.xpButton}`}
+            onClick={() => handleDockItemClick('xp')}
+            aria-label="XP Points"
+          >
+            <span className={styles.dockIcon}>⚡</span>
+            <span className={styles.dockLabel}>XP</span>
+            {xpEarned > 0 && (
+              <span className={styles.xpBadge}>{xpEarned}</span>
+            )}
+          </button>
+        </div>
+      </div>
+      
+      {/* Main Question & Answer Area */}
       <div className={styles.mainContent}>
         {/* Question Section */}
         <div className={`${styles.questionSection} ${styles[question.type]}`}>
           <div className={styles.questionHeader}>
             <span className={styles.questionLabel}>Question {question.number}</span>
             <span className={styles.questionType}>{question.type.replace('_', ' ')}</span>
-            <span className={styles.xpBadge}>+{question.xpReward || 10} XP</span>
           </div>
           
           <div className={styles.questionContent}>
@@ -249,30 +308,36 @@ export const BentoLearnCardV2: React.FC<BentoLearnCardV2Props> = ({
         <div className={styles.answerSection}>
           <div className={styles.answersGrid}>
             {question.options && question.options.length > 0 ? (
-              question.options.map((option, index) => (
-                <button
-                  key={index}
-                  className={`
-                    ${styles.answerOption}
-                    ${selectedAnswer === option ? styles.selected : ''}
-                    ${isAnswered && option === question.correctAnswer ? styles.correct : ''}
-                    ${isAnswered && selectedAnswer === option && option !== question.correctAnswer ? styles.incorrect : ''}
-                  `}
-                  onClick={() => handleAnswerSelect(option)}
-                  disabled={isAnswered}
-                >
-                  {question.type === 'true_false' ? (
-                    <span className={styles.trueFalseOption}>{option}</span>
-                  ) : (
-                    <>
-                      <span className={styles.optionLabel}>
-                        {gradeCategory === 'elementary' ? ['A', 'B', 'C', 'D'][index] : `${index + 1}`}
-                      </span>
-                      <span className={styles.optionText}>{option}</span>
-                    </>
-                  )}
-                </button>
-              ))
+              question.options.slice(0, 4).map((option, index) => {
+                const optionLabels = ['A', 'B', 'C', 'D'];
+                // Handle both string and object options
+                const optionText = typeof option === 'string' ? option : (option?.text || String(option));
+                const optionId = typeof option === 'string' ? `opt-${index}` : (option?.id || `opt-${index}`);
+                return (
+                  <button
+                    key={optionId}
+                    className={`
+                      ${styles.answerOption}
+                      ${selectedAnswer === optionText ? styles.selected : ''}
+                      ${isAnswered && optionText === question.correctAnswer ? styles.correct : ''}
+                      ${isAnswered && selectedAnswer === optionText && optionText !== question.correctAnswer ? styles.incorrect : ''}
+                    `}
+                    onClick={() => handleAnswerSelect(optionText)}
+                    disabled={isAnswered}
+                  >
+                    {question.type === 'true_false' ? (
+                      <span className={styles.trueFalseOption}>{optionText}</span>
+                    ) : (
+                      <>
+                        <span className={styles.optionLabel}>
+                          {gradeCategory === 'elementary' ? optionLabels[index] : `${index + 1}`}
+                        </span>
+                        <span className={styles.optionText}>{optionText}</span>
+                      </>
+                    )}
+                  </button>
+                );
+              })
             ) : (
               <div className={styles.inputAnswer}>
                 <input
@@ -297,72 +362,23 @@ export const BentoLearnCardV2: React.FC<BentoLearnCardV2Props> = ({
               >
                 Submit Answer
               </button>
-            ) : !showFeedback && (
+            ) : (
               <button 
                 className={styles.nextButton}
                 onClick={handleNext}
               >
-                {progress.current < progress.total ? 'Next Question →' : 'Complete Practice →'}
+                {progress.current < progress.total ? 'Next Question →' : 
+                 skill === 'Assessment' ? 'Complete Assessment →' : 'Complete Practice →'}
               </button>
             )}
           </div>
         </div>
       </div>
       
-      {/* Floating Dock - Right side with labels */}
-      <div className={styles.floatingDock}>
-        <button
-          className={`${styles.dockItem} ${activeDockItem === 'xp' ? styles.active : ''} ${styles.xpButton}`}
-          onClick={() => handleDockItemClick('xp')}
-          aria-label="XP Points"
-        >
-          <span className={styles.dockIcon}>⚡</span>
-          <span className={styles.dockLabel}>XP</span>
-          {xpEarned > 0 && (
-            <span className={styles.xpBadge}>{xpEarned}</span>
-          )}
-        </button>
-        
-        <button
-          className={`${styles.dockItem} ${activeDockItem === 'chat' ? styles.active : ''}`}
-          onClick={() => handleDockItemClick('chat')}
-          aria-label="Chat with companion"
-        >
-          <span className={styles.dockIcon}>💬</span>
-          <span className={styles.dockLabel}>Chat</span>
-        </button>
-        
-        <button
-          className={`${styles.dockItem} ${activeDockItem === 'progress' ? styles.active : ''}`}
-          onClick={() => handleDockItemClick('progress')}
-          aria-label="Progress & XP"
-        >
-          <span className={styles.dockIcon}>📊</span>
-          <span className={styles.dockLabel}>Progress</span>
-        </button>
-        
-        <button
-          className={`${styles.dockItem} ${activeDockItem === 'hints' ? styles.active : ''}`}
-          onClick={() => handleDockItemClick('hints')}
-          aria-label="Hints & Help"
-        >
-          <span className={styles.dockIcon}>💡</span>
-          <span className={styles.dockLabel}>Hints</span>
-        </button>
-        
-        <button
-          className={`${styles.dockItem} ${activeDockItem === 'tools' ? styles.active : ''}`}
-          onClick={() => handleDockItemClick('tools')}
-          aria-label="Learning Tools"
-        >
-          <span className={styles.dockIcon}>🛠️</span>
-          <span className={styles.dockLabel}>Tools</span>
-        </button>
-      </div>
-      
       {/* Display Modal - Shows selected dock item content */}
+      {/* Expanded Panel - Below Question */}
       {activeDockItem && (
-        <div className={styles.displayModal} ref={displayModalRef}>
+        <div className={styles.expandedPanel} ref={displayModalRef}>
           <div className={styles.modalHeader}>
             <h3>{
               activeDockItem === 'xp' ? 'XP Points' :

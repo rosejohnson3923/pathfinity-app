@@ -8,6 +8,8 @@
  */
 
 @import './BaseContainer.css';
+@import '../../design-system/tokens/layout.css';
+@import '../../design-system/tokens/spacing.css';
 
 /* ============================================
    LEARN CONTAINER SPECIFIC
@@ -126,9 +128,9 @@
 
 .ai-learn-container .career-context-card {
   background: var(--color-card);
-  border-radius: 24px;
-  padding: 32px;
-  max-width: 900px;
+  border-radius: var(--radius-3xl);
+  padding: var(--space-8);
+  max-width: var(--width-modal-lg); /* Using design system token: 900px */
   width: 90%;
   max-height: 80vh;
   overflow-y: auto;

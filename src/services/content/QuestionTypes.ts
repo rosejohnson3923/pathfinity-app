@@ -88,6 +88,8 @@ export interface FillBlankQuestion extends BaseQuestion {
     caseSensitive?: boolean;
   }>;
   template: string; // Text with {{blank_id}} placeholders
+  options?: string[]; // Optional multiple choice options for display
+  correctAnswer?: string; // The primary correct answer
 }
 
 // 4. Numeric Question

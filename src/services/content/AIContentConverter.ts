@@ -14,6 +14,7 @@ import {
   FillBlankQuestion,
   ShortAnswerQuestion
 } from './QuestionTypes';
+import { fillBlankGenerator } from '../FillBlankGeneratorService';
 
 export class AIContentConverter {
   private static instance: AIContentConverter;
@@ -62,7 +63,8 @@ export class AIContentConverter {
       type: assessment?.type,
       visual: assessment?.visual,
       options: assessment?.options,
-      correctAnswer: assessment?.correct_answer
+      correctAnswer: assessment?.correct_answer || assessment?.correctAnswer,
+      rawAssessment: assessment
     });
     
     // Detect type if not provided
@@ -259,11 +261,19 @@ export class AIContentConverter {
   }
 
   private toCountingQuestion(assessment: any, skillInfo: any): CountingQuestion {
-    // Count emojis in visual - this is the primary source of truth
+    // First priority: Get correct count from the provided answer (supports both snake_case and camelCase)
     let correctCount = 0;
+    const providedAnswer = assessment.correct_answer ?? assessment.correctAnswer ?? assessment.correctCount;
     
-    if (assessment.visual && assessment.visual !== '❓') {
-      // Handle visual as either string or object with content property
+    if (providedAnswer !== undefined && providedAnswer !== null) {
+      correctCount = typeof providedAnswer === 'number' 
+        ? providedAnswer 
+        : parseInt(providedAnswer) || 0;
+      
+      console.log('🎯 Using provided correct answer:', correctCount);
+    }
+    // Second priority: Count emojis in visual if no answer provided
+    else if (assessment.visual && assessment.visual !== '❓') {
       const visualContent = typeof assessment.visual === 'string' 
         ? assessment.visual 
         : assessment.visual?.content || assessment.visual?.text || '';
@@ -278,32 +288,27 @@ export class AIContentConverter {
       });
     }
     
-    // Fallback: If no visual or no emojis found, check correct_answer
-    if (correctCount === 0) {
-      if (typeof assessment.correct_answer === 'number') {
-        // Check if it's an index into options
-        if (assessment.options && assessment.correct_answer < assessment.options.length) {
-          const optionValue = assessment.options[assessment.correct_answer];
-          correctCount = parseInt(optionValue) || assessment.correct_answer;
-        } else {
-          // It's the actual count
-          correctCount = assessment.correct_answer;
-        }
-      } else if (typeof assessment.correct_answer === 'string') {
-        correctCount = parseInt(assessment.correct_answer) || 0;
-      }
-    }
-    
     console.log('🔢 Counting question:', {
       visual: assessment.visual,
       correctCount,
-      originalAnswer: assessment.correct_answer
+      originalAnswer: assessment.correct_answer,
+      originalAnswerCamel: assessment.correctAnswer,
+      providedAnswer
     });
     
-    return {
+    // Generate options array for UI compatibility (always 4 options)
+    const options = this.generateCountingOptions(correctCount);
+    
+    // Clean the question text if we have a separate visual
+    const questionText = assessment.visual && assessment.visual !== '❓' 
+      ? this.cleanQuestionText(String(assessment.content || assessment.question || ''), assessment.visual)
+      : String(assessment.content || assessment.question || '');
+
+    // Return with additional fields for UI compatibility
+    const result: any = {
       id: this.generateQuestionId('assessment'),
       type: 'counting',
-      content: String(assessment.content || assessment.question || ''),
+      content: questionText,
       topic: skillInfo.skill_name,
       subject: skillInfo.subject,
       difficulty: 'easy',
@@ -314,20 +319,146 @@ export class AIContentConverter {
           ? assessment.visual 
           : assessment.visual?.content || assessment.visual?.text || ''
       } : undefined,
-      correctCount, // Use the determined count
-      countWhat: 'items', // Default label
+      correctCount,
+      countWhat: 'items',
       minCount: 0,
       maxCount: 10,
       explanation: assessment.explanation,
       metadata: {
         bloomsLevel: 'remember',
         estimatedTime: 30
-      }
+      },
+      // Add these for UI compatibility
+      options: options,
+      correct_answer: String(correctCount), // Store as string to match other question types
+      visual: assessment.visual,
+      hint: assessment.hint
     };
+    
+    console.log('📊 Generated counting question with options:', {
+      correctCount,
+      options: result.options,
+      correct_answer: result.correct_answer
+    });
+    
+    return result;
+  }
+  
+  /**
+   * Strip visual emojis from question text when they're displayed separately
+   */
+  private cleanQuestionText(question: string, visual: string | undefined): string {
+    // Start with the original question
+    let cleanedQuestion = question;
+    
+    // Remove the visual emojis if they exist in the question
+    if (visual && typeof visual === 'string') {
+      cleanedQuestion = cleanedQuestion.replace(visual, '').trim();
+    }
+    
+    // Remove any emojis at the end of the question (including compound emojis)
+    // This comprehensive regex catches all emoji categories including compound ones
+    cleanedQuestion = cleanedQuestion.replace(/[\u{1F000}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F900}-\u{1F9FF}]|[\u{1F600}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{1F300}-\u{1F5FF}]|[\u200D\uFE0F]|[👨‍⚕️👩‍⚕️🧑‍⚕️👨‍🏫👩‍🏫🧑‍🏫👨‍🎓👩‍🎓🧑‍🎓👨‍🔬👩‍🔬🧑‍🔬👨‍💻👩‍💻🧑‍💻👨‍🍳👩‍🍳🧑‍🍳👨‍🔧👩‍🔧🧑‍🔧👨‍🏭👩‍🏭🧑‍🏭👨‍💼👩‍💼🧑‍💼👨‍🔬👩‍🔬🧑‍🔬👨‍🎨👩‍🎨🧑‍🎨👨‍🚒👩‍🚒🧑‍🚒👨‍✈️👩‍✈️🧑‍✈️👨‍🚀👩‍🚀🧑‍🚀👨‍⚖️👩‍⚖️🧑‍⚖️]+$/gu, '').trim();
+    
+    // Ensure question ends with proper punctuation
+    if (cleanedQuestion && !cleanedQuestion.match(/[.?!]$/)) {
+      cleanedQuestion += '?';
+    }
+    
+    return cleanedQuestion;
+  }
+
+  /**
+   * Generate options for counting questions
+   * Always returns 4 options including 0 when appropriate
+   */
+  private generateCountingOptions(correctAnswer: number): string[] {
+    const options = new Set<number>();
+    
+    // Always add the correct answer
+    options.add(correctAnswer);
+    
+    // For numbers 0-3, always include 0,1,2,3
+    if (correctAnswer <= 3) {
+      options.add(0);
+      options.add(1);
+      options.add(2);
+      options.add(3);
+    } else {
+      // For larger numbers, add nearby options
+      options.add(Math.max(0, correctAnswer - 1));
+      options.add(correctAnswer + 1);
+      if (correctAnswer > 5) {
+        options.add(correctAnswer - 2);
+      } else {
+        options.add(correctAnswer + 2);
+      }
+    }
+    
+    // Convert to array and sort
+    let optionsArray = Array.from(options).sort((a, b) => a - b);
+    
+    // Ensure exactly 4 options
+    while (optionsArray.length > 4) {
+      // Remove the furthest option from correct answer
+      const distances = optionsArray.map(opt => Math.abs(opt - correctAnswer));
+      const maxDistance = Math.max(...distances);
+      const indexToRemove = distances.indexOf(maxDistance);
+      optionsArray.splice(indexToRemove, 1);
+    }
+    
+    while (optionsArray.length < 4) {
+      const max = Math.max(...optionsArray);
+      optionsArray.push(max + 1);
+    }
+    
+    // Ensure exactly 4 options first
+    optionsArray = optionsArray.slice(0, 4);
+    
+    // NOW shuffle for random order
+    for (let i = optionsArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [optionsArray[i], optionsArray[j]] = [optionsArray[j], optionsArray[i]];
+    }
+    
+    // Convert to strings
+    const result = optionsArray.map(n => String(n));
+    
+    console.log('🎯 Generated counting options:', {
+      correctAnswer,
+      optionsLength: result.length,
+      options: result,
+      shuffled: true
+    });
+    
+    // Return as strings for consistency
+    return result;
   }
 
   private toMultipleChoiceQuestion(assessment: any, skillInfo: any): MultipleChoiceQuestion {
-    const options = assessment.options || [];
+    let options = assessment.options || [];
+    
+    // Check if this is a shape question with visual emojis
+    const isShapeQuestion = (assessment.question?.toLowerCase().includes('shape') || 
+                           assessment.question?.toLowerCase().includes('classify')) &&
+                          assessment.visual && 
+                          typeof assessment.visual === 'string';
+    
+    if (isShapeQuestion) {
+      // Extract emojis from visual field
+      const visualEmojis = assessment.visual.trim().split(/\s+/).filter(e => e.match(/[\p{Emoji}]/u));
+      
+      if (visualEmojis.length >= options.length) {
+        console.log('🎨 Shape question detected - replacing text options with visual emojis:', {
+          original: options,
+          emojis: visualEmojis,
+          visual: assessment.visual
+        });
+        
+        // Use the visual emojis as options instead of text
+        options = visualEmojis.slice(0, options.length);
+      }
+    }
     
     // CRITICAL DEBUG: Log exactly what we receive
     console.log('🔍 MULTIPLE CHOICE RAW INPUT:', {
@@ -360,6 +491,16 @@ export class AIContentConverter {
         console.warn('⚠️ Invalid correct_answer index:', rawCorrectAnswer, 'for options:', options);
         correctAnswer = '';
       }
+    } else if (isShapeQuestion && typeof rawCorrectAnswer === 'string') {
+      // For shape questions, if the correct answer is text but options are emojis, map it
+      const shapeToEmojiMap: { [key: string]: string } = {
+        'Circle': '🔵',
+        'Square': '🟦',
+        'Triangle': '🔺',
+        'Rectangle': '🟩',
+        'Oval': '🟢'
+      };
+      correctAnswer = shapeToEmojiMap[rawCorrectAnswer] || String(rawCorrectAnswer || '');
     } else {
       // It's the actual answer text
       correctAnswer = String(rawCorrectAnswer || '');
@@ -605,60 +746,38 @@ export class AIContentConverter {
   }
 
   private toFillBlankQuestion(assessment: any, skillInfo: any): FillBlankQuestion {
-    // Extract all blank positions and create template
-    const question = String(assessment.question || '');
-    const blankMatches = question.match(/_{3,}/g);  // Note the 'g' flag for multiple matches
+    // First, process the question through FillBlankGeneratorService with grade level
+    const gradeLevel = skillInfo.grade || skillInfo.grade_level || 'K';
+    const processedQuestion = fillBlankGenerator.processFillBlankQuestion(assessment, gradeLevel);
     
-    // Handle multiple blanks
-    let template = question;
-    const blanks: any[] = [];
+    // Log the processing for debugging
+    console.log('📝 Processing fill_blank question:', {
+      original: assessment.question || assessment.content,
+      processed_question: processedQuestion.question,
+      grade_level: gradeLevel,
+      correct_answer: processedQuestion.correct_answer,
+      template: processedQuestion.template,
+      blanks: processedQuestion.blanks
+    });
     
-    if (blankMatches && blankMatches.length > 0) {
-      blankMatches.forEach((match, index) => {
-        const blankId = `blank_${index}`;
-        // Replace each occurrence with its placeholder
-        template = template.replace(match, `{{${blankId}}}`);
-        
-        // Handle correct answers - if array, distribute among blanks
-        let correctAnswersForBlank: string[];
-        if (Array.isArray(assessment.correct_answer)) {
-          correctAnswersForBlank = index < assessment.correct_answer.length 
-            ? [String(assessment.correct_answer[index])]
-            : [String(assessment.correct_answer[0])]; // Fallback to first answer
-        } else {
-          correctAnswersForBlank = [String(assessment.correct_answer)];
-        }
-        
-        blanks.push({
-          id: blankId,
-          position: question.indexOf(match),
-          correctAnswers: correctAnswersForBlank,
-          caseSensitive: false
-        });
-      });
-    } else {
-      // No blanks found, create a default template
-      template = question.replace(/_{3,}/g, '{{blank_0}}');
-      blanks.push({
-        id: 'blank_0',
-        position: 0,
-        correctAnswers: Array.isArray(assessment.correct_answer) 
-          ? assessment.correct_answer.map(String)
-          : [String(assessment.correct_answer)],
-        caseSensitive: false
-      });
-    }
+    // Generate options for fill_blank (convert to multiple choice format)
+    const options = fillBlankGenerator.generateOptions(
+      processedQuestion.correct_answer,
+      skillInfo.subject
+    );
     
     return {
       id: this.generateQuestionId('assessment'),
       type: 'fill_blank',
-      content: question,
+      content: processedQuestion.question,
       topic: skillInfo.skill_name,
       subject: skillInfo.subject,
       difficulty: 'medium',
       points: 10,
-      template,
-      blanks,
+      template: processedQuestion.template,
+      blanks: processedQuestion.blanks,
+      options: options, // Add options for multiple choice display
+      correctAnswer: processedQuestion.correct_answer, // Add correct answer
       explanation: assessment.explanation,
       metadata: {
         bloomsLevel: 'apply',
@@ -686,10 +805,15 @@ export class AIContentConverter {
       }
     }
     
+    // Clean the question text if we have a visual
+    const questionText = assessment.visual && assessment.visual !== '❓' 
+      ? this.cleanQuestionText(String(assessment.content || assessment.question || ''), assessment.visual)
+      : String(assessment.content || assessment.question || '');
+
     return {
       id: this.generateQuestionId('assessment'),
       type: 'numeric',
-      content: String(assessment.content || assessment.question || ''),
+      content: questionText,
       topic: skillInfo.skill_name,
       subject: skillInfo.subject,
       difficulty: 'medium',
@@ -697,6 +821,7 @@ export class AIContentConverter {
       correctAnswer,
       tolerance: 0.01,
       explanation: assessment.explanation,
+      visual: assessment.visual,  // Add visual field
       metadata: {
         bloomsLevel: 'apply',
         estimatedTime: 45

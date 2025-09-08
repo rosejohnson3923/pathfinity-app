@@ -602,7 +602,7 @@ export const AILearnContainerV2: React.FC<AILearnContainerV2Props> = ({
         }
       />
       
-      {features.showXP && <XPDisplay />}
+      {/* XP Display removed - now shown in dock */}
       
       <div className="container-content">
         {/* Instruction Phase */}

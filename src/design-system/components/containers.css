@@ -1,0 +1,197 @@
+/**
+ * CONTAINER SYSTEM
+ * ================
+ * Theme-aware container components
+ * No color dependencies in layout - all from tokens
+ */
+
+/* =========================
+   BASE CONTAINER
+   ========================= */
+.theme-container {
+  width: 100%;
+  min-height: 100vh;
+  padding: var(--space-8) var(--space-4);
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  transition: var(--transition-colors);
+}
+
+/* =========================
+   EXPERIENCE CONTAINER
+   ========================= */
+.container-experience {
+  background: var(--color-container-experience);
+  position: relative;
+  overflow: hidden;
+}
+
+.container-experience::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at 30% 50%,
+    rgba(20, 184, 166, 0.1) 0%,
+    transparent 50%
+  );
+  pointer-events: none;
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .container-experience::before {
+  background: radial-gradient(
+    circle at 30% 50%,
+    rgba(20, 184, 166, 0.05) 0%,
+    transparent 50%
+  );
+}
+
+/* =========================
+   LEARN CONTAINER
+   ========================= */
+.container-learn {
+  background: var(--color-container-learn);
+  position: relative;
+  overflow: hidden;
+}
+
+.container-learn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at 70% 30%,
+    rgba(168, 85, 247, 0.1) 0%,
+    transparent 50%
+  );
+  pointer-events: none;
+}
+
+[data-theme="dark"] .container-learn::before {
+  background: radial-gradient(
+    circle at 70% 30%,
+    rgba(168, 85, 247, 0.05) 0%,
+    transparent 50%
+  );
+}
+
+/* =========================
+   DISCOVER CONTAINER
+   ========================= */
+.container-discover {
+  background: var(--color-container-discover);
+  position: relative;
+  overflow: hidden;
+}
+
+.container-discover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at 50% 70%,
+    rgba(217, 70, 239, 0.1) 0%,
+    transparent 50%
+  );
+  pointer-events: none;
+}
+
+[data-theme="dark"] .container-discover::before {
+  background: radial-gradient(
+    circle at 50% 70%,
+    rgba(217, 70, 239, 0.05) 0%,
+    transparent 50%
+  );
+}
+
+/* =========================
+   CONTAINER CONTENT
+   ========================= */
+.container-content {
+  max-width: var(--width-content-max);
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.container-content-narrow {
+  max-width: var(--width-content-narrow);
+}
+
+.container-content-article {
+  max-width: var(--width-content-article);
+}
+
+/* =========================
+   CONTAINER HEADER
+   ========================= */
+.container-header {
+  margin-bottom: var(--space-12);
+  text-align: center;
+}
+
+.container-title {
+  font-size: var(--text-4xl);
+  font-weight: var(--font-bold);
+  margin-bottom: var(--space-4);
+  color: var(--color-text-primary);
+}
+
+.container-subtitle {
+  font-size: var(--text-xl);
+  color: var(--color-text-secondary);
+  max-width: var(--width-content-narrow);
+  margin: 0 auto;
+}
+
+/* =========================
+   CONTAINER GRID
+   ========================= */
+.container-grid {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: repeat(auto-fit, minmax(var(--width-card-min), 1fr));
+}
+
+@media (min-width: 768px) {
+  .container-grid {
+    gap: var(--space-8);
+  }
+}
+
+/* =========================
+   CONTAINER SECTION
+   ========================= */
+.container-section {
+  padding: var(--space-16) 0;
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.container-section:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.section-title {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-semibold);
+  margin-bottom: var(--space-6);
+  color: var(--color-text-primary);
+}
+
+.section-description {
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-8);
+  max-width: var(--width-content-article);
+}

@@ -230,8 +230,8 @@ export class AILearningJourneyService {
         subject: skill.subject || 'Math'
       },
       career: {
-        id: career?.name?.toLowerCase() || 'general',
-        name: career?.name || 'Professional',
+        id: (typeof career?.name === 'string' ? career.name : career?.title || career?.id || 'general').toLowerCase(),
+        name: typeof career?.name === 'string' ? career.name : career?.title || career?.name || 'Professional',
         description: career?.description
       },
       student: {
@@ -261,434 +261,7 @@ export class AILearningJourneyService {
       `${prompt}\n\nCONTINUITY: Continue from where we left off: "${storylineContext.previousSummary}"` :
       prompt;
 
-    // REMOVED: Old inline prompt generation - now using PromptBuilder
-    const availableTypes = GRADE_TYPE_MAP[student.grade_level] || GRADE_TYPE_MAP['3'];
-    
-    /* OLD PROMPT CODE REMOVED - Using PromptBuilder instead
-    const typeExamples = availableTypes.map(type => {
-      switch(type) {
-        case 'counting':
-          return `"counting": Visual counting (K-2 only, REQUIRES visual field)`;
-        case 'true_false':
-          return `"true_false": True/false question (always include visual field - use "❓" for text-only questions)`;
-        case 'multiple_choice':
-          return `"multiple_choice": 4 options with one correct answer`;
-        case 'numeric':
-          return `"numeric": Number-only answer`;
-        case 'fill_blank':
-          return `"fill_blank": Text completion with blank`;
-        default:
-          return '';
-      }
-    }).filter(Boolean).join('\n');
-
-    // Add grade-specific instructions
-    const isYoungLearner = student.grade_level === 'K' || student.grade_level === '1' || student.grade_level === '2';
-    const typeInstructions = `
-
-CRITICAL - QUESTION TYPE RULES:
-
-You MUST use ONLY these exact types for grade ${student.grade_level}:
-${typeExamples}
-
-STRICT RULES BY SUBJECT:
-
-MATH RULES:
-1. "How many" questions for K-2 → type MUST be "counting" with visual
-2. "How many" questions for 3+ → type MUST be "numeric"
-3. Counting type MUST include visual field with emojis
-4. Can use all types: counting, numeric, multiple_choice, true_false
-
-ELA RULES:
-1. NEVER use "counting" type - even if asking about quantity
-2. Letter identification → "multiple_choice" with letter options
-3. Phonics/rhyming → "multiple_choice" with word options
-4. True/False for reading comprehension only
-5. Never ask "How many letters" - ask "Which letter" instead
-
-SCIENCE RULES:
-1. NEVER use "counting" type
-2. Use "true_false" for all true/false questions
-3. For text-only: set visual="❓"
-4. For visual support: use appropriate emojis
-4. Use "multiple_choice" for categorization (Which animal lives in water?)
-5. Observations → "multiple_choice" (What happens when ice melts?)
-6. Never count objects - classify or describe them instead
-
-SOCIAL STUDIES RULES:
-1. NEVER use "counting" type
-2. Community helpers → "multiple_choice" (Who helps when sick?)
-3. Geography → "true_false" for all questions (visual="❓" for text-only)
-4. Cultural topics → "multiple_choice" with descriptive options
-5. Focus on relationships and roles, not quantities
-
-GENERAL RULES:
-1. ONLY use types from the approved list for the grade
-2. Multiple choice MUST have exactly 4 options
-3. True/False questions MUST start with "True or False:"
-4. ALWAYS include visual field - use "❓" when no visual needed
-5. true_false correct_answer MUST be boolean (true/false), NOT strings
-
-CORRECT EXAMPLES (Even for "Counting to 3" skill, use VARIED types):
-
-{
-  "question": "True or False: The ${career?.name || 'doctor'} counted 3 tools.",
-  "type": "true_false",  // ✅ Always use true_false
-  "visual": "🔧🔧🔧",  // Visual support for the question
-  "correct_answer": true,  // ✅ Boolean, not string!
-  "hint": "Look at the visual and count",
-  "explanation": "Yes! There are exactly 3 tools."
-}
-
-// Example of text-only true/false:
-{
-  "question": "True or False: Water freezes at 0 degrees Celsius.",
-  "type": "true_false",
-  "visual": "❓",  // ✅ Placeholder for text-only questions
-  "correct_answer": true,  // ✅ Boolean value
-  "hint": "Think about ice",
-  "explanation": "Water freezes at 0°C or 32°F"
-}
-
-{
-  "question": "How many ${career?.name === 'Doctor' ? 'stethoscopes' : career?.name === 'Athlete' ? 'basketballs' : 'tools'} do you see?",
-  "type": "counting",  // ✅ CORRECT: counting type when asking "how many" with visual
-  "visual": "${career?.name === 'Doctor' ? '🩺 🩺 🩺' : career?.name === 'Athlete' ? '🏀 🏀 🏀' : '🔧 🔧 🔧'}",
-  "correct_answer": 3,  // ✅ Number, not string!
-  "hint": "Count each one carefully",
-  "explanation": "There are 3!"
-}
-
-{
-  "question": "The ${career?.name || 'chef'} prepared 3 meals. How many meals is that?",
-  "type": "multiple_choice",  // ✅ CORRECT: multiple_choice for counting practice
-  "options": ["2 meals", "3 meals", "4 meals", "5 meals"],
-  "correct_answer": 1,
-  "hint": "Read the question carefully",
-  "explanation": "The chef prepared 3 meals!"
-}
-
-ELA LETTER EXAMPLES (NEVER use counting for these!):
-
-{
-  "question": "Which letter does the ${career?.name || 'teacher'} need for the word 'CAT'?",
-  "type": "multiple_choice",  // ✅ CORRECT: multiple_choice for letter identification
-  "options": ["B", "C", "D", "E"],
-  "correct_answer": 1,
-  "hint": "Look at the first letter of CAT",
-  "explanation": "The letter C starts the word CAT!"
-}
-
-{
-  "question": "The ${career?.name || 'chef'} sees this letter on the menu: G. Which letter is it?",
-  "type": "multiple_choice",  // ✅ CORRECT: NOT counting even though ELA
-  "options": ["E", "F", "G", "H"],
-  "correct_answer": 2,
-  "hint": "Look carefully at the shape",
-  "explanation": "That's the letter G!"
-}
-
-❌ WRONG for ELA: "How many letters are in the word DOG?" - Don't ask counting questions for ELA!
-✅ RIGHT for ELA: "Which letter comes first: D, O, or G?" - Ask about letter identification
-`;
-
-    // CAREER-FIRST LEARNING PROMPT
-    const careerContext = career ? `
-CAREER CONTEXT (MOST IMPORTANT):
-${student.display_name} wants to be a ${career.name}!
-ALL content MUST show how a ${career.name} uses ${skill.skill_name} in their daily work.
-- Every example must be about what a ${career.name} does
-- Every practice question must relate to ${career.name} tasks
-- Every visual should show ${career.name}-related scenarios
-- Make ${student.display_name} feel like they're training to be a real ${career.name}!
-
-CRITICAL - INDUSTRY-APPROPRIATE ITEMS ONLY:
-You MUST use items that are ACTUALLY used in the ${career.name} profession/industry:
-${career.name === 'Athlete' ? `
-- ✅ CORRECT for Athletes: sports water bottles (NOT baby bottles!), basketballs, soccer balls, tennis balls, running shoes, jerseys, medals, trophies, cones, hurdles, weights
-- ❌ WRONG for Athletes: baby bottles, feeding bottles, regular household items, non-sports items
-- Use specific sports equipment and athletic gear ONLY
-- When mentioning water, ALWAYS say "sports water bottles" or "sports drinks" - NEVER just "bottles"
-` : career.name === 'Doctor' ? `
-- ✅ CORRECT for Doctors: stethoscopes, medical charts, thermometers, bandages, medicine bottles, syringes, gloves
-- ❌ WRONG for Doctors: unrelated tools, kitchen items
-- Use actual medical equipment and healthcare items ONLY
-` : career.name === 'Teacher' ? `
-- ✅ CORRECT for Teachers: pencils, books, whiteboards, markers, notebooks, rulers, globes, computers
-- ❌ WRONG for Teachers: unrelated professional tools
-- Use actual classroom and educational items ONLY
-` : career.name === 'Chef' ? `
-- ✅ CORRECT for Chefs: pots, pans, chef knives, spatulas, ingredients, plates, recipes, aprons
-- ❌ WRONG for Chefs: medical equipment, sports items
-- Use actual kitchen and culinary items ONLY
-` : `
-- Use items that professionals in this field ACTUALLY use
-- Avoid generic or unrelated items
-- Be specific to the ${career.name} industry
-`}
-
-IMPORTANT: Every single item, scenario, and example MUST be authentic to what a real ${career.name} would encounter in their professional life!
-` : '';
-
-    // Adaptive instruction based on practice performance
-    const adaptiveContext = practiceResults ? `
-ADAPTIVE INSTRUCTION BASED ON PRACTICE:
-The student just completed diagnostic practice with ${practiceResults.correct}/${practiceResults.total} correct.
-${practiceResults.struggles.length > 0 ? `Areas of struggle: ${practiceResults.struggles.join(', ')}` : ''}
-ADJUST INSTRUCTION ACCORDINGLY:
-- If performance was weak (< 50%), focus on fundamentals and basics
-- If performance was moderate (50-80%), balance review with new concepts  
-- If performance was strong (> 80%), move quickly to advanced applications
-- Address specific struggle areas directly in examples
-` : '';
-
-    const oldPrompt = `Create a comprehensive learning experience for ${student.display_name}, a ${student.grade_level} student.
-
-STORYLINE CONTINUITY (Maintain this narrative thread):
-Setting: ${storylineContext.setting}
-Scenario: ${student.display_name} is ${storylineContext.scenario}
-Current Challenge: ${storylineContext.currentChallenge}
-Career Connection: ${storylineContext.careerConnection}
-
-${careerContext}
-${adaptiveContext}
-SKILL TO TEACH: ${skill.skill_name}
-SUBJECT: ${skill.subject}
-STUDENT GRADE: ${student.grade_level}
-STUDENT NAME: ${student.display_name}
-
-SUBJECT-SPECIFIC REQUIREMENTS FOR ${skill.subject.toUpperCase()}:
-${skill.subject === 'Math' ? `
-Mathematics Content:
-- Focus on numerical concepts, patterns, arithmetic, geometry, measurement
-- Use counting, comparison, addition, subtraction appropriate for grade ${student.grade_level}
-- Include visual representations of mathematical concepts
-- Practice problems should involve calculations, number recognition, or pattern identification
-${skill.skill_name.includes('up to 3') ? `
-
-⚠️ CRITICAL NUMBER LIMIT FOR THIS SKILL: "up to 3" means MAXIMUM OF 3!
-- ALL numbers in questions MUST be 3 or less (never 4, 5, 6, 7, etc.)
-- ALL visual counts MUST show 3 items or fewer
-- ALL answers MUST be 3 or less
-- Examples: ✅ "2 water bottles", ✅ "3 basketballs", ❌ "5 trophies", ❌ "7 soccer balls"
-- When creating visuals: ✅ "⚽⚽⚽" (3 items), ❌ "⚽⚽⚽⚽⚽" (5 items)` : ''}
-` : skill.subject === 'ELA' ? `
-English Language Arts Content:
-- Focus on reading, writing, phonics, vocabulary, grammar
-- Include letter recognition, word families, sentence structure for grade ${student.grade_level}
-- Practice comprehension, spelling, and language usage
-- Questions should test literacy skills like rhyming, alphabetical order, or word meanings
-` : skill.subject === 'Science' ? `
-Science Content:
-- Focus on natural world, living things, physical properties, earth science
-- Include observations, predictions, cause and effect for grade ${student.grade_level}
-- Practice scientific thinking and basic concepts
-- Questions should explore nature, animals, weather, materials, or simple experiments
-` : skill.subject === 'Social Studies' ? `
-Social Studies Content:
-- Focus on community, geography, history, cultures, citizenship
-- Include people, places, traditions appropriate for grade ${student.grade_level}
-- Practice understanding society and relationships
-- Questions should cover families, jobs, maps, holidays, or community helpers
-` : `General ${skill.subject} content appropriate for grade ${student.grade_level}`}
-
-IMPORTANT - NEW PHASE ORDER:
-This follows Practice → Instruction → Assessment flow.
-- Practice questions are DIAGNOSTIC (testing prior knowledge)
-- Instruction should ADAPT based on practice performance
-- Assessment questions must be DIFFERENT from practice questions
-
-CRITICAL INSTRUCTION ABOUT QUESTION TYPES:
-The skill name "${skill.skill_name}" describes WHAT to teach, NOT the question types to use.
-Even if the skill is "Counting to 3", you should use VARIED question types:
-- Some questions can be counting type (with visuals)
-- Some should be true_false (e.g., "True or False: The doctor counted 3 tools")
-- Some should be multiple_choice (e.g., "How many items did the chef prepare? a) 2 b) 3 c) 4 d) 5")
-DO NOT make all questions the same type just because of the skill name!
-${typeInstructions}
-${career && (student.grade_level === 'K' || student.grade_level === '1' || student.grade_level === '2') ? `
-KINDERGARTEN/EARLY ELEMENTARY REQUIREMENTS:
-- Use VERY simple vocabulary (5-6 year old level)
-- Keep numbers small (1-10 for K, 1-20 for grade 1-2)
-- Use familiar, concrete objects
-- Make career connections simple and fun
-- Example for ${career.name === 'Doctor' ? 'Doctor' : career.name}:
-  ${career.name === 'Doctor' ? 
-    `- "Let's help people feel better by counting!"
-     - "Count the happy faces after the doctor helps!"
-     - "How many toys are in the doctor's waiting room?"` :
-  career.name === 'Teacher' ?
-    `- "Count the books on the teacher's desk!"
-     - "How many friends are in our classroom?"
-     - "Let's count the crayons we need!"` :
-  career.name === 'Firefighter' ?
-    `- "Count the fire trucks!"
-     - "How many helpers does the firefighter need?"
-     - "Let's count the safety hats!"` :
-    `- "Count items that ${career.name}s use!"
-     - "How many tools does a ${career.name} need?"
-     - "Let's count together like a ${career.name}!"`}
-
-VISUAL EMOJI GUIDANCE - USE INDUSTRY-APPROPRIATE EMOJIS ONLY:
-${career.name === 'Athlete' ? `
-For Athletes, use these emojis ONLY:
-- Water: 💧 or 🥤 (sports drink), NEVER 🍼 (baby bottle)
-- Balls: ⚽ 🏀 🏈 ⚾ 🎾 🏐 (specific sports balls)
-- Equipment: 👟 (running shoes), 🏃 (runner), 🏅 (medal), 🏆 (trophy)
-- Training: 🔴 (cones), 🏋️ (weights), 🎯 (target)
-` : career.name === 'Doctor' ? `
-For Doctors, use these emojis ONLY:
-- Medical: 🩺 (stethoscope), 💊 (medicine), 🌡️ (thermometer), 🩹 (bandage)
-- Healthcare: 🏥 (hospital), 🚑 (ambulance), 💉 (syringe)
-` : career.name === 'Teacher' ? `
-For Teachers, use these emojis ONLY:
-- School: 📚 (books), ✏️ (pencil), 📝 (paper), 🎒 (backpack)
-- Classroom: 🖊️ (pen), 📐 (ruler), 🌍 (globe), 💻 (computer)
-` : career.name === 'Chef' ? `
-For Chefs, use these emojis ONLY:
-- Food: 🍳 (cooking), 🥘 (pot), 🍽️ (plate), 🥄 (spoon)
-- Kitchen: 👨‍🍳 (chef), 🔪 (knife), 🧑‍🍳 (cook)
-` : `Use profession-appropriate emojis ONLY`}
-` : ''}
-
-Generate a complete learning journey with:
-
-1. PRACTICE PHASE (DIAGNOSTIC - Comes FIRST):
-   - EXACTLY 5 diagnostic questions to test PRIOR KNOWLEDGE (MUST BE 5 QUESTIONS, NOT 3!)
-   - These are exploratory questions to see what student already knows
-   - Use ONLY these types: ${availableTypes.join(', ')}
-   - Start simple and increase difficulty progressively
-   - Mix different question types for variety
-   - Questions should test understanding WITHOUT teaching first
-   - CRITICAL: Questions MUST be specific to ${skill.subject}:
-     ${skill.subject === 'Math' ? `
-     * Math: Focus on numbers, counting, arithmetic, patterns, shapes, measurements
-     * Example: "How many ${career ? career.name + ' tools' : 'objects'} do you see?"
-     * Example: "What number comes after 5?"
-     * Example: "Which shape has 3 sides?"` : 
-     skill.subject === 'ELA' ? `
-     * ELA: Focus on letters, words, reading, phonics, vocabulary, sentence structure
-     * NEVER ask "How many letters" - instead ask "Which letter is this?" or "Find the letter X"
-     * Example: "Which letter comes first in the alphabet: B or D?"
-     * Example: "What rhymes with 'cat'?"
-     * Example: "Which word means the same as 'happy'?"
-     * Example: "Which letter is this: E, G, H, or J?" (for letter identification)` :
-     skill.subject === 'Science' ? `
-     * Science: Focus on nature, animals, weather, plants, body parts, basic physics
-     * NEVER ask counting questions (not "How many legs does a spider have?")
-     * Example: "True or False: Plants need water to grow"
-     * Example: "Which animal lives in water: bird, fish, cat, or dog?"
-     * Example: "What happens to ice when it gets warm: melts, freezes, grows, or flies?"` :
-     skill.subject === 'Social Studies' ? `
-     * Social Studies: Focus on community, family, jobs, maps, holidays, cultures
-     * NEVER ask counting questions (not "How many people in a family?")
-     * Example: "Who helps us when we're sick: doctor, baker, artist, or swimmer?"
-     * Example: "True or False: The 4th of July is America's birthday"
-     * Example: "Which is bigger: your house or your city?"`
-     : `* General subject-appropriate questions for ${skill.subject}`}
-   - Each question MUST include full practice support:
-     * Pre-question context connecting to ${career ? `${career.name}` : 'real world'}
-     * Encouraging message (since this is diagnostic)
-     * 3 progressive hints (easy → medium → detailed)
-     * Correct answer feedback with encouragement
-     * Incorrect answer support (gentle, since they haven't learned it yet)
-     * Teaching moment preview (what they'll learn next)
-
-2. INSTRUCTION PHASE (ADAPTIVE - Based on practice performance):
-   - Engaging title ${career ? `with ${student.display_name} as the ${career.name}` : ''}
-   - Personal greeting: ${career ? `"Welcome, ${career.name} ${student.display_name}!"` : `"Welcome, ${student.display_name}!"`}
-   - Clear concept explanation showing ${career ? `how you as a ${career.name} use ${skill.skill_name}` : `${skill.skill_name}`}
-   - 3 step-by-step examples ${career ? `from a ${career.name}'s daily work` : 'with clear explanations'}
-   ${practiceResults ? '- Focus on areas where student struggled in practice' : ''}
-   ${practiceResults && practiceResults.correct < practiceResults.total * 0.5 ? '- Extra emphasis on fundamentals' : ''}
-   ${practiceResults && practiceResults.correct >= practiceResults.total * 0.8 ? '- Can move quickly to advanced concepts' : ''}
-
-3. ASSESSMENT PHASE (VALIDATION):
-   - 1 comprehensive assessment question  
-   - MUST BE DIFFERENT from practice questions
-   - Tests understanding of what was taught in instruction
-   - Include visual field with CAREER-APPROPRIATE emojis if it's a counting question
-   - 4 multiple choice options
-   - Detailed explanation
-   - Encouraging success message
-   - MUST use industry-appropriate items and scenarios ONLY
-
-REQUIREMENTS:
-- Use ${student.display_name}'s name throughout
-- Grade ${student.grade_level} appropriate language:
-  ${student.grade_level === 'K' ? '• Kindergarten: Very simple words, short sentences, basic concepts only' :
-    student.grade_level === '1' ? '• Grade 1: Simple vocabulary, clear sentences, foundational concepts' :
-    student.grade_level === '2' ? '• Grade 2: Basic vocabulary, straightforward explanations' :
-    '• Age-appropriate vocabulary and complexity'}
-- Include fun emojis and visual elements
-- Keep explanations brief and clear
-- Make it educational, fun, and achievable
-- Ensure content builds understanding progressively
-${student.grade_level === 'K' || student.grade_level === '1' || student.grade_level === '2' ? 
-  '- IMPORTANT: Avoid complex medical/technical terms for young learners' : ''}
-
-Return JSON following this exact structure:
-{
-  "title": "${career ? `${career.name} ${student.display_name} Masters ${skill.skill_name}` : `${student.display_name} Learns ${skill.skill_name}`}",
-  "greeting": "${career ? `Welcome, ${career.name} ${student.display_name}! In your ${career.name === 'Chef' ? 'kitchen' : career.name === 'Artist' ? 'studio' : career.name === 'Doctor' ? 'clinic' : career.name === 'Engineer' ? 'workshop' : 'workspace'} today...` : `Welcome, ${student.display_name}! Today we're going to...`}",
-  "concept": "${career ? `As a ${career.name}, you use ${skill.skill_name} to...` : `Clear explanation of ${skill.skill_name}`}",
-  "examples": [
-    {
-      "question": "Example question",
-      "answer": "Answer",
-      "explanation": "Why this works",
-      "visual": "Description of helpful visual"
-    }
-  ],
-  "practice": [
-    // CRITICAL: YOU MUST PROVIDE EXACTLY 5 PRACTICE QUESTIONS - NO MORE, NO LESS!
-    // IF YOU PROVIDE FEWER THAN 5, THE SYSTEM WILL FAIL!
-    {
-      "question": "Practice question 1 text (vary types even for counting skills!)",
-      "type": "MUST be one of: ${availableTypes.join(', ')} - MIX TYPES, don't use same for all!",
-      "visual": "ALWAYS REQUIRED - use \"❓\" for text-only questions, appropriate emojis for visual questions",
-      "options": ["A", "B", "C", "D"] (REQUIRED for multiple_choice, exactly 4),
-      "correct_answer": "FORMAT BY TYPE:\n        - true_false: boolean (true or false, NOT strings)\n        - counting: number (3 not '3')\n        - numeric: number\n        - multiple_choice: index 0-3\n        - fill_blank: string",
-      "hint": "Helpful hint",
-      "explanation": "Learning explanation",
-      "practiceSupport": {
-        "preQuestionContext": "${career ? `As a ${career.name}, let's see what you already know about this` : `Let's see what you know about this skill`}",
-        "connectionToLearn": "This connects to what you might already know...",
-        "confidenceBuilder": "Let's explore this together, ${student.display_name}!",
-        "hints": [
-          {"level": 1, "hint": "First gentle hint", "visualCue": "What to look for"},
-          {"level": 2, "hint": "More specific guidance", "example": "For example..."},
-          {"level": 3, "hint": "Step-by-step help", "example": "Let me show you..."}
-        ],
-        "correctFeedback": {
-          "immediate": "Great! You already understand this!",
-          "careerConnection": "That's exactly how ${career ? `a ${career.name}` : 'professionals'} think about it!",
-          "skillReinforcement": "You're ready to learn more about..."
-        },
-        "incorrectFeedback": {
-          "immediate": "No worries! We'll learn this together!",
-          "explanation": "Here's a hint about the answer...",
-          "reteach": "We'll cover this in detail next...",
-          "tryAgainPrompt": "Want to try another approach?"
-        },
-        "teachingMoment": {
-          "conceptExplanation": "Soon you'll learn why this works...",
-          "realWorldExample": "${career ? career.name + 's' : 'People'} use this skill when...",
-          "commonMistakes": ["Many students think...", "A common confusion is..."]
-        }
-      }
-    }
-  ],
-  "assessment": {
-    "question": "Assessment question (e.g., 'How many flashlights does the Police Officer have?')",
-    "type": "Question type (${availableTypes.join(' | ')})",
-    "visual": "ALWAYS include - use \"❓\" for text-only, or appropriate emojis",
-    "options": ["1", "2", "3", "4"] (REQUIRED for multiple_choice only),
-    "correct_answer": "See FORMAT BY TYPE rules above",
-    "explanation": "Detailed explanation",
-    "success_message": "Great job, ${student.display_name}!"
-  }
-}`;*/
+    // All prompt generation now handled by PromptBuilder
 
     try {
       // Use the new hierarchical prompt from PromptBuilder
@@ -1038,93 +611,69 @@ Return JSON following this exact structure:
     practiceResults: { correct: number; total: number; struggles: string[] },
     career?: { name: string; description?: string }
   ): Promise<Pick<AILearnContent, 'title' | 'greeting' | 'concept' | 'examples'>> {
-    console.log(`📚 Generating adaptive instruction based on practice performance`, {
+    console.log(`📚 Generating adaptive instruction using PromptBuilder based on practice performance`, {
       correct: practiceResults.correct,
       total: practiceResults.total,
       struggles: practiceResults.struggles
     });
+    
+    // Build context for PromptBuilder
+    const context: PromptContext = {
+      container: 'LEARN',
+      subject: skill.subject || 'Math',
+      grade: student.grade_level || 'K',
+      skill: {
+        id: skill.skill_number,
+        name: skill.skill_name,
+        description: skill.skill_description,
+        subject: skill.subject || 'Math'
+      },
+      career: {
+        id: (career?.name || 'general').toLowerCase(),
+        name: career?.name || 'Professional',
+        description: career?.description
+      },
+      student: {
+        id: student.id,
+        display_name: student.display_name || 'Student',
+        grade_level: student.grade_level || 'K'
+      }
+    };
+    
+    // Generate base prompt using PromptBuilder
+    const basePrompt = promptBuilder.buildPrompt(context);
     
     // Calculate performance level
     const performancePercentage = (practiceResults.correct / practiceResults.total) * 100;
     const performanceLevel = performancePercentage >= 80 ? 'advanced' : 
                            performancePercentage >= 60 ? 'intermediate' : 'foundational';
     
-    const prompt = `Create an ADAPTIVE TEACHING LESSON for ${student.display_name}, a ${student.grade_level} student.
+    // Add adaptive context to the prompt
+    const prompt = `${basePrompt}
+
+ADAPTIVE INSTRUCTION MODE:
+This is Phase 2 - Generate ONLY the instruction content (title, greeting, concept, examples).
+DO NOT generate practice questions or assessment.
 
 PRACTICE PERFORMANCE:
 - Score: ${practiceResults.correct}/${practiceResults.total} (${performancePercentage.toFixed(0)}%)
 - Performance Level: ${performanceLevel}
 ${practiceResults.struggles.length > 0 ? `- Areas needing focus: ${practiceResults.struggles.join(', ')}` : '- Strong understanding demonstrated'}
 
-SKILL TO TEACH: ${skill.skill_name}
-SUBJECT: ${skill.subject}
-${career ? `CAREER CONTEXT: ${career.name}` : ''}
-
-Based on the practice performance, create an INSTRUCTIONAL LESSON that:
+ADJUST INSTRUCTION BASED ON PERFORMANCE:
 ${performanceLevel === 'advanced' ? 
-  '- Acknowledges strong foundation and moves to advanced applications' :
+  '- Acknowledge strong foundation and move to advanced applications' :
   performanceLevel === 'intermediate' ?
-  '- Reinforces concepts with focus on struggled areas' :
-  '- Provides thorough foundational teaching with extra support'}
+  '- Reinforce concepts with focus on struggled areas' :
+  '- Provide thorough foundational teaching with extra support'}
 
-INSTRUCTION CONTENT NEEDED:
-
-1. PERSONALIZED GREETING:
-   - Acknowledge practice performance appropriately
-   - Set expectations for what they'll learn
-   - Use ${student.display_name}'s name
-   ${career ? `- Reference how ${career.name}s use this skill` : ''}
-
-2. CONCEPT EXPLANATION (NOT practice questions!):
-   - Clear, grade ${student.grade_level} appropriate explanation of ${skill.skill_name}
-   - Break down the concept into understandable parts
-   ${performanceLevel === 'foundational' ? '- Extra emphasis on basics and fundamentals' : ''}
-   ${performanceLevel === 'advanced' ? '- Include advanced insights and applications' : ''}
-   ${practiceResults.struggles.length > 0 ? `- Special focus on: ${practiceResults.struggles.join(', ')}` : ''}
-   ${career ? `- Show how ${career.name}s use this in their work` : ''}
-
-3. TEACHING EXAMPLES (NOT quiz questions!):
-   - 3 worked examples that TEACH the concept step-by-step
-   - Each example should demonstrate a different aspect
-   - Show the thinking process, not just answer
-   ${performanceLevel === 'foundational' ? '- Start with very basic examples' : ''}
-   ${performanceLevel === 'advanced' ? '- Include challenging applications' : ''}
-   - Examples should BUILD understanding progressively
-
-IMPORTANT:
-- This is a TEACHING phase, not testing
-- Examples should SHOW and EXPLAIN, not quiz
-- Use "Let me show you..." not "Can you solve..."
-- Examples format: "Here's how to..." with full explanation
-- Make it feel like a friendly tutor explaining concepts
-
-Return JSON:
+Return ONLY these fields:
 {
-  "title": "Mastering ${skill.skill_name}${career ? ` like a ${career.name}` : ''}",
-  "greeting": "Hi ${student.display_name}! ${performanceLevel === 'advanced' ? 'Excellent work on the practice! You showed strong understanding. Let me teach you some advanced techniques...' : performanceLevel === 'intermediate' ? 'Good effort on the practice! Let me help you master the areas you found tricky...' : 'Thanks for trying the practice questions! Now let me teach you everything about this skill step by step...'}",
-  "concept": "TEACHING explanation of ${skill.skill_name} (2-3 sentences explaining the concept clearly)",
-  "examples": [
-    {
-      "question": "Example 1: Let me show you how to [specific aspect]",
-      "answer": "The answer is [answer] because...",
-      "explanation": "Here's the step-by-step thinking: First we... Then we... Finally we...",
-      "visual": "Visual representation or helpful imagery"
-    },
-    {
-      "question": "Example 2: Here's another way to think about [different aspect]",
-      "answer": "We get [answer] by...",
-      "explanation": "The key insight here is... Notice how... This means...",
-      "visual": "Visual aid or mental model"
-    },
-    {
-      "question": "Example 3: Let's apply this to ${career ? `a ${career.name} situation` : 'a real-world scenario'}",
-      "answer": "The solution is [answer]",
-      "explanation": "In this situation, we... The important thing to remember is...",
-      "visual": "Practical visualization"
-    }
-  ]
+  "title": "Adaptive title based on performance",
+  "greeting": "Personalized greeting acknowledging practice results",
+  "concept": "Clear explanation adjusted to performance level",
+  "examples": [/* 3 teaching examples tailored to performance */]
 }`;
-
     try {
       console.log('🤖 Calling Azure OpenAI for adaptive instruction...');
       const response = await azureOpenAIService.generateWithModel(
@@ -1342,7 +891,7 @@ Return JSON:
     student: StudentProfile,
     career?: { name: string; description?: string }
   ): Promise<AIExperienceContent> {
-    console.log(`🎯 Generating AI Experience content for ${skill.skill_number}: ${skill.skill_name}`, {
+    console.log(`🎯 Generating AI Experience content using PromptBuilder for ${skill.skill_number}: ${skill.skill_name}`, {
       career: career?.name || 'No career context'
     });
 
@@ -1353,7 +902,37 @@ Return JSON:
     // Experience is ALWAYS career-focused - use provided career or generate appropriate one
     const careerToUse = career?.name || this.getDefaultCareerForGrade(student.grade_level, skill.subject);
     
-    const prompt = `Create an immersive FIRST-PERSON career experience for ${student.display_name}, a ${student.grade_level} student.
+    // Build context for PromptBuilder
+    const context: PromptContext = {
+      container: 'EXPERIENCE',
+      subject: skill.subject || 'Math',
+      grade: student.grade_level || 'K',
+      skill: {
+        id: skill.skill_number,
+        name: skill.skill_name,
+        description: skill.skill_description,
+        subject: skill.subject || 'Math'
+      },
+      career: {
+        id: careerToUse.toLowerCase(),
+        name: careerToUse,
+        description: career?.description
+      },
+      student: {
+        id: student.id,
+        display_name: student.display_name || 'Student',
+        grade_level: student.grade_level || 'K'
+      }
+    };
+    
+    // Generate base prompt using PromptBuilder
+    const basePrompt = promptBuilder.buildPrompt(context);
+    
+    // Add EXPERIENCE-specific instructions
+    const prompt = `${basePrompt}
+
+EXPERIENCE CONTAINER SPECIFIC:
+Create an immersive FIRST-PERSON career experience for ${student.display_name}, a ${student.grade_level} student.
 
 STORYLINE CONTINUITY (Continue this narrative):
 Setting: ${storylineContext.setting}
@@ -1462,20 +1041,50 @@ Return JSON:
     student: StudentProfile,
     career?: { name: string; description?: string }
   ): Promise<AIDiscoverContent> {
-    console.log(`🔍 Generating AI Discover content for ${skill.skill_number}: ${skill.skill_name}`, {
+    console.log(`🔍 Generating AI Discover content using PromptBuilder for ${skill.skill_number}: ${skill.skill_name}`, {
       career: career?.name || 'No career context'
     });
 
     // Get or create storyline context for continuity
     const skillKey = `${student.id}-${skill.skill_number}`;
     const storylineContext = this.getStorylineContext(skillKey, skill, career);
+    
+    // Build context for PromptBuilder
+    const context: PromptContext = {
+      container: 'DISCOVER',
+      subject: skill.subject || 'Math',
+      grade: student.grade_level || 'K',
+      skill: {
+        id: skill.skill_number,
+        name: skill.skill_name,
+        description: skill.skill_description,
+        subject: skill.subject || 'Math'
+      },
+      career: {
+        id: (career?.name || 'explorer').toLowerCase(),
+        name: career?.name || 'Explorer',
+        description: career?.description
+      },
+      student: {
+        id: student.id,
+        display_name: student.display_name || 'Student',
+        grade_level: student.grade_level || 'K'
+      }
+    };
+    
+    // Generate base prompt using PromptBuilder
+    const basePrompt = promptBuilder.buildPrompt(context);
 
     const careerContext = career ? `
 CAREER FOCUS: ${career.name}
 Frame all discoveries around how YOU as a ${career.name} innovate and explore with ${skill.skill_name}
 ` : '';
 
-    const prompt = `Create a FIRST-PERSON exploration and discovery experience for ${student.display_name}, a ${student.grade_level} student.
+    // Add DISCOVER-specific instructions
+    const prompt = `${basePrompt}
+
+DISCOVER CONTAINER SPECIFIC:
+Create a FIRST-PERSON exploration and discovery experience for ${student.display_name}, a ${student.grade_level} student.
 
 STORYLINE CONTINUITY (Conclude this journey):
 Setting: ${storylineContext.setting}

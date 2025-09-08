@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design System Test</title>
+    <style>
+        :root {
+            /* Color tokens */
+            --purple-500: #a855f7;
+            --purple-600: #9333ea;
+            --purple-700: #7e22ce;
+            --teal-500: #14b8a6;
+            --magenta-500: #d946ef;
+            
+            /* Light theme */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+        }
+        
+        [data-theme="dark"] {
+            /* Dark theme */
+            --bg-primary: #111827;
+            --bg-secondary: #1f2937;
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --border-color: #374151;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding-top: 20px;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+        
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+        }
+        
+        .theme-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            background: var(--purple-600);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        
+        .btn:hover {
+            background: var(--purple-700);
+        }
+        
+        .section {
+            margin-bottom: 48px;
+        }
+        
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 24px;
+        }
+        
+        .card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .color-box {
+            width: 100%;
+            height: 60px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .container-demo {
+            padding: 32px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .learn-container {
+            background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+        }
+        
+        [data-theme="dark"] .learn-container {
+            background: linear-gradient(135deg, #581c87 0%, #6b21a8 100%);
+        }
+        
+        .experience-container {
+            background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%);
+        }
+        
+        [data-theme="dark"] .experience-container {
+            background: linear-gradient(135deg, #134e4a 0%, #115e59 100%);
+        }
+        
+        .discover-container {
+            background: linear-gradient(135deg, #fdf4ff 0%, #fae8ff 100%);
+        }
+        
+        [data-theme="dark"] .discover-container {
+            background: linear-gradient(135deg, #701a75 0%, #86198f 100%);
+        }
+        
+        .benefits-list {
+            line-height: 2;
+            font-size: 1.125rem;
+        }
+        
+        .benefits-list li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="theme-switcher">
+        <button class="btn" onclick="toggleTheme()">
+            Switch Theme
+        </button>
+    </div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>Design System Test</h1>
+            <p class="subtitle">
+                Testing the new token-based design system with automatic theme switching
+            </p>
+        </div>
+        
+        <section class="section">
+            <h2>Color System</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="color-box" style="background: var(--purple-600);"></div>
+                    <p>Primary Purple</p>
+                </div>
+                <div class="card">
+                    <div class="color-box" style="background: var(--teal-500);"></div>
+                    <p>Experience Teal</p>
+                </div>
+                <div class="card">
+                    <div class="color-box" style="background: var(--magenta-500);"></div>
+                    <p>Discover Magenta</p>
+                </div>
+                <div class="card">
+                    <div class="color-box" style="background: var(--bg-secondary);"></div>
+                    <p>Background Color</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2>Themed Containers</h2>
+            <div class="container-demo learn-container">
+                <h3>Learn Container</h3>
+                <p>Purple gradient that adapts to theme</p>
+            </div>
+            <div class="container-demo experience-container">
+                <h3>Experience Container</h3>
+                <p>Teal gradient that adapts to theme</p>
+            </div>
+            <div class="container-demo discover-container">
+                <h3>Discover Container</h3>
+                <p>Magenta gradient that adapts to theme</p>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2>Key Benefits</h2>
+            <div class="card">
+                <ul class="benefits-list">
+                    <li>✅ Single source of truth for all design values</li>
+                    <li>✅ Automatic theme switching with CSS variables</li>
+                    <li>✅ No inline styles competing with CSS</li>
+                    <li>✅ Predictable cascade and specificity</li>
+                    <li>✅ Easy to debug and maintain</li>
+                    <li>✅ Gradual migration path</li>
+                    <li>✅ Consistent styling across components</li>
+                    <li>✅ No more reverting changes due to conflicts</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2>How It Works</h2>
+            <div class="card">
+                <p style="line-height: 1.8; font-size: 1.125rem;">
+                    This demo uses CSS custom properties (variables) that automatically update based on the 
+                    <code style="background: var(--border-color); padding: 2px 6px; border-radius: 4px;">data-theme</code> 
+                    attribute on the HTML element. When you click the theme switcher, it simply changes this attribute, 
+                    and all colors update instantly through the CSS cascade. No JavaScript theme logic needed in components!
+                </p>
+            </div>
+        </section>
+    </div>
+    
+    <script>
+        // Initialize theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+    </script>
+</body>
+</html>

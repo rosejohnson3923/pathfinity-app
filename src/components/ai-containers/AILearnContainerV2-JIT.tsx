@@ -555,7 +555,7 @@ export const AILearnContainerV2: React.FC<AILearnContainerV2Props> = ({
           <div className="practice-phase">
             <div className="question-header">
               <span>Practice Question {currentQuestionIndex + 1} of {content.practice.length}</span>
-              {features.xpEnabled && <XPDisplay currentXP={profile?.currentXP || 0} />}
+              {/* XP Display removed - now shown in dock */}
             </div>
             
             <QuestionRenderer
@@ -582,7 +582,7 @@ export const AILearnContainerV2: React.FC<AILearnContainerV2Props> = ({
           <div className="assessment-phase">
             <div className="question-header">
               <span>Assessment Question</span>
-              {features.xpEnabled && <XPDisplay currentXP={profile?.currentXP || 0} />}
+              {/* XP Display removed - now shown in dock */}
             </div>
             
             <QuestionRenderer

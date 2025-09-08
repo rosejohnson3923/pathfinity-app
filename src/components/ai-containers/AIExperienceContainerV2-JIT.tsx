@@ -631,7 +631,7 @@ export const AIExperienceContainerV2: React.FC<AIExperienceContainerV2Props> = (
               <span className="scenario-progress">
                 Scenario {currentScenarioIndex + 1} of {scenarios.length}
               </span>
-              {features.xpEnabled && <XPDisplay currentXP={profile?.currentXP || 0} />}
+              {/* XP Display removed - now shown in dock */}
             </div>
             
             <div className="scenario-context">

@@ -13,6 +13,13 @@ import { pathIQGamification } from '../../services/pathIQGamificationService';
 import { chatbotService } from '../../services/chatbotService';
 import styles from './BentoExperienceCard.module.css';
 
+// Import design system tokens
+import '../../design-system/tokens/colors.css';
+import '../../design-system/tokens/spacing.css';
+import '../../design-system/tokens/layout.css';
+import '../../design-system/tokens/typography.css';
+import '../../design-system/tokens/effects.css';
+
 interface BentoExperienceCardProps {
   screen?: 1 | 2; // Screen 1: Introduction, Screen 2: Challenge
   career: {
@@ -77,6 +84,32 @@ export const BentoExperienceCard: React.FC<BentoExperienceCardProps> = ({
   showCareerContext = true
 }) => {
   const { theme } = useTheme();
+  
+  // Use actual DOM theme to ensure synchronization
+  const [actualTheme, setActualTheme] = useState<'light' | 'dark'>('light');
+  
+  useEffect(() => {
+    // Get the actual theme from DOM
+    const getActualTheme = () => {
+      const domTheme = document.documentElement.getAttribute('data-theme');
+      return (domTheme === 'dark' ? 'dark' : 'light') as 'light' | 'dark';
+    };
+    
+    // Set initial theme
+    setActualTheme(getActualTheme());
+    
+    // Watch for theme changes
+    const observer = new MutationObserver(() => {
+      setActualTheme(getActualTheme());
+    });
+    
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme']
+    });
+    
+    return () => observer.disconnect();
+  }, []);
   const [selectedAnswer, setSelectedAnswer] = useState<string>('');
   const [isAnswered, setIsAnswered] = useState(false);
   const [showChat, setShowChat] = useState(false);
@@ -171,15 +204,8 @@ export const BentoExperienceCard: React.FC<BentoExperienceCardProps> = ({
   
   const experienceType = getExperienceType();
   
-  // Get container styles with visual hierarchy
-  const getContainerStyles = () => {
-    const baseStyles = hierarchy.getStyles(gradeCategory);
-    return {
-      ...baseStyles,
-      background: hierarchy.getGradient(containerType, theme),
-      minHeight: `${hierarchy.minHeight[gradeCategory]}px`
-    };
-  };
+  // Container styles are now handled entirely by CSS classes
+  // No inline styles needed - everything uses design tokens
   
   // Handle starting the experience from career context
   const handleStartExperience = () => {
@@ -309,8 +335,7 @@ export const BentoExperienceCard: React.FC<BentoExperienceCardProps> = ({
   if (screen === 1) {
     return (
       <div 
-        className={`${styles.bentoContainer} ${styles[`grade-${gradeCategory}`]} ${theme === 'dark' ? styles.darkTheme : styles.lightTheme}`}
-        style={getContainerStyles()}
+        className={`${styles.bentoContainer} ${styles[`grade-${gradeCategory}`]} ${actualTheme === 'dark' ? styles.darkTheme : styles.lightTheme}`}
       >
         {/* Progress Header */}
         <div className={styles.progressHeader}>
@@ -451,8 +476,7 @@ export const BentoExperienceCard: React.FC<BentoExperienceCardProps> = ({
   // Screen 2: Professional Challenge
   return (
     <div 
-      className={`${styles.bentoContainer} ${styles[`grade-${gradeCategory}`]} ${theme === 'dark' ? styles.darkTheme : styles.lightTheme}`}
-      style={getContainerStyles()}
+      className={`${styles.bentoContainer} ${styles[`grade-${gradeCategory}`]} ${actualTheme === 'dark' ? styles.darkTheme : styles.lightTheme}`}
     >
       {/* Progress Header */}
       <div className={styles.progressHeader}>

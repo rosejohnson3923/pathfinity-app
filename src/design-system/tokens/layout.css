@@ -1,0 +1,79 @@
+/**
+ * LAYOUT DESIGN TOKENS
+ * ====================
+ * Width constraints, breakpoints, and layout rules
+ * THIS is where all width management happens
+ */
+
+:root {
+  /* =========================
+     WIDTH CONSTRAINTS
+     Single source of truth for ALL widths
+     ========================= */
+  
+  /* Container Widths */
+  --width-container-max: 1440px;
+  --width-container-xl: 1280px;
+  --width-container-lg: 1024px;
+  --width-container-md: 768px;
+  --width-container-sm: 640px;
+  
+  /* Content Widths */
+  --width-content-max: 1200px;
+  --width-content-article: 720px;
+  --width-content-narrow: 560px;
+  
+  /* Modal Widths */
+  --width-modal-xl: 1200px;
+  --width-modal-lg: 900px;
+  --width-modal-md: 600px;
+  --width-modal-sm: 420px;
+  
+  /* Component Specific Widths */
+  --width-sidebar: 280px;
+  --width-sidebar-collapsed: 64px;
+  --width-card-max: 480px;
+  --width-card-min: 280px;
+  
+  /* =========================
+     BREAKPOINTS
+     ========================= */
+  --breakpoint-xs: 475px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+  
+  /* =========================
+     Z-INDEX SCALE
+     ========================= */
+  --z-base: 0;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-popover: 500;
+  --z-tooltip: 600;
+  --z-toast: 700;
+  --z-max: 9999;
+  
+  /* =========================
+     BORDER RADIUS
+     ========================= */
+  --radius-none: 0;
+  --radius-sm: 0.125rem;   /* 2px */
+  --radius-base: 0.25rem;  /* 4px */
+  --radius-md: 0.375rem;   /* 6px */
+  --radius-lg: 0.5rem;     /* 8px */
+  --radius-xl: 0.75rem;    /* 12px */
+  --radius-2xl: 1rem;      /* 16px */
+  --radius-3xl: 1.5rem;    /* 24px */
+  --radius-full: 9999px;
+  
+  /* Component specific radius */
+  --radius-button: var(--radius-lg);
+  --radius-card: var(--radius-2xl);
+  --radius-modal: var(--radius-3xl);
+  --radius-input: var(--radius-md);
+}

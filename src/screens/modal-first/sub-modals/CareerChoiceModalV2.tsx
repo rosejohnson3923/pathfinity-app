@@ -315,7 +315,7 @@ export const CareerChoiceModalV2: React.FC<CareerChoiceModalV2Props> = ({
           backgroundColor: colors.background,
           borderRadius: '16px',
           padding: '24px',
-          maxWidth: '500px',
+          maxWidth: '1200px',
           width: '90%',
           maxHeight: '80vh',
           overflowY: 'auto',
@@ -348,21 +348,44 @@ export const CareerChoiceModalV2: React.FC<CareerChoiceModalV2Props> = ({
               Back to careers
             </button>
             
-            <button
-              onClick={() => {
-                setViewMode('expanded');
-                setSelectedCareerForPreview(null);
-              }}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: colors.subtext,
-                cursor: 'pointer',
-                fontSize: '20px'
-              }}
-            >
-              ×
-            </button>
+            <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+              {/* Audio Button */}
+              <button
+                onClick={() => setSoundEnabled(!soundEnabled)}
+                style={{
+                  background: soundEnabled ? colors.accent : 'transparent',
+                  border: `2px solid ${colors.border}`,
+                  borderRadius: '8px',
+                  color: soundEnabled ? '#FFFFFF' : colors.text,
+                  cursor: 'pointer',
+                  padding: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'all 0.2s'
+                }}
+                title={soundEnabled ? 'Turn off audio' : 'Turn on audio'}
+              >
+                {soundEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
+              </button>
+              
+              {/* Close Button */}
+              <button
+                onClick={() => {
+                  setViewMode('expanded');
+                  setSelectedCareerForPreview(null);
+                }}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: colors.subtext,
+                  cursor: 'pointer',
+                  fontSize: '20px'
+                }}
+              >
+                ×
+              </button>
+            </div>
           </div>
           
           {/* Career Icon and Name */}
@@ -600,172 +623,24 @@ export const CareerChoiceModalV2: React.FC<CareerChoiceModalV2Props> = ({
             </div>
           </div>
           
-          {/* More Options Button */}
-          <button
-            onClick={() => setViewMode('recommended-detail')}
-            style={{
-              padding: '12px 24px',
-              backgroundColor: 'transparent',
-              color: colors.accent,
-              border: `2px solid ${colors.accent}`,
-              borderRadius: '8px',
-              fontSize: '16px',
-              fontWeight: 'bold',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-              alignSelf: 'center'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = colors.accent;
-              e.currentTarget.style.color = '#FFFFFF';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'transparent';
-              e.currentTarget.style.color = colors.accent;
-            }}
-          >
-            More Options
-          </button>
-        </>
-      ) : viewMode === 'recommended-detail' ? (
-        <>
-          {/* Choose Your Career Screen with 3 Detailed Recommendations */}
-          <div style={{ marginBottom: '24px' }}>
-            <h2 style={{
-              color: colors.text,
-              fontSize: '24px',
-              fontWeight: 'bold',
-              marginBottom: '20px'
-            }}>
-              Choose Your Career
-            </h2>
-            
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr',
-              gap: '20px',
-              marginBottom: '24px'
-            }}>
-              {recommendedCareers.length > 0 ? recommendedCareers.map(career => (
-                <div key={career.careerId || career.id} style={{
-                  backgroundColor: colors.cardBg,
-                  borderRadius: '12px',
-                  padding: '20px',
-                  border: `2px solid ${colors.border}`,
-                  cursor: 'pointer',
-                  transition: 'all 0.2s'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = colors.accent;
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = colors.border;
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }}
-                onClick={() => handleCareerPreview(career.careerId || career.id)}>
-                  <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
-                    <div style={{
-                      fontSize: '48px',
-                      backgroundColor: career.color + '20',
-                      borderRadius: '12px',
-                      padding: '12px',
-                      minWidth: '72px',
-                      minHeight: '72px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center'
-                    }}>
-                      {career.icon}
-                    </div>
-                    
-                    <div style={{ flex: 1 }}>
-                      <h3 style={{
-                        color: colors.text,
-                        fontSize: '20px',
-                        fontWeight: 'bold',
-                        marginBottom: '8px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px'
-                      }}>
-                        {career.name}
-                        <Sparkles size={16} style={{ color: colors.warning }} />
-                      </h3>
-                      
-                      <p style={{
-                        color: colors.subtext,
-                        fontSize: '16px',
-                        lineHeight: '1.5',
-                        marginBottom: '12px'
-                      }}>
-                        {career.description || career.quickDesc || 'Explore this exciting career path'}
-                      </p>
-                      
-                      {career.skills && (
-                        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                          {career.skills.slice(0, 3).map(skill => (
-                            <span key={skill} style={{
-                              backgroundColor: colors.accent + '20',
-                              color: colors.accent,
-                              padding: '4px 8px',
-                              borderRadius: '6px',
-                              fontSize: '12px',
-                              fontWeight: 'bold'
-                            }}>
-                              {skill}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )) : (
-                <div style={{
-                  padding: '40px',
-                  textAlign: 'center',
-                  color: colors.subtext
-                }}>
-                  <p>Loading recommended careers...</p>
-                  <p style={{ fontSize: '14px', marginTop: '10px' }}>
-                    If careers don't appear, please go back and try again.
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-          
-          {/* Explore More Careers Button */}
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '16px' }}>
+          {/* Action Buttons */}
+          <div style={{
+            display: 'flex',
+            gap: '16px',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
+            {/* Quick Start with Top Match */}
             <button
-              onClick={() => setViewMode('initial')}
+              onClick={() => {
+                if (recommendedCareers.length > 0) {
+                  const topMatch = recommendedCareers[0];
+                  handleCareerSelection(topMatch.careerId || topMatch.id);
+                }
+              }}
               style={{
                 padding: '12px 24px',
-                backgroundColor: 'transparent',
-                color: colors.text,
-                border: `2px solid ${colors.border}`,
-                borderRadius: '8px',
-                fontSize: '16px',
-                fontWeight: 'bold',
-                cursor: 'pointer',
-                transition: 'all 0.2s'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = colors.accent;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = colors.border;
-              }}
-            >
-              Back
-            </button>
-            
-            <button
-              onClick={() => setViewMode('all-careers')}
-              style={{
-                padding: '12px 24px',
-                backgroundColor: colors.accent,
+                backgroundColor: colors.success,
                 color: '#FFFFFF',
                 border: 'none',
                 borderRadius: '8px',
@@ -776,20 +651,48 @@ export const CareerChoiceModalV2: React.FC<CareerChoiceModalV2Props> = ({
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'scale(1.05)';
+                e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.boxShadow = 'none';
               }}
             >
-              Explore More Careers
+              🚀 Quick Start with Top Match
+            </button>
+            
+            {/* More Options Button - Goes directly to all careers */}
+            <button
+              onClick={() => setViewMode('all-careers')}
+              style={{
+                padding: '12px 24px',
+                backgroundColor: 'transparent',
+                color: colors.accent,
+                border: `2px solid ${colors.accent}`,
+                borderRadius: '8px',
+                fontSize: '16px',
+                fontWeight: 'bold',
+                cursor: 'pointer',
+                transition: 'all 0.2s'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = colors.accent;
+                e.currentTarget.style.color = '#FFFFFF';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'transparent';
+                e.currentTarget.style.color = colors.accent;
+              }}
+            >
+              More Options
             </button>
           </div>
         </>
       ) : viewMode === 'all-careers' ? (
         <>
-          {/* Back to Recommended Detail */}
+          {/* Back to Recommended */}
           <button
-            onClick={() => setViewMode('recommended-detail')}
+            onClick={() => setViewMode('initial')}
             style={{
               background: 'none',
               border: 'none',

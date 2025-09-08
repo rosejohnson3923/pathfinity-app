@@ -30,8 +30,27 @@ export const TwoPanelModal: React.FC<TwoPanelModalProps> = ({
   modalTitle,
   onClose
 }) => {
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  // Start with sidebar collapsed on mobile devices
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(() => {
+    // Check if window is available (client-side) and if screen is mobile
+    if (typeof window !== 'undefined') {
+      return window.innerWidth <= 768;
+    }
+    return false;
+  });
   const [showFullLeaderboard, setShowFullLeaderboard] = useState(false);
+
+  // Update sidebar state when window resizes
+  React.useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768 && !isSidebarCollapsed) {
+        setIsSidebarCollapsed(true);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isSidebarCollapsed]);
 
   const handleToggleSidebar = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);
@@ -39,6 +58,15 @@ export const TwoPanelModal: React.FC<TwoPanelModalProps> = ({
 
   return (
     <div className={`two-panel-modal ${sidebarPosition}-sidebar ${isSidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
+      {/* Mobile overlay - clickable to close sidebar */}
+      {!isSidebarCollapsed && typeof window !== 'undefined' && window.innerWidth <= 768 && (
+        <div 
+          className="mobile-overlay" 
+          onClick={() => setIsSidebarCollapsed(true)}
+          aria-label="Close sidebar"
+        />
+      )}
+      
       {/* Single integrated container - no backdrop */}
       <div className="modal-container">
         {/* Main Content - Full screen */}

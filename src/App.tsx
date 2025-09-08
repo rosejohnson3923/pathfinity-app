@@ -37,6 +37,8 @@ fixRootWidth();
 // Application Pages
 import { AdminImageGenerator } from './pages/AdminImageGenerator';
 import { AdminDemoContentGenerator } from './pages/AdminDemoContentGenerator';
+import { DesignSystemTest } from './design-system/test/DesignSystemTestSimple';
+import { TestPage } from './pages/TestPage';
 
 import './utils/debugFinnComponents'; // Load debug utilities in development
 
@@ -84,6 +86,10 @@ function App() {
           <AuthProvider>
             <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
                   <Routes>
+                  {/* Test routes - no auth required */}
+                  <Route path="/test" element={<TestPage />} />
+                  <Route path="/test/design-system" element={<DesignSystemTest />} />
+                  
                   {/* Default route redirects to login */}
                   <Route path="/" element={<Navigate to="/app/login" replace />} />
                   

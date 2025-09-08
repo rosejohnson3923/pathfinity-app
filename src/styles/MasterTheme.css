@@ -319,8 +319,8 @@
   --bg-hover: #374151;
   
   --text-primary: #f7fafc;
-  --text-secondary: #cbd5e0;
-  --text-tertiary: #94a3b8;
+  --text-secondary: #e2e8f0; /* Improved contrast from #cbd5e0 */
+  --text-tertiary: #a0aec0; /* Improved contrast from #94a3b8 */
   --text-inverse: #1a202c;
   --text-link: #818cf8;
   

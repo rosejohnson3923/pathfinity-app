@@ -112,7 +112,12 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
   userId,
   onSkipToDiscover
 }) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
+  
+  // Get container class
+  const getContainerClassName = () => {
+    return 'ai-experience-container container-experience';
+  };
   
   // Initialize JIT Services (V2-JIT)
   const jitService = getJustInTimeContentService();
@@ -799,7 +804,7 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
     // Show career context card if available
     if (showCareerContext && content) {
       return (
-        <div className="ai-experience-container">
+        <div className={getContainerClassName()}>
           <CareerContextCard
             title={content?.title || 'Welcome to Your Experience'}
             greeting={content?.greeting || `Welcome, ${selectedCareer?.name || 'Explorer'} ${student.display_name}!`}
@@ -823,7 +828,7 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
     
     if (useBentoUI) {
       return (
-        <div className="ai-experience-container">
+        <div className={getContainerClassName()}>
           <ProgressHeader
             containerType="EXPERIENCE"
             title="Career Experience"
@@ -897,7 +902,7 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
     }
     
     return (
-      <div className="ai-experience-container">
+      <div className={getContainerClassName()}>
         {/* Comprehensive Progress Header */}
         <ProgressHeader
           containerType="EXPERIENCE"
@@ -976,11 +981,11 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
     
     if (useBentoUI) {
       return (
-        <div className="ai-experience-container">
+        <div className={getContainerClassName()}>
           <ProgressHeader
             containerType="EXPERIENCE"
             title="Real-World Applications"
-            career={career}
+            career={selectedCareer?.name || 'Professional'}
             skill={skill?.skill_name}
             subject={skill?.subject}
             progress={40 + (currentConnection / content.real_world_connections.length) * 20}
@@ -996,7 +1001,7 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
             screen={2}
             career={{
               id: selectedCareer?.id || 'default',
-              name: selectedCareer?.name || career || 'Professional',
+              name: selectedCareer?.name || 'Professional',
               icon: selectedCareer?.icon || '💼'
             }}
             skill={{
@@ -1029,7 +1034,7 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
     }
 
     return (
-      <div className="ai-experience-container">
+      <div className={getContainerClassName()}>
         {/* Comprehensive Progress Header */}
         <ProgressHeader
           containerType="EXPERIENCE"
@@ -1116,7 +1121,7 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
     const showFeedback = showChallengeFeedback[currentChallenge];
 
     return renderWithDock(
-      <div className="ai-experience-container">
+      <div className={getContainerClassName()}>
         {/* Comprehensive Progress Header */}
         <ProgressHeader
           containerType="EXPERIENCE"
@@ -1204,7 +1209,7 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
 
   if (phase === 'complete') {
     return (
-      <div className="ai-experience-container">
+      <div className={getContainerClassName()}>
         {/* Comprehensive Progress Header */}
         <ProgressHeader
           containerType="EXPERIENCE"

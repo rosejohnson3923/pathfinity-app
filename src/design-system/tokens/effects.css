@@ -1,0 +1,96 @@
+/**
+ * EFFECTS DESIGN TOKENS
+ * =====================
+ * Shadows, transitions, animations
+ */
+
+:root {
+  /* =========================
+     SHADOWS
+     ========================= */
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+  --shadow-none: none;
+  
+  /* Dark mode shadows (stronger) */
+  --shadow-xs-dark: 0 1px 2px 0 rgb(0 0 0 / 0.1);
+  --shadow-sm-dark: 0 1px 3px 0 rgb(0 0 0 / 0.2), 0 1px 2px -1px rgb(0 0 0 / 0.2);
+  --shadow-md-dark: 0 4px 6px -1px rgb(0 0 0 / 0.2), 0 2px 4px -2px rgb(0 0 0 / 0.2);
+  --shadow-lg-dark: 0 10px 15px -3px rgb(0 0 0 / 0.2), 0 4px 6px -4px rgb(0 0 0 / 0.2);
+  --shadow-xl-dark: 0 20px 25px -5px rgb(0 0 0 / 0.2), 0 8px 10px -6px rgb(0 0 0 / 0.2);
+  --shadow-2xl-dark: 0 25px 50px -12px rgb(0 0 0 / 0.5);
+  
+  /* Active shadows */
+  --shadow-current-xs: var(--shadow-xs);
+  --shadow-current-sm: var(--shadow-sm);
+  --shadow-current-md: var(--shadow-md);
+  --shadow-current-lg: var(--shadow-lg);
+  --shadow-current-xl: var(--shadow-xl);
+  --shadow-current-2xl: var(--shadow-2xl);
+  
+  /* =========================
+     TRANSITIONS
+     ========================= */
+  --transition-none: none;
+  --transition-all: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-colors: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1), 
+                       border-color 150ms cubic-bezier(0.4, 0, 0.2, 1), 
+                       color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-opacity: opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-shadow: box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-transform: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* =========================
+     ANIMATION DURATIONS
+     ========================= */
+  --duration-instant: 0ms;
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-moderate: 350ms;
+  --duration-slow: 500ms;
+  --duration-slower: 750ms;
+  --duration-slowest: 1000ms;
+  
+  /* =========================
+     ANIMATION EASINGS
+     ========================= */
+  --ease-linear: linear;
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  
+  /* =========================
+     OPACITY
+     ========================= */
+  --opacity-0: 0;
+  --opacity-5: 0.05;
+  --opacity-10: 0.1;
+  --opacity-20: 0.2;
+  --opacity-25: 0.25;
+  --opacity-30: 0.3;
+  --opacity-40: 0.4;
+  --opacity-50: 0.5;
+  --opacity-60: 0.6;
+  --opacity-70: 0.7;
+  --opacity-75: 0.75;
+  --opacity-80: 0.8;
+  --opacity-90: 0.9;
+  --opacity-95: 0.95;
+  --opacity-100: 1;
+}
+
+/* Dark mode shadow overrides */
+[data-theme="dark"] {
+  --shadow-current-xs: var(--shadow-xs-dark);
+  --shadow-current-sm: var(--shadow-sm-dark);
+  --shadow-current-md: var(--shadow-md-dark);
+  --shadow-current-lg: var(--shadow-lg-dark);
+  --shadow-current-xl: var(--shadow-xl-dark);
+  --shadow-current-2xl: var(--shadow-2xl-dark);
+}

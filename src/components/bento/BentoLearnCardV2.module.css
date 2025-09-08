@@ -2,35 +2,111 @@
 /* Redesigned with proper UI/UX principles - Grid layout, proper sizing, accessible dock */
 
 .bentoContainerV2 {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  grid-template-rows: minmax(0, 1fr);
-  gap: 20px;
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  height: 100vh;
-  max-height: 900px;
+  height: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
   position: relative;
   background: var(--color-background);
-  padding: 20px;
+  padding: 0;
   box-sizing: border-box;
   overflow: hidden;
 }
 
-/* When display modal is active */
-.bentoContainerV2[data-active-dock]:not([data-active-dock="none"]) {
-  grid-template-rows: minmax(0, 1fr) 260px;
+/* Horizontal Dock - Above Question */
+.horizontalDock {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border-color);
+  gap: 20px;
+  flex-shrink: 0;
+  overflow: visible;
+}
+
+.dockGroupSupport,
+.dockGroupInfo {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.dockGroupSupport {
+  flex: 1;
+  justify-content: flex-start;
+}
+
+.dockGroupInfo {
+  justify-content: flex-end;
+}
+
+.dockItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  position: relative;
+}
+
+.dockItem:hover {
+  background: var(--bg-tertiary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dockItem.active {
+  background: var(--gradient-primary);
+  color: white;
+  border-color: transparent;
+}
+
+.dockIcon {
+  font-size: 18px;
+}
+
+.dockLabel {
+  font-size: 13px;
+}
+
+.xpBadge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 3px 8px;
+  border-radius: 12px;
+  min-width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 10;
 }
 
 /* Main Content Area - Question & Answer */
 .mainContent {
-  grid-column: 1;
-  grid-row: 1;
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  /* Removed max-width: 720px to allow full width */
-  /* Content will now use available space based on parent constraints */
-  margin: 0 auto;
+  padding: 20px;
   width: 100%;
   overflow-y: auto;
   overflow-x: hidden;
@@ -46,8 +122,9 @@
   box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
   animation: slideIn 0.5s ease;
   flex: 0 0 auto;
-  max-height: 40vh;
-  overflow-y: auto;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
 }
 
 .questionHeader {
@@ -72,16 +149,7 @@
   text-transform: capitalize;
 }
 
-.xpBadge {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 6px 12px;
-  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 14px;
-}
+/* Duplicate xpBadge removed - using primary definition above */
 
 .questionContent {
   display: flex;
@@ -359,23 +427,10 @@
 /* XP Button Badge */
 .xpButton {
   position: relative;
+  overflow: visible;
 }
 
-.xpBadge {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-  color: white;
-  font-size: 11px;
-  font-weight: bold;
-  padding: 2px 6px;
-  border-radius: 12px;
-  min-width: 20px;
-  text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  animation: bounceIn 0.5s ease;
-}
+/* Third duplicate xpBadge removed - using primary definition */
 
 /* XP Container Styles */
 .xpContainer {
@@ -994,6 +1049,17 @@
   }
 }
 
+@keyframes slideDown {
+  from {
+    max-height: 0;
+    opacity: 0;
+  }
+  to {
+    max-height: 300px;
+    opacity: 1;
+  }
+}
+
 @keyframes typing {
   0%, 60%, 100% {
     opacity: 0.3;
@@ -1036,15 +1102,15 @@
     max-width: 100%;
   }
   
-  .floatingDock {
-    grid-column: 1;
-    grid-row: 1;
-    flex-direction: row;
-    justify-content: center;
-    margin-top: 0;
-    min-width: unset;
-    padding: 8px;
-    gap: 8px;
+  .horizontalDock {
+    padding: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .dockGroupSupport,
+  .dockGroupInfo {
+    flex: 1;
+    min-width: 200px;
   }
   
   .dockItem {
@@ -1061,9 +1127,9 @@
     font-size: 20px;
   }
   
-  .displayModal {
-    grid-row: 3;
-    max-height: 200px;
+  .expandedPanel {
+    max-height: 250px;
+    margin: 0 12px 12px 12px;
   }
   
   .answersGrid {
@@ -1099,8 +1165,8 @@
     max-width: 600px;
   }
   
-  .floatingDock {
-    min-width: 100px;
+  .horizontalDock {
+    padding: 10px;
   }
   
   .dockLabel {
@@ -1119,8 +1185,8 @@
     max-width: 900px;
   }
   
-  .floatingDock {
-    min-width: 140px;
+  .horizontalDock {
+    padding: 18px 28px;
   }
 }
 
@@ -1128,7 +1194,7 @@
 @media (prefers-reduced-motion: reduce) {
   .xpAnimation,
   .feedbackOverlay,
-  .displayModal,
+  .expandedPanel,
   .questionSection {
     animation: none !important;
   }

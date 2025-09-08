@@ -1,0 +1,67 @@
+/**
+ * BORDER TOKENS
+ * =============
+ * Standardized border styles for consistent UI
+ */
+
+:root {
+  /* Border widths */
+  --border-width-none: 0;
+  --border-width-thin: 1px;
+  --border-width-base: 2px;
+  --border-width-thick: 3px;
+  --border-width-heavy: 4px;
+  
+  /* Border radius */
+  --radius-none: 0;
+  --radius-sm: 0.25rem;  /* 4px */
+  --radius-md: 0.5rem;   /* 8px */
+  --radius-lg: 0.75rem;  /* 12px */
+  --radius-xl: 1rem;     /* 16px */
+  --radius-2xl: 1.5rem;  /* 24px */
+  --radius-3xl: 2rem;    /* 32px */
+  --radius-full: 9999px;
+  
+  /* Border colors - Light theme */
+  --border-color-default: rgba(0, 0, 0, 0.1);
+  --border-color-soft: rgba(0, 0, 0, 0.05);
+  --border-color-medium: rgba(0, 0, 0, 0.15);
+  --border-color-strong: rgba(0, 0, 0, 0.2);
+  --border-color-focus: var(--purple-500);
+  --border-color-error: var(--red-500);
+  --border-color-success: var(--green-500);
+  --border-color-warning: var(--yellow-500);
+  --border-color-info: var(--blue-500);
+  
+  /* Common border styles */
+  --border-default: var(--border-width-thin) solid var(--border-color-default);
+  --border-soft: var(--border-width-thin) solid var(--border-color-soft);
+  --border-medium: var(--border-width-thin) solid var(--border-color-medium);
+  --border-strong: var(--border-width-thin) solid var(--border-color-strong);
+  --border-focus: var(--border-width-base) solid var(--border-color-focus);
+}
+
+/* Dark theme border colors */
+[data-theme="dark"] {
+  --border-color-default: rgba(255, 255, 255, 0.1);
+  --border-color-soft: rgba(255, 255, 255, 0.05);
+  --border-color-medium: rgba(255, 255, 255, 0.15);
+  --border-color-strong: rgba(255, 255, 255, 0.2);
+}
+
+/* Utility classes for borders */
+.border-none { border: none !important; }
+.border-default { border: var(--border-default) !important; }
+.border-soft { border: var(--border-soft) !important; }
+.border-medium { border: var(--border-medium) !important; }
+.border-strong { border: var(--border-strong) !important; }
+
+/* Border radius utilities */
+.rounded-none { border-radius: var(--radius-none) !important; }
+.rounded-sm { border-radius: var(--radius-sm) !important; }
+.rounded-md { border-radius: var(--radius-md) !important; }
+.rounded-lg { border-radius: var(--radius-lg) !important; }
+.rounded-xl { border-radius: var(--radius-xl) !important; }
+.rounded-2xl { border-radius: var(--radius-2xl) !important; }
+.rounded-3xl { border-radius: var(--radius-3xl) !important; }
+.rounded-full { border-radius: var(--radius-full) !important; }

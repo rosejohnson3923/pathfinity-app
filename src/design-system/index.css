@@ -1,0 +1,33 @@
+/**
+ * PATHFINITY DESIGN SYSTEM
+ * ========================
+ * Import this file to use the complete design system
+ */
+
+/* Design Tokens - The Foundation */
+@import './tokens/colors.css';
+@import './tokens/spacing.css';
+@import './tokens/layout.css';
+@import './tokens/typography.css';
+@import './tokens/effects.css';
+
+/* Component Styles */
+@import './components/base.css';
+@import './components/containers.css';
+
+/**
+ * USAGE:
+ * 
+ * In your component:
+ * import '@/design-system/index.css';
+ * 
+ * Or import specific tokens:
+ * import '@/design-system/tokens/colors.css';
+ * 
+ * Then use the tokens in your CSS:
+ * .my-component {
+ *   background: var(--color-bg-elevated);
+ *   padding: var(--space-6);
+ *   border-radius: var(--radius-card);
+ * }
+ */

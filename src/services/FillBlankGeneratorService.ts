@@ -21,9 +21,10 @@ export class FillBlankGeneratorService {
    * Convert a complete statement into a fill_blank question
    * @param statement The complete statement from AI
    * @param hint Optional hint about what type of word to extract
+   * @param gradeLevel Optional grade level for age-appropriate blanking
    * @returns Object with question (with _____), answer, and template
    */
-  generateFillBlank(statement: string, hint?: string): {
+  generateFillBlank(statement: string, hint?: string, gradeLevel?: string): {
     question: string;
     correct_answer: string;
     template: string;
@@ -38,6 +39,18 @@ export class FillBlankGeneratorService {
     // Remove common prefixes if present
     cleanStatement = cleanStatement.replace(/^(Fill in the blank:|Complete the sentence:|The answer is:)\s*/i, '');
     
+    // Check if the statement already has blanks
+    if (cleanStatement.includes('_____') || cleanStatement.includes('____')) {
+      return this.processPredefinedBlanks(cleanStatement);
+    }
+    
+    // For elementary grades (K-5), use simpler single-word blanking
+    const isElementary = this.isElementaryGrade(gradeLevel);
+    
+    if (isElementary) {
+      return this.generateElementaryFillBlank(cleanStatement, hint);
+    }
+    
     // Identify the key term to blank out
     const extraction = this.extractKeyTerm(cleanStatement, hint);
     
@@ -49,6 +62,154 @@ export class FillBlankGeneratorService {
     }
     
     return this.createBlankQuestion(cleanStatement, extraction.term, extraction.position);
+  }
+  
+  /**
+   * Check if grade is elementary (K-5)
+   */
+  private isElementaryGrade(gradeLevel?: string): boolean {
+    if (!gradeLevel) return false;
+    const grade = gradeLevel.toLowerCase();
+    return grade === 'k' || 
+           grade === 'kindergarten' || 
+           (parseInt(grade) >= 1 && parseInt(grade) <= 5);
+  }
+  
+  /**
+   * Generate fill_blank for elementary grades (single word only)
+   */
+  private generateElementaryFillBlank(statement: string, hint?: string): {
+    question: string;
+    correct_answer: string;
+    template: string;
+    blanks: Array<{
+      id: string;
+      correctAnswers: string[];
+    }>;
+  } {
+    // For elementary, extract a single important word
+    const singleWord = this.extractSingleKeyWord(statement, hint);
+    return this.createBlankQuestion(statement, singleWord);
+  }
+  
+  /**
+   * Extract a single key word for elementary grades
+   */
+  private extractSingleKeyWord(statement: string, hint?: string): string {
+    // Remove punctuation for processing
+    const cleanStatement = statement.replace(/[.,!?;:]/g, '');
+    const words = cleanStatement.split(/\s+/);
+    
+    // Priority patterns for single words
+    const importantPatterns = [
+      /community|family|school|teacher|friend|helper/i,
+      /work|live|help|share|care|play/i,
+      /group|people|together|everyone/i,
+      /number|count|many|few|some|all/i
+    ];
+    
+    // Find the most important single word
+    for (const pattern of importantPatterns) {
+      for (const word of words) {
+        if (pattern.test(word)) {
+          return word;
+        }
+      }
+    }
+    
+    // Fallback: use the last noun-like word
+    const nounPatterns = /^[A-Z][a-z]+$|^[a-z]+(s|es|ing|ed)?$/;
+    for (let i = words.length - 1; i >= 0; i--) {
+      if (nounPatterns.test(words[i]) && words[i].length > 3) {
+        return words[i];
+      }
+    }
+    
+    // Ultimate fallback
+    return words[words.length - 1] || 'answer';
+  }
+  
+  /**
+   * Process statements that already have blanks defined
+   */
+  private processPredefinedBlanks(statement: string): {
+    question: string;
+    correct_answer: string;
+    template: string;
+    blanks: Array<{
+      id: string;
+      correctAnswers: string[];
+    }>;
+  } {
+    // Count the number of blanks
+    const blankPattern = /_{3,}/g;
+    const blanks = statement.match(blankPattern) || [];
+    const numBlanks = blanks.length;
+    
+    if (numBlanks === 0) {
+      // No blanks found, create one
+      return this.generateFillBlank(statement);
+    }
+    
+    // Create template with numbered blanks
+    let template = statement;
+    let blankIndex = 0;
+    template = template.replace(blankPattern, () => `{{blank_${blankIndex++}}}`);
+    
+    // For predefined blanks, we need to infer the answers
+    // This is a complex problem, so we'll provide a structure that needs answers
+    const blankArray = [];
+    const answers = [];
+    
+    for (let i = 0; i < numBlanks; i++) {
+      // Default answers for common patterns
+      const defaultAnswers = this.inferDefaultAnswers(statement, i, numBlanks);
+      blankArray.push({
+        id: `blank_${i}`,
+        correctAnswers: defaultAnswers
+      });
+      answers.push(defaultAnswers[0]);
+    }
+    
+    // If multiple blanks, join answers with commas
+    const correct_answer = answers.length > 1 ? answers.join(', ') : answers[0];
+    
+    return {
+      question: statement,
+      correct_answer,
+      template,
+      blanks: blankArray
+    };
+  }
+  
+  /**
+   * Infer default answers for predefined blanks based on context
+   */
+  private inferDefaultAnswers(statement: string, blankIndex: number, totalBlanks: number): string[] {
+    const lowerStatement = statement.toLowerCase();
+    
+    // Common patterns for community/social studies
+    if (lowerStatement.includes('community') && lowerStatement.includes('people who')) {
+      const communityAnswers = [
+        ['group', 'groups'],
+        ['live', 'living'],
+        ['work', 'working'],
+        ['help', 'helping']
+      ];
+      return blankIndex < communityAnswers.length ? communityAnswers[blankIndex] : ['answer'];
+    }
+    
+    // Default based on position
+    if (totalBlanks === 3) {
+      // Common three-blank patterns
+      return [
+        ['live', 'living'],
+        ['work', 'working'],
+        ['play', 'playing']
+      ][blankIndex] || ['answer'];
+    }
+    
+    return ['answer'];
   }
 
   /**
@@ -413,8 +574,10 @@ export class FillBlankGeneratorService {
 
   /**
    * Process AI-generated content to ensure fill_blank questions are properly formatted
+   * @param aiQuestion The question from AI
+   * @param gradeLevel Optional grade level for age-appropriate processing
    */
-  processFillBlankQuestion(aiQuestion: any): any {
+  processFillBlankQuestion(aiQuestion: any, gradeLevel?: string): any {
     // Check if the question is problematic (ends with "What's the _____?" or similar)
     const questionText = aiQuestion.question || aiQuestion.content || '';
     const isProblematicPattern = /What['']s the _____\?$|What is the _____\?$|The answer is _____/i.test(questionText);
@@ -564,7 +727,7 @@ export class FillBlankGeneratorService {
     }
     
     // Generate fill_blank from complete statement
-    const generated = this.generateFillBlank(sourceText, aiQuestion.hint);
+    const generated = this.generateFillBlank(sourceText, aiQuestion.hint, gradeLevel);
     
     return {
       ...aiQuestion,

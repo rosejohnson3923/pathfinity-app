@@ -72,7 +72,7 @@ import { ProgressHeader } from '../navigation/ProgressHeader';
 import { CompanionChatBox } from '../learning-support/CompanionChatBox';
 import { VisualRenderer } from './VisualRenderer';
 import { EnhancedLoadingScreen } from './EnhancedLoadingScreen';
-import { XPDisplay } from '../gamification/XPDisplay';
+// import { XPDisplay } from '../gamification/XPDisplay'; // Removed - XP now shown in dock
 import { useTheme } from '../../hooks/useTheme';
 import { SettingsModal } from '../../screens/modal-first/sub-modals/SettingsModal';
 
@@ -205,7 +205,14 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   }, [isLoading, onLoadingChange]);
   
   useEffect(() => {
-    // Only generate content once
+    // Reset the ref when dependencies change
+    return () => {
+      contentGeneratedRef.current = false;
+    };
+  }, [student?.id, skill?.id, characterId, selectedCareer?.id]);
+  
+  useEffect(() => {
+    // Only generate content once per dependency change
     if (contentGeneratedRef.current) {
       return;
     }
@@ -273,7 +280,7 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
               interests: student.interests || [career],
               learning_style: student.learning_style || 'visual'
             },
-            career: career,
+            career: selectedCareer || { name: career },
             careerDescription: `${career} professional`
           },
           timeConstraint: 15 // minutes
@@ -453,6 +460,8 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
         // Could track as failed performance data if needed
       } finally {
         setIsLoading(false);
+        // Mark content as generated to prevent re-generation
+        contentGeneratedRef.current = true;
       }
     };
     
@@ -740,6 +749,17 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
     }
   };
   
+  const handlePhaseTransition = () => {
+    // Transition to the next logical phase
+    if (phase === 'instruction') {
+      handleStartPractice();
+    } else if (phase === 'practice') {
+      handleStartAssessment();
+    } else if (phase === 'assessment') {
+      setPhase('complete');
+    }
+  };
+
   const handleStartAssessment = () => {
     setPhase('assessment');
     setAssessmentAnswer(undefined);
@@ -952,7 +972,7 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
         onSettingsClick={() => setShowSettings(true)}
       />
       
-      {features.showXP && <XPDisplay />}
+      {/* XP Display removed - now shown in dock */}
       
       <div className="container-content">
         {/* Debug instruction phase */}
@@ -1058,7 +1078,8 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
                         if (idx < content.practice.length - 1) {
                           setCurrentPracticeQuestion(prev => prev + 1);
                         } else {
-                          handlePhaseTransition();
+                          // Move to assessment phase after practice
+                          handleStartAssessment();
                         }
                       }}
                       progress={{
@@ -1075,6 +1096,7 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
                       skill={skill?.name || 'Practice'}
                       userId={student.id}
                       companionId={selectedCharacter}
+                      totalXP={profile?.xp || 0}
                     />
                   );
                 } else if (useBentoUI) {
@@ -1115,7 +1137,8 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
                         if (idx < content.practice.length - 1) {
                           setCurrentPracticeQuestion(prev => prev + 1);
                         } else {
-                          handlePhaseTransition();
+                          // Move to assessment phase after practice
+                          handleStartAssessment();
                         }
                       }}
                       progress={{
@@ -1132,6 +1155,7 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
                       skill={skill?.name || 'Practice'}
                       userId={student.id}
                       companionId={selectedCharacter}
+                      totalXP={profile?.xp || 0}
                     />
                   );
                 }
@@ -1239,30 +1263,7 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
               })()}
             </div>
             
-            <div className={practiceStyles.practiceNavigation}>
-              {/* Show Next button after submitting answer (not last question) */}
-              {practiceResults[currentPracticeQuestion] !== undefined && 
-               currentPracticeQuestion < content.practice.length - 1 && (
-                <button 
-                  className={`${buttonStyles.primary} ${buttonStyles.learnVariant}`}
-                  onClick={() => {
-                    setCurrentPracticeQuestion(currentPracticeQuestion + 1);
-                    setQuestionStartTime(Date.now());
-                  }}
-                >
-                  Next Question →
-                </button>
-              )}
-              
-              {Object.keys(practiceResults).length === content.practice.length && (
-                <button 
-                  className={`${buttonStyles.primary} ${buttonStyles.learnVariant}`}
-                  onClick={handleStartAssessment}
-                >
-                  Continue to Assessment
-                </button>
-              )}
-            </div>
+            {/* Practice navigation removed - buttons are now integrated into question cards to avoid duplication */}
           </div>
         )}
         
@@ -1286,11 +1287,21 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
                 //   type: questionObj.type
                 // });
                 
-                // Use QuestionRenderer for proper rendering
+                // Use BentoLearnCardV2 for consistent styling with practice
                 return (
-                  <QuestionRenderer
-                    question={questionObj}
-                    onAnswer={(answer) => {
+                  <BentoLearnCardV2
+                    question={{
+                      id: questionObj.id || 'assessment',
+                      number: 1,
+                      text: questionObj.content || questionObj.question || '',
+                      type: questionObj.type,
+                      options: questionObj.options || [],
+                      correctAnswer: questionObj.correct_answer || questionObj.correctAnswer || '',
+                      image: questionObj.visual || questionObj.visualElements?.description,
+                      hint: questionObj.hint,
+                      xpReward: 20
+                    }}
+                    onAnswerSubmit={(answer) => {
                       console.log('📝 Setting assessment answer:', {
                         answer,
                         answerType: typeof answer,
@@ -1298,32 +1309,29 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
                       });
                       setAssessmentAnswer(answer);
                       setAssessmentAnswerSet(true);
-                      // Note: Auto-submit is handled by useEffect to ensure state is updated
+                      handleAssessmentSubmit();
                     }}
-                    disabled={showAssessmentResult}
-                    showFeedback={showAssessmentResult}
-                    theme={theme}
+                    onNextQuestion={() => {
+                      setPhase('complete');
+                    }}
+                    progress={{
+                      current: 1,
+                      total: 1,
+                      score: 0
+                    }}
+                    feedback={showAssessmentResult ? {
+                      isCorrect: assessmentIsCorrect,
+                      message: assessmentIsCorrect ? 'Excellent work!' : `The correct answer is ${questionObj.correct_answer || questionObj.correctAnswer || 'shown above'}`
+                    } : undefined}
+                    gradeLevel={student.grade_level}
+                    subject={skill?.subject || 'Learning'}
+                    skill={skill?.name || 'Assessment'}
+                    userId={student.id}
+                    companionId={selectedCharacter}
+                    totalXP={profile?.xp || 0}
                   />
                 );
               })()}
-              
-              {/* Submit button for question types that need manual submission */}
-              {!showAssessmentResult && assessmentAnswerSet && 
-               convertedAssessment && (
-                convertedAssessment.type === 'numeric' || 
-                convertedAssessment.type === 'counting' || 
-                convertedAssessment.type === 'short_answer' || 
-                convertedAssessment.type === 'fill_blank' ||
-                convertedAssessment.type === 'long_answer' ||
-                convertedAssessment.type === 'open_ended' ||
-                convertedAssessment.type === 'code_completion') && (
-                <button 
-                  className={`${buttonStyles.primary} ${buttonStyles.learnVariant}`}
-                  onClick={handleAssessmentSubmit}
-                >
-                  Submit Answer
-                </button>
-              )}
               
               {showAssessmentResult && (
                 <>

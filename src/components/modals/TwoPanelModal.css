@@ -408,30 +408,87 @@
 /* Mobile breakpoint */
 @media (max-width: 768px) {
   .modal-container {
-    flex-direction: column;
+    flex-direction: row; /* Keep horizontal layout */
+    position: relative;
   }
   
-  .two-panel-modal:not(.sidebar-collapsed) .main-content-panel {
-    width: 100%;
-    max-width: 100%;
-    height: calc(100vh - 200px);
-  }
-  
-  .gamification-sidebar {
+  /* Main content takes full width on mobile */
+  .main-content-panel {
     width: 100% !important;
-    min-width: 100% !important;
-    height: 200px;
-    min-height: 200px;
+    max-width: 100% !important;
+    height: 100vh !important;
+    padding: 0 1rem !important; /* Reduce padding on mobile */
+  }
+  
+  /* Sidebar becomes an overlay on mobile */
+  .two-panel-modal:not(.sidebar-collapsed) .gamification-sidebar {
     position: fixed;
+    top: 0;
+    right: 0;
     bottom: 0;
+    width: 85% !important;
+    max-width: 320px !important;
+    height: 100vh !important;
+    z-index: 1000;
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.2);
+    animation: slideInRight 0.3s ease-out;
+  }
+  
+  /* Collapsed state - show toggle button only */
+  .two-panel-modal.sidebar-collapsed .gamification-sidebar {
+    position: fixed;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    width: auto !important;
+    min-width: auto !important;
+    height: auto !important;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+  }
+  
+  /* Add overlay when sidebar is open */
+  .two-panel-modal:not(.sidebar-collapsed)::before {
+    content: '';
+    position: fixed;
+    top: 0;
     left: 0;
     right: 0;
-    z-index: 101;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    animation: fadeIn 0.3s ease-out;
   }
-  
-  .gamification-sidebar.collapsed {
-    height: 50px;
-    min-height: 50px;
+}
+
+/* Mobile overlay for closing sidebar */
+.mobile-overlay {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-overlay {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    animation: fadeIn 0.3s ease-out;
+    cursor: pointer;
+  }
+}
+
+/* Mobile animations */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
   }
 }
 

@@ -1616,55 +1616,76 @@ export const AILearnContainer: React.FC<AILearnContainerProps> = ({
                     </button>
                   ))}
                 </div>
-                {/* Submit button for multiple choice */}
+                {/* Submit/Next button for multiple choice */}
                 <div style={{ marginTop: '2rem', textAlign: 'center' }}>
-                  <button
-                    onClick={() => {
-                      const currentAnswer = practiceAnswers[currentPractice];
-                      if (showFeedback) {
-                        // Next question functionality - reset feedback state  
+                  {!showFeedback ? (
+                    // Submit Answer Button
+                    <button
+                      onClick={() => {
+                        const currentAnswer = practiceAnswers[currentPractice];
+                        if (currentAnswer !== undefined) {
+                          handlePracticeAnswer(currentPractice, currentAnswer);
+                        }
+                      }}
+                      disabled={userAnswer === undefined}
+                      style={{
+                        padding: '1.5rem 3rem',
+                        fontSize: '1.5rem',
+                        background: userAnswer === undefined 
+                          ? '#9ca3af'
+                          : 'linear-gradient(135deg, #4f46e5, #7c3aed)',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '0.75rem',
+                        cursor: userAnswer === undefined ? 'not-allowed' : 'pointer',
+                        fontWeight: '700',
+                        boxShadow: '0 4px 12px rgba(79, 70, 229, 0.25)',
+                        transition: 'all 0.3s ease',
+                      }}
+                      onMouseEnter={(e) => {
+                        if (userAnswer !== undefined) {
+                          e.currentTarget.style.transform = 'scale(1.05)';
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'scale(1)';
+                      }}
+                    >
+                      Submit Answer
+                    </button>
+                  ) : (
+                    // Next Question Button (only shows after feedback)
+                    <button
+                      onClick={() => {
                         setShowPracticeFeedback(prev => ({ ...prev, [currentPractice]: false }));
                         if (currentPractice < content.practice.length - 1) {
                           setCurrentPractice(currentPractice + 1);
                         } else {
-                          // After practice (diagnostic), move to instruction/lesson
                           handlePracticeComplete();
                         }
-                      } else if (currentAnswer !== undefined) {
-                        // Submit answer functionality
-                        handlePracticeAnswer(currentPractice, currentAnswer);
-                      }
-                    }}
-                    disabled={!showFeedback && userAnswer === undefined}
-                    style={{
-                      padding: '1.5rem 2rem',
-                      fontSize: '1.5rem',
-                      background: !showFeedback && userAnswer === undefined 
-                        ? '#9ca3af'
-                        : showFeedback 
-                          ? 'linear-gradient(135deg, #10b981, #059669)'
-                          : 'linear-gradient(135deg, #4f46e5, #7c3aed)',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '0.75rem',
-                      cursor: !showFeedback && userAnswer === undefined ? 'not-allowed' : 'pointer',
-                      fontWeight: '700',
-                      boxShadow: showFeedback 
-                        ? '0 4px 12px rgba(16, 185, 129, 0.25)'
-                        : '0 4px 12px rgba(79, 70, 229, 0.25)',
-                      transition: 'all 0.3s ease',
-                    }}
-                    onMouseEnter={(e) => {
-                      if (userAnswer !== undefined) {
+                      }}
+                      style={{
+                        padding: '1.5rem 3rem',
+                        fontSize: '1.5rem',
+                        background: 'linear-gradient(135deg, #10b981, #059669)',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '0.75rem',
+                        cursor: 'pointer',
+                        fontWeight: '700',
+                        boxShadow: '0 4px 12px rgba(16, 185, 129, 0.25)',
+                        transition: 'all 0.3s ease',
+                      }}
+                      onMouseEnter={(e) => {
                         e.currentTarget.style.transform = 'scale(1.05)';
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = 'scale(1)';
-                    }}
-                  >
-                    {showFeedback ? 'Next Question →' : 'Submit'}
-                  </button>
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'scale(1)';
+                      }}
+                    >
+                      {currentPractice < content.practice.length - 1 ? 'Next Question →' : 'Continue to Lesson →'}
+                    </button>
+                  )}
                 </div>
               </>
             )}
@@ -1772,7 +1793,7 @@ export const AILearnContainer: React.FC<AILearnContainerProps> = ({
                       e.currentTarget.style.transform = 'scale(1)';
                     }}
                   >
-                    {showFeedback ? 'Next Question →' : 'Submit'}
+                    {!showFeedback ? 'Submit Answer' : (currentPractice < content.practice.length - 1 ? 'Next Question →' : 'Continue to Lesson →')}
                   </button>
                 </div>
               </>
@@ -1854,7 +1875,7 @@ export const AILearnContainer: React.FC<AILearnContainerProps> = ({
                       e.currentTarget.style.transform = 'scale(1)';
                     }}
                   >
-                    {showFeedback ? 'Next Question →' : 'Submit'}
+                    {!showFeedback ? 'Submit Answer' : (currentPractice < content.practice.length - 1 ? 'Next Question →' : 'Continue to Lesson →')}
                   </button>
                 </div>
                 <div style={{ marginTop: '1rem', fontSize: '1rem', color: theme === 'dark' ? '#9ca3af' : '#6b7280' }}>
@@ -1940,7 +1961,7 @@ export const AILearnContainer: React.FC<AILearnContainerProps> = ({
                       e.currentTarget.style.transform = 'scale(1)';
                     }}
                   >
-                    {showFeedback ? 'Next Question →' : 'Submit'}
+                    {!showFeedback ? 'Submit Answer' : (currentPractice < content.practice.length - 1 ? 'Next Question →' : 'Continue to Lesson →')}
                   </button>
                 </div>
                 <div style={{ marginTop: '1rem', fontSize: '0.9rem', color: theme === 'dark' ? '#9ca3af' : '#6b7280' }}>
@@ -2026,7 +2047,7 @@ export const AILearnContainer: React.FC<AILearnContainerProps> = ({
                       transition: 'all 0.3s ease'
                     }}
                   >
-                    {showFeedback ? 'Next Question →' : 'Submit'}
+                    {!showFeedback ? 'Submit Answer' : (currentPractice < content.practice.length - 1 ? 'Next Question →' : 'Continue to Lesson →')}
                   </button>
                 </div>
               </div>

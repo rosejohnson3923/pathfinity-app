@@ -95,7 +95,11 @@ ${this.getQualityChecklist()}
 Remember:
 1. EVERY question MUST have ALL mandatory fields
 2. correct_answer format MUST match the question type
-3. visual field is ALWAYS required (use "❓" or null for text-only)
+3. visual field is ALWAYS required:
+   - For shape questions: Use shape emojis (▲ ■ ● ◆)
+   - For warning signs: Use ⚠️ or 🔺
+   - For counting: Use object emojis
+   - ONLY use "❓" for pure text questions with no visual element
 4. Practice questions MUST include complete practiceSupport structure
 5. Use ONLY the allowed question types for ${subject} grade ${grade}
 6. ${subject === 'ELA' ? 'NEVER use counting type for ELA' : ''}
@@ -186,7 +190,7 @@ RESPONSE FORMAT (JSON)
     {
       "question": "Practice question text",
       "type": "One of: ${allowedTypes.join(', ')}",
-      "visual": "REQUIRED - use \\"❓\\" for text-only",
+      "visual": "REQUIRED - For shapes use emojis (▲ ■ ● ◆), for objects use relevant emojis, use \\"❓\\" ONLY for pure text questions",
       "options": ["A", "B", "C", "D"] // ONLY for multiple_choice
       "correct_answer": "Format based on type (see universal rules)",
       "hint": "Single helpful hint",
@@ -206,7 +210,7 @@ RESPONSE FORMAT (JSON)
   "assessment": {
     "question": "Final assessment question",
     "type": "Appropriate type from allowed list",
-    "visual": "REQUIRED field",
+    "visual": "REQUIRED - Use appropriate emojis (shapes: ▲■●◆, warning signs: ⚠️🔺, objects: relevant emojis)",
     "options": [/* if multiple_choice */],
     "correct_answer": "Format based on type",
     "explanation": "Detailed explanation",
@@ -287,7 +291,11 @@ FINAL QUALITY CHECK
 Before generating, verify:
 ✓ All questions have ALL mandatory fields
 ✓ correct_answer format matches type EXACTLY
-✓ visual field present in EVERY question
+✓ visual field present in EVERY question with appropriate content:
+  • Shape questions → shape emojis (▲■●◆)
+  • Warning/sign questions → relevant emojis (⚠️🔺)
+  • Counting questions → object emojis
+  • Pure text questions → "❓" placeholder
 ✓ NO forbidden types used (e.g., counting for ELA)
 ✓ Practice questions have COMPLETE practiceSupport
 ✓ Career context integrated naturally

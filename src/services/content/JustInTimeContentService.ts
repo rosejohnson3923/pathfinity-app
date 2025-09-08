@@ -657,8 +657,8 @@ export class JustInTimeContentService {
     };
     
     const career = context.career ? {
-      name: context.career,
-      description: context.careerDescription || `${context.career} professional`
+      name: typeof context.career === 'string' ? context.career : context.career.name || context.career.title,
+      description: context.careerDescription || (typeof context.career === 'string' ? `${context.career} professional` : context.career.description || `${context.career.name || context.career.title} professional`)
     } : undefined;
     
     console.log('[JIT] 📚 Calling AI service with:', {

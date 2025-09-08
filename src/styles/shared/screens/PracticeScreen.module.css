@@ -11,9 +11,10 @@
    PRACTICE PHASE CONTAINER
    ============================================ */
 .practicePhase {
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: var(--space-6);
+  padding: 0;
   animation: fadeIn var(--duration-base) var(--easing-out);
 }
 
@@ -27,6 +28,7 @@
 .practiceHeader {
   text-align: center;
   margin-bottom: var(--space-8);
+  padding: 0 var(--space-6);
   animation: slideDown var(--duration-moderate) var(--easing-out);
 }
 
@@ -169,6 +171,8 @@
 /* Single question display (one at a time) */
 .questionWrapper {
   width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
   animation: questionSlide var(--duration-moderate) var(--easing-out);
 }
 
@@ -201,7 +205,8 @@
   justify-content: center;
   gap: var(--space-4);
   margin-top: var(--space-8);
-  padding-top: var(--space-6);
+  padding: var(--space-6);
+  padding-bottom: 0;
   border-top: 1px solid var(--border-color-soft);
 }
 

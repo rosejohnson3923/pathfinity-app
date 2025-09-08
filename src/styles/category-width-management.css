@@ -288,6 +288,16 @@ html, body, #root {
   /* Remove height constraints to allow scrolling */
 }
 
+/* AssessmentPhase - Allow natural flow and scrolling */
+.assessmentPhase,
+[class*="assessmentPhase"],
+[class*="assessment-phase"] {
+  min-height: auto !important;
+  height: auto !important;
+  overflow: visible !important;
+  justify-content: flex-start !important;
+}
+
 /* Dashboard headers should match dashboard width */
 .dashboard-page header,
 .dashboard-page .header,
