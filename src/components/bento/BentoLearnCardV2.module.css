@@ -26,6 +26,9 @@
   gap: 20px;
   flex-shrink: 0;
   overflow: visible;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .dockGroupSupport,
@@ -111,6 +114,7 @@
   overflow-y: auto;
   overflow-x: hidden;
   min-height: 0;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
 }
 
 /* Question Section */
@@ -125,37 +129,81 @@
   min-height: 200px;
   display: flex;
   flex-direction: column;
+  overflow: visible; /* Changed from hidden to allow content visibility */
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.questionHeader {
+/* Compact progress indicator with dots */
+.progressIndicator {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  margin-bottom: 24px;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.progressDots {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.dot.completed {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.dot.active {
+  background: white;
+  width: 10px;
+  height: 10px;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+.progressLabel {
+  font-size: 9px;
+  opacity: 0.6;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Old header - hidden */
+.questionHeader {
+  display: none;
 }
 
 .questionLabel {
-  font-size: 14px;
-  font-weight: 600;
-  text-transform: uppercase;
-  opacity: 0.9;
-  display: block;
-  white-space: normal;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: none;
+  opacity: 0.8;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
   writing-mode: horizontal-tb !important;
   text-orientation: mixed !important;
-  width: 100%;
+  width: auto;
 }
 
 .questionType {
-  font-size: 12px;
-  padding: 4px 12px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
+  font-size: 10px;
+  padding: 2px 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
   text-transform: capitalize;
   display: inline-block;
   white-space: nowrap;
+  opacity: 0.7;
   writing-mode: horizontal-tb !important;
   text-orientation: mixed !important;
 }
@@ -238,6 +286,8 @@
   flex: 0 0 auto;
   max-height: 35vh;
   overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 .answersGrid {
@@ -767,9 +817,11 @@
 }
 
 .progressFill {
+  position: relative;
   height: 100%;
   background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);
   transition: width 0.3s ease;
+  border-radius: 4px;
 }
 
 .scoreDisplay {
@@ -1110,24 +1162,60 @@
 /* Responsive Design - Mobile First Approach */
 @media (max-width: 768px) {
   .bentoContainerV2 {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto minmax(0, 1fr);
-    padding: 12px;
-    gap: 12px;
-  }
-  
-  .bentoContainerV2[data-active-dock]:not([data-active-dock="none"]) {
-    grid-template-rows: auto minmax(0, 1fr) 200px;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    max-height: 100vh;
+    padding: 0;
+    gap: 0;
+    overflow: hidden;
   }
   
   .mainContent {
-    grid-column: 1;
+    flex: 1;
+    padding: 12px;
     max-width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .questionSection {
+    min-height: auto;
+    padding: 20px;
+  }
+  
+  .answerSection {
+    max-height: none;
+    overflow: visible;
   }
   
   .horizontalDock {
     padding: 12px;
     flex-wrap: wrap;
+  }
+  
+  /* Ensure progress bar elements are properly styled in mobile */
+  .progressBar {
+    display: block;
+    padding: 12px;
+    margin: 0;
+  }
+  
+  .progressTrack {
+    overflow: hidden;
+    position: relative;
+    height: 6px;
+  }
+  
+  .progressFill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    transition: width 0.3s ease;
+    background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);
   }
   
   .dockGroupSupport,
@@ -1203,36 +1291,351 @@
   }
 }
 
-/* Small mobile screens (375px and below) */
-@media (max-width: 375px) {
-  .countingEmojiLarge {
-    font-size: 32px !important;
-    letter-spacing: 2px !important;
-    padding: 8px !important;
-    display: block !important;
-    text-align: center !important;
-    width: 100% !important;
+/* Small to medium mobile screens (376px to 480px) */
+@media (min-width: 376px) and (max-width: 480px) {
+  .bentoContainerV2 {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    max-height: 100vh;
+    padding: 0;
+    gap: 0;
+    overflow: hidden;
   }
   
-  .questionLabel {
-    font-size: 11px !important;
-    padding: 0 4px;
+  .mainContent {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0;
+    -webkit-overflow-scrolling: touch;
   }
   
-  .questionType {
-    font-size: 10px !important;
-    padding: 2px 6px !important;
+  .questionSection {
+    padding: 16px !important;
+    min-height: auto !important;
+  }
+  
+  .answerSection {
+    padding: 12px;
+    max-height: none !important;
+    overflow: visible !important;
+    flex: 0 0 auto;
   }
   
   .answersGrid {
     grid-template-columns: 1fr !important;
     gap: 8px !important;
-    padding: 0 4px !important;
   }
   
   .answerOption {
     padding: 12px !important;
     font-size: 14px !important;
+    min-height: 44px !important;
+  }
+  
+  .horizontalDock {
+    padding: 10px;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .dockItem {
+    padding: 8px 12px;
+  }
+}
+
+/* Small mobile screens (375px and below - iPhone SE) */
+@media screen and (max-width: 375px) {
+  /* Container fixes for small screens */
+  .bentoContainerV2 {
+    padding: 0;
+    gap: 0;
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .mainContent {
+    padding: 0 !important;
+    overflow: hidden !important;
+    flex: 1;
+    min-height: 0;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+    position: relative !important;
+  }
+  
+  /* Fix horizontal dock overlapping content */
+  .horizontalDock {
+    position: relative !important;
+    z-index: 1 !important;
+    background: var(--bg-elevated) !important;
+    padding: 8px !important;
+    flex-shrink: 0 !important;
+  }
+  
+  /* Question section with fixed height and scroll */
+  .questionSection {
+    padding: 12px !important;
+    height: 40vh !important;
+    max-height: 40vh !important;
+    min-height: 40vh !important;
+    margin: 0 !important;
+    color: white !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    flex: 0 0 40vh !important;
+    z-index: 1 !important;
+    position: relative !important;
+    background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    order: 1 !important;
+  }
+  
+  /* Answer section with remaining height and scroll */
+  .answerSection {
+    padding: 12px !important;
+    height: auto !important;
+    max-height: 60vh !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    flex: 1 1 auto !important;
+    position: relative !important;
+    z-index: 1 !important;
+    margin: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    order: 2 !important;
+    background: var(--bg-primary) !important;
+    width: 100% !important;
+    border-top: 2px solid var(--border-color) !important;
+  }
+  
+  /* Progress indicator adjustments */
+  .progressIndicator {
+    margin-bottom: 8px;
+  }
+  
+  .progressDots {
+    gap: 4px;
+  }
+  
+  .dot {
+    width: 6px;
+    height: 6px;
+  }
+  
+  .dot.active {
+    width: 8px;
+    height: 8px;
+  }
+  
+  .progressLabel {
+    font-size: 8px;
+  }
+  
+  /* Question content */
+  .questionContent {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 12px !important;
+    padding: 8px !important;
+    width: 100% !important;
+    min-height: 120px !important;
+    height: auto !important;
+    overflow: visible !important;
+    position: relative !important;
+    z-index: 15 !important;
+  }
+  
+  .questionContent > * {
+    flex-shrink: 0 !important;
+  }
+  
+  .questionContent h2 {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  /* Fix question text visibility within scrollable container */
+  .questionText {
+    display: block !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    line-height: 1.4 !important;
+    color: #FFFFFF !important;
+    text-shadow: 
+      2px 2px 4px rgba(0, 0, 0, 0.9),
+      -1px -1px 2px rgba(0, 0, 0, 0.9) !important;
+    text-align: center !important;
+    padding: 12px !important;
+    margin: 8px 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    white-space: normal !important;
+    min-height: auto !important;
+    height: auto !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 1 !important;
+    background: rgba(0, 0, 0, 0.2) !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 8px !important;
+  }
+  
+  /* Ensure question content container is visible */
+  .questionContent {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    min-height: auto !important;
+    padding: 0 !important;
+    position: relative !important;
+    z-index: 1 !important;
+  }
+  
+  /* Make sure the question section shows content */
+  .questionSection .questionContent > * {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  /* Fallback for h2 question text */
+  .questionSection h2,
+  .questionContent h2 {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    color: #FFFFFF !important;
+    font-size: 20px !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8) !important;
+    margin: 8px 0 !important;
+    padding: 8px !important;
+    width: 100% !important;
+    text-align: center !important;
+  }
+  
+  
+  .countingVisualPrimary {
+    min-height: 40px !important;
+    max-height: 60px !important;
+    margin-bottom: 4px !important;
+    flex-shrink: 0 !important;
+  }
+  
+  .countingEmojiLarge {
+    font-size: 24px !important;
+    letter-spacing: 2px !important;
+    padding: 4px !important;
+    display: flex !important;
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  /* Ensure text shows for counting questions */
+  .counting .questionText {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  .counting .questionContent {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  
+  .counting .countingVisualPrimary {
+    flex-shrink: 0 !important;
+  }
+  
+  .questionLabel {
+    font-size: 10px !important;
+    padding: 0 2px;
+  }
+  
+  .questionType {
+    font-size: 9px !important;
+    padding: 1px 4px !important;
+  }
+  
+  /* Answer grid fixes */
+  .answersGrid {
+    grid-template-columns: 1fr !important;
+    gap: 6px !important;
+    padding: 0 !important;
+    margin-bottom: 8px !important;
+    margin-top: 0 !important;
+    width: 100% !important;
+    position: relative !important;
+    display: grid !important;
+  }
+  
+  .answerOption {
+    padding: 10px 8px !important;
+    font-size: 13px !important;
+    min-height: 44px !important;
+    width: 100% !important;
+  }
+  
+  .optionLabel {
+    font-size: 12px !important;
+  }
+  
+  .optionText {
+    font-size: 13px !important;
+  }
+  
+  /* Dock adjustments */
+  .horizontalDock {
+    padding: 8px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  
+  .dockItem {
+    padding: 6px;
+    min-width: 45px;
+  }
+  
+  .dockLabel {
+    font-size: 8px;
+  }
+  
+  /* Action buttons */
+  .submitButton,
+  .nextButton {
+    padding: 10px 16px !important;
+    font-size: 14px !important;
+    width: 100% !important;
+  }
+  
+  /* Expanded panel */
+  .expandedPanel {
+    max-height: 180px !important;
+    margin: 8px !important;
+    padding: 10px !important;
   }
 }
 
@@ -1317,5 +1720,74 @@
     --color-text: #F9FAFB;
     --color-text-secondary: #D1D5DB;
     --color-hover: #4B5563;
+  }
+}
+
+/* CRITICAL: iPhone SE (375x667) specific overrides - MUST BE LAST */
+@media only screen and (max-width: 375px) {
+  .bentoContainerV2 .mainContent {
+    display: flex !important;
+    flex-direction: column !important;
+    height: calc(100vh - 60px) !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    gap: 0 !important;
+  }
+  
+  .bentoContainerV2 .questionSection {
+    flex: 0 0 35vh !important;
+    height: 35vh !important;
+    max-height: 35vh !important;
+    min-height: 35vh !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding: 12px !important;
+    margin: 0 !important;
+    background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+  }
+  
+  .bentoContainerV2 .questionSection .questionText {
+    display: block !important;
+    color: #FFFFFF !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    padding: 12px !important;
+    margin: 8px 0 !important;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.9) !important;
+    background: rgba(0,0,0,0.3) !important;
+    border-radius: 8px !important;
+    width: 100% !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 1 !important;
+  }
+  
+  .bentoContainerV2 .answerSection {
+    flex: 1 1 auto !important;
+    height: auto !important;
+    max-height: calc(65vh - 60px) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding: 12px !important;
+    margin: 0 !important;
+    background: var(--bg-primary) !important;
+    border-top: 2px solid var(--border-color) !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  
+  .bentoContainerV2 .answersGrid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
 }

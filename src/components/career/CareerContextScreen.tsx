@@ -4,7 +4,7 @@
  * Features particle effects and professional animations
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, memo } from 'react';
 import { useTheme } from '../../hooks/useTheme';
 import { careerContextConverter } from '../../services/content/CareerContextConverter';
 import './CareerContextScreen.css';
@@ -74,7 +74,7 @@ class Particle {
   }
 }
 
-export const CareerContextScreen: React.FC<CareerContextScreenProps> = ({
+const CareerContextScreenComponent: React.FC<CareerContextScreenProps> = ({
   instruction,
   studentName,
   careerName,
@@ -88,8 +88,7 @@ export const CareerContextScreen: React.FC<CareerContextScreenProps> = ({
   audioUrl,
   autoPlayAudio = true
 }) => {
-  // Debug: Log that component is rendering
-  console.log('🎯 CareerContextScreen rendering');
+  // Component render tracking disabled to reduce console noise
   const { theme } = useTheme();
   const [isVisible, setIsVisible] = useState(true);
   const [isAnimatingOut, setIsAnimatingOut] = useState(false);
@@ -388,3 +387,6 @@ export const CareerContextScreen: React.FC<CareerContextScreenProps> = ({
     </div>
   );
 };
+
+// Memoize the component to prevent unnecessary re-renders
+export const CareerContextScreen = memo(CareerContextScreenComponent);

@@ -30,16 +30,10 @@ export const CompanionChatBox = React.forwardRef<any, CompanionChatBoxProps>(({
 
   // Show message when received
   useEffect(() => {
-    console.log('💬 Companion Chat Box: useEffect triggered', {
-      message,
-      hasText: message?.text ? true : false,
-      messageText: message?.text,
-      currentMessage,
-      isVisible
-    });
+    // Debug: useEffect triggered (disabled to reduce console noise)
     
     if (message && message.text) {
-      console.log('💬 Companion Chat Box: Displaying message:', message.text);
+      // Debug: Displaying message
       setCurrentMessage(message.text);
       setIsVisible(true);
 
@@ -49,7 +43,7 @@ export const CompanionChatBox = React.forwardRef<any, CompanionChatBoxProps>(({
           clearTimeout(hideTimeoutRef.current);
         }
         hideTimeoutRef.current = setTimeout(() => {
-          console.log('💬 Companion Chat Box: Auto-hiding message');
+          // Debug: Auto-hiding message
           setIsVisible(false);
         }, autoHideDelay);
       }
@@ -60,7 +54,7 @@ export const CompanionChatBox = React.forwardRef<any, CompanionChatBoxProps>(({
   // Expose method to add messages programmatically
   React.useImperativeHandle(ref, () => ({
     showMessage: (text: string) => {
-      console.log('💬 Companion Chat Box: showMessage called via ref with:', text);
+      // Debug: showMessage called via ref
       setCurrentMessage(text);
       setIsVisible(true);
       
@@ -69,13 +63,13 @@ export const CompanionChatBox = React.forwardRef<any, CompanionChatBoxProps>(({
           clearTimeout(hideTimeoutRef.current);
         }
         hideTimeoutRef.current = setTimeout(() => {
-          console.log('💬 Companion Chat Box: Auto-hiding message (ref method)');
+          // Debug: Auto-hiding message (ref method)
           setIsVisible(false);
         }, autoHideDelay);
       }
     },
     hide: () => {
-      console.log('💬 Companion Chat Box: hide called via ref');
+      // Debug: hide called via ref
       setIsVisible(false);
     }
   }));
@@ -91,19 +85,14 @@ export const CompanionChatBox = React.forwardRef<any, CompanionChatBoxProps>(({
     return companions[companionName] || companionEmoji;
   };
 
-  // Debug logging for render
-  console.log('💬 Companion Chat Box: Render check', {
-    isVisible,
-    currentMessage,
-    willRender: isVisible && currentMessage
-  });
+  // Debug logging for render (disabled to reduce console noise)
 
   if (!isVisible || !currentMessage) {
-    console.log('💬 Companion Chat Box: Not rendering - isVisible:', isVisible, 'currentMessage:', currentMessage);
+    // Debug: Not rendering
     return null;
   }
 
-  console.log('💬 Companion Chat Box: RENDERING COMPONENT TO DOM');
+  // Debug: Rendering component to DOM
 
   return (
     <div 

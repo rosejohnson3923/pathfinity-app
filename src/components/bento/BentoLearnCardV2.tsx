@@ -65,7 +65,14 @@ export const BentoLearnCardV2: React.FC<BentoLearnCardV2Props> = ({
   companionId = 'finn',
   totalXP = 0
 }) => {
-  console.log('🎨 BentoLearnCardV2 is being used for practice questions');
+  // Debug: Log received question (disabled)
+  // console.log('🎯 BentoLearnCardV2 received question:', {
+  //   text: question.text,
+  //   type: question.type,
+  //   image: question.image,
+  //   hasText: !!question.text,
+  //   textLength: question.text?.length
+  // });
   const { theme } = useTheme();
   const [selectedAnswer, setSelectedAnswer] = useState<string | string[]>('');
   const [showHint, setShowHint] = useState(false);
@@ -86,6 +93,23 @@ export const BentoLearnCardV2: React.FC<BentoLearnCardV2Props> = ({
   
   const chatEndRef = useRef<HTMLDivElement>(null);
   const displayModalRef = useRef<HTMLDivElement>(null);
+  
+  // Detect iPhone SE specifically
+  const [isIPhoneSE, setIsIPhoneSE] = useState(false);
+  
+  useEffect(() => {
+    const checkIPhoneSE = () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const isIOS = /iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      // iPhone SE has 375x667 viewport
+      setIsIPhoneSE(isIOS && width === 375 && height === 667);
+    };
+    
+    checkIPhoneSE();
+    window.addEventListener('resize', checkIPhoneSE);
+    return () => window.removeEventListener('resize', checkIPhoneSE);
+  }, []);
   
   // Get gamification data on mount
   useEffect(() => {
@@ -267,12 +291,44 @@ export const BentoLearnCardV2: React.FC<BentoLearnCardV2Props> = ({
       </div>
       
       {/* Main Question & Answer Area */}
-      <div className={styles.mainContent}>
+      <div className={styles.mainContent} style={isIPhoneSE ? {
+        display: 'flex',
+        flexDirection: 'column',
+        height: 'calc(100vh - 120px)',
+        overflow: 'hidden',
+        padding: 0,
+        gap: 0
+      } : {}}>
         {/* Question Section */}
-        <div className={`${styles.questionSection} ${styles[question.type]}`}>
-          <div className={styles.questionHeader}>
-            <span className={styles.questionLabel}>Question {question.number}</span>
-            <span className={styles.questionType}>{question.type.replace('_', ' ')}</span>
+        <div className={`${styles.questionSection} ${styles[question.type]}`} style={isIPhoneSE ? {
+          flex: '0 0 40%',
+          height: '40%',
+          maxHeight: '40%',
+          minHeight: '40%',
+          overflowY: 'auto',
+          overflowX: 'hidden',
+          padding: '12px',
+          margin: 0,
+          background: 'linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+          position: 'relative'
+        } : {}}>
+          {/* Compact progress dots with label */}
+          <div className={styles.progressIndicator}>
+            <div className={styles.progressDots}>
+              {Array.from({ length: progress.total }, (_, i) => (
+                <span 
+                  key={i}
+                  className={`${styles.dot} ${i < progress.current ? styles.completed : ''} ${i === progress.current - 1 ? styles.active : ''}`}
+                />
+              ))}
+            </div>
+            <span className={styles.progressLabel}>
+              Practice {progress.current} of {progress.total}
+            </span>
           </div>
           
           <div className={styles.questionContent}>
@@ -287,8 +343,26 @@ export const BentoLearnCardV2: React.FC<BentoLearnCardV2Props> = ({
               </div>
             )}
             
-            <h2 className={`${styles.questionText} ${gradeCategory === 'elementary' ? styles.questionTextLarge : ''}`}>
-              {question.text}
+            <h2 className={`${styles.questionText} ${gradeCategory === 'elementary' ? styles.questionTextLarge : ''}`}
+                style={isIPhoneSE ? {
+                  display: 'block',
+                  color: '#FFFFFF',
+                  fontSize: '16px',
+                  fontWeight: '600',
+                  textAlign: 'center',
+                  padding: '8px',
+                  margin: '4px 0',
+                  textShadow: '2px 2px 4px rgba(0,0,0,0.9)',
+                  background: 'rgba(0,0,0,0.2)',
+                  borderRadius: '8px',
+                  width: '100%',
+                  boxSizing: 'border-box',
+                  position: 'static',
+                  zIndex: 'auto',
+                  visibility: 'visible',
+                  opacity: 1
+                } : {}}>
+              {question.text || 'Loading question...'}
             </h2>
             
             {/* For non-counting questions, show image as supplementary */}
@@ -305,7 +379,20 @@ export const BentoLearnCardV2: React.FC<BentoLearnCardV2Props> = ({
         </div>
         
         {/* Answer Section */}
-        <div className={styles.answerSection}>
+        <div className={styles.answerSection} style={isIPhoneSE ? {
+          flex: '1 1 60%',
+          height: '60%',
+          maxHeight: '60%',
+          overflowY: 'auto',
+          overflowX: 'hidden',
+          padding: '12px',
+          margin: 0,
+          background: 'var(--bg-primary)',
+          borderTop: '2px solid var(--border-color)',
+          display: 'flex',
+          flexDirection: 'column',
+          position: 'relative'
+        } : {}}>
           <div className={styles.answersGrid}>
             {question.options && question.options.length > 0 ? (
               question.options.slice(0, 4).map((option, index) => {

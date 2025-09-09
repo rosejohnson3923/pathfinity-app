@@ -537,7 +537,9 @@ export class ContentGenerationPipeline {
   // ================================================================
 
   private getCacheKey(request: ContentGenerationRequest): string {
-    return `${request.userId}_${request.subject}_${request.topic}_${request.skill.id}`;
+    // Include career in cache key to prevent content mismatch
+    const careerPart = request.career ? `_${request.career.id}` : '';
+    return `${request.userId}_${request.subject}_${request.topic}_${request.skill.id}${careerPart}`;
   }
 
   private getCachedContent(request: ContentGenerationRequest): GeneratedContent | null {

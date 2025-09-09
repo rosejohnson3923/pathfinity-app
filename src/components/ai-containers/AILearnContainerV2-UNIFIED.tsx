@@ -196,8 +196,14 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   // CONTENT GENERATION WITH RULES ENGINE
   // ================================================================
   
-  // Use a ref to track if content has been generated
+  // Use a ref and session storage to track if content has been generated
+  // This prevents double-generation in React.StrictMode
+  const sessionKey = `learn-content-${student?.id}-${skill?.id}-${characterId}`;
   const contentGeneratedRef = useRef(false);
+  const [hasGeneratedContent, setHasGeneratedContent] = useState(() => {
+    // Check if content was generated in this session
+    return sessionStorage.getItem(sessionKey) === 'true';
+  });
   
   // Notify parent of loading state changes
   useEffect(() => {
@@ -205,15 +211,17 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   }, [isLoading, onLoadingChange]);
   
   useEffect(() => {
-    // Reset the ref when dependencies change
+    // Reset the ref and session storage when dependencies change
     return () => {
+      sessionStorage.removeItem(sessionKey);
       contentGeneratedRef.current = false;
+      setHasGeneratedContent(false);
     };
-  }, [student?.id, skill?.id, characterId, selectedCareer?.id]);
+  }, [sessionKey]);
   
   useEffect(() => {
-    // Only generate content once per dependency change
-    if (contentGeneratedRef.current) {
+    // Only generate content once per session
+    if (contentGeneratedRef.current || hasGeneratedContent) {
       return;
     }
     
@@ -229,7 +237,7 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
     
     // Initialize PreGeneration cache warming when entering Learn container
     if (student?.id && student?.grade_level) {
-      console.log('🔥 Initiating cache warming for student:', student.id, 'Grade:', student.grade_level);
+      // Debug: Initiating cache warming
       preGenerationService.warmCacheForStudent(student.id, student.grade_level).catch(err => {
         console.error('Cache warming failed:', err);
       });
@@ -241,8 +249,7 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
     
     const generateContent = async () => {
       
-      // Clear cache on mount to test new visual generation
-      // TODO: Remove this after testing
+      // TEMPORARY: Force clear cache to fix career mismatch issue
       getJustInTimeContentService().clearCache();
       
       setIsLoading(true);
@@ -369,21 +376,22 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
         
         setContent(generatedContent);
         contentGeneratedRef.current = true; // Mark as generated AFTER content is set
+        setHasGeneratedContent(true);
+        sessionStorage.setItem(sessionKey, 'true');
         
         // Check if we have career context in the response
-        console.log('🎯 Content Set Successfully - ACTUAL STRUCTURE:', {
-          allKeys: Object.keys(generatedContent),
-          title: generatedContent.title,
-          greeting: generatedContent.greeting, 
-          concept: generatedContent.concept,
-          learning_goal: generatedContent.learning_goal,
-          introduction: generatedContent.introduction,
-          career_connection: generatedContent.career_connection,
-          hasCareerContext: !!generatedContent.career_context,
-          careerContext: generatedContent.career_context,
-          career: career,
-          fullGeneratedContent: JSON.stringify(generatedContent, null, 2)
-        });
+        // Debug: Content Set Successfully - ACTUAL STRUCTURE
+        // allKeys: Object.keys(generatedContent),
+        // title: generatedContent.title,
+        // greeting: generatedContent.greeting, 
+        // concept: generatedContent.concept,
+        // learning_goal: generatedContent.learning_goal,
+        // introduction: generatedContent.introduction,
+        // career_connection: generatedContent.career_connection,
+        // hasCareerContext: !!generatedContent.career_context,
+        // careerContext: generatedContent.career_context,
+        // career: career,
+        // fullGeneratedContent: JSON.stringify(generatedContent, null, 2)
         
         // For testing: Clear session storage if URL has ?clearCareerContext=true
         if (window.location.search.includes('clearCareerContext=true')) {
@@ -466,7 +474,7 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
     };
     
     generateContent();
-  }, [student?.id, skill?.id, characterId, selectedCareer?.id]); // Use IDs to prevent re-renders from object changes
+  }, [student?.id, skill?.id, characterId, selectedCareer?.id, sessionKey, hasGeneratedContent]); // Use IDs to prevent re-renders from object changes
   
   // Auto-submit effect for true_false and multiple_choice questions
   useEffect(() => {
@@ -931,17 +939,7 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
     return q.correct_answer;
   };
 
-  // Debug logging for render
-  console.log('🔍 AILearnContainerV2-UNIFIED Render Debug:', {
-    phase,
-    hasContent: !!content,
-    isLoading,
-    error,
-    skill: skill?.skill_name,
-    career: career?.name,
-    student: student?.display_name,
-    character: character?.name
-  });
+  // Debug logging for render (disabled to reduce console noise)
 
   return (
     <div className={`ai-learn-container container-learn phase-${phase}`} data-theme={theme}>
@@ -975,13 +973,7 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
       {/* XP Display removed - now shown in dock */}
       
       <div className="container-content">
-        {/* Debug instruction phase */}
-        {console.log('📍 Phase Check:', {
-          currentPhase: phase,
-          isLoading: isLoading,
-          hasContent: !!content,
-          willRenderCareerContext: phase === 'instruction'
-        })}
+        {/* Debug instruction phase (disabled to reduce console noise) */}
         
         {/* Loading Phase */}
         {phase === 'loading' && (
@@ -1018,11 +1010,6 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
         {phase === 'practice' && content && (
           <div className={practiceStyles.practicePhase}>
             <div className={questionStyles.questionCard}>
-              <div className={questionStyles.questionHeader}>
-                <span className={questionStyles.questionNumber}>
-                  Question {currentPracticeQuestion + 1} of {content.practice.length}
-                </span>
-              </div>
               <div className={questionStyles.progressDots}>
                 {content.practice.map((_, idx) => (
                   <div 
@@ -1050,6 +1037,15 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
                   });
                   return <div>Error: Question not found</div>;
                 }
+                
+                // Debug: Log question text (disabled)
+                // console.log('📝 Question text debug:', {
+                //   content: questionObj.content,
+                //   question: questionObj.question,
+                //   statement: questionObj.statement,
+                //   type: questionObj.type,
+                //   visual: questionObj.visual
+                // });
                 
                 // Feature flags for UI versions
                 const useBentoUI = true;
@@ -1101,20 +1097,20 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
                   );
                 } else if (useBentoUI) {
                   // Debug the question object
-                  console.log('🎯 BentoLearnCard Question Object:', {
-                    idx,
-                    questionObj,
-                    hasQuestion: !!questionObj.question,
-                    hasContent: !!questionObj.content,
-                    question: questionObj.question,
-                    content: questionObj.content,
-                    type: questionObj.type,
-                    options: questionObj.options,
-                    correctCount: questionObj.correctCount,
-                    visual: questionObj.visual,
-                    visualElements: questionObj.visualElements,
-                    allKeys: Object.keys(questionObj)
-                  });
+                  // console.log('🎯 BentoLearnCard Question Object:', {
+                  //   idx,
+                  //   questionObj,
+                  //   hasQuestion: !!questionObj.question,
+                  //   hasContent: !!questionObj.content,
+                  //   question: questionObj.question,
+                  //   content: questionObj.content,
+                  //   type: questionObj.type,
+                  //   options: questionObj.options,
+                  //   correctCount: questionObj.correctCount,
+                  //   visual: questionObj.visual,
+                  //   visualElements: questionObj.visualElements,
+                  //   allKeys: Object.keys(questionObj)
+                  // });
                   
                   return (
                     <BentoLearnCard
@@ -1302,11 +1298,7 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
                       xpReward: 20
                     }}
                     onAnswerSubmit={(answer) => {
-                      console.log('📝 Setting assessment answer:', {
-                        answer,
-                        answerType: typeof answer,
-                        questionType: questionObj.type
-                      });
+                      // Debug: Setting assessment answer
                       setAssessmentAnswer(answer);
                       setAssessmentAnswerSet(true);
                       handleAssessmentSubmit();

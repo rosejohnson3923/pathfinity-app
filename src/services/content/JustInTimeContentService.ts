@@ -432,6 +432,27 @@ export class JustInTimeContentService {
     this.sessionCache.clear();
     this.cacheHits = 0;
     this.cacheMisses = 0;
+    
+    // Also clear localStorage cache
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const keys = Object.keys(localStorage);
+      keys.forEach(key => {
+        if (key.startsWith('jit-cache-')) {
+          localStorage.removeItem(key);
+        }
+      });
+    }
+    
+    // Clear sessionStorage content keys
+    if (typeof window !== 'undefined' && window.sessionStorage) {
+      const keys = Object.keys(sessionStorage);
+      keys.forEach(key => {
+        if (key.includes('learn-content-') || key.includes('jit-')) {
+          sessionStorage.removeItem(key);
+        }
+      });
+    }
+    
     console.log('[JIT] All caches cleared');
   }
 
@@ -925,7 +946,11 @@ export class JustInTimeContentService {
       ? `-${perfContext.adaptationLevel}-${Math.round(perfContext.recentAccuracy)}`
       : '';
     
-    return `${request.userId}-${request.container}-${request.subject}${perfKey}`;
+    // Include career and skill in cache key to prevent content mismatch
+    const careerKey = request.context?.career ? `-${request.context.career}` : '';
+    const skillKey = request.context?.skill?.skill_number ? `-${request.context.skill.skill_number}` : '';
+    
+    return `${request.userId}-${request.container}-${request.subject}${careerKey}${skillKey}${perfKey}`;
   }
 
   /**
