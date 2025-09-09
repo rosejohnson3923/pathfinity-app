@@ -1,0 +1,371 @@
+/**
+ * GLOBAL AI CONTENT RESPONSIVE SYSTEM
+ * =====================================
+ * This file ensures ALL AI-generated content is responsive by default
+ * Handles runtime-generated elements from OpenAI API calls
+ * Provides device-agnostic responsive behavior
+ */
+
+/* ============================================
+   GLOBAL RESPONSIVE FOUNDATION
+   ============================================ */
+
+/* Ensure all containers are responsive by default */
+* {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Prevent character-by-character text breaking */
+h1, h2, h3, h4, h5, h6, p, span, div, a, button {
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+  min-width: 0; /* Allow flexbox items to shrink */
+}
+
+/* Dashboard specific fixes */
+[class*="greeting"], 
+[class*="dashboard-header"],
+[class*="welcome"] {
+  white-space: normal !important;
+  word-break: normal !important;
+  line-height: normal !important;
+  min-width: 0;
+}
+
+/* All AI-generated content containers */
+[class*="question"],
+[class*="answer"],
+[class*="content"],
+[class*="visual"],
+[class*="emoji"],
+[class*="grid"],
+[class*="container"] {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+}
+
+/* ============================================
+   AI-GENERATED TEXT CONTENT
+   ============================================ */
+
+/* All text elements should be responsive */
+h1, h2, h3, h4, h5, h6, p, span, div {
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+/* Question text - any variation */
+[class*="questionText"],
+[class*="question-text"],
+[class*="QuestionText"],
+h2[class*="question"],
+div[class*="question"] > p,
+div[class*="question"] > span {
+  font-size: clamp(0.875rem, 2.5vw + 0.5rem, 1.5rem);
+  line-height: 1.4;
+  word-wrap: break-word;
+  hyphens: auto;
+  max-width: 100%;
+}
+
+/* Large text variants */
+[class*="Large"],
+[class*="large"],
+[class*="LARGE"] {
+  font-size: clamp(1rem, 3vw + 0.5rem, 2rem);
+}
+
+/* ============================================
+   AI-GENERATED VISUAL CONTENT
+   ============================================ */
+
+/* Emoji displays - responsive sizing */
+[class*="emoji"],
+[class*="Emoji"],
+[class*="EMOJI"],
+[class*="counting"] [class*="emoji"],
+div[class*="visual"] span {
+  font-size: clamp(1.5rem, 8vw, 4rem);
+  line-height: 1.2;
+  display: inline-block;
+  padding: clamp(0.25rem, 1vw, 1rem);
+}
+
+/* Large emoji variants */
+[class*="emojiLarge"],
+[class*="emoji-large"],
+[class*="EmojiLarge"],
+[class*="countingEmojiLarge"] {
+  font-size: clamp(2rem, 10vw, 6rem);
+  letter-spacing: clamp(0.25rem, 2vw, 1rem);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(0.25rem, 1vw, 0.5rem);
+  padding: clamp(0.5rem, 2vw, 1rem);
+}
+
+/* Images in AI content */
+[class*="question"] img,
+[class*="answer"] img,
+[class*="visual"] img,
+[class*="content"] img {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* ============================================
+   AI-GENERATED GRIDS & LAYOUTS
+   ============================================ */
+
+/* Answer grids - responsive columns */
+[class*="answerGrid"],
+[class*="answer-grid"],
+[class*="AnswerGrid"],
+[class*="answersGrid"],
+div[class*="grid"] {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: clamp(0.5rem, 2vw, 1rem);
+  width: 100%;
+  padding: clamp(0.5rem, 2vw, 1rem);
+}
+
+/* Multiple choice options */
+[class*="choice"],
+[class*="option"],
+[class*="answer"] button,
+[class*="mc-"] {
+  width: 100%;
+  padding: clamp(0.75rem, 2vw, 1.25rem);
+  font-size: clamp(0.875rem, 2vw, 1.125rem);
+  margin: clamp(0.25rem, 1vw, 0.5rem) 0;
+}
+
+/* ============================================
+   RESPONSIVE BREAKPOINTS FOR AI CONTENT
+   ============================================ */
+
+/* Tablets and small laptops */
+@media (max-width: 1024px) {
+  /* Reduce grid columns */
+  [class*="grid"] {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+  }
+  
+  /* Adjust spacing */
+  [class*="container"],
+  [class*="section"] {
+    padding: clamp(0.75rem, 3vw, 1.5rem);
+  }
+}
+
+/* Mobile devices */
+@media (max-width: 768px) {
+  /* Single column layouts */
+  [class*="grid"]:not([class*="number"]) {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Number grids stay multi-column but smaller */
+  [class*="number"][class*="grid"] {
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+  }
+  
+  /* Stack all flex layouts */
+  [class*="flex"]:not([class*="inline"]) {
+    flex-direction: column;
+  }
+  
+  /* Reduce emoji sizes on mobile */
+  [class*="emoji"] {
+    font-size: clamp(1.25rem, 6vw, 3rem);
+  }
+  
+  [class*="emojiLarge"] {
+    font-size: clamp(1.75rem, 8vw, 4rem);
+    letter-spacing: clamp(0.125rem, 1vw, 0.5rem);
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+  /* Further reduce font sizes */
+  [class*="questionText"],
+  [class*="question-text"] {
+    font-size: clamp(0.875rem, 3vw, 1.125rem);
+  }
+  
+  /* Compact grids */
+  [class*="grid"] {
+    gap: clamp(0.25rem, 1vw, 0.5rem);
+  }
+  
+  /* Reduce padding globally */
+  [class*="container"],
+  [class*="section"],
+  [class*="card"] {
+    padding: clamp(0.5rem, 2vw, 1rem);
+  }
+  
+  /* Smaller buttons/options */
+  [class*="choice"],
+  [class*="option"],
+  button {
+    padding: clamp(0.5rem, 2vw, 0.875rem);
+    font-size: clamp(0.75rem, 2vw, 0.9375rem);
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 360px) {
+  /* Minimum viable sizes */
+  [class*="questionText"] {
+    font-size: 0.875rem;
+  }
+  
+  [class*="emoji"] {
+    font-size: 1.5rem;
+  }
+  
+  [class*="emojiLarge"] {
+    font-size: 2rem;
+    letter-spacing: 0.25rem;
+  }
+  
+  /* Minimal padding */
+  [class*="container"],
+  [class*="section"] {
+    padding: 0.5rem;
+  }
+  
+  /* Compact buttons */
+  button,
+  [class*="choice"],
+  [class*="option"] {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* ============================================
+   CONTAINER QUERIES FOR TRUE RESPONSIVENESS
+   ============================================ */
+
+/* Container query support for modern browsers */
+@supports (container-type: inline-size) {
+  /* Mark all AI content containers as query containers */
+  [class*="container"],
+  [class*="section"],
+  [class*="modal"],
+  [class*="panel"] {
+    container-type: inline-size;
+  }
+  
+  /* Responsive based on container size, not viewport */
+  @container (max-width: 500px) {
+    [class*="questionText"] {
+      font-size: 1rem;
+    }
+    
+    [class*="grid"] {
+      grid-template-columns: 1fr;
+    }
+    
+    [class*="emoji"] {
+      font-size: 2rem;
+    }
+  }
+  
+  @container (max-width: 300px) {
+    [class*="questionText"] {
+      font-size: 0.875rem;
+    }
+    
+    [class*="emoji"] {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+/* ============================================
+   RUNTIME CONTENT SAFETY
+   ============================================ */
+
+/* Prevent content overflow */
+[data-ai-generated],
+[data-dynamic-content],
+.ai-content,
+.dynamic-content {
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+  max-width: 100%;
+}
+
+/* Ensure all runtime-injected content is responsive */
+.ai-content > *,
+.dynamic-content > *,
+[data-ai-generated] > * {
+  max-width: 100%;
+  word-wrap: break-word;
+}
+
+/* ============================================
+   FLEXIBLE UNITS FOR AI CONTENT
+   ============================================ */
+
+/* Use viewport-relative units with constraints */
+[class*="practice"],
+[class*="assessment"],
+[class*="question"],
+[class*="answer"] {
+  /* Font sizes that scale but have limits */
+  font-size: clamp(0.875rem, 2vw + 0.25rem, 1.25rem);
+  
+  /* Padding that scales */
+  padding: clamp(0.5rem, 3vw, 1.5rem);
+  
+  /* Margins that scale */
+  margin: clamp(0.25rem, 2vw, 1rem) auto;
+}
+
+/* ============================================
+   DEVICE TRANSITION SAFETY
+   ============================================ */
+
+/* Smooth transitions when moving between devices */
+* {
+  transition: font-size 0.3s ease, padding 0.3s ease, margin 0.3s ease;
+}
+
+/* Disable transitions during resize to prevent jank */
+.resizing * {
+  transition: none !important;
+}
+
+/* ============================================
+   PRINT STYLES FOR AI CONTENT
+   ============================================ */
+
+@media print {
+  [class*="emoji"] {
+    font-size: 14pt !important;
+  }
+  
+  [class*="questionText"] {
+    font-size: 11pt !important;
+  }
+  
+  [class*="grid"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}

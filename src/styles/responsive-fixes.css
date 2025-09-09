@@ -63,17 +63,20 @@ html, body {
     padding: 1rem !important;
   }
 
-  /* Two Panel Modal */
-  .two-panel-modal {
+  /* Two Panel Modal - Removed to let TwoPanelModal.css handle layout */
+  /* .two-panel-modal {
     flex-direction: column !important;
-  }
+  } */
 
+  /* Main content panel - now handled by TwoPanelModal.css */
   .main-content-panel {
     width: 100% !important;
     max-width: 100% !important;
-    height: calc(100vh - 200px) !important;
+    /* Removed fixed height calculation - let TwoPanelModal.css handle it */
   }
 
+  /* Gamification sidebar - Disabled to prevent conflicts with TwoPanelModal mobile handling */
+  /* The sidebar is now handled by TwoPanelModal.css which properly hides it when collapsed
   .gamification-sidebar {
     width: 100% !important;
     height: 200px !important;
@@ -84,6 +87,7 @@ html, body {
     border-radius: 20px 20px 0 0 !important;
     overflow-x: auto !important;
   }
+  */
 
   /* Floating Dock - Horizontal Bottom */
   .floating-dock {

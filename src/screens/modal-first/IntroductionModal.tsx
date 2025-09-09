@@ -36,6 +36,7 @@ export const IntroductionModal: React.FC<IntroductionModalProps> = ({
   const [hasSeenIntroduction, setHasSeenIntroduction] = useState(false);
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
   const [randomCareers, setRandomCareers] = useState<any[]>([]);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const themeColors = {
     light: {
@@ -61,6 +62,16 @@ export const IntroductionModal: React.FC<IntroductionModalProps> = ({
   };
 
   const colors = themeColors[theme];
+
+  // Handle window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const prepareTodaysJourney = useCallback((career?: any) => {
     // Get grade from profile or user auth data
@@ -359,28 +370,38 @@ export const IntroductionModal: React.FC<IntroductionModalProps> = ({
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: 'flex-start',
             minHeight: '100vh',
-            padding: '2rem',
-            background: colors.background
+            height: '100vh',
+            maxHeight: '100vh',
+            padding: windowWidth <= 768 ? '1rem' : '2rem',
+            paddingBottom: windowWidth <= 768 ? '4rem' : '2rem',
+            background: colors.background,
+            overflowY: 'auto',
+            overflowX: 'hidden',
+            boxSizing: 'border-box',
+            WebkitOverflowScrolling: 'touch',
+            position: 'relative'
           }}>
             {/* Simplified Header */}
             <div style={{ 
               textAlign: 'center',
-              marginBottom: '3rem',
-              animation: 'fadeInDown 0.6s ease-out'
+              marginBottom: windowWidth <= 768 ? '1.5rem' : '3rem',
+              animation: 'fadeInDown 0.6s ease-out',
+              flexShrink: 0
             }}>
               <h1 style={{ 
                 color: colors.text, 
-                fontSize: '2.2rem',
+                fontSize: windowWidth <= 768 ? '1.5rem' : '2.2rem',
                 marginBottom: '0.5rem',
-                fontWeight: '600'
+                fontWeight: '600',
+                padding: '0 1rem'
               }}>
                 What do you want to be today?
               </h1>
               <p style={{ 
                 color: colors.subtext,
-                fontSize: '1rem',
+                fontSize: windowWidth <= 768 ? '0.9rem' : '1rem',
                 opacity: 0.8
               }}>
                 Choose your career adventure
@@ -394,15 +415,21 @@ export const IntroductionModal: React.FC<IntroductionModalProps> = ({
               alignItems: 'center',
               gap: '2rem',
               width: '100%',
-              maxWidth: '800px'
+              maxWidth: windowWidth <= 768 ? '100%' : '800px',
+              marginBottom: windowWidth <= 768 ? '2rem' : '0',
+              flex: '1 1 auto',
+              minHeight: 0
             }}>
               {/* Main Featured Career - Larger */}
               <div style={{
                 display: 'flex',
-                gap: '2rem',
+                flexDirection: windowWidth <= 768 ? 'column' : 'row',
+                gap: windowWidth <= 768 ? '1rem' : '2rem',
                 width: '100%',
-                alignItems: 'center',
-                justifyContent: 'center'
+                alignItems: windowWidth <= 768 ? 'stretch' : 'center',
+                justifyContent: 'center',
+                flexWrap: windowWidth <= 1024 ? 'wrap' : 'nowrap',
+                padding: windowWidth <= 768 ? '0 0.5rem' : '0'
               }}>
                 {careers.map((career, index) => {
                   // Handle both career objects and category objects
@@ -453,14 +480,24 @@ export const IntroductionModal: React.FC<IntroductionModalProps> = ({
                     }}
                     style={{
                       backgroundColor: colors.cardBg,
-                      padding: index === 1 ? '2.5rem' : '2rem',
+                      padding: windowWidth <= 768 
+                        ? (index === 1 ? '1.5rem' : '1.25rem')
+                        : (index === 1 ? '2.5rem' : '2rem'),
                       borderRadius: '1.5rem',
                       border: `3px solid ${hoveredCareer === index ? career.color : colors.border}`,
                       cursor: 'pointer',
                       transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)', // Slower transition
-                      transform: `scale(${index === 1 ? 1.1 : 0.95}) ${hoveredCareer === index ? 'translateY(-8px)' : 'translateY(0)'}`,
+                      transform: windowWidth <= 768 
+                        ? (hoveredCareer === index ? 'translateY(-4px)' : 'translateY(0)')
+                        : `scale(${index === 1 ? 1.1 : 0.95}) ${hoveredCareer === index ? 'translateY(-8px)' : 'translateY(0)'}`,
                       opacity: hoveredCareer !== null && hoveredCareer !== index ? 0.6 : 1,
-                      width: index === 1 ? '280px' : '220px',
+                      width: windowWidth <= 480 
+                        ? '100%' 
+                        : windowWidth <= 768 
+                          ? (index === 1 ? '90%' : '85%')
+                          : (index === 1 ? '280px' : '220px'),
+                      minWidth: windowWidth <= 768 ? 'auto' : 'auto',
+                      maxWidth: windowWidth <= 768 ? '100%' : 'none',
                       boxShadow: hoveredCareer === index 
                         ? `0 20px 40px ${career.color}40` 
                         : '0 4px 12px rgba(0,0,0,0.1)',
@@ -499,9 +536,18 @@ export const IntroductionModal: React.FC<IntroductionModalProps> = ({
                     {/* Career Name */}
                     <h3 style={{ 
                       color: colors.text,
-                      fontSize: index === 1 ? '1.5rem' : '1.2rem',
+                      fontSize: windowWidth <= 768 
+                        ? (index === 1 ? '1.2rem' : '1rem')
+                        : (index === 1 ? '1.5rem' : '1.2rem'),
                       marginBottom: '0.5rem',
-                      fontWeight: '600'
+                      fontWeight: '600',
+                      writingMode: 'horizontal-tb',
+                      textOrientation: 'mixed',
+                      whiteSpace: 'normal',
+                      wordBreak: 'normal',
+                      overflowWrap: 'break-word',
+                      minWidth: '100%',
+                      textAlign: 'center'
                     }}>
                       {displayName}
                     </h3>
@@ -526,8 +572,12 @@ export const IntroductionModal: React.FC<IntroductionModalProps> = ({
                     
                     <p style={{ 
                       color: colors.subtext,
-                      fontSize: '0.85rem',
-                      marginBottom: '0.5rem'
+                      fontSize: windowWidth <= 768 ? '0.75rem' : '0.85rem',
+                      marginBottom: '0.5rem',
+                      writingMode: 'horizontal-tb',
+                      textOrientation: 'mixed',
+                      whiteSpace: 'nowrap',
+                      textAlign: 'center'
                     }}>
                       {isCategory ? `${career.careerCount || 0} careers available` : `Match: ${career.score || 75}%`}
                     </p>
@@ -562,8 +612,11 @@ export const IntroductionModal: React.FC<IntroductionModalProps> = ({
               {/* Quick Action Buttons */}
               <div style={{
                 display: 'flex',
-                gap: '1.5rem',
-                marginTop: '1rem'
+                flexDirection: windowWidth <= 480 ? 'column' : 'row',
+                gap: windowWidth <= 768 ? '1rem' : '1.5rem',
+                marginTop: '1rem',
+                width: windowWidth <= 480 ? '100%' : 'auto',
+                maxWidth: windowWidth <= 480 ? '300px' : 'none'
               }}>
                 <button
                   onClick={() => {
@@ -582,16 +635,17 @@ export const IntroductionModal: React.FC<IntroductionModalProps> = ({
                     }, 300);
                   }}
                   style={{
-                    padding: '0.75rem 2rem',
+                    padding: windowWidth <= 768 ? '0.75rem 1.5rem' : '0.75rem 2rem',
                     backgroundColor: colors.primary,
                     color: 'white',
                     border: 'none',
                     borderRadius: '0.75rem',
-                    fontSize: '1rem',
+                    fontSize: windowWidth <= 768 ? '0.9rem' : '1rem',
                     fontWeight: '600',
                     cursor: 'pointer',
                     transition: 'transform 0.2s',
-                    animation: 'pulse 2s infinite'
+                    animation: 'pulse 2s infinite',
+                    width: windowWidth <= 480 ? '100%' : 'auto'
                   }}
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
                   onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
@@ -608,14 +662,15 @@ export const IntroductionModal: React.FC<IntroductionModalProps> = ({
                     });
                   }}
                   style={{
-                    padding: '0.75rem 2rem',
+                    padding: windowWidth <= 768 ? '0.75rem 1.5rem' : '0.75rem 2rem',
                     backgroundColor: 'transparent',
                     color: colors.subtext,
                     border: `2px solid ${colors.border}`,
                     borderRadius: '0.75rem',
-                    fontSize: '1rem',
+                    fontSize: windowWidth <= 768 ? '0.9rem' : '1rem',
                     cursor: 'pointer',
-                    transition: 'all 0.2s'
+                    transition: 'all 0.2s',
+                    width: windowWidth <= 480 ? '100%' : 'auto'
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.borderColor = colors.primary;

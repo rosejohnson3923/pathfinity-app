@@ -24,15 +24,21 @@ import './styles/responsive-fixes.css';
 import './styles/mobile-responsive-enhancements.css';
 import './styles/touch-interactions.css';
 import './styles/accessibility.css';
+import './styles/global-ai-responsive.css'; // Global responsive system for AI-generated content
+import './styles/dashboard-greeting-fix.css'; // Critical fix for dashboard greeting vertical text
 
 // Import root width fix
 import { fixRootWidth } from './utils/fixRootWidth';
+import { initializeAIResponsive } from './utils/aiContentResponsive';
 
 // Initialize theme service on app load
 themeService.initialize();
 
 // Fix root width issue
 fixRootWidth();
+
+// Initialize AI content responsive system
+initializeAIResponsive();
 
 // Application Pages
 import { AdminImageGenerator } from './pages/AdminImageGenerator';

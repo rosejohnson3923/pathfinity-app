@@ -308,9 +308,9 @@ export const CareerIncLobbyModal: React.FC<CareerIncLobbyModalProps> = ({
         )}
         
         <div className="check-in-status">
-          <div className="status-badge">
+          <span className="status-badge">
             ✓ Checked In
-          </div>
+          </span>
           <span className="check-in-time">{checkedInTime}</span>
         </div>
       </div>

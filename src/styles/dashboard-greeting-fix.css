@@ -1,0 +1,198 @@
+/**
+ * CRITICAL FIX: Dashboard Greeting Vertical Text Issue
+ * =====================================================
+ * Forces horizontal text display for dashboard greetings
+ */
+
+/* Prevent ALL text from breaking vertically */
+* {
+  writing-mode: horizontal-tb !important;
+  text-orientation: mixed !important;
+}
+
+/* Specific fix for greeting sections */
+.greeting-section,
+.greeting-section *,
+[class*="greeting"],
+[class*="greeting"] * {
+  writing-mode: horizontal-tb !important;
+  text-orientation: mixed !important;
+  white-space: normal !important;
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+  min-width: auto !important;
+  width: auto !important;
+  max-width: 100% !important;
+  display: block !important;
+  flex-direction: row !important;
+}
+
+/* Force greeting text to display inline */
+.greeting-section h1,
+.greeting-section .greeting,
+h1.greeting,
+.greeting {
+  display: block !important;
+  white-space: normal !important;
+  word-break: normal !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  hyphens: none !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  font-size: clamp(1rem, 4vw, 2rem) !important;
+  line-height: 1.2 !important;
+  min-width: 200px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  writing-mode: horizontal-tb !important;
+  text-orientation: mixed !important;
+  /* Ensure visibility without overriding design system colors */
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Ensure date displays properly */
+.greeting-section .date,
+.date {
+  display: block !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  width: 100% !important;
+  writing-mode: horizontal-tb !important;
+}
+
+/* Dashboard header container fix */
+.dashboard-header,
+[class*="dashboard-header"] {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  min-width: 100% !important;
+  width: 100% !important;
+  padding: 1rem !important;
+  box-sizing: border-box !important;
+}
+
+/* Mobile specific fixes */
+@media (max-width: 768px) {
+  .dashboard-header,
+  [class*="dashboard-header"] {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  
+  .greeting-section {
+    width: 100% !important;
+    text-align: center !important;
+  }
+  
+  .greeting-section h1,
+  h1.greeting {
+    font-size: 1.5rem !important;
+    text-align: center !important;
+    width: 100% !important;
+  }
+}
+
+/* Emergency fix for character-by-character breaking */
+.greeting-section > *,
+.greeting > * {
+  display: inline !important;
+  writing-mode: horizontal-tb !important;
+}
+
+/* Fix for flex containers that might cause vertical stacking */
+.greeting-section {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  min-width: 200px !important;
+}
+
+/* Ensure text spans stay inline */
+.greeting span,
+.greeting-section span {
+  display: inline !important;
+  white-space: normal !important;
+}
+
+/* Override any column layouts that might affect greeting */
+.dashboard-modal .greeting-section,
+.student-dashboard .greeting-section {
+  grid-template-columns: none !important;
+  display: block !important;
+}
+
+/* Force horizontal text for all text elements in dashboard */
+.dashboard-modal h1,
+.dashboard-modal h2,
+.dashboard-modal h3,
+.dashboard-modal p,
+.dashboard-modal span,
+.dashboard-modal div {
+  writing-mode: horizontal-tb !important;
+  text-orientation: mixed !important;
+}
+
+/* Fix BentoTile and dashboard cards responsiveness */
+.dashboard-card,
+[class*="bento"],
+[class*="BentoTile"] {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+.dashboard-card h3,
+.dashboard-card h4,
+[class*="bento"] h3,
+[class*="bento"] h4,
+[class*="BentoTile"] h3,
+[class*="BentoTile"] h4 {
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+  hyphens: auto !important;
+  text-overflow: ellipsis !important;
+  line-height: 1.2 !important;
+}
+
+.dashboard-card p,
+[class*="bento"] p,
+[class*="BentoTile"] p,
+.dashboard-card .subtitle,
+[class*="bento"] .subtitle {
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  line-height: 1.4 !important;
+  max-width: 100% !important;
+}
+
+/* Mobile specific card fixes */
+@media (max-width: 480px) {
+  .dashboard-card,
+  [class*="bento"],
+  [class*="BentoTile"] {
+    min-height: auto !important;
+    max-height: none !important;
+    padding: 0.875rem !important;
+  }
+  
+  .dashboard-card h3,
+  .dashboard-card h4,
+  [class*="bento"] h3,
+  [class*="bento"] h4 {
+    font-size: 0.9rem !important;
+  }
+  
+  .dashboard-card p,
+  [class*="bento"] p {
+    font-size: 0.8rem !important;
+  }
+}

@@ -21,6 +21,10 @@
   animation: slideDown 0.5s ease-out;
   background: transparent !important;
   border: none !important;
+  width: 100%;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+  min-width: 0;
 }
 
 .header-actions {
@@ -33,14 +37,38 @@
   transform: scale(1.02);
 }
 
-.greeting-section h1 {
+.greeting-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  flex: 1;
+  max-width: 100%;
+}
+
+.greeting-section h1,
+.greeting-section .greeting {
   font-size: 2rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+  line-height: 1.2;
+  width: 100%;
+  display: block;
+  text-align: left;
+  color: var(--text-primary); /* Use design system color */
 }
 
 .greeting-section .date {
   font-size: 1.1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  color: var(--text-secondary); /* Use design system color */
 }
 
 .streak-badge {
@@ -404,11 +432,29 @@
   .dashboard-header {
     flex-direction: column;
     gap: 1rem;
+    padding: 1.5rem 1rem;
+  }
+  
+  .greeting-section {
+    width: 100%;
+    text-align: center;
+    align-items: center;
+  }
+  
+  .greeting-section h1 {
+    font-size: 1.5rem;
+    white-space: normal;
+    word-break: normal;
+  }
+  
+  .greeting-section .date {
+    font-size: 1rem;
   }
 
   .header-actions {
     width: 100%;
     justify-content: space-between;
+    flex-wrap: wrap;
   }
   
   .sections-grid {
@@ -427,5 +473,67 @@
   .quick-stats {
     flex-direction: column;
     gap: 1rem;
+  }
+  
+  .streak-badge {
+    padding: 0.75rem 1rem;
+  }
+  
+  .streak-number {
+    font-size: 1.5rem;
+  }
+  
+  .streak-label {
+    font-size: 0.75rem;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+  .dashboard-header {
+    padding: 1rem;
+  }
+  
+  .greeting-section h1 {
+    font-size: 1.25rem;
+  }
+  
+  .greeting-section .date {
+    font-size: 0.9rem;
+  }
+  
+  .header-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+  
+  .streak-badge {
+    justify-content: center;
+    padding: 0.5rem;
+  }
+  
+  .logout-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 360px) {
+  .greeting-section h1 {
+    font-size: 1.125rem;
+  }
+  
+  .greeting-section .date {
+    font-size: 0.875rem;
+  }
+  
+  .streak-number {
+    font-size: 1.25rem;
+  }
+  
+  .streak-icon {
+    font-size: 1.25rem;
   }
 }

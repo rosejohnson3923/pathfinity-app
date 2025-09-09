@@ -3,7 +3,7 @@
  * Reusable tile component implementing visual hierarchy system
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   HierarchyLevel, 
   ContainerType, 
@@ -71,11 +71,29 @@ export const BentoTile: React.FC<BentoTileProps> = ({
   actionButton
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  
+  // Handle window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   
   // Get styles from visual hierarchy system
   const tileStyles = getTileStyles(hierarchy, containerType, theme, gradeLevel);
   const textStyles = getTextStyles(hierarchy, gradeLevel);
-  const iconSize = getIconSize(hierarchy, gradeLevel);
+  let iconSize = getIconSize(hierarchy, gradeLevel);
+  
+  // Adjust icon size for mobile when in vertical layout
+  if (isMobile && (hierarchy === 'SECONDARY' || hierarchy === 'TERTIARY')) {
+    const baseSize = parseInt(iconSize);
+    iconSize = `${Math.min(baseSize * 1.2, 64)}px`; // Slightly larger but capped at 64px
+  }
+  
   const hoverStyles = isHovered && !disabled ? getHoverStyles(hierarchy) : {};
   const brandColors = BrandColors[containerType][theme];
   
@@ -254,7 +272,8 @@ export const BentoTile: React.FC<BentoTileProps> = ({
   };
   
   // Determine layout based on hierarchy and content
-  const isHorizontalLayout = (hierarchy === 'SECONDARY' || hierarchy === 'TERTIARY') && (emoji || avatarUrl);
+  // On mobile, always use vertical layout for better text readability
+  const isHorizontalLayout = !isMobile && (hierarchy === 'SECONDARY' || hierarchy === 'TERTIARY') && (emoji || avatarUrl);
   
   return (
     <div
@@ -289,14 +308,18 @@ export const BentoTile: React.FC<BentoTileProps> = ({
         {(title || emoji || avatarUrl) && (
           <div style={{
             display: 'flex',
-            alignItems: 'flex-start',
-            gap: isHorizontalLayout ? '16px' : '12px',
+            alignItems: isHorizontalLayout ? 'flex-start' : (isMobile ? 'center' : 'flex-start'),
+            gap: isHorizontalLayout ? '16px' : (isMobile ? '8px' : '12px'),
             marginBottom: children || actionButton ? '16px' : '0',
             flexDirection: isHorizontalLayout ? 'row' : 'column'
           }}>
             {renderIcon()}
             
-            <div style={{ flex: 1 }}>
+            <div style={{ 
+              flex: 1,
+              textAlign: (!isHorizontalLayout && isMobile) ? 'center' : 'left',
+              width: '100%'
+            }}>
               {title && (
                 <h3 style={{
                   ...textStyles,

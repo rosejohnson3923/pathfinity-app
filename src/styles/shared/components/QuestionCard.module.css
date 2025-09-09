@@ -16,7 +16,9 @@
   padding: var(--card-padding);
   box-shadow: var(--card-shadow);
   margin: 0 auto;
-  max-width: 1168px; /* Updated to use full available width for Bento cards */
+  max-width: min(1168px, 100%); /* Responsive max-width */
+  width: 100%;
+  box-sizing: border-box;
   animation: slideIn var(--duration-base) var(--easing-out);
   transition: all var(--duration-base) var(--easing-in-out);
 }
@@ -130,6 +132,8 @@
   justify-content: center;
   align-items: center;
   min-height: 200px;
+  flex-wrap: wrap;
+  gap: var(--space-4);
 }
 
 .visualContainer {
@@ -143,6 +147,62 @@
   max-width: 100%;
   height: auto;
   display: block;
+}
+
+/* Image Grid for Multiple Images */
+.imageGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-3);
+  width: 100%;
+  max-width: 100%;
+  padding: var(--space-4);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-xl);
+}
+
+.imageGridItem {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  background: var(--bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.imageGridItem img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Image Array - Horizontal scroll on mobile */
+.imageArray {
+  display: flex;
+  gap: var(--space-3);
+  overflow-x: auto;
+  padding: var(--space-3) 0;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.imageArrayItem {
+  flex: 0 0 auto;
+  width: 200px;
+  height: 200px;
+  scroll-snap-align: center;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.imageArrayItem img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .visualAnimation {
@@ -524,44 +584,316 @@
 /* ============================================
    RESPONSIVE DESIGN
    ============================================ */
-@media (max-width: 768px) {
+
+/* Large screens - optimize layout */
+@media (max-width: 1400px) {
   .questionCard {
-    padding: var(--space-4);
-    border-radius: var(--radius-xl);
+    max-width: 100%;
+    margin: 0 var(--space-4);
+  }
+}
+
+/* Tablets */
+@media (max-width: 1024px) {
+  .questionCard {
+    max-width: 100%;
+    padding: var(--space-5);
+    margin: 0 var(--space-3);
   }
   
   .questionText {
     font-size: var(--text-lg);
   }
   
-  .optionButton {
-    padding: var(--space-3) var(--space-4);
+  .answerOptions {
+    gap: var(--space-2);
+  }
+  
+  .imageGrid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+}
+
+/* Mobile devices */
+@media (max-width: 768px) {
+  .questionCard {
+    max-width: 100%;
+    padding: var(--space-4);
+    margin: 0 var(--space-2);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .imageGrid {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: var(--space-2);
+  }
+  
+  .imageArray {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .imageArrayItem {
+    width: 100%;
+    max-width: none;
+  }
+  
+  .questionHeader {
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-3);
+  }
+  
+  .questionNumber {
+    font-size: var(--text-xs);
+  }
+  
+  .questionBadge {
+    padding: 2px 8px;
+    font-size: 10px;
+  }
+  
+  .questionText {
     font-size: var(--text-base);
+    line-height: 1.5;
+    margin-bottom: var(--space-4);
+  }
+  
+  .questionText.large {
+    font-size: var(--text-lg);
+  }
+  
+  .questionContext {
+    padding: var(--space-3);
+    font-size: var(--text-sm);
+  }
+  
+  .questionVisual {
+    margin: var(--space-4) 0;
+    min-height: 150px;
+  }
+  
+  .answerOptions {
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+  }
+  
+  .optionButton {
+    padding: var(--space-3);
+    font-size: var(--text-sm);
+    border-radius: var(--radius-lg);
+    gap: var(--space-2);
+  }
+  
+  .optionButton:hover:not(:disabled) {
+    transform: translateX(2px);
+  }
+  
+  .optionLabel {
+    font-size: var(--text-xs);
+    padding: 4px 8px;
   }
   
   .trueFalseOptions {
-    flex-direction: column;
+    flex-direction: row;
+    gap: var(--space-3);
+    justify-content: center;
     align-items: center;
   }
   
   .trueFalseButton {
-    max-width: 100%;
-    padding: var(--space-4) var(--space-6);
+    flex: 1;
+    max-width: 150px;
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-base);
   }
   
   .answerInput {
-    font-size: var(--text-lg);
+    font-size: var(--text-base);
+    padding: var(--space-3);
+  }
+  
+  .matchingContainer {
+    gap: var(--space-4);
+  }
+  
+  .matchingColumn {
+    gap: var(--space-2);
+  }
+  
+  .matchingItem {
+    padding: var(--space-3);
+    font-size: var(--text-sm);
+  }
+  
+  .dragDropZone {
+    padding: var(--space-3);
+    min-height: 80px;
+  }
+  
+  .submitSection {
+    margin-top: var(--space-4);
+    padding-top: var(--space-4);
+  }
+  
+  .feedbackMessage {
+    padding: var(--space-3);
+    font-size: var(--text-sm);
   }
 }
 
+/* Small mobile devices */
 @media (max-width: 480px) {
+  .questionCard {
+    padding: var(--space-3);
+    margin: 0;
+    border-radius: var(--radius-md);
+    box-shadow: none;
+    border: 1px solid var(--border-color-soft);
+  }
+  
+  .imageGrid {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+  }
+  
+  .imageArray {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  
+  .imageArrayItem {
+    width: 100%;
+    max-width: none;
+    height: auto;
+  }
+  
   .questionHeader {
     flex-direction: column;
     gap: var(--space-2);
     align-items: flex-start;
+    margin-bottom: var(--space-3);
+    padding-bottom: var(--space-2);
   }
   
+  .questionText {
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-3);
+  }
+  
+  .questionVisual {
+    margin: var(--space-3) 0;
+    min-height: 120px;
+  }
+  
+  .answerOptions {
+    gap: 10px;
+  }
+  
+  .optionButton {
+    padding: 12px;
+    font-size: var(--text-sm);
+    border-radius: var(--radius-md);
+  }
+  
+  .optionButton:hover:not(:disabled) {
+    transform: none;
+  }
+  
+  .trueFalseOptions {
+    flex-direction: column;
+    gap: var(--space-2);
+    align-items: stretch;
+  }
+  
+  .trueFalseButton {
+    width: 100%;
+    max-width: none;
+    padding: var(--space-3);
+  }
+  
+  .answerInput {
+    font-size: var(--text-sm);
+    padding: 10px;
+  }
+  
+  .matchingContainer {
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  
+  .matchingColumn {
+    width: 100%;
+  }
+  
+  .dragDropZone {
+    padding: var(--space-2);
+    min-height: 60px;
+    font-size: var(--text-sm);
+  }
+  
+  .dragItem {
+    padding: 8px 12px;
+    font-size: var(--text-sm);
+  }
+  
+  .submitSection {
+    margin-top: var(--space-3);
+    padding-top: var(--space-3);
+  }
+  
+  .submitButton {
+    width: 100%;
+    padding: var(--space-3);
+    font-size: var(--text-base);
+  }
+  
+  .feedbackMessage {
+    padding: 10px;
+    font-size: var(--text-xs);
+  }
+  
+  .hintButton {
+    padding: 8px 12px;
+    font-size: var(--text-xs);
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 360px) {
   .questionCard {
-    margin: var(--space-2);
+    padding: var(--space-2);
+  }
+  
+  .questionText {
+    font-size: 14px;
+  }
+  
+  .optionButton {
+    padding: 10px;
+    font-size: 13px;
+  }
+  
+  .questionTimer {
+    display: none;
+  }
+  
+  .questionBadge {
+    display: none;
+  }
+  
+  .imageGrid {
+    grid-template-columns: 1fr;
+    gap: var(--space-1);
+  }
+  
+  .imageArray {
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+  
+  .imageArrayItem {
+    width: 100%;
+    max-height: 120px;
   }
 }
