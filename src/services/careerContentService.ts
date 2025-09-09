@@ -52,7 +52,8 @@ class CareerContentService {
     const profile = this.careerEngine.getCareerProfile(careerName as CareerType);
     
     if (!profile) {
-      console.warn(`Career profile not found for: ${careerName}, generating fallback content`);
+      // Silently use fallback content for careers not yet fully implemented in the engine
+      // This is expected behavior as we have 80 careers but only 15 have full profiles
       return this.generateFallbackContent(careerName, grade);
     }
 
@@ -706,6 +707,23 @@ class CareerContentService {
         realWorldSimple: 'Athletes play exciting games!',
         realWorldMedium: 'Athletes inspire fitness and teamwork.',
         realWorldAdvanced: 'Athletes represent nations and inspire generations.'
+      },
+      
+      // Community Helpers
+      'Cafeteria Worker': {
+        icon: '🍽️',
+        color: '#EA580C',
+        category: 'Community Helpers',
+        baseDescription: 'serve nutritious meals',
+        simpleTasks: ['Serve lunch', 'Help students', 'Keep clean', 'Be friendly'],
+        mediumTasks: ['Prepare balanced meals', 'Follow nutrition guidelines', 'Manage food service', 'Ensure food safety'],
+        advancedTasks: ['Plan menus', 'Manage dietary needs', 'Lead food teams', 'Implement nutrition programs'],
+        funFactSimple: 'Cafeteria workers make sure you have yummy lunch!',
+        funFactMedium: 'School cafeterias serve millions of meals every day!',
+        funFactAdvanced: 'Nutrition services are vital for student learning and health!',
+        realWorldSimple: 'They make your school lunch!',
+        realWorldMedium: 'They provide essential nutrition for student success.',
+        realWorldAdvanced: 'They support public health through nutrition programs.'
       }
     };
 

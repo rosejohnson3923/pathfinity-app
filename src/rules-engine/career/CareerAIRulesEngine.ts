@@ -5,6 +5,7 @@
  */
 
 import { BaseRulesEngine, Rule, RuleContext, RuleResult } from '../core/BaseRulesEngine';
+import { CAREER_BASICS } from '../../data/careerBasicsData';
 
 // ============================================================================
 // CAREER CONTEXT DEFINITIONS
@@ -36,13 +37,32 @@ export interface CareerContext extends RuleContext {
 }
 
 export type CareerType = 
-  | 'Doctor' | 'Teacher' | 'Scientist' | 'Engineer' | 'Artist'
-  | 'Chef' | 'Athlete' | 'Musician' | 'Writer' | 'Veterinarian'
-  | 'Pilot' | 'Farmer' | 'Police Officer' | 'Firefighter' | 'Astronaut';
+  | 'Doctor' | 'Nurse' | 'Veterinarian' | 'Surgeon' | 'Psychologist'
+  | 'Teacher' | 'Scientist' | 'Programmer' | 'Data Scientist' | 'Marine Biologist'
+  | 'AI/ML Engineer' | 'Cybersecurity Specialist' | 'Software Engineer' | 'Mobile App Developer'
+  | 'Biotech Researcher' | 'Blockchain Developer' | 'Artist' | 'Musician' | 'Writer'
+  | 'Photographer' | 'Dancer' | 'Game Designer' | 'Entrepreneur' | 'Investment Banker'
+  | 'Marketing Director' | 'Financial Analyst' | 'Chief Executive Officer' | 'Police Officer'
+  | 'Firefighter' | 'Social Worker' | 'Lawyer' | 'Athlete' | 'Professional Athlete'
+  | 'Farmer' | 'YouTuber' | 'Engineer' | 'Builder' | 'Architect' | 'Robotics Engineer'
+  | 'Aerospace Engineer' | 'Renewable Energy Engineer' | 'Cloud Architect' | 'Astronaut'
+  | 'Pilot' | 'Chef' | 'Cafeteria Worker' | 'Bus Driver' | 'Crossing Guard'
+  | 'Grocery Store Worker' | 'Janitor' | 'Librarian' | 'Mail Carrier' | 'Park Ranger'
+  | 'Carpenter' | 'Electrician' | 'Plumber' | 'Dentist' | 'Mental Health Counselor'
+  | 'Pharmacist' | 'Psychiatrist' | 'Drone Operator' | 'Game Developer' | 'Podcast Producer'
+  | 'Social Media Strategist' | 'UX/UI Designer' | 'Video Game Designer' | 'Web Designer'
+  | 'YouTuber/Content Creator' | 'Bank Teller' | 'Corporate Lawyer' | 'Real Estate Agent'
+  | 'Coach' | 'Environmental Scientist' | 'Graphic Designer' | 'Journalist'
+  | 'Policy Advisor' | 'Research Scientist' | 'Space Industry Professional'
+  | 'Sustainability Consultant' | 'Team Manager';
 
 export type CareerCategory = 
   | 'Healthcare' | 'Education' | 'STEM' | 'Arts' | 'Service' 
-  | 'Sports' | 'Technology' | 'Nature' | 'Public Safety' | 'Exploration';
+  | 'Sports' | 'Technology' | 'Nature' | 'Public Safety' | 'Exploration'
+  | 'Business & Finance' | 'Arts & Creative' | 'Public Service'
+  | 'Sports & Fitness' | 'Environment & Agriculture' | 'Media & Communication'
+  | 'Engineering' | 'Hospitality & Service' | 'Skilled Trades'
+  | 'Community Helpers' | 'Digital & Media' | 'Science & Technology';
 
 export interface CareerProfile {
   id: string;
@@ -867,7 +887,155 @@ export class CareerAIRulesEngine extends BaseRulesEngine<CareerContext> {
       rewards: ['exploration', 'advancing science', 'unique experience', 'inspiring others']
     });
     
+    // Add profiles for all remaining careers from careerBasicsData
+    Object.values(CAREER_BASICS).forEach(career => {
+      // Skip if already has a hardcoded profile
+      if (profiles.has(career.name as CareerType)) {
+        return;
+      }
+      
+      // Generate a complete profile from the basic data
+      profiles.set(career.name as CareerType, this.generateCareerProfile(career));
+    });
+    
     return profiles;
+  }
+  
+  /**
+   * Generate a career profile from basic career data
+   */
+  private generateCareerProfile(careerBasic: any): CareerProfile {
+    // Map subject arrays to vocabulary
+    const vocabulary = new Map<string, string[]>();
+    careerBasic.subjects.forEach((subject: string) => {
+      vocabulary.set(subject, this.generateSubjectVocabulary(careerBasic.name, subject));
+    });
+    
+    // Generate scenarios for each subject
+    const scenarios = new Map<string, string[]>();
+    careerBasic.subjects.forEach((subject: string) => {
+      scenarios.set(subject, this.generateSubjectScenarios(careerBasic.name, subject));
+    });
+    
+    return {
+      id: careerBasic.id,
+      name: careerBasic.name as CareerType,
+      category: careerBasic.category as CareerCategory,
+      description: careerBasic.quickDesc,
+      skills: this.generateCareerSkills(careerBasic.name),
+      tools: this.generateCareerTools(careerBasic.name),
+      environments: this.generateCareerEnvironments(careerBasic.name),
+      vocabulary,
+      scenarios,
+      visualTheme: {
+        primaryColor: careerBasic.color,
+        icon: careerBasic.icon,
+        backgroundImage: `${careerBasic.id}-theme`
+      },
+      roleModels: this.generateRoleModels(careerBasic.name),
+      pathways: {
+        education: this.generateEducationPathways(careerBasic.name),
+        experience: this.generateExperiencePathways(careerBasic.name),
+        certifications: this.generateCertifications(careerBasic.name)
+      },
+      dailyActivities: this.generateDailyActivities(careerBasic.name),
+      challenges: this.generateChallenges(careerBasic.name),
+      rewards: this.generateRewards(careerBasic.name)
+    };
+  }
+  
+  // Helper methods for generating career profile components
+  private generateSubjectVocabulary(careerName: string, subject: string): string[] {
+    const baseVocabulary: Record<string, string[]> = {
+      'math': ['numbers', 'counting', 'measuring', 'calculating', 'data'],
+      'science': ['observing', 'testing', 'discovering', 'learning', 'exploring'],
+      'ela': ['reading', 'writing', 'communicating', 'documenting', 'presenting'],
+      'social': ['helping', 'community', 'teamwork', 'society', 'culture'],
+      'art': ['creating', 'designing', 'colors', 'shapes', 'imagination'],
+      'technology': ['computers', 'tools', 'innovation', 'digital', 'software'],
+      'physical-education': ['fitness', 'health', 'movement', 'sports', 'exercise']
+    };
+    
+    return baseVocabulary[subject] || ['learning', 'working', 'helping', 'growing', 'achieving'];
+  }
+  
+  private generateSubjectScenarios(careerName: string, subject: string): string[] {
+    const careerAction = `A ${careerName}`;
+    const scenarios: Record<string, string[]> = {
+      'math': [
+        `${careerAction} needs to calculate...`,
+        `${careerAction} uses numbers to...`
+      ],
+      'science': [
+        `${careerAction} discovers how...`,
+        `${careerAction} experiments with...`
+      ],
+      'ela': [
+        `${careerAction} writes about...`,
+        `${careerAction} communicates with...`
+      ],
+      'social': [
+        `${careerAction} helps the community by...`,
+        `${careerAction} works with people to...`
+      ]
+    };
+    
+    return scenarios[subject] || [`${careerAction} works on...`, `${careerAction} helps with...`];
+  }
+  
+  private generateCareerSkills(careerName: string): string[] {
+    // Generic skills that apply to most careers
+    return ['problem-solving', 'communication', 'teamwork', 'dedication'];
+  }
+  
+  private generateCareerTools(careerName: string): string[] {
+    // Generic tools
+    return ['computer', 'equipment', 'resources', 'knowledge'];
+  }
+  
+  private generateCareerEnvironments(careerName: string): string[] {
+    // Generic environments
+    return ['workplace', 'office', 'field', 'community'];
+  }
+  
+  private generateRoleModels(careerName: string): Array<{name: string, achievement: string, quote: string}> {
+    // Generic role models
+    return [
+      {
+        name: `Expert ${careerName}`,
+        achievement: `Leading professional in the field`,
+        quote: 'Hard work and dedication lead to success'
+      },
+      {
+        name: `Pioneering ${careerName}`,
+        achievement: 'Innovation and excellence',
+        quote: 'Never stop learning and growing'
+      }
+    ];
+  }
+  
+  private generateEducationPathways(careerName: string): string[] {
+    return ['relevant degree', 'specialized training', 'continuous learning'];
+  }
+  
+  private generateExperiencePathways(careerName: string): string[] {
+    return ['internships', 'entry-level positions', 'hands-on practice'];
+  }
+  
+  private generateCertifications(careerName: string): string[] {
+    return ['professional certification', 'industry standards', 'specialized training'];
+  }
+  
+  private generateDailyActivities(careerName: string): string[] {
+    return ['planning work', 'completing tasks', 'collaborating with others', 'solving problems'];
+  }
+  
+  private generateChallenges(careerName: string): string[] {
+    return ['learning new skills', 'meeting deadlines', 'solving complex problems'];
+  }
+  
+  private generateRewards(careerName: string): string[] {
+    return ['helping others', 'personal growth', 'making a difference', 'career satisfaction'];
   }
   
   /**

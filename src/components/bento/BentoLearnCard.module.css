@@ -187,6 +187,10 @@
   padding: 4px 12px;
   border-radius: 20px;
   font-size: 12px;
+  display: inline-block;
+  white-space: nowrap;
+  writing-mode: horizontal-tb !important;
+  text-orientation: mixed !important;
 }
 
 .xpReward {
@@ -246,6 +250,16 @@
   background: rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   letter-spacing: 8px; /* Space between emojis for easier counting */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  word-break: break-all;
+  overflow-wrap: break-word;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .countingImageLarge {
@@ -293,6 +307,8 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
   margin-bottom: 16px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Stack vertically on smaller grids */
@@ -1009,6 +1025,31 @@
     grid-column: span 2;
     grid-row: span 2;
   }
+  
+  /* Mobile-specific fixes for practice components */
+  .countingEmojiLarge {
+    font-size: 40px !important;
+    letter-spacing: 4px !important;
+    padding: 12px !important;
+    max-width: 100%;
+    overflow: hidden;
+  }
+  
+  .questionType {
+    font-size: 11px !important;
+    padding: 2px 8px !important;
+  }
+  
+  .answersGrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 0 8px;
+  }
+  
+  .answerOption {
+    font-size: 16px !important;
+    padding: 14px !important;
+  }
 
   .mediumTile {
     grid-column: span 2;
@@ -1038,5 +1079,39 @@
 
   .questionText {
     font-size: 16px;
+  }
+}
+
+/* Small mobile screens (375px and below) */
+@media (max-width: 375px) {
+  .countingEmojiLarge {
+    font-size: 32px !important;
+    letter-spacing: 2px !important;
+    padding: 8px !important;
+    display: block !important;
+    text-align: center !important;
+    width: 100% !important;
+  }
+  
+  .questionType {
+    font-size: 10px !important;
+    padding: 2px 6px !important;
+  }
+  
+  .answersGrid {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    padding: 0 4px !important;
+  }
+  
+  .answerOption {
+    padding: 12px !important;
+    font-size: 14px !important;
+  }
+  
+  .bentoContainer {
+    grid-template-columns: 1fr;
+    padding: 12px;
+    gap: 8px;
   }
 }
