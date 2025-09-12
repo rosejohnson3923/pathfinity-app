@@ -186,6 +186,7 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
   const [currentChallenge, setCurrentChallenge] = useState(0);
   const [challengeAnswers, setChallengeAnswers] = useState<Record<number, number>>({});
   const [showChallengeFeedback, setShowChallengeFeedback] = useState<Record<number, boolean>>({});
+  const [showHint, setShowHint] = useState(false);
   const [simulationComplete, setSimulationComplete] = useState(false);
   const [sessionId] = useState(`experience-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`);
   const [currentHint, setCurrentHint] = useState<string | null>(null);
@@ -814,6 +815,7 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
       if (challengeIndex < content.interactive_simulation.challenges.length - 1) {
         setCurrentChallenge(challengeIndex + 1);
         setShowChallengeFeedback(prev => ({ ...prev, [challengeIndex]: false }));
+        setShowHint(false); // Reset hint for next challenge
       } else {
         setSimulationComplete(true);
         setTimeout(() => {
@@ -1073,7 +1075,7 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
             currentPhase={`Scenario ${currentScenarioIndex + 1} of ${multiScenarioContent.totalScenarios}`}
             totalPhases={multiScenarioContent.totalScenarios}
             showBackButton={true}
-            backPath="/student-dashboard"
+            onBack={onBack}
             showThemeToggle={false}
             hideOnLoading={true}
             isLoading={phase === 'loading'}
@@ -1136,7 +1138,7 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
                 correct_choice: s.interactiveSimulation?.challenges?.[0]?.correct_choice || 0,
                 outcome: s.interactiveSimulation?.challenges?.[0]?.outcome || '',
                 learning_point: s.interactiveSimulation?.challenges?.[0]?.learning_point || '',
-                hint: s.hint
+                hint: s.interactiveSimulation?.challenges?.[0]?.hint || s.hint || 'Think about how this skill can help you solve the problem.'
               })),
               aiGeneratedContent: content
             }}
@@ -1211,7 +1213,7 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
           currentPhase="Career Introduction"
           totalPhases={4}
           showBackButton={true}
-          backPath="/student-dashboard"
+          backPath="/app/dashboard"
           showThemeToggle={false}
           hideOnLoading={true}
           isLoading={loading}
@@ -1289,7 +1291,7 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
             currentPhase="Real-World Connections"
             totalPhases={4}
             showBackButton={true}
-            backPath="/student-dashboard"
+            onBack={onBack}
             showThemeToggle={false}
             hideOnLoading={true}
             isLoading={phase === 'loading'}
@@ -1359,7 +1361,7 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
           currentPhase="Real-World Connections"
           totalPhases={4}
           showBackButton={true}
-          backPath="/student-dashboard"
+          backPath="/app/dashboard"
           showThemeToggle={false}
           hideOnLoading={true}
           isLoading={loading}
@@ -1446,7 +1448,7 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
           currentPhase="Interactive Simulation"
           totalPhases={4}
           showBackButton={true}
-          backPath="/student-dashboard"
+          backPath="/app/dashboard"
           showThemeToggle={false}
           hideOnLoading={true}
           isLoading={loading}
@@ -1465,6 +1467,39 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
           <div className={questionStyles.questionCard}>
             <h2 className={questionStyles.questionTitle}>🎯 Your Professional Challenge</h2>
             <p className={questionStyles.questionText}>{challenge.description}</p>
+            
+            {/* Hint section */}
+            {challenge.hint && !showFeedback && (
+              <div className={questionStyles.hintSection}>
+                <button 
+                  onClick={() => setShowHint(prev => !prev)}
+                  className={questionStyles.hintButton}
+                  style={{
+                    background: 'linear-gradient(135deg, var(--amber-500), var(--amber-600))',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '8px 16px',
+                    marginTop: '12px',
+                    cursor: 'pointer',
+                    fontWeight: '600'
+                  }}
+                >
+                  💡 {showHint ? 'Hide Hint' : 'Need a Hint?'}
+                </button>
+                {showHint && (
+                  <div className={questionStyles.hintContent} style={{
+                    marginTop: '12px',
+                    padding: '12px',
+                    background: 'var(--amber-50)',
+                    borderRadius: '8px',
+                    border: '2px solid var(--amber-200)'
+                  }}>
+                    <strong>Hint:</strong> {challenge.hint}
+                  </div>
+                )}
+              </div>
+            )}
             
             <div className="challenge-choices">
               <h3>What would you do as a professional?</h3>
@@ -1534,7 +1569,7 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
           currentPhase="Completed"
           totalPhases={4}
           showBackButton={true}
-          backPath="/student-dashboard"
+          backPath="/app/dashboard"
           showThemeToggle={false}
           hideOnLoading={true}
           isLoading={loading}

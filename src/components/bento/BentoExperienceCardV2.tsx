@@ -14,6 +14,12 @@ import { chatbotService } from '../../services/chatbotService';
 import { getCompanionDisplayName } from '../../utils/companionUtils';
 import styles from './BentoExperienceCard.module.css';
 
+// Import design system tokens
+import '../../design-system/tokens/colors.css';
+import '../../design-system/tokens/spacing.css';
+import '../../design-system/tokens/borders.css';
+import '../../design-system/tokens/shadows.css';
+
 // Import tile components
 import { CompanionTile } from './tiles/CompanionTile';
 import { ScenarioTile } from './tiles/ScenarioTile';
@@ -115,6 +121,7 @@ interface BentoExperienceCardProps {
           description?: string;
           options?: string[];
           correct_choice?: number;
+          hint?: string;
           outcome?: string;
           learning_point?: string;
         }>;
@@ -505,27 +512,28 @@ export const BentoExperienceCard: React.FC<BentoExperienceCardProps> = ({
     return (
     <div style={{
       width: '100%',
-      background: actualTheme === 'dark' ? '#1a1a1a' : 'white',
-      borderRadius: '20px',
-      padding: '40px'
+      background: actualTheme === 'dark' ? 'var(--gray-900)' : 'var(--gray-50)',
+      borderRadius: 'var(--radius-xl)',
+      padding: 'var(--space-10)',
+      paddingTop: 'var(--space-20)' // Add extra padding to avoid header overlap
     }}>
       {/* Simple Welcome Header - Testing visibility */}
-      <div style={{
+      <div className={`${styles.welcomeHeader} ${styles.animateSlideInFromTop}`} style={{
         background: companion?.id?.toLowerCase() === 'harmony' 
-          ? 'linear-gradient(135deg, #ec4899, #f472b6)' 
+          ? 'linear-gradient(135deg, var(--magenta-500), var(--magenta-400))' 
           : companion?.id?.toLowerCase() === 'sage'
-          ? 'linear-gradient(135deg, #065f46, #10b981)'
+          ? 'linear-gradient(135deg, var(--teal-700), var(--teal-500))'
           : companion?.id?.toLowerCase() === 'spark'
-          ? 'linear-gradient(135deg, #dc2626, #f59e0b)'
-          : 'linear-gradient(135deg, #6366f1, #a855f7)',
-        color: 'white',
-        padding: '30px',
-        borderRadius: '20px',
-        marginBottom: '20px'
+          ? 'linear-gradient(135deg, var(--amber-600), var(--amber-500))'
+          : 'linear-gradient(135deg, var(--purple-600), var(--purple-500))',
+        color: 'var(--color-text-inverse)',
+        padding: 'var(--space-8)',
+        borderRadius: 'var(--radius-lg)',
+        marginBottom: 'var(--space-5)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
           {/* Companion Avatar */}
-          <div style={{ 
+          <div className={styles.animatePulse} style={{ 
             width: '80px', 
             height: '80px', 
             borderRadius: '50%', 
@@ -580,21 +588,21 @@ export const BentoExperienceCard: React.FC<BentoExperienceCardProps> = ({
         gap: '20px'
       }}>
         {/* Character Context & Story Setup Tile - LARGER */}
-        <div className={`${styles.bentoTile} ${styles.storyContextTile}`} style={{
+        <div className={`${styles.bentoTile} ${styles.storyContextTile} ${styles.animateSlideInFromLeft}`} style={{
         background: actualTheme === 'dark'
-          ? 'linear-gradient(135deg, rgba(16,185,129,0.2) 0%, rgba(5,150,105,0.2) 100%)'
-          : 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-        backgroundColor: actualTheme === 'dark' ? '#1a1a1a' : 'white',
-        border: actualTheme === 'dark' ? '1px solid rgba(16,185,129,0.4)' : 'none',
-        borderRadius: '20px',
-        padding: '28px',
+          ? 'linear-gradient(135deg, var(--teal-800), var(--teal-700))'
+          : 'linear-gradient(135deg, var(--teal-500), var(--teal-600))',
+        backgroundColor: actualTheme === 'dark' ? 'var(--gray-800)' : 'white',
+        border: actualTheme === 'dark' ? '1px solid var(--teal-700)' : 'none',
+        borderRadius: 'var(--radius-lg)',
+        padding: 'var(--space-7)',
         boxShadow: actualTheme === 'dark' 
-          ? '0 10px 30px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)'
-          : '0 20px 40px rgba(16,185,129,0.25), inset 0 1px 0 rgba(255,255,255,0.3)',
+          ? 'var(--shadow-xl)'
+          : 'var(--shadow-lg)',
         minHeight: '240px',
         position: 'relative',
         overflow: 'hidden',
-        color: actualTheme === 'dark' ? 'rgba(255,255,255,0.95)' : 'white'
+        color: 'var(--color-text-inverse)'
       }}>
         {/* Decorative element */}
         <div style={{
@@ -649,20 +657,20 @@ export const BentoExperienceCard: React.FC<BentoExperienceCardProps> = ({
       </div>
         
         {/* How Careers Use Skills Tile */}
-        <div className={`${styles.bentoTile} ${styles.howToTile}`} style={{
+        <div className={`${styles.bentoTile} ${styles.howToTile} ${styles.animateSlideInFromRight}`} style={{
         background: actualTheme === 'dark'
-          ? 'linear-gradient(135deg, rgba(59,130,246,0.2) 0%, rgba(37,99,235,0.2) 100%)'
-          : 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
-        backgroundColor: actualTheme === 'dark' ? '#1a1a1a' : 'white',
-        border: actualTheme === 'dark' ? '1px solid rgba(59,130,246,0.4)' : 'none',
-        borderRadius: '20px',
-        padding: '24px',
+          ? 'linear-gradient(135deg, var(--purple-800), var(--purple-700))'
+          : 'linear-gradient(135deg, var(--purple-500), var(--purple-600))',
+        backgroundColor: actualTheme === 'dark' ? 'var(--gray-800)' : 'white',
+        border: actualTheme === 'dark' ? '1px solid var(--purple-700)' : 'none',
+        borderRadius: 'var(--radius-lg)',
+        padding: 'var(--space-6)',
         boxShadow: actualTheme === 'dark' 
-          ? '0 10px 25px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)'
-          : '0 15px 30px rgba(59,130,246,0.2), inset 0 1px 0 rgba(255,255,255,0.3)',
+          ? 'var(--shadow-xl)'
+          : 'var(--shadow-lg)',
         position: 'relative',
         overflow: 'hidden',
-        color: actualTheme === 'dark' ? 'rgba(255,255,255,0.95)' : 'white'
+        color: 'var(--color-text-inverse)'
       }}>
         {/* Pattern overlay */}
         <div style={{
@@ -706,24 +714,25 @@ export const BentoExperienceCard: React.FC<BentoExperienceCardProps> = ({
     </div>
     
     {/* Your Mission & Start Adventure Tile - Enhanced visual design */}
-    <div className={`${styles.bentoTile} ${styles.missionTile}`} style={{
+    <div className={`${styles.bentoTile} ${styles.missionTile} ${styles.animateSlideInFromBottom}`} style={{
       gridColumn: 'span 4',
       background: actualTheme === 'dark'
-        ? 'linear-gradient(135deg, rgba(251,146,60,0.25) 0%, rgba(245,158,11,0.25) 100%)'
-        : 'linear-gradient(135deg, #fb923c 0%, #f59e0b 100%)',
-      backgroundColor: actualTheme === 'dark' ? '#1a1a1a' : 'white',
-      border: actualTheme === 'dark' ? '1px solid rgba(251,146,60,0.4)' : 'none',
-      borderRadius: '20px',
-      padding: '24px 28px',
+        ? 'linear-gradient(135deg, var(--amber-800), var(--amber-700))'
+        : 'linear-gradient(135deg, var(--amber-500), var(--amber-600))',
+      backgroundColor: actualTheme === 'dark' ? 'var(--gray-800)' : 'white',
+      border: actualTheme === 'dark' ? '1px solid var(--amber-700)' : 'none',
+      borderRadius: 'var(--radius-lg)',
+      padding: 'var(--space-6) var(--space-7)',
+      marginTop: 'var(--space-5)', // Add margin to separate from tiles above
       boxShadow: actualTheme === 'dark' 
-        ? '0 10px 30px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)'
-        : '0 15px 35px rgba(251,146,60,0.25), inset 0 1px 0 rgba(255,255,255,0.3)',
+        ? 'var(--shadow-xl)'
+        : 'var(--shadow-lg)',
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
-      gap: '32px',
+      gap: 'var(--space-8)',
       position: 'relative',
-      color: actualTheme === 'dark' ? 'rgba(255,255,255,0.95)' : 'white'
+      color: 'var(--color-text-inverse)'
     }}>
       {/* Animated background pattern */}
       <div style={{
@@ -861,20 +870,20 @@ export const BentoExperienceCard: React.FC<BentoExperienceCardProps> = ({
         className={styles.startButton}
         onClick={onNext}
         style={{
-          background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-          color: 'white',
+          background: 'linear-gradient(135deg, var(--teal-500), var(--teal-600))',
+          color: 'var(--color-text-inverse)',
           border: 'none',
-          borderRadius: '16px',
-          padding: '18px 36px',
+          borderRadius: 'var(--radius-md)',
+          padding: 'var(--space-5) var(--space-9)',
           fontSize: '20px',
           fontWeight: '700',
           cursor: 'pointer',
-          boxShadow: '0 10px 25px rgba(16,185,129,0.4), inset 0 1px 0 rgba(255,255,255,0.2)',
+          boxShadow: 'var(--shadow-lg)',
           transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: '10px',
+          gap: 'var(--space-3)',
           whiteSpace: 'nowrap',
           minWidth: '200px',
           position: 'relative',
@@ -882,11 +891,11 @@ export const BentoExperienceCard: React.FC<BentoExperienceCardProps> = ({
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.transform = 'translateY(-2px) scale(1.05)';
-          e.currentTarget.style.boxShadow = '0 15px 35px rgba(16,185,129,0.5), inset 0 1px 0 rgba(255,255,255,0.3)';
+          e.currentTarget.style.boxShadow = 'var(--shadow-xl)';
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.transform = 'translateY(0) scale(1)';
-          e.currentTarget.style.boxShadow = '0 10px 25px rgba(16,185,129,0.4), inset 0 1px 0 rgba(255,255,255,0.2)';
+          e.currentTarget.style.boxShadow = 'var(--shadow-lg)';
         }}
       >
         <span style={{ fontSize: '24px' }}>🚀</span>

@@ -962,7 +962,7 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
         }
         totalPhases={3}
         showBackButton={true}
-        backPath="/student-dashboard"
+        onBack={onBack}
         showThemeToggle={false}
         showSkipButton={import.meta.env.DEV}
         onSkip={() => handlePhaseTransition()}

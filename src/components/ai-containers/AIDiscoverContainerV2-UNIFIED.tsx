@@ -819,7 +819,7 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
             currentPhase="Exploration Introduction"
             totalPhases={5}
             showBackButton={true}
-            backPath="/student-dashboard"
+            onBack={onBack}
             showThemeToggle={false}
             hideOnLoading={true}
             isLoading={loading}
@@ -858,7 +858,7 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
           currentPhase="Exploration Introduction"
           totalPhases={5}
           showBackButton={true}
-          backPath="/student-dashboard"
+          backPath="/app/dashboard"
           showThemeToggle={false}
           hideOnLoading={true}
           isLoading={loading}
@@ -936,7 +936,7 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
           currentPhase="Discovery Paths"
           totalPhases={5}
           showBackButton={true}
-          backPath="/student-dashboard"
+          backPath="/app/dashboard"
           showThemeToggle={false}
           hideOnLoading={true}
           isLoading={loading}
@@ -993,7 +993,7 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
           currentPhase="Activities"
           totalPhases={5}
           showBackButton={true}
-          backPath="/student-dashboard"
+          backPath="/app/dashboard"
           showThemeToggle={false}
           hideOnLoading={true}
           isLoading={loading}
@@ -1080,7 +1080,7 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
           currentPhase="Reflection"
           totalPhases={5}
           showBackButton={true}
-          backPath="/student-dashboard"
+          backPath="/app/dashboard"
           showThemeToggle={false}
           hideOnLoading={true}
           isLoading={loading}
@@ -1160,7 +1160,7 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
           currentPhase="Completed"
           totalPhases={5}
           showBackButton={true}
-          backPath="/student-dashboard"
+          backPath="/app/dashboard"
           showThemeToggle={false}
           hideOnLoading={true}
           isLoading={loading}

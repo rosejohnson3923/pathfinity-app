@@ -1010,11 +1010,12 @@ Return JSON:
     "setup": "You arrive at your ${careerToUse} job and...",
     "challenges": [
       // Generate EXACTLY ${challengeCount} challenge objects
-      // Each with: description, options (3-4), correct_choice, outcome, learning_point
+      // Each with: description, options (3-4), correct_choice, hint, outcome, learning_point
       {
-        "description": "Challenge 1: Your boss asks you to... What do you do?",
+        "description": "Challenge 1: Your coworker asks you to... What do you do?",
         "options": ["I would...", "I would...", "I would..."],
         "correct_choice": 0,
+        "hint": "Think about how ${skill.skill_name} can help you solve this...",
         "outcome": "You chose to... and it worked because...",
         "learning_point": "You learned that ${skill.skill_name} helps you..."
       }
@@ -1345,10 +1346,10 @@ Return JSON:
       career_introduction: `As a ${career}, you use ${skillName} to solve important problems and help people.`,
       real_world_connections: [], // Removed - no longer needed
       interactive_simulation: {
-        setup: `You arrive at your ${career} job and your boss has a task for you!`,
+        setup: `You arrive at your ${career} job and your coworker has a task for you!`,
         challenges: [
           {
-            description: 'Your boss asks you to handle this challenge. What do you do?',
+            description: 'Your coworker asks you to handle this challenge. What do you do?',
             options: ['I would try approach A', 'I would try approach B', 'I would try approach C'],
             correct_choice: 0,
             outcome: 'You chose the best approach! Your solution worked perfectly.',

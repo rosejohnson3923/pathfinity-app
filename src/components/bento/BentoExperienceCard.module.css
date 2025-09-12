@@ -888,6 +888,32 @@
   font-size: var(--text-lg);
 }
 
+/* Animation Classes */
+.animateSlideInFromTop {
+  animation: slideInFromTop 0.6s ease-out;
+}
+
+.animateSlideInFromLeft {
+  animation: slideInFromLeft 0.8s ease-out;
+}
+
+.animateSlideInFromRight {
+  animation: slideInFromRight 0.8s ease-out 0.2s backwards;
+}
+
+.animateSlideInFromBottom {
+  animation: slideInFromBottom 1s ease-out 0.4s backwards;
+}
+
+.animatePulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.welcomeHeader {
+  position: relative;
+  overflow: hidden;
+}
+
 /* Animations */
 @keyframes fadeIn {
   from { opacity: 0; }
@@ -897,6 +923,55 @@
 @keyframes slideUp {
   from { transform: translateY(20px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideInFromTop {
+  0% { 
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromLeft {
+  0% { 
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% { 
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromRight {
+  0% { 
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  100% { 
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromBottom {
+  0% { 
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
 }
 
 @keyframes correctPulse {

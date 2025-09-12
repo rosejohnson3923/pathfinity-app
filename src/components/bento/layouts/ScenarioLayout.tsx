@@ -145,7 +145,8 @@ export const ScenarioLayout: React.FC<ScenarioLayoutProps> = ({
             scenario={{
               description: scenario.description,
               visual: scenario.visual || '❓',
-              careerContext: `Like a ${career.name}!`
+              careerContext: `Like a ${career.name}!`,
+              hint: scenario.hint
             }}
             scenarioNumber={scenarioIndex + 1}
             totalScenarios={totalScenarios}
@@ -153,6 +154,7 @@ export const ScenarioLayout: React.FC<ScenarioLayoutProps> = ({
             skill={skill}
             gradeLevel={gradeLevel}
             visualSize="large"
+            showHint={showHint}
           />
         </div>
 
@@ -272,13 +274,15 @@ export const ScenarioLayout: React.FC<ScenarioLayoutProps> = ({
             scenario={{
               description: scenario.description,
               visual: scenario.visual,
-              careerContext: scenario.careerContext || `${career.name} perspective`
+              careerContext: scenario.careerContext || `${career.name} perspective`,
+              hint: scenario.hint
             }}
             scenarioNumber={scenarioIndex + 1}
             totalScenarios={totalScenarios}
             career={career}
             skill={skill}
             gradeLevel={gradeLevel}
+            showHint={showHint}
           />
         </div>
 
@@ -370,7 +374,8 @@ export const ScenarioLayout: React.FC<ScenarioLayoutProps> = ({
             <ScenarioTile
               scenario={{
                 description: scenario.description,
-                careerContext: `Professional context: ${career.name}`
+                careerContext: `Professional context: ${career.name}`,
+                hint: scenario.hint
               }}
               scenarioNumber={scenarioIndex + 1}
               totalScenarios={totalScenarios}
@@ -378,6 +383,7 @@ export const ScenarioLayout: React.FC<ScenarioLayoutProps> = ({
               skill={skill}
               gradeLevel={gradeLevel}
               compact={true}
+              showHint={showHint}
             />
           </div>
 
@@ -465,6 +471,11 @@ export const ScenarioLayout: React.FC<ScenarioLayoutProps> = ({
             <p className={styles.contextNote}>
               <em>Context: {career.name} - {scenario.careerContext}</em>
             </p>
+          )}
+          {showHint && scenario.hint && (
+            <div className={styles.hintBox}>
+              <strong>Hint:</strong> {scenario.hint}
+            </div>
           )}
         </div>
 

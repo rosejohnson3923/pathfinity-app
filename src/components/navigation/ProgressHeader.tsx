@@ -73,7 +73,7 @@ export const ProgressHeader: React.FC<ProgressHeaderProps> = ({
   subjects,
   onSubjectChange,
   showBackButton = true,
-  backPath = '/student-dashboard',
+  backPath = '/app/dashboard',
   onBack,
   showThemeToggle = false,
   showSkipButton = false,
@@ -95,7 +95,7 @@ export const ProgressHeader: React.FC<ProgressHeaderProps> = ({
   }
 
   // Determine if we're in the dashboard
-  const isInDashboard = location.pathname === '/student-dashboard' || 
+  const isInDashboard = location.pathname === '/app/dashboard' || 
                        location.pathname === '/dashboard';
 
   const handleBack = () => {
@@ -284,7 +284,7 @@ export const ProgressHeader: React.FC<ProgressHeaderProps> = ({
                 onSettingsClick();
               } else {
                 // Navigate to dashboard and open settings
-                navigate('/student-dashboard', { state: { openSettings: true } });
+                navigate('/app/dashboard', { state: { openSettings: true } });
               }
             }}
             aria-label="Settings"

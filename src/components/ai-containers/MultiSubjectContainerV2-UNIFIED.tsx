@@ -495,7 +495,6 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
             subject={`${currentSubject} Foundations`}
             showBackButton={true}
             onBack={onBack}
-            backPath="/student-dashboard"
             showThemeToggle={false}
             showSkipButton={false}
             hideOnLoading={true}
