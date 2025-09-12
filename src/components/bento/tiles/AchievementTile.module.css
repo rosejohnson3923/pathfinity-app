@@ -1,0 +1,540 @@
+/**
+ * AchievementTile Styles
+ * Using Pathfinity Design System Tokens
+ */
+
+/* Import design system */
+@import '../../../design-system/index.css';
+
+.achievementTile {
+  position: relative;
+  background: var(--color-bg-elevated);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-current-md);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Size variants */
+.sizeSmall {
+  padding: var(--space-3);
+  min-width: var(--space-24);
+  min-height: var(--space-16);
+}
+
+.sizeMedium {
+  padding: var(--space-4);
+  min-width: var(--space-32);
+  min-height: var(--space-24);
+}
+
+.sizeLarge {
+  padding: var(--space-6);
+  min-width: var(--space-48);
+  min-height: var(--space-32);
+}
+
+/* Type-specific backgrounds */
+.typeXp {
+  background: linear-gradient(135deg, var(--amber-50), var(--color-bg-elevated));
+  border-color: var(--amber-500);
+}
+
+[data-theme="dark"] .typeXp {
+  background: linear-gradient(135deg, var(--amber-900), var(--color-bg-elevated));
+  opacity: var(--opacity-20);
+}
+
+.typeBadge {
+  background: linear-gradient(135deg, var(--purple-50), var(--color-bg-elevated));
+  border-color: var(--purple-500);
+}
+
+[data-theme="dark"] .typeBadge {
+  background: linear-gradient(135deg, var(--purple-900), var(--color-bg-elevated));
+  opacity: var(--opacity-20);
+}
+
+.typeStreak {
+  background: linear-gradient(135deg, var(--orange-50), var(--color-bg-elevated));
+  border-color: var(--orange-500);
+}
+
+[data-theme="dark"] .typeStreak {
+  background: linear-gradient(135deg, var(--orange-900), var(--color-bg-elevated));
+  opacity: var(--opacity-20);
+}
+
+.typeMilestone {
+  background: linear-gradient(135deg, var(--teal-50), var(--color-bg-elevated));
+  border-color: var(--teal-500);
+}
+
+[data-theme="dark"] .typeMilestone {
+  background: linear-gradient(135deg, var(--teal-900), var(--color-bg-elevated));
+  opacity: var(--opacity-20);
+}
+
+.typeLevel {
+  background: linear-gradient(135deg, var(--blue-50), var(--color-bg-elevated));
+  border-color: var(--blue-500);
+}
+
+[data-theme="dark"] .typeLevel {
+  background: linear-gradient(135deg, var(--blue-900), var(--color-bg-elevated));
+  opacity: var(--opacity-20);
+}
+
+.typeComplete {
+  background: linear-gradient(135deg, var(--green-50), var(--color-bg-elevated));
+  border-color: var(--green-500);
+}
+
+[data-theme="dark"] .typeComplete {
+  background: linear-gradient(135deg, var(--green-900), var(--color-bg-elevated));
+  opacity: var(--opacity-20);
+}
+
+/* XP Tile */
+.xpTile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  text-align: center;
+}
+
+.xpIcon {
+  font-size: var(--text-3xl);
+  animation: sparkle var(--duration-slow) var(--ease-in-out);
+}
+
+.xpValue {
+  font-size: var(--text-4xl);
+  font-weight: var(--font-bold);
+  color: var(--amber-600);
+  animation: countUp var(--duration-base) var(--ease-out);
+}
+
+[data-theme="dark"] .xpValue {
+  color: var(--amber-400);
+}
+
+.xpLabel {
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-secondary);
+}
+
+/* Badge Tile */
+.badgeTile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  text-align: center;
+}
+
+.badgeIcon {
+  font-size: var(--text-4xl);
+  animation: rotate var(--duration-slow) var(--ease-in-out);
+}
+
+.badgeName {
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  color: var(--purple-600);
+}
+
+[data-theme="dark"] .badgeName {
+  color: var(--purple-400);
+}
+
+.badgeDescription {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-normal);
+}
+
+/* Streak Tile */
+.streakTile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  text-align: center;
+}
+
+.streakIcon {
+  font-size: var(--text-3xl);
+  animation: flicker var(--duration-slower) var(--ease-in-out) infinite;
+}
+
+.streakValue {
+  font-size: var(--text-5xl);
+  font-weight: var(--font-black);
+  color: var(--orange-600);
+}
+
+[data-theme="dark"] .streakValue {
+  color: var(--orange-400);
+}
+
+.streakLabel {
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+}
+
+/* Milestone Tile */
+.milestoneTile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.milestoneHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.milestoneIcon {
+  font-size: var(--text-2xl);
+}
+
+.milestoneTitle {
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  color: var(--teal-600);
+}
+
+[data-theme="dark"] .milestoneTitle {
+  color: var(--teal-400);
+}
+
+.milestoneContent {
+  padding-left: var(--space-8);
+}
+
+.milestoneDescription {
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+/* Level Tile */
+.levelTile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  text-align: center;
+}
+
+.levelUpAnimation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  animation: levelUp var(--duration-base) var(--ease-bounce);
+}
+
+.levelIcon {
+  font-size: var(--text-3xl);
+}
+
+.levelText {
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+  color: var(--blue-600);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+}
+
+.levelValue {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  color: var(--blue-600);
+}
+
+[data-theme="dark"] .levelValue {
+  color: var(--blue-400);
+}
+
+.levelMessage {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+/* Complete Tile */
+.completeTile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  text-align: center;
+}
+
+.completeIcon {
+  font-size: var(--text-4xl);
+  animation: checkmark var(--duration-base) var(--ease-out);
+}
+
+.completeTitle {
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  color: var(--green-600);
+}
+
+[data-theme="dark"] .completeTitle {
+  color: var(--green-400);
+}
+
+.completeMessage {
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+}
+
+.completeStats {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-full);
+}
+
+.statLabel {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.statValue {
+  font-size: var(--text-base);
+  font-weight: var(--font-bold);
+  color: var(--green-600);
+}
+
+/* Achievement List */
+.achievementList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+/* Celebration Overlay */
+.celebrationOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.confetti,
+.star,
+.sparkle {
+  position: absolute;
+  font-size: var(--text-2xl);
+  animation-duration: var(--duration-slower);
+  animation-timing-function: var(--ease-out);
+  animation-fill-mode: forwards;
+}
+
+.confetti {
+  animation-name: confettiFall;
+}
+
+.star {
+  animation-name: starBurst;
+}
+
+.sparkle {
+  animation-name: sparkleFloat;
+}
+
+/* Position variants for particles */
+.confetti0, .star0, .sparkle0 { left: 10%; top: 10%; }
+.confetti1, .star1, .sparkle1 { left: 30%; top: 15%; }
+.confetti2, .star2, .sparkle2 { left: 50%; top: 10%; }
+.confetti3, .star3, .sparkle3 { left: 70%; top: 15%; }
+.confetti4, .star4, .sparkle4 { left: 90%; top: 10%; }
+.confetti5, .star5, .sparkle5 { left: 20%; top: 20%; }
+.confetti6, .star6, .sparkle6 { left: 40%; top: 25%; }
+.confetti7, .star7, .sparkle7 { left: 60%; top: 20%; }
+.confetti8, .star8, .sparkle8 { left: 80%; top: 25%; }
+.confetti9, .star9, .sparkle9 { left: 45%; top: 30%; }
+.sparkle10 { left: 25%; top: 35%; }
+.sparkle11 { left: 75%; top: 35%; }
+
+/* Animations */
+.animateIn {
+  animation: slideInScale var(--duration-base) var(--ease-out);
+}
+
+.bounce {
+  animation: bounce var(--duration-slow) var(--ease-bounce) infinite;
+}
+
+@keyframes slideInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes countUp {
+  from {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.2) rotate(180deg);
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes flicker {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes levelUp {
+  0% {
+    transform: scale(0.5) translateY(20px);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2) translateY(-10px);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes checkmark {
+  0% {
+    transform: scale(0) rotate(-180deg);
+  }
+  50% {
+    transform: scale(1.2) rotate(20deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes confettiFall {
+  to {
+    transform: translateY(200px) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+@keyframes starBurst {
+  to {
+    transform: scale(2) rotate(180deg);
+    opacity: 0;
+  }
+}
+
+@keyframes sparkleFloat {
+  to {
+    transform: translateY(-100px) scale(0);
+    opacity: 0;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Grade-Specific Styles */
+.gradeK2 {
+  --text-3xl: var(--text-4xl);
+  --text-4xl: var(--text-5xl);
+  --text-5xl: var(--text-6xl);
+}
+
+.gradeK2 .achievementTile {
+  min-height: var(--space-32);
+}
+
+.grade35 {
+  --text-3xl: var(--text-3xl);
+  --text-4xl: var(--text-4xl);
+}
+
+.grade68 {
+  /* Use default sizes */
+}
+
+.grade912 .achievementTile {
+  border-width: 1px;
+  background: var(--color-bg-secondary);
+}
+
+.grade912 .celebrationOverlay {
+  display: none; /* More professional */
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sizeLarge {
+    min-width: 100%;
+    padding: var(--space-4);
+  }
+  
+  .achievementList {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .xpValue {
+    font-size: var(--text-3xl);
+  }
+  
+  .streakValue {
+    font-size: var(--text-4xl);
+  }
+}

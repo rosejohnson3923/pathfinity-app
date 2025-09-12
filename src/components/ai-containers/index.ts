@@ -12,6 +12,6 @@ export type {
   StudentProfile,
   LearningSkill,
   AILearnContent,
-  AIExperienceContent,
+  AIExperienceContentLegacy,
   AIDiscoverContent
 } from '../../services/AILearningJourneyService';

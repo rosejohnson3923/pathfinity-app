@@ -78,7 +78,7 @@ You are an expert educational content creator specializing in personalized, gami
 
 ${this.getSystemContext(student, career, skill, companion)}
 
-${formatUniversalRulesForPrompt()}
+${formatUniversalRulesForPrompt(grade)}
 
 ${formatSubjectRulesForPrompt(subject, grade)}
 

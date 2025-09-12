@@ -1,0 +1,294 @@
+/**
+ * CompanionTile Styles
+ * Personality-based animations and speech bubbles
+ */
+
+.companionTile {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  transition: all 0.3s ease;
+}
+
+/* Size Variants */
+.sizeSmall .companionAvatar {
+  width: 60px;
+  height: 60px;
+}
+
+.sizeMedium .companionAvatar {
+  width: 80px;
+  height: 80px;
+}
+
+.sizeLarge .companionAvatar {
+  width: 120px;
+  height: 120px;
+}
+
+/* Position Variants */
+.positionFloat {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.positionInline {
+  position: relative;
+  margin: var(--spacing-md) 0;
+}
+
+.positionCorner {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+/* Companion Avatar */
+.companionAvatar {
+  position: relative;
+  border-radius: var(--radius-full);
+  background: var(--gradient-companion);
+  padding: 8px;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.companionImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: var(--radius-full);
+}
+
+/* Emotion Indicator */
+.emotionIndicator {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 24px;
+  height: 24px;
+  background: white;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Speech Bubble */
+.speechBubble {
+  position: relative;
+  background: white;
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  max-width: 300px;
+  box-shadow: var(--shadow-md);
+  animation: bubbleAppear 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transform-origin: left center;
+}
+
+.bubbleContent {
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+  color: var(--color-text);
+}
+
+.typingCursor {
+  animation: blink 1s infinite;
+  color: var(--color-primary);
+  font-weight: bold;
+}
+
+.bubbleTail {
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 10px 10px 10px 0;
+  border-color: transparent white transparent transparent;
+}
+
+.bubbleTail::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: -10px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 10px 10px 10px 0;
+  border-color: transparent var(--color-primary) transparent transparent;
+}
+
+/* Companion-Specific Styles */
+.companionFinn {
+  --gradient-companion: linear-gradient(135deg, #a855f7, #7c3aed);
+}
+
+.companionSage {
+  --gradient-companion: linear-gradient(135deg, #8b5cf6, #6d28d9);
+}
+
+.companionSpark {
+  --gradient-companion: linear-gradient(135deg, #fbbf24, #f59e0b);
+}
+
+.companionHarmony {
+  --gradient-companion: linear-gradient(135deg, #fb7185, #f43f5e);
+}
+
+/* Emotion-Based Bubble Styles */
+.bubbleHappy {
+  background: linear-gradient(135deg, #fef3c7, #fff);
+}
+
+.bubbleThinking {
+  background: linear-gradient(135deg, #dbeafe, #fff);
+}
+
+.bubbleCelebrating {
+  background: linear-gradient(135deg, #fce7f3, #fff);
+  animation: celebrate 0.5s ease;
+}
+
+.bubbleEncouraging {
+  background: linear-gradient(135deg, #dcfce7, #fff);
+}
+
+/* Personality-Based Animations */
+.animateBounce {
+  animation: bounce 2s ease-in-out infinite, wiggle 3s ease-in-out infinite;
+  animation-delay: 0s, 0.5s;
+}
+
+.animateFloat {
+  animation: float 3s ease-in-out infinite, glow 4s ease-in-out infinite;
+  animation-delay: 0s, 1s;
+}
+
+.animatePulse {
+  animation: pulse 1.5s ease-in-out infinite, sparkle 2s ease-in-out infinite;
+  animation-delay: 0s, 0.3s;
+}
+
+.animateSway {
+  animation: sway 4s ease-in-out infinite, breathe 5s ease-in-out infinite;
+  animation-delay: 0s, 0.8s;
+}
+
+/* Animation Keyframes */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes sway {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+@keyframes celebrate {
+  0%, 100% { transform: scale(1) rotate(0); }
+  25% { transform: scale(1.1) rotate(-5deg); }
+  75% { transform: scale(1.1) rotate(5deg); }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-3deg); }
+  75% { transform: rotate(3deg); }
+}
+
+@keyframes glow {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.1) drop-shadow(0 0 10px rgba(139, 92, 246, 0.3)); }
+}
+
+@keyframes sparkle {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.2) contrast(1.1); }
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+@keyframes bubbleAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0) translateX(-20px);
+  }
+  50% {
+    transform: scale(1.1) translateX(5px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateX(0);
+  }
+}
+
+/* Dark Theme */
+:global(.dark) .speechBubble {
+  background: var(--color-surface);
+  border-color: var(--color-primary-dark);
+  color: var(--color-text-dark);
+}
+
+:global(.dark) .bubbleContent {
+  color: var(--color-text-dark);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .speechBubble {
+    max-width: 200px;
+    font-size: var(--font-size-sm);
+  }
+  
+  .positionFloat {
+    bottom: 10px;
+    right: 10px;
+  }
+  
+  .sizeLarge .companionAvatar {
+    width: 80px;
+    height: 80px;
+  }
+}

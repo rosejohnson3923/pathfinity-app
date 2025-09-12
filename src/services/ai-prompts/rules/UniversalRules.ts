@@ -228,11 +228,107 @@ export const UNIVERSAL_RULES = {
       'practiceSupport complete for practice questions',
       'options array has exactly 4 items for multiple_choice'
     ]
+  },
+
+  // Grade-specific language constraints
+  LANGUAGE_CONSTRAINTS: {
+    K: {
+      sentence_length: '3-5 words per sentence',
+      vocabulary: 'Simple, common words only',
+      instructions: 'One-step directions',
+      examples: [
+        'The cat is big.',
+        'Count the red apples.',
+        'Which shape is blue?'
+      ],
+      avoid: [
+        'Complex sentences',
+        'Multiple clauses',
+        'Abstract concepts',
+        'Compound instructions'
+      ]
+    },
+    '1-2': {
+      sentence_length: '5-8 words per sentence',
+      vocabulary: 'Common words, simple concepts',
+      instructions: 'Clear, single-step directions',
+      examples: [
+        'The big dog runs very fast.',
+        'Add these two numbers together.',
+        'Find all the triangles in the picture.'
+      ]
+    },
+    '3-5': {
+      sentence_length: '8-12 words per sentence',
+      vocabulary: 'Grade-appropriate vocabulary with context clues',
+      instructions: 'Can include two-step directions',
+      examples: [
+        'Scientists use tools to measure weather patterns every day.',
+        'First, count the objects, then write the total number.',
+        'Compare these two fractions and choose the larger one.'
+      ]
+    },
+    '6-8': {
+      sentence_length: '10-15 words per sentence',
+      vocabulary: 'More complex vocabulary with academic terms',
+      instructions: 'Multi-step processes with logical sequences',
+      examples: [
+        'Analyze the data in the graph to identify patterns and trends.',
+        'Calculate the area of the rectangle, then find its perimeter.',
+        'Evaluate how this historical event influenced modern society.'
+      ]
+    },
+    '9-12': {
+      sentence_length: 'Varied sentence structure',
+      vocabulary: 'Advanced vocabulary and technical terms',
+      instructions: 'Complex, multi-faceted tasks',
+      examples: [
+        'Synthesize information from multiple sources to develop a comprehensive understanding.',
+        'Apply the quadratic formula to solve for x in the given equation.',
+        'Critically evaluate the author\'s argument and identify potential biases.'
+      ]
+    }
   }
 };
 
 // Helper function to generate the rules text for AI prompt
-export function formatUniversalRulesForPrompt(): string {
+export function formatUniversalRulesForPrompt(grade?: string): string {
+  // Determine which language constraints to apply
+  let languageSection = '';
+  if (grade) {
+    const gradeNum = parseInt(grade);
+    let constraintKey = '';
+    
+    if (grade === 'K' || grade === 'k' || grade === '0') {
+      constraintKey = 'K';
+    } else if (gradeNum >= 1 && gradeNum <= 2) {
+      constraintKey = '1-2';
+    } else if (gradeNum >= 3 && gradeNum <= 5) {
+      constraintKey = '3-5';
+    } else if (gradeNum >= 6 && gradeNum <= 8) {
+      constraintKey = '6-8';
+    } else if (gradeNum >= 9 && gradeNum <= 12) {
+      constraintKey = '9-12';
+    }
+    
+    if (constraintKey && UNIVERSAL_RULES.LANGUAGE_CONSTRAINTS[constraintKey]) {
+      const constraints = UNIVERSAL_RULES.LANGUAGE_CONSTRAINTS[constraintKey];
+      languageSection = `
+
+LANGUAGE REQUIREMENTS FOR GRADE ${grade}:
+  • Sentence Length: ${constraints.sentence_length}
+  • Vocabulary: ${constraints.vocabulary}
+  • Instructions: ${constraints.instructions}
+  
+  Good Examples:
+${constraints.examples.map(e => `    "${e}"`).join('\n')}
+  
+  AVOID:
+${constraints.avoid ? constraints.avoid.map(a => `    ✗ ${a}`).join('\n') : '    ✗ Overly complex language'}
+`;
+    }
+  }
+  
   return `
 ========================================
 UNIVERSAL RULES (APPLY TO ALL QUESTIONS)
@@ -273,7 +369,7 @@ STRUCTURE REQUIREMENTS:
   • Practice: EXACTLY 5 questions with variety
   • Assessment: EXACTLY 1 question
   • Examples: EXACTLY 3 worked examples
-`;
+${languageSection}`;
 }
 
 // Type guards for validation

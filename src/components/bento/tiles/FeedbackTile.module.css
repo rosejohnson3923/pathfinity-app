@@ -1,0 +1,380 @@
+/**
+ * FeedbackTile Styles
+ * Using Pathfinity Design System Tokens
+ */
+
+/* Import design system */
+@import '../../../design-system/index.css';
+
+.feedbackTile {
+  background: var(--color-bg-elevated);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-current-md);
+  transition: var(--transition-all);
+  position: relative;
+  overflow: hidden;
+}
+
+.feedbackTile.animated {
+  animation: slideIn var(--duration-base) var(--ease-out);
+}
+
+/* Feedback type variants */
+.feedbackSuccess {
+  border-color: var(--green-500);
+  background: linear-gradient(135deg, var(--green-50), var(--color-bg-elevated));
+}
+
+[data-theme="dark"] .feedbackSuccess {
+  background: linear-gradient(135deg, var(--green-900), var(--color-bg-elevated));
+  opacity: var(--opacity-20);
+}
+
+.feedbackPartial {
+  border-color: var(--amber-500);
+  background: linear-gradient(135deg, var(--amber-50), var(--color-bg-elevated));
+}
+
+[data-theme="dark"] .feedbackPartial {
+  background: linear-gradient(135deg, var(--amber-900), var(--color-bg-elevated));
+  opacity: var(--opacity-20);
+}
+
+.feedbackIncorrect {
+  border-color: var(--red-500);
+  background: linear-gradient(135deg, var(--red-50), var(--color-bg-elevated));
+}
+
+[data-theme="dark"] .feedbackIncorrect {
+  background: linear-gradient(135deg, var(--red-900), var(--color-bg-elevated));
+  opacity: var(--opacity-20);
+}
+
+.feedbackHint {
+  border-color: var(--blue-500);
+  background: linear-gradient(135deg, var(--blue-50), var(--color-bg-elevated));
+}
+
+[data-theme="dark"] .feedbackHint {
+  background: linear-gradient(135deg, var(--blue-900), var(--color-bg-elevated));
+  opacity: var(--opacity-20);
+}
+
+.feedbackProgress {
+  border-color: var(--teal-500);
+  background: linear-gradient(135deg, var(--teal-50), var(--color-bg-elevated));
+}
+
+[data-theme="dark"] .feedbackProgress {
+  background: linear-gradient(135deg, var(--teal-900), var(--color-bg-elevated));
+  opacity: var(--opacity-20);
+}
+
+/* Header Section */
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-12);
+  height: var(--space-12);
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-current-sm);
+}
+
+.icon {
+  font-size: var(--text-2xl);
+}
+
+.typeLabel {
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  color: var(--color-text-primary);
+}
+
+/* Message Section */
+.messageSection {
+  margin-bottom: var(--space-4);
+}
+
+.message {
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+/* Score Section */
+.scoreSection {
+  background: var(--color-bg-secondary);
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-4);
+}
+
+.scoreBar {
+  width: 100%;
+  height: var(--space-6);
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-bottom: var(--space-3);
+}
+
+.scoreProgress {
+  height: 100%;
+  background: linear-gradient(90deg, var(--teal-400), var(--teal-600));
+  transition: width var(--duration-slow) var(--ease-out);
+  border-radius: var(--radius-full);
+}
+
+.scoreText {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-1);
+  justify-content: center;
+  font-weight: var(--font-semibold);
+}
+
+.scoreValue {
+  font-size: var(--text-2xl);
+  color: var(--teal-600);
+}
+
+[data-theme="dark"] .scoreValue {
+  color: var(--teal-400);
+}
+
+.scoreSeparator {
+  font-size: var(--text-lg);
+  color: var(--color-text-secondary);
+}
+
+.scoreMax {
+  font-size: var(--text-xl);
+  color: var(--color-text-primary);
+}
+
+.scorePercentage {
+  font-size: var(--text-base);
+  color: var(--color-text-tertiary);
+  margin-left: var(--space-2);
+}
+
+/* Details Section */
+.detailsSection {
+  background: var(--color-bg-secondary);
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-4);
+}
+
+.detailsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.detailItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.detailBullet {
+  color: var(--teal-500);
+  font-weight: var(--font-bold);
+  flex-shrink: 0;
+}
+
+.detailText {
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--color-text-primary);
+}
+
+/* Companion Section */
+.companionSection {
+  margin-top: var(--space-6);
+  padding-top: var(--space-4);
+  border-top: 2px solid var(--color-border-subtle);
+}
+
+.companionBubble {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  background: var(--color-bg-secondary);
+  padding: var(--space-4);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-current-sm);
+}
+
+.companionEmoji {
+  font-size: var(--text-3xl);
+  animation: bounce var(--duration-slow) var(--ease-bounce) infinite;
+}
+
+.companionMessage {
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--color-text-primary);
+  margin: 0;
+  font-style: italic;
+}
+
+/* Celebration Overlay */
+.celebrationOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  opacity: var(--opacity-30);
+}
+
+.celebrationEmoji {
+  font-size: var(--text-4xl);
+  animation: sparkle var(--duration-slower) var(--ease-in-out) infinite;
+}
+
+.celebrationEmoji:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.celebrationEmoji:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* Grade-Specific Styles */
+.gradeK2 {
+  --text-base: var(--text-xl);
+  --text-lg: var(--text-2xl);
+  --text-xl: var(--text-3xl);
+  --text-2xl: var(--text-4xl);
+  --space-6: var(--space-8);
+}
+
+.gradeK2 .icon {
+  font-size: var(--text-4xl);
+}
+
+.gradeK2 .companionEmoji {
+  font-size: var(--text-5xl);
+}
+
+.grade35 {
+  --text-base: var(--text-lg);
+  --text-lg: var(--text-xl);
+  --text-xl: var(--text-2xl);
+  --text-2xl: var(--text-3xl);
+}
+
+.grade35 .icon {
+  font-size: var(--text-3xl);
+}
+
+.grade68 {
+  /* Use default sizes */
+}
+
+.grade912 {
+  --text-base: var(--text-base);
+  --text-lg: var(--text-lg);
+  --text-xl: var(--text-xl);
+}
+
+.grade912 .celebrationOverlay {
+  display: none; /* More professional */
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-4));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-var(--space-2));
+  }
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+    opacity: var(--opacity-30);
+  }
+  50% {
+    transform: scale(1.2) rotate(180deg);
+    opacity: var(--opacity-60);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .feedbackTile {
+    padding: var(--space-4);
+  }
+  
+  .header {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .iconWrapper {
+    width: var(--space-10);
+    height: var(--space-10);
+  }
+  
+  .gradeK2 {
+    --text-base: var(--text-lg);
+    --text-lg: var(--text-xl);
+    --text-xl: var(--text-2xl);
+    --text-2xl: var(--text-3xl);
+  }
+  
+  .companionBubble {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .scoreText {
+    flex-wrap: wrap;
+  }
+  
+  .detailItem {
+    flex-direction: column;
+  }
+  
+  .detailBullet {
+    display: none;
+  }
+}

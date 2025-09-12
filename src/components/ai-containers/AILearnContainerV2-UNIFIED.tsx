@@ -1003,6 +1003,7 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
               const sessionKey = `career_context_learn_${skill?.subject}_${career?.name || 'default'}`;
               sessionStorage.setItem(sessionKey, 'shown');
             }}
+            onSkip={handleSkipToExperience} // Add skip handler for testing
           />
         )}
         
@@ -1091,7 +1092,7 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
                       subject={skill?.subject || 'Learning'}
                       skill={skill?.name || 'Practice'}
                       userId={student.id}
-                      companionId={selectedCharacter}
+                      companionId={selectedCharacter?.toLowerCase() || 'finn'}
                       totalXP={profile?.xp || 0}
                     />
                   );
@@ -1150,7 +1151,7 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
                       subject={skill?.subject || 'Learning'}
                       skill={skill?.name || 'Practice'}
                       userId={student.id}
-                      companionId={selectedCharacter}
+                      companionId={selectedCharacter?.toLowerCase() || 'finn'}
                       totalXP={profile?.xp || 0}
                     />
                   );

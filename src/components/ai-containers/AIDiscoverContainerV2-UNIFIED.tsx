@@ -839,7 +839,7 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
             onPathComplete={handleExplorationIntroComplete}
             gradeLevel={student.grade_level}
             userId={student.id}
-            companionId={selectedCharacter}
+            companionId={selectedCharacter?.toLowerCase() || 'finn'}
           />
         </div>
       );

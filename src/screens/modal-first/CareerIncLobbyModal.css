@@ -258,12 +258,12 @@
 }
 
 .container-card.completed {
-  background: rgba(72, 187, 120, 0.05);
-  border-color: #48BB78 !important;
+  background: rgba(var(--container-color-rgb, 72, 187, 120), 0.05);
+  /* Border color will be set inline based on container color */
 }
 
 .container-card.completed .container-icon {
-  background: linear-gradient(135deg, #48BB78 0%, #38A169 100%) !important;
+  /* Icon background will be set inline based on container gradient */
 }
 
 .container-card.available {
@@ -647,7 +647,7 @@
 }
 
 .theme-dark .container-card.completed {
-  background: rgba(72, 187, 120, 0.1);
+  /* Background will be set inline based on container color */
 }
 
 /* Animations */

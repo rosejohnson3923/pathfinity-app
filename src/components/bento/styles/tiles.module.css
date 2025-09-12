@@ -1,0 +1,556 @@
+/**
+ * Shared Tile Styles
+ * Common styles for all tile components
+ */
+
+/* Base Tile Styles */
+.tile {
+  background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%);
+  border-radius: var(--radius-lg, 20px);
+  padding: var(--spacing-md, 20px);
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.08),
+    0 2px 8px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition: all var(--animation-duration, 300ms) cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+}
+
+.tile::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(255, 255, 255, 0.5) 50%, 
+    transparent 100%);
+  opacity: 0.8;
+}
+
+.tile:hover {
+  box-shadow: 
+    0 8px 30px rgba(0, 0, 0, 0.12),
+    0 4px 12px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+  transform: translateY(-4px) scale(1.02);
+  background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+}
+
+/* Tile Sizes */
+.tileSmall {
+  min-height: 80px;
+  padding: var(--spacing-sm, 12px);
+}
+
+.tileMedium {
+  min-height: 120px;
+  padding: var(--spacing-md, 16px);
+}
+
+.tileLarge {
+  min-height: 160px;
+  padding: var(--spacing-lg, 24px);
+}
+
+.tileExtraLarge {
+  min-height: 200px;
+  padding: var(--spacing-xl, 32px);
+}
+
+/* K-2 Specific Tile Styles */
+.tileK2 {
+  min-height: var(--tile-min-height, 180px);
+  font-size: var(--base-font-size, 26px);
+  padding: var(--container-padding, 36px);
+  border-radius: 32px;
+  background: linear-gradient(135deg, #fff8dc 0%, #ffeaa7 50%, #fdcb6e 100%);
+  border: 3px solid #feca57;
+  box-shadow: 
+    0 10px 40px rgba(254, 202, 87, 0.3),
+    0 4px 16px rgba(0, 0, 0, 0.1),
+    inset 0 2px 4px rgba(255, 255, 255, 0.9);
+  position: relative;
+  overflow: hidden;
+}
+
+.tileK2::after {
+  content: '✨';
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 32px;
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+.tileK2:active {
+  transform: scale(0.97);
+  box-shadow: 
+    0 5px 20px rgba(254, 202, 87, 0.2),
+    0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+@keyframes sparkle {
+  0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.8; }
+  50% { transform: scale(1.2) rotate(180deg); opacity: 1; }
+}
+
+/* Interactive Tiles */
+.tileInteractive {
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tileInteractive:active {
+  transform: scale(0.98);
+}
+
+.tileInteractive.selected {
+  background: var(--color-primary-light, #e3f2fd);
+  border: 2px solid var(--color-primary, #2196f3);
+}
+
+.tileInteractive.correct {
+  background: var(--color-success-light, #e8f5e9);
+  border: 2px solid var(--color-success, #4caf50);
+  animation: correctPulse 0.6s ease;
+}
+
+.tileInteractive.incorrect {
+  background: var(--color-error-light, #ffebee);
+  border: 2px solid var(--color-error, #f44336);
+  animation: incorrectShake 0.5s ease;
+}
+
+/* Companion Tile Styles */
+.companionTile {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md, 20px);
+  background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 50%, #ce93d8 100%);
+  backdrop-filter: blur(10px);
+  border: 2px solid #ba68c8;
+  box-shadow: 
+    0 8px 32px rgba(186, 104, 200, 0.2),
+    0 4px 12px rgba(0, 0, 0, 0.08);
+  position: relative;
+  padding: var(--spacing-lg, 24px);
+}
+
+.companionTile::before {
+  content: '🌟';
+  position: absolute;
+  top: -10px;
+  left: 20px;
+  font-size: 24px;
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  25% { transform: scale(1.1) rotate(10deg); opacity: 0.8; }
+  50% { transform: scale(1.2) rotate(-10deg); opacity: 1; }
+  75% { transform: scale(1.1) rotate(10deg); opacity: 0.8; }
+}
+
+.companionAvatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  animation: var(--companion-animation, bounce) 2s infinite;
+}
+
+.companionAvatar.small {
+  width: 48px;
+  height: 48px;
+}
+
+.companionAvatar.large {
+  width: 80px;
+  height: 80px;
+}
+
+.companionSpeech {
+  flex: 1;
+  padding: var(--spacing-sm, 12px);
+  background: var(--color-surface, white);
+  border-radius: var(--radius-md, 12px);
+  position: relative;
+  font-size: inherit;
+}
+
+.companionSpeech::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 8px 8px 8px 0;
+  border-color: transparent var(--color-surface) transparent transparent;
+}
+
+/* Progress Tile Styles */
+.progressTile {
+  padding: var(--spacing-sm, 12px);
+}
+
+.progressBar {
+  height: 8px;
+  background: var(--color-surface-dark, #e0e0e0);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: var(--spacing-xs, 8px) 0;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--color-primary, #2196f3);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.progressDots {
+  display: flex;
+  gap: var(--spacing-xs, 8px);
+  justify-content: center;
+  margin: var(--spacing-sm, 12px) 0;
+}
+
+.progressDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-surface-dark, #e0e0e0);
+  transition: all 0.3s ease;
+}
+
+.progressDot.completed {
+  background: var(--color-success, #4caf50);
+  transform: scale(1.2);
+}
+
+.progressDot.current {
+  background: var(--color-primary, #2196f3);
+  animation: pulse 1.5s infinite;
+}
+
+/* Option Tile Styles */
+.optionTile {
+  min-height: var(--min-touch-target, 44px);
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-md, 16px);
+  margin: var(--spacing-xs, 8px) 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.optionTileK2 {
+  min-height: 64px;
+  font-size: 20px;
+  padding: 20px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.optionVisual {
+  font-size: 32px;
+  margin-right: 12px;
+}
+
+.optionLabel {
+  font-weight: 600;
+  margin-right: var(--spacing-sm, 12px);
+  color: var(--color-text-secondary, #666);
+}
+
+.optionText {
+  flex: 1;
+  color: var(--color-text, #333);
+}
+
+/* Achievement Tile Styles */
+.achievementTile {
+  text-align: center;
+  padding: var(--spacing-lg, 24px);
+  background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary) 100%);
+  color: white;
+}
+
+.achievementBadge {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto var(--spacing-md, 16px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: 50%;
+  font-size: 40px;
+  animation: badgeAppear 0.6s ease;
+}
+
+.achievementXP {
+  font-size: 32px;
+  font-weight: bold;
+  animation: xpCount 1s ease;
+}
+
+.achievementStreak {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs, 8px);
+  margin-top: var(--spacing-sm, 12px);
+}
+
+/* Feedback Tile Styles */
+.feedbackTile {
+  padding: var(--spacing-lg, 24px);
+  text-align: center;
+}
+
+.feedbackSuccess {
+  background: var(--color-success-light, #e8f5e9);
+  color: var(--color-success-dark, #1b5e20);
+}
+
+.feedbackError {
+  background: var(--color-error-light, #ffebee);
+  color: var(--color-error-dark, #b71c1c);
+}
+
+.feedbackHint {
+  background: var(--color-info-light, #e3f2fd);
+  color: var(--color-info-dark, #0d47a1);
+}
+
+.feedbackMessage {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: var(--spacing-md, 16px);
+}
+
+.feedbackDetails {
+  list-style: none;
+  padding: 0;
+  margin: var(--spacing-md, 16px) 0;
+}
+
+.feedbackDetails li {
+  padding: var(--spacing-xs, 8px) 0;
+}
+
+/* Scenario Tile Styles */
+.scenarioTile {
+  padding: var(--spacing-lg, 24px);
+}
+
+.scenarioHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md, 16px);
+}
+
+.scenarioNumber {
+  font-size: 14px;
+  color: var(--color-text-secondary, #666);
+}
+
+.scenarioDescription {
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: var(--spacing-md, 16px);
+}
+
+.scenarioVisual {
+  font-size: 48px;
+  text-align: center;
+  margin: var(--spacing-lg, 24px) 0;
+}
+
+.scenarioContext {
+  font-style: italic;
+  color: var(--color-text-secondary, #666);
+  margin-top: var(--spacing-sm, 12px);
+}
+
+/* Interactive Canvas Tile */
+.canvasTile {
+  min-height: 300px;
+  padding: var(--spacing-lg, 24px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.canvasItems {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: var(--spacing-md, 16px);
+  width: 100%;
+  margin: var(--spacing-lg, 24px) 0;
+}
+
+.canvasItem {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-surface, white);
+  border: 2px solid var(--color-border, #e0e0e0);
+  border-radius: var(--radius-md, 12px);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 32px;
+}
+
+.canvasItem:hover {
+  transform: scale(1.05);
+  border-color: var(--color-primary, #2196f3);
+}
+
+.canvasItem.dragging {
+  opacity: 0.5;
+  transform: scale(1.1);
+}
+
+.canvasDropZone {
+  border: 2px dashed var(--color-border, #e0e0e0);
+  background: var(--color-surface-light, #f5f5f5);
+  min-height: 100px;
+  border-radius: var(--radius-md, 12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.canvasDropZone.active {
+  border-color: var(--color-primary, #2196f3);
+  background: var(--color-primary-light, #e3f2fd);
+}
+
+/* Animations */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-5px) rotate(2deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+@keyframes sway {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+
+@keyframes correctPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes incorrectShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+@keyframes badgeAppear {
+  0% { transform: scale(0) rotate(0deg); }
+  50% { transform: scale(1.2) rotate(180deg); }
+  100% { transform: scale(1) rotate(360deg); }
+}
+
+@keyframes xpCount {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes typewriter {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+/* Dark Theme Overrides */
+.darkTheme .tile {
+  background: var(--color-surface-dark, #1e1e1e);
+  color: var(--color-text-dark, #ffffff);
+  box-shadow: var(--shadow-dark-sm, 0 2px 8px rgba(0, 0, 0, 0.3));
+}
+
+.darkTheme .companionSpeech {
+  background: var(--color-surface-dark, #2d2d2d);
+  color: var(--color-text-dark, #ffffff);
+}
+
+.darkTheme .progressBar {
+  background: var(--color-surface-darker, #0d0d0d);
+}
+
+.darkTheme .optionTile:hover {
+  background: var(--color-surface-light-dark, #2d2d2d);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 480px) {
+  .tile {
+    border-radius: var(--radius-md, 12px);
+    padding: var(--spacing-sm, 12px);
+  }
+  
+  .companionAvatar {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .scenarioVisual {
+    font-size: 36px;
+  }
+  
+  .achievementBadge {
+    width: 60px;
+    height: 60px;
+    font-size: 30px;
+  }
+}
+
+@media (min-width: 768px) {
+  .tileK2 {
+    min-height: 200px;
+    font-size: 28px;
+  }
+  
+  .optionTileK2 {
+    min-height: 72px;
+    font-size: 24px;
+  }
+  
+  .canvasItems {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+}

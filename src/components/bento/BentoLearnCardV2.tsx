@@ -231,8 +231,10 @@ export const BentoLearnCardV2: React.FC<BentoLearnCardV2Props> = ({
     }
   };
   
+  const isAssessment = skill === 'Assessment' || progress.total === 1;
+  
   return (
-    <div className={`${styles.bentoContainerV2} ${styles[`grade-${gradeCategory}`]} ${styles[`theme-${theme}`]}`} data-active-dock={activeDockItem || 'none'}>
+    <div className={`${styles.bentoContainerV2} ${isAssessment ? styles.assessment : ''} ${styles[`grade-${gradeCategory}`]} ${styles[`theme-${theme}`]}`} data-active-dock={activeDockItem || 'none'}>
       {/* Horizontal Dock - Above Question */}
       <div className={styles.horizontalDock}>
         {/* Support Tools - Related to Current Question */}

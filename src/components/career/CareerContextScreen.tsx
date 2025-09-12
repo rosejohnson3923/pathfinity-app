@@ -27,6 +27,7 @@ interface CareerContextScreenProps {
   
   // Actions
   onStart: () => void;
+  onSkip?: () => void; // Optional skip handler for testing
   
   // Audio (future integration)
   audioUrl?: string;
@@ -85,6 +86,7 @@ const CareerContextScreenComponent: React.FC<CareerContextScreenProps> = ({
   avatarUrl,
   companionName = 'Sage',
   onStart,
+  onSkip,
   audioUrl,
   autoPlayAudio = true
 }) => {
@@ -373,6 +375,33 @@ const CareerContextScreenComponent: React.FC<CareerContextScreenProps> = ({
             <span className="button-text">Begin Your {careerName} Journey</span>
             <span className="button-arrow">→</span>
           </button>
+          
+          {/* Skip button for testing - only show in Learn container */}
+          {onSkip && containerType === 'learn' && (
+            <button 
+              className="skip-to-experience-button" 
+              onClick={onSkip}
+              style={{
+                marginTop: '10px',
+                padding: '8px 16px',
+                background: 'rgba(255, 255, 255, 0.2)',
+                border: '1px solid rgba(255, 255, 255, 0.3)',
+                borderRadius: '8px',
+                color: 'white',
+                cursor: 'pointer',
+                fontSize: '14px',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
+              }}
+            >
+              Skip to Experience (Testing) →
+            </button>
+          )}
           
           <div className="progress-indicator">
             <div className="progress-dots">

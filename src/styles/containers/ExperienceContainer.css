@@ -21,6 +21,8 @@
   min-height: 100vh;
   position: relative;
   overflow: hidden;
+  width: 100%;
+  max-width: 100%;
 }
 
 /* Container experience uses CSS variable that changes with theme */
@@ -124,8 +126,8 @@
   background: var(--bg-elevated);
   border-radius: 24px;
   padding: 32px;
-  max-width: 900px;
-  width: 90%;
+  max-width: var(--width-content-max);
+  width: 100%;
   animation: slideUp 0.4s ease;
 }
 

@@ -1,0 +1,429 @@
+/**
+ * InteractiveCanvasTile Styles
+ * Using Pathfinity Design System Tokens
+ */
+
+/* Import design system */
+@import '../../../design-system/index.css';
+
+.interactiveCanvas {
+  background: var(--color-bg-elevated);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-current-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-height: var(--space-96);
+}
+
+/* Instructions */
+.instructions {
+  background: var(--color-bg-secondary);
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  border-left: 4px solid var(--teal-500);
+}
+
+.instructions p {
+  margin: 0;
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+  line-height: var(--leading-relaxed);
+}
+
+.hintButton {
+  margin-top: var(--space-2);
+  background: transparent;
+  border: 1px solid var(--teal-500);
+  color: var(--teal-600);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+  transition: var(--transition-all);
+}
+
+[data-theme="dark"] .hintButton {
+  color: var(--teal-400);
+  border-color: var(--teal-400);
+}
+
+.hintButton:hover {
+  background: var(--teal-50);
+  transform: translateY(-1px);
+}
+
+[data-theme="dark"] .hintButton:hover {
+  background: var(--teal-900);
+  opacity: var(--opacity-30);
+}
+
+.hintBubble {
+  background: var(--amber-50);
+  padding: var(--space-3);
+  border-radius: var(--radius-lg);
+  border-left: 4px solid var(--amber-500);
+  font-size: var(--text-base);
+  color: var(--amber-700);
+  animation: slideIn var(--duration-base) var(--ease-out);
+}
+
+[data-theme="dark"] .hintBubble {
+  background: var(--amber-900);
+  color: var(--amber-400);
+  opacity: var(--opacity-20);
+}
+
+/* Canvas Area */
+.canvasArea {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  position: relative;
+  min-height: var(--space-64);
+}
+
+/* Tap Grid for K-2 */
+.tapGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: var(--space-4);
+  padding: var(--space-4);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-xl);
+}
+
+.tapItem {
+  background: white;
+  border: 3px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-4);
+  cursor: pointer;
+  transition: var(--transition-all);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--space-32);
+}
+
+.tapItem:hover:not(:disabled) {
+  border-color: var(--teal-400);
+  transform: scale(1.05);
+  box-shadow: var(--shadow-current-lg);
+}
+
+.tapItem.selected {
+  border-color: var(--teal-500);
+  background: linear-gradient(135deg, var(--teal-50), white);
+  box-shadow: var(--shadow-current-xl);
+  transform: scale(1.1);
+}
+
+.tapItem.completed {
+  background: linear-gradient(135deg, var(--green-50), white);
+  border-color: var(--green-500);
+  opacity: var(--opacity-80);
+  cursor: not-allowed;
+}
+
+.tapItemVisual {
+  font-size: var(--text-5xl);
+  animation: bounce var(--duration-slower) var(--ease-in-out) infinite;
+}
+
+.tapItemContent {
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+  text-align: center;
+}
+
+/* Draggable Items */
+.itemsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-lg);
+  min-height: var(--space-24);
+}
+
+.draggableItem {
+  background: white;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3);
+  cursor: move;
+  transition: var(--transition-all);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  user-select: none;
+}
+
+.draggableItem:hover {
+  border-color: var(--teal-400);
+  box-shadow: var(--shadow-current-md);
+  transform: translateY(-2px);
+}
+
+.draggableItem.dragging {
+  opacity: var(--opacity-50);
+  transform: scale(0.95);
+}
+
+.draggableItem.selected {
+  border-color: var(--teal-500);
+  background: linear-gradient(135deg, var(--teal-50), white);
+  box-shadow: var(--shadow-current-lg);
+}
+
+.draggableItem.completed {
+  background: linear-gradient(135deg, var(--green-50), white);
+  border-color: var(--green-500);
+  cursor: not-allowed;
+  opacity: var(--opacity-70);
+}
+
+.draggableItem.tapOnly {
+  cursor: pointer;
+}
+
+.itemVisual {
+  font-size: var(--text-2xl);
+}
+
+.itemContent {
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+}
+
+.completedMark {
+  margin-left: auto;
+  width: var(--space-6);
+  height: var(--space-6);
+  background: var(--green-500);
+  color: white;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--font-bold);
+}
+
+/* Drop Targets */
+.targetsContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-4);
+  padding: var(--space-4);
+  background: var(--color-bg-tertiary);
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  min-height: var(--space-32);
+}
+
+.dropTarget {
+  background: white;
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  min-height: var(--space-24);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  transition: var(--transition-all);
+}
+
+.dropTarget:hover {
+  border-color: var(--teal-400);
+  background: var(--teal-50);
+}
+
+.dropTarget.hasItem {
+  border-style: solid;
+  border-color: var(--green-500);
+  background: linear-gradient(135deg, var(--green-50), white);
+}
+
+.targetLabel {
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+}
+
+.placedItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: white;
+  border: 1px solid var(--green-500);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+}
+
+/* Feedback */
+.feedbackMessage {
+  text-align: center;
+  padding: var(--space-3);
+  background: linear-gradient(135deg, var(--teal-50), var(--color-bg-primary));
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--teal-500);
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  color: var(--teal-700);
+  animation: feedbackPop var(--duration-base) var(--ease-bounce);
+}
+
+[data-theme="dark"] .feedbackMessage {
+  background: linear-gradient(135deg, var(--teal-900), var(--color-bg-primary));
+  color: var(--teal-400);
+  opacity: var(--opacity-20);
+}
+
+/* Check Button */
+.checkButton {
+  align-self: center;
+  background: var(--teal-500);
+  color: white;
+  border: none;
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-full);
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+  transition: var(--transition-all);
+  box-shadow: var(--shadow-current-md);
+}
+
+.checkButton:hover {
+  background: var(--teal-600);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-current-lg);
+}
+
+.checkButton:disabled {
+  opacity: var(--opacity-50);
+  cursor: not-allowed;
+}
+
+/* Grade-Specific Styles */
+.gradeK,
+.grade1,
+.grade2 {
+  /* Extra large targets for K-2 */
+  --space-32: 10rem;
+  --space-24: 8rem;
+  --text-5xl: var(--text-7xl);
+  --text-lg: var(--text-2xl);
+}
+
+.gradeK .tapItem,
+.grade1 .tapItem,
+.grade2 .tapItem {
+  min-width: var(--space-32);
+  min-height: var(--space-32);
+  border-width: 4px;
+}
+
+.grade3,
+.grade4,
+.grade5 {
+  /* Large targets for 3-5 */
+  --space-24: 6rem;
+  --text-2xl: var(--text-3xl);
+}
+
+.grade6,
+.grade7,
+.grade8 {
+  /* Standard sizes for 6-8 */
+}
+
+.grade9,
+.grade10,
+.grade11,
+.grade12 {
+  /* Compact for 9-12 */
+  padding: var(--space-4);
+}
+
+.grade9 .draggableItem,
+.grade10 .draggableItem,
+.grade11 .draggableItem,
+.grade12 .draggableItem {
+  padding: var(--space-2) var(--space-3);
+  border-width: 1px;
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes feedbackPop {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .tapGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .targetsContainer {
+    grid-template-columns: 1fr;
+  }
+  
+  .interactiveCanvas {
+    padding: var(--space-4);
+  }
+}
+
+@media (max-width: 480px) {
+  .tapGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .itemsContainer {
+    flex-direction: column;
+  }
+}

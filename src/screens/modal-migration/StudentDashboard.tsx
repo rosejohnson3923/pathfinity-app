@@ -15,12 +15,17 @@ import { ModalProvider } from '../../state/modalState';
 import { useAuth } from '../../hooks/useAuth';
 import { useStudentProfile } from '../../hooks/useStudentProfile';
 import { useTheme, useThemeControl } from '../../hooks/useTheme';
+import { usePageCategory } from '../../hooks/usePageCategory';
 import { themeService } from '../../services/themeService';
 import { skillsData } from '../../data/skillsDataComplete';
 import { ProgressHeader } from '../../components/navigation/ProgressHeader';
+import { CAREER_BASICS } from '../../data/careerBasicsData';
 import './StudentDashboard.css';
 
 const StudentDashboardInner: React.FC = () => {
+  // Apply dashboard width management category
+  usePageCategory('dashboard');
+  
   const { user } = useAuth();
   const { profile } = useStudentProfile();
   const { theme, setTheme } = useThemeControl(); // Use centralized theme service with controls
@@ -103,6 +108,22 @@ const StudentDashboardInner: React.FC = () => {
 
   const selectedCareerObject = useMemo(() => {
     if (!dashboardSelections) return null;
+    
+    // Look up the career by ID (convert name to ID format if needed)
+    const careerId = dashboardSelections.career.toLowerCase().replace(/\s+/g, '-');
+    const careerData = CAREER_BASICS[careerId];
+    
+    if (careerData) {
+      return {
+        id: careerData.id,
+        name: careerData.name,
+        icon: careerData.icon,
+        color: careerData.color,
+        category: careerData.category
+      };
+    }
+    
+    // Fallback to simple object if not found
     return {
       id: dashboardSelections.career,
       name: dashboardSelections.career

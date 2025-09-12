@@ -89,7 +89,8 @@ export interface AILearnContent {
   };
 }
 
-export interface AIExperienceContent {
+// Legacy single-challenge interface (deprecated)
+export interface AIExperienceContentLegacy {
   title: string;
   scenario: string;
   character_context: string;
@@ -112,6 +113,9 @@ export interface AIExperienceContent {
     conclusion: string;
   };
 }
+
+// Note: The multi-challenge interfaces were removed as they were not integrated.
+// The system uses AIExperienceContentLegacy for the Experience container.
 
 export interface AIDiscoverContent {
   title: string;
@@ -890,7 +894,7 @@ Return ONLY these fields:
     skill: LearningSkill,
     student: StudentProfile,
     career?: { name: string; description?: string }
-  ): Promise<AIExperienceContent> {
+  ): Promise<AIExperienceContentLegacy> {
     console.log(`🎯 Generating AI Experience content using PromptBuilder for ${skill.skill_number}: ${skill.skill_name}`, {
       career: career?.name || 'No career context'
     });
@@ -901,6 +905,24 @@ Return ONLY these fields:
 
     // Experience is ALWAYS career-focused - use provided career or generate appropriate one
     const careerToUse = career?.name || this.getDefaultCareerForGrade(student.grade_level, skill.subject);
+    
+    // Determine number of challenges based on grade level for Experience
+    const gradeNum = student.grade_level === 'K' ? 0 : parseInt(student.grade_level);
+    let challengeCount = 2; // Default
+    if (skill.subject === 'Math') {
+      if (gradeNum <= 2) {
+        challengeCount = 4; // K-2: 4 challenges (simpler, more practice)
+      } else if (gradeNum <= 5) {
+        challengeCount = 3; // 3-5: 3 challenges (balanced)
+      } else if (gradeNum <= 8) {
+        challengeCount = 3; // 6-8: 3 challenges (deeper)
+      } else {
+        challengeCount = 2; // 9-12: 2 challenges (complex)
+      }
+    } else {
+      // For non-Math subjects, use standard count
+      challengeCount = gradeNum <= 2 ? 3 : 2;
+    }
     
     // Build context for PromptBuilder
     const context: PromptContext = {
@@ -928,7 +950,6 @@ Return ONLY these fields:
     // Generate base prompt using PromptBuilder
     const basePrompt = promptBuilder.buildPrompt(context);
     
-    // Add EXPERIENCE-specific instructions
     const prompt = `${basePrompt}
 
 EXPERIENCE CONTAINER SPECIFIC:
@@ -961,18 +982,15 @@ Create a ${careerToUse} experience where the student IS the ${careerToUse}:
    - "As a ${careerToUse}, you use ${skill.skill_name} to..."
    - Make it personal and immersive
 
-2. REAL-WORLD CONNECTIONS:
-   - 3 situations written as "You encounter..." or "Your boss asks you to..."
-   - Challenges written as "You need to figure out..."
-   - Solutions written as "You decide to..."
-   - Always use "you/your" not "${student.display_name}"
-
-3. INTERACTIVE SIMULATION:
+2. INTERACTIVE SIMULATION (EXACTLY ${challengeCount} CHALLENGES):
    - Setup: "You arrive at work and..."
-   - Challenges: "What would YOU do?" scenarios
+   - Create EXACTLY ${challengeCount} challenge scenarios
+   - Each challenge should be progressively more complex
    - Options should be "I would..." choices
    - Outcomes: "You chose to... and this happened..."
    - Learning: "You learned that..."
+   
+IMPORTANT: You MUST generate exactly ${challengeCount} challenges in the interactive_simulation.challenges array!
 
 REQUIREMENTS:
 - ALWAYS use second person ("You are", "You do", "Your task")
@@ -986,29 +1004,29 @@ Return JSON:
   "title": "${careerToUse} ${student.display_name}'s Day at Work",
   "scenario": "You are ${careerToUse} ${student.display_name}, working on... (immersive scenario)",
   "character_context": "Welcome, ${careerToUse} ${student.display_name}! You're a professional ${careerToUse} who...",
-  "career_introduction": "As ${careerToUse} ${student.display_name}, you use ${skill.skill_name} every day to...",
-  "real_world_connections": [
-    {
-      "situation": "You encounter... (first-person situation)",
-      "challenge": "You need to... (what YOU must solve)",
-      "solution_approach": "You decide to... (how YOU approach it)",
-      "learning_connection": "You use ${skill.skill_name} to..."
-    }
-  ],
+  "career_introduction": "As ${careerToUse} ${student.display_name}, you use ${skill.skill_name} every day to..."
+  "real_world_connections": [],
   "interactive_simulation": {
     "setup": "You arrive at your ${careerToUse} job and...",
     "challenges": [
+      // Generate EXACTLY ${challengeCount} challenge objects
+      // Each with: description, options (3-4), correct_choice, outcome, learning_point
       {
-        "description": "Your boss asks you to... What do you do?",
+        "description": "Challenge 1: Your boss asks you to... What do you do?",
         "options": ["I would...", "I would...", "I would..."],
         "correct_choice": 0,
         "outcome": "You chose to... and it worked because...",
         "learning_point": "You learned that ${skill.skill_name} helps you..."
       }
+      // Repeat for all ${challengeCount} challenges
     ],
-    "conclusion": "Great job today! As a ${careerToUse}, you successfully..."
+    "conclusion": "Great job today! As a ${careerToUse}, you successfully completed ${challengeCount} challenges!"
   }
-}`;
+}
+
+REMEMBER: 
+- real_world_connections should be an EMPTY array []
+- challenges array must have EXACTLY ${challengeCount} items`;
 
     try {
       const response = await azureOpenAIService.generateWithModel(
@@ -1032,6 +1050,10 @@ Return JSON:
       return this.generateFallbackExperienceContent(skill, student);
     }
   }
+
+  // Removed: generateMultiChallengeExperienceContent and generateFallbackMultiChallengeContent methods
+  // These methods were not integrated into production. 
+  // The system uses generateExperienceContent() for single-skill generation.
 
   /**
    * Generate AI-powered Discover container content
@@ -1191,6 +1213,22 @@ Return JSON:
   // HELPER METHODS
   // ================================================================
 
+  /**
+   * Get scenario count based on grade level and complexity
+   * K-2: 4 scenarios (simple, more practice)
+   * 3-5: 3 scenarios (moderate complexity)
+   * 6-8: 3 scenarios (deeper exploration)
+   * 9-12: 2 scenarios (complex, comprehensive)
+   */
+  private getScenarioCount(gradeLevel: string): number {
+    const grade = gradeLevel === 'K' ? 0 : parseInt(gradeLevel);
+    
+    if (grade <= 2) return 4;  // K-2: More scenarios, simpler each
+    if (grade <= 5) return 3;  // 3-5: Balanced
+    if (grade <= 8) return 3;  // 6-8: Deeper scenarios
+    return 2;                   // 9-12: Fewer but more complex
+  }
+
   private getDefaultCareerForGrade(grade: string, subject: string): string {
     // Age-appropriate default careers by grade and subject
     const careerMap: Record<string, Record<string, string>> = {
@@ -1288,7 +1326,7 @@ Return JSON:
     };
   }
 
-  private generateFallbackExperienceContent(skill: LearningSkill, student: StudentProfile): AIExperienceContent {
+  private generateFallbackExperienceContent(skill: LearningSkill, student: StudentProfile): AIExperienceContentLegacy {
     const careers = {
       'Math': 'Engineer',
       'Science': 'Scientist',
@@ -1305,14 +1343,7 @@ Return JSON:
       scenario: `You are a ${career} starting your workday!`,
       character_context: `Welcome! You're a professional ${career} who uses ${skillName} every day.`,
       career_introduction: `As a ${career}, you use ${skillName} to solve important problems and help people.`,
-      real_world_connections: [
-        {
-          situation: `You encounter a challenge that requires ${skillName}`,
-          challenge: 'You need to solve this professional problem',
-          solution_approach: 'You decide to approach it this way',
-          learning_connection: `You use ${skillName} to complete the task`
-        }
-      ],
+      real_world_connections: [], // Removed - no longer needed
       interactive_simulation: {
         setup: `You arrive at your ${career} job and your boss has a task for you!`,
         challenges: [

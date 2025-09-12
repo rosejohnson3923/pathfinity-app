@@ -354,7 +354,11 @@ export const CareerIncLobbyModal: React.FC<CareerIncLobbyModalProps> = ({
                 animationDelay: `${index * 0.1}s`,
                 borderColor: isLocked ? '#718096' : container.color,
                 opacity: isLocked ? 0.6 : 1,
-                cursor: isLocked ? 'not-allowed' : 'pointer'
+                cursor: isLocked ? 'not-allowed' : 'pointer',
+                ...(isCompleted && {
+                  background: `${container.color}15`, // 15 is hex for ~0.08 opacity
+                  borderColor: `${container.color} !important`
+                })
               }}
               onClick={() => handleContainerSelect(container.id)}
             >
@@ -443,8 +447,9 @@ export const CareerIncLobbyModal: React.FC<CareerIncLobbyModalProps> = ({
               <button 
                 className="start-container-btn"
                 style={{ 
-                  backgroundColor: isLocked ? '#718096' : isCompleted ? '#48BB78' : container.color,
-                  cursor: isLocked ? 'not-allowed' : 'pointer'
+                  backgroundColor: isLocked ? '#718096' : container.color,
+                  cursor: isLocked ? 'not-allowed' : 'pointer',
+                  opacity: isCompleted ? 0.9 : 1
                 }}
                 disabled={isLocked}
               >

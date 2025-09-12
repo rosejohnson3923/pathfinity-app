@@ -332,7 +332,9 @@ header[class*="_dashboardHeader_"] {
 [class*="AIExperience"],
 [class*="AIDiscover"],
 [class*="Container"][class*="AI"],
-.multi-subject-container {
+.multi-subject-container,
+.ai-experience-container,
+.container-experience {
   width: 100% !important;
   max-width: min(1400px, 95vw) !important;
   margin: 0 auto !important;
@@ -346,6 +348,26 @@ header[class*="_dashboardHeader_"] {
 [data-page-category="content"] .content-wrapper {
   max-width: 1200px !important;
   margin: 0 auto !important;
+}
+
+/* BentoContainer specific rules */
+.bento-v2-container,
+[class*="bentoContainer"],
+.ai-experience-container [class*="bentoContainer"],
+.container-experience [class*="bentoContainer"] {
+  width: 100% !important;
+  max-width: min(1400px, 95vw) !important;
+  margin: 0 auto !important;
+  box-sizing: border-box !important;
+}
+
+/* MultiSubjectContainer specific rules */
+[class*="multiSubjectContainer"],
+.multi-subject-container {
+  width: 100% !important;
+  max-width: min(1400px, 95vw) !important;
+  margin: 0 auto !important;
+  box-sizing: border-box !important;
 }
 
 /* ============================================

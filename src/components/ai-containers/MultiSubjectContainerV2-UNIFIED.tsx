@@ -11,6 +11,7 @@ import { AIDiscoverContainerV2UNIFIED as AIDiscoverContainerV2 } from './AIDisco
 import { TwoPanelModal } from '../modals/TwoPanelModal';
 import { useAuth } from '../../hooks/useAuth';
 import { useStudentProfile } from '../../hooks/useStudentProfile';
+import { usePageCategory } from '../../hooks/usePageCategory';
 
 // REMOVE direct skillsData import - use adaptive journey instead
 // import { skillsData } from '../../data/skillsDataComplete';
@@ -33,7 +34,6 @@ import {
   useGamificationRules,
   useMasterOrchestration
 } from '../../rules-engine/integration/ContainerIntegration';
-import { toastNotificationService } from '../../services/toastNotificationService';
 
 // Toast Container for notifications
 import { ToastProvider } from '../notifications/ToastContainer';
@@ -86,6 +86,9 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
   onBack,
   theme = 'light'
 }) => {
+  // Apply width management category for content containers
+  usePageCategory('content');
+  
   // Move hooks to component level
   const { user } = useAuth();
   const { profile } = useStudentProfile();
@@ -278,14 +281,7 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
   // COMPANION INTEGRATION
   // ============================================================================
   
-  useEffect(() => {
-    if (selectedCharacter) {
-      // Simple welcome message for now
-      const welcomeMessage = `Welcome! Let's explore ${currentSubject} together.`;
-      
-      toastNotificationService.success(welcomeMessage);
-    }
-  }, [selectedCharacter, currentSubject]);
+  // Toast notification removed - was causing display issues in loading screen
   
   // ============================================================================
   // CONTAINER RENDERING
@@ -379,11 +375,7 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
     if (currentSubjectIndex >= subjects.length - 1) {
       console.log('🎉 All subjects completed!');
       
-      // Show completion message
-      toastNotificationService.success(
-        'Congratulations! You completed all subjects!'
-      );
-      
+      // Completion message removed - was causing display issues
       // Complete the container
       setTimeout(() => {
         onComplete();
@@ -466,7 +458,10 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
       selectedCareer,
       theme,
       // Add callback to track child loading state
-      onLoadingChange: (loading: boolean) => setIsChildContainerLoading(loading)
+      onLoadingChange: (loading: boolean) => setIsChildContainerLoading(loading),
+      // Pass subject tracking info for Experience container
+      totalSubjects: subjects.length,
+      currentSubjectIndex: currentSubjectIndex
     };
     
     // Use activeContainerType instead of containerType for dev mode override
@@ -474,7 +469,13 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
       case 'LEARN':
         return <AILearnContainerV2 {...commonProps} />;
       case 'EXPERIENCE':
-        return <AIExperienceContainerV2 {...commonProps} />;
+        return <AIExperienceContainerV2 
+          {...commonProps} 
+          onSkipToDiscover={() => {
+            // Skip directly to Discover container for testing
+            setContainerType('DISCOVER');
+          }}
+        />;
       case 'DISCOVER':
         return <AIDiscoverContainerV2 {...commonProps} />;
       default:
