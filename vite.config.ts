@@ -8,6 +8,8 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      // Polyfill Azure Identity for browser to avoid import errors
+      '@azure/identity': path.resolve(__dirname, './src/services/azure-identity-stub.ts'),
     },
   },
   optimizeDeps: {

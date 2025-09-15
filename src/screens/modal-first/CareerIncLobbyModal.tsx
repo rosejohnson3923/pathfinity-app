@@ -75,8 +75,8 @@ const getLearningContainers = (career: string): LearningContainer[] => [
     id: 'DISCOVER',
     name: 'Explore & Create',
     icon: '🚀',
-    color: '#DC2626',
-    bgGradient: 'linear-gradient(135deg, #DC2626 0%, #EF4444 100%)',
+    color: '#C026D3',
+    bgGradient: 'linear-gradient(135deg, #C026D3 0%, #A21CAF 100%)',
     description: `Innovate and explore advanced ${career} concepts and emerging trends`,
     objectives: [
       `Research cutting-edge ${career} developments`,

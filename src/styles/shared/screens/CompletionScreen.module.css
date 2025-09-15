@@ -20,6 +20,17 @@
   animation: fadeIn var(--duration-base) var(--easing-out);
   position: relative;
   overflow: hidden;
+  background: linear-gradient(135deg,
+    var(--primary-50) 0%,
+    var(--secondary-50) 50%,
+    var(--tertiary-50) 100%);
+}
+
+[data-theme="dark"] .completionPhase {
+  background: linear-gradient(135deg,
+    var(--gray-900) 0%,
+    var(--gray-800) 50%,
+    var(--gray-900) 100%);
 }
 
 .completionPhase.withHeader {
@@ -278,19 +289,27 @@
 }
 
 .achievementBadge {
-  width: 80px;
-  height: 80px;
-  border-radius: var(--radius-full);
-  background: var(--gradient-warning);
+  padding: var(--space-4) var(--space-6);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, var(--primary-100), var(--primary-200));
+  color: var(--primary-700);
+  border: 2px solid var(--primary-300);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: var(--text-3xl);
-  box-shadow: 
-    var(--shadow-md),
-    inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  text-align: center;
+  box-shadow: var(--shadow-sm);
   animation: badgeAppear 0.5s ease-out backwards;
   position: relative;
+  min-height: 60px;
+}
+
+[data-theme="dark"] .achievementBadge {
+  background: linear-gradient(135deg, var(--primary-900), var(--primary-800));
+  color: var(--primary-200);
+  border: 2px solid var(--primary-700);
 }
 
 .achievementBadge:nth-child(1) { animation-delay: 0.1s; }
@@ -422,6 +441,16 @@
   border: none;
   position: relative;
   overflow: hidden;
+  background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+  color: white;
+  box-shadow: 0 4px 12px rgba(var(--primary-500-rgb), 0.3);
+  min-width: 250px;
+}
+
+.actionButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(var(--primary-500-rgb), 0.4);
+  background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
 }
 
 .continueButton {

@@ -501,18 +501,49 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = ({
   };
 
   // Render completion screen
-  const renderCompletion = () => (
-    <div className={cn(
-      styles.container,
-      styles[`container${gradeCategory.charAt(0).toUpperCase() + gradeCategory.slice(1)}`]
-    )}>
-      {/* Completion content would go here */}
-      <h1>Challenge Complete!</h1>
-      <button onClick={onChallengeComplete}>Continue</button>
-    </div>
-  );
+  const renderCompletion = () => {
+    console.log('🟢 EXPERIENCECARD - RENDERING COMPLETION SCREEN:', {
+      component: 'ExperienceCard',
+      challengeData: {
+        subject: challengeData?.subject,
+        skillName: challengeData?.skill?.name,
+        totalScenarios: challengeData?.scenarios?.length
+      },
+      currentChallengeIndex,
+      totalChallenges,
+      timestamp: new Date().toISOString(),
+      message: 'This is the orphaned Continue button screen!'
+    });
+
+    return (
+      <div className={cn(
+        styles.container,
+        styles[`container${gradeCategory.charAt(0).toUpperCase() + gradeCategory.slice(1)}`]
+      )}>
+        {/* DEBUG INFO */}
+        <div style={{ padding: '20px', background: 'rgba(255,0,0,0.1)', border: '2px solid red' }}>
+          <h2>🔍 DEBUG: ORPHANED COMPLETION SCREEN</h2>
+          <p>Component: ExperienceCard</p>
+          <p>Subject: {challengeData?.subject}</p>
+          <p>Skill: {challengeData?.skill?.name}</p>
+          <p>Challenge {currentChallengeIndex + 1} of {totalChallenges}</p>
+          <p>This screen shows for 10 seconds</p>
+        </div>
+
+        {/* Original minimal content */}
+        <h1>Challenge Complete!</h1>
+        <button onClick={onChallengeComplete}>Continue</button>
+      </div>
+    );
+  };
 
   // Main render
+  console.log('📊 EXPERIENCECARD - SCREEN TYPE:', {
+    screenType,
+    component: 'ExperienceCard',
+    timestamp: new Date().toISOString()
+  });
+
   switch (screenType) {
     case 'intro':
       return renderIntroduction();

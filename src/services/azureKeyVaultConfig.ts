@@ -39,7 +39,7 @@ class AzureKeyVaultConfigService {
     // In production, we must use environment variables set during build
     if (this.useKeyVault && typeof window === 'undefined') {
       const keyVaultUrl = `https://${this.keyVaultName}.vault.azure.net`;
-      
+
       try {
         // DefaultAzureCredential works with:
         // - Azure CLI (az login) for local development

@@ -1004,6 +1004,7 @@ Return JSON:
 {
   "title": "${careerToUse} ${student.display_name}'s Day at Work",
   "scenario": "You are ${careerToUse} ${student.display_name}, working on... (immersive scenario)",
+  "scenario_summary": "Brief 3-5 word action phrase for Mission Tile (e.g., 'Help patients today', 'Design new buildings', 'Solve tech problems')",
   "character_context": "Welcome, ${careerToUse} ${student.display_name}! You're a professional ${careerToUse} who...",
   "career_introduction": "As ${careerToUse} ${student.display_name}, you use ${skill.skill_name} every day to..."
   "real_world_connections": [],
@@ -1013,6 +1014,7 @@ Return JSON:
       // ⚠️ MUST HAVE EXACTLY ${challengeCount} CHALLENGE OBJECTS IN THIS ARRAY
       {
         "description": "Challenge 1: Your coworker asks you to... What do you do?",
+        "challenge_summary": "Brief 2-4 word action (e.g., 'Distribute equipment', 'Organize team', 'Count supplies')",
         "options": ["I would...", "I would...", "I would..."],
         "correct_choice": 0,
         "hint": "Think about how ${skill.skill_name} can help you solve this...",
@@ -1021,6 +1023,7 @@ Return JSON:
       },
       ${challengeCount >= 2 ? `{
         "description": "Challenge 2: Next situation...",
+        "challenge_summary": "Brief 2-4 word action",
         "options": ["I would...", "I would...", "I would..."],
         "correct_choice": 1,
         "hint": "Remember what you learned...",
@@ -1029,6 +1032,7 @@ Return JSON:
       }${challengeCount > 2 ? ',' : ''}` : ''}
       ${challengeCount >= 3 ? `{
         "description": "Challenge 3: Another task...",
+        "challenge_summary": "Brief 2-4 word action",
         "options": ["I would...", "I would...", "I would..."],
         "correct_choice": 0,
         "hint": "Apply your ${skill.skill_name} skills...",
@@ -1037,6 +1041,7 @@ Return JSON:
       }${challengeCount > 3 ? ',' : ''}` : ''}
       ${challengeCount >= 4 ? `{
         "description": "Challenge 4: Final challenge...",
+        "challenge_summary": "Brief 2-4 word action",
         "options": ["I would...", "I would...", "I would..."],
         "correct_choice": 2,
         "hint": "Use everything you learned...",

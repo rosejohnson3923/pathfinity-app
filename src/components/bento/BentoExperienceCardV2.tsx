@@ -1,78 +1,30 @@
 /**
- * BentoExperienceCard V2 - Multi-Challenge Implementation
- * Supports multiple challenges with scenarios for each subject
- * Integrates all 4 AI Companions: Finn, Sage, Spark, Harmony
+ * ExperienceCard Component
+ * Clean implementation with CSS modules only - NO INLINE STYLES
+ * Handles OpenAI content injection with proper separation of concerns
  */
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTheme } from '../../hooks/useTheme';
-import { usePageCategory } from '../../hooks/usePageCategory';
-import { VisualHierarchy } from '../../styles/visualHierarchy';
-import { CareerContextScreen } from '../career/CareerContextScreen';
-import { pathIQGamification } from '../../services/pathIQGamificationService';
-import { chatbotService } from '../../services/chatbotService';
-import { getCompanionDisplayName } from '../../utils/companionUtils';
-import styles from './BentoExperienceCard.module.css';
-
-// Import design system tokens
-import '../../design-system/tokens/colors.css';
-import '../../design-system/tokens/spacing.css';
-import '../../design-system/tokens/borders.css';
-import '../../design-system/tokens/shadows.css';
+import { getGradeCategory } from '../../utils/styles/gradeAdapter';
+import styles from '../experience/ExperienceCard.module.css';
+import cn from 'classnames';
 
 // Import tile components
-import { CompanionTile } from './tiles/CompanionTile';
+import { ProgressTile } from './tiles/ProgressTile';
 import { ScenarioTile } from './tiles/ScenarioTile';
 import { FeedbackTile } from './tiles/FeedbackTile';
-import { ProgressTile } from './tiles/ProgressTile';
 import { OptionTile } from './tiles/OptionTile';
+import { CompanionTile } from './tiles/CompanionTile';
 import { AchievementTile } from './tiles/AchievementTile';
-import { InteractiveCanvasTile } from './tiles/InteractiveCanvasTile';
 
-// Import layout configurations
-import { 
-  getGradeLayout, 
-  getMinTouchTargetSize,
-  getAnimationDuration,
-  needsLargeTouchTargets 
-} from './layouts/gradeLayouts';
-
-// Import layout components
-import { IntroductionLayout } from './layouts/IntroductionLayout';
-import { ScenarioLayout } from './layouts/ScenarioLayout';
-import { CompletionLayout } from './layouts/CompletionLayout';
-
-// Import interaction configuration
-import { getInteractionConfig } from './utils/interactionConfig';
-
-// Import responsive handler
-import { useResponsiveConfig } from './utils/responsiveHandler';
-
-// Import animation system
-import { getAnimationSet, transitionScreen, celebrateAchievement } from './utils/animations';
-
-// Import shared tile styles
-import tileStyles from './styles/tiles.module.css';
-
-// Import progress persistence hook
-import { useExperienceProgress } from '../../hooks/useExperienceProgress';
-
-// Import design system tokens
-import '../../design-system/tokens/colors.css';
-import '../../design-system/tokens/spacing.css';
-import '../../design-system/tokens/layout.css';
-import '../../design-system/tokens/typography.css';
-import '../../design-system/tokens/effects.css';
-
-// Multi-challenge props interface
-interface BentoExperienceCardProps {
+interface ExperienceCardProps {
   // Challenge navigation
   totalChallenges: number;
   currentChallengeIndex: number;
   screenType: 'intro' | 'scenario' | 'completion';
   currentScenarioIndex?: number;
-  containerType?: 'EXPERIENCE' | 'DISCOVER'; // For theming
-  
+
   // Core data
   career: {
     id: string;
@@ -108,7 +60,7 @@ interface BentoExperienceCardProps {
       title?: string;
       context?: string;
     }>;
-    // OpenAI generated content structure
+    // OpenAI generated content
     aiGeneratedContent?: {
       title: string;
       scenario: string;
@@ -128,1292 +80,650 @@ interface BentoExperienceCardProps {
         }>;
         conclusion?: string;
       };
-      challenges?: Array<{
-        title?: string;
-        description?: string;
-        options?: string[];
-        correct_choice?: number;
-        outcome?: string;
-        learning_point?: string;
-      } | string>;
     };
   };
-  
+
   // User info
   gradeLevel: string;
   studentName: string;
   userId?: string;
-  avatarUrl?: string;
-  
+
   // Callbacks
   onScenarioComplete: (scenarioIndex: number, wasCorrect: boolean) => void;
   onChallengeComplete: () => void;
   onNext: () => void;
-  
+
   // Progress tracking
   overallProgress?: number;
   challengeProgress?: number;
   achievements?: string[];
-  
+
   // Optional features
-  showCareerContext?: boolean;
   enableHints?: boolean;
-  enableAudio?: boolean;
 }
 
-interface ChatMessage {
-  id: string;
-  role: 'user' | 'professional';
-  content: string;
-  timestamp: Date;
-}
-
-export const BentoExperienceCard: React.FC<BentoExperienceCardProps> = ({
+export const ExperienceCard: React.FC<ExperienceCardProps> = ({
   totalChallenges,
   currentChallengeIndex,
   screenType,
   currentScenarioIndex = 0,
-  containerType = 'EXPERIENCE',
   career,
   companion,
   challengeData,
   gradeLevel,
   studentName,
   userId,
-  avatarUrl,
   onScenarioComplete,
   onChallengeComplete,
   onNext,
   overallProgress = 0,
   challengeProgress = 0,
   achievements = [],
-  showCareerContext = true,
-  enableHints = false,
-  enableAudio = false
+  enableHints = false
 }) => {
-  // Get theme colors based on container type using Design System tokens
-  const getContainerColors = () => {
-    if (containerType === 'DISCOVER') {
-      return {
-        primary: 'var(--magenta-600)',
-        secondary: 'var(--magenta-500)',
-        dark: 'var(--magenta-800)',
-        light: 'var(--magenta-400)',
-        gradient: 'var(--color-container-discover)',
-        gradientDark: 'linear-gradient(135deg, var(--magenta-800), var(--magenta-700))'
-      };
-    }
-    // Default to Experience colors (Teal per design system)
-    return {
-      primary: 'var(--teal-600)',
-      secondary: 'var(--teal-500)',
-      dark: 'var(--teal-800)',
-      light: 'var(--teal-400)',
-      gradient: 'var(--color-container-experience)',
-      gradientDark: 'linear-gradient(135deg, var(--teal-800), var(--teal-700))'
-    };
-  };
-
-  const containerColors = getContainerColors();
-
-  // Log props immediately to debug
-  console.log('🚀 BentoExperienceCardV2 Props received:', {
-    companion,
-    career,
-    studentName,
-    screenType,
-    containerType,
-    hasCompanion: !!companion,
-    companionDetails: companion ? { id: companion.id, name: companion.name } : 'no companion'
-  });
-  
-  // Apply width management category for content containers
-  usePageCategory('content');
-  
   const { theme } = useTheme();
-  
-  // Get initial theme from DOM since useTheme() returns undefined
-  const getInitialTheme = (): 'light' | 'dark' => {
-    const domTheme = document.documentElement.getAttribute('data-theme');
-    return domTheme === 'dark' ? 'dark' : 'light';
-  };
-  
-  const [actualTheme, setActualTheme] = useState<'light' | 'dark'>(theme || getInitialTheme());
-  
-  // Debug theme
-  console.log('🎨 Theme Detection:', { themeFromHook: theme, actualTheme, domTheme: document.documentElement.getAttribute('data-theme') });
   const [selectedOptionIndex, setSelectedOptionIndex] = useState<number | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
   const [showHint, setShowHint] = useState(false);
-  const [xpEarned, setXpEarned] = useState(0);
-  const [showXPAnimation, setShowXPAnimation] = useState(false);
-  
-  // Progress persistence
-  const {
-    progress,
-    updateScenarioProgress,
-    completeScenario,
-    completeSubject,
-    recordInteraction,
-    getResumeData,
-    getCompletionPercentage
-  } = useExperienceProgress(userId || '', challengeData.subject, challengeData.skill);
-  
-  // Chat state for professional interaction
-  const [showChat, setShowChat] = useState(false);
-  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
-  const [chatInput, setChatInput] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
-  const chatEndRef = useRef<HTMLDivElement>(null);
-  
-  // Update progress when scenario changes
-  useEffect(() => {
-    if (challengeData.scenarios && challengeData.scenarios.length > 0) {
-      updateScenarioProgress(currentScenarioIndex, challengeData.scenarios.length);
-    }
-  }, [currentScenarioIndex]); // Only depend on currentScenarioIndex to avoid loops
-  
-  // Check for resume on mount
-  useEffect(() => {
-    const resumeData = getResumeData();
-    if (resumeData?.canResume && resumeData.scenarioIndex > 0) {
-      // Ask user if they want to resume
-      const shouldResume = window.confirm(`Would you like to resume from scenario ${resumeData.scenarioIndex + 1}?`);
-      if (shouldResume) {
-        setCurrentScenarioIndex(resumeData.scenarioIndex);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Only on mount - getResumeData is stable and doesn't need to be a dependency
-  
-  // Add global style override to force content visibility
-  useEffect(() => {
-    const style = document.createElement('style');
-    style.innerHTML = `
-      .bento-v2-container, 
-      .bento-v2-container * {
-        overflow: visible !important;
-        max-height: none !important;
-        height: auto !important;
-      }
-      .bento-v2-container {
-        min-height: 100vh !important;
-        display: grid !important;
-        grid-template-rows: auto auto auto !important;
-      }
-    `;
-    document.head.appendChild(style);
-    return () => {
-      document.head.removeChild(style);
-    };
-  }, []);
-  
-  // Theme detection - sync with theme hook
-  useEffect(() => {
-    // Use theme from hook as primary source
-    if (theme) {
-      setActualTheme(theme);
-    } else {
-      // Fallback to DOM check
-      const getActualTheme = () => {
-        const domTheme = document.documentElement.getAttribute('data-theme');
-        return (domTheme === 'dark' ? 'dark' : 'light') as 'light' | 'dark';
-      };
-      
-      setActualTheme(getActualTheme());
-      
-      const observer = new MutationObserver(() => {
-        setActualTheme(getActualTheme());
-      });
-      
-      observer.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ['data-theme']
-      });
-      
-      return () => observer.disconnect();
-    }
-  }, [theme]);
-  
-  // Helper functions
-  const getCompanionImage = (companionId: string, theme: 'light' | 'dark' = 'light') => {
-    return `/images/companions/${companionId}-${theme}.png`;
-  };
-  
-  const getGradeCategory = (grade: string): 'elementary' | 'middle' | 'high' => {
-    const gradeNum = grade === 'K' ? 0 : parseInt(grade);
-    if (gradeNum <= 5) return 'elementary';
-    if (gradeNum <= 8) return 'middle';
-    return 'high';
-  };
-  
+
   const gradeCategory = getGradeCategory(gradeLevel);
-  const interactionConfig = getInteractionConfig(gradeLevel);
-  const responsiveConfig = useResponsiveConfig(gradeLevel);
-  const animationSet = getAnimationSet(gradeLevel);
-  
-  // Helper functions for visual options
-  const getOptionVisual = (index: number): string => {
-    const visuals = ['🔵', '🟡', '🔴', '🟢'];
-    return visuals[index] || '⭐';
-  };
-  
-  const needsVisualOptions = (): boolean => {
-    return ['K', '1', '2'].includes(gradeLevel);
-  };
-  
-  const needsInteractiveCanvas = (scenario: any): boolean => {
-    // Use interactive canvas based on grade-specific interaction config
-    if (interactionConfig.mode === 'tap-only') {
-      return scenario.interactionType === 'visual' || scenario.interactionType === 'tap-select';
-    }
-    if (interactionConfig.mode === 'drag-drop' && scenario.interactionType === 'sorting') {
-      return true;
-    }
-    if (interactionConfig.mode === 'multi-select' && scenario.interactionType === 'multiple') {
-      return true;
-    }
-    return false;
-  };
-  
-  // Get grade-specific layout styles
-  const getLayoutStyles = () => {
-    const layout = getGradeLayout(gradeLevel);
-    return {
-      '--min-touch-target': `${getMinTouchTargetSize(gradeLevel)}px`,
-      '--base-font-size': `${layout.fontSize}px`,
-      '--animation-duration': `${getAnimationDuration(gradeLevel)}ms`,
-      '--container-padding': layout.containerPadding,
-      '--tile-min-height': layout.minTileHeight
-    } as React.CSSProperties;
-  };
-  
-  // Companion personality messages
-  const getCompanionGreeting = () => {
-    const greetings = {
-      'finn': `Hey ${studentName}! 🎉 Ready for an awesome ${challengeData.subject} adventure?`,
-      'sage': `Greetings, ${studentName}. Let us explore ${challengeData.subject} with wisdom and patience.`,
-      'spark': `WOW ${studentName}! ⚡ Let's ENERGIZE this ${challengeData.subject} challenge!`,
-      'harmony': `Welcome, dear ${studentName}. 🌸 Let's flow through ${challengeData.subject} together.`
-    };
-    // Ensure companion.id is lowercase for matching
+  const aiContent = challengeData?.aiGeneratedContent || {};
+  const hasAIContent = !!(aiContent && (aiContent.title || aiContent.scenario));
+
+  // Get companion-specific styles
+  const getCompanionClass = () => {
     const companionId = companion.id?.toLowerCase() || 'finn';
-    return greetings[companionId] || challengeData.introduction.companionMessage;
+    return styles[`welcomeHeader${companionId.charAt(0).toUpperCase() + companionId.slice(1)}`];
   };
-  
-  const getCompanionHint = () => {
-    const currentScenario = challengeData.scenarios[currentScenarioIndex];
-    if (!currentScenario?.hint) return null;
-    
-    const hintStyles = {
-      'finn': `Psst! ${currentScenario.hint} 😉`,
-      'sage': `Consider this: ${currentScenario.hint}`,
-      'spark': `Ooh! Quick tip: ${currentScenario.hint}! ⚡`,
-      'harmony': `Gently... ${currentScenario.hint} 🌸`
-    };
-    return hintStyles[companion.id] || currentScenario.hint;
-  };
-  
-  const getCompanionCelebration = () => {
-    const celebrations = {
-      'finn': "AWESOME! You totally nailed it! 🎉",
-      'sage': "Excellent reasoning. You've shown true understanding. 🦉",
-      'spark': "AMAZING ENERGY! You're on FIRE! ⚡⚡⚡",
-      'harmony': "Beautiful work! You approached that with such grace. 🌸"
-    };
-    return celebrations[companion.id] || "Great job!";
-  };
-  
-  const getCompanionEncouragement = () => {
-    const encouragements = {
-      'finn': "No worries! Let's try again - you've got this! 💪",
-      'sage': "A learning opportunity. Reflect and try once more. 🤔",
-      'spark': "Whoa! Close one! Channel that energy and GO AGAIN! ⚡",
-      'harmony': "It's okay, dear. Take a breath and try again. 🌸"
-    };
-    return encouragements[companion.id] || "Let's try again!";
-  };
-  
-  // Handle option selection in scenarios
+
+  // Handle option selection
   const handleOptionSelect = (optionIndex: number) => {
-    if (selectedOptionIndex !== null) return; // Already answered
-    
-    const startTime = Date.now();
+    if (selectedOptionIndex !== null) return;
+
     setSelectedOptionIndex(optionIndex);
     const scenario = challengeData.scenarios[currentScenarioIndex];
     const isCorrect = optionIndex === scenario.correct_choice;
-    
+
     setShowFeedback(true);
-    
-    // Record the interaction
-    const timeToComplete = Date.now() - startTime;
-    recordInteraction(
-      `${challengeData.subject}_${currentScenarioIndex}`,
-      'answer_selected',
-      isCorrect ? 'correct' : 'incorrect',
-      timeToComplete
-    );
-    
-    // Award XP for correct answers
-    if (isCorrect && userId) {
-      const xp = gradeCategory === 'elementary' ? 10 : 15;
-      pathIQGamification.awardPoints(userId, xp, 'Scenario completed', 'experience');
-      setXpEarned(xp);
-      setShowXPAnimation(true);
-      setTimeout(() => setShowXPAnimation(false), 2000);
-      
-      // Mark scenario as completed
-      completeScenario(`${challengeData.subject}_${currentScenarioIndex}`, xp);
-    }
-    
-    // Auto-advance after feedback
+
     setTimeout(() => {
       onScenarioComplete(currentScenarioIndex, isCorrect);
       setSelectedOptionIndex(null);
       setShowFeedback(false);
     }, 3000);
   };
-  
-  // Handle chat with professional
-  const handleChatSend = async () => {
-    if (!chatInput.trim()) return;
-    
-    const userMessage: ChatMessage = {
-      id: Date.now().toString(),
-      role: 'user',
-      content: chatInput,
-      timestamp: new Date()
-    };
-    
-    setChatMessages(prev => [...prev, userMessage]);
-    setChatInput('');
-    setIsTyping(true);
-    
-    try {
-      const context = `You are a ${career.name} helping a grade ${gradeLevel} student understand ${challengeData.skill.name}. 
-                      Be professional but friendly, and use real-world examples.`;
-      
-      const response = await chatbotService.sendMessage(chatInput, context);
-      
-      const professionalMessage: ChatMessage = {
-        id: (Date.now() + 1).toString(),
-        role: 'professional',
-        content: response.message,
-        timestamp: new Date()
-      };
-      
-      setChatMessages(prev => [...prev, professionalMessage]);
-    } catch (error) {
-      console.error('Chat error:', error);
-    } finally {
-      setIsTyping(false);
-    }
-  };
-  
-  // Handle start button from introduction
-  const handleStart = () => {
-    setScreenType('scenario');
-    setCurrentScenarioIndex(0);
-  };
-  
-  // Handle moving to next scenario
-  const handleNextScenario = () => {
-    if (currentScenarioIndex < challengeData.scenarios.length - 1) {
-      setCurrentScenarioIndex(currentScenarioIndex + 1);
-      setSelectedOptionIndex(null);
-      setShowFeedback(false);
-      setShowHint(false);
-      setShowXPAnimation(false);
-    } else {
-      // Check if this is the final subject/challenge
-      const isFinalChallenge = currentChallengeIndex >= totalChallenges - 1;
 
-      if (isFinalChallenge) {
-        // Only show completion screen for the final challenge
-        setScreenType('completion');
-        // Celebration animation for K-2
-        if (['K', '1', '2'].includes(gradeLevel)) {
-          setTimeout(() => {
-            const container = document.querySelector(`.${tileStyles.tile}`);
-            if (container) {
-              celebrateAchievement(container as HTMLElement, gradeLevel, 'confetti');
-            }
-          }, 100);
-        }
-      } else {
-        // For intermediate subjects, just call onChallengeComplete to move to next subject
-        onChallengeComplete();
-      }
+  // Helper function to create a summary from scenario text
+  const getScenarioSummary = (text: string, maxLength: number = 30): string => {
+    if (!text) return '';
+
+    // Remove "Challenge X:" prefix if present
+    let cleanText = text.replace(/^Challenge \d+:\s*/i, '');
+
+    // Common patterns to extract the action:
+    // "The kids are making name tags" -> "Make name tags"
+    // "It's time to make team signs" -> "Create team signs"
+    // "A kid's jersey is missing the letter 'R'" -> "Fix team jersey"
+
+    // Pattern 1: "The X are/is [verb]ing Y" -> "[Verb] Y"
+    const pattern1 = /^(?:The |A |An )?[\w\s']+ (?:are|is) (\w+)ing (.+)$/i;
+    const match1 = cleanText.match(pattern1);
+    if (match1) {
+      const verb = match1[1].charAt(0).toUpperCase() + match1[1].slice(1);
+      return `${verb} ${match1[2]}`.substring(0, maxLength);
     }
+
+    // Pattern 2: "It's time to [verb] Y" -> "[Verb] Y"
+    const pattern2 = /^It'?s time to (\w+) (.+)$/i;
+    const match2 = cleanText.match(pattern2);
+    if (match2) {
+      const verb = match2[1].charAt(0).toUpperCase() + match2[1].slice(1);
+      return `${verb} ${match2[2]}`.substring(0, maxLength);
+    }
+
+    // Pattern 3: "X is missing Y" -> "Fix X"
+    const pattern3 = /^(?:The |A |An )?([\w\s']+) (?:is|are) missing/i;
+    const match3 = cleanText.match(pattern3);
+    if (match3) {
+      return `Fix ${match3[1]}`.substring(0, maxLength);
+    }
+
+    // Pattern 4: "X needs Y" -> "Add/Fix X"
+    const pattern4 = /^(?:The |A |An )?([\w\s']+) needs?/i;
+    const match4 = cleanText.match(pattern4);
+    if (match4) {
+      return `Update ${match4[1]}`.substring(0, maxLength);
+    }
+
+    // Pattern 5: Extract verb phrase after "to" or "must"
+    const pattern5 = /(?:to|must|should|need to|have to) (\w+)\s+(.+?)(?:[.,!?]|$)/i;
+    const match5 = cleanText.match(pattern5);
+    if (match5) {
+      const verb = match5[1].charAt(0).toUpperCase() + match5[1].slice(1);
+      return `${verb} ${match5[2]}`.substring(0, maxLength);
+    }
+
+    // If no pattern matches, try to find the main verb and object
+    // Get first sentence
+    const firstSentence = cleanText.split(/[.!?]/)[0];
+
+    // If it starts with a verb (imperative), use as is
+    const imperativePattern = /^(Make|Create|Fix|Update|Build|Design|Write|Draw|Help|Find|Solve|Add|Remove|Check|Test|Complete|Select|Choose|Apply|Use)/i;
+    if (imperativePattern.test(firstSentence)) {
+      return firstSentence.substring(0, maxLength);
+    }
+
+    // Otherwise, truncate smartly
+    if (firstSentence.length > maxLength) {
+      return firstSentence.substring(0, maxLength - 3) + '...';
+    }
+
+    return firstSentence;
   };
-  
-  // Render introduction screen with storytelling narrative
-  const renderIntroduction = () => {
-    // Parse OpenAI content if it has the new structure
-    const aiContent = challengeData?.aiGeneratedContent || {};
-    const hasAIContent = !!(aiContent && (aiContent.title || aiContent.scenario || aiContent.character_context || aiContent.career_introduction));
-    
-    // Debug logging
-    console.log('🎭 BentoExperienceCardV2 - renderIntroduction:', {
-      companion: companion,
-      companionId: companion?.id,
-      companionName: companion?.name,
-      career: career,
-      studentName: studentName,
-      screenType: screenType,
-      hasCompanion: !!companion,
-      challengeData: challengeData,
-      aiContent: aiContent,
-      hasAIContent: hasAIContent
-    });
-    
-    // Test with a simple visible div first
-    return (
-    <div style={{
-      width: '100%',
-      background: actualTheme === 'dark' ? 'var(--gray-900)' : 'var(--gray-50)',
-      borderRadius: 'var(--radius-xl)',
-      padding: 'var(--space-10)',
-      paddingTop: 'var(--space-20)' // Add extra padding to avoid header overlap
-    }}>
-      {/* Simple Welcome Header - Testing visibility */}
-      <div className={`${styles.welcomeHeader} ${styles.animateSlideInFromTop}`} style={{
-        background: companion?.id?.toLowerCase() === 'harmony' 
-          ? 'linear-gradient(135deg, var(--magenta-500), var(--magenta-400))' 
-          : companion?.id?.toLowerCase() === 'sage'
-          ? 'linear-gradient(135deg, var(--teal-700), var(--teal-500))'
-          : companion?.id?.toLowerCase() === 'spark'
-          ? 'linear-gradient(135deg, var(--amber-600), var(--amber-500))'
-          : containerColors.gradient,
-        color: 'var(--color-text-inverse)',
-        padding: 'var(--space-8)',
-        borderRadius: 'var(--radius-lg)',
-        marginBottom: 'var(--space-5)'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-          {/* Companion Avatar */}
-          <div className={styles.animatePulse} style={{ 
-            width: '80px', 
- 
-            borderRadius: '50%', 
-            background: 'rgba(255,255,255,0.2)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            border: '3px solid white',
-          }}>
-            <img 
+
+  // Extract challenge summaries for mission list
+  const getChallengeSummaries = () => {
+    // Get aiChallenges from aiContent
+    const aiChallenges = aiContent?.interactive_simulation?.challenges;
+
+    // If we have AI challenges, use challenge_summary or extract from description
+    if (aiChallenges && aiChallenges.length > 0) {
+      return aiChallenges.map((challenge: any, index: number) => {
+        // First check if AI provided a challenge_summary
+        if (challenge.challenge_summary) {
+          return challenge.challenge_summary;
+        }
+
+        // Otherwise extract a short action from the challenge description
+        const description = challenge.description || '';
+
+        // Remove "Challenge X:" prefix
+        let cleanDesc = description.replace(/^Challenge \d+:\s*/i, '');
+
+        // Try to extract action-oriented summary from the description
+        // Common patterns:
+        // "You have X. Players need Y." -> Focus on the action
+        // "Three players are waiting." -> Focus on what needs to be done
+
+        // Look for key action verbs and create summaries
+        const lowerDesc = cleanDesc.toLowerCase();
+
+        // Equipment/item distribution
+        if (lowerDesc.includes('give') || lowerDesc.includes('hand out') || lowerDesc.includes('distribute')) {
+          if (lowerDesc.includes('ball')) return 'Distribute balls';
+          if (lowerDesc.includes('jersey')) return 'Hand out jerseys';
+          if (lowerDesc.includes('equipment')) return 'Distribute equipment';
+          return 'Distribute items';
+        }
+
+        // Organization/arrangement
+        if (lowerDesc.includes('organize') || lowerDesc.includes('arrange') || lowerDesc.includes('setup')) {
+          if (lowerDesc.includes('player')) return 'Organize players';
+          if (lowerDesc.includes('team')) return 'Organize team';
+          return 'Organize activity';
+        }
+
+        // Selection/choosing
+        if (lowerDesc.includes('pick') || lowerDesc.includes('select') || lowerDesc.includes('choose')) {
+          if (lowerDesc.includes('player')) return 'Select players';
+          if (lowerDesc.includes('team')) return 'Choose team members';
+          return 'Make selection';
+        }
+
+        // Counting/identifying
+        if (lowerDesc.includes('count') || lowerDesc.includes('identify')) {
+          return 'Count and organize';
+        }
+
+        // Need-based actions
+        if (lowerDesc.includes('need')) {
+          if (lowerDesc.includes('ball')) return 'Provide equipment';
+          if (lowerDesc.includes('player')) return 'Find players';
+          if (lowerDesc.includes('jersey')) return 'Provide uniforms';
+          if (lowerDesc.includes('more')) return 'Get resources';
+        }
+
+        // Try to get the "What do you do?" question focus
+        const whatDoYouDo = cleanDesc.match(/what do you do\?/i);
+        if (whatDoYouDo) {
+          // Get the sentence before "What do you do?"
+          const beforeQuestion = cleanDesc.split(/what do you do\?/i)[0].trim();
+          const lastSentence = beforeQuestion.split('.').pop()?.trim();
+          if (lastSentence && lastSentence.length < 30) {
+            return lastSentence;
+          }
+        }
+
+        // Extract first action phrase (up to first period or question)
+        const firstPhrase = cleanDesc.split(/[.?!]/)[0].trim();
+        if (firstPhrase.length < 25) {
+          return firstPhrase;
+        }
+
+        // Shorten long phrases by taking key words
+        const words = firstPhrase.split(' ');
+        if (words.length > 4) {
+          return words.slice(0, 4).join(' ') + '...';
+        }
+
+        return `Challenge ${index + 1}`;
+      });
+    }
+
+    // Fallback to extracting from scenarios
+    if (challengeData?.scenarios && challengeData.scenarios.length > 0) {
+      return challengeData.scenarios.map((scenario, index) => {
+        // Check for interactive simulation challenges
+        const aiChallenge = scenario.interactiveSimulation?.challenges?.[0];
+
+        // Try different sources for the description
+        const description =
+          aiChallenge?.description ||
+          aiChallenge?.scenario ||
+          scenario.description ||
+          scenario.careerContext ||
+          '';
+
+        // Use the helper function to create a clean summary
+        const summary = getScenarioSummary(description);
+
+        // Return the summary or a fallback
+        return summary || `Task ${index + 1}`;
+      });
+    }
+
+    // Fallback if no scenarios
+    return ['Task 1', 'Task 2', 'Task 3', 'Task 4'];
+  };
+
+  // Render introduction screen
+  const renderIntroduction = () => (
+    <div className={styles.introContainer}>
+      {/* Welcome Header */}
+      <div className={cn(styles.welcomeHeader, getCompanionClass())}>
+        <div className={styles.welcomeContent}>
+          <div className={styles.companionAvatar}>
+            <img
               src={`/images/companions/${companion?.id?.toLowerCase() || 'finn'}-${theme === 'dark' ? 'dark' : 'light'}.png`}
               alt={companion?.name || 'Companion'}
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover'
-              }}
             />
           </div>
-          
-          {/* Text Content */}
-          <div style={{ flex: 1 }}>
-            <h1 style={{ 
-              fontSize: '32px', 
-              fontWeight: 'bold', 
-              marginBottom: '8px',
-              margin: 0
-            }}>
+          <div className={styles.welcomeText}>
+            <h1 className={styles.welcomeTitle}>
               {hasAIContent && aiContent.title ? aiContent.title : `${career?.icon || '💼'} Welcome to ${career?.name || 'Coach'}'s World!`}
             </h1>
             {hasAIContent && aiContent.career_introduction && (
-              <p style={{
-                fontSize: '18px',
-                opacity: 0.95,
-                margin: 0,
-                marginTop: '8px',
-                lineHeight: '1.5'
-              }}>
+              <p className={styles.welcomeSubtitle}>
                 {aiContent.career_introduction}
               </p>
             )}
           </div>
         </div>
       </div>
-      
-      {/* Side-by-side layout: Character Context & How To Tile */}
-      <div style={{ 
-        gridColumn: 'span 4', 
-        display: 'grid', 
-        gridTemplateColumns: '3fr 2fr', 
-        gap: '20px'
-      }}>
-        {/* Character Context & Story Setup Tile - LARGER */}
-        <div className={`${styles.bentoTile} ${styles.storyContextTile} ${styles.animateSlideInFromLeft}`} style={{
-        background: actualTheme === 'dark'
-          ? 'linear-gradient(135deg, var(--teal-800), var(--teal-700))'
-          : 'linear-gradient(135deg, var(--teal-500), var(--teal-600))',
-        backgroundColor: actualTheme === 'dark' ? 'var(--gray-800)' : 'white',
-        border: actualTheme === 'dark' ? '1px solid var(--teal-700)' : 'none',
-        borderRadius: 'var(--radius-lg)',
-        padding: 'var(--space-7)',
-        boxShadow: actualTheme === 'dark' 
-          ? 'var(--shadow-xl)'
-          : 'var(--shadow-lg)',
-        position: 'relative',
-        color: 'var(--color-text-inverse)'
-      }}>
-        {/* Decorative element */}
-        <div style={{
-          position: 'absolute',
-          top: '-50px',
-          right: '-50px',
-          width: '150px',
-          borderRadius: '50%',
-          background: 'rgba(255,255,255,0.1)',
-          pointerEvents: 'none'
-        }} />
-        
-        <h2 className={styles.sectionTitle} style={{ 
-          fontSize: '24px', 
-          fontWeight: '700', 
-          marginBottom: '20px', 
-          color: 'white',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px'
-        }}>
-          <span style={{ fontSize: '28px' }}>📖</span>
-          Your Story Begins...
-        </h2>
-        <div className={styles.storyContent} style={{ 
-          fontSize: '17px', 
-          lineHeight: '1.7', 
-          color: 'rgba(255,255,255,0.95)',
-          position: 'relative',
-          zIndex: 1
-        }}>
-          {hasAIContent && aiContent.scenario ? (
-            <>
-              <p style={{ marginBottom: '16px' }}>{aiContent.scenario}</p>
-              {aiContent.character_context && (
-                <p>{aiContent.character_context}</p>
-              )}
-            </>
-          ) : (
-            <>
-              <p style={{ marginBottom: '16px' }}>
-                You are {career?.name || 'a Professional'} {studentName}, ready to take on today's challenges!
-              </p>
-              <p>
-                Today, you're focusing on <strong style={{ color: '#fbbf24' }}>{challengeData?.skill?.name || 'Identify numbers - up to 3'}</strong> - 
-                a crucial skill that every {career?.name || 'professional'} needs. Your mission is to {challengeData?.skill?.description || 'master important skills for your career'}!
-              </p>
-            </>
-          )}
-        </div>
-      </div>
-        
-        {/* How Careers Use Skills Tile */}
-        <div className={`${styles.bentoTile} ${styles.howToTile} ${styles.animateSlideInFromRight}`} style={{
-        background: actualTheme === 'dark'
-          ? containerColors.gradientDark
-          : containerColors.gradient,
-        backgroundColor: actualTheme === 'dark' ? 'var(--gray-800)' : 'white',
-        border: actualTheme === 'dark' ? `1px solid ${containerColors.dark}` : 'none',
-        borderRadius: 'var(--radius-lg)',
-        padding: 'var(--space-6)',
-        boxShadow: actualTheme === 'dark' 
-          ? 'var(--shadow-xl)'
-          : 'var(--shadow-lg)',
-        position: 'relative',
-        color: 'var(--color-text-inverse)'
-      }}>
-        {/* Pattern overlay */}
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 1px)',
-          backgroundSize: '20px 20px',
-          pointerEvents: 'none'
-        }} />
-        
-        <h2 className={styles.sectionTitle} style={{ 
-          fontSize: '20px', 
-          fontWeight: '700', 
-          marginBottom: '14px', 
-          color: 'white',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          position: 'relative',
-          zIndex: 1
-        }}>
-          <span style={{ fontSize: '24px' }}>🎯</span>
-          Real-World Skills
-        </h2>
-        <p style={{ 
-          fontSize: '15px', 
-          lineHeight: '1.6', 
-          color: 'rgba(255,255,255,0.95)',
-          position: 'relative',
-          zIndex: 1
-        }}>
-          {hasAIContent && aiContent.career_introduction ? 
-            aiContent.career_introduction :
-            `${career?.name || 'Professional'}s use ${challengeData?.skill?.name || 'math skills'} every day! Master this skill to become a pro.`
-          }
-        </p>
-      </div>
-    </div>
-    
-    {/* Your Mission & Start Adventure Tile - Enhanced visual design */}
-    <div className={`${styles.bentoTile} ${styles.missionTile} ${styles.animateSlideInFromBottom}`} style={{
-      gridColumn: 'span 4',
-      background: actualTheme === 'dark'
-        ? 'linear-gradient(135deg, var(--amber-800), var(--amber-700))'
-        : 'linear-gradient(135deg, var(--amber-500), var(--amber-600))',
-      backgroundColor: actualTheme === 'dark' ? 'var(--gray-800)' : 'white',
-      border: actualTheme === 'dark' ? '1px solid var(--amber-700)' : 'none',
-      borderRadius: 'var(--radius-lg)',
-      padding: 'var(--space-6) var(--space-7)',
-      marginTop: 'var(--space-5)', // Add margin to separate from tiles above
-      boxShadow: actualTheme === 'dark' 
-        ? 'var(--shadow-xl)'
-        : 'var(--shadow-lg)',
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      gap: 'var(--space-8)',
-      position: 'relative',
-      color: 'var(--color-text-inverse)'
-    }}>
-      {/* Animated background pattern */}
-      <div style={{
-        position: 'absolute',
-        top: 0,
-        left: '-100%',
-        right: '-100%',
-        bottom: 0,
-        background: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.03) 10px, rgba(255,255,255,0.03) 20px)',
-        animation: 'slide 20s linear infinite',
-        pointerEvents: 'none'
-      }} />
-      
-      {/* Mission Content - Enhanced */}
-      <div style={{ flex: 1, position: 'relative', zIndex: 1 }}>
-        <h2 className={styles.sectionTitle} style={{ 
-          fontSize: '22px', 
-          fontWeight: '700', 
-          marginBottom: '16px', 
-          color: 'white',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px'
-        }}>
-          <span style={{ fontSize: '26px' }}>🏆</span>
-          Your Mission
-        </h2>
-        <div style={{ display: 'flex', gap: '32px', alignItems: 'center' }}>
-          <ul style={{ 
-            fontSize: '16px', 
-            paddingLeft: '24px', 
-            margin: 0, 
-            color: 'rgba(255,255,255,0.95)', 
-            lineHeight: '1.8',
-            fontWeight: '500'
-          }}>
-            {(() => {
-              const aiChallenges = aiContent?.interactive_simulation?.challenges;
-              
-              // Function to extract a brief summary from challenge description
-              const getChallengeSummary = (challenge: any, index: number) => {
-                if (typeof challenge === 'string') return challenge;
-                
-                const description = challenge.description || '';
-                
-                // Extract key action from the description
-                // Look for patterns like "count how many", "set up cones", "form a team", etc.
-                if (description.includes('count')) {
-                  return `Count players and equipment`;
-                } else if (description.includes('set up') || description.includes('cones')) {
-                  return `Set up practice equipment`;
-                } else if (description.includes('team') || description.includes('form')) {
-                  return `Organize team activities`;
-                } else if (description.includes('snack') || description.includes('juice')) {
-                  return `Manage snack distribution`;
-                } else if (description.includes('relay') || description.includes('race')) {
-                  return `Prepare for relay races`;
-                } else if (description.includes('catch') || description.includes('ball')) {
-                  return `Track balls and players`;
-                }
-                
-                // Fallback: extract first key verb/action after the colon
-                const colonIndex = description.indexOf(':');
-                if (colonIndex > -1) {
-                  const afterColon = description.substring(colonIndex + 1, colonIndex + 50);
-                  const cleaned = afterColon.replace(/[.!?].*/, '').trim();
-                  if (cleaned.length < 40) {
-                    return cleaned;
-                  }
-                }
-                
-                // Final fallback
-                return `Challenge ${index + 1}: Apply counting skills`;
-              };
-              
-              console.log('📋 Your Mission - Challenges Debug:', {
-                aiContent: aiContent,
-                aiChallenges: aiChallenges,
-                hasChallenges: aiChallenges && aiChallenges.length > 0,
-                scenarios: challengeData?.scenarios
-              });
-              
-              if (aiChallenges && aiChallenges.length > 0) {
-                return aiChallenges.map((challenge, index) => (
-                  <li key={index} style={{ marginBottom: '4px' }}>
-                    Challenge {index + 1}: {getChallengeSummary(challenge, index)}
-                  </li>
-                ));
-              } else if (challengeData?.scenarios && challengeData.scenarios.length > 0) {
-                return challengeData.scenarios.slice(0, 3).map((scenario, index) => (
-                <li key={index} style={{ marginBottom: '4px' }}>
-                  {scenario.title || `Challenge ${index + 1}: ${scenario.description?.split('.')[0] || 'Complete the task'}`}
-                </li>
-              ));
-              } else {
-                return (
-                  <>
-                    <li style={{ marginBottom: '4px' }}>Learn to identify numbers up to 3</li>
-                    <li style={{ marginBottom: '4px' }}>Practice counting with real-world examples</li>
-                    <li style={{ marginBottom: '4px' }}>Apply your skills in fun challenges</li>
-                  </>
-                );
-              }
-            })()}
-          </ul>
-          <div className={styles.scenarioCount} style={{ 
-            display: 'flex', 
-            flexDirection: 'column',
-            gap: '8px', 
-            alignItems: 'center',
-            padding: '12px',
-            background: 'rgba(255,255,255,0.1)',
-            borderRadius: '12px',
-            backdropFilter: 'blur(10px)'
-          }}>
-            <div style={{ display: 'flex', gap: '6px' }}>
-              {Array.from({ length: Math.min(challengeData.scenarios.length, 5) }).map((_, i) => (
-                <span key={i} style={{ 
-                  width: '12px', 
-                  height: '12px', 
-                  borderRadius: '50%', 
-                  background: 'rgba(255,255,255,0.8)',
-                  display: 'inline-block',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
-                }}></span>
-              ))}
-            </div>
-            <span style={{ fontSize: '12px', opacity: 0.9, fontWeight: '600' }}>Ready!</span>
+
+      {/* Content Tiles */}
+      <div className={styles.tileGrid}>
+        {/* Story Context Tile */}
+        <div className={styles.storyTile}>
+          <div className={styles.storyDecoration} />
+          <h2 className={styles.sectionTitle}>
+            <span className={styles.sectionIcon}>📖</span>
+            Your Story Begins...
+          </h2>
+          <div className={styles.storyContent}>
+            {hasAIContent && aiContent.scenario ? (
+              <>
+                <p>{aiContent.scenario}</p>
+                {aiContent.character_context && <p>{aiContent.character_context}</p>}
+              </>
+            ) : (
+              <>
+                <p>You are {career?.name || 'a Professional'} {studentName}, ready to take on today's challenges!</p>
+                <p>Today, you're focusing on <strong>{challengeData?.skill?.name || 'important skills'}</strong> -
+                  a crucial skill that every {career?.name || 'professional'} needs.</p>
+              </>
+            )}
           </div>
         </div>
+
+        {/* Skills Tile */}
+        <div className={styles.skillsTile}>
+          <div className={styles.skillsPattern} />
+          <h2 className={styles.sectionTitle}>
+            <span className={styles.sectionIcon}>🎯</span>
+            Real-World Skills
+          </h2>
+          <p className={styles.skillsContent}>
+            {hasAIContent && aiContent.career_introduction ?
+              aiContent.career_introduction :
+              `${career?.name || 'Professional'}s use ${challengeData?.skill?.name || 'these skills'} every day! Master this skill to become a pro.`
+            }
+          </p>
+        </div>
       </div>
-      
-      {/* Start Adventure Button - Enhanced */}
-      <button 
-        className={styles.startButton}
-        onClick={onNext}
-        style={{
-          background: 'linear-gradient(135deg, var(--teal-500), var(--teal-600))',
-          color: 'var(--color-text-inverse)',
-          border: 'none',
-          borderRadius: 'var(--radius-md)',
-          padding: 'var(--space-5) var(--space-9)',
-          fontSize: '20px',
-          fontWeight: '700',
-          cursor: 'pointer',
-          boxShadow: 'var(--shadow-lg)',
-          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: 'var(--space-3)',
-          whiteSpace: 'nowrap',
-          minWidth: '200px',
-          position: 'relative'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'translateY(-2px) scale(1.05)';
-          e.currentTarget.style.boxShadow = 'var(--shadow-xl)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'translateY(0) scale(1)';
-          e.currentTarget.style.boxShadow = 'var(--shadow-lg)';
-        }}
-      >
-        <span style={{ fontSize: '24px' }}>🚀</span>
-        <span>Start Adventure</span>
-        <span style={{ fontSize: '18px' }}>→</span>
-      </button>
+
+      {/* Mission Tile */}
+      <div className={styles.missionTile}>
+        <div className={styles.missionPattern} />
+        <div className={styles.missionContent}>
+          <h2 className={styles.sectionTitle}>
+            <span className={styles.sectionIcon}>🏆</span>
+            {aiContent?.scenario_summary || 'Your Mission'}
+          </h2>
+          <div className={styles.missionList}>
+            <ul className={styles.challengeList}>
+              {getChallengeSummaries().map((summary, index) => (
+                <li key={index}>{summary}</li>
+              ))}
+            </ul>
+            <div className={styles.scenarioIndicator}>
+              <div className={styles.scenarioDots}>
+                {Array.from({ length: Math.min(challengeData.scenarios.length, 5) }).map((_, i) => (
+                  <span key={i} className={styles.scenarioDot} />
+                ))}
+              </div>
+              <span className={styles.scenarioLabel}>Ready!</span>
+            </div>
+          </div>
+        </div>
+
+        <button className={styles.startButton} onClick={onNext}>
+          <span className={styles.startButtonIcon}>🚀</span>
+          <span>Start Adventure</span>
+          <span className={styles.startButtonArrow}>→</span>
+        </button>
+      </div>
     </div>
-    
-    {/* Add keyframe animation for sliding pattern */}
-    <style dangerouslySetInnerHTML={{ __html: `
-      @keyframes slide {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(100%); }
-      }
-    `}} />
-  </div>
   );
-  };
-  
+
   // Render scenario screen
   const renderScenario = () => {
-    const scenario = challengeData.scenarios[currentScenarioIndex];
+    // Check for AI-generated challenges first
+    const aiChallenges = aiContent?.interactive_simulation?.challenges;
+    const aiChallenge = aiChallenges && aiChallenges[currentScenarioIndex];
+
+    // Use AI challenge if available, otherwise fall back to regular scenario
+    const scenario = aiChallenge ? {
+      ...challengeData.scenarios[currentScenarioIndex],
+      description: aiChallenge.description || challengeData.scenarios[currentScenarioIndex]?.description,
+      options: aiChallenge.options || challengeData.scenarios[currentScenarioIndex]?.options,
+      correct_choice: aiChallenge.correct_choice ?? challengeData.scenarios[currentScenarioIndex]?.correct_choice,
+      hint: aiChallenge.hint || challengeData.scenarios[currentScenarioIndex]?.hint,
+      outcome: aiChallenge.outcome || challengeData.scenarios[currentScenarioIndex]?.outcome,
+      learning_point: aiChallenge.learning_point || challengeData.scenarios[currentScenarioIndex]?.learning_point,
+      title: aiChallenge.title || challengeData.scenarios[currentScenarioIndex]?.title,
+      careerContext: challengeData.scenarios[currentScenarioIndex]?.careerContext
+    } : challengeData.scenarios[currentScenarioIndex];
+
+
     if (!scenario) return null;
-    
+
+    // Get companion messages
+    const getCompanionMessage = () => {
+      if (showFeedback) {
+        return selectedOptionIndex === scenario.correct_choice
+          ? "Excellent work! You got it right!"
+          : "Not quite, but that's okay! Let's try again.";
+      }
+      return showHint ? scenario.hint || "Think about it..." : "Need a hint?";
+    };
+
     return (
-      <div className={`${styles.bentoContainer} ${styles[`grade-${gradeCategory}`]} ${actualTheme === 'dark' ? styles.darkTheme : styles.lightTheme} bento-v2-container`} style={{
-        overflow: 'visible !important',
-        height: 'auto !important',
-        minHeight: 'auto !important',
-        maxHeight: 'none !important',
-        display: 'grid !important',
-        gridTemplateRows: 'auto auto auto !important'
-      }}>
-        {/* Progress Tile - Enhanced */}
-        <div className={`${styles.bentoTile} ${styles.wideTile} ${styles.progressTile}`} style={{
-          background: actualTheme === 'dark' 
-            ? 'linear-gradient(90deg, rgba(99,102,241,0.15) 0%, rgba(16,185,129,0.15) 50%, rgba(251,146,60,0.15) 100%)'
-            : 'linear-gradient(90deg, #6366f1 0%, #10b981 50%, #fb923c 100%)',
-          border: actualTheme === 'dark' ? '1px solid rgba(99,102,241,0.3)' : 'none',
-          borderRadius: '16px',
-          boxShadow: actualTheme === 'dark' 
-            ? '0 8px 16px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05)'
-            : '0 8px 16px rgba(99,102,241,0.2), inset 0 1px 0 rgba(255,255,255,0.3)',
-          color: 'white',
-          position: 'relative'
-        }}>
-          <ProgressTile
-            progress={{
-              currentScenario: currentScenarioIndex + 1,
-              totalScenarios: challengeData.scenarios.length,
-              completedScenarios: currentScenarioIndex,
-              completionPercentage: getCompletionPercentage(),
-              currentSkill: {
-                name: challengeData.skill.name,
-                subject: challengeData.subject,
-                progress: challengeProgress
-              }
-            }}
-            display="minimal"
-            showMilestones={false}
-            gradeLevel={gradeLevel}
-          />
-        </div>
-        
-        {/* Scenario Tile - Enhanced visual */}
-        <div className={`${styles.bentoTile} ${styles.largeTile} ${styles.scenarioMainTile}`} style={{
-          background: actualTheme === 'dark'
-            ? 'linear-gradient(135deg, rgba(59,130,246,0.12) 0%, rgba(37,99,235,0.12) 100%)'
-            : 'linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%)',
-          border: actualTheme === 'dark' ? '1px solid rgba(59,130,246,0.3)' : '2px solid #3b82f6',
-          borderRadius: '20px',
-          boxShadow: actualTheme === 'dark' 
-            ? '0 20px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05)'
-            : '0 20px 40px rgba(59,130,246,0.15)',
-          color: actualTheme === 'dark' ? '#e5e7eb' : '#1e293b',
-          position: 'relative',
-          overflow: 'visible !important',
-          height: 'auto !important',
-          minHeight: 'auto !important',
-          maxHeight: 'none !important'
-        }}>
-          <ScenarioTile
-            scenario={{
-              description: scenario.description,
-              visual: scenario.visual,
-              careerContext: scenario.careerContext,
-              hint: scenario.hint
-            }}
-            scenarioNumber={currentScenarioIndex + 1}
-            totalScenarios={challengeData.scenarios.length}
-            career={{ name: career.name, icon: career.icon }}
-            skill={{ name: challengeData.skill.name }}
-            gradeLevel={gradeLevel}
-          />
-        </div>
-        
-        {/* Options - Use InteractiveCanvas based on interaction config */}
-        {needsInteractiveCanvas(scenario) ? (
-          <div className={`${styles.bentoTile} ${styles.largeTile} ${styles.interactiveTile}`} style={{
-            background: actualTheme === 'dark'
-              ? 'linear-gradient(135deg, rgba(240,253,244,0.1) 0%, rgba(220,252,231,0.1) 100%)'
-              : 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)',
-            border: actualTheme === 'dark' ? '2px solid rgba(34,197,94,0.4)' : '3px solid #22c55e',
-            borderRadius: '16px',
-            boxShadow: actualTheme === 'dark' ? '0 10px 25px rgba(0,0,0,0.4)' : '0 10px 25px rgba(34,197,94,0.3)',
-            color: actualTheme === 'dark' ? '#e5e7eb' : 'inherit'
-          }}>
-            <InteractiveCanvasTile
-              type={
-                interactionConfig.mode === 'tap-only' ? 'tap-select' :
-                interactionConfig.mode === 'drag-drop' ? 'drag-drop' :
-                interactionConfig.mode === 'multi-select' ? 'multi-select' :
-                'selection'
-              }
-              items={scenario.options.map((option, index) => ({
-                id: `option-${index}`,
-                content: option,
-                visual: interactionConfig.showVisuals ? getOptionVisual(index) : undefined,
-                type: interactionConfig.mode === 'drag-drop' ? 'draggable' as const : 'static' as const,
-                correctTarget: index === scenario.correct_choice ? 'correct' : undefined
-              }))}
-              gradeLevel={gradeLevel}
-              instructions={interactionConfig.instructions || "Select your answer"}
-              showFeedback={showFeedback}
-              enableHints={enableHints}
-              targetSize={interactionConfig.targetSize}
-              enableSnapping={interactionConfig.mode === 'drag-drop'}
-              feedback={interactionConfig.feedback}
-              onComplete={(result) => {
-                // Handle completion
-                if (result.correct) {
-                  onScenarioComplete(currentScenarioIndex, true);
-                }
-              }}
-              onInteraction={(itemId, action) => {
-                const index = parseInt(itemId.split('-')[1]);
-                handleOptionSelect(index);
-              }}
-            />
+      <div className={cn(
+        styles.scenarioContainer,
+        styles[`container${gradeCategory.charAt(0).toUpperCase() + gradeCategory.slice(1)}`]
+      )}>
+        {/* Progress Bar with Setup Text */}
+        <div className={styles.progressTile}>
+          <div className={styles.progressContent}>
+            <div className={styles.progressTopRow}>
+              <span className={styles.progressLabel}>
+                Scenario {currentScenarioIndex + 1} of {challengeData.scenarios.length}
+              </span>
+              <div className={styles.progressBar}>
+                <div
+                  className={styles.progressFill}
+                  style={{ '--width': `${((currentScenarioIndex + 1) / challengeData.scenarios.length) * 100}%` }}
+                />
+              </div>
+            </div>
+            {/* AI Setup text inside progress tile */}
+            {aiContent?.interactive_simulation?.setup && (
+              <div className={styles.progressSetupSection}>
+                <div className={styles.setupHeader}>
+                  <span className={styles.setupIcon}>📋</span>
+                  <h3 className={styles.setupTitle}>Your Mission Today</h3>
+                </div>
+                <p className={styles.setupText}>
+                  {aiContent.interactive_simulation.setup}
+                </p>
+              </div>
+            )}
           </div>
-        ) : (
-          <div className={`${styles.bentoTile} ${styles.mediumTile} ${styles.optionsTile}`} style={{
-            background: actualTheme === 'dark'
-              ? 'linear-gradient(135deg, rgba(16,185,129,0.12) 0%, rgba(5,150,105,0.12) 100%)'
-              : 'linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)',
-            border: actualTheme === 'dark' ? '1px solid rgba(16,185,129,0.3)' : '2px solid #10b981',
-            borderRadius: '20px',
-            boxShadow: actualTheme === 'dark'
-              ? '0 15px 30px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05)'
-              : '0 15px 30px rgba(16,185,129,0.15)',
-            color: actualTheme === 'dark' ? '#e5e7eb' : '#1e293b',
-            overflow: 'visible !important',
-            height: 'auto !important',
-            minHeight: 'auto !important',
-            maxHeight: 'none !important'
-          }}>
-            <OptionTile
-              options={scenario.options.map((text, index) => ({
-                text,
-                visual: needsVisualOptions() ? getOptionVisual(index) : undefined
-              }))}
-              correctIndex={scenario.correct_choice}
-              gradeLevel={gradeLevel}
-              enableHints={enableHints}
-              onSelect={handleOptionSelect}
-              selectedIndex={selectedOptionIndex}
-              showFeedback={showFeedback}
-              disabled={showFeedback}
-              questionFormat={gradeCategory === 'elementary' ? 'standard' : 'i-would'}
-            />
+        </div>
+
+        {/* Main Scenario Content */}
+        <div className={styles.scenarioMainTile}>
+          <div className={styles.scenarioHeader}>
+            <h2 className={styles.scenarioTitle}>
+              Challenge {currentScenarioIndex + 1}
+            </h2>
+            <div className={styles.careerBadge}>
+              <span className={styles.careerIcon}>{career.icon}</span>
+              <span className={styles.careerName}>{career.name}</span>
+            </div>
           </div>
-        )}
-        
-        {/* Companion Helper Tile - Theme aware */}
-        {enableHints && !showFeedback && (
-          <div className={`${styles.bentoTile} ${styles.smallTile} ${styles.helperTile}`} style={{
-            background: actualTheme === 'dark'
-              ? 'linear-gradient(135deg, rgba(251,191,36,0.12) 0%, rgba(245,158,11,0.12) 100%)'
-              : 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)',
-            border: actualTheme === 'dark' ? '1px solid rgba(251,191,36,0.3)' : '2px solid #f59e0b',
-            borderRadius: '16px',
-            boxShadow: actualTheme === 'dark'
-              ? '0 10px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05)'
-              : '0 10px 20px rgba(245,158,11,0.15)',
-            color: actualTheme === 'dark' ? '#e5e7eb' : '#1e293b'
-          }}>
-            <CompanionTile
-              companion={{
-                id: companion.id as 'finn' | 'sage' | 'spark' | 'harmony',
-                name: companion.name,
-                personality: companion.personality
-              }}
-              message={showHint ? getCompanionHint() || "Think about it..." : "Need a hint?"}
-              emotion={showHint ? "thinking" : "curious"}
-              size="small"
-              position="corner"
-            />
-            {!showHint && (
-              <button 
-                className={styles.hintButton}
-                onClick={() => setShowHint(true)}
+
+          <div className={styles.scenarioDescription}>
+            <p>{scenario.description.replace(/^Challenge \d+:\s*/i, '')}</p>
+          </div>
+
+          {/* Only show visual if explicitly provided */}
+          {scenario.visual && scenario.visual.trim() !== '' && (
+            <div className={styles.scenarioVisual}>
+              {scenario.visual}
+            </div>
+          )}
+        </div>
+
+        {/* Options and Outcome Container */}
+        <div className={styles.optionsOutcomeContainer}>
+          {/* Options */}
+          <div className={styles.optionsTile}>
+            <h3 className={styles.optionsTitle}>What would you do?</h3>
+            <div className={styles.optionsGrid}>
+              {scenario.options && scenario.options.length > 0 ? (
+                scenario.options.map((option, index) => {
+                  // Convert number options to visual representations
+                  const getVisualOption = (opt: string) => {
+                    // Check if it's a simple number
+                    if (opt === '1') return '🔺';
+                    if (opt === '2') return '🔺🔺';
+                    if (opt === '3') return '🔺🔺🔺';
+                    if (opt === '4') return '🔺🔺🔺🔺';
+                    if (opt === '5') return '🔺🔺🔺🔺🔺';
+
+                    // Otherwise return the original option text
+                    return opt;
+                  };
+
+                  const displayOption = getVisualOption(option);
+
+
+                  return (
+                    <button
+                      key={index}
+                      className={cn(
+                        styles.optionButton,
+                        selectedOptionIndex === index && styles.optionSelected,
+                        showFeedback && index === scenario.correct_choice && styles.optionCorrect,
+                        showFeedback && selectedOptionIndex === index && index !== scenario.correct_choice && styles.optionIncorrect
+                      )}
+                      onClick={() => handleOptionSelect(index)}
+                      disabled={showFeedback}
+                    >
+                      <span className={styles.optionNumber}>{index + 1}</span>
+                      <span className={styles.optionText}>{displayOption}</span>
+                    </button>
+                  );
+                })
+              ) : (
+                <div className={styles.noOptions}>Loading options...</div>
+              )}
+            </div>
+          </div>
+
+          {/* Outcome & Learning Point Tile */}
+          {showFeedback && (
+            <div className={cn(
+              styles.outcomeTile,
+              selectedOptionIndex === scenario.correct_choice ? styles.outcomeCorrect : styles.outcomeIncorrect
+            )}>
+              <div className={styles.outcomeHeader}>
+                <span className={styles.outcomeIcon}>
+                  {selectedOptionIndex === scenario.correct_choice ? '🎉' : '💡'}
+                </span>
+                <h3 className={styles.outcomeTitle}>
+                  {selectedOptionIndex === scenario.correct_choice ? 'Excellent!' : 'Let\'s Learn!'}
+                </h3>
+              </div>
+
+              <div className={styles.outcomeContent}>
+                <div className={styles.outcomeSection}>
+                  <h4 className={styles.outcomeSectionTitle}>What Happens:</h4>
+                  <p className={styles.outcomeText}>{scenario.outcome}</p>
+                </div>
+
+                <div className={styles.learningSection}>
+                  <h4 className={styles.learningSectionTitle}>Key Learning:</h4>
+                  <p className={styles.learningText}>{scenario.learning_point}</p>
+                </div>
+              </div>
+
+              <button
+                className={styles.nextButton}
+                onClick={() => {
+                  if (currentScenarioIndex < challengeData.scenarios.length - 1) {
+                    setSelectedOptionIndex(null);
+                    setShowFeedback(false);
+                    setShowHint(false);
+                    onNext();
+                  } else {
+                    onChallengeComplete();
+                  }
+                }}
               >
-                Show Hint
+                {currentScenarioIndex < challengeData.scenarios.length - 1 ? 'Next Challenge →' : 'Complete! 🏆'}
               </button>
-            )}
+            </div>
+          )}
+        </div>
+
+        {/* Companion Helper */}
+        {(enableHints || showFeedback) && (
+          <div className={cn(
+            styles.companionTile,
+            showFeedback && styles.companionFeedback
+          )}>
+            <div className={styles.companionContent}>
+              <img
+                className={styles.companionSmallAvatar}
+                src={`/images/companions/${companion?.id?.toLowerCase() || 'finn'}-${theme === 'dark' ? 'dark' : 'light'}.png`}
+                alt={companion?.name}
+              />
+              <div className={styles.companionMessage}>
+                <p>{getCompanionMessage()}</p>
+                {!showHint && !showFeedback && enableHints && (
+                  <button
+                    className={styles.hintButton}
+                    onClick={() => setShowHint(true)}
+                  >
+                    Show Hint
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
         )}
-        
-        {/* Feedback Tile - Enhanced theme support */}
-        {showFeedback && (
-          <div className={`${styles.bentoTile} ${styles.largeTile} ${styles.feedbackTile}`} style={{
-            gridColumn: 'span 2',
-            gridRow: 'span 2',
-            background: selectedOptionIndex === scenario.correct_choice
-              ? (actualTheme === 'dark' 
-                  ? 'linear-gradient(135deg, rgba(34,197,94,0.15) 0%, rgba(16,185,129,0.15) 100%)'
-                  : 'linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)')
-              : (actualTheme === 'dark'
-                  ? 'linear-gradient(135deg, rgba(239,68,68,0.15) 0%, rgba(220,38,38,0.15) 100%)'
-                  : 'linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)'),
-            border: selectedOptionIndex === scenario.correct_choice
-              ? (actualTheme === 'dark' ? '1px solid rgba(34,197,94,0.3)' : '2px solid #22c55e')
-              : (actualTheme === 'dark' ? '1px solid rgba(239,68,68,0.3)' : '2px solid #ef4444'),
-            borderRadius: '20px',
-            padding: '24px',
-            boxShadow: actualTheme === 'dark'
-              ? '0 20px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05)'
-              : '0 20px 40px rgba(0,0,0,0.1)',
-            color: actualTheme === 'dark' ? '#e5e7eb' : '#1e293b',
-            position: 'relative',
-          }}>
-            <FeedbackTile
-              feedback={{
-                type: selectedOptionIndex === scenario.correct_choice ? 'success' : 'incorrect',
-                message: selectedOptionIndex === scenario.correct_choice 
-                  ? "Excellent choice! You understood the scenario perfectly."
-                  : "Not quite right, but that's okay! Learning is all about trying.",
-                score: selectedOptionIndex === scenario.correct_choice ? 10 : 0,
-                maxScore: 10,
-                details: [
-                  scenario.outcome,
-                  scenario.learning_point
-                ]
-              }}
-              companion={{
-                message: selectedOptionIndex === scenario.correct_choice 
-                  ? getCompanionCelebration() 
-                  : getCompanionEncouragement(),
-                emotion: selectedOptionIndex === scenario.correct_choice ? 'celebrating' : 'encouraging'
-              }}
-              showAnimation={true}
-              gradeLevel={gradeLevel}
-            />
-            {showXPAnimation && (
-              <AchievementTile
-                type="xp"
-                value={xpEarned}
-                gradeLevel={gradeLevel}
-                showAnimation={true}
-                onAnimationComplete={() => setShowXPAnimation(false)}
-              />
-            )}
+
+      </div>
+    );
+  };
+
+  // Render completion screen
+  const renderCompletion = () => {
+    const subjectName = challengeData?.subject ?
+      challengeData.subject.charAt(0).toUpperCase() + challengeData.subject.slice(1) :
+      'Subject';
+    const scenariosCompleted = challengeData?.scenarios?.length || 0;
+    const isLastSubject = currentChallengeIndex >= totalChallenges - 1;
+
+    return (
+      <div className={styles.completionContainer}>
+        {/* Achievement Badge */}
+        <div className={styles.completionBadge}>
+          <span className={styles.completionIcon}>🏆</span>
+        </div>
+
+        {/* Main Message */}
+        <h1 className={styles.completionTitle}>
+          {subjectName} Complete!
+        </h1>
+
+        {/* Skill Achievement */}
+        <div className={styles.completionSkill}>
+          <h2 className={styles.completionSkillTitle}>
+            You've mastered: {challengeData?.skill?.name}
+          </h2>
+        </div>
+
+        {/* Stats Card */}
+        <div className={styles.completionStats}>
+          <div className={styles.statItem}>
+            <span className={styles.statIcon}>✅</span>
+            <span className={styles.statLabel}>Scenarios Completed</span>
+            <span className={styles.statValue}>{scenariosCompleted}/{scenariosCompleted}</span>
+          </div>
+          <div className={styles.statItem}>
+            <span className={styles.statIcon}>📚</span>
+            <span className={styles.statLabel}>Subject Progress</span>
+            <span className={styles.statValue}>{currentChallengeIndex + 1}/{totalChallenges}</span>
+          </div>
+        </div>
+
+        {/* Message */}
+        <p className={styles.completionMessage}>
+          {isLastSubject ?
+            "🎉 Amazing! You've completed all subjects in this experience!" :
+            "Great work! Ready for the next subject?"
+          }
+        </p>
+
+        {/* Continue Button */}
+        <button
+          className={styles.completionButton}
+          onClick={onChallengeComplete}
+        >
+          {isLastSubject ?
+            "Complete Experience 🎯" :
+            `Continue to Next Subject →`
+          }
+        </button>
+
+        {/* Progress Indicator */}
+        {!isLastSubject && (
+          <div className={styles.completionProgress}>
+            <span className={styles.completionProgressText}>
+              Next up: Subject {currentChallengeIndex + 2} of {totalChallenges}
+            </span>
           </div>
         )}
       </div>
     );
   };
-  
-  // Render completion screen
-  const renderCompletion = () => (
-    <div className={`${styles.bentoContainer} ${styles[`grade-${gradeCategory}`]} ${actualTheme === 'dark' ? styles.darkTheme : styles.lightTheme}`} style={{...getLayoutStyles(), paddingTop: '80px'}}>
-      {/* Progress Summary Tile - Enhanced */}
-      <div className={`${styles.bentoTile} ${styles.wideTile} ${styles.completionProgressTile}`} style={{
-        gridColumn: 'span 4',
-        background: actualTheme === 'dark'
-          ? 'linear-gradient(90deg, rgba(34,197,94,0.15) 0%, rgba(16,185,129,0.15) 50%, rgba(5,150,105,0.15) 100%)'
-          : 'linear-gradient(90deg, #22c55e 0%, #10b981 50%, #059669 100%)',
-        border: actualTheme === 'dark' ? '1px solid rgba(34,197,94,0.3)' : 'none',
-        borderRadius: '20px',
-        padding: '16px 24px',
-        boxShadow: actualTheme === 'dark'
-          ? '0 10px 25px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05)'
-          : '0 10px 25px rgba(34,197,94,0.2), inset 0 1px 0 rgba(255,255,255,0.3)',
-        color: 'white'
-      }}>
-        <ProgressTile
-          progress={{
-            currentScenario: challengeData.scenarios.length,
-            totalScenarios: challengeData.scenarios.length,
-            completedScenarios: challengeData.scenarios.length,
-            completionPercentage: 100,
-            currentSkill: {
-              name: challengeData.skill.name,
-              subject: challengeData.subject,
-              progress: 100
-            },
-            overallProgress: {
-              completedSkills: currentChallengeIndex + 1,
-              totalSkills: totalChallenges,
-              badges: achievements
-            }
-          }}
-          display="full"
-          showMilestones={true}
-          gradeLevel={gradeLevel}
-        />
-      </div>
-      
-      {/* Celebration HERO Tile - Vibrant and engaging */}
-      <div className={`${styles.bentoTile} ${styles.heroTile} ${styles.celebrationTile}`} style={{
-        gridColumn: 'span 4',
-        background: actualTheme === 'dark'
-          ? 'linear-gradient(135deg, rgba(168,85,247,0.2) 0%, rgba(236,72,153,0.2) 100%)'
-          : 'linear-gradient(135deg, #a855f7 0%, #ec4899 100%)',
-        border: actualTheme === 'dark' ? '1px solid rgba(168,85,247,0.3)' : 'none',
-        borderRadius: '24px',
-        padding: '32px',
-        boxShadow: actualTheme === 'dark'
-          ? '0 25px 50px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)'
-          : '0 25px 50px rgba(168,85,247,0.3), inset 0 1px 0 rgba(255,255,255,0.3)',
-        color: 'white',
-        textAlign: 'center',
-        position: 'relative',
-      }}>
-        {/* Confetti overlay effect */}
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundImage: `radial-gradient(circle at 20% 80%, rgba(255,255,255,0.2) 0%, transparent 50%),
-                           radial-gradient(circle at 80% 20%, rgba(255,255,255,0.15) 0%, transparent 50%)`,
-          pointerEvents: 'none'
-        }} />
-        
-        <h1 className={styles.celebrationTitle} style={{
-          fontSize: '36px',
-          fontWeight: '800',
-          marginBottom: '16px',
-          textShadow: '0 4px 8px rgba(0,0,0,0.2)',
-          position: 'relative',
-          zIndex: 1
-        }}>
-          🎉 {challengeData.subject} Challenge Complete! 🎉
-        </h1>
-        <p className={styles.celebrationMessage} style={{
-          fontSize: '20px',
-          opacity: 0.95,
-          position: 'relative',
-          zIndex: 1
-        }}>
-          You've mastered all {challengeData.scenarios.length} scenarios like a true champion!
-        </p>
-      </div>
-      
-      {/* Companion Celebration */}
-      <div className={styles.companionCelebrationSection}>
-        <CompanionTile
-          companion={{
-            id: companion.id as 'finn' | 'sage' | 'spark' | 'harmony',
-            name: companion.name,
-            personality: companion.personality
-          }}
-          message={`${getCompanionCelebration()} You've mastered ${challengeData.skill.name} like a true ${career.name}!`}
-          emotion="celebrating"
-          size="large"
-          position="inline"
-        />
-      </div>
-      
-      {/* Success Feedback */}
-      <div className={styles.completionFeedbackSection}>
-        <FeedbackTile
-          feedback={{
-            type: 'success',
-            message: `Outstanding work on your ${challengeData.subject} challenge!`,
-            score: challengeData.scenarios.length * 10,
-            maxScore: challengeData.scenarios.length * 10,
-            details: [
-              `Completed ${challengeData.scenarios.length} scenarios`,
-              `Mastered ${challengeData.skill.name}`,
-              `Learned how ${career.name}s apply this skill`
-            ]
-          }}
-          showAnimation={true}
-          gradeLevel={gradeLevel}
-        />
-      </div>
-      
-      {/* Achievement Display */}
-      <div className={styles.achievementSection}>
-        <AchievementTile
-          type="badge"
-          value={`${challengeData.skill.name} Master`}
-          gradeLevel={gradeLevel}
-          showAnimation={true}
-          additionalInfo={{
-            totalXP: challengeData.scenarios.length * 10,
-            streak: challengeData.scenarios.length,
-            milestone: `${challengeData.subject} Champion`
-          }}
-        />
-      </div>
-      
-      {/* Next Action Tile - Prominent CTA */}
-      <div className={`${styles.bentoTile} ${styles.actionTile}`} style={{
-        gridColumn: 'span 4',
-        background: actualTheme === 'dark'
-          ? 'linear-gradient(135deg, rgba(99,102,241,0.15) 0%, rgba(79,70,229,0.15) 100%)'
-          : 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
-        border: actualTheme === 'dark' ? '1px solid rgba(99,102,241,0.3)' : 'none',
-        borderRadius: '20px',
-        padding: '24px',
-        boxShadow: actualTheme === 'dark'
-          ? '0 15px 35px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05)'
-          : '0 15px 35px rgba(99,102,241,0.25), inset 0 1px 0 rgba(255,255,255,0.3)',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center'
-      }}>
-        <button 
-          className={styles.continueButton}
-          onClick={onChallengeComplete}
-          style={{
-            background: 'rgba(255,255,255,0.95)',
-            color: actualTheme === 'dark' ? '#4f46e5' : '#6366f1',
-            border: 'none',
-            borderRadius: '16px',
-            padding: '20px 48px',
-            fontSize: '22px',
-            fontWeight: '700',
-            cursor: 'pointer',
-            boxShadow: '0 10px 25px rgba(0,0,0,0.2)',
-            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '12px'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-2px) scale(1.05)';
-            e.currentTarget.style.boxShadow = '0 15px 35px rgba(0,0,0,0.3)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateY(0) scale(1)';
-            e.currentTarget.style.boxShadow = '0 10px 25px rgba(0,0,0,0.2)';
-          }}
-        >
-          {currentChallengeIndex < totalChallenges - 1 
-            ? <><span>Next Challenge</span> <span style={{ fontSize: '20px' }}>→</span></> 
-            : <><span>Complete Experience</span> <span style={{ fontSize: '24px' }}>🏆</span></>}
-        </button>
-      </div>
-    </div>
-  );
-  
-  // Main render logic based on screenType - using inline render functions with visible styles
-  console.log('🎯 BentoExperienceCardV2 - Main render:', {
-    screenType: screenType,
-    companion: companion,
-    companionId: companion?.id,
-    career: career?.name,
-    studentName: studentName
-  });
-  
+
+  // Main render
+
   switch (screenType) {
     case 'intro':
       return renderIntroduction();
@@ -1422,9 +732,11 @@ export const BentoExperienceCard: React.FC<BentoExperienceCardProps> = ({
     case 'completion':
       return renderCompletion();
     default:
-      return renderIntroduction(); // Default to intro screen
+      return renderIntroduction();
   }
 };
 
-export default BentoExperienceCard;
-export { BentoExperienceCard as BentoExperienceCardV2 };
+// Export as both BentoExperienceCard and BentoExperienceCardV2
+export default ExperienceCard;
+export { ExperienceCard as BentoExperienceCard };
+export { ExperienceCard as BentoExperienceCardV2 };
