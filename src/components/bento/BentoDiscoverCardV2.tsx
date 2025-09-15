@@ -1,6 +1,6 @@
 /**
- * BentoExperienceCard V2 - Multi-Challenge Implementation
- * Supports multiple challenges with scenarios for each subject
+ * BentoDiscoverCard V2 - Exploration & Discovery Implementation
+ * Supports exploration questions and discovery paths
  * Integrates all 4 AI Companions: Finn, Sage, Spark, Harmony
  */
 
@@ -65,13 +65,12 @@ import '../../design-system/tokens/typography.css';
 import '../../design-system/tokens/effects.css';
 
 // Multi-challenge props interface
-interface BentoExperienceCardProps {
+interface BentoDiscoverCardProps {
   // Challenge navigation
   totalChallenges: number;
   currentChallengeIndex: number;
   screenType: 'intro' | 'scenario' | 'completion';
   currentScenarioIndex?: number;
-  containerType?: 'EXPERIENCE' | 'DISCOVER'; // For theming
   
   // Core data
   career: {
@@ -168,12 +167,11 @@ interface ChatMessage {
   timestamp: Date;
 }
 
-export const BentoExperienceCard: React.FC<BentoExperienceCardProps> = ({
+export const BentoDiscoverCardV2: React.FC<BentoDiscoverCardProps> = ({
   totalChallenges,
   currentChallengeIndex,
   screenType,
   currentScenarioIndex = 0,
-  containerType = 'EXPERIENCE',
   career,
   companion,
   challengeData,
@@ -191,38 +189,12 @@ export const BentoExperienceCard: React.FC<BentoExperienceCardProps> = ({
   enableHints = false,
   enableAudio = false
 }) => {
-  // Get theme colors based on container type using Design System tokens
-  const getContainerColors = () => {
-    if (containerType === 'DISCOVER') {
-      return {
-        primary: 'var(--magenta-600)',
-        secondary: 'var(--magenta-500)',
-        dark: 'var(--magenta-800)',
-        light: 'var(--magenta-400)',
-        gradient: 'var(--color-container-discover)',
-        gradientDark: 'linear-gradient(135deg, var(--magenta-800), var(--magenta-700))'
-      };
-    }
-    // Default to Experience colors (Teal per design system)
-    return {
-      primary: 'var(--teal-600)',
-      secondary: 'var(--teal-500)',
-      dark: 'var(--teal-800)',
-      light: 'var(--teal-400)',
-      gradient: 'var(--color-container-experience)',
-      gradientDark: 'linear-gradient(135deg, var(--teal-800), var(--teal-700))'
-    };
-  };
-
-  const containerColors = getContainerColors();
-
   // Log props immediately to debug
   console.log('🚀 BentoExperienceCardV2 Props received:', {
     companion,
     career,
     studentName,
     screenType,
-    containerType,
     hasCompanion: !!companion,
     companionDetails: companion ? { id: companion.id, name: companion.name } : 'no companion'
   });
@@ -525,24 +497,15 @@ export const BentoExperienceCard: React.FC<BentoExperienceCardProps> = ({
       setShowHint(false);
       setShowXPAnimation(false);
     } else {
-      // Check if this is the final subject/challenge
-      const isFinalChallenge = currentChallengeIndex >= totalChallenges - 1;
-
-      if (isFinalChallenge) {
-        // Only show completion screen for the final challenge
-        setScreenType('completion');
-        // Celebration animation for K-2
-        if (['K', '1', '2'].includes(gradeLevel)) {
-          setTimeout(() => {
-            const container = document.querySelector(`.${tileStyles.tile}`);
-            if (container) {
-              celebrateAchievement(container as HTMLElement, gradeLevel, 'confetti');
-            }
-          }, 100);
-        }
-      } else {
-        // For intermediate subjects, just call onChallengeComplete to move to next subject
-        onChallengeComplete();
+      setScreenType('completion');
+      // Celebration animation for K-2
+      if (['K', '1', '2'].includes(gradeLevel)) {
+        setTimeout(() => {
+          const container = document.querySelector(`.${tileStyles.tile}`);
+          if (container) {
+            celebrateAchievement(container as HTMLElement, gradeLevel, 'confetti');
+          }
+        }, 100);
       }
     }
   };
@@ -584,7 +547,7 @@ export const BentoExperienceCard: React.FC<BentoExperienceCardProps> = ({
           ? 'linear-gradient(135deg, var(--teal-700), var(--teal-500))'
           : companion?.id?.toLowerCase() === 'spark'
           ? 'linear-gradient(135deg, var(--amber-600), var(--amber-500))'
-          : containerColors.gradient,
+          : 'linear-gradient(135deg, var(--magenta-600), var(--magenta-500))',
         color: 'var(--color-text-inverse)',
         padding: 'var(--space-8)',
         borderRadius: 'var(--radius-lg)',
@@ -714,10 +677,10 @@ export const BentoExperienceCard: React.FC<BentoExperienceCardProps> = ({
         {/* How Careers Use Skills Tile */}
         <div className={`${styles.bentoTile} ${styles.howToTile} ${styles.animateSlideInFromRight}`} style={{
         background: actualTheme === 'dark'
-          ? containerColors.gradientDark
-          : containerColors.gradient,
+          ? 'linear-gradient(135deg, var(--magenta-800), var(--magenta-700))'
+          : 'linear-gradient(135deg, var(--magenta-500), var(--magenta-600))',
         backgroundColor: actualTheme === 'dark' ? 'var(--gray-800)' : 'white',
-        border: actualTheme === 'dark' ? `1px solid ${containerColors.dark}` : 'none',
+        border: actualTheme === 'dark' ? '1px solid var(--magenta-700)' : 'none',
         borderRadius: 'var(--radius-lg)',
         padding: 'var(--space-6)',
         boxShadow: actualTheme === 'dark' 
@@ -1426,5 +1389,4 @@ export const BentoExperienceCard: React.FC<BentoExperienceCardProps> = ({
   }
 };
 
-export default BentoExperienceCard;
-export { BentoExperienceCard as BentoExperienceCardV2 };
+export default BentoDiscoverCardV2;

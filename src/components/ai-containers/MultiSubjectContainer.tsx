@@ -6,7 +6,8 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { AILearnContainer } from './AILearnContainer';
-import { AIExperienceContainer } from './AIExperienceContainer';
+// import { AIExperienceContainer } from './AIExperienceContainer'; // MOVED TO OBSOLETE
+import { AIExperienceContainerV2UNIFIED as AIExperienceContainer } from './AIExperienceContainerV2-UNIFIED';
 import { AIDiscoverContainer } from './AIDiscoverContainer';
 import { staticDataService } from '../../services/StaticDataService';
 import { skillProgressionService } from '../../services/skillProgressionService';

@@ -49,7 +49,7 @@ import { ProgressHeader } from '../navigation/ProgressHeader';
 import { CompanionChatBox } from '../learning-support/CompanionChatBox';
 import { EnhancedLoadingScreen } from './EnhancedLoadingScreen';
 import { useTheme } from '../../hooks/useTheme';
-import { BentoDiscoverCard } from '../bento/BentoDiscoverCard';
+import { BentoDiscoverCardV2 } from '../bento/BentoDiscoverCardV2'; // Discover-specific tile implementation
 import { CareerContextCard } from '../career/CareerContextCard';
 
 // Import CSS modules - UNIFIED approach
@@ -186,10 +186,20 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
   // ================================================================
 
   useEffect(() => {
+    // Prevent duplicate calls
+    if (!skill || !student || phase !== 'loading' || content) {
+      return;
+    }
     generateContent();
-  }, [skill, student]);
+  }, [skill?.id, student?.id]); // Use IDs to prevent unnecessary re-renders
 
   const generateContent = async () => {
+    // Double-check to prevent race conditions
+    if (phase !== 'loading' || content) {
+      console.log('⚠️ Skipping duplicate content generation - already loading or loaded');
+      return;
+    }
+
     const startTime = performance.now();
     
     try {
@@ -458,6 +468,25 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
 
     explorationStartTime.current = Date.now();
     setPhase('discovery_paths');
+  };
+
+  const handleDiscoveryPathsComplete = async () => {
+    // Track discovery paths completion
+    await unifiedLearningAnalyticsService.trackLearningEvent({
+      studentId: student.id,
+      sessionId,
+      eventType: 'discovery_paths_complete',
+      metadata: {
+        grade: student.grade_level,
+        subject: skill.subject,
+        skill: skill.skill_name,
+        container: 'discover_v2',
+        duration: (Date.now() - explorationStartTime.current) / 1000
+      }
+    });
+
+    setPhase('complete');
+    onComplete(true);
   };
 
   const handlePathSelection = async (pathIndex: number) => {
@@ -807,39 +836,81 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
     const useBentoUI = true;
     
     if (useBentoUI) {
+      // Map Discover content to Experience tile structure
+      const mappedContent = content ? {
+        interactive_simulation: {
+          setup: content.exploration_hook || content.greeting,
+          challenges: content.practice?.map((item: any, index: number) => ({
+            title: `Discovery ${index + 1}`,
+            description: item.question,
+            options: item.options || [],
+            correct_choice: typeof item.correct_answer === 'number' ? item.correct_answer : 0,
+            hint: item.hint,
+            outcome: item.explanation,
+            learning_point: item.discovery_moment || item.explanation
+          })) || [],
+          conclusion: content.conclusion || "Great discoveries today!"
+        },
+        career_introduction: content.career_connection || `Discover how professionals use ${skill?.skill_name}`,
+        real_world_connections: content.real_world_examples || []
+      } : null;
+
       return (
         <div className="ai-discover-container">
-          <ProgressHeader
-            containerType="DISCOVER"
-            title="Discovery Journey"
-            career={career}
-            skill={skill?.skill_name}
-            subject={skill?.subject}
-            progress={20}
-            currentPhase="Exploration Introduction"
-            totalPhases={5}
-            showBackButton={true}
-            onBack={onBack}
-            showThemeToggle={false}
-            hideOnLoading={true}
-            isLoading={loading}
-          />
-          <BentoDiscoverCard
-            screen={1}
+          <BentoDiscoverCardV2
+            screenType="scenario"
             skill={{
               id: skill?.id || 'default',
               name: skill?.skill_name || skill?.name || 'Discovery',
-              description: skill?.description || 'Exploring new concepts'
+              skill_number: skill?.skill_number || 1,
+              category: skill?.category || 'discovery',
+              subject: skill?.subject || 'general',
+              grade: student.grade_level
             }}
-            content={{
-              bigDiscovery: content.big_idea,
-              explorationMission: content.exploration_hook,
-              wonderQuestions: content.curiosity_questions
+            career={{
+              name: selectedCareer?.name || 'Explorer',
+              icon: '🔍',
+              description: selectedCareer?.description || 'Discovering new knowledge'
             }}
-            onPathComplete={handleExplorationIntroComplete}
+            companion={{
+              id: selectedCharacter?.toLowerCase() || 'finn',
+              name: selectedCharacter || 'Finn',
+              trait: 'curious'
+            }}
+            aiContent={mappedContent}
+            challengeData={{
+              subject: skill?.subject || 'Discovery',
+              skill: {
+                id: skill?.id || 'default',
+                name: skill?.skill_name || skill?.name || 'Discovery',
+                description: skill?.description || 'Exploring new concepts'
+              },
+              introduction: {
+                welcome: content?.exploration_theme || 'Welcome to Discovery!',
+                companionMessage: `Let's explore ${skill?.skill_name || 'new concepts'} together!`,
+                howToUse: 'Click on options to discover new connections'
+              },
+              scenarios: content?.practice?.map((item: any) => ({
+                description: item.question,
+                visual: item.visual,
+                careerContext: `How ${selectedCareer?.name || 'Explorer'}s use this`,
+                options: item.options || [],
+                correct_choice: typeof item.correct_answer === 'number' ? item.correct_answer : 0,
+                outcome: item.explanation,
+                learning_point: item.practiceSupport?.teachingMoment?.conceptExplanation || item.explanation,
+                hint: item.hint,
+                title: item.question,
+                context: item.practiceSupport?.preQuestionContext
+              })) || []
+            }}
             gradeLevel={student.grade_level}
+            studentName={student.display_name}
             userId={student.id}
-            companionId={selectedCharacter?.toLowerCase() || 'finn'}
+            onChallengeComplete={handleDiscoveryPathsComplete}
+            onScenarioComplete={(index, wasCorrect) => {
+              console.log(`Discovery ${index + 1} completed:`, wasCorrect);
+            }}
+            onBack={onBack}
           />
         </div>
       );

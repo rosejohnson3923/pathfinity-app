@@ -422,6 +422,17 @@ export class SessionStateManager {
   }
 
   /**
+   * Check if a container has been completed
+   */
+  public isContainerCompleted(userId: string, containerId: string): boolean {
+    const state = this.getCurrentState(userId);
+    if (!state) return false;
+
+    // Check if container exists in completed list
+    return state.completedContainers.some(c => c.id === containerId);
+  }
+
+  /**
    * Update skill progress
    */
   public updateSkillProgress(

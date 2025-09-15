@@ -1,0 +1,31 @@
+/*
+ * UNIFIED TOKEN IMPORT
+ * Single entry point for all design tokens
+ */
+
+@import './colors.css';
+@import './spacing.css';
+@import './typography.css';
+@import './layout.css';
+@import './borders.css';
+@import './shadows.css';
+@import './effects.css';
+
+/* Grade-specific token overrides */
+:root[data-grade-category="elementary"] {
+  --base-font-size: 20px;
+  --min-touch-target: 60px;
+  --base-spacing-multiplier: 1.5;
+}
+
+:root[data-grade-category="middle"] {
+  --base-font-size: 16px;
+  --min-touch-target: 48px;
+  --base-spacing-multiplier: 1.2;
+}
+
+:root[data-grade-category="high"] {
+  --base-font-size: 14px;
+  --min-touch-target: 40px;
+  --base-spacing-multiplier: 1;
+}

@@ -13,11 +13,11 @@
 .bentoContainer {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(3, minmax(140px, 1fr));
+  grid-template-rows: auto auto auto;
   gap: var(--space-5);
   padding: var(--space-6);
   width: 100%;
-  height: 100%;
+  height: auto;
   min-height: 600px;
   box-sizing: border-box;
   position: relative;
@@ -32,7 +32,7 @@
     0 30px 60px rgba(102, 126, 234, 0.2),
     0 15px 30px rgba(118, 75, 162, 0.15),
     inset 0 2px 10px rgba(255, 255, 255, 0.3);
-  overflow: hidden;
+  overflow: visible;
 }
 
 .bentoContainer::before {
@@ -1000,7 +1000,7 @@
     0 4px 8px rgba(0, 0, 0, 0.04),
     inset 0 2px 4px rgba(255, 255, 255, 0.95);
   transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-  overflow: hidden;
+  overflow: visible;
   position: relative;
   display: flex;
   flex-direction: column;

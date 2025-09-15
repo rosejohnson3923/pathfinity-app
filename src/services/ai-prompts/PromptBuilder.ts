@@ -3,26 +3,59 @@
  * This centralizes prompt generation and ensures all rules are applied
  */
 
-import { 
-  UNIVERSAL_RULES, 
+import {
+  UNIVERSALCONTENT_RULES,
   formatUniversalRulesForPrompt,
-  validateQuestionStructure 
-} from './rules/UniversalRules';
+  getLanguageConstraintsOnly,
+  validateQuestionStructure
+} from './rules/UniversalContentRules';
 
 import {
-  SUBJECT_RULES,
+  UNIVERSALSUBJECT_RULES,
   formatSubjectRulesForPrompt,
   getAllowedTypes,
   validateSubjectRules
-} from './rules/SubjectRules';
+} from './rules/UniversalSubjectRules';
 
 import {
-  CONTAINER_RULES,
-  formatContainerRulesForPrompt,
-  getContainerRequirements,
-  getContainerInstructions,
-  validateContainerRules
-} from './rules/ContainerRules';
+  LEARNCONTAINER_RULES,
+  formatLearnContainerRulesForPrompt,
+  getLearnContainerRequirements,
+  getLearnContainerInstructions,
+  validateLearnContainerRules,
+  getLearnExampleStructure,
+  getLearnResponseFormat,
+  getLearnQualityChecklist,
+  getLearnReminders
+} from './rules/LearnContainerRules';
+
+import {
+  EXPERIENCECONTAINER_RULES,
+  formatExperienceContainerRulesForPrompt,
+  getExperienceContainerRequirements,
+  getExperienceContainerInstructions,
+  validateExperienceContainerRules,
+  getExperienceTaskInstructions,
+  getExperienceResponseFormat,
+  getExperienceExampleStructure,
+  getExperienceQualityChecklist,
+  getExperienceReminders,
+  getExperienceOverrides
+} from './rules/ExperienceContainerRules';
+
+import {
+  DISCOVERCONTAINER_RULES,
+  formatDiscoverContainerRulesForPrompt,
+  getDiscoverContainerRequirements,
+  getDiscoverContainerInstructions,
+  validateDiscoverContainerRules,
+  getDiscoverTaskInstructions,
+  getDiscoverResponseFormat,
+  getDiscoverQualityChecklist,
+  getDiscoverReminders,
+  getDiscoverExampleStructure,
+  getDiscoverOverrides
+} from './rules/DiscoverContainerRules';
 
 export interface PromptContext {
   container: 'LEARN' | 'DISCOVER' | 'EXPERIENCE' | 'ASSESSMENT';
@@ -67,49 +100,109 @@ export class PromptBuilder {
    */
   buildPrompt(context: PromptContext): string {
     const { container, subject, grade, skill, career, student, companion } = context;
-    
+
     // Get allowed types for this subject/grade
     const allowedTypes = getAllowedTypes(subject, grade);
-    const requirements = getContainerRequirements(container);
-    
-    // Build the complete prompt
+
+    // Get container-specific requirements and overrides
+    const requirements = this.getContainerRequirements(container);
+    const overrides = this.getContainerOverrides(container);
+
+    // Build the complete prompt based on container type
     const prompt = `
 You are an expert educational content creator specializing in personalized, gamified learning experiences.
 
 ${this.getSystemContext(student, career, skill, companion)}
 
-${formatUniversalRulesForPrompt(grade)}
+${overrides.useLanguageConstraintsOnly ? getLanguageConstraintsOnly(grade) : formatUniversalRulesForPrompt(grade)}
 
-${formatSubjectRulesForPrompt(subject, grade)}
+${overrides.skipSubjectRules ? '' : formatSubjectRulesForPrompt(subject, grade)}
 
-${formatContainerRulesForPrompt(container, career.name)}
+${this.getContainerRules(container, career.name)}
 
 ${this.getTaskInstructions(context)}
 
-${this.getResponseFormat(container, requirements, allowedTypes)}
+${this.getResponseFormat(container, requirements, allowedTypes, context)}
 
-${this.getExampleStructure(container)}
+${this.getExampleStructure(container, career.name, subject)}
 
-${this.getQualityChecklist()}
+${this.getQualityChecklist(container)}
 
-Remember:
-1. EVERY question MUST have ALL mandatory fields
-2. correct_answer format MUST match the question type
-3. visual field is ALWAYS required:
-   - For shape questions: Use shape emojis (▲ ■ ● ◆)
-   - For warning signs: Use ⚠️ or 🔺
-   - For counting: Use object emojis
-   - ONLY use "❓" for pure text questions with no visual element
-4. Practice questions MUST include complete practiceSupport structure
-5. Use ONLY the allowed question types for ${subject} grade ${grade}
-6. ${subject === 'ELA' ? 'NEVER use counting type for ELA' : ''}
+${this.getContainerReminders(container, subject, grade, career.name)}
 
 Generate the content now:
 `;
-    
+
     return prompt;
   }
   
+  /**
+   * Get container-specific requirements
+   */
+  private getContainerRequirements(container: string): any {
+    switch (container) {
+      case 'LEARN':
+      case 'ASSESSMENT':
+        return getLearnContainerRequirements(container);
+      case 'EXPERIENCE':
+        return getExperienceContainerRequirements(container);
+      case 'DISCOVER':
+        return getDiscoverContainerRequirements(container);
+      default:
+        return { exampleCount: 3, practiceCount: 5, assessmentCount: 1, requiresSupport: true };
+    }
+  }
+
+  /**
+   * Get container-specific overrides
+   */
+  private getContainerOverrides(container: string): any {
+    switch (container) {
+      case 'EXPERIENCE':
+        return getExperienceOverrides();
+      case 'DISCOVER':
+        return getDiscoverOverrides();
+      case 'LEARN':
+      case 'ASSESSMENT':
+      default:
+        return { skipSubjectRules: false, useLanguageConstraintsOnly: false };
+    }
+  }
+
+  /**
+   * Get container-specific rules
+   */
+  private getContainerRules(container: string, careerName: string): string {
+    switch (container) {
+      case 'LEARN':
+      case 'ASSESSMENT':
+        return formatLearnContainerRulesForPrompt(container, careerName);
+      case 'EXPERIENCE':
+        return formatExperienceContainerRulesForPrompt(container, careerName);
+      case 'DISCOVER':
+        return formatDiscoverContainerRulesForPrompt(container, careerName);
+      default:
+        return '';
+    }
+  }
+
+  /**
+   * Get container-specific reminders
+   */
+  private getContainerReminders(container: string, subject: string, grade: string, careerName: string): string {
+    switch (container) {
+      case 'LEARN':
+      case 'ASSESSMENT':
+        return getLearnReminders(subject, grade);
+      case 'EXPERIENCE':
+        return getExperienceReminders(careerName, grade);
+      case 'DISCOVER':
+        return getDiscoverReminders(subject, grade, careerName);
+      default:
+        return '';
+    }
+  }
+
   /**
    * Build system context section
    */
@@ -137,15 +230,36 @@ Your task is to create an engaging, career-integrated learning experience that h
    * Get specific task instructions based on container
    */
   private getTaskInstructions(context: PromptContext): string {
-    const { container, student, career } = context;
-    const instructions = getContainerInstructions(
-      container,
-      career.name,
-      student.display_name,
-      student.grade_level
-    );
-    
-    return `
+    const { container, student, career, skill, subject } = context;
+
+    switch (container) {
+      case 'EXPERIENCE':
+        return getExperienceTaskInstructions(
+          student.display_name,
+          career.name,
+          skill.name,
+          student.grade_level
+        );
+
+      case 'DISCOVER':
+        return getDiscoverTaskInstructions(
+          student.display_name,
+          career.name,
+          subject,
+          skill.name,
+          student.grade_level
+        );
+
+      case 'LEARN':
+      case 'ASSESSMENT':
+      default:
+        const instructions = getLearnContainerInstructions(
+          container,
+          career.name,
+          student.display_name,
+          student.grade_level
+        );
+        return `
 ========================================
 YOUR TASK
 ========================================
@@ -158,6 +272,7 @@ Create content that:
 • Maintains consistent formatting and structure
 • Provides supportive, encouraging feedback
 `;
+    }
   }
   
   /**
@@ -166,144 +281,74 @@ Create content that:
   private getResponseFormat(
     container: string,
     requirements: any,
-    allowedTypes: string[]
+    allowedTypes: string[],
+    context?: PromptContext
   ): string {
-    return `
-========================================
-RESPONSE FORMAT (JSON)
-========================================
-{
-  "title": "Engaging title with career and skill",
-  "greeting": "Personalized welcome using student name and career context",
-  "concept": "Clear explanation of the concept and its career relevance",
-  ${requirements.exampleCount > 0 ? `"examples": [
-    // EXACTLY ${requirements.exampleCount} worked examples
-    {
-      "question": "Example question text",
-      "answer": "The answer",
-      "explanation": "Why this answer is correct",
-      "visual": "Optional visual ("❓" if text-only)"
+    switch (container) {
+      case 'EXPERIENCE':
+        return getExperienceResponseFormat(requirements);
+
+      case 'DISCOVER':
+        // Add context to requirements for Discover
+        const discoverRequirements = {
+          ...requirements,
+          career: context?.career?.name,
+          subject: context?.subject,
+          skill: context?.skill?.name,
+          studentName: context?.student?.display_name
+        };
+        return getDiscoverResponseFormat(discoverRequirements, allowedTypes);
+
+      case 'LEARN':
+      case 'ASSESSMENT':
+        return getLearnResponseFormat(requirements, allowedTypes);
+
+      default:
+        // Fallback to basic format
+        return getLearnResponseFormat(requirements, allowedTypes);
     }
-  ],` : ''}
-  "practice": [
-    // EXACTLY ${requirements.practiceCount} practice questions
-    {
-      "question": "Practice question text",
-      "type": "One of: ${allowedTypes.join(', ')}",
-      "visual": "REQUIRED - For shapes use emojis (▲ ■ ● ◆), for objects use relevant emojis, use \\"❓\\" ONLY for pure text questions",
-      "options": ["A", "B", "C", "D"] // ONLY for multiple_choice
-      "correct_answer": "Format based on type (see universal rules)",
-      "hint": "Single helpful hint",
-      "explanation": "Clear explanation",
-      ${container !== 'ASSESSMENT' ? `"practiceSupport": {
-        // COMPLETE STRUCTURE REQUIRED (see template)
-        "preQuestionContext": "...",
-        "connectionToLearn": "...",
-        "confidenceBuilder": "...",
-        "hints": [/* 3 progressive hints */],
-        "correctFeedback": {/* all fields */},
-        "incorrectFeedback": {/* all fields */},
-        "teachingMoment": {/* all fields */}
-      }` : ''}
-    }
-  ],
-  "assessment": {
-    "question": "Final assessment question",
-    "type": "Appropriate type from allowed list",
-    "visual": "REQUIRED - Use appropriate emojis (shapes: ▲■●◆, warning signs: ⚠️🔺, objects: relevant emojis)",
-    "options": [/* if multiple_choice */],
-    "correct_answer": "Format based on type",
-    "explanation": "Detailed explanation",
-    "success_message": "Celebration with student name!"
-  }
-}
-`;
   }
   
   /**
    * Provide a concrete example structure
    */
-  private getExampleStructure(container: string): string {
-    if (container === 'LEARN') {
-      return `
-========================================
-EXAMPLE PRACTICE QUESTION STRUCTURE
-========================================
-{
-  "question": "True or False: [career-relevant statement]",
-  "type": "true_false",
-  "visual": "❓",
-  "correct_answer": false,  // BOOLEAN, not string!
-  "hint": "Think about what you learned...",
-  "explanation": "The answer is false because...",
-  "practiceSupport": {
-    "preQuestionContext": "Let's see how [Career] uses this skill...",
-    "connectionToLearn": "Remember when we discussed...",
-    "confidenceBuilder": "You're doing great, [Name]!",
-    "hints": [
-      {
-        "level": 1,
-        "hint": "First, think about...",
-        "visualCue": "Look for..."
-      },
-      {
-        "level": 2,
-        "hint": "The key is...",
-        "example": "For instance..."
-      },
-      {
-        "level": 3,
-        "hint": "The answer is...",
-        "example": "Here's why..."
-      }
-    ],
-    "correctFeedback": {
-      "immediate": "Excellent work!",
-      "careerConnection": "Just like a [Career] would!",
-      "skillReinforcement": "You're mastering this!"
-    },
-    "incorrectFeedback": {
-      "immediate": "That's okay!",
-      "explanation": "The correct answer is...",
-      "reteach": "Let's review...",
-      "tryAgainPrompt": "Want to try again?"
-    },
-    "teachingMoment": {
-      "conceptExplanation": "This works because...",
-      "realWorldExample": "[Career]s use this when...",
-      "commonMistakes": ["Students often think..."]
+  private getExampleStructure(container: string, careerName: string, subject: string): string {
+    switch (container) {
+      case 'EXPERIENCE':
+        return getExperienceExampleStructure();
+
+      case 'DISCOVER':
+        return getDiscoverExampleStructure(careerName, subject);
+
+      case 'LEARN':
+      case 'ASSESSMENT':
+        return getLearnExampleStructure();
+
+      default:
+        return ``;
     }
-  }
-}
-`;
-    }
-    return '';
   }
   
   /**
    * Quality checklist reminder
    */
-  private getQualityChecklist(): string {
-    return `
-========================================
-FINAL QUALITY CHECK
-========================================
-Before generating, verify:
-✓ All questions have ALL mandatory fields
-✓ correct_answer format matches type EXACTLY
-✓ visual field present in EVERY question with appropriate content:
-  • Shape questions → shape emojis (▲■●◆)
-  • Warning/sign questions → relevant emojis (⚠️🔺)
-  • Counting questions → object emojis
-  • Pure text questions → "❓" placeholder
-✓ NO forbidden types used (e.g., counting for ELA)
-✓ Practice questions have COMPLETE practiceSupport
-✓ Career context integrated naturally
-✓ Grade-appropriate language and complexity
-✓ Exactly the required number of questions
-✓ True/False uses boolean, not strings
-✓ Multiple choice uses index (0-3), not text
-`;
+  private getQualityChecklist(container?: string): string {
+    switch (container) {
+      case 'EXPERIENCE':
+        return getExperienceQualityChecklist();
+
+      case 'DISCOVER':
+        return getDiscoverQualityChecklist();
+
+      case 'LEARN':
+      case 'ASSESSMENT':
+        return getLearnQualityChecklist();
+
+      default:
+        // This should never be reached since all containers have their own checklists
+        console.warn(`No quality checklist found for container: ${container}`);
+        return '';
+    }
   }
   
   /**
@@ -317,8 +362,20 @@ Before generating, verify:
     const errors: string[] = [];
     const warnings: string[] = [];
     
-    // Validate container requirements
-    const containerErrors = validateContainerRules(content, context.container);
+    // Validate container requirements based on container type
+    let containerErrors: string[] = [];
+    switch (context.container) {
+      case 'LEARN':
+      case 'ASSESSMENT':
+        containerErrors = validateLearnContainerRules(content, context.container);
+        break;
+      case 'EXPERIENCE':
+        containerErrors = validateExperienceContainerRules(content, context.container);
+        break;
+      case 'DISCOVER':
+        containerErrors = validateDiscoverContainerRules(content, context.container);
+        break;
+    }
     errors.push(...containerErrors);
     
     // Validate each practice question
@@ -364,8 +421,8 @@ Before generating, verify:
     questionType: string,
     includeSupport: boolean = true
   ): string {
-    const rules = UNIVERSAL_RULES.ANSWER_FORMATS[questionType as keyof typeof UNIVERSAL_RULES.ANSWER_FORMATS];
-    
+    const rules = UNIVERSALCONTENT_RULES.ANSWER_FORMATS[questionType as keyof typeof UNIVERSALCONTENT_RULES.ANSWER_FORMATS];
+
     return `
 Generate a ${questionType} question for ${subject}, grade ${grade}.
 

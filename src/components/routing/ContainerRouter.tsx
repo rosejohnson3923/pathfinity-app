@@ -10,7 +10,8 @@ import { shouldUseV2Containers, debugLog } from '../../config/featureFlags';
 import { MultiSubjectContainer } from '../ai-containers/MultiSubjectContainer';
 import { AIThreeContainerJourney } from '../ai-containers/AIThreeContainerJourney';
 import { AILearnContainer } from '../ai-containers/AILearnContainer';
-import { AIExperienceContainer } from '../ai-containers/AIExperienceContainer';
+// import { AIExperienceContainer } from '../ai-containers/AIExperienceContainer'; // MOVED TO OBSOLETE - Using V2-UNIFIED
+import { AIExperienceContainerV2UNIFIED as AIExperienceContainer } from '../ai-containers/AIExperienceContainerV2-UNIFIED';
 import { AIDiscoverContainer } from '../ai-containers/AIDiscoverContainer';
 
 // V2-UNIFIED Containers (Best of V2 + V2-JIT + Adaptive Journey)

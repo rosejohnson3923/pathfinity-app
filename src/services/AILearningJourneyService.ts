@@ -11,7 +11,7 @@ import { staticDataService } from './StaticDataService';
 import { dataCaptureServiceV2 } from './DataCaptureServiceV2';
 import { FillBlankGeneratorService } from './FillBlankGeneratorService';
 import { promptBuilder, PromptContext } from './ai-prompts/PromptBuilder';
-import { getGradeCategory } from './ai-prompts/rules/SubjectRules';
+import { getGradeCategory } from './ai-prompts/rules/UniversalSubjectRules';
 
 // ================================================================
 // TYPE DEFINITIONS
@@ -907,21 +907,19 @@ Return ONLY these fields:
     const careerToUse = career?.name || this.getDefaultCareerForGrade(student.grade_level, skill.subject);
     
     // Determine number of challenges based on grade level for Experience
+    // This MUST match the frontend's getScenarioCount() function
     const gradeNum = student.grade_level === 'K' ? 0 : parseInt(student.grade_level);
     let challengeCount = 2; // Default
-    if (skill.subject === 'Math') {
-      if (gradeNum <= 2) {
-        challengeCount = 4; // K-2: 4 challenges (simpler, more practice)
-      } else if (gradeNum <= 5) {
-        challengeCount = 3; // 3-5: 3 challenges (balanced)
-      } else if (gradeNum <= 8) {
-        challengeCount = 3; // 6-8: 3 challenges (deeper)
-      } else {
-        challengeCount = 2; // 9-12: 2 challenges (complex)
-      }
+
+    // Align with frontend expectations - same for ALL subjects
+    if (gradeNum <= 2) {
+      challengeCount = 4; // K-2: 4 challenges for all subjects
+    } else if (gradeNum <= 5) {
+      challengeCount = 3; // 3-5: 3 challenges
+    } else if (gradeNum <= 8) {
+      challengeCount = 3; // 6-8: 3 challenges
     } else {
-      // For non-Math subjects, use standard count
-      challengeCount = gradeNum <= 2 ? 3 : 2;
+      challengeCount = 2; // 9-12: 2 challenges
     }
     
     // Build context for PromptBuilder
@@ -989,8 +987,11 @@ Create a ${careerToUse} experience where the student IS the ${careerToUse}:
    - Options should be "I would..." choices
    - Outcomes: "You chose to... and this happened..."
    - Learning: "You learned that..."
-   
-IMPORTANT: You MUST generate exactly ${challengeCount} challenges in the interactive_simulation.challenges array!
+
+⚠️ CRITICAL REQUIREMENT: You MUST generate EXACTLY ${challengeCount} challenges!
+   - The challenges array MUST contain EXACTLY ${challengeCount} items
+   - Not ${challengeCount - 1}, not ${challengeCount + 1}, but EXACTLY ${challengeCount}
+   - Count them: Challenge 1, Challenge 2${challengeCount >= 3 ? ', Challenge 3' : ''}${challengeCount >= 4 ? ', Challenge 4' : ''}
 
 REQUIREMENTS:
 - ALWAYS use second person ("You are", "You do", "Your task")
@@ -1009,8 +1010,7 @@ Return JSON:
   "interactive_simulation": {
     "setup": "You arrive at your ${careerToUse} job and...",
     "challenges": [
-      // Generate EXACTLY ${challengeCount} challenge objects
-      // Each with: description, options (3-4), correct_choice, hint, outcome, learning_point
+      // ⚠️ MUST HAVE EXACTLY ${challengeCount} CHALLENGE OBJECTS IN THIS ARRAY
       {
         "description": "Challenge 1: Your coworker asks you to... What do you do?",
         "options": ["I would...", "I would...", "I would..."],
@@ -1018,16 +1018,44 @@ Return JSON:
         "hint": "Think about how ${skill.skill_name} can help you solve this...",
         "outcome": "You chose to... and it worked because...",
         "learning_point": "You learned that ${skill.skill_name} helps you..."
-      }
-      // Repeat for all ${challengeCount} challenges
+      },
+      ${challengeCount >= 2 ? `{
+        "description": "Challenge 2: Next situation...",
+        "options": ["I would...", "I would...", "I would..."],
+        "correct_choice": 1,
+        "hint": "Remember what you learned...",
+        "outcome": "Great choice because...",
+        "learning_point": "This shows that..."
+      }${challengeCount > 2 ? ',' : ''}` : ''}
+      ${challengeCount >= 3 ? `{
+        "description": "Challenge 3: Another task...",
+        "options": ["I would...", "I would...", "I would..."],
+        "correct_choice": 0,
+        "hint": "Apply your ${skill.skill_name} skills...",
+        "outcome": "Excellent work...",
+        "learning_point": "You discovered..."
+      }${challengeCount > 3 ? ',' : ''}` : ''}
+      ${challengeCount >= 4 ? `{
+        "description": "Challenge 4: Final challenge...",
+        "options": ["I would...", "I would...", "I would..."],
+        "correct_choice": 2,
+        "hint": "Use everything you learned...",
+        "outcome": "Perfect solution...",
+        "learning_point": "You mastered..."
+      }` : ''}
     ],
     "conclusion": "Great job today! As a ${careerToUse}, you successfully completed ${challengeCount} challenges!"
   }
 }
 
-REMEMBER: 
+REMEMBER:
 - real_world_connections should be an EMPTY array []
-- challenges array must have EXACTLY ${challengeCount} items`;
+- challenges array must have EXACTLY ${challengeCount} items
+
+FINAL CHECK before returning JSON:
+✓ Count the challenges in your array: Must be EXACTLY ${challengeCount}
+✓ For grade ${student.grade_level} in ${skill.subject}, you need ${challengeCount} challenges
+✓ Not 3 if it should be 4, not 2 if it should be 3 - EXACTLY ${challengeCount}`;
 
     try {
       const response = await azureOpenAIService.generateWithModel(
@@ -1038,11 +1066,44 @@ REMEMBER:
       );
 
       const content = JSON.parse(response);
+
+      // Ensure we have exactly the expected number of challenges
+      if (content.interactive_simulation?.challenges) {
+        const actualCount = content.interactive_simulation.challenges.length;
+        if (actualCount < challengeCount) {
+          console.warn(`⚠️ AI returned ${actualCount} challenges but expected ${challengeCount}. Padding with additional challenges.`);
+
+          // Pad with additional challenges
+          while (content.interactive_simulation.challenges.length < challengeCount) {
+            const challengeNum = content.interactive_simulation.challenges.length + 1;
+
+            content.interactive_simulation.challenges.push({
+              description: `Challenge ${challengeNum}: As a ${careerToUse}, you need to apply your ${skill.skill_name} skills. What's your approach?`,
+              options: [
+                `Use ${skill.skill_name} to solve this systematically`,
+                `Apply what you learned in the previous challenge`,
+                `Try a different ${skill.skill_name} strategy`
+              ],
+              correct_choice: 0,
+              hint: `Remember how ${careerToUse}s use ${skill.skill_name} in their work`,
+              outcome: `Great job! You successfully applied ${skill.skill_name} as a ${careerToUse} would.`,
+              learning_point: `This shows how ${skill.skill_name} is essential for ${careerToUse}s in real situations.`
+            });
+          }
+
+          console.log(`✅ Padded challenges array to ${challengeCount} items`);
+        } else if (actualCount > challengeCount) {
+          console.warn(`⚠️ AI returned ${actualCount} challenges but expected ${challengeCount}. Trimming excess.`);
+          content.interactive_simulation.challenges = content.interactive_simulation.challenges.slice(0, challengeCount);
+        }
+      }
+
       console.log(`✅ Generated AI Experience content for ${skill.skill_number}`, {
         title: content.title,
         scenario: content.scenario?.substring(0, 100),
         character_context: content.character_context?.substring(0, 100),
-        career_introduction: content.career_introduction?.substring(0, 100)
+        career_introduction: content.career_introduction?.substring(0, 100),
+        challengeCount: content.interactive_simulation?.challenges?.length || 0
       });
       return content;
 
@@ -1103,89 +1164,27 @@ CAREER FOCUS: ${career.name}
 Frame all discoveries around how YOU as a ${career.name} innovate and explore with ${skill.skill_name}
 ` : '';
 
-    // Add DISCOVER-specific instructions
+    // The PromptBuilder now includes the 3-2-1 structure, so we only need minimal additions
     const prompt = `${basePrompt}
 
-DISCOVER CONTAINER SPECIFIC:
-Create a FIRST-PERSON exploration and discovery experience for ${student.display_name}, a ${student.grade_level} student.
-
-STORYLINE CONTINUITY (Conclude this journey):
+STORYLINE CONTINUITY:
 Setting: ${storylineContext.setting}
-Journey So Far: ${student.display_name} has been ${storylineContext.scenario}
-Final Discovery: ${storylineContext.currentChallenge}
-Real-World Impact: ${storylineContext.careerConnection}
-${careerContext}
-SKILL TO EXPLORE: ${skill.skill_name}
-SUBJECT: ${skill.subject}
-STUDENT: ${student.display_name} (Grade ${student.grade_level})
+Journey: ${storylineContext.scenario}
+Discovery Focus: ${storylineContext.currentChallenge}
+Career Impact: ${storylineContext.careerConnection}
+
 ${skill.skill_name.includes('up to 3') ? `
+⚠️ NUMBER LIMIT: This skill specifies "up to 3" - ALL numbers MUST be 3 or less!` : ''}
 
-⚠️ CRITICAL NUMBER LIMIT: This skill specifies "up to 3" - ALL numbers MUST be 3 or less!
-- Never use numbers greater than 3 in any discovery activity
-- All counting explorations must involve 3 items or fewer
-- Examples: ✅ "You discover 2 patterns", ✅ "You find 3 clues", ❌ "You explore 5 options"` : ''}
+REMEMBER: The PromptBuilder has already specified the 3-2-1 structure:
+- Return exactly 6 scenarios in the "practice" array
+- All scenarios MUST be type: "multiple_choice"
+- Mark scenarios 1-3 as scenario_type: "example"
+- Mark scenarios 4-5 as scenario_type: "practice"
+- Mark scenario 6 as scenario_type: "assessment"
+- Focus on career exploration - how ${career?.name || 'professionals'} use ${skill.skill_name}
 
-CRITICAL: Write everything in SECOND PERSON ("You discover...", "You explore...", "Your investigation...")
-The student is actively discovering - they're the explorer, the scientist, the innovator!
-
-Design a discovery journey where the student explores as a ${career ? career.name : 'curious explorer'}:
-
-1. EXPLORATION THEME:
-   - "You're investigating how ${career ? `${career.name}s` : 'professionals'} use ${skill.skill_name}..."
-   - Questions written as "What would YOU discover if...?"
-   - "Your mission is to explore..."
-
-2. DISCOVERY PATHS:
-   - 3 paths written as "You can explore..."
-   - Activities written as "You will..." or "Your task is..."
-   - Instructions as "You need to..." or "Try to..."
-   - Outcomes as "You discovered that..."
-
-3. CONNECTIONS:
-   - "You learned earlier that..."
-   - "As a ${career ? career.name : 'professional'}, you used this when..."
-   - "Next, you might want to explore..."
-
-REQUIREMENTS:
-- ALWAYS use second person ("You explore", "You discover", "Your investigation")
-- NEVER use third person ("${student.display_name} explores", "${student.display_name} discovers")
-- Age-appropriate discovery for grade ${student.grade_level}
-- Make the student feel they ARE the explorer/innovator
-- Show how THEY discover new uses for ${skill.skill_name}
-
-Return JSON:
-{
-  "title": "${career ? `${career.name} ${student.display_name}'s` : `${student.display_name}'s`} ${skill.skill_name} Discovery",
-  "exploration_theme": "Welcome, ${career ? `${career.name} ${student.display_name}` : `Explorer ${student.display_name}`}! You're on a mission to discover how ${career ? `you as a ${career.name}` : 'professionals'} innovate with ${skill.skill_name}...",
-  "curiosity_questions": [
-    "What would you discover if...?",
-    "How could you use ${skill.skill_name} to...?",
-    "What happens when you...?"
-  ],
-  "discovery_paths": [
-    {
-      "path_name": "Your Research Path",
-      "description": "You will investigate...",
-      "activities": [
-        {
-          "activity_type": "research",
-          "title": "Your Investigation",
-          "instructions": "You need to... (what YOU should do)",
-          "expected_outcome": "You will discover..."
-        }
-      ],
-      "reflection_questions": [
-        "What did you discover about...?",
-        "How could you use this in your ${career ? career.name : ''} work?"
-      ]
-    }
-  ],
-  "connections": {
-    "to_learn": "You learned that ${skill.skill_name} helps you...",
-    "to_experience": "As a ${career ? career.name : 'professional'}, you used this to...",
-    "to_future_learning": "Next, you might want to explore..."
-  }
-}`;
+Generate the JSON response now following the exact format specified in the PromptBuilder.`;
 
     try {
       const response = await azureOpenAIService.generateWithModel(
@@ -1334,11 +1333,44 @@ Return JSON:
       'ELA': 'Writer',
       'Social Studies': 'Community Leader'
     };
-    
+
     const skillName = skill?.skill_name || 'this skill';
     const subject = skill?.subject || 'learning';
     const career = careers[subject as keyof typeof careers] || 'Professional';
-    
+
+    // Determine number of challenges based on grade level for Experience (same logic as main method)
+    // This MUST match the frontend's getScenarioCount() function
+    const gradeNum = student.grade_level === 'K' ? 0 : parseInt(student.grade_level);
+    let challengeCount = 2; // Default
+
+    // Align with frontend expectations - same for ALL subjects
+    if (gradeNum <= 2) {
+      challengeCount = 4; // K-2: 4 challenges for all subjects
+    } else if (gradeNum <= 5) {
+      challengeCount = 3; // 3-5: 3 challenges
+    } else if (gradeNum <= 8) {
+      challengeCount = 3; // 6-8: 3 challenges
+    } else {
+      challengeCount = 2; // 9-12: 2 challenges
+    }
+
+    // Generate the appropriate number of challenges
+    const challenges = [];
+    for (let i = 1; i <= challengeCount; i++) {
+      challenges.push({
+        description: `Challenge ${i}: Your coworker needs help with a ${skillName} task. What's your approach?`,
+        options: [
+          `Use ${skillName} method A`,
+          `Apply ${skillName} technique B`,
+          `Try ${skillName} strategy C`
+        ],
+        correct_choice: i % 3, // Vary the correct answer
+        hint: `Think about how ${career}s use ${skillName} in their work`,
+        outcome: `Great choice! Your ${skillName} solution worked perfectly.`,
+        learning_point: `You successfully used ${skillName} like a real ${career}!`
+      });
+    }
+
     return {
       title: `Your Day as a ${career}`,
       scenario: `You are a ${career} starting your workday!`,
@@ -1346,17 +1378,9 @@ Return JSON:
       career_introduction: `As a ${career}, you use ${skillName} to solve important problems and help people.`,
       real_world_connections: [], // Removed - no longer needed
       interactive_simulation: {
-        setup: `You arrive at your ${career} job and your coworker has a task for you!`,
-        challenges: [
-          {
-            description: 'Your coworker asks you to handle this challenge. What do you do?',
-            options: ['I would try approach A', 'I would try approach B', 'I would try approach C'],
-            correct_choice: 0,
-            outcome: 'You chose the best approach! Your solution worked perfectly.',
-            learning_point: `You successfully used ${skillName} like a real ${career}!`
-          }
-        ],
-        conclusion: `Amazing work today! You're thinking and working like a true ${career}.`
+        setup: `You arrive at your ${career} job and your team has ${challengeCount} tasks for you!`,
+        challenges: challenges,
+        conclusion: `Amazing work today! You completed all ${challengeCount} challenges. You're thinking and working like a true ${career}.`
       }
     };
   }

@@ -349,6 +349,13 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
   };
   
   const handleSubjectComplete = async () => {
+    console.log(`📊 handleSubjectComplete called:`, {
+      currentSubject,
+      currentSubjectIndex,
+      totalSubjects: subjects.length,
+      activeContainerType,
+      isLastSubject: currentSubjectIndex >= subjects.length - 1
+    });
     console.log(`✅ Completed ${currentSubject}`);
     
     // Record completion in adaptive journey
@@ -420,39 +427,74 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
     }
     
     if (!getCurrentSkill) {
-      const nextSubject = subjects[currentSubjectIndex + 1];
-      const subjectIcon = currentSubject === 'Science' ? '🔬' : 
-                          currentSubject === 'Social Studies' ? '🌍' : '📚';
-      
-      return (
-        <div className={styles.noSkillMessage}>
-          <div className={styles.noSkillIcon}>{subjectIcon}</div>
-          <h3>No {currentSubject} skills available</h3>
-          <p>Grade {student.grade_level} curriculum for {currentSubject} is coming soon!</p>
-          {nextSubject && (
-            <>
-              <p className={styles.nextSubjectHint}>
-                Let's continue with {nextSubject.name} {nextSubject.icon}
-              </p>
-              <button onClick={handleSubjectComplete} className={styles.skipButton}>
-                Continue to {nextSubject.name}
-              </button>
-            </>
-          )}
-          {!nextSubject && (
-            <button onClick={handleSubjectComplete} className={styles.skipButton}>
-              Complete Learning Journey
-            </button>
-          )}
-        </div>
-      );
+      // This shouldn't happen - log an error and try to recover
+      console.error(`CRITICAL: No skills found for ${currentSubject} Grade ${student.grade_level}`, {
+        currentSubject,
+        gradeLevel: student.grade_level,
+        studentId: student.id,
+        skillsLoaded,
+        currentSubjectIndex,
+        subjects
+      });
+
+      // Automatically skip to next subject after a short delay
+      if (currentSubjectIndex < subjects.length - 1) {
+        console.log(`Auto-skipping ${currentSubject} due to missing skills, moving to next subject...`);
+        setTimeout(() => {
+          handleSubjectComplete();
+        }, 1000);
+
+        return (
+          <div className={styles.loadingMessage}>
+            <h3>Checking {currentSubject} curriculum...</h3>
+            <div className={styles.loadingSpinner}></div>
+          </div>
+        );
+      } else {
+        // Last subject with no skills - complete the journey
+        console.log('Last subject has no skills, completing journey...');
+        setTimeout(() => {
+          onComplete();
+        }, 1000);
+
+        return (
+          <div className={styles.loadingMessage}>
+            <h3>Completing learning journey...</h3>
+            <div className={styles.loadingSpinner}></div>
+          </div>
+        );
+      }
     }
     
     const commonProps = {
       student,
       skill: getCurrentSkill,
       onComplete: handleSubjectComplete,
-      onNext: handleSubjectComplete, // Continue Learning button uses onNext
+      onNext: activeContainerType === 'EXPERIENCE' && currentSubjectIndex >= subjects.length - 1
+      ? () => {
+          // Experience completed all subjects -> Move to Discover and reset to first subject (Math)
+          console.log('🚀 EXPERIENCE CONTAINER - ALL SUBJECTS COMPLETE - TRANSITIONING TO DISCOVER');
+          console.log('Debug info:', {
+            activeContainerType,
+            currentSubjectIndex,
+            totalSubjects: subjects.length,
+            nextContainer: 'DISCOVER',
+            nextSubject: 'Math (resetting to index 0)'
+          });
+          setCurrentSubjectIndex(0); // Reset to first subject (Math)
+          setSkillsLoaded(false); // Force reload skills for Math
+          setActiveContainerType('DISCOVER');
+        }
+      : () => {
+          console.log('📍 onNext called - moving to next subject via handleSubjectComplete');
+          console.log('Debug info:', {
+            activeContainerType,
+            currentSubjectIndex,
+            totalSubjects: subjects.length,
+            isLastSubject: currentSubjectIndex >= subjects.length - 1
+          });
+          handleSubjectComplete();
+        }, // For other cases, move to next subject
       onBack,
       selectedCharacter,
       selectedCareer,
@@ -469,12 +511,8 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
       case 'LEARN':
         return <AILearnContainerV2 {...commonProps} />;
       case 'EXPERIENCE':
-        return <AIExperienceContainerV2 
-          {...commonProps} 
-          onSkipToDiscover={() => {
-            // Skip directly to Discover container for testing
-            setContainerType('DISCOVER');
-          }}
+        return <AIExperienceContainerV2
+          {...commonProps}
         />;
       case 'DISCOVER':
         return <AIDiscoverContainerV2 {...commonProps} />;

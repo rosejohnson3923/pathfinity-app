@@ -45,7 +45,6 @@ import { iconVisualService } from '../../services/iconVisualService';
 import { Question, BaseQuestion } from '../../services/content/QuestionTypes';
 import { questionValidator, ValidationResult } from '../../services/content/QuestionValidator';
 import QuestionRenderer, { questionRenderer } from '../../services/content/QuestionRenderer';
-import { BentoLearnCard } from '../bento/BentoLearnCard';
 import { BentoLearnCardV2 } from '../bento/BentoLearnCardV2';
 import { CareerContextScreen } from '../career/CareerContextScreen';
 import { aiContentConverter } from '../../services/content/AIContentConverter';
@@ -248,10 +247,19 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
     }
     
     const generateContent = async () => {
-      
+
+      // Check if this container has already been completed
+      const completionKey = `learn-${skill?.id}-${student?.id}`;
+      const isCompleted = sessionStateManager.isContainerCompleted(student?.id, completionKey);
+
+      if (isCompleted) {
+        console.log('⚠️ Learn container already completed, skipping content generation:', completionKey);
+        return;
+      }
+
       // TEMPORARY: Force clear cache to fix career mismatch issue
       getJustInTimeContentService().clearCache();
-      
+
       setIsLoading(true);
       setError(null);
       setPhase('loading');
@@ -1096,67 +1104,8 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
                       totalXP={profile?.xp || 0}
                     />
                   );
-                } else if (useBentoUI) {
-                  // Debug the question object
-                  // console.log('🎯 BentoLearnCard Question Object:', {
-                  //   idx,
-                  //   questionObj,
-                  //   hasQuestion: !!questionObj.question,
-                  //   hasContent: !!questionObj.content,
-                  //   question: questionObj.question,
-                  //   content: questionObj.content,
-                  //   type: questionObj.type,
-                  //   options: questionObj.options,
-                  //   correctCount: questionObj.correctCount,
-                  //   visual: questionObj.visual,
-                  //   visualElements: questionObj.visualElements,
-                  //   allKeys: Object.keys(questionObj)
-                  // });
-                  
-                  return (
-                    <BentoLearnCard
-                      question={{
-                        id: questionObj.id || `practice-${idx}`,
-                        number: idx + 1,
-                        type: questionObj.type,
-                        text: questionObj.content || questionObj.question || questionObj.statement || 'Question text missing',
-                        image: questionObj.image || questionObj.visual?.content || questionObj.visual || questionObj.visualElements?.description,
-                        options: getOptionsForQuestionType(questionObj),
-                        correctAnswer: getCorrectAnswerForQuestionType(questionObj),
-                        hint: questionObj.hint || questionObj.hints?.[0] || "Think about the problem carefully",
-                        xpReward: 10
-                      }}
-                      onAnswerSubmit={(answer) => {
-                        setPracticeAnswers(prev => ({ ...prev, [idx]: answer }));
-                        handlePracticeAnswer(idx, answer);
-                      }}
-                      onNextQuestion={() => {
-                        if (idx < content.practice.length - 1) {
-                          setCurrentPracticeQuestion(prev => prev + 1);
-                        } else {
-                          // Move to assessment phase after practice
-                          handleStartAssessment();
-                        }
-                      }}
-                      progress={{
-                        current: idx + 1,
-                        total: content.practice.length,
-                        score: Math.round((Object.values(practiceResults).filter(r => r === true).length / content.practice.length) * 100)
-                      }}
-                      feedback={practiceResults[idx] !== undefined ? {
-                        isCorrect: practiceResults[idx],
-                        message: practiceResults[idx] ? 'Correct!' : `The correct answer is ${questionObj.correct_answer || 'shown above'}`
-                      } : undefined}
-                      gradeLevel={student.grade_level}
-                      subject={skill?.subject || 'Learning'}
-                      skill={skill?.name || 'Practice'}
-                      userId={student.id}
-                      companionId={selectedCharacter?.toLowerCase() || 'finn'}
-                      totalXP={profile?.xp || 0}
-                    />
-                  );
                 }
-                
+
                 return (
                 <>
                   <div className={questionStyles.questionContent}>
@@ -1259,7 +1208,7 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
                 );
               })()}
             </div>
-            
+
             {/* Practice navigation removed - buttons are now integrated into question cards to avoid duplication */}
           </div>
         )}

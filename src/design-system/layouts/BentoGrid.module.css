@@ -1,0 +1,91 @@
+/*
+ * BENTO GRID LAYOUT SYSTEM
+ * Shared grid layouts for all containers
+ */
+
+@import '../tokens/index.css';
+
+/* Base Grid Container */
+.gridContainer {
+  display: grid;
+  gap: var(--space-5);
+  padding: var(--space-6);
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* Elementary Layout (K-2) - Simple 2x2 */
+.gridElementary {
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(2, minmax(200px, auto));
+  gap: var(--space-8);
+}
+
+/* Middle School Layout (3-8) - 3x3 Grid */
+.gridMiddle {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, minmax(140px, auto));
+  gap: var(--space-5);
+}
+
+/* High School Layout (9-12) - 4x4 Grid */
+.gridHigh {
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, minmax(120px, auto));
+  gap: var(--space-4);
+}
+
+/* Tile Sizes */
+.tileSmall {
+  grid-column: span 1;
+  grid-row: span 1;
+}
+
+.tileMedium {
+  grid-column: span 2;
+  grid-row: span 1;
+}
+
+.tileLarge {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.tileWide {
+  grid-column: span 3;
+  grid-row: span 1;
+}
+
+.tileFull {
+  grid-column: 1 / -1;
+  grid-row: span 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .gridMiddle,
+  .gridHigh {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .tileLarge,
+  .tileWide {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 480px) {
+  .gridElementary,
+  .gridMiddle,
+  .gridHigh {
+    grid-template-columns: 1fr;
+  }
+
+  .tileSmall,
+  .tileMedium,
+  .tileLarge,
+  .tileWide {
+    grid-column: span 1;
+  }
+}

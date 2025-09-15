@@ -20,7 +20,7 @@
   composes: container-base;
   min-height: 100vh;
   position: relative;
-  overflow: hidden;
+  overflow: auto; /* Changed from hidden to auto to allow scrolling */
   width: 100%;
   max-width: 100%;
 }

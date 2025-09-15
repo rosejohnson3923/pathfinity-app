@@ -6,7 +6,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { AILearnContainerV2UNIFIED as AILearnContainerV2 } from './AILearnContainerV2-UNIFIED';
-import { AIExperienceContainerV2 } from './AIExperienceContainerV2';
+// import { AIExperienceContainerV2 } from './AIExperienceContainerV2'; // MOVED TO OBSOLETE
+import { AIExperienceContainerV2UNIFIED as AIExperienceContainerV2 } from './AIExperienceContainerV2-UNIFIED';
 import { AIDiscoverContainerV2 } from './AIDiscoverContainerV2';
 import type { StudentProfile, LearningSkill } from '../../services/AILearningJourneyService';
 

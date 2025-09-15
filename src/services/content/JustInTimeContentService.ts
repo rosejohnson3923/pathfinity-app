@@ -764,27 +764,49 @@ export class JustInTimeContentService {
       }));
       instructions = aiContent.scenario + '\n\n' + aiContent.character_context;
       
-    } else if (containerType === 'discover' && aiContent.exploration_activities) {
-      // Convert discovery activities to questions
-      questions = aiContent.exploration_activities.map((a: any, idx: number) => ({
-        id: `${request.container}-q-${idx}`,
-        type: a.activity_type || 'exploration',
-        question: a.prompt,
-        options: a.options || [],
-        correctAnswer: a.expected_outcome,
-        hint: a.guidance || '',
-        explanation: a.discovery_insight || '',
-        metadata: {
-          difficulty: 'medium',
-          skill: skillFocus,
-          career: careerContext
-        }
-      }));
-      instructions = aiContent.discovery_prompt;
+    } else if (containerType === 'discover') {
+      // Handle new 3-2-1 structure where all 6 scenarios are in "practice" array
+      if (aiContent.practice && Array.isArray(aiContent.practice)) {
+        questions = aiContent.practice.map((q: any, idx: number) => ({
+          id: `${request.container}-q-${idx}`,
+          type: q.type || 'multiple_choice',
+          question: q.question,
+          options: q.options || [],
+          correctAnswer: q.correct_answer,
+          hint: q.hint || '',
+          explanation: q.explanation || '',
+          visual: q.visual,
+          practiceSupport: q.practiceSupport,
+          scenario_type: q.scenario_type, // example, practice, or assessment
+          metadata: {
+            difficulty: q.scenario_type === 'assessment' ? 'hard' : 'medium',
+            skill: skillFocus,
+            career: careerContext
+          }
+        }));
+        instructions = aiContent.greeting || aiContent.exploration_theme || 'Discover new connections!';
+      } else if (aiContent.exploration_activities) {
+        // Fallback for old format
+        questions = aiContent.exploration_activities.map((a: any, idx: number) => ({
+          id: `${request.container}-q-${idx}`,
+          type: a.activity_type || 'exploration',
+          question: a.prompt,
+          options: a.options || [],
+          correctAnswer: a.expected_outcome,
+          hint: a.guidance || '',
+          explanation: a.discovery_insight || '',
+          metadata: {
+            difficulty: 'medium',
+            skill: skillFocus,
+            career: careerContext
+          }
+        }));
+        instructions = aiContent.discovery_prompt;
+      }
     }
-    
-    // Add assessment question if available
-    if (aiContent.assessment) {
+
+    // Add assessment question if available (skip for discover since it's included in the 6 scenarios)
+    if (containerType !== 'discover' && aiContent.assessment) {
       questions.push({
         id: `${request.container}-assessment`,
         type: aiContent.assessment.type,

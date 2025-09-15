@@ -1,5 +1,5 @@
 /**
- * Universal Rules - Core rules that apply to ALL questions across all subjects and containers
+ * Universal Content Rules - Core rules that apply to ALL questions across all subjects and containers
  * These rules ensure consistency and prevent missing fields like the ELA true_false issue
  */
 
@@ -31,7 +31,7 @@ export interface PracticeSupportStructure {
   };
 }
 
-export const UNIVERSAL_RULES = {
+export const UNIVERSALCONTENT_RULES = {
   // Types that are FORBIDDEN and must never be used
   FORBIDDEN_TYPES: [
     'ordering',      // NOT SUPPORTED - use multiple_choice instead
@@ -291,6 +291,43 @@ export const UNIVERSAL_RULES = {
   }
 };
 
+// Helper function to get ONLY language constraints for a grade
+export function getLanguageConstraintsOnly(grade?: string): string {
+  if (!grade) return '';
+
+  const gradeNum = parseInt(grade);
+  let constraintKey = '';
+
+  if (grade === 'K' || grade === 'k' || grade === '0') {
+    constraintKey = 'K';
+  } else if (gradeNum >= 1 && gradeNum <= 2) {
+    constraintKey = '1-2';
+  } else if (gradeNum >= 3 && gradeNum <= 5) {
+    constraintKey = '3-5';
+  } else if (gradeNum >= 6 && gradeNum <= 8) {
+    constraintKey = '6-8';
+  } else if (gradeNum >= 9 && gradeNum <= 12) {
+    constraintKey = '9-12';
+  }
+
+  if (constraintKey && UNIVERSALCONTENT_RULES.LANGUAGE_CONSTRAINTS[constraintKey]) {
+    const constraints = UNIVERSALCONTENT_RULES.LANGUAGE_CONSTRAINTS[constraintKey];
+    return `
+LANGUAGE REQUIREMENTS FOR GRADE ${grade}:
+  • Sentence Length: ${constraints.sentence_length}
+  • Vocabulary: ${constraints.vocabulary}
+  • Instructions: ${constraints.instructions}
+
+  Good Examples:
+${constraints.examples.map(e => `    "${e}"`).join('\n')}
+
+  AVOID:
+${constraints.avoid ? constraints.avoid.map(a => `    ✗ ${a}`).join('\n') : '    ✗ Overly complex language'}`;
+  }
+
+  return '';
+}
+
 // Helper function to generate the rules text for AI prompt
 export function formatUniversalRulesForPrompt(grade?: string): string {
   // Determine which language constraints to apply
@@ -311,8 +348,8 @@ export function formatUniversalRulesForPrompt(grade?: string): string {
       constraintKey = '9-12';
     }
     
-    if (constraintKey && UNIVERSAL_RULES.LANGUAGE_CONSTRAINTS[constraintKey]) {
-      const constraints = UNIVERSAL_RULES.LANGUAGE_CONSTRAINTS[constraintKey];
+    if (constraintKey && UNIVERSALCONTENT_RULES.LANGUAGE_CONSTRAINTS[constraintKey]) {
+      const constraints = UNIVERSALCONTENT_RULES.LANGUAGE_CONSTRAINTS[constraintKey];
       languageSection = `
 
 LANGUAGE REQUIREMENTS FOR GRADE ${grade}:
@@ -335,12 +372,12 @@ UNIVERSAL RULES (APPLY TO ALL QUESTIONS)
 ========================================
 
 ❌ FORBIDDEN TYPES (NEVER USE THESE):
-${UNIVERSAL_RULES.FORBIDDEN_TYPES.map(t => `  ✗ ${t}`).join('\n')}
+${UNIVERSALCONTENT_RULES.FORBIDDEN_TYPES.map(t => `  ✗ ${t}`).join('\n')}
 
 If you need to ask about ordering, use multiple_choice with ordered options instead.
 
 MANDATORY FIELDS - Every question MUST include:
-${UNIVERSAL_RULES.MANDATORY_FIELDS.all_questions.map(f => `  ✓ ${f}`).join('\n')}
+${UNIVERSALCONTENT_RULES.MANDATORY_FIELDS.all_questions.map(f => `  ✓ ${f}`).join('\n')}
 
 Practice questions additionally REQUIRE:
   ✓ practiceSupport (full gamification structure)
@@ -349,21 +386,21 @@ Assessment questions additionally REQUIRE:
   ✓ success_message (personalized celebration)
 
 CORRECT_ANSWER FORMAT BY TYPE (CRITICAL):
-${Object.entries(UNIVERSAL_RULES.ANSWER_FORMATS).map(([type, rules]) => 
+${Object.entries(UNIVERSALCONTENT_RULES.ANSWER_FORMATS).map(([type, rules]) => 
   `  ${type}: ${rules.format} - ${rules.example}`
 ).join('\n')}
 
 VISUAL FIELD RULES:
   • ALWAYS include visual field
-  • Use "${UNIVERSAL_RULES.VISUAL_RULES.placeholder}" or null for text-only questions  
+  • Use "${UNIVERSALCONTENT_RULES.VISUAL_RULES.placeholder}" or null for text-only questions  
   • Use appropriate emojis for visual questions
   • Counting MUST have visual (e.g., "🍎🍎🍎" for count of 3)
 
 PRACTICE SUPPORT STRUCTURE (Required for all practice questions):
-${JSON.stringify(UNIVERSAL_RULES.PRACTICE_SUPPORT_TEMPLATE, null, 2)}
+${JSON.stringify(UNIVERSALCONTENT_RULES.PRACTICE_SUPPORT_TEMPLATE, null, 2)}
 
 COMMON MISTAKES TO AVOID:
-${Object.values(UNIVERSAL_RULES.ERROR_PREVENTION.common_mistakes).map(m => `  ✗ ${m}`).join('\n')}
+${Object.values(UNIVERSALCONTENT_RULES.ERROR_PREVENTION.common_mistakes).map(m => `  ✗ ${m}`).join('\n')}
 
 STRUCTURE REQUIREMENTS:
   • Practice: EXACTLY 5 questions with variety
@@ -377,7 +414,7 @@ export function validateQuestionStructure(question: any): string[] {
   const errors: string[] = [];
   
   // Check mandatory fields
-  for (const field of UNIVERSAL_RULES.MANDATORY_FIELDS.all_questions) {
+  for (const field of UNIVERSALCONTENT_RULES.MANDATORY_FIELDS.all_questions) {
     if (!(field in question)) {
       errors.push(`Missing mandatory field: ${field}`);
     }
@@ -385,7 +422,7 @@ export function validateQuestionStructure(question: any): string[] {
   
   // Validate correct_answer format
   if (question.type && question.correct_answer !== undefined) {
-    const format = UNIVERSAL_RULES.ANSWER_FORMATS[question.type as keyof typeof UNIVERSAL_RULES.ANSWER_FORMATS];
+    const format = UNIVERSALCONTENT_RULES.ANSWER_FORMATS[question.type as keyof typeof UNIVERSALCONTENT_RULES.ANSWER_FORMATS];
     if (format) {
       const answerType = typeof question.correct_answer;
       if (format.format === 'boolean' && answerType !== 'boolean') {

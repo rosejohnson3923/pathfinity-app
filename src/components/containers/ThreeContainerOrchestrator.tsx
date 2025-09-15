@@ -8,10 +8,10 @@ import { Sun, Moon, FastForward } from 'lucide-react';
 import { AIThreeContainerOrchestrator } from './AIThreeContainerOrchestrator';
 // Legacy containers kept for fallback
 import LearnContainer from './LearnContainer';
-import ExperienceContainer from './ExperienceContainer';
+// import ExperienceContainer from './ExperienceContainer'; // OBSOLETE - moved to /obsolete/experience/
 import DiscoverContainer from './DiscoverContainer';
 import LearnMasterContainer from '../mastercontainers/LearnMasterContainer';
-import ExperienceMasterContainer from '../mastercontainers/ExperienceMasterContainer';
+// import ExperienceMasterContainer from '../mastercontainers/ExperienceMasterContainer'; // OBSOLETE - moved to /obsolete/experience/
 import DiscoverMasterContainer from '../mastercontainers/DiscoverMasterContainer';
 import TimeTracker from '../TimeTracker';
 import SimpleParticlesBackground from '../SimpleParticlesBackground';

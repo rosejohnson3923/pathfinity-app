@@ -55,8 +55,10 @@ import { CompanionChatBox } from '../learning-support/CompanionChatBox';
 import { EnhancedLoadingScreen } from './EnhancedLoadingScreen';
 import { useTheme } from '../../hooks/useTheme';
 import { usePageCategory } from '../../hooks/usePageCategory';
-import { BentoExperienceCard } from '../bento/BentoExperienceCard';
+// import { BentoExperienceCard } from '../bento/BentoExperienceCard'; // OBSOLETE - moved to /obsolete/experience/
 import { BentoExperienceCardV2 } from '../bento/BentoExperienceCardV2';
+import { shouldUseCleanExperience } from '../../config/experienceConfig';
+import { ExperienceCard } from '../experience/ExperienceCard';
 
 // Import CSS modules - UNIFIED approach
 import '../../styles/containers/BaseContainer.css';
@@ -95,7 +97,6 @@ interface AIExperienceContainerV2Props {
   onNext: () => void;
   onBack?: () => void;
   userId?: string;
-  onSkipToDiscover?: () => void; // Testing skip button
   totalSubjects?: number; // Total number of subjects in the journey
   currentSubjectIndex?: number; // Which subject we're currently on
 }
@@ -115,7 +116,6 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
   onNext,
   onBack,
   userId,
-  onSkipToDiscover,
   totalSubjects = 4, // Default to 4 subjects if not provided
   currentSubjectIndex = 0 // Default to first subject
 }) => {
@@ -243,49 +243,79 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
   
   // Ref to track content generation for current skill/student
   const contentGenerationKey = useRef<string>('');
-  
+  const generationInProgress = useRef<boolean>(false);
+
   // ================================================================
   // CONTENT GENERATION WITH RULES ENGINE
   // ================================================================
 
   useEffect(() => {
+    if (!skill || !student) return;
+
     // Create a unique key for this skill/student combination
     const currentKey = `${skill?.skill_name}-${student?.id}`;
-    
-    console.log('🔄 Experience useEffect triggered:', { 
+
+    console.log('🔄 Experience useEffect triggered:', {
       currentKey,
       previousKey: contentGenerationKey.current,
-      hasContent: !!content, 
+      hasContent: !!content,
+      hasMultiScenarioContent: !!multiScenarioContent,
       phase,
       skill: skill?.skill_name,
-      student: student?.name 
+      student: student?.name,
+      generationInProgress: generationInProgress.current
     });
-    
+
+    // Check if this is a new skill/student combination
+    const isNewSkill = contentGenerationKey.current !== currentKey;
+
     // Skip if we've already started generation for this exact skill/student combo
-    if (contentGenerationKey.current === currentKey) {
-      console.log('⏭️ Already generated/generating for this skill-student combo');
+    if (contentGenerationKey.current === currentKey && generationInProgress.current) {
+      console.log('⏭️ Already generating for this skill-student combo');
       return;
     }
-    
-    // Only generate if we don't have content
-    if (!content) {
+
+    // Skip if content already exists for this skill/student combo
+    if (contentGenerationKey.current === currentKey && (content || multiScenarioContent)) {
+      console.log('⏭️ Content already exists for this skill-student combo');
+      return;
+    }
+
+    // Only generate if we don't have content and this is a new skill
+    if (!content && !multiScenarioContent && isNewSkill && !generationInProgress.current) {
       console.log('📝 Starting content generation for new key:', currentKey);
       contentGenerationKey.current = currentKey;
+      generationInProgress.current = true;
       generateContent();
     } else {
-      console.log('⏭️ Content already exists, skipping generation');
+      console.log('⏭️ Skipping generation:', {
+        hasContent: !!content,
+        hasMultiScenarioContent: !!multiScenarioContent,
+        isNewSkill,
+        generationInProgress: generationInProgress.current
+      });
     }
-    
+
     // No cleanup needed - we want to preserve the generation key
-  }, [skill, student]);
+  }, [skill?.skill_name, student?.id]); // Only depend on actual identifying values
 
   const generateContent = async () => {
+    // Check if this container has already been completed
+    const completionKey = `experience-${skill?.skill_number}-${student?.id}`;
+    const sessionStateManager = getSessionStateManager();
+    const isCompleted = sessionStateManager.isContainerCompleted(student?.id, completionKey);
+
+    if (isCompleted) {
+      console.log('⚠️ Experience container already completed, skipping content generation:', completionKey);
+      return;
+    }
+
     // Prevent multiple simultaneous generations
     if (isGenerating) {
       console.log('⚠️ Generation already in progress, skipping...');
       return;
     }
-    
+
     console.log('🚀 generateContent called, setting isLoading and isGenerating to true');
     setIsGenerating(true);
     setIsLoading(true);
@@ -334,8 +364,8 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
         skill_name: skill.skill_name,
         grade_level: student.grade_level
       });
-      const jitContent = await jitService.generateContainerContent(jitRequest);
-      
+      const jitResponse = await jitService.generateContainerContent(jitRequest);
+
       // STEP 3: Create Rules Engine Context (V2)
       const experienceContext: ExperienceContext = {
         student: {
@@ -395,13 +425,23 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
         }
       });
 
-      // Generate content with AI service for the single skill
-      const generatedContent = await aiLearningJourneyService.generateExperienceContent(
-        skill, 
-        student, 
-        selectedCareer
-      );
-      
+      // Use the content from JIT service (which already called aiLearningJourneyService internally)
+      // This prevents duplicate AI calls and maintains storyline continuity through caching
+      // The JIT service returns the AI content in the aiSourceContent field
+      const generatedContent = jitResponse.aiSourceContent || jitResponse.content || jitResponse;
+
+      console.log('🤖 AI Response Structure (from JIT):', {
+        hasTitle: !!generatedContent.title,
+        hasIntroduction: !!generatedContent.introduction,
+        hasChallenges: !!generatedContent.challenges || !!generatedContent.interactive_simulation?.challenges,
+        challengeCount: generatedContent.challenges?.length || generatedContent.interactive_simulation?.challenges?.length,
+        hasConclusion: !!generatedContent.conclusion,
+        hasInteractiveSimulation: !!generatedContent.interactive_simulation,
+        firstChallenge: generatedContent.challenges?.[0] || generatedContent.interactive_simulation?.challenges?.[0],
+        fromJIT: true,
+        cached: jitResponse.metadata?.source === 'cache'
+      });
+
       // Apply career theming from rules engine
       if (adaptationsObj.career && adaptationsObj.theme) {
         generatedContent.theme = adaptationsObj.theme;
@@ -475,52 +515,81 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
       // Each shows a different professional application
       for (let i = 0; i < scenarioCount; i++) {
         const variation = variations[i] || variations[0];
+
+        // Map AI response - check both new format and current format
+        const aiChallenge = generatedContent.challenges?.[i] ||
+                           generatedContent.interactive_simulation?.challenges?.[i];
+
+        // Log AI challenge availability
+        console.log(`Creating scenario ${i}:`, {
+          hasAIChallenge: !!aiChallenge,
+          aiDescription: aiChallenge?.description,
+          aiScenario: aiChallenge?.scenario,
+          aiQuestion: aiChallenge?.question,
+          aiOptionsCount: aiChallenge?.options?.length
+        });
+
         const scenario = {
           index: i,
-          title: `${variation.context}: ${skill.skill_name}`,
+          title: generatedContent.title || `${selectedCareer?.name} Experience`,
           introduction: {
-            welcome: i === 0 ? generatedContent.scenario : 
+            welcome: i === 0 ? (generatedContent.introduction || generatedContent.scenario) :
+              aiChallenge?.scenario ? aiChallenge.scenario.split('.')[0] :
               `${variation.context}: How ${selectedCareer?.name || 'professionals'} use ${skill.skill_name}`,
-            companionMessage: multiScenarioContent.companion.personality.includes('playful') ? 
-              `Awesome! Let's see ${variation.context} - this will be fun!` :
+            companionMessage: multiScenarioContent.companion.personality.includes('playful') ?
+              `Awesome! Let's see what's next - this will be fun!` :
               multiScenarioContent.companion.personality.includes('thoughtful') ?
-              `Now for ${variation.context}. Let's think carefully about this.` :
+              `Now for the next challenge. Let's think carefully about this.` :
               multiScenarioContent.companion.personality.includes('energetic') ?
-              `WOW! ${variation.context} time! This is EXCITING!` :
-              `Welcome to ${variation.context}, dear friend.`,
-            howToUse: `In ${variation.setting}, ${selectedCareer?.name || 'professionals'} apply ${skill.skill_name}`
+              `WOW! Next challenge time! This is EXCITING!` :
+              `Welcome to the next challenge, dear friend.`,
+            howToUse: `In this scenario, ${selectedCareer?.name || 'professionals'} apply ${skill.skill_name}`
           },
-          realWorldConnections: generatedContent.real_world_connections?.slice(i, i + 1) || 
+          realWorldConnections: generatedContent.real_world_connections?.slice(i, i + 1) ||
             [{
-              situation: `During ${variation.context}, a ${selectedCareer?.name || 'professional'} needs to ${skill.skill_name}`,
-              challenge: `How would you handle this ${variation.time} task?`,
-              solution_approach: `Apply ${skill.skill_name} in ${variation.setting}`,
-              learning_connection: `This shows how ${skill.skill_name} is essential for ${variation.context}`
+              situation: `A ${selectedCareer?.name || 'professional'} needs to ${skill.skill_name}`,
+              challenge: `How would you handle this task?`,
+              solution_approach: `Apply ${skill.skill_name} effectively`,
+              learning_connection: `This shows how ${skill.skill_name} is essential`
             }],
           interactiveSimulation: {
-            setup: generatedContent.interactive_simulation?.setup || 
-              `It's ${variation.time}. You're a ${selectedCareer?.name || 'professional'} in ${variation.setting}`,
-            challenges: generatedContent.interactive_simulation?.challenges?.slice(i, i + 1) || 
-              [{
-                description: `${variation.context}: Apply ${skill.skill_name} during ${variation.time}`,
-                options: [
-                  `Use ${skill.skill_name} for ${variation.context}`,
-                  `Try a different approach for this ${variation.time} task`,
-                  `Ask your team for help with ${variation.context}`,
-                  `Research best practices for ${variation.setting}`
-                ],
-                correct_choice: 0,
-                outcome: `Great ${variation.context} work! You applied ${skill.skill_name} perfectly.`,
-                learning_point: `${selectedCareer?.name || 'Professionals'} use ${skill.skill_name} during ${variation.context}`
-              }],
-            conclusion: generatedContent.interactive_simulation?.conclusion
+            setup: generatedContent.interactive_simulation?.setup || generatedContent.introduction ||
+              `You're a ${selectedCareer?.name || 'professional'} ready to work`,
+            challenges: aiChallenge ? [{
+              description: aiChallenge.description || aiChallenge.scenario,
+              scenario: aiChallenge.scenario || aiChallenge.description, // Use description if scenario is missing
+              question: aiChallenge.question || aiChallenge.description || "What would you do?", // Use description as question if needed
+              options: aiChallenge.options,
+              correct_choice: aiChallenge.correct_choice ?? aiChallenge.correct_answer ?? 0,
+              hint: aiChallenge.hint || `Think about how a ${selectedCareer?.name} would handle this`,
+              outcome: aiChallenge.outcome,
+              learning_point: aiChallenge.learning_point,
+              explanation: aiChallenge.explanation
+            }] : [{
+              description: `Apply ${skill.skill_name} in this situation`,
+              options: [
+                `Use ${skill.skill_name} effectively`,
+                `Try a different approach`,
+                `Ask your team for help`,
+                `Research best practices`
+              ],
+              correct_choice: 0,
+              hint: `Think about how to apply ${skill.skill_name}`,
+              outcome: `Great work! You applied ${skill.skill_name} perfectly.`,
+              learning_point: `${selectedCareer?.name || 'Professionals'} use ${skill.skill_name} regularly`
+            }],
+            conclusion: generatedContent.conclusion || "Great job! You've completed this professional experience!"
           },
-          careerContext: `${variation.context} - ${variation.setting}`,
-          visual: i === 0 ? '🌅' : i === 1 ? '☀️' : i === 2 ? '🌆' : '🌙',
-          description: `${variation.context}: Apply ${skill.skill_name} as a ${selectedCareer?.name} at ${variation.time}`,
-          hint: `Think about how ${skill.skill_name} helps during ${variation.context}`
+          careerContext: aiChallenge ?
+            `${selectedCareer?.name} ${variation.context}` :
+            `${variation.context} - ${variation.setting}`,
+          visual: '', // Experience container doesn't use visuals
+          description: aiChallenge?.description || aiChallenge?.scenario ||
+            `Apply ${skill.skill_name} as a ${selectedCareer?.name}`,
+          hint: aiChallenge?.hint ||
+            `Think about how ${skill.skill_name} helps in this situation`
         };
-        
+
         multiScenarioContent.scenarios.push(scenario);
       }
       
@@ -545,15 +614,30 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
       
       setContent(generatedContent);
       console.log('✅ Content generated successfully, setting isLoading to false');
-      
+      console.log('📊 Content state:', {
+        hasContent: !!generatedContent,
+        multiScenarioContentLength: multiScenarioContent?.scenarios?.length,
+        phase: 'career_intro',
+        isLoadingBefore: isLoading,
+        isGeneratingBefore: isGenerating
+      });
+
       // Check if we should show career context card
       if (generatedContent.career_context && generatedContent.career_context.greeting) {
         setShowCareerContext(true);
       }
-      
+
       setPhase('career_intro');
       setIsLoading(false); // Stop loading after content is generated
       setIsGenerating(false); // Mark generation as complete
+      generationInProgress.current = false; // Reset ref flag
+
+      console.log('📊 State after update:', {
+        phaseAfter: 'career_intro',
+        isLoadingAfter: false,
+        isGeneratingAfter: false,
+        multiScenarioContentAfter: multiScenarioContent?.scenarios?.length
+      });
       
       // Get companion greeting from rules engine
       if (companionRules) {
@@ -576,6 +660,7 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
       console.error('❌ Failed to generate AI Experience content:', error);
       setIsLoading(false);
       setIsGenerating(false); // Mark generation as complete even on error
+      generationInProgress.current = false; // Reset ref flag on error
       setError(error instanceof Error ? error.message : 'Failed to generate content');
     }
   };
@@ -1015,7 +1100,22 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
   // LOADING STATE
   // ================================================================
 
-  if (phase === 'loading' || !content) {
+  console.log('🔍 Loading state check:', {
+    phase,
+    hasContent: !!content,
+    contentType: typeof content,
+    contentKeys: content ? Object.keys(content) : [],
+    multiScenarioContentLength: multiScenarioContent?.scenarios?.length,
+    hasMultiScenarioContent: !!(multiScenarioContent && multiScenarioContent.scenarios && multiScenarioContent.scenarios.length > 0),
+    isLoading,
+    isGenerating,
+    willShowLoading: phase === 'loading' || (!content && !(multiScenarioContent?.scenarios?.length > 0))
+  });
+
+  // Check if we have either content OR multiScenarioContent with scenarios
+  const hasValidContent = content || (multiScenarioContent && multiScenarioContent.scenarios && multiScenarioContent.scenarios.length > 0);
+
+  if (phase === 'loading' || !hasValidContent) {
     return (
       <EnhancedLoadingScreen 
         phase="practice"
@@ -1051,7 +1151,6 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
             companionName={currentCharacter?.name || 'Sage'}
             avatarUrl={currentCharacter?.avatar_url}
             onStart={() => setShowCareerContext(false)}
-            onSkip={onSkipToDiscover} // Add skip handler for testing
           />
         </div>
       );
@@ -1064,7 +1163,7 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
       const currentScenario = multiScenarioContent.scenarios[currentScenarioIndex];
       
       return (
-        <div className={getContainerClassName()}>
+        <div className={getContainerClassName()} style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', height: 'auto' }}>
           <ProgressHeader
             containerType="EXPERIENCE"
             title="Career Experience"
@@ -1081,38 +1180,17 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
             isLoading={phase === 'loading'}
           />
           
-          {/* Testing Skip Button */}
-          {onSkipToDiscover && (
-            <button
-              onClick={onSkipToDiscover}
-              style={{
-                position: 'fixed',
-                top: '120px',
-                right: '20px',
-                padding: '10px 20px',
-                backgroundColor: '#fbbf24',
-                color: '#000',
-                border: '2px solid #f59e0b',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                fontWeight: 'bold',
-                fontSize: '14px',
-                zIndex: 99999,
-                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#f59e0b';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#fbbf24';
-              }}
-            >
-              🚀 Skip to Discover →
-            </button>
-          )}
           
-          <BentoExperienceCardV2
-            totalChallenges={totalSubjects}
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'auto' }}>
+          {/* Dynamic component selection based on feature flag */}
+          {(() => {
+            const ExperienceComponent = shouldUseCleanExperience(student.grade_level)
+              ? ExperienceCard
+              : BentoExperienceCardV2;
+
+            return (
+              <ExperienceComponent
+                totalChallenges={totalSubjects}
             currentChallengeIndex={currentSubjectIndex}
             screenType={screenType}
             currentScenarioIndex={currentScenarioIndex}
@@ -1130,16 +1208,29 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
                 description: skill?.description || 'Exploring professional skills'
               },
               introduction: currentScenario.introduction,
-              scenarios: multiScenarioContent.scenarios.map(s => ({
-                description: s.realWorldConnections?.[0]?.situation || s.description,
-                visual: s.visual,
-                careerContext: s.careerContext,
-                options: s.interactiveSimulation?.challenges?.[0]?.options || [],
-                correct_choice: s.interactiveSimulation?.challenges?.[0]?.correct_choice || 0,
-                outcome: s.interactiveSimulation?.challenges?.[0]?.outcome || '',
-                learning_point: s.interactiveSimulation?.challenges?.[0]?.learning_point || '',
-                hint: s.interactiveSimulation?.challenges?.[0]?.hint || s.hint || 'Think about how this skill can help you solve the problem.'
-              })),
+              scenarios: multiScenarioContent.scenarios.map((s, idx) => {
+                // Get the challenge data from the scenario's interactiveSimulation
+                const challenge = s.interactiveSimulation?.challenges?.[0];
+
+                // Log for debugging
+                console.log(`Mapping scenario ${idx}:`, {
+                  hasChallenge: !!challenge,
+                  description: challenge?.description,
+                  optionsCount: challenge?.options?.length
+                });
+
+                return {
+                  description: challenge?.description || s.description,
+                  visual: '', // Experience container doesn't use visuals
+                  careerContext: s.careerContext,
+                  options: challenge?.options || [],
+                  correct_choice: challenge?.correct_choice ?? 0,
+                  outcome: challenge?.outcome || '',
+                  learning_point: challenge?.learning_point || '',
+                  hint: challenge?.hint || s.hint || 'Think about how this skill can help you solve the problem.',
+                  title: s.title || `Challenge ${idx + 1}`
+                };
+              }),
               aiGeneratedContent: content
             }}
             gradeLevel={student.grade_level}
@@ -1166,8 +1257,25 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
               }
             }}
             onChallengeComplete={() => {
-              setPhase('complete');
-              onComplete(true);
+              // Debug: Check if this is the final subject
+              const isFinalSubject = currentSubjectIndex >= (totalSubjects - 1);
+              console.log('🎯 Experience Challenge Complete:', {
+                currentSubjectIndex,
+                totalSubjects,
+                isFinalSubject,
+                skill: skill?.skill_name,
+                subject: skill?.subject
+              });
+
+              if (isFinalSubject) {
+                console.log('✅ FINAL SUBJECT COMPLETE - Showing Experience completion screen');
+                setPhase('complete');
+                onComplete(true);
+              } else {
+                console.log('➡️ Subject complete but more subjects remain - Moving to next subject');
+                // Don't set phase to complete, just move to next subject
+                onComplete(true);
+              }
             }}
             onNext={() => {
               // Only show intro once at the beginning, then go to first scenario
@@ -1182,7 +1290,10 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
             showCareerContext={true}
             enableHints={student.grade_level === 'K' || student.grade_level === '1' || student.grade_level === '2'}
             enableAudio={false}
-          />
+              />
+            );
+          })()}
+          </div>
         </div>
       );
     } else if (useBentoV2 && !multiScenarioContent) {
@@ -1216,7 +1327,7 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
           backPath="/app/dashboard"
           showThemeToggle={false}
           hideOnLoading={true}
-          isLoading={loading}
+          isLoading={isLoading}
         />
         <div className={`${lessonStyles.lessonPhase} ${onBack ? lessonStyles.withHeader : ''}`}>
           <header className="phase-header">
@@ -1296,8 +1407,15 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
             hideOnLoading={true}
             isLoading={phase === 'loading'}
           />
-          <BentoExperienceCardV2
-            totalChallenges={content.real_world_connections.length}
+          {/* Dynamic component selection based on feature flag */}
+          {(() => {
+            const ExperienceComponent = shouldUseCleanExperience(student.grade_level)
+              ? ExperienceCard
+              : BentoExperienceCardV2;
+
+            return (
+              <ExperienceComponent
+                totalChallenges={content.real_world_connections.length}
             currentChallengeIndex={currentConnection}
             screenType="scenario"
             currentScenarioIndex={0}
@@ -1343,7 +1461,9 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
             }}
             onChallengeComplete={handleConnectionNext}
             onNext={handleConnectionNext}
-          />
+              />
+            );
+          })()}
         </div>
       );
     }
@@ -1364,7 +1484,7 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
           backPath="/app/dashboard"
           showThemeToggle={false}
           hideOnLoading={true}
-          isLoading={loading}
+          isLoading={isLoading}
         />
         <div className={`${practiceStyles.practicePhase} ${onBack ? practiceStyles.withHeader : ''}`}>
           <header className="phase-header">
@@ -1451,7 +1571,7 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
           backPath="/app/dashboard"
           showThemeToggle={false}
           hideOnLoading={true}
-          isLoading={loading}
+          isLoading={isLoading}
         />
         <div className={`${practiceStyles.practicePhase} ${onBack ? practiceStyles.withHeader : ''}`}>
           <header className="phase-header">
@@ -1467,7 +1587,12 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
           <div className={questionStyles.questionCard}>
             <h2 className={questionStyles.questionTitle}>🎯 Your Professional Challenge</h2>
             <p className={questionStyles.questionText}>{challenge.description}</p>
-            
+            {challenge.question && (
+              <div className={questionStyles.questionContext}>
+                {challenge.question}
+              </div>
+            )}
+
             {/* Hint section */}
             {challenge.hint && !showFeedback && (
               <div className={questionStyles.hintSection}>
@@ -1562,7 +1687,7 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
         <ProgressHeader
           containerType="EXPERIENCE"
           title="Experience Complete"
-          career={career}
+          career={selectedCareer}
           skill={skill?.skill_name}
           subject={skill?.subject}
           progress={100}
@@ -1572,7 +1697,7 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
           backPath="/app/dashboard"
           showThemeToggle={false}
           hideOnLoading={true}
-          isLoading={loading}
+          isLoading={isLoading}
         />
         <div className={`${completionStyles.completionPhase} ${onBack ? completionStyles.withHeader : ''}`}>
           <header className="completion-header">
