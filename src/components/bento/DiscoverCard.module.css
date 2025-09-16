@@ -1,6 +1,7 @@
 /**
- * ExperienceCard CSS Module
- * All styles for the Experience container - NO INLINE STYLES
+ * DiscoverCard CSS Module
+ * All styles for the Discover container - NO INLINE STYLES
+ * Based on ExperienceCard styles with Discover-specific customizations
  */
 
 @import '../../design-system/tokens/index.css';
@@ -11,7 +12,7 @@
    ============================================ */
 .container {
   composes: gridContainer from '../../design-system/layouts/BentoGrid.module.css';
-  background: var(--gradient-experience);
+  background: var(--gradient-discover);
   position: relative;
 }
 
@@ -46,10 +47,31 @@
    ============================================ */
 .introContainer {
   width: 100%;
+  max-height: calc(100vh - 100px);  /* Limit height to viewport */
+  overflow-y: auto;  /* Enable vertical scrolling */
   background: var(--color-surface);
   border-radius: var(--radius-xl);
   padding: var(--space-10);
   padding-top: var(--space-20);
+}
+
+/* Custom scrollbar styling */
+.introContainer::-webkit-scrollbar {
+  width: 8px;
+}
+
+.introContainer::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.introContainer::-webkit-scrollbar-thumb {
+  background: var(--purple-500);
+  border-radius: 4px;
+}
+
+.introContainer::-webkit-scrollbar-thumb:hover {
+  background: var(--purple-600);
 }
 
 [data-theme="dark"] .introContainer {
@@ -57,11 +79,40 @@
 }
 
 .welcomeHeader {
+  margin-bottom: var(--space-5);
+}
+
+.welcomeTile {
+  background: linear-gradient(135deg,
+    var(--magenta-600) 0%,
+    var(--magenta-500) 50%,
+    var(--purple-500) 100%);
   padding: var(--space-8);
   border-radius: var(--radius-lg);
-  margin-bottom: var(--space-5);
   color: white;
+  position: relative;
+  overflow: hidden;
   animation: slideInFromTop 0.6s ease-out;
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  box-shadow: var(--shadow-lg);
+}
+
+.tilePattern {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 300px;
+  height: 100%;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.03),
+    rgba(255, 255, 255, 0.03) 10px,
+    transparent 10px,
+    transparent 20px
+  );
+  pointer-events: none;
 }
 
 /* Companion-specific welcome colors */
@@ -99,11 +150,13 @@
   animation: pulse 2s ease-in-out infinite;
 }
 
-.companionAvatar img {
+.companionAvatar img,
+.companionImage {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;  /* Changed from 'cover' to 'contain' to prevent distortion */
   border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);  /* Add subtle background for better appearance */
 }
 
 .welcomeText {
@@ -116,6 +169,13 @@
   margin-bottom: var(--space-2);
   margin-top: 0;
   color: white;
+}
+
+.welcomeMessage {
+  font-size: var(--text-lg);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
 }
 
 .welcomeSubtitle {
@@ -133,6 +193,13 @@
 .tileGrid {
   display: grid;
   grid-template-columns: 3fr 2fr;
+  gap: var(--space-5);
+  margin-bottom: var(--space-5);
+}
+
+.tilesRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: var(--space-5);
   margin-bottom: var(--space-5);
 }
@@ -164,6 +231,23 @@
   height: 150px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.storyPattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0.02) 10px,
+    transparent 10px,
+    transparent 20px
+  );
   pointer-events: none;
   z-index: 0;
 }
@@ -206,6 +290,13 @@
   color: var(--amber-300);
 }
 
+.storyDescription {
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: var(--space-3);
+}
+
 .skillsTile {
   padding: var(--space-6);
   border-radius: var(--radius-lg);
@@ -243,6 +334,38 @@
   color: rgba(255, 255, 255, 0.95);
   position: relative;
   z-index: 1;
+}
+
+.subjectsList {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.subjectItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  transition: background 0.2s;
+}
+
+.subjectItem:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.subjectNumber {
+  width: 24px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--font-bold);
+  font-size: var(--text-xs);
 }
 
 /* ============================================
@@ -392,19 +515,322 @@
 /* ============================================
    SCENARIO SCREEN
    ============================================ */
+.progressHeader {
+  background: var(--gradient-discover);
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-5);
+  color: white;
+}
+
+.progressInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-2);
+}
+
+.progressLabel {
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+}
+
+.progressCount {
+  font-size: var(--text-sm);
+  opacity: 0.9;
+}
+
+.progressBar {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: white;
+  border-radius: var(--radius-full);
+  transition: width 0.5s ease;
+}
+
+.eventContextTile {
+  background: linear-gradient(135deg, var(--teal-600), var(--teal-500));
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-4);
+  color: white;
+}
+
+.eventHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
+}
+
+.eventIcon {
+  font-size: var(--text-2xl);
+}
+
+.eventTitle {
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  margin: 0;
+}
+
+.eventDescription {
+  line-height: 1.5;
+  opacity: 0.95;
+}
+
+.questionHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.scenarioBadge {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.scenarioBadge.explore {
+  background: var(--purple-500);
+  color: white;
+}
+
+.scenarioBadge.practice {
+  background: var(--amber-500);
+  color: white;
+}
+
+.scenarioBadge.challenge {
+  background: var(--green-500);
+  color: white;
+}
+
+.questionTitle {
+  font-size: var(--text-base);
+  color: var(--gray-600);
+}
+
+.learningPoint {
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+}
+
+.careerConnection {
+  margin-top: var(--space-2);
+  padding: var(--space-2);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-sm);
+  text-align: center;
+}
+
 .scenarioContainer {
   width: 100%;
   padding: var(--space-6);
   background: var(--color-surface);
   border-radius: var(--radius-xl);
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  grid-auto-rows: minmax(120px, auto);
+  display: flex;
+  flex-direction: column;
   gap: var(--space-5);
 }
 
 [data-theme="dark"] .scenarioContainer {
   background: var(--gray-900);
+}
+
+/* Tiles Row - Horizontal Bento Layout */
+.tilesRow {
+  display: flex;
+  gap: var(--space-4);
+  width: 100%;
+}
+
+.eventContextTile,
+.questionTile {
+  flex: 1;
+  min-height: 180px;
+}
+
+/* Event Context Tile */
+.eventContextTile {
+  background: linear-gradient(135deg, var(--purple-50), var(--blue-50));
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--purple-200);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+[data-theme="dark"] .eventContextTile {
+  background: linear-gradient(135deg, var(--purple-900), var(--blue-900));
+  border-color: var(--purple-700);
+}
+
+.eventHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.eventIcon {
+  font-size: var(--text-2xl);
+}
+
+.eventTitle {
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.eventDescription {
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Question Tile */
+.questionTile {
+  background: white;
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 2px solid var(--gray-200);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+[data-theme="dark"] .questionTile {
+  background: var(--gray-800);
+  border-color: var(--gray-700);
+}
+
+.questionTile::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-discover);
+}
+
+.questionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.questionText {
+  font-size: var(--text-xl);
+  font-weight: var(--font-semibold);
+  line-height: 1.5;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+/* Feedback Section */
+.feedbackSection {
+  margin-top: var(--space-5);
+  animation: slideInUp 0.4s ease-out;
+}
+
+.feedbackCard {
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  display: flex;
+  gap: var(--space-4);
+  align-items: flex-start;
+}
+
+.feedbackCorrect {
+  background: linear-gradient(135deg, var(--green-50), var(--green-100));
+  border: 2px solid var(--green-300);
+}
+
+[data-theme="dark"] .feedbackCorrect {
+  background: linear-gradient(135deg, var(--green-900), var(--green-800));
+  border-color: var(--green-700);
+}
+
+.feedbackIncorrect {
+  background: linear-gradient(135deg, var(--amber-50), var(--amber-100));
+  border: 2px solid var(--amber-300);
+}
+
+[data-theme="dark"] .feedbackIncorrect {
+  background: linear-gradient(135deg, var(--amber-900), var(--amber-800));
+  border-color: var(--amber-700);
+}
+
+.feedbackIcon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: white;
+}
+
+[data-theme="dark"] .feedbackIcon {
+  background: var(--gray-800);
+}
+
+.feedbackContent {
+  flex: 1;
+}
+
+.feedbackTitle {
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  margin: 0 0 var(--space-2) 0;
+  color: var(--color-text-primary);
+}
+
+.feedbackText {
+  font-size: var(--text-base);
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.xpEarned {
+  display: inline-block;
+  margin-top: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  background: var(--purple-500);
+  color: white;
+  border-radius: var(--radius-full);
+  font-weight: var(--font-bold);
+  font-size: var(--text-sm);
+}
+
+/* Action Buttons */
+.actionButtons {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
 }
 
 /* Progress Bar with Setup - Full width top */
@@ -755,6 +1181,61 @@
   opacity: 0.7;
 }
 
+.optionSelected {
+  background: var(--purple-50) !important;
+  border-color: var(--purple-500) !important;
+  transform: scale(1.02);
+}
+
+[data-theme="dark"] .optionSelected {
+  background: var(--purple-900) !important;
+  border-color: var(--purple-400) !important;
+}
+
+.optionCorrect {
+  background: var(--green-50) !important;
+  border-color: var(--green-500) !important;
+  animation: correctPulse 0.6s ease;
+}
+
+[data-theme="dark"] .optionCorrect {
+  background: var(--green-900) !important;
+  border-color: var(--green-400) !important;
+}
+
+.optionIncorrect {
+  background: var(--red-50) !important;
+  border-color: var(--red-500) !important;
+  animation: incorrectShake 0.4s ease;
+}
+
+[data-theme="dark"] .optionIncorrect {
+  background: var(--red-900) !important;
+  border-color: var(--red-400) !important;
+}
+
+@keyframes correctPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes incorrectShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 .optionNumber {
   width: 40px !important;
   min-width: 40px !important;
@@ -967,8 +1448,16 @@
    ============================================ */
 @media (max-width: 768px) {
   .scenarioContainer {
-    grid-template-columns: 1fr;
-    grid-auto-rows: auto;
+    padding: var(--space-4);
+  }
+
+  .tilesRow {
+    flex-direction: column;
+  }
+
+  .eventContextTile,
+  .questionTile {
+    min-height: auto;
   }
 
   .progressTile,
@@ -978,6 +1467,67 @@
   .feedbackTile {
     grid-column: span 1;
     grid-row: auto;
+  }
+
+  /* Additional Mobile Styles for Scenario Screen */
+  .progressHeader {
+    padding: var(--space-3);
+  }
+
+  .progressLabel {
+    font-size: var(--text-sm);
+  }
+
+  .eventContextTile {
+    padding: var(--space-3);
+  }
+
+  .eventTitle {
+    font-size: var(--text-base);
+  }
+
+  .questionTile {
+    padding: var(--space-4);
+  }
+
+  .questionText {
+    font-size: var(--text-base);
+    line-height: 1.4;
+  }
+
+  .scenarioBadge {
+    font-size: var(--text-xs);
+    padding: var(--space-1) var(--space-2);
+  }
+
+  .optionButton {
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .optionText {
+    font-size: var(--text-sm);
+  }
+
+  .feedbackCard {
+    padding: var(--space-3);
+  }
+
+  .feedbackTitle {
+    font-size: var(--text-base);
+  }
+
+  .feedbackText {
+    font-size: var(--text-sm);
+  }
+
+  .actionButtons {
+    flex-direction: column;
+    margin-top: var(--space-3);
+  }
+
+  .actionButtons button {
+    width: 100%;
+    padding: var(--space-3);
   }
 }
 
@@ -1136,7 +1686,7 @@
   justify-content: center;
   padding: var(--space-8);
   min-height: 100vh;
-  background: var(--gradient-experience);
+  background: var(--gradient-discover);
   text-align: center;
   gap: var(--space-6);
 }

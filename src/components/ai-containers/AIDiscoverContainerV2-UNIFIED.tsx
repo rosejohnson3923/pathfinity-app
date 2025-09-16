@@ -89,6 +89,7 @@ interface AIDiscoverContainerV2Props {
   onNext?: () => void;
   onBack?: () => void;
   userId?: string;
+  onLoadingChange?: (loading: boolean) => void;
 }
 
 type DiscoverPhase = 'loading' | 'exploration_intro' | 'discovery_paths' | 'activities' | 'reflection' | 'complete';
@@ -105,7 +106,8 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
   onComplete,
   onNext,
   onBack,
-  userId
+  userId,
+  onLoadingChange
 }) => {
   const theme = useTheme();
   
@@ -180,29 +182,74 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
   const explorationStartTime = useRef<number>(Date.now());
   const topicsExplored = useRef<Set<string>>(new Set());
   const questionsAsked = useRef<number>(0);
+  const isGenerating = useRef<boolean>(false);
+
+  // Notify parent of loading state changes
+  useEffect(() => {
+    if (onLoadingChange) {
+      onLoadingChange(phase === 'loading');
+    }
+  }, [phase, onLoadingChange]);
   
   // ================================================================
   // CONTENT GENERATION WITH RULES ENGINE
   // ================================================================
 
+  // Track render count for debugging
+  const renderCount = useRef(0);
+  renderCount.current++;
+
+  // Create stable identifiers to prevent unnecessary re-renders
+  const skillKey = skill ? `${skill.id || skill.skill_number}-${skill.skill_name}` : null;
+  const studentKey = student ? `${student.id}-${student.name}` : null;
+
   useEffect(() => {
+    console.log('🔍 Discover useEffect triggered:', {
+      renderCount: renderCount.current,
+      hasSkill: !!skill,
+      hasStudent: !!student,
+      skillKey,
+      studentKey,
+      phase,
+      hasContent: !!content,
+      isGenerating: isGenerating.current
+    });
+
     // Prevent duplicate calls
-    if (!skill || !student || phase !== 'loading' || content) {
+    if (!skill || !student || phase !== 'loading' || content || isGenerating.current) {
+      console.log('⚠️ Skipping generateContent:', {
+        noSkill: !skill,
+        noStudent: !student,
+        notLoading: phase !== 'loading',
+        hasContent: !!content,
+        alreadyGenerating: isGenerating.current
+      });
       return;
     }
     generateContent();
-  }, [skill?.id, student?.id]); // Use IDs to prevent unnecessary re-renders
+  }, [skillKey, studentKey]); // Use stable keys to prevent unnecessary re-renders
 
   const generateContent = async () => {
+    console.log('📢 generateContent called');
+
+    // Prevent concurrent generation
+    if (isGenerating.current) {
+      console.log('🔒 Already generating content, skipping duplicate call');
+      return;
+    }
+
     // Double-check to prevent race conditions
     if (phase !== 'loading' || content) {
       console.log('⚠️ Skipping duplicate content generation - already loading or loaded');
       return;
     }
 
+    // Set flag to prevent concurrent calls
+    isGenerating.current = true;
     const startTime = performance.now();
-    
+
     try {
+      console.log('🚀 Starting content generation...');
       // STEP 1: Initialize Daily Context (V2-JIT)
       const dailyContext = dailyContextManager.getCurrentContext() || 
         await dailyContextManager.createDailyContext({
@@ -237,9 +284,32 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
         timeConstraint: 15 // minutes
       };
       
-      console.log('⚡ Generating Discover Content via JIT:', jitRequest);
-      const jitContent = await jitService.generateContainerContent(jitRequest);
-      
+      console.log('⚡ Checking JIT cache for Discover Content:', jitRequest);
+
+      // Try to get content from JIT cache first
+      let generatedContent;
+      try {
+        const jitContent = await jitService.generateContainerContent(jitRequest);
+
+        // Use JIT content if available
+        if (jitContent && jitContent.content) {
+          console.log('✅ Using cached JIT content');
+          generatedContent = jitContent.content;
+        }
+      } catch (jitError) {
+        console.log('⚠️ JIT cache miss or error:', jitError);
+      }
+
+      // Only make AI call if JIT didn't provide content
+      if (!generatedContent) {
+        console.log('🤖 Making fresh AI call since JIT cache was empty');
+        generatedContent = await aiLearningJourneyService.generateDiscoverContent(
+          skill,
+          student,
+          selectedCareer
+        );
+      }
+
       // STEP 3: Create Rules Engine Context (V2)
       const discoverContext: DiscoverContext = {
         student: {
@@ -307,13 +377,6 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
         }
       });
 
-      // Generate content with AI service
-      const generatedContent = await aiLearningJourneyService.generateDiscoverContent(
-        skill, 
-        student, 
-        selectedCareer
-      );
-      
       // Apply career-specific exploration themes from rules engine
       if (explorationPath && selectedCareer) {
         generatedContent.careerTheme = explorationPath.careerActivities;
@@ -344,9 +407,13 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
           emotion: greeting.emotion 
         });
       }
-      
+
     } catch (error) {
       console.error('❌ Failed to generate AI Discover content:', error);
+      isGenerating.current = false; // Reset flag on error
+    } finally {
+      isGenerating.current = false; // Always reset flag
+      console.log('✅ Content generation completed');
     }
   };
 
@@ -836,7 +903,7 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
     const useBentoUI = true;
     
     if (useBentoUI) {
-      // Map Discover content to Experience tile structure
+      // Map Discover content to proper structure with new fields
       const mappedContent = content ? {
         interactive_simulation: {
           setup: content.exploration_hook || content.greeting,
@@ -852,13 +919,18 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
           conclusion: content.conclusion || "Great discoveries today!"
         },
         career_introduction: content.career_connection || `Discover how professionals use ${skill?.skill_name}`,
-        real_world_connections: content.real_world_examples || []
+        real_world_connections: content.real_world_examples || [],
+        // New fields from updated AI generation
+        curiosity_questions: content.curiosity_questions || [],
+        discovery_paths: content.discovery_paths || [],
+        exploration_theme: content.exploration_theme || `Discover ${skill?.skill_name} in action!`,
+        reflection_questions: content.reflection_questions || []
       } : null;
 
       return (
         <div className="ai-discover-container">
           <BentoDiscoverCardV2
-            screenType="scenario"
+            screenType="intro"
             skill={{
               id: skill?.id || 'default',
               name: skill?.skill_name || skill?.name || 'Discovery',

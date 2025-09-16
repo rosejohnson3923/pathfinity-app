@@ -1164,32 +1164,83 @@ FINAL CHECK before returning JSON:
     // Generate base prompt using PromptBuilder
     const basePrompt = promptBuilder.buildPrompt(context);
 
+    // Map career to event - matching CAREER_EVENTS from BentoDiscoverCardV2
+    const careerEvents: Record<string, string> = {
+      'chef': 'Cooking Competition',
+      'coach': 'Championship Game',
+      'veterinarian': 'Pet Clinic Open House',
+      'astronaut': 'Space Camp',
+      'teacher': 'Science Fair',
+      'engineer': 'STEM Showcase',
+      'programmer': 'Hackathon',
+      'architect': 'Building Tour',
+      'park-ranger': 'Nature Festival',
+      'farmer': 'Harvest Festival',
+      'pilot': 'Air Show'
+    };
+
+    const careerKey = career?.name?.toLowerCase().replace(/\s+/g, '-') || 'default';
+    const careerEvent = careerEvents[careerKey] || 'Career Day';
+
     const careerContext = career ? `
-CAREER FOCUS: ${career.name}
-Frame all discoveries around how YOU as a ${career.name} innovate and explore with ${skill.skill_name}
+CAREER EVENT SETTING: ${careerEvent}
+You are attending a special ${careerEvent} where ${career.name}s showcase their skills!
+This is a field trip event, NOT at Career Inc headquarters.
+Frame all discoveries around what you'll see and do at the ${careerEvent}.
 ` : '';
 
-    // The PromptBuilder now includes the 3-2-1 structure, so we only need minimal additions
+    // Enhanced prompt with discovery-specific requirements
     const prompt = `${basePrompt}
 
-STORYLINE CONTINUITY:
-Setting: ${storylineContext.setting}
-Journey: ${storylineContext.scenario}
-Discovery Focus: ${storylineContext.currentChallenge}
-Career Impact: ${storylineContext.careerConnection}
+FIELD TRIP EVENT:
+Setting: ${careerEvent} - An exciting field trip where ${career?.name || 'professionals'} showcase their work
+Discovery Focus: How ${career?.name || 'professionals'} use ${skill.skill_name} at the ${careerEvent}
+Interactive Elements: Hands-on activities and demonstrations at the event
 
 ${skill.skill_name.includes('up to 3') ? `
 ⚠️ NUMBER LIMIT: This skill specifies "up to 3" - ALL numbers MUST be 3 or less!` : ''}
 
-REMEMBER: The PromptBuilder has already specified the 3-2-1 structure:
-- Return exactly 6 scenarios in the "practice" array
-- All scenarios MUST be type: "multiple_choice"
-- Mark scenarios 1-3 as scenario_type: "example"
-- Mark scenarios 4-5 as scenario_type: "practice"
-- Mark scenario 6 as scenario_type: "assessment"
-- Focus on career exploration - how ${career?.name || 'professionals'} use ${skill.skill_name}
+${careerContext}
 
-Generate the JSON response now following the exact format specified in the PromptBuilder.`;
+REQUIRED DISCOVER CONTENT STRUCTURE:
+{
+  "title": "Field Trip: ${skill.skill_name} at the ${careerEvent}",
+  "exploration_theme": "Discover how ${career?.name || 'professionals'} use ${skill.skill_name} at the ${careerEvent}!",
+  "greeting": "Welcome to the ${careerEvent}, ${career?.name || 'Explorer'}!",
+  "curiosity_questions": [
+    // Generate 3-4 wonder questions about the skill at the event
+    "How do ${career?.name || 'professionals'} use ${skill.skill_name} at the ${careerEvent}?",
+    "What surprising ways will you see ${skill.skill_name} in action today?",
+    // Add 1-2 more contextual questions
+  ],
+  "discovery_paths": [
+    {
+      "title": "Path name related to the event",
+      "icon": "emoji",
+      "description": "Brief description",
+      "preview": "What you'll discover",
+      "activities": [
+        {
+          "type": "exploration",
+          "title": "Activity title",
+          "description": "Activity description at the ${careerEvent}",
+          "interactive_element": "Hands-on element",
+          "learning_objective": "What you'll learn"
+        }
+      ]
+    }
+    // Generate 2-3 discovery paths
+  ],
+  "practice": [
+    // Your existing 6 scenarios following the 3-2-1 structure
+  ],
+  "reflection_questions": [
+    "What was the most surprising discovery at the ${careerEvent}?",
+    "How will you use what you learned today?"
+  ]
+}
+
+Generate the complete JSON response with ALL required fields.`;
 
     try {
       const response = await azureOpenAIService.generateWithModel(
@@ -1395,14 +1446,96 @@ Generate the JSON response now following the exact format specified in the Promp
     const studentName = student?.display_name || 'Explorer';
     const subject = skill?.subject || 'learning';
     const careerName = career?.name || this.getDefaultCareerForGrade(student.grade_level, subject);
-    
+
+    // Map career to event
+    const careerEvents: Record<string, string> = {
+      'chef': 'Cooking Competition',
+      'coach': 'Championship Game',
+      'veterinarian': 'Pet Clinic Open House',
+      'astronaut': 'Space Camp',
+      'teacher': 'Science Fair'
+    };
+    const careerKey = careerName?.toLowerCase().replace(/\s+/g, '-') || 'default';
+    const careerEvent = careerEvents[careerKey] || 'Career Day';
+
     return {
-      title: `${careerName} ${studentName}'s ${skillName} Discovery`,
-      exploration_theme: `Welcome, ${careerName} ${studentName}! You're on a mission to discover how you as a ${careerName} can innovate with ${skillName}!`,
+      title: `Field Trip: ${skillName} at the ${careerEvent}`,
+      greeting: `Welcome to the ${careerEvent}, ${careerName} ${studentName}!`,
+      exploration_theme: `Discover how ${careerName}s use ${skillName} at the ${careerEvent}!`,
       curiosity_questions: [
-        `Where could you find ${skillName} in your world?`,
-        `How could you use ${skillName} in new ways?`,
-        `What would you create with ${skillName}?`
+        `How do ${careerName}s use ${skillName} at the ${careerEvent}?`,
+        `What surprising ways will you see ${skillName} in action today?`,
+        `Where could you find ${skillName} at this event?`
+      ],
+      // Add practice array with 6 discovery scenarios
+      practice: [
+        {
+          scenario_type: 'example',
+          question: `At the ${careerEvent}, how many items does the ${careerName} need?`,
+          type: 'multiple_choice',
+          visual: '🔍',
+          options: ['1 item', '2 items', '3 items', '4 items'],
+          correct_answer: 2,
+          hint: `Think about what ${careerName}s use at the ${careerEvent}!`,
+          explanation: `${careerName}s often use 3 items at the ${careerEvent}!`,
+          practiceSupport: {
+            preQuestionContext: `Let's discover how ${careerName}s work at the ${careerEvent}!`,
+            teachingMoment: {
+              conceptExplanation: `${careerName}s use ${skillName} in their daily work!`
+            }
+          }
+        },
+        {
+          scenario_type: 'example',
+          question: `Which tool helps ${careerName}s at the ${careerEvent}?`,
+          type: 'multiple_choice',
+          visual: '⚡',
+          options: ['Tool A', 'Tool B', 'Tool C', 'Tool D'],
+          correct_answer: 1,
+          hint: `What would ${careerName}s need most?`,
+          explanation: `Tool B is perfect for ${careerName}s at events!`
+        },
+        {
+          scenario_type: 'example',
+          question: `How do ${careerName}s organize at the ${careerEvent}?`,
+          type: 'multiple_choice',
+          visual: '🎯',
+          options: ['In groups of 1', 'In groups of 2', 'In groups of 3', 'In groups of 5'],
+          correct_answer: 2,
+          hint: 'Think about our number focus!',
+          explanation: `Groups of 3 work perfectly at the ${careerEvent}!`
+        },
+        {
+          scenario_type: 'practice',
+          question: `${careerName} ${studentName} needs to count supplies. How many do you see? 🎈🎈🎈`,
+          type: 'multiple_choice',
+          visual: '🎈🎈🎈',
+          options: ['1 supply', '2 supplies', '3 supplies', '4 supplies'],
+          correct_answer: 2,
+          hint: 'Count each balloon!',
+          explanation: `Great counting! There are 3 supplies!`
+        },
+        {
+          scenario_type: 'practice',
+          question: `At the ${careerEvent}, which number helps ${careerName}s most?`,
+          type: 'multiple_choice',
+          visual: '🌟',
+          options: ['0', '1', '2', '3'],
+          correct_answer: 3,
+          hint: 'What\'s our biggest number?',
+          explanation: `3 is the perfect number for ${careerName}s!`
+        },
+        {
+          scenario_type: 'assessment',
+          question: `Final Challenge: How many helpers does ${careerName} ${studentName} need? 👥👥`,
+          type: 'multiple_choice',
+          visual: '🏆',
+          options: ['No helpers', '1 helper', '2 helpers', '4 helpers'],
+          correct_answer: 2,
+          hint: 'Count the helper symbols!',
+          explanation: `Perfect! 2 helpers makes a team of 3 with you!`,
+          success_message: `Amazing discovery, ${studentName}! You understand how ${careerName}s use numbers!`
+        }
       ],
       discovery_paths: [
         {
