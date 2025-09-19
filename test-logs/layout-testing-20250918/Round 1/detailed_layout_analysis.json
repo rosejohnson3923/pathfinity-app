@@ -1,0 +1,98 @@
+{
+  "grade_patterns": {
+    "K-2": {
+      "students": [
+        "alex-1",
+        "sam-k",
+        "taylor-10"
+      ],
+      "layout_preference": {
+        "grid-4": 260,
+        "grid-2": 62,
+        "vertical": 172
+      },
+      "subjects": {
+        "unknown": {
+          "grid-4": 260,
+          "grid-2": 62,
+          "vertical": 172
+        }
+      }
+    },
+    "3-8": {
+      "students": [
+        "jordan-7"
+      ],
+      "layout_preference": {
+        "grid-4": 12,
+        "grid-1": 10,
+        "vertical": 88,
+        "grid-2": 20
+      },
+      "subjects": {
+        "unknown": {
+          "grid-4": 12,
+          "grid-1": 10,
+          "vertical": 88,
+          "grid-2": 20
+        }
+      }
+    },
+    "9-12": {
+      "students": [],
+      "layout_preference": {},
+      "subjects": {}
+    }
+  },
+  "individual_results": [
+    {
+      "student": "alex-1",
+      "grade": 1,
+      "layout_by_subject": {
+        "unknown": {
+          "grid-4": 108,
+          "grid-2": 28,
+          "vertical": 20
+        }
+      },
+      "issues": []
+    },
+    {
+      "student": "jordan-7",
+      "grade": 7,
+      "layout_by_subject": {
+        "unknown": {
+          "grid-4": 12,
+          "grid-1": 10,
+          "vertical": 88,
+          "grid-2": 20
+        }
+      },
+      "issues": []
+    },
+    {
+      "student": "sam-k",
+      "grade": 0,
+      "layout_by_subject": {
+        "unknown": {
+          "grid-4": 132,
+          "grid-2": 10,
+          "vertical": 12
+        }
+      },
+      "issues": []
+    },
+    {
+      "student": "taylor-10",
+      "grade": 1,
+      "layout_by_subject": {
+        "unknown": {
+          "vertical": 140,
+          "grid-4": 20,
+          "grid-2": 24
+        }
+      },
+      "issues": []
+    }
+  ]
+}

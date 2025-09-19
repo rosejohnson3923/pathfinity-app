@@ -58,12 +58,18 @@ class AIServiceSelector implements AIServiceInterface {
     if (this.useMultiModel) {
       try {
         this.multiModelService = new MultiModelService();
-        if (this.debugMode) {
-          console.log('🚀 Multi-Model System Initialized');
-          console.log('Target Grades:', this.targetGrades);
-        }
+        console.log('');
+        console.log('╔═══════════════════════════════════════════════════════════╗');
+        console.log('║        🚀 MULTI-MODEL AI SYSTEM INITIALIZED 🚀            ║');
+        console.log('╠═══════════════════════════════════════════════════════════╣');
+        console.log('║ Status: ACTIVE                                            ║');
+        console.log(`║ Target Grades: ${this.targetGrades.join(', ').padEnd(43)}║`);
+        console.log(`║ Debug Mode: ${this.debugMode ? 'ON' : 'OFF'}                                          ║`);
+        console.log('║ Cost Savings: 81.6% vs GPT-4o                            ║');
+        console.log('╚═══════════════════════════════════════════════════════════╝');
+        console.log('');
       } catch (error) {
-        console.error('Failed to initialize multi-model service:', error);
+        console.error('❌ Failed to initialize multi-model service:', error);
         this.useMultiModel = false;
       }
     }
@@ -82,9 +88,16 @@ class AIServiceSelector implements AIServiceInterface {
     if (grade && this.targetGrades.length > 0) {
       const shouldUse = this.targetGrades.includes(grade);
 
-      if (this.debugMode) {
-        console.log(`Grade ${grade}: ${shouldUse ? '✅ Using Multi-Model' : '⏭️ Using Standard'}`);
-      }
+      console.log('');
+      console.log('┌─────────────────────────────────────────┐');
+      console.log('│      🎯 MODEL SELECTION DECISION        │');
+      console.log('├─────────────────────────────────────────┤');
+      console.log(`│ Grade: ${grade.padEnd(33)}│`);
+      console.log(`│ Subject: ${(params.context?.subject || 'N/A').padEnd(31)}│`);
+      console.log(`│ Skill: ${(params.context?.skill || 'N/A').substring(0, 31).padEnd(33)}│`);
+      console.log('├─────────────────────────────────────────┤');
+      console.log(`│ Decision: ${shouldUse ? '✅ MULTI-MODEL' : '⏭️  STANDARD GPT-4o'}          │`);
+      console.log('└─────────────────────────────────────────┘');
 
       return shouldUse;
     }
@@ -111,12 +124,16 @@ class AIServiceSelector implements AIServiceInterface {
         // Use multi-model system
         const result = await this.generateWithMultiModel(params);
 
-        if (this.debugMode) {
-          const latency = Date.now() - startTime;
-          console.log(`✅ Multi-Model Response in ${latency}ms`);
-          console.log(`Model Used: ${result.modelUsed}`);
-          console.log(`Cost: $${result.cost?.toFixed(6) || 'N/A'}`);
-        }
+        const latency = Date.now() - startTime;
+        console.log('');
+        console.log('╔═══════════════════════════════════════════╗');
+        console.log('║     ✅ MULTI-MODEL RESPONSE COMPLETE      ║');
+        console.log('╠═══════════════════════════════════════════╣');
+        console.log(`║ Model Used: ${(result.modelUsed || 'Unknown').padEnd(30)}║`);
+        console.log(`║ Latency: ${(latency + 'ms').padEnd(33)}║`);
+        console.log(`║ Cost: $${(result.cost?.toFixed(6) || '0.000000').padEnd(35)}║`);
+        console.log(`║ Tokens: ${((result.tokens || 0) + ' total').padEnd(34)}║`);
+        console.log('╚═══════════════════════════════════════════╝');
 
         return result.content;
       } else {
@@ -127,10 +144,14 @@ class AIServiceSelector implements AIServiceInterface {
           params.temperature || 0.7
         );
 
-        if (this.debugMode) {
-          const latency = Date.now() - startTime;
-          console.log(`⏭️ Standard GPT-4o Response in ${latency}ms`);
-        }
+        const latency = Date.now() - startTime;
+        console.log('');
+        console.log('┌─────────────────────────────────────────┐');
+        console.log('│   ⏭️  STANDARD GPT-4o RESPONSE          │');
+        console.log('├─────────────────────────────────────────┤');
+        console.log(`│ Latency: ${(latency + 'ms').padEnd(31)}│`);
+        console.log(`│ Est. Cost: $0.005000                   │`);
+        console.log('└─────────────────────────────────────────┘');
 
         return result;
       }
@@ -171,9 +192,14 @@ class AIServiceSelector implements AIServiceInterface {
 
     const selectedModel = ModelRouter.routeRequest(routingContext);
 
-    if (this.debugMode) {
-      console.log(`📊 Selected Model: ${selectedModel.name}`);
-    }
+    console.log('');
+    console.log('┌─────────────────────────────────────────┐');
+    console.log('│       📊 MODEL ROUTING RESULT           │');
+    console.log('├─────────────────────────────────────────┤');
+    console.log(`│ Selected: ${selectedModel.name.padEnd(30)}│`);
+    console.log(`│ Endpoint: ${selectedModel.endpoint?.substring(8, 30).padEnd(30)}│`);
+    console.log(`│ Cost/1K: $${((selectedModel.costPerMilTokensInput || 0) / 1000).toFixed(6).padEnd(29)}│`);
+    console.log('└─────────────────────────────────────────┘');
 
     // Generate content with selected model
     const result = await this.multiModelService.generateContent({

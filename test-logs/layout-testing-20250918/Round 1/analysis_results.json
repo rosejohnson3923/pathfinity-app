@@ -1,0 +1,148 @@
+{
+  "summary": {
+    "total_layout_decisions": 624,
+    "layout_distribution": {
+      "grid-4": 272,
+      "grid-2": 82,
+      "vertical": 260,
+      "grid-1": 10
+    },
+    "content_distribution": {
+      "numeric": 130,
+      "text": 220,
+      "emoji": 84,
+      "longText": 178,
+      "array": 12
+    },
+    "common_issues": {
+      "Only 3 practice questions shown (expected 5)": 4
+    },
+    "practice_question_counts": {
+      "3": 362
+    },
+    "subjects_by_student": {
+      "alex-1": [
+        "science",
+        "math",
+        "ela",
+        "social studies"
+      ],
+      "jordan-7": [
+        "science",
+        "math",
+        "ela",
+        "social studies"
+      ],
+      "sam-k": [
+        "science",
+        "math",
+        "ela",
+        "social studies"
+      ],
+      "taylor-10": [
+        "science",
+        "math",
+        "ela",
+        "social studies"
+      ]
+    },
+    "uppercase_issues_count": 0,
+    "errors_by_student": {
+      "alex-1": [
+        "Assessment submission failed"
+      ],
+      "jordan-7": [
+        "Assessment submission failed"
+      ],
+      "sam-k": [
+        "Assessment submission failed"
+      ],
+      "taylor-10": [
+        "Missing correct_answer",
+        "Assessment submission failed"
+      ]
+    }
+  },
+  "detailed_results": [
+    {
+      "student": "alex-1",
+      "layout_types": {
+        "grid-4": 108,
+        "grid-2": 28,
+        "vertical": 20
+      },
+      "content_types": {
+        "numeric": 50,
+        "text": 48,
+        "emoji": 38,
+        "longText": 20
+      },
+      "issues": [
+        "Only 3 practice questions shown (expected 5)"
+      ],
+      "errors": [
+        "Assessment submission failed"
+      ]
+    },
+    {
+      "student": "jordan-7",
+      "layout_types": {
+        "grid-4": 12,
+        "grid-1": 10,
+        "vertical": 88,
+        "grid-2": 20
+      },
+      "content_types": {
+        "numeric": 22,
+        "longText": 58,
+        "text": 50
+      },
+      "issues": [
+        "Only 3 practice questions shown (expected 5)"
+      ],
+      "errors": [
+        "Assessment submission failed"
+      ]
+    },
+    {
+      "student": "sam-k",
+      "layout_types": {
+        "grid-4": 132,
+        "grid-2": 10,
+        "vertical": 12
+      },
+      "content_types": {
+        "numeric": 48,
+        "text": 60,
+        "emoji": 46
+      },
+      "issues": [
+        "Only 3 practice questions shown (expected 5)"
+      ],
+      "errors": [
+        "Assessment submission failed"
+      ]
+    },
+    {
+      "student": "taylor-10",
+      "layout_types": {
+        "vertical": 140,
+        "grid-4": 20,
+        "grid-2": 24
+      },
+      "content_types": {
+        "longText": 100,
+        "numeric": 10,
+        "array": 12,
+        "text": 62
+      },
+      "issues": [
+        "Only 3 practice questions shown (expected 5)"
+      ],
+      "errors": [
+        "Missing correct_answer",
+        "Assessment submission failed"
+      ]
+    }
+  ]
+}

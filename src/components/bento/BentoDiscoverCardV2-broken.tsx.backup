@@ -1,0 +1,476 @@
+// ================================================================
+// BENTO DISCOVER CARD V2 - Simplified Discovery Implementation
+// Discovery through narrative with AI-generated content
+// ================================================================
+
+import React, { useState, useEffect } from 'react';
+import { Book, Star, Trophy, Sparkles, ArrowRight, ChevronLeft, Award, CheckCircle, Target } from 'lucide-react';
+import styles from './BentoExperienceCard.module.css';
+import completionStyles from '../../styles/shared/screens/CompletionScreen.module.css';
+
+interface BentoDiscoverCardProps {
+  screenType: 'intro' | 'scenario' | 'completion';
+  skill: any;
+  career: {
+    name: string;
+    icon: string;
+    description: string;
+  };
+  companion: {
+    id: string;
+    name: string;
+    trait: string;
+  };
+  aiContent?: any;
+  challengeData: {
+    subject: string;
+    skill: {
+      id: string;
+      name: string;
+      description: string;
+    };
+    introduction: {
+      welcome: string;
+      companionMessage: string;
+      howToUse: string;
+    };
+    scenarios: Array<any>;
+  };
+  gradeLevel: string;
+  studentName: string;
+  currentChallengeIndex?: number;
+  totalChallenges?: number;
+  currentScenarioIndex?: number;
+  isLoading?: boolean;
+  onComplete?: (success: boolean) => void;
+  onNavNext?: () => void;
+  onNavPrev?: () => void;
+  onBack?: () => void;
+  totalSubjects?: number;
+  currentSubjectIndex?: number;
+  student?: any;
+  selectedCareer?: any;
+}
+
+export const BentoDiscoverCardV2: React.FC<BentoDiscoverCardProps> = ({
+  screenType: initialScreenType,
+  skill,
+  career,
+  companion,
+  aiContent,
+  challengeData,
+  gradeLevel,
+  studentName,
+  currentChallengeIndex = 0,
+  totalChallenges = 1,
+  currentScenarioIndex = 0,
+  isLoading = false,
+  onComplete,
+  onNavNext,
+  onNavPrev,
+  onBack,
+  totalSubjects = 4,
+  currentSubjectIndex = 0,
+  student,
+  selectedCareer
+}) => {
+  const [screenType, setScreenType] = useState<'intro' | 'scenario' | 'completion'>(initialScreenType || 'intro');
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [selectedAnswerIndex, setSelectedAnswerIndex] = useState<number | null>(null);
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [correctAnswers, setCorrectAnswers] = useState(0);
+  const [totalQuestions, setTotalQuestions] = useState(0);
+  const [xpEarned, setXpEarned] = useState(0);
+
+  // Get AI-generated discovery content
+  const discoveryContent = aiContent?.discovery_questions || aiContent?.exploration || aiContent;
+  const scenarios = challengeData?.scenarios || [];
+
+  // Handle screen transitions
+  useEffect(() => {
+    setScreenType(initialScreenType || 'intro');
+  }, [initialScreenType]);
+
+  // Calculate progress
+  const calculateProgress = () => {
+    if (scenarios.length === 0) return 0;
+    return ((currentQuestionIndex + 1) / scenarios.length) * 100;
+  };
+
+  // Handle answer selection
+  const handleAnswerSelect = (index: number) => {
+    if (showFeedback) return;
+    setSelectedAnswerIndex(index);
+  };
+
+  // Submit answer
+  const submitAnswer = () => {
+    if (selectedAnswerIndex === null) return;
+
+    const currentScenario = scenarios[currentQuestionIndex];
+    const isCorrect = selectedAnswerIndex === (currentScenario.correct_choice || 0);
+
+    if (isCorrect) {
+      setCorrectAnswers(prev => prev + 1);
+      setXpEarned(prev => prev + 15);
+    }
+
+    setTotalQuestions(prev => prev + 1);
+    setShowFeedback(true);
+  };
+
+  // Continue to next question
+  const continueToNext = () => {
+    setShowFeedback(false);
+    setSelectedAnswerIndex(null);
+
+    if (currentQuestionIndex < scenarios.length - 1) {
+      setCurrentQuestionIndex(prev => prev + 1);
+    } else {
+      // Move to completion for this subject
+      handleSubjectComplete();
+    }
+  };
+
+  // Handle subject completion
+  const handleSubjectComplete = () => {
+    console.log('🎉 Subject discovery complete!', {
+      subject: skill?.subject,
+      skillName: skill?.name,
+      correctAnswers,
+      totalQuestions: scenarios.length,
+      xpEarned
+    });
+
+    // Check if this is the last subject
+    if (currentSubjectIndex >= totalSubjects - 1) {
+      // All subjects complete - show final completion
+      setScreenType('completion');
+    } else {
+      // More subjects to go - show subject completion
+      if (onNavNext) {
+        onNavNext();
+      }
+    }
+  };
+
+  // Render introduction screen with Bento tiles
+  const renderIntroduction = () => (
+    <div className={styles.introContainer}>
+      {/* Welcome Header Tile */}
+      <div className={styles.welcomeHeader}>
+        <div className={styles.welcomeTile}>
+          <div className={styles.tilePattern} />
+          <div className={styles.companionAvatar}>
+            {companion?.id === 'finn' && '🎭'}
+            {companion?.id === 'sage' && '🦉'}
+            {companion?.id === 'spark' && '⚡'}
+            {companion?.id === 'harmony' && '🎵'}
+          </div>
+          <div className={styles.welcomeContent}>
+            <h1 className={styles.welcomeTitle}>
+              {aiContent?.title || `${career?.name || 'Explorer'} ${studentName}'s Discovery Quest`}
+            </h1>
+            <p className={styles.welcomeMessage}>
+              {aiContent?.greeting || challengeData?.introduction?.welcome ||
+               `Hi ${studentName}! ${companion?.name || 'Finn'} here! Ready to discover amazing stories about how ${career?.name}s use ${skill?.name}? Let's explore together!`}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Two Column Layout for Story and Skills */}
+      <div className={styles.tilesRow}>
+        {/* Story Begins Tile */}
+        <div className={styles.storyTile}>
+          <div className={styles.storyPattern} />
+          <div className={styles.storyContent}>
+            <h2 className={styles.sectionTitle}>
+              <span className={styles.sectionIcon}>📖</span>
+              Your Story Begins...
+            </h2>
+            <p className={styles.storyDescription}>
+              {aiContent?.scenario ||
+               `You are ${career?.name} ${studentName}, exploring the fascinating world of ${skill?.name}! Today, you'll discover surprising connections and solve mysteries that show how ${career?.name}s use these skills every day.`}
+            </p>
+          </div>
+        </div>
+
+        {/* Real World Discoveries Tile */}
+        <div className={styles.skillsTile}>
+          <div className={styles.skillsPattern} />
+          <div className={styles.skillsContent}>
+            <h2 className={styles.sectionTitle}>
+              <span className={styles.sectionIcon}>🌟</span>
+              Real World Discoveries
+            </h2>
+            <p className={styles.skillsDescription}>
+              {aiContent?.career_introduction ||
+               `As ${career?.name} ${studentName}, you'll explore how ${skill?.name} appears in unexpected places. Through interactive stories and discoveries, you'll see connections you never imagined!`}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Mission Tile */}
+      <div className={styles.missionTile}>
+        <div className={styles.missionPattern} />
+        <div className={styles.missionContent}>
+          <h2 className={styles.sectionTitle}>
+            <span className={styles.sectionIcon}>🔍</span>
+            Your Discovery Mission
+          </h2>
+          <div className={styles.missionList}>
+            <ul className={styles.challengeList}>
+              <li>Explore {scenarios.length || 4} discovery challenges</li>
+              <li>Find hidden connections to {career?.name} work</li>
+              <li>Earn XP for each discovery</li>
+              <li>Complete your discovery journey!</li>
+            </ul>
+            <div className={styles.scenarioIndicator}>
+              <div className={styles.scenarioDots}>
+                {Array.from({ length: Math.min(scenarios.length || 4, 5) }).map((_, i) => (
+                  <span key={i} className={styles.scenarioDot} />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+        <button
+          onClick={() => {
+            console.log('🔍 BentoDiscoverCardV2 - Start Discovery clicked!', {
+              currentScreenType: screenType,
+              newScreenType: 'scenario',
+              scenarios: scenarios.length
+            });
+            setScreenType('scenario');
+          }}
+          className={styles.startButton}
+        >
+          <span>Start Discovery</span>
+          <span className={styles.startButtonArrow}>→</span>
+        </button>
+      </div>
+    </div>
+    );
+  };
+
+  // Render scenario/question screen
+  const renderScenario = () => {
+    console.log('🔍 BentoDiscoverCardV2 - renderScenario called', {
+      currentQuestionIndex,
+      scenariosLength: scenarios.length,
+      scenarios
+    });
+
+    const currentScenario = scenarios[currentQuestionIndex];
+    if (!currentScenario) {
+      console.error('🔍 BentoDiscoverCardV2 - No scenario found!', {
+        currentQuestionIndex,
+        scenarios,
+        scenariosLength: scenarios.length
+      });
+      return (
+        <div className={styles.errorContainer}>
+          <p>No discovery challenges available. Please try again.</p>
+          <button onClick={() => setScreenType('intro')} className={styles.retryButton}>
+            Return to Introduction
+          </button>
+        </div>
+      );
+    }
+
+    return (
+      <div className={styles.scenarioContainer}>
+        {/* Progress Header */}
+        <div className={styles.progressHeader}>
+          <div className={styles.progressInfo}>
+            <span className={styles.progressLabel}>Discovery Progress</span>
+            <span className={styles.progressCount}>
+              Question {currentQuestionIndex + 1} of {scenarios.length}
+            </span>
+          </div>
+          <div className={styles.progressBar}>
+            <div
+              className={styles.progressFill}
+              style={{ width: `${calculateProgress()}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Story Context */}
+        {currentScenario.context && (
+          <div className={styles.storyContext}>
+            <div className={styles.storyIcon}>📖</div>
+            <p className={styles.storyText}>{currentScenario.context}</p>
+          </div>
+        )}
+
+        {/* Question */}
+        <div className={styles.questionTile}>
+          <h3 className={styles.questionText}>
+            {currentScenario.description || currentScenario.question || 'Discovery Challenge'}
+          </h3>
+        </div>
+
+        {/* Options */}
+        <div className={styles.optionsGrid}>
+          {(currentScenario.options || []).map((option: string, index: number) => (
+            <button
+              key={index}
+              onClick={() => handleAnswerSelect(index)}
+              className={`${styles.optionButton} ${
+                selectedAnswerIndex === index ? styles.optionSelected : ''
+              } ${
+                showFeedback && index === currentScenario.correct_choice ? styles.optionCorrect : ''
+              } ${
+                showFeedback && selectedAnswerIndex === index && index !== currentScenario.correct_choice
+                  ? styles.optionIncorrect : ''
+              }`}
+              disabled={showFeedback}
+            >
+              <span className={styles.optionNumber}>{index + 1}</span>
+              <span className={styles.optionText}>{option}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Feedback */}
+        {showFeedback && (
+          <div className={styles.feedbackSection}>
+            <div className={`${styles.feedbackCard} ${
+              selectedAnswerIndex === currentScenario.correct_choice
+                ? styles.feedbackCorrect
+                : styles.feedbackIncorrect
+            }`}>
+              <div className={styles.feedbackIcon}>
+                {selectedAnswerIndex === currentScenario.correct_choice ? (
+                  <CheckCircle className="w-6 h-6" />
+                ) : (
+                  <Target className="w-6 h-6" />
+                )}
+              </div>
+              <div className={styles.feedbackContent}>
+                <h4 className={styles.feedbackTitle}>
+                  {selectedAnswerIndex === currentScenario.correct_choice
+                    ? 'Excellent Discovery!'
+                    : 'Good Try!'}
+                </h4>
+                <p className={styles.feedbackText}>
+                  {currentScenario.outcome || currentScenario.explanation ||
+                   'Keep exploring to learn more!'}
+                </p>
+                {selectedAnswerIndex === currentScenario.correct_choice && (
+                  <p className={styles.xpEarned}>+15 XP</p>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Action Buttons */}
+        <div className={styles.actionButtons}>
+          {!showFeedback ? (
+            <button
+              onClick={submitAnswer}
+              disabled={selectedAnswerIndex === null}
+              className={`${styles.submitButton} ${
+                selectedAnswerIndex === null ? styles.submitDisabled : ''
+              }`}
+            >
+              Submit Answer
+            </button>
+          ) : (
+            <button
+              onClick={continueToNext}
+              className={styles.continueButton}
+            >
+              {currentQuestionIndex < scenarios.length - 1 ? 'Next Discovery' : 'Complete'}
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  // Render completion screen
+  const renderCompletion = () => (
+    <div className={`${completionStyles.completionPhase} ${onBack ? completionStyles.withHeader : ''}`}>
+      <div className={completionStyles.completionCard}>
+        <div className={completionStyles.trophyIcon}>🎉</div>
+        <h1 className={completionStyles.completionTitle}>Discovery Complete!</h1>
+        <p className={completionStyles.completionSubtitle}>
+          Amazing discoveries, {studentName || student?.display_name}!
+        </p>
+
+        <div className={completionStyles.achievementSection}>
+          <h2 className={completionStyles.achievementTitle}>🌟 Discovery Achievements</h2>
+          <div className={completionStyles.achievementGrid}>
+            <div className={completionStyles.achievementBadge}>
+              Explored {scenarios.length} discoveries
+            </div>
+            <div className={completionStyles.achievementBadge}>
+              Found {correctAnswers} insights
+            </div>
+            <div className={completionStyles.achievementBadge}>
+              Earned {xpEarned} XP
+            </div>
+            <div className={completionStyles.achievementBadge}>
+              Discovered how {selectedCareer?.name || career?.name}s use {skill?.name}
+            </div>
+          </div>
+        </div>
+
+        <div className={completionStyles.achievementSection}>
+          <h2 className={completionStyles.achievementTitle}>
+            🚀 Ready for the Assessment?
+          </h2>
+        </div>
+
+        <button
+          onClick={() => {
+            // User is ready to continue
+            if (onNavNext) onNavNext();
+            if (onComplete) onComplete(true);
+          }}
+          className={completionStyles.continueButton}
+        >
+          Continue to Assessment →
+        </button>
+      </div>
+    </div>
+  );
+
+  // Main render logic
+  console.log('🔍 BentoDiscoverCardV2 - Main render:', {
+    screenType,
+    isLoading,
+    scenariosLength: scenarios.length
+  });
+
+  if (isLoading) {
+    console.log('🔍 BentoDiscoverCardV2 - Loading state');
+    return (
+      <div className={styles.loadingContainer}>
+        <div className={styles.loadingSpinner}>Loading Discovery...</div>
+      </div>
+    );
+  }
+
+  switch (screenType) {
+    case 'intro':
+      console.log('🔍 BentoDiscoverCardV2 - Rendering intro');
+      return renderIntroduction();
+    case 'scenario':
+      console.log('🔍 BentoDiscoverCardV2 - Rendering scenario');
+      return renderScenario();
+    case 'completion':
+      console.log('🔍 BentoDiscoverCardV2 - Rendering completion');
+      return renderCompletion();
+    default:
+      console.log('🔍 BentoDiscoverCardV2 - Rendering default (intro)');
+      return renderIntroduction();
+  }
+};
+
+export default BentoDiscoverCardV2;
