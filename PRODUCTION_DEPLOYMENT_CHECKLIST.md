@@ -1,217 +1,119 @@
-# 📋 PRODUCTION DEPLOYMENT CHECKLIST
-## Pathfinity Educational Platform - Deployment Guide
+# Production Deployment Checklist for app.pathfinity.ai
 
-**Deployment Date**: ___________  
-**Deployed By**: ___________  
-**Version**: 1.0.0  
+## Pre-Deployment Verification
 
----
+### Environment Variables Protection
+- [x] `.env` is in `.gitignore` (local development only)
+- [x] `.env.multimodel` is in `.gitignore` (local multi-model config)
+- [x] `.env.local` and `.env.*.local` are in `.gitignore`
+- [ ] Never commit API keys or sensitive data
 
-## 🔒 PRE-DEPLOYMENT CHECKLIST
+### Required Netlify Environment Variables
 
-### 1. Environment Variables ⚠️ CRITICAL
-- [ ] Update `.env.production` with real values:
-  ```bash
-  VITE_SUPABASE_URL=<production_url>
-  VITE_SUPABASE_ANON_KEY=<production_anon_key>
-  VITE_OPENAI_API_KEY=<production_openai_key>
-  VITE_SENTRY_DSN=<real_sentry_dsn>
-  VITE_SENTRY_ENVIRONMENT=production
-  VITE_APP_VERSION=1.0.0
-  ```
-
-### 2. Code Preparation
-- [ ] All changes committed to git
-- [ ] Create git tag for release: `git tag -a v1.0.0 -m "Production release 1.0.0"`
-- [ ] Push tag to remote: `git push origin v1.0.0`
-
-### 3. Build Verification
-- [ ] Run production build locally: `npm run build`
-- [ ] Check build output for errors
-- [ ] Verify dist folder created (~15-20MB expected)
-- [ ] Test production build locally: `npm run preview`
-
-### 4. Database Status
-- [ ] Verify Supabase production database is ready
-- [ ] Confirm all migrations have been run
-- [ ] Check that question types and skills data are imported
-- [ ] Verify database connection from build
-
----
-
-## 🚀 DEPLOYMENT STEPS
-
-### Step 1: Build Production Bundle
-```bash
-# Clean previous builds
-rm -rf dist
-
-# Build with production configuration
-npm run build
-
-# Verify build output
-ls -la dist/
+#### Core Azure OpenAI (Currently Active in Production)
+```
+VITE_AZURE_OPENAI_API_KEY=<from Azure Key Vault>
+VITE_AZURE_OPENAI_ENDPOINT=https://pathfinity-ai.openai.azure.com/
+VITE_AZURE_GPT4_DEPLOYMENT=gpt-4o
+VITE_AZURE_GPT4O_DEPLOYMENT=gpt-4o
 ```
 
-### Step 2: Deploy to Hosting Service
+#### Multi-Model System (Toggle On/Off as Needed)
+```
+# Feature Toggle (set to false to disable multi-model in production)
+VITE_ENABLE_MULTI_MODEL=false
 
-#### Option A: Vercel (Recommended)
-```bash
-# Install Vercel CLI if needed
-npm i -g vercel
+# Rollout Configuration (when enabled)
+VITE_MULTI_MODEL_TARGET_GRADES=K,1
+VITE_MULTI_MODEL_ROLLOUT_PERCENTAGE=0
+VITE_MULTI_MODEL_DEBUG=false
 
-# Deploy
-vercel --prod
-
-# Follow prompts to configure project
+# Azure Key Vault (for API keys)
+AZURE_KEY_VAULT_URL=https://pathfinity-kv-2823.vault.azure.net/
 ```
 
-#### Option B: Netlify
-```bash
-# Install Netlify CLI if needed
-npm i -g netlify-cli
-
-# Deploy
-netlify deploy --prod --dir=dist
-
-# Follow prompts to configure
+#### Supabase Configuration
+```
+VITE_SUPABASE_URL=https://zohdmprtfyijneqnwjsu.supabase.co
+VITE_SUPABASE_ANON_KEY=<anon key>
 ```
 
-#### Option C: Traditional Server
-```bash
-# Copy dist folder to server
-scp -r dist/* user@server:/var/www/pathfinity/
+## Multi-Model System Rollout Strategy
 
-# On server, configure nginx/apache to serve from /var/www/pathfinity
-```
+### Phase 1: Testing (Current)
+- Local development: `VITE_ENABLE_MULTI_MODEL=true`
+- Production: `VITE_ENABLE_MULTI_MODEL=false`
 
-### Step 3: Configure Domain & SSL
-- [ ] Point domain to hosting service
-- [ ] Ensure SSL certificate is active
-- [ ] Test HTTPS redirect works
+### Phase 2: Limited Rollout
+- Set `VITE_ENABLE_MULTI_MODEL=true`
+- Set `VITE_MULTI_MODEL_TARGET_GRADES=K,1`
+- Set `VITE_MULTI_MODEL_ROLLOUT_PERCENTAGE=10`
+- Monitor logs and costs
 
-### Step 4: Verify Deployment
-- [ ] Access production URL
-- [ ] Check browser console for errors
-- [ ] Test login functionality
-- [ ] Verify AI interactions work
-- [ ] Test a complete learning session
+### Phase 3: Gradual Expansion
+- Increase `VITE_MULTI_MODEL_ROLLOUT_PERCENTAGE` to 25, 50, 75, 100
+- Add more grades: `VITE_MULTI_MODEL_TARGET_GRADES=K,1,2,3,4,5`
 
----
+### Phase 4: Full Production
+- All grades enabled
+- 100% rollout
+- Disable debug logging: `VITE_MULTI_MODEL_DEBUG=false`
 
-## ✅ POST-DEPLOYMENT VERIFICATION
+## Deployment Steps
 
-### Immediate Checks (First 30 minutes)
-- [ ] **Sentry Monitoring**
-  - [ ] Access Sentry dashboard
-  - [ ] Verify events are being received
-  - [ ] Check for any critical errors
-  - [ ] Set up alert thresholds
-
-- [ ] **Core Functionality**
-  - [ ] Student can log in
-  - [ ] Questions load properly
-  - [ ] All 15 question types display
-  - [ ] AI character (Finn) responds
-  - [ ] Progress saves correctly
-
-- [ ] **Performance**
-  - [ ] Page load time < 3 seconds
-  - [ ] Interactions responsive
-  - [ ] No memory leaks in console
-
-### First Hour Monitoring
-- [ ] Check Sentry for any errors
-- [ ] Monitor server logs
-- [ ] Verify database connections stable
-- [ ] Test from different browsers:
-  - [ ] Chrome 90+
-  - [ ] Safari 13.1+
-  - [ ] Firefox 88+
-  - [ ] Edge 90+
-
-### First 24 Hours
-- [ ] Monitor error rate in Sentry
-- [ ] Track user engagement metrics
-- [ ] Check server resource usage
-- [ ] Gather initial user feedback
-- [ ] Document any issues found
-
----
-
-## 🔧 ROLLBACK PLAN
-
-If critical issues occur:
-
-1. **Immediate Rollback** (< 5 minutes)
+1. **Verify Git Status**
    ```bash
-   # Vercel
-   vercel rollback
-   
-   # Netlify
-   netlify rollback
-   
-   # Traditional
-   # Restore previous dist backup
+   git status
+   # Ensure no .env or .env.multimodel files are staged
    ```
 
-2. **Notify Team**
-   - Send alert to development team
-   - Document issue in incident log
-   - Begin root cause analysis
+2. **Test Locally**
+   ```bash
+   npm run build
+   npm run preview
+   ```
 
-3. **Fix Forward** (if minor issues)
-   - Apply hotfix to main branch
-   - Run tests
-   - Deploy patch version
+3. **Push to Repository**
+   ```bash
+   git push origin main
+   ```
 
----
+4. **Netlify Deployment**
+   - Auto-deploys on push to main branch
+   - Monitor at: https://app.netlify.com
 
-## 📊 SUCCESS CRITERIA
+5. **Post-Deployment Verification**
+   - Check https://app.pathfinity.ai loads
+   - Test login with demo users
+   - Verify AI content generation works
+   - Check browser console for errors
 
-Deployment is successful when:
-- ✅ No critical errors in first hour
-- ✅ < 1% error rate in Sentry
-- ✅ Core learning flows working
-- ✅ Performance metrics met
-- ✅ Positive initial user feedback
+## Rollback Plan
 
----
+If issues occur:
+1. Set `VITE_ENABLE_MULTI_MODEL=false` in Netlify
+2. Trigger redeploy in Netlify
+3. System will fall back to standard GPT-4o
 
-## 📞 CONTACT LIST
+## Cost Monitoring
 
-**Development Team**:
-- Primary: ___________
-- Backup: ___________
+When multi-model is enabled:
+- K-2: Uses Phi-4 ($0.00045/request vs $0.0125 for GPT-4o)
+- 3-5: Uses Llama-3.3-70B ($0.00122/request vs $0.0125)
+- 6-8: Uses GPT-4o-mini ($0.00075/request vs $0.0125)
+- 9-12: Uses GPT-4o ($0.0125/request)
 
-**DevOps/Infrastructure**:
-- Primary: ___________
-- Backup: ___________
+Expected savings: **81.6%** for grades K-8
 
-**Product Owner**:
-- Primary: ___________
+## Important Files Not to Modify in Production
 
----
+- `.env` - Local development only
+- `.env.multimodel` - Local multi-model config
+- API keys in code - Use environment variables only
+- Model endpoints - Configured via environment variables
 
-## 📝 DEPLOYMENT LOG
+## Support Contacts
 
-| Time | Action | Status | Notes |
-|------|--------|--------|-------|
-| | Pre-deployment checks | | |
-| | Build production | | |
-| | Deploy to hosting | | |
-| | Verify deployment | | |
-| | Monitor first hour | | |
-
----
-
-## 🎉 SIGN-OFF
-
-**Deployment Complete**: ☐  
-**All Checks Passed**: ☐  
-**Approved By**: ___________  
-**Date/Time**: ___________  
-
----
-
-*Remember: Take your time, follow each step carefully, and monitor closely after deployment.*
+- Azure Issues: Check Azure Portal for service health
+- Netlify Issues: support@netlify.com
+- Domain/DNS: IONOS control panel

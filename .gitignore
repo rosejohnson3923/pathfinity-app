@@ -26,4 +26,7 @@ dist-ssr
 *.sln
 *.sw?
 .env
+.env.multimodel
+.env.local
+.env.*.local
 claude-sessions/

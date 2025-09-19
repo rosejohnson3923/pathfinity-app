@@ -7,13 +7,6 @@ import { azureOpenAIService } from '../azureOpenAIService';
 import { MultiModelService } from './MultiModelService';
 import { ModelRouter } from './ModelRouter';
 import { getModelForGrade } from './ModelCapabilities';
-import * as fs from 'fs';
-import * as dotenv from 'dotenv';
-
-// Load multi-model configuration if available
-if (typeof window === 'undefined' && fs.existsSync && fs.existsSync('.env.multimodel')) {
-  dotenv.config({ path: '.env.multimodel' });
-}
 
 export interface AIServiceInterface {
   generateContent(params: ContentGenerationParams): Promise<any>;
@@ -43,16 +36,31 @@ class AIServiceSelector implements AIServiceInterface {
   }
 
   private initialize() {
+    // Check if we're in a browser or Node environment
+    const isBrowser = typeof window !== 'undefined';
+
+    // Use Vite env variables in browser, process.env in Node
+    const getEnvVar = (key: string): string | undefined => {
+      if (isBrowser) {
+        // In browser, use Vite's import.meta.env
+        return (import.meta as any).env?.[`VITE_${key}`];
+      } else {
+        // In Node.js, use process.env
+        return process?.env?.[key];
+      }
+    };
+
     // Check if multi-model is enabled
-    this.useMultiModel = process.env.ENABLE_MULTI_MODEL === 'true';
+    this.useMultiModel = getEnvVar('ENABLE_MULTI_MODEL') === 'true';
 
     // Get target grades for rollout
-    if (process.env.MULTI_MODEL_TARGET_GRADES) {
-      this.targetGrades = process.env.MULTI_MODEL_TARGET_GRADES.split(',').map(g => g.trim());
+    const targetGrades = getEnvVar('MULTI_MODEL_TARGET_GRADES');
+    if (targetGrades) {
+      this.targetGrades = targetGrades.split(',').map(g => g.trim());
     }
 
     // Debug mode
-    this.debugMode = process.env.MULTI_MODEL_DEBUG === 'true';
+    this.debugMode = getEnvVar('MULTI_MODEL_DEBUG') === 'true';
 
     // Initialize multi-model service if enabled
     if (this.useMultiModel) {
@@ -103,7 +111,12 @@ class AIServiceSelector implements AIServiceInterface {
     }
 
     // Check rollout percentage
-    const rolloutPercentage = parseInt(process.env.MULTI_MODEL_ROLLOUT_PERCENTAGE || '0');
+    const isBrowser = typeof window !== 'undefined';
+    const rolloutStr = isBrowser
+      ? (import.meta as any).env?.VITE_MULTI_MODEL_ROLLOUT_PERCENTAGE
+      : process?.env?.MULTI_MODEL_ROLLOUT_PERCENTAGE;
+    const rolloutPercentage = parseInt(rolloutStr || '0');
+
     if (rolloutPercentage > 0 && rolloutPercentage < 100) {
       const random = Math.random() * 100;
       return random < rolloutPercentage;
@@ -263,10 +276,15 @@ class AIServiceSelector implements AIServiceInterface {
    * Get statistics about model usage
    */
   getStatistics() {
+    const isBrowser = typeof window !== 'undefined';
+    const rolloutStr = isBrowser
+      ? (import.meta as any).env?.VITE_MULTI_MODEL_ROLLOUT_PERCENTAGE
+      : process?.env?.MULTI_MODEL_ROLLOUT_PERCENTAGE;
+
     return {
       multiModelEnabled: this.useMultiModel,
       targetGrades: this.targetGrades,
-      rolloutPercentage: process.env.MULTI_MODEL_ROLLOUT_PERCENTAGE || '0',
+      rolloutPercentage: rolloutStr || '0',
       debugMode: this.debugMode
     };
   }

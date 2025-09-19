@@ -91,8 +91,8 @@ function App() {
                   <Route path="/test" element={<TestPage />} />
                   <Route path="/test/design-system" element={<DesignSystemTest />} />
                   
-                  {/* Default route redirects to login */}
-                  <Route path="/" element={<Navigate to="/app/login" replace />} />
+                  {/* Default route redirects to login - for development, go directly to login */}
+                  <Route path="/" element={<Navigate to="/login" replace />} />
                   
                   {/* Application Routes */}
                   <Route path="/app/login" element={<Login />} />
@@ -157,9 +157,13 @@ function App() {
                   } />
                   <Route path="/app/unauthorized" element={<Unauthorized />} />
                   
-                  {/* Legacy redirect for existing users */}
-                  <Route path="/dashboard" element={<Navigate to="/app/dashboard" replace />} />
-                  <Route path="/login" element={<Navigate to="/app/login" replace />} />
+                  {/* Development routes without /app prefix */}
+                  <Route path="/dashboard" element={
+                    <ProtectedRoute>
+                      <DashboardRouter />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/login" element={<Login />} />
                 </Routes>
               </Router>
         </AuthProvider>
