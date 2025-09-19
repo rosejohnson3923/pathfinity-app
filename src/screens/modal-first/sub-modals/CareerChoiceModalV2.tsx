@@ -112,12 +112,16 @@ export const CareerChoiceModalV2: React.FC<CareerChoiceModalV2Props> = ({
         
         // Get all available careers for this grade from PathIQ
         const categorizedCareers = pathIQService.getCareersByCategory(gradeLevel);
+        console.log(`🎯 CareerChoiceModalV2: Got ${categorizedCareers.length} categories for grade ${gradeLevel}`);
+        console.log('📚 Categories:', categorizedCareers.map(c => `${c.category.name}: ${c.careers.length} careers`));
         setCareersByCategory(categorizedCareers);
-        
+
         const available: any[] = [];
         categorizedCareers.forEach(({ careers }) => {
           available.push(...careers);
         });
+        console.log(`✅ Total careers available in More Options: ${available.length}`);
+        console.log('🔍 Career names:', available.map(c => c.name));
         setAllCareers(available);
         
         // ONLY fetch enriched data for the 3 recommended careers

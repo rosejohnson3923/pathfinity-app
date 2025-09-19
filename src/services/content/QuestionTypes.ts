@@ -22,6 +22,7 @@ export interface BaseQuestion {
   points: number;
   hints?: string[];
   explanation?: string;
+  passage?: string; // Reading passage for comprehension questions
   media?: {
     type: 'image' | 'video' | 'audio';
     url: string;

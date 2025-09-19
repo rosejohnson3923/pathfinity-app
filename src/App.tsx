@@ -75,13 +75,8 @@ function App() {
     initializeApp();
   }, []);
   
-  // Debug navigation and fix root width
+  // Fix root width after React renders
   React.useEffect(() => {
-    console.log('🔴 DEBUG: App component mounted/updated');
-    console.log('🔴 DEBUG: Current location:', window.location.href);
-    console.log('🔴 DEBUG: Current timestamp:', new Date().toISOString());
-    
-    // Apply root width fix after React renders
     fixRootWidth();
   });
 

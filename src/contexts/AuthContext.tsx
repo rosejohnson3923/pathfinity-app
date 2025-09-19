@@ -36,15 +36,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => clearTimeout(timer);
   }, [auth.loading]);
   
-  // Debug auth state changes
+  // Track previous auth state for logging
+  const prevUser = React.useRef(auth.user);
+  const prevLoading = React.useRef(auth.loading);
+
+  // Log only significant auth state changes
   React.useEffect(() => {
-    console.log('🔴 DEBUG: AuthContext state change:', {
-      loading: auth.loading,
-      user: auth.user?.email || 'null',
-      tenant: auth.tenant?.name || 'null',
-      timestamp: new Date().toISOString()
-    });
-  }, [auth.loading, auth.user, auth.tenant]);
+    if (prevUser.current !== auth.user || (prevLoading.current && !auth.loading)) {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Auth state:', {
+          user: auth.user ? 'authenticated' : 'unauthenticated',
+          loading: auth.loading
+        });
+      }
+    }
+
+    prevUser.current = auth.user;
+    prevLoading.current = auth.loading;
+  }, [auth.loading, auth.user]);
 
   return (
     <AuthContext.Provider value={auth}>

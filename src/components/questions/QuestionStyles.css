@@ -126,7 +126,8 @@
    ============================================================================ */
 
 .mc-options-container {
-  display: flex;
+  /* Default to flex for better control, will be overridden by inline styles */
+  display: flex !important;
   flex-direction: column;
   gap: 0.75rem;
 }

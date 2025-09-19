@@ -193,7 +193,14 @@ class QuestionTypeValidator {
     
     // Check required fields
     for (const field of type.requiredFields) {
-      if (!question[field] || (Array.isArray(question[field]) && question[field].length === 0)) {
+      // Special handling for fields that can be 0 or false
+      const fieldValue = question[field];
+      const isMissing = fieldValue === undefined ||
+                        fieldValue === null ||
+                        (Array.isArray(fieldValue) && fieldValue.length === 0) ||
+                        (typeof fieldValue === 'string' && fieldValue.trim() === '');
+
+      if (isMissing) {
         errors.push(`Missing required field: ${field}`);
         
         // Apply default corrections

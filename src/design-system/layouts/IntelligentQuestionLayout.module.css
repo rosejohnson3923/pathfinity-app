@@ -1,0 +1,632 @@
+/**
+ * INTELLIGENT QUESTION LAYOUT SYSTEM
+ * Adaptive layouts for questions based on content analysis
+ * Integrates with PathFinityOS Design System
+ */
+
+@import '../tokens/index.css';
+
+/* ========================================
+   BASE QUESTION CONTAINER
+   ======================================== */
+.questionContainer {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ========================================
+   LAYOUT VARIANTS
+   Based on content analysis
+   ======================================== */
+
+/* VERTICAL LAYOUT - For long text, sentences, arrays */
+.layoutVertical {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);  /* More spacing between options */
+  width: 100%;
+}
+
+.layoutVertical .optionButton {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
+  width: 100%;
+  min-height: 5rem;  /* Larger for bigger text */
+  padding: var(--space-5) var(--space-6);  /* Generous padding */
+  border-radius: var(--radius-lg);
+  transition: all 0.2s ease;
+  white-space: normal; /* Ensure text wraps properly */
+}
+
+.layoutVertical .optionLabel {
+  /* Styles now handled by LONG TEXT PROPORTIONS section */
+}
+
+.layoutVertical .optionText {
+  flex: 1;
+  text-align: left;
+  overflow-wrap: break-word;
+  word-wrap: break-word; /* fallback for older browsers */
+  white-space: normal;
+  /* Font size and line-height handled by LONG TEXT PROPORTIONS section */
+}
+
+/* GRID LAYOUT - For short numeric/emoji options */
+.layoutGrid {
+  display: grid;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+/* Grid column variants */
+.layoutGrid2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.layoutGrid3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.layoutGrid4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.layoutGrid .optionButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: var(--radius-lg);
+  transition: all 0.2s ease;
+}
+
+/* WRAPPED GRID - For medium-length text */
+.layoutWrappedGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.layoutWrappedGrid .optionButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 3.5rem;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  transition: all 0.2s ease;
+  white-space: normal; /* Ensure text wraps properly */
+}
+
+.layoutWrappedGrid .optionLabel {
+  font-weight: 600;
+  margin-right: var(--space-2);
+}
+
+.layoutWrappedGrid .optionText {
+  overflow-wrap: break-word;
+  word-wrap: break-word; /* fallback for older browsers */
+  line-height: 1.4;
+  white-space: normal;
+}
+
+/* ========================================
+   GRADE-SPECIFIC ADJUSTMENTS
+   ======================================== */
+
+/* Elementary (K-2) - Larger touch targets, simpler layouts */
+.gradeElementary .optionButton {
+  min-height: 4rem;
+  font-size: 1.125rem;
+  padding: var(--space-4);
+}
+
+.gradeElementary.layoutGrid .optionButton {
+  min-height: 5rem;
+}
+
+.gradeElementary .optionText {
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+/* Middle School (3-8) - Balanced layouts */
+.gradeMiddle .optionButton {
+  min-height: 3.5rem;
+  font-size: 1rem;
+}
+
+/* High School (9-12) - Compact, efficient layouts */
+.gradeHigh .optionButton {
+  min-height: 3rem;
+  font-size: 0.95rem;
+}
+
+.gradeHigh.layoutGrid .optionButton {
+  min-height: 3.5rem;
+}
+
+/* ========================================
+   CONTENT-TYPE SPECIFIC STYLES
+   ======================================== */
+
+/* Numeric content - Monospace font, centered */
+.contentNumeric .optionText {
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+}
+
+/* Emoji content - Larger display */
+.contentEmoji .optionText {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+/* Array/Math content - Monospace, proper spacing */
+.contentArray .optionText {
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+}
+
+/* Long text content - Better readability */
+.contentLongText .optionText {
+  line-height: 1.6;
+  font-size: 0.95rem;
+  overflow-wrap: break-word;
+  word-wrap: break-word; /* fallback for older browsers */
+  white-space: normal;
+}
+
+/* ========================================
+   PROPORTIONAL SIZING SYSTEM
+   Content-aware sizing for different answer types
+   ======================================== */
+
+/* SHORT CONTENT PROPORTIONS (Images, Emojis, Short Answers) */
+/* Ratios: Label 8%, Content 85%, Container 100% */
+.layoutGrid .optionLabel,
+.contentEmoji .optionLabel,
+.contentNumeric .optionLabel {
+  font-size: 0.85rem;  /* Slightly larger label text */
+  width: 2rem;  /* Fixed width to prevent stretching */
+  height: 2rem;  /* Fixed height to maintain circle */
+  padding: 0.2rem;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(75, 85, 99, 0.15));  /* Subtle gradient */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;  /* Prevent shrinking */
+  flex-grow: 0;  /* Prevent growing */
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);  /* Softer label color */
+  border: 1px solid rgba(139, 92, 246, 0.2);  /* Subtle border */
+  margin-bottom: var(--space-2);  /* Add spacing below */
+}
+
+.layoutGrid .optionText,
+.contentEmoji .optionText,
+.contentNumeric .optionText {
+  font-size: 2rem;  /* Much larger option text */
+  margin-top: var(--space-2);
+  font-weight: 600;
+  color: var(--gray-100);
+}
+
+.layoutGrid .optionButton {
+  padding: var(--space-3);  /* Reduced padding to fit content better */
+  min-height: 5rem;  /* Appropriate for content */
+}
+
+/* LONG TEXT PROPORTIONS (Paragraphs, Summaries, Sentences) */
+/* Ratios: Label 15%, Content 85%, Container 100% */
+.layoutVertical .optionLabel,
+.contentLongText .optionLabel {
+  font-size: 1.35rem;  /* Much larger label */
+  width: 3rem;  /* Larger circle */
+  height: 3rem;  /* Larger circle */
+  padding: 0.6rem;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(75, 85, 99, 0.2));
+  border-radius: 50%;  /* Perfect circle */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;  /* Bold */
+  color: rgba(255, 255, 255, 0.9);  /* High contrast */
+  border: 2px solid rgba(139, 92, 246, 0.35);  /* More visible border */
+  margin-right: var(--space-5);  /* More spacing from text */
+  flex-shrink: 0;  /* Prevent label from shrinking */
+  flex-grow: 0;  /* Prevent growing */
+}
+
+.layoutVertical .optionText,
+.contentLongText .optionText {
+  font-size: 1.35rem;  /* Much larger text */
+  line-height: 1.7;
+  padding: 0 var(--space-4);  /* Good internal padding */
+  font-weight: 500;  /* Medium weight for readability */
+  letter-spacing: 0.01em;  /* Slight letter spacing for clarity */
+}
+
+.layoutVertical .optionButton,
+.contentLongText .optionButton {
+  padding: var(--space-5) var(--space-6);  /* Generous padding */
+  min-height: 5rem;  /* Larger height for bigger text */
+  align-items: center;  /* Center align for better appearance */
+}
+
+/* MEDIUM TEXT PROPORTIONS (Wrapped Grid) */
+/* Ratios: Label 12%, Content 80%, Container 100% */
+.layoutWrappedGrid .optionLabel {
+  font-size: 1rem;  /* Larger label */
+  width: 2.5rem;  /* Larger width */
+  height: 2.5rem;  /* Larger height */
+  padding: 0.3rem;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(75, 85, 99, 0.15));
+  border-radius: 50%;  /* Keep circular */
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  margin-right: var(--space-3);
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+.layoutWrappedGrid .optionText {
+  font-size: 1.2rem;  /* Larger text */
+  flex: 1;
+  font-weight: 500;
+  padding: 0 var(--space-2);
+}
+
+.layoutWrappedGrid .optionButton {
+  padding: var(--space-4);  /* More padding */
+  min-height: 4rem;  /* Taller buttons */
+}
+
+/* GRADE-SPECIFIC PROPORTION OVERRIDES */
+/* Elementary needs larger labels for better recognition */
+.gradeElementary .optionLabel {
+  font-size: 0.9rem !important;
+  width: 2.25rem;  /* Fixed dimensions */
+  height: 2.25rem;
+}
+
+.gradeElementary .optionText {
+  font-size: 2.25rem !important;  /* Even larger for young learners */
+}
+
+/* High school can have more compact labels */
+.gradeHigh .optionLabel {
+  font-size: 0.8rem;
+  width: 1.75rem;  /* Fixed dimensions */
+  height: 1.75rem;
+}
+
+/* ENSURE LABELS ARE SUBTLE */
+.optionLabel {
+  transition: all 0.2s ease;
+}
+
+.optionButton:hover .optionLabel {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(75, 85, 99, 0.25));
+  border-color: rgba(139, 92, 246, 0.3);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.optionButton.selected .optionLabel {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.4), rgba(75, 85, 99, 0.3));
+  color: rgba(255, 255, 255, 0.95);
+  border-color: rgba(139, 92, 246, 0.5);
+}
+
+.optionButton.correct .optionLabel {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.4), rgba(75, 85, 99, 0.3));
+  color: rgba(255, 255, 255, 0.95);
+  border-color: rgba(34, 197, 94, 0.5);
+}
+
+.optionButton.incorrect .optionLabel {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.4), rgba(75, 85, 99, 0.3));
+  color: rgba(255, 255, 255, 0.95);
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+/* ========================================
+   RESPONSIVE ADJUSTMENTS
+   ======================================== */
+
+/* Tablet and below */
+@media (max-width: 768px) {
+  .layoutGrid4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .layoutGrid3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .layoutWrappedGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .layoutGrid4,
+  .layoutGrid3,
+  .layoutGrid2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .layoutGrid .optionButton {
+    aspect-ratio: auto;
+    min-height: 3rem;
+  }
+
+  .gradeElementary.layoutGrid .optionButton {
+    min-height: 4rem;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 360px) {
+  .layoutGrid4,
+  .layoutGrid3,
+  .layoutGrid2 {
+    grid-template-columns: 1fr;
+  }
+
+  .layoutGrid .optionButton {
+    flex-direction: row;
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  .layoutGrid .optionLabel {
+    margin-bottom: 0;
+    margin-right: var(--space-3);
+  }
+}
+
+/* ========================================
+   STATE STYLES
+   ======================================== */
+
+/* Base option text styles to prevent character-by-character wrapping */
+.optionText {
+  overflow-wrap: break-word;
+  word-wrap: break-word; /* fallback for older browsers */
+  white-space: normal;
+  hyphens: none; /* Prevent automatic hyphenation */
+}
+
+.optionButton {
+  border: 2px solid var(--color-border);
+  background: white;
+  color: var(--gray-900);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  font-family: var(--font-sans);
+  overflow-wrap: break-word;
+  word-wrap: break-word; /* fallback for older browsers */
+  white-space: normal;
+}
+
+.optionButton:hover:not(:disabled) {
+  background: var(--purple-50);
+  border-color: var(--purple-400);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.optionButton:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.optionButton.selected {
+  background: var(--purple-100);
+  border-color: var(--purple-500);
+  color: var(--purple-900);
+  font-weight: 600;
+}
+
+.optionButton.correct {
+  background: var(--green-50);
+  border-color: var(--green-500);
+  color: var(--green-900);
+}
+
+.optionButton.incorrect {
+  background: var(--red-50);
+  border-color: var(--red-500);
+  color: var(--red-900);
+}
+
+.optionButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ========================================
+   DARK THEME SUPPORT
+   ======================================== */
+
+[data-theme="dark"] .optionButton {
+  background: var(--gray-800);
+  border-color: var(--gray-600);
+  color: var(--gray-100);
+}
+
+[data-theme="dark"] .optionButton:hover:not(:disabled) {
+  background: var(--gray-700);
+  border-color: var(--purple-400);
+}
+
+[data-theme="dark"] .optionButton.selected {
+  background: var(--purple-900);
+  border-color: var(--purple-400);
+  color: var(--purple-100);
+  font-weight: 600;
+}
+
+[data-theme="dark"] .optionButton.correct {
+  background: var(--green-900);
+  border-color: var(--green-400);
+  color: var(--green-100);
+}
+
+[data-theme="dark"] .optionButton.incorrect {
+  background: var(--red-900);
+  border-color: var(--red-400);
+  color: var(--red-100);
+}
+
+/* Dark theme label adjustments - keep subtle */
+[data-theme="dark"] .optionLabel {
+  /* Labels already use subtle gradients that work in both themes */
+}
+
+[data-theme="dark"] .optionButton:hover .optionLabel {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(75, 85, 99, 0.3));
+  border-color: rgba(139, 92, 246, 0.4);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+[data-theme="dark"] .optionButton.selected .optionLabel {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.45), rgba(75, 85, 99, 0.35));
+  color: rgba(255, 255, 255, 1);
+  border-color: rgba(139, 92, 246, 0.6);
+}
+
+[data-theme="dark"] .optionButton.correct .optionLabel {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.45), rgba(75, 85, 99, 0.35));
+  color: rgba(255, 255, 255, 1);
+  border-color: rgba(34, 197, 94, 0.6);
+}
+
+[data-theme="dark"] .optionButton.incorrect .optionLabel {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.45), rgba(75, 85, 99, 0.35));
+  color: rgba(255, 255, 255, 1);
+  border-color: rgba(239, 68, 68, 0.6);
+}
+
+/* ============================================
+   READING PASSAGE STYLES
+   ============================================ */
+
+.passageContainer {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg,
+    rgba(139, 92, 246, 0.05),
+    rgba(59, 130, 246, 0.05));
+  border-radius: 12px;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  position: relative;
+}
+
+.passageHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid rgba(139, 92, 246, 0.15);
+}
+
+.passageLabel {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--primary-600, #7c3aed);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.passageText {
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: var(--text-primary, #1f2937);
+  font-family: var(--font-reading, 'Georgia', 'Times New Roman', serif);
+  text-align: left;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Grade-specific passage text sizing */
+.passageText[data-grade="K"],
+.passageText[data-grade="1"],
+.passageText[data-grade="2"] {
+  font-size: 1.25rem;
+  line-height: 2;
+}
+
+.passageText[data-grade="3"],
+.passageText[data-grade="4"],
+.passageText[data-grade="5"] {
+  font-size: 1.2rem;
+  line-height: 1.9;
+}
+
+.passageText[data-grade="6"],
+.passageText[data-grade="7"],
+.passageText[data-grade="8"] {
+  font-size: 1.15rem;
+  line-height: 1.8;
+}
+
+.passageText[data-grade="9"],
+.passageText[data-grade="10"],
+.passageText[data-grade="11"],
+.passageText[data-grade="12"] {
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+/* Highlight career context in passages */
+.passageText .careerContext {
+  background: rgba(139, 92, 246, 0.1);
+  padding: 0.125rem 0.375rem;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+/* Responsive passage sizing */
+@media (max-width: 768px) {
+  .passageContainer {
+    margin-bottom: 1.5rem;
+    padding: 1.25rem;
+  }
+
+  .passageText {
+    font-size: 1.1rem;
+  }
+
+  .passageLabel {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .passageContainer {
+    margin-bottom: 1.25rem;
+    padding: 1rem;
+  }
+
+  .passageText {
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+}

@@ -20,6 +20,8 @@
   display: flex;
   flex-direction: column;
   /* Removed justify-content: center to allow scrolling */
+  height: 100%;
+  overflow: hidden;
 }
 
 /* ============================================
@@ -92,6 +94,9 @@
   border: 2px solid var(--border-color);
   position: relative;
   animation: slideUp var(--duration-moderate) var(--easing-out);
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 [data-theme="dark"] .assessmentQuestion {

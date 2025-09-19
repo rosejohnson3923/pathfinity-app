@@ -69,9 +69,9 @@ export const UNIVERSALCONTENT_RULES = {
     },
     multiple_choice: {
       format: 'number',
-      example: '0, 1, 2, or 3 (index of correct option in array)',
+      example: '0, 1, 2, or 3 (index of correct option in RANDOMIZED array)',
       validation: 'Must be number 0-3',
-      aiInstruction: 'Use array index (0-3), not the option text'
+      aiInstruction: 'CRITICAL: Randomize options array, then use index (0-3) of correct answer in randomized position'
     },
     counting: {
       format: 'number',
@@ -89,7 +89,7 @@ export const UNIVERSALCONTENT_RULES = {
       format: 'string',
       example: '"answer text"',
       validation: 'Must be string',
-      aiInstruction: 'Use string for the blank answer'
+      aiInstruction: 'CRITICAL: Provide COMPLETE sentence with NO blanks. System will auto-blank. Example: "A coach ensuring player safety is similar to government maintaining order" NOT "A coach ensuring player safety is similar to government _____"'
     },
     short_answer: {
       format: 'string',
@@ -124,33 +124,177 @@ export const UNIVERSALCONTENT_RULES = {
     usage: {
       text_only: 'Use "❓" or null when no visual support needed',
       with_visual: 'Use appropriate emojis or description',
-      counting: 'REQUIRED - use repeated emojis matching count (e.g., "🍎🍎🍎" for 3)'
+      counting: 'REQUIRED - use repeated emojis matching count (e.g., "🍎🍎🍎" for 3)',
+      shape_identification: 'REQUIRED - object emoji in visual field (e.g., "🥅" for soccer goal)'
     },
     formats: {
       emoji: 'Direct emoji characters (e.g., "🍎🍎🍎")',
       description: 'Text description for complex visuals',
       null: 'null for no visual',
       placeholder: '"❓" to explicitly indicate text-only'
+    },
+
+    // CRITICAL COUNTING QUESTION RULES
+    COUNTING_RULES: {
+      visual_placement: 'ALWAYS put counting emojis in the visual field ONLY',
+      question_format: [
+        '✅ CORRECT: question: "How many items are there?", visual: "🏀👕👕"',
+        '✅ CORRECT: question: "Count the objects above", visual: "🍎🍎🍎"',
+        '✅ CORRECT: question: "How many does Coach have?", visual: "⚽⚽⚽⚽"',
+        '❌ WRONG: question: "Coach sees 🏀👕👕. How many items are there?", visual: "🏀👕👕"',
+        '❌ WRONG: question: "Count these: 🍎🍎🍎", visual: "🍎🍎🍎"'
+      ],
+      key_principle: 'NEVER duplicate counting emojis in both question text AND visual field',
+      instructions: [
+        '1. Place ALL counting emojis in the visual field',
+        '2. Reference them generically in the question ("How many items/objects/things")',
+        '3. Or reference them by context ("How many does [Career] have?")',
+        '4. NEVER put the actual emojis in the question text itself'
+      ],
+      examples: {
+        good: {
+          question: 'How many sports items does Coach have?',
+          visual: '⚽🏀🏈',
+          correct_answer: 3
+        },
+        bad: {
+          question: 'Coach has ⚽🏀🏈. How many items?',
+          visual: '⚽🏀🏈',
+          issue: 'Emojis appear in both question and visual - confusing!'
+        }
+      }
     }
+  },
+
+  // Shape Question Specific Rules (for K-2 grades)
+  SHAPE_QUESTION_RULES: {
+    identification: {
+      visual: 'Show SINGLE-SHAPE objects only (see approved list below)',
+      options: 'Use ONLY basic shape emojis: ⭕ ⬜ 🔺 ▬',
+
+      // APPROVED single-shape objects for visual field
+      APPROVED_OBJECTS: {
+        circles: ['🏀', '⚽', '🎾', '🟠', '🔵', '🟢', '⭕'],
+        squares: ['📦', '🎁', '⬜', '◼️', '🟦', '📺'],
+        triangles: ['🔺', '⚠️', '📐', '🔻'],
+        rectangles: ['📱', '🚪', '📋', '▬', '🟩']
+      },
+
+      // FORBIDDEN complex/multi-shape/free-form objects
+      FORBIDDEN_OBJECTS: [
+        '🚩 (flag - has pole + triangle)',
+        '🥅 (goal - complex structure)',
+        '🏠 (house - multiple shapes)',
+        '⛺ (tent - complex)',
+        '🎪 (circus tent - complex)',
+        '🚗 (car - multiple shapes)',
+        '✉️ (envelope - complex)',
+        '⏰ (clock - circle + details)',
+        '☁️ (cloud - free-form shape)',
+        '🌊 (wave - free-form)',
+        '🔥 (fire - free-form)',
+        '💭 (thought bubble - free-form)',
+        '🗨️ (speech bubble - complex)',
+        '⚡ (lightning - free-form)',
+        '🌟 (sparkle - complex star)',
+        'ANY emoji that is not a clear, single geometric shape'
+      ],
+
+      // Basic shapes ONLY for kindergarten
+      BASIC_SHAPES_ONLY: {
+        allowed: ['circle', 'square', 'triangle', 'rectangle'],
+        not_for_K: ['diamond', 'star', 'heart', 'oval', 'hexagon']
+      },
+
+      example_CORRECT: {
+        question: 'What shape is this ball?',
+        visual: '🏀',
+        options: ['⭕', '⬜', '🔺', '▬'],
+        correct_answer: 0,
+        explanation: 'A basketball is a circle when we look at it'
+      },
+
+      example_WRONG: {
+        question: 'What shape is the flag?',
+        visual: '🚩',
+        reason: 'FLAG IS NOT A SINGLE SHAPE - has pole and triangular flag part'
+      }
+    },
+
+    matching: {
+      instruction: 'Match simple shape to simple shape'
+    },
+
+    CRITICAL_RULES: [
+      'ONLY use objects that are CLEARLY one geometric shape',
+      'NEVER use complex objects with multiple shapes',
+      'NEVER use free-form or organic shapes (clouds, flames, waves)',
+      'NEVER use objects that combine shapes (flag = pole + triangle)',
+      'For K grade: stick to circle, square, triangle, rectangle ONLY',
+      'Options must ALWAYS be exactly [⭕, ⬜, 🔺, ▬] in randomized order',
+      'Test: Is this a SINGLE, CLEAR, GEOMETRIC shape? If unsure, dont use it',
+      'When in doubt, use the pure shape emoji itself (⭕ not 🏀)'
+    ]
   },
 
   // Structure requirements
   STRUCTURE_RULES: {
     practice: {
-      count: 'EXACTLY 5 questions',
+      count: 'EXACTLY 5 questions - MANDATORY: Generate all 5 practice questions numbered 1-5',
       variety: 'Use at least 2 different question types',
       progression: 'Start simple, increase complexity',
-      support: 'MUST include full practiceSupport structure'
+      support: 'MUST include full practiceSupport structure',
+      randomization: 'ALL multiple_choice options MUST be randomized',
+      validation: '⚠️ RESPONSE REJECTED if practice array.length !== 5',
+      enforcement: [
+        'Practice array MUST contain exactly 5 elements',
+        'Do NOT stop at 3 or 4 questions',
+        'Generate ALL 5 questions before completing response',
+        'Count your practice questions: 1, 2, 3, 4, 5',
+        'If you have fewer than 5, add more until you have 5'
+      ]
     },
     assessment: {
       count: 'EXACTLY 1 question',
       difficulty: 'Should test mastery of skill',
-      no_support: 'No practiceSupport (assessment only)'
+      no_support: 'No practiceSupport (assessment only)',
+      randomization: 'ALL multiple_choice options MUST be randomized',
+      mandatory_fields: 'MUST include: question, type, visual, correct_answer, hint, explanation, success_message',
+      question_format: [
+        '⚠️ MUST be an actual QUESTION, not a statement',
+        '✅ CORRECT: "Which letter in the word \'Game\' is uppercase?"',
+        '✅ CORRECT: "Is the letter E a consonant or a vowel?"',
+        '✅ CORRECT: "How many items does the coach have?"',
+        '❌ WRONG: "Show what you\'ve learned about consonants and vowels!"',
+        '❌ WRONG: "Let\'s test your knowledge!"',
+        '❌ WRONG: "Time to demonstrate your skills!"'
+      ]
     },
     examples: {
       count: 'EXACTLY 3 worked examples',
-      structure: 'question, answer, explanation, visual (optional)'
+      structure: 'question, answer, explanation, visual (optional)',
+      randomization: 'ALL multiple_choice options MUST be randomized'
     }
+  },
+
+  // Option randomization requirements
+  RANDOMIZATION_RULES: {
+    multiple_choice: {
+      required: true,
+      instruction: 'ALWAYS randomize the order of options',
+      process: [
+        '1. Create your 4 options with the correct answer',
+        '2. Randomize/shuffle the order of all options',
+        '3. Set correct_answer to the NEW index position (0-3) of the correct option',
+        '4. Never present options in sequential, alphabetical, or predictable order'
+      ],
+      example: {
+        before: 'options: ["2", "4", "6", "8"], correct_answer: 2 (for "6")',
+        after: 'options: ["6", "2", "8", "4"], correct_answer: 0 (for "6" in new position)'
+      },
+      validation: 'Options must appear in random order, not sequential or alphabetical'
+    },
+    applies_to: ['practice', 'assessment', 'examples', 'all question sets']
   },
 
   // Gamification structure template
@@ -218,8 +362,12 @@ export const UNIVERSALCONTENT_RULES = {
       true_false_strings: 'NEVER use "true"/"false" strings for true_false type',
       missing_visual: 'ALWAYS include visual field (use "❓" or null if none)',
       missing_correct_answer: 'EVERY question MUST have correct_answer',
+      missing_hint_in_assessment: 'Assessment MUST have hint field (not just practice)',
       wrong_index: 'multiple_choice uses 0-3, not 1-4',
-      counting_no_visual: 'counting type REQUIRES visual with emojis'
+      counting_no_visual: 'counting type REQUIRES visual with emojis',
+      sequential_options: 'NEVER present multiple_choice options in sequential order (1,2,3,4)',
+      alphabetical_options: 'NEVER present multiple_choice options in alphabetical order',
+      unrandomized_options: 'ALWAYS randomize multiple_choice options before setting correct_answer index'
     },
     validation_checks: [
       'All mandatory fields present',
@@ -384,17 +532,115 @@ Practice questions additionally REQUIRE:
 
 Assessment questions additionally REQUIRE:
   ✓ success_message (personalized celebration)
+  ✓ hint (MANDATORY - same as practice questions)
+  ✓ MUST be an actual QUESTION (not "Show what you've learned...")
 
 CORRECT_ANSWER FORMAT BY TYPE (CRITICAL):
-${Object.entries(UNIVERSALCONTENT_RULES.ANSWER_FORMATS).map(([type, rules]) => 
+${Object.entries(UNIVERSALCONTENT_RULES.ANSWER_FORMATS).map(([type, rules]) =>
   `  ${type}: ${rules.format} - ${rules.example}`
 ).join('\n')}
 
+📝 FILL_BLANK SPECIFIC RULES (CRITICAL):
+  1. PROVIDE COMPLETE STATEMENTS - NOT QUESTIONS!
+     ✓ CORRECT: "A coach makes rules to help the team work well together"
+     ✗ WRONG: "Why is teamwork important in a community?"
+     ✗ WRONG: "What does a coach use to help the team?"
+
+  2. MUST BE A STATEMENT, NEVER A QUESTION:
+     ⚠️ NEVER end with a question mark (?)
+     ⚠️ NEVER start with "Why", "What", "How", "When", "Where"
+     ⚠️ ALWAYS use declarative sentences that state facts
+
+  3. PROVIDE COMPLETE SENTENCES - NO BLANKS!
+     ✓ CORRECT: "question": "A coach makes rules to help the team work well together"
+     ✗ WRONG: "question": "A coach makes _____ to help the team work well together"
+
+  4. ONE BLANK ONLY RULE (CRITICAL):
+     ⚠️ The system will create exactly ONE blank from your sentence
+     ⚠️ Your correct_answer must be a SINGLE WORD that will be blanked
+     ⚠️ NEVER provide sentences expecting multiple blanks
+
+  5. SENTENCE REQUIREMENTS:
+     • Must be a STATEMENT, not a question
+     • Must contain at least 8-10 words minimum
+     • Must have ONE key concept word that will be blanked
+     • Should have clear subject-verb-object structure
+     • correct_answer should be ONE meaningful word (not articles/prepositions)
+     • correct_answer must be a SINGLE WORD that appears in the sentence
+
+  6. GOOD FILL_BLANK EXAMPLES (ALL STATEMENTS):
+     • Sentence: "The coach develops strategic plays to help the team win"
+       correct_answer: "strategic" (ONE word that will be blanked)
+     • Sentence: "A coach makes rules to help the team work well together"
+       correct_answer: "rules" (ONE word that will be blanked)
+     • Sentence: "Teamwork is important in a community for helping each other"
+       correct_answer: "community" (ONE word that will be blanked)
+
+  7. BAD FILL_BLANK EXAMPLES:
+     ✗ "Why is teamwork important in a community?" (QUESTION - not allowed!)
+     ✗ "What does a coach do?" (QUESTION - not allowed!)
+     ✗ "Coaches are leaders" (too short, no context)
+     ✗ correct_answer: "players fair" (TWO words - system needs ONE)
+
+⚠️ RANDOMIZATION REQUIREMENT (CRITICAL FOR ALL CONTAINERS):
+For ALL multiple_choice questions across ALL containers (Learn, Discover, Experience, Assessment):
+  ✓ MUST randomize/shuffle the order of options
+  ✓ MUST update correct_answer to the NEW index after randomization
+  ✓ NEVER present options in sequential order (1,2,3,4)
+  ✓ NEVER present options in alphabetical order
+  ✓ NEVER use predictable patterns
+
+Example of CORRECT randomization:
+  Original: options: ["2", "4", "6", "8"], correct_answer: 2 (for "6")
+  Randomized: options: ["8", "2", "6", "4"], correct_answer: 2 (for "6" in position 2)
+
+Example of INCORRECT (sequential):
+  ✗ options: ["1", "2", "3", "4"]
+  ✗ options: ["A", "B", "C", "D"]
+
 VISUAL FIELD RULES:
   • ALWAYS include visual field
-  • Use "${UNIVERSALCONTENT_RULES.VISUAL_RULES.placeholder}" or null for text-only questions  
+  • Use "${UNIVERSALCONTENT_RULES.VISUAL_RULES.placeholder}" or null for text-only questions
   • Use appropriate emojis for visual questions
   • Counting MUST have visual (e.g., "🍎🍎🍎" for count of 3)
+  • Shape identification: Object in visual field (e.g., "🥅"), shapes in options
+
+🔷 SHAPE QUESTION RULES (CRITICAL FOR K-2):
+
+⚠️ SINGLE-SHAPE OBJECTS ONLY:
+  ✓ APPROVED objects for visual field:
+    • Circles: 🏀 ⚽ 🎾 🟠 🔵 ⭕
+    • Squares: 📦 🎁 ⬜ ◼️ 🟦
+    • Triangles: 🔺 ⚠️ 📐 🔻
+    • Rectangles: 📱 🚪 📋 ▬ 🟩
+
+  ❌ FORBIDDEN objects (DO NOT USE):
+    • 🚩 (flag - has pole + triangle)
+    • 🥅 (goal - complex structure)
+    • 🏠 (house - multiple shapes)
+    • ⛺ (tent - complex)
+    • ☁️ (cloud - free-form, not geometric)
+    • 🌊 (wave - free-form)
+    • 🔥 (fire - free-form)
+    • ⚡ (lightning - free-form)
+    • Any object with multiple shapes
+    • Any free-form or organic shapes
+    • Any object that isn't CLEARLY one basic shape
+
+  KINDERGARTEN RULES:
+    • Options MUST be: [⭕, ⬜, 🔺, ▬]
+    • Use ONLY: circle, square, triangle, rectangle
+    • NO diamonds, stars, hearts, ovals for K grade
+
+  ✅ CORRECT Example:
+    question: "What shape is this ball?"
+    visual: "🏀"
+    options: ["⭕", "⬜", "🔺", "▬"]
+    correct_answer: 0
+
+  ❌ WRONG Example:
+    question: "What shape is the flag?"
+    visual: "🚩"  ← NO! Flag has multiple shapes!
 
 PRACTICE SUPPORT STRUCTURE (Required for all practice questions):
 ${JSON.stringify(UNIVERSALCONTENT_RULES.PRACTICE_SUPPORT_TEMPLATE, null, 2)}
@@ -403,9 +649,14 @@ COMMON MISTAKES TO AVOID:
 ${Object.values(UNIVERSALCONTENT_RULES.ERROR_PREVENTION.common_mistakes).map(m => `  ✗ ${m}`).join('\n')}
 
 STRUCTURE REQUIREMENTS:
-  • Practice: EXACTLY 5 questions with variety
-  • Assessment: EXACTLY 1 question
+  • Practice: EXACTLY 5 questions (MANDATORY - count them: 1, 2, 3, 4, 5)
+  • Assessment: EXACTLY 1 question (MUST include hint field)
   • Examples: EXACTLY 3 worked examples
+
+⚠️ CRITICAL REQUIREMENT:
+  The "practice" array MUST contain exactly 5 question objects.
+  Do NOT submit with fewer than 5 practice questions.
+  Count them before submitting: Question 1 ✓ Question 2 ✓ Question 3 ✓ Question 4 ✓ Question 5 ✓
 ${languageSection}`;
 }
 

@@ -26,7 +26,8 @@ import {
   getLearnExampleStructure,
   getLearnResponseFormat,
   getLearnQualityChecklist,
-  getLearnReminders
+  getLearnReminders,
+  getELALetterRules
 } from './rules/LearnContainerRules';
 
 import {
@@ -108,9 +109,31 @@ export class PromptBuilder {
     const requirements = this.getContainerRequirements(container);
     const overrides = this.getContainerOverrides(container);
 
+    // Add pre-generation validation for ELA
+    const preValidation = skill.subject === 'ELA' ? `
+⚠️⚠️⚠️ STOP AND READ - CRITICAL VALIDATION ⚠️⚠️⚠️
+
+You are about to generate content for:
+- Subject: ELA (English Language Arts)
+- Skill: ${skill.name}
+- Grade: ${grade}
+
+BEFORE YOU GENERATE ANYTHING, CONFIRM:
+✓ You will ONLY ask about letters, vowels, and consonants
+✓ You will NEVER ask "Which number comes first: 1, 2, or 3?"
+✓ You will use Title Case words like "Game" not "GAME"
+✓ Example question: "Is the letter E a consonant or a vowel?"
+
+If you generate ANY Math content for this ELA lesson, the entire response will be REJECTED.
+
+⚠️⚠️⚠️ END CRITICAL VALIDATION ⚠️⚠️⚠️
+` : '';
+
     // Build the complete prompt based on container type
     const prompt = `
 You are an expert educational content creator specializing in personalized, gamified learning experiences.
+
+${preValidation}
 
 ${this.getSystemContext(student, career, skill, companion)}
 
@@ -119,6 +142,10 @@ ${overrides.useLanguageConstraintsOnly ? getLanguageConstraintsOnly(grade) : for
 ${overrides.skipSubjectRules ? '' : formatSubjectRulesForPrompt(subject, grade)}
 
 ${this.getContainerRules(container, career.name)}
+
+${subject === 'ELA' && (container === 'LEARN' || container === 'ASSESSMENT') ? getELALetterRules(grade, skill.name) : ''}
+
+${subject === 'MATH' && ['K', '1', '2'].includes(grade) ? this.getCountingQuestionRules(career.name) : ''}
 
 ${this.getTaskInstructions(context)}
 
@@ -129,6 +156,14 @@ ${this.getExampleStructure(container, career.name, subject)}
 ${this.getQualityChecklist(container)}
 
 ${this.getContainerReminders(container, subject, grade, career.name)}
+
+${skill.subject === 'ELA' ? `
+⚠️ FINAL REMINDER BEFORE GENERATING:
+- This is ELA about "${skill.name}"
+- ONLY generate questions about letters/vowels/consonants
+- Use "Game" not "GAME", "Play" not "PLAY"
+- NO MATH QUESTIONS ALLOWED
+` : ''}
 
 Generate the content now:
 `;
@@ -223,6 +258,32 @@ Subject: ${skill.subject}
 ${companion ? `AI Companion: ${companion.name}` : ''}
 
 Your task is to create an engaging, career-integrated learning experience that helps ${student.display_name} master "${skill.name}" while seeing how ${career.name}s use this skill professionally.
+
+⚠️ CRITICAL SUBJECT ISOLATION - MANDATORY:
+• You are teaching ${skill.subject} ONLY - NO EXCEPTIONS!
+• NEVER mix subjects - this is a CRITICAL ERROR
+
+${skill.subject === 'ELA' ? `
+🔴 ELA SPECIFIC - ABSOLUTELY FORBIDDEN:
+  ❌ NEVER ask "Which number comes first: 1, 2, or 3?"
+  ❌ NEVER use Math counting questions
+  ❌ NEVER use numeric ordering
+  ✅ ONLY focus on: letters, vowels, consonants, words, sentences
+  ✅ Example: "Is the letter E a consonant or a vowel?"
+  ✅ Example: "Which letter in 'Game' is uppercase?"
+` : ''}
+
+${skill.subject === 'MATH' ? `
+🔴 MATH SPECIFIC - ABSOLUTELY FORBIDDEN:
+  ❌ NEVER ask about consonants and vowels
+  ❌ NEVER ask about letter identification
+  ✅ ONLY focus on: numbers, counting, operations, patterns
+` : ''}
+
+ENFORCEMENT:
+• If teaching ${skill.subject}, ALL questions MUST be about ${skill.subject}
+• Topic: "${skill.name}" - stay focused on this specific skill
+• Any cross-subject content will cause COMPLETE FAILURE
 `;
   }
   
@@ -412,6 +473,185 @@ Create content that:
     };
   }
   
+  /**
+   * Get counting question rules for K-2 Math with career-appropriate emojis
+   */
+  private getCountingQuestionRules(careerName?: string): string {
+    // Career-specific emoji mappings
+    const careerEmojiMap: Record<string, string> = {
+      // Sports & Fitness
+      'Coach': '⚽🏀🏈🎾🏐⚾🥎🏏🏸🏓🏒🏑🥍🥊🤺⛹️🤸🏋️👕🏆🥇🥈🥉🏅📣', // Note: No whistle emoji exists, use 📣 (megaphone) for coach communication
+      'Athletic Trainer': '⚽🏀🏈🎾💪🦵🦶🏃🤸⛹️🩹🧊💊🏥',
+      'Sports Referee': '⚽🏀🏈⚾🏐📣🚩🟨🟥✋👁️📋📊',
+
+      // Medical & Healthcare
+      'Doctor': '🩺💊💉🏥🔬🧪🩹🌡️🏥📋🧬🦴🫀🫁',
+      'Nurse': '🩺💊💉🏥🩹🌡️📋🧴💊🏥',
+      'Veterinarian': '🐶🐱🐭🐹🐰🦊🐻🐼🐨🐯🦁🐮🐷🐸🩺💉',
+
+      // Creative Arts
+      'Artist': '🎨🖌️🖍️✏️📐🖼️🎭🖊️📏📐',
+      'Musician': '🎵🎶🎼🎹🎸🥁🎷🎺🎻🪕🎤🎧',
+      'Chef': '🍳🥘🍲🥗🍕🍔🍟🌮🌯🥙🧆🍜🍱🥡🔪🥄',
+
+      // Technology
+      'Video Game Designer': '🎮🕹️💻🖥️🖱️⌨️🎯👾🤖🏆💎⚔️🛡️',
+      'Computer Programmer': '💻🖥️⌨️🖱️💾💿📀🖨️📱⚙️🔧🔨',
+
+      // Education
+      'Teacher': '📚📖📝✏️📏📐🖍️🎨🔤🔢🧮🗂️',
+      'Librarian': '📚📖📕📗📘📙📓📔📑🔖📰🗞️',
+
+      // Science & Research
+      'Scientist': '🔬🧪🧫🦠💉🧬🔭🌡️⚗️🥽📊📈',
+      'Astronaut': '🚀🛸🌌🌍🌎🌏🌙⭐🪐☄️🛰️👨‍🚀',
+      'Marine Biologist': '🐠🐟🐡🦈🐙🦑🦐🦞🦀🐚🐋🐬',
+      'Archeologist': '🏺⚱️🗿🦴🦖🔍🗺️⛏️🏛️📜',
+      'Geologist': '⛰️🌋🪨💎⛏️🔍🗺️🌍📊📈',
+
+      // Business & Finance
+      'Entrepreneur': '💼💰💳📊📈💡🏢🤝📱💻',
+      'Accountant': '💰💵💴💶💷📊📈📉🧮💳',
+      'Financial Advisor': '💰📊📈💳🏦💵📑📋💼🤝',
+      'Real Estate Agent': '🏠🏡🏢🏘️🔑📋🤝💼📐📏',
+
+      // Transportation & Logistics
+      'Pilot': '✈️🛩️🛫🛬🌍🗺️📡🎛️👨‍✈️👩‍✈️',
+      'Truck Driver': '🚚🚛📦📋🗺️⛽🛣️🚦⚠️🔧',
+      'Ship Captain': '🚢⛴️⚓🌊🗺️📡🧭⛵🌅🐋',
+
+      // Law & Public Service
+      'Lawyer': '⚖️📚📋🏛️💼📝✍️🤝👔📑',
+      'Police Officer': '👮🚔🚨📋🔦🚓⚖️🛡️📻🚁',
+      'Firefighter': '🚒🔥🧯👨‍🚒🪜🚨💧🏢⛑️🆘',
+      'Judge': '⚖️🔨📚🏛️📋👨‍⚖️👩‍⚖️📝✍️⚡',
+
+      // Agriculture & Environment
+      'Farmer': '🌾🌽🥕🥔🍅🚜🐄🐖🐓🌻',
+      'Gardener': '🌻🌷🌹🌺🌸🌿🍀🌱🌲🌳',
+      'Environmental Scientist': '🌍🌱🌳💧🌊♻️📊📈🔬🧪',
+      'Park Ranger': '🌲🏞️🦌🐻🗺️🥾⛺🔥🎒📷',
+
+      // Construction & Trades
+      'Construction Worker': '👷🏗️🧱🔨🪛⚒️🪜📐📏🚧',
+      'Electrician': '💡🔌⚡🔋🪛🔧📐⚠️👷💻',
+      'Plumber': '🔧🚰💧🚿🛁🪠🔩👷📐⚠️',
+      'Carpenter': '🪵🔨🪛📐📏🪚🗜️👷🏠🚪',
+
+      // Media & Entertainment
+      'Actor': '🎭🎬🎥📺🎪🌟👔👗💄🎤',
+      'Director': '🎬🎥📹🎞️📽️🎪📢📋✂️🌟',
+      'Photographer': '📷📸📹🖼️💡🎨🌅🌄🏞️📐',
+      'Journalist': '📰🗞️📝✍️📻📺🎤📹💻🗂️',
+
+      // Service Industry
+      'Barber': '✂️💈👔🪒🧴💇‍♂️💇‍♀️🪑📋💵',
+      'Beautician': '💄💅💇‍♀️✂️🧴💆‍♀️👗💍📋💵',
+      'Hotel Manager': '🏨🔑🛎️🛏️🍽️📋💼🤝📞💳',
+      'Travel Agent': '✈️🏖️🗺️🎫🏨🚢📋💼🌍📞',
+
+      // Default fallback emojis for any career
+      'default': '⭐📦🎁🎈🎯🔵🔴🟡🟢🟣🟠⚫⚪'
+    };
+
+    // Get career-appropriate emojis
+    const careerEmojis = careerEmojiMap[careerName || ''] || careerEmojiMap['default'];
+
+    return `
+========================================
+🔴🔴🔴 STOP - CRITICAL COUNTING QUESTION RULES 🔴🔴🔴
+========================================
+
+⛔⛔⛔ ABSOLUTE PROHIBITION ⛔⛔⛔
+THE QUESTION TEXT MUST NEVER CONTAIN ANY EMOJIS!
+THE QUESTION TEXT MUST NEVER CONTAIN ANY EMOJIS!
+THE QUESTION TEXT MUST NEVER CONTAIN ANY EMOJIS!
+
+ALL EMOJIS GO IN THE 'visual' FIELD ONLY!
+
+🚫 COMPLETELY FORBIDDEN - WILL FAIL VALIDATION:
+{
+  "question": "How many basketballs are there? 🏀🏀🏀",  ← WRONG! Has emojis!
+  "visual": "🏀🏀🏀"
+}
+
+✅ ONLY CORRECT FORMAT:
+{
+  "question": "How many basketballs are there?",  ← RIGHT! No emojis in text!
+  "visual": "🏀🏀🏀"  ← Emojis ONLY here!
+}
+
+========================================
+MANDATORY COUNTING QUESTION STRUCTURE
+========================================
+
+1. question field: PURE TEXT ONLY - NO EMOJIS EVER!
+2. visual field: ALL EMOJIS GO HERE AND ONLY HERE!
+3. correct_answer: The count number
+
+🎯 CAREER-APPROPRIATE EMOJI SELECTION:
+${careerName ? `For ${careerName}, use ONLY these emojis IN THE VISUAL FIELD: ${careerEmojis}` : 'Use generic counting objects: ⭐📦🎁🎈🎯'}
+
+========================================
+✅ CORRECT EXAMPLES FOR ${careerName || 'ANY CAREER'}
+========================================
+
+EXAMPLE 1:
+{
+  "question": "How many sports balls are on the field?",
+  "visual": "⚽🏀🏈",
+  "correct_answer": 3
+}
+
+EXAMPLE 2:
+{
+  "question": "Count the items above",
+  "visual": "🏆🏆",
+  "correct_answer": 2
+}
+
+EXAMPLE 3:
+{
+  "question": "How many ${careerName === 'Coach' ? 'uniforms' : 'items'} does ${careerName || 'the professional'} need?",
+  "visual": "${careerName === 'Coach' ? '👕👕👕👕' : '⭐⭐⭐⭐'}",
+  "correct_answer": 4
+}
+
+========================================
+❌ NEVER GENERATE THESE WRONG FORMATS
+========================================
+
+WRONG 1 - Emojis in question text:
+{
+  "question": "How many are there? 🏀🏀🏀",  ← EMOJIS IN QUESTION = WRONG!
+  "visual": "🏀🏀🏀"
+}
+
+WRONG 2 - Emojis embedded in sentence:
+{
+  "question": "The coach sees 🏀🏀. How many?",  ← EMOJIS IN QUESTION = WRONG!
+  "visual": "🏀🏀"
+}
+
+WRONG 3 - Any emoji anywhere in question:
+{
+  "question": "Count these items: ⚽⚽⚽",  ← EMOJIS IN QUESTION = WRONG!
+  "visual": "⚽⚽⚽"
+}
+
+========================================
+FINAL REMINDER - THIS IS CRITICAL
+========================================
+
+Before generating EACH counting question, verify:
+☐ Question text has ZERO emojis (not a single one!)
+☐ Visual field contains ALL the emojis
+☐ Question refers to items generically or by career context
+☐ Emojis in visual field match the career (${careerName || 'generic'})
+
+If you put ANY emoji in the question text, the entire response will be REJECTED!`;
+  }
+
   /**
    * Generate a simplified prompt for quick testing
    */

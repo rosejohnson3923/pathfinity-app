@@ -322,7 +322,7 @@ export const BentoDiscoverCardV2: React.FC<BentoDiscoverCardProps> = ({
         </div>
 
         {/* Horizontal Tiles Row */}
-        <div className={styles.tilesRow}>
+        <div className={styles.scenarioTilesRow}>
           {/* Field Trip Event Context */}
           <div className={styles.eventContextTile}>
             <div className={styles.eventHeader}>

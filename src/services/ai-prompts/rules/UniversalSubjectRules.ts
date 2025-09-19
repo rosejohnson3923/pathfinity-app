@@ -31,7 +31,8 @@ export const SUBJECT_RULES: Record<string, SubjectRule> = {
       patterns_sequences: 'Use "fill_blank" or "multiple_choice"'
     },
     visuals: {
-      counting: 'REQUIRED - use career-appropriate emojis in groups',
+      counting: 'REQUIRED - use SIMPLE, SINGLE emojis repeated (⚽⚽⚽ not 🧑‍🤝‍🧑)',
+      counting_rules: 'NEVER use compound emojis. Use ⚽🏀🎾🟠⭐ etc. NOT 🧑‍🤝‍🧑👨‍👩‍👧',
       geometric: 'Use shape emojis (▲ ■ ● ◆) for geometry',
       other: 'OPTIONAL - use "❓" or null if not helpful'
     },
@@ -39,6 +40,7 @@ export const SUBJECT_RULES: Record<string, SubjectRule> = {
       Chef: ['🍎', '🍕', '🥐', '🍰', '🥕'],
       Doctor: ['💊', '🩺', '🌡️', '🏥', '💉'],
       Athlete: ['⚽', '🏀', '🎾', '🏈', '⚾'],
+      Coach: ['⚽', '🏀', '🎾', '🟠', '⭐', '🏆'],
       Teacher: ['📚', '✏️', '📐', '🖊️', '📝'],
       Firefighter: ['🚒', '🔥', '💧', '🪜', '⛑️'],
       Entrepreneur: ['💰', '📊', '💡', '📈', '💼']

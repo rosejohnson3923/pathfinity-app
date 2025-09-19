@@ -9,6 +9,8 @@ import { useTheme } from '../../hooks/useTheme';
 import { pathIQGamification } from '../../services/pathIQGamificationService';
 import { chatbotService } from '../../services/chatbotService';
 import styles from './BentoLearnCardV2.module.css';
+import layoutStyles from '../../design-system/layouts/IntelligentQuestionLayout.module.css';
+import { layoutDebugger } from '../../utils/LayoutDebugger';
 
 interface BentoLearnCardV2Props {
   question: {
@@ -78,6 +80,19 @@ export const BentoLearnCardV2: React.FC<BentoLearnCardV2Props> = ({
   const [showHint, setShowHint] = useState(false);
   const [isAnswered, setIsAnswered] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
+
+  // Debug logging for component mount and state
+  useEffect(() => {
+    console.error('🎴🎴 BentoLearnCardV2 Mounted/Updated:', {
+      questionType: question.type,
+      questionOptions: question.options,
+      selectedAnswer,
+      isAnswered,
+      showFeedback,
+      feedbackProvided: !!feedback,
+      timestamp: new Date().toISOString()
+    });
+  }, [question.type, selectedAnswer, isAnswered]);
   const [activeDockItem, setActiveDockItem] = useState<DockItem>(null);
   
   // Chat state
@@ -137,15 +152,29 @@ export const BentoLearnCardV2: React.FC<BentoLearnCardV2Props> = ({
   const gradeCategory = getGradeCategory(gradeLevel);
   
   const handleAnswerSelect = (answer: string) => {
+    console.error('🕸️🕸️ BentoLearnCardV2 - Answer Selected:', {
+      answer,
+      isAnswered,
+      willSetAnswer: !isAnswered,
+      timestamp: new Date().toISOString()
+    });
     if (!isAnswered) {
       setSelectedAnswer(answer);
     }
   };
   
   const handleSubmit = () => {
+    console.error('🎯🎯 BentoLearnCardV2 - handleSubmit Called:', {
+      selectedAnswer,
+      isAnswered,
+      willSubmit: selectedAnswer && !isAnswered,
+      caller: new Error().stack?.split('\n')[2],
+      timestamp: new Date().toISOString()
+    });
     if (selectedAnswer && !isAnswered) {
       setIsAnswered(true);
       setShowFeedback(true);
+      console.error('📤📤 BentoLearnCardV2 - Calling onAnswerSubmit with:', selectedAnswer);
       onAnswerSubmit(selectedAnswer);
       
       // Award XP for correct answer
@@ -395,51 +424,161 @@ export const BentoLearnCardV2: React.FC<BentoLearnCardV2Props> = ({
           flexDirection: 'column',
           position: 'relative'
         } : {}}>
-          <div className={styles.answersGrid}>
-            {question.options && question.options.length > 0 ? (
-              question.options.slice(0, 4).map((option, index) => {
-                const optionLabels = ['A', 'B', 'C', 'D'];
-                // Handle both string and object options
-                const optionText = typeof option === 'string' ? option : (option?.text || String(option));
-                const optionId = typeof option === 'string' ? `opt-${index}` : (option?.id || `opt-${index}`);
-                return (
+          {/* Intelligent Layout System */}
+          {(() => {
+            if (!question.options || question.options.length === 0) {
+              return (
+                <div className={styles.inputAnswer}>
+                  <input
+                    type={question.type === 'numeric' || question.type === 'counting' ? 'number' : 'text'}
+                    placeholder="Type your answer..."
+                    value={selectedAnswer as string}
+                    onChange={(e) => setSelectedAnswer(e.target.value)}
+                    disabled={isAnswered}
+                    className={styles.answerInput}
+                  />
+                </div>
+              );
+            }
+
+            // Extract and analyze option text
+            const optionTexts = question.options.map(opt =>
+              typeof opt === 'string' ? opt : (opt?.text || String(opt))
+            );
+
+            // Content analysis
+            const optionLengths = optionTexts.map(text => text.length);
+            const longestOption = Math.max(...optionLengths);
+            const avgOptionLength = optionLengths.reduce((a, b) => a + b, 0) / optionLengths.length;
+            const maxWords = Math.max(...optionTexts.map(text =>
+              text.trim().split(/\s+/).filter(w => w.length > 0).length
+            ));
+
+            // Content type checks
+            const hasArrays = optionTexts.some(text => /^\[.*\]$/.test(text));
+            const allNumeric = optionTexts.every(text => /^-?\d+(\.\d+)?$/.test(text.trim()));
+            const hasEmojis = optionTexts.some(text => /[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]/u.test(text));
+
+            // Intelligent layout decision
+            let layoutType = 'grid-2';
+            let contentType = 'text';
+
+            if (hasArrays || maxWords > 3 || avgOptionLength > 20) {
+              layoutType = 'vertical';
+              contentType = hasArrays ? 'array' : 'longText';
+            } else if (allNumeric && longestOption <= 3) {
+              layoutType = `grid-${Math.min(4, question.options.length)}`;
+              contentType = 'numeric';
+            } else if (avgOptionLength <= 10) {
+              const cols = question.options.length <= 2 ? 2 : Math.min(4, question.options.length);
+              layoutType = `grid-${cols}`;
+              contentType = hasEmojis ? 'emoji' : 'text';
+            } else {
+              layoutType = 'vertical';
+              contentType = 'text';
+            }
+
+            // Build layout classes
+            let layoutClass = layoutStyles.layoutVertical;
+            if (layoutType === 'vertical') {
+              layoutClass = layoutStyles.layoutVertical;
+            } else if (layoutType.startsWith('grid-')) {
+              const cols = layoutType.split('-')[1];
+              layoutClass = `${layoutStyles.layoutGrid} ${layoutStyles[`layoutGrid${cols}`] || ''}`;
+            }
+
+            let contentClass = '';
+            if (contentType === 'numeric') contentClass = layoutStyles.contentNumeric;
+            else if (contentType === 'emoji') contentClass = layoutStyles.contentEmoji;
+            else if (contentType === 'array') contentClass = layoutStyles.contentArray;
+            else if (contentType === 'longText') contentClass = layoutStyles.contentLongText;
+
+            const containerClasses = `${layoutStyles.questionContainer} ${layoutClass} ${contentClass}`.trim();
+
+            // Enhanced debugging for layout system validation
+            console.log('🎯 ============ BENTOLEARN LAYOUT DECISION ============');
+            console.log('📋 Question Info:', {
+              id: question.id,
+              number: question.number,
+              type: question.type,
+              text: question.text?.substring(0, 50) + '...'
+            });
+            console.log('📊 Options Analysis:', {
+              count: question.options.length,
+              raw: question.options,
+              texts: optionTexts.map((t, i) => `[${i}] "${t}" (${t.length} chars, ${t.split(/\s+/).length} words)`),
+              lengths: optionLengths,
+              avgLength: avgOptionLength.toFixed(1),
+              longestOption,
+              variance: longestOption - Math.min(...optionLengths)
+            });
+            console.log('🔍 Content Type Detection:', {
+              hasArrays,
+              allNumeric,
+              hasEmojis,
+              maxWords,
+              contentType
+            });
+            console.log('🎨 Final Layout:', {
+              layoutType,
+              contentType,
+              reasoning: layoutType === 'vertical' ?
+                'VERTICAL - Long text/sentences need horizontal space' :
+                `GRID (${layoutType.split('-')[1]} cols) - Short content fits in grid`,
+              cssClasses: containerClasses.split(' ').filter(c => c),
+              gradeCategory
+            });
+            console.log('🎯 ====================================================');
+
+            // Track decision in layout debugger
+            layoutDebugger.track({
+              questionId: question.id,
+              questionType: question.type,
+              questionText: question.text,
+              optionCount: question.options.length,
+              avgOptionLength: avgOptionLength,
+              maxWords,
+              layoutType,
+              contentType,
+              gradeLevel: gradeLevel
+            });
+
+            return (
+              <div className={containerClasses}>
+                {question.options.slice(0, 4).map((option, index) => {
+                  const optionLabels = ['A', 'B', 'C', 'D'];
+                  const optionText = typeof option === 'string' ? option : (option?.text || String(option));
+                  const optionId = typeof option === 'string' ? `opt-${index}` : (option?.id || `opt-${index}`);
+
+                  const buttonClasses = [
+                    layoutStyles.optionButton,
+                    selectedAnswer === optionText ? layoutStyles.selected : '',
+                    isAnswered && optionText === question.correctAnswer ? layoutStyles.correct : '',
+                    isAnswered && selectedAnswer === optionText && optionText !== question.correctAnswer ? layoutStyles.incorrect : ''
+                  ].filter(Boolean).join(' ');
+
+                  return (
                   <button
                     key={optionId}
-                    className={`
-                      ${styles.answerOption}
-                      ${selectedAnswer === optionText ? styles.selected : ''}
-                      ${isAnswered && optionText === question.correctAnswer ? styles.correct : ''}
-                      ${isAnswered && selectedAnswer === optionText && optionText !== question.correctAnswer ? styles.incorrect : ''}
-                    `}
-                    onClick={() => handleAnswerSelect(optionText)}
+                    className={buttonClasses}
+                    onClick={() => {
+                      console.error('🕹️🕹️ Option Button Clicked:', optionText);
+                      handleAnswerSelect(optionText);
+                    }}
                     disabled={isAnswered}
                   >
-                    {question.type === 'true_false' ? (
-                      <span className={styles.trueFalseOption}>{optionText}</span>
-                    ) : (
-                      <>
-                        <span className={styles.optionLabel}>
-                          {gradeCategory === 'elementary' ? optionLabels[index] : `${index + 1}`}
-                        </span>
-                        <span className={styles.optionText}>{optionText}</span>
-                      </>
-                    )}
+                    <span className={layoutStyles.optionLabel}>
+                      {optionLabels[index]}
+                    </span>
+                    <span className={layoutStyles.optionText}>
+                      {optionText}
+                    </span>
                   </button>
-                );
-              })
-            ) : (
-              <div className={styles.inputAnswer}>
-                <input
-                  type={question.type === 'numeric' || question.type === 'counting' ? 'number' : 'text'}
-                  placeholder="Type your answer..."
-                  value={selectedAnswer as string}
-                  onChange={(e) => setSelectedAnswer(e.target.value)}
-                  disabled={isAnswered}
-                  className={styles.answerInput}
-                />
+                  );
+                })}
               </div>
-            )}
-          </div>
+            );
+          })()}
           
           {/* Submit/Next Button */}
           <div className={styles.actionButton}>

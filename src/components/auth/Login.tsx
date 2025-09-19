@@ -90,28 +90,26 @@ export function Login() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('🔴 DEBUG: Login form submitted');
-    console.log('🔴 DEBUG: Email:', email);
-    console.log('🔴 DEBUG: Password:', password ? '***' : 'empty');
-    console.log('🔴 DEBUG: isLogin:', isLogin);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Login attempt');
+    }
     
     setLoading(true);
     setError('');
 
     try {
       if (isLogin) {
-        console.log('🔴 DEBUG: Calling signIn()');
         const { error } = await signIn(email, password);
-        console.log('🔴 DEBUG: signIn() result:', { error: error?.message || 'no error' });
         if (error) {
+          if (process.env.NODE_ENV === 'development') {
+            console.error('Login failed:', error.message);
+          }
           if (error.message && error.message.includes('Invalid login credentials')) {
             setError('Invalid email or password. Please check your credentials and try again.');
           } else {
             setError(error.message || 'An error occurred during sign in');
           }
         } else {
-          console.log('🔴 DEBUG: Login successful, processing...');
-          
           // Check if this is a demo user (regardless of URL params)
           const isDemoMode = searchParams.get('demo') === 'true';
           const isDemoUserEmail = [
@@ -132,21 +130,15 @@ export function Login() {
           // Keep demo mode flag for demo users, clear it for regular users
           if (isDemoUserEmail) {
             localStorage.setItem('demo_mode', 'true');
-            console.log('🎯 Demo mode flag set for demo user:', email);
           } else if (!isDemoMode) {
             localStorage.removeItem('demo_mode');
-            console.log('🎯 Demo mode flag cleared for regular user');
           }
-          
-          console.log('🔴 DEBUG: Login successful, navigating to dashboard');
-          console.log('🔴 DEBUG: Email used for login:', email);
-          console.log('🔴 DEBUG: Is demo mode:', isDemoMode);
-          console.log('🔴 DEBUG: Is demo user email:', isDemoUserEmail);
-          
-          
-          console.log('🔴 DEBUG: About to call navigate()');
+
+          if (process.env.NODE_ENV === 'development') {
+            console.log('Login successful, redirecting...');
+          }
+
           navigate('/app/dashboard', { replace: true });
-          console.log('🔴 DEBUG: navigate() call completed');
         }
       } else {
         // Ensure userData is passed as an object, not a string

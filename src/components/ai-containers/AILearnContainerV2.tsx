@@ -672,18 +672,46 @@ export const AILearnContainerV2: React.FC<AILearnContainerV2Props> = ({
               {(() => {
                 const question = content.practice[currentPracticeQuestion];
                 const idx = currentPracticeQuestion;
+
+                // Create randomized options for practice questions only
+                let displayOptions = question.options;
+                let correctAnswerIndex = question.correct_answer;
+
+                if (question.type === 'multiple_choice' && question.options) {
+                  // Create an array of indices with their options
+                  const optionsWithIndices = question.options.map((opt, i) => ({
+                    option: opt,
+                    originalIndex: i
+                  }));
+
+                  // Shuffle the array using Fisher-Yates algorithm
+                  const shuffled = [...optionsWithIndices];
+                  for (let i = shuffled.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+                  }
+
+                  // Find where the correct answer ended up
+                  const newCorrectIndex = shuffled.findIndex(
+                    item => item.originalIndex === question.correct_answer
+                  );
+
+                  displayOptions = shuffled.map(item => item.option);
+                  correctAnswerIndex = newCorrectIndex;
+                }
+
                 return (
                 <>
                   <div className={questionStyles.questionContent}>
                     <p className={questionStyles.questionText}>{question.question}</p>
-                    
+
                     {question.visual && (
                       <VisualRenderer visual={question.visual} />
                     )}
-                    
+
                     {question.type === 'multiple_choice' && (
                       <div className={questionStyles.answerOptions}>
-                        {question.options.map((option, optIdx) => (
+                        {displayOptions.map((option, optIdx) => (
                           <button
                             key={optIdx}
                             className={`${questionStyles.optionButton} ${
@@ -692,7 +720,7 @@ export const AILearnContainerV2: React.FC<AILearnContainerV2Props> = ({
                               practiceResults[idx] !== undefined ?
                                 (practiceResults[idx] && practiceAnswers[idx] === optIdx ? questionStyles.correct :
                                  !practiceResults[idx] && practiceAnswers[idx] === optIdx ? questionStyles.incorrect :
-                                 optIdx === question.correct_answer ? questionStyles.showCorrect : '') : ''
+                                 optIdx === correctAnswerIndex ? questionStyles.showCorrect : '') : ''
                             }`}
                             onClick={() => handlePracticeAnswer(idx, optIdx)}
                             disabled={practiceResults[idx] !== undefined}

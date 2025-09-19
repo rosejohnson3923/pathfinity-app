@@ -12,7 +12,7 @@ export const initializeSupabase = async (): Promise<SupabaseClient> => {
   }
 
   try {
-    console.log('🔐 Initializing Supabase with secure configuration...');
+    // Initialize Supabase with secure configuration
     const config = await getSecureConfig.getSupabaseConfig();
     
     if (!config.anonKey) {
@@ -31,7 +31,6 @@ export const initializeSupabase = async (): Promise<SupabaseClient> => {
     });
 
     isInitialized = true;
-    console.log('✅ Supabase initialized with secure configuration');
     return supabaseInstance;
   } catch (error) {
     console.error('❌ Failed to initialize Supabase with secure keys:', error);

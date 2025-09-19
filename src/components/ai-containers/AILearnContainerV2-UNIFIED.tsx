@@ -129,7 +129,22 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   onBack,
   onLoadingChange,
 }) => {
-  
+  // CRITICAL DEBUG - Component Mount
+  console.error('🚨🚨🚨 AILearnContainerV2UNIFIED MOUNTED/RENDERED', {
+    timestamp: new Date().toISOString(),
+    skill: skill?.id,
+    student: student?.id,
+    phase: 'initial',
+    stackTrace: new Error().stack?.split('\n').slice(1, 5)
+  });
+
+  useEffect(() => {
+    console.error('🚨🚨🚨 AILearnContainerV2UNIFIED useEffect - Component Did Mount');
+    return () => {
+      console.error('🚨🚨🚨 AILearnContainerV2UNIFIED useEffect - Component Will Unmount');
+    };
+  }, []);
+
   // Initialize JIT Services
   const jitService = getJustInTimeContentService();
   const dailyContextManager = getDailyLearningContext();
@@ -145,6 +160,15 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   
   // State Management
   const [phase, setPhase] = useState<LearningPhase>('loading');
+
+  // Debug phase changes
+  useEffect(() => {
+    console.error('🎯🎯 PHASE CHANGED:', {
+      newPhase: phase,
+      timestamp: new Date().toISOString(),
+      stack: new Error().stack?.split('\n').slice(1, 4)
+    });
+  }, [phase]);
   const [content, setContent] = useState<AILearnContent | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
@@ -158,6 +182,18 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   const [assessmentAnswerSet, setAssessmentAnswerSet] = useState(false);
   const [showAssessmentResult, setShowAssessmentResult] = useState(false);
   const [assessmentIsCorrect, setAssessmentIsCorrect] = useState(false);
+
+  // Debug logging for state changes - MUST be after state declarations
+  useEffect(() => {
+    console.error('🔍🔍 Assessment State Changed:', {
+      assessmentAnswer,
+      assessmentAnswerSet,
+      showAssessmentResult,
+      phase,
+      hasContent: !!content?.assessment,
+      timestamp: new Date().toISOString()
+    });
+  }, [assessmentAnswer, assessmentAnswerSet, showAssessmentResult, phase]);
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const [currentPracticeQuestion, setCurrentPracticeQuestion] = useState(0); // Track current question
   const [isAudioEnabled, setIsAudioEnabled] = useState(false);
@@ -172,7 +208,28 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   // Context Hooks
   const { currentMode } = useModeContext();
   const { currentCharacter } = useAICharacter();
-  const { features, awardXP, profile } = usePathIQGamification(student?.id || 'default', student?.grade_level);
+
+  // Pause background updates when actively in practice or assessment phase
+  // This prevents the 5-second re-renders that were causing the component to reset
+  const pauseBackgroundUpdates = phase === 'practice' || phase === 'assessment';
+
+  // Debug logging for background update control
+  useEffect(() => {
+    console.log('🔄 Background Updates Control:', {
+      phase,
+      pauseBackgroundUpdates,
+      reason: pauseBackgroundUpdates ?
+        'Paused - Active learning session' :
+        'Active - Not in practice/assessment',
+      timestamp: new Date().toISOString()
+    });
+  }, [phase, pauseBackgroundUpdates]);
+
+  const { features, awardXP, profile } = usePathIQGamification(
+    student?.id || 'default',
+    student?.grade_level,
+    pauseBackgroundUpdates
+  );
   const theme = useTheme();
   
   // Refs
@@ -312,8 +369,12 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
             visual: jitContent.visual || null,
             companionMessage: ''
           },
-          practice: jitContent.questions?.slice(0, 3) || [],
-          assessment: jitContent.questions?.slice(-1)[0] || jitContent.assessment || null,
+          // CRITICAL FIX: Use proper practice questions - check if JIT returns them separately
+          practice: jitContent.practice ||
+                   (jitContent.questions && jitContent.assessment ? jitContent.questions :
+                    jitContent.questions?.slice(0, -1)) || [], // If questions includes assessment, take all but last
+          assessment: jitContent.assessment ||
+                     jitContent.questions?.slice(-1)[0] || null,
           summary: jitContent.summary || '',
           hints: jitContent.hints || []
         };
@@ -382,6 +443,14 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
           generatedContent.practice = validQuestions;
         }
         
+        console.log('🌟 CONTENT GENERATED:', {
+          hasInstruction: !!generatedContent.instruction,
+          practiceQuestionsCount: generatedContent.practice_questions?.length,
+          hasAssessment: !!generatedContent.assessment,
+          assessmentType: generatedContent.assessment?.type,
+          timestamp: new Date().toISOString()
+        });
+
         setContent(generatedContent);
         contentGeneratedRef.current = true; // Mark as generated AFTER content is set
         setHasGeneratedContent(true);
@@ -435,8 +504,16 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
             }
           );
           setConvertedAssessment(convertedAssess);
+          console.log('🎯 CONVERTED ASSESSMENT SET:', {
+            type: convertedAssess?.type,
+            hasOptions: !!convertedAssess?.options,
+            optionsCount: convertedAssess?.options?.length,
+            correctAnswer: convertedAssess?.correctAnswer,
+            timestamp: new Date().toISOString()
+          });
         }
-        
+
+        console.log('🎉 SETTING INITIAL PHASE TO INSTRUCTION');
         setPhase('instruction');
         
         // Get initial companion message
@@ -486,12 +563,22 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   
   // Auto-submit effect for true_false and multiple_choice questions
   useEffect(() => {
+    console.error('🚨🚨 AUTO-SUBMIT CHECK:', {
+      assessmentAnswerSet,
+      showAssessmentResult,
+      hasAssessment: !!content?.assessment,
+      assessmentAnswer,
+      phase,
+      timestamp: new Date().toISOString()
+    });
+
     // Only auto-submit if:
     // 1. We have an answer (use flag to handle false values properly)
     // 2. We haven't shown results yet
     // 3. We have content
     // 4. The question type supports auto-submit
     if (assessmentAnswerSet && !showAssessmentResult && content?.assessment) {
+      console.error('⚠️⚠️ AUTO-SUBMIT CONDITIONS MET!');
       // Convert the assessment to get the question type
       const questionObj = aiContentConverter.convertAssessment(
         content.assessment,
@@ -503,8 +590,19 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
         }
       );
       
+      if (questionObj) {
+        console.error('📊📊 Question Object Details:', {
+          type: questionObj.type,
+          content: questionObj.content,
+          options: questionObj.options,
+          correctAnswer: questionObj.correctAnswer,
+          hasOptions: !!questionObj.options,
+          optionsLength: questionObj.options?.length
+        });
+      }
+
       if (questionObj && (questionObj.type === 'multiple_choice' || questionObj.type === 'true_false')) {
-        console.log('⚡ Auto-submitting answer for', questionObj.type, ':', {
+        console.error('⚡⚡⚡ AUTO-SUBMIT TRIGGERED for', questionObj.type, ':', {
           answer: assessmentAnswer,
           answerType: typeof assessmentAnswer,
           correctAnswer: questionObj.correctAnswer,
@@ -660,7 +758,18 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   };
   
   const handleAssessmentSubmit = async () => {
-    if (!content || !assessmentAnswerSet) return;
+    console.error('🎲🎲 handleAssessmentSubmit CALLED:', {
+      hasContent: !!content,
+      assessmentAnswerSet,
+      assessmentAnswer,
+      caller: new Error().stack?.split('\n')[2], // Track who called this
+      timestamp: new Date().toISOString()
+    });
+
+    if (!content || !assessmentAnswerSet) {
+      console.log('❌ handleAssessmentSubmit ABORTED - missing requirements');
+      return;
+    }
     
     // Convert to Question object for proper validation
     const questionObj = aiContentConverter.convertAssessment(
@@ -748,6 +857,7 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   };
   
   const handleStartPractice = () => {
+    console.error('🎮🎮 STARTING PRACTICE PHASE');
     setPhase('practice');
     setCurrentPracticeQuestion(0); // Start with first question
     practiceStartTime.current = Date.now();
@@ -777,6 +887,7 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   };
 
   const handleStartAssessment = () => {
+    console.error('🎯🎯 STARTING ASSESSMENT PHASE');
     setPhase('assessment');
     setAssessmentAnswer(undefined);
     setAssessmentAnswerSet(false);
@@ -914,8 +1025,8 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
         return ['True', 'False'];
       
       case 'counting':
-        const maxCount = q.correctCount || q.correctAnswer || 5;
-        return Array.from({length: Math.min(maxCount + 2, 10)}, (_, i) => String(i + 1));
+        // Use the options already generated by AIContentConverter
+        return q.options || [];
       
       case 'numeric':
         // Generate options around the correct answer
@@ -1017,6 +1128,12 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
         
         {/* Practice Phase */}
         {phase === 'practice' && content && (
+          console.error('🎲🎲 RENDERING PRACTICE PHASE:', {
+            currentPracticeQuestion,
+            totalQuestions: content.practice?.length,
+            convertedQuestionsReady: convertedPracticeQuestions.length,
+            timestamp: new Date().toISOString()
+          }),
           <div className={practiceStyles.practicePhase}>
             <div className={questionStyles.questionCard}>
               <div className={questionStyles.progressDots}>
@@ -1033,7 +1150,14 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
             
               {(() => {
                 const idx = currentPracticeQuestion;
-                
+
+                console.error('📋📋 RENDERING PRACTICE QUESTION:', {
+                  index: idx,
+                  convertedQuestionsLength: convertedPracticeQuestions.length,
+                  hasQuestion: !!convertedPracticeQuestions[idx],
+                  timestamp: new Date().toISOString()
+                });
+
                 // Use ONLY pre-converted questions from state - no raw data access
                 const questionObj = convertedPracticeQuestions[currentPracticeQuestion];
                 
@@ -1062,6 +1186,13 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
                 
                 if (useBentoUI && useBentoV2) {
                   // Use the new V2 with FloatingDock and Display Modal
+                  console.error('🎴🎴 RENDERING BentoLearnCardV2 for Practice:', {
+                    questionType: questionObj.type,
+                    questionId: questionObj.id,
+                    hasOptions: !!getOptionsForQuestionType(questionObj),
+                    timestamp: new Date().toISOString()
+                  });
+
                   return (
                     <BentoLearnCardV2
                       question={{
@@ -1069,7 +1200,7 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
                         number: idx + 1,
                         type: questionObj.type,
                         text: questionObj.content || questionObj.question || questionObj.statement || 'Question text missing',
-                        image: questionObj.image || questionObj.visual?.content || questionObj.visual || questionObj.visualElements?.description,
+                        image: questionObj.media?.url || questionObj.image || questionObj.visual?.content || questionObj.visual || questionObj.visualElements?.description,
                         options: getOptionsForQuestionType(questionObj),
                         correctAnswer: getCorrectAnswerForQuestionType(questionObj),
                         hint: questionObj.hint || questionObj.hints?.[0] || "Think about the problem carefully",
@@ -1094,7 +1225,19 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
                       }}
                       feedback={practiceResults[idx] !== undefined ? {
                         isCorrect: practiceResults[idx],
-                        message: practiceResults[idx] ? 'Correct!' : `The correct answer is ${questionObj.correct_answer || 'shown above'}`
+                        message: practiceResults[idx] ? 'Correct!' : (() => {
+                          // For multiple choice, show the actual answer text, not the index
+                          if (questionObj.type === 'multiple_choice' && questionObj.options) {
+                            const correctIndex = typeof questionObj.correct_answer === 'number'
+                              ? questionObj.correct_answer
+                              : parseInt(questionObj.correct_answer);
+                            if (!isNaN(correctIndex) && correctIndex >= 0 && correctIndex < questionObj.options.length) {
+                              return `The correct answer is: ${questionObj.options[correctIndex]}`;
+                            }
+                          }
+                          // For other types, use the explanation or a generic message
+                          return questionObj.explanation || 'Let\'s try again!';
+                        })()
                       } : undefined}
                       gradeLevel={student.grade_level}
                       subject={skill?.subject || 'Learning'}
@@ -1243,12 +1386,18 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
                       type: questionObj.type,
                       options: questionObj.options || [],
                       correctAnswer: questionObj.correct_answer || questionObj.correctAnswer || '',
-                      image: questionObj.visual || questionObj.visualElements?.description,
+                      image: questionObj.media?.url || questionObj.visual || questionObj.visualElements?.description,
                       hint: questionObj.hint,
                       xpReward: 20
                     }}
                     onAnswerSubmit={(answer) => {
-                      // Debug: Setting assessment answer
+                      console.log('📝 USER SUBMITTED ANSWER:', {
+                        answer,
+                        answerType: typeof answer,
+                        currentAssessmentAnswer: assessmentAnswer,
+                        currentAssessmentAnswerSet: assessmentAnswerSet,
+                        timestamp: new Date().toISOString()
+                      });
                       setAssessmentAnswer(answer);
                       setAssessmentAnswerSet(true);
                       handleAssessmentSubmit();
@@ -1263,7 +1412,20 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
                     }}
                     feedback={showAssessmentResult ? {
                       isCorrect: assessmentIsCorrect,
-                      message: assessmentIsCorrect ? 'Excellent work!' : `The correct answer is ${questionObj.correct_answer || questionObj.correctAnswer || 'shown above'}`
+                      message: assessmentIsCorrect ? 'Excellent work!' : (() => {
+                        // For multiple choice, show the actual answer text, not the index
+                        if (questionObj.type === 'multiple_choice' && questionObj.options) {
+                          const correctAnswer = questionObj.correct_answer ?? questionObj.correctAnswer;
+                          const correctIndex = typeof correctAnswer === 'number'
+                            ? correctAnswer
+                            : parseInt(correctAnswer);
+                          if (!isNaN(correctIndex) && correctIndex >= 0 && correctIndex < questionObj.options.length) {
+                            return `The correct answer is: ${questionObj.options[correctIndex]}`;
+                          }
+                        }
+                        // For other types, use the explanation or a generic message
+                        return questionObj.explanation || 'Let\'s review this concept!';
+                      })()
                     } : undefined}
                     gradeLevel={student.grade_level}
                     subject={skill?.subject || 'Learning'}

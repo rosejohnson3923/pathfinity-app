@@ -1719,13 +1719,17 @@
   overflow: hidden;
   height: 100vh;
   max-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .bentoContainerV2.assessment .mainContent {
   overflow-y: auto !important;
-  height: calc(100vh - 100px) !important;
-  max-height: calc(100vh - 100px) !important;
+  overflow-x: hidden !important;
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
   -webkit-overflow-scrolling: touch;
+  padding-bottom: 100px !important; /* Ensure space for submit button */
 }
 
 .bentoContainerV2.assessment .questionSection,
@@ -1735,10 +1739,16 @@
 }
 
 /* Ensure all question and answer sections are scrollable when needed */
-.questionSection,
+.questionSection {
+  overflow: visible;
+  flex-shrink: 0;
+}
+
 .answerSection {
   overflow-y: auto;
+  overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
+  max-height: 50vh; /* Limit answer section height to ensure submit button is visible */
 }
 
 /* Prevent content from being cut off */

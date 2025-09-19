@@ -8,6 +8,7 @@
 import React, { useState } from 'react';
 import questionStyles from '../../components/questions/QuestionStyles.module.css';
 import styles from './QuestionRenderer.module.css';
+import layoutStyles from '../../design-system/layouts/IntelligentQuestionLayout.module.css';
 import {
   Question,
   MultipleChoiceQuestion,
@@ -342,8 +343,157 @@ const MultipleChoiceRenderer: React.FC<{
     }
   };
 
+  // Intelligent layout detection with comprehensive content analysis
+  const analyzeLayout = () => {
+    if (!question.options || question.options.length === 0) return { type: 'vertical', contentType: 'text' };
+
+    // Analyze answer options
+    const optionTexts = question.options.map(opt => opt.text);
+    const optionLengths = optionTexts.map(text => text.length);
+    const longestOption = Math.max(...optionLengths);
+    const shortestOption = Math.min(...optionLengths);
+    const avgOptionLength = optionLengths.reduce((a, b) => a + b, 0) / optionLengths.length;
+
+    // Word counts for each option
+    const optionWordCounts = optionTexts.map(text => text.trim().split(/\s+/).filter(w => w.length > 0).length);
+    const maxWords = Math.max(...optionWordCounts);
+
+    // Content type detection
+    const hasArrays = optionTexts.some(text => /^\[.*\]$/.test(text));
+    const allNumeric = optionTexts.every(text => /^-?\d+(\.\d+)?$/.test(text.trim()));
+    const hasEmojis = optionTexts.some(text => /[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]/u.test(text));
+    const hasSentences = maxWords > 3;
+
+    // Determine content type
+    let contentType = 'mixed';
+    if (allNumeric) contentType = 'numeric';
+    else if (hasEmojis && avgOptionLength <= 5) contentType = 'emoji';
+    else if (hasArrays) contentType = 'array';
+    else if (avgOptionLength > 20) contentType = 'longText';
+    else contentType = 'text';
+
+    // LAYOUT DECISION RULES
+    // Rule 1: Arrays always vertical
+    if (hasArrays) {
+      console.log('📐 Layout: VERTICAL - Arrays need horizontal space');
+      return { type: 'vertical', contentType: 'array' };
+    }
+
+    // Rule 2: Sentences or phrases (>3 words) vertical
+    if (hasSentences) {
+      console.log('📐 Layout: VERTICAL - Sentences/phrases need reading space');
+      return { type: 'vertical', contentType: 'longText' };
+    }
+
+    // Rule 3: Very short numeric (<=3 chars) - grid
+    if (allNumeric && longestOption <= 3) {
+      const cols = Math.min(4, question.options.length);
+      console.log(`📐 Layout: GRID-${cols} - Very short numbers`);
+      return { type: `grid-${cols}`, contentType: 'numeric' };
+    }
+
+    // Rule 4: Long text (>20 chars avg) - vertical
+    if (avgOptionLength > 20) {
+      console.log('📐 Layout: VERTICAL - Long text needs width');
+      return { type: 'vertical', contentType: 'longText' };
+    }
+
+    // Rule 5: High variance - vertical for consistency
+    if (longestOption - shortestOption > 15) {
+      console.log('📐 Layout: VERTICAL - Varied lengths need consistency');
+      return { type: 'vertical', contentType };
+    }
+
+    // Rule 6: Short text (5-10 chars) - grid
+    if (avgOptionLength <= 10) {
+      const cols = question.options.length <= 2 ? 2 : Math.min(4, question.options.length);
+      console.log(`📐 Layout: GRID-${cols} - Short text`);
+      return { type: `grid-${cols}`, contentType };
+    }
+
+    // Default: Vertical for readability
+    console.log('📐 Layout: VERTICAL - Default for readability');
+    return { type: 'vertical', contentType };
+  };
+
+  const layoutAnalysis = analyzeLayout();
+  const layoutType = layoutAnalysis.type;
+  const contentType = layoutAnalysis.contentType;
+
+  // Determine CSS classes based on layout analysis
+  const getLayoutClasses = () => {
+    const baseClass = layoutStyles.questionContainer;
+    let layoutClass = layoutStyles.layoutVertical;
+    let contentClass = '';
+
+    // Layout type classes
+    if (layoutType === 'vertical') {
+      layoutClass = layoutStyles.layoutVertical;
+    } else if (layoutType === 'wrapped-grid') {
+      layoutClass = layoutStyles.layoutWrappedGrid;
+    } else if (layoutType.startsWith('grid-')) {
+      const cols = layoutType.split('-')[1];
+      layoutClass = `${layoutStyles.layoutGrid} ${layoutStyles[`layoutGrid${cols}`] || ''}`;
+    }
+
+    // Content type classes
+    switch(contentType) {
+      case 'numeric': contentClass = layoutStyles.contentNumeric; break;
+      case 'emoji': contentClass = layoutStyles.contentEmoji; break;
+      case 'array': contentClass = layoutStyles.contentArray; break;
+      case 'longText': contentClass = layoutStyles.contentLongText; break;
+    }
+
+    return `${baseClass} ${layoutClass} ${contentClass}`.trim();
+  };
+
+  const layoutClasses = getLayoutClasses();
+
+  // Enhanced debug logging for layout decisions
+  console.log('🎨 ============ INTELLIGENT LAYOUT ANALYSIS ============');
+  console.log('📊 Question:', question.content?.substring(0, 50) + '...');
+  console.log('📝 Options Analysis:', {
+    count: question.options?.length,
+    texts: question.options?.map((o, i) => `[${i}] "${o.text}" (${o.text.length} chars)`),
+    lengths: optionLengths,
+    avgLength: avgOptionLength.toFixed(1),
+    longestOption,
+    shortestOption,
+    variance: longestOption - shortestOption,
+    maxWords,
+    wordCounts: optionWordCounts
+  });
+  console.log('🔍 Content Detection:', {
+    hasArrays,
+    allNumeric,
+    hasEmojis,
+    hasSentences: maxWords > 3,
+    contentType
+  });
+  console.log('🎯 Layout Decision:', {
+    layoutType,
+    reasoning: layoutType === 'vertical' ?
+      'VERTICAL - Text needs full width for readability' :
+      layoutType.startsWith('grid-') ?
+      `GRID (${layoutType.split('-')[1]} cols) - Short content fits in grid` :
+      'WRAPPED - Medium content with flexible layout',
+    cssClasses: layoutClasses.split(' ').filter(c => c)
+  });
+  console.log('🎨 ====================================================');
+
   return (
     <div className={`multiple-choice-question theme-${theme || 'light'}`}>
+      {/* Reading Passage Section - Display before the question */}
+      {question.passage && (
+        <div className={`${layoutStyles.readingPassage} ${layoutStyles.passageContainer}`}>
+          <div className={layoutStyles.passageHeader}>
+            <span className={layoutStyles.passageLabel}>📖 Reading Passage</span>
+          </div>
+          <div className={layoutStyles.passageText}>
+            {question.passage}
+          </div>
+        </div>
+      )}
       <div className="question-text">
         {question.content ? (
           <h3>{stripEmojis(question.content)}</h3>
@@ -354,9 +504,9 @@ const MultipleChoiceRenderer: React.FC<{
       {question.media && question.media.url !== '❓' && (
         <div className="question-visual">
           {question.media.type === 'image' && (
-            <div style={{ 
-              fontSize: '3rem', 
-              textAlign: 'center', 
+            <div style={{
+              fontSize: '3rem',
+              textAlign: 'center',
               margin: '1.5rem 0',
               lineHeight: '1.2',
               letterSpacing: '0.5rem'
@@ -366,21 +516,32 @@ const MultipleChoiceRenderer: React.FC<{
           )}
         </div>
       )}
-      <div className="mc-options-container">
-        {question.options.map(option => (
+      <div className={layoutClasses}>
+        {question.options.map(option => {
+          const optionClasses = [
+            layoutStyles.optionButton,
+            selected.includes(option.id) ? layoutStyles.selected : '',
+            showFeedback && option.isCorrect ? layoutStyles.correct : '',
+            showFeedback && selected.includes(option.id) && !option.isCorrect ? layoutStyles.incorrect : '',
+            disabled ? layoutStyles.disabled : ''
+          ].filter(Boolean).join(' ');
+
+          return (
           <button
             key={option.id}
-            className={`mc-option ${selected.includes(option.id) ? 'selected' : ''} 
-                       ${showFeedback && option.isCorrect ? 'correct' : ''}
-                       ${showFeedback && selected.includes(option.id) && !option.isCorrect ? 'incorrect' : ''} 
-                       ${disabled ? 'disabled' : ''}`}
+            className={optionClasses}
             onClick={() => handleSelect(option.id)}
             disabled={disabled}
           >
-            <span className="option-label">{String.fromCharCode(65 + question.options.indexOf(option))}</span>
-            <span className="option-text">{option.text}</span>
+            <span className={layoutStyles.optionLabel}>
+              {String.fromCharCode(65 + question.options.indexOf(option))}
+            </span>
+            <span className={layoutStyles.optionText}>
+              {option.text}
+            </span>
           </button>
-        ))}
+          );
+        })}
       </div>
       {showFeedback && validationResult && (
         <div className={`question-feedback ${validationResult.isCorrect ? 'correct' : 'incorrect'}`}>

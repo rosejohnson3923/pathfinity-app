@@ -38,6 +38,41 @@ export class AIContentConverter {
   }
 
   /**
+   * Extract reading passage from a question that embeds it
+   * For questions like: "A coaching article states: 'passage text here'. What is the main idea?"
+   */
+  private extractPassageFromQuestion(question: string | undefined): string | undefined {
+    if (!question) return undefined;
+
+    // Pattern 1: "A [source] states: 'passage text'"
+    const pattern1 = /(?:A\s+\w+\s+(?:article|passage|text|story|book)\s+states?:\s*['"])([\s\S]+?)(['"])/;
+    const match1 = question.match(pattern1);
+    if (match1) {
+      const passage = match1[1].trim();
+      // Only extract if it's a substantial passage (more than just a single sentence)
+      if (passage.length > 50 || passage.includes('.')) {
+        return passage;
+      }
+    }
+
+    // Pattern 2: "Read this passage: 'text here'"
+    const pattern2 = /(?:Read\s+(?:this|the)\s+(?:passage|text|article):\s*['"]?)([\s\S]+?)(?:['"]?\s*(?:What|Which|How|Why))/;
+    const match2 = question.match(pattern2);
+    if (match2) {
+      return match2[1].trim();
+    }
+
+    // Pattern 3: Quoted text followed by a question
+    const pattern3 = /^['"]([^'"]{50,})['"][\s\S]*\?$/;
+    const match3 = question.match(pattern3);
+    if (match3) {
+      return match3[1].trim();
+    }
+
+    return undefined;
+  }
+
+  /**
    * Convert assessment from AI format to Question object
    */
   convertAssessment(
@@ -49,6 +84,8 @@ export class AIContentConverter {
       correct_answer: number | string;
       explanation?: string;
       success_message?: string;
+      passage?: string; // Reading passage for comprehension questions
+      context?: string; // Alternative field name for passage
     },
     skillInfo: {
       subject: string;
@@ -191,12 +228,20 @@ export class AIContentConverter {
         ? assessment.visual 
         : assessment.visual?.content || assessment.visual?.text || '';
       
+      // Only override to counting if we have actual countable objects (not placeholder ❓)
       const hasEmojis = visualContent && /[\p{Emoji}]/u.test(visualContent);
-      if (hasEmojis) {
-        console.log('🎯 Overriding type to counting due to pattern + emojis', {
+
+      // Check if it's actually countable objects vs just a placeholder
+      // Counting questions should have repeated emojis or countable objects
+      const isCountableVisual = hasEmojis &&
+                                visualContent !== '❓' &&
+                                (visualContent.length > 2 || /[\p{Emoji}]\s*[\p{Emoji}]/u.test(visualContent));
+
+      if (isCountableVisual) {
+        console.log('🎯 Overriding type to counting due to pattern + countable visual', {
           visual: assessment.visual,
           visualContent,
-          hasEmojis
+          isCountableVisual
         });
         return 'counting';
       }
@@ -378,12 +423,29 @@ export class AIContentConverter {
     // Always add the correct answer
     options.add(correctAnswer);
     
-    // For numbers 0-3, always include 0,1,2,3
+    // Always include the correct answer
+    options.add(correctAnswer);
+
+    // For small numbers (0-3), create more varied distractors
     if (correctAnswer <= 3) {
-      options.add(0);
-      options.add(1);
-      options.add(2);
-      options.add(3);
+      // Add some numbers that aren't just 0,1,2,3
+      if (correctAnswer === 0) {
+        options.add(1);
+        options.add(2);
+        options.add(4);
+      } else if (correctAnswer === 1) {
+        options.add(0);
+        options.add(3);
+        options.add(4);
+      } else if (correctAnswer === 2) {
+        options.add(0);
+        options.add(3);
+        options.add(5);
+      } else if (correctAnswer === 3) {
+        options.add(1);
+        options.add(4);
+        options.add(6);
+      }
     } else {
       // For larger numbers, add nearby options
       options.add(Math.max(0, correctAnswer - 1));
@@ -437,26 +499,42 @@ export class AIContentConverter {
 
   private toMultipleChoiceQuestion(assessment: any, skillInfo: any): MultipleChoiceQuestion {
     let options = assessment.options || [];
-    
-    // Check if this is a shape question with visual emojis
-    const isShapeQuestion = (assessment.question?.toLowerCase().includes('shape') || 
-                           assessment.question?.toLowerCase().includes('classify')) &&
-                          assessment.visual && 
-                          typeof assessment.visual === 'string';
-    
-    if (isShapeQuestion) {
-      // Extract emojis from visual field
-      const visualEmojis = assessment.visual.trim().split(/\s+/).filter(e => e.match(/[\p{Emoji}]/u));
-      
-      if (visualEmojis.length >= options.length) {
-        console.log('🎨 Shape question detected - replacing text options with visual emojis:', {
-          original: options,
-          emojis: visualEmojis,
-          visual: assessment.visual
+
+    // Shape names to emoji mapping
+    const shapeToEmojiMap: { [key: string]: string } = {
+      'Circle': '⭕',
+      'circle': '⭕',
+      'Square': '⬜',
+      'square': '⬜',
+      'Triangle': '🔺',
+      'triangle': '🔺',
+      'Rectangle': '▬',
+      'rectangle': '▬',
+      'Oval': '🔵',
+      'oval': '🔵'
+    };
+
+    // Check if this is a shape question
+    const isShapeQuestion = (assessment.question?.toLowerCase().includes('shape') ||
+                           assessment.question?.toLowerCase().includes('classify'));
+
+    if (isShapeQuestion && options.length > 0) {
+      // Check if options are shape names that need to be converted to emojis
+      const hasShapeNames = options.some((opt: any) =>
+        shapeToEmojiMap[opt] !== undefined
+      );
+
+      if (hasShapeNames) {
+        console.log('🎨 Converting shape names to emojis:', {
+          original: options
         });
-        
-        // Use the visual emojis as options instead of text
-        options = visualEmojis.slice(0, options.length);
+
+        // Convert shape names to emojis
+        options = options.map((opt: any) =>
+          shapeToEmojiMap[opt] || opt
+        );
+
+        console.log('🎨 Converted options:', options);
       }
     }
     
@@ -493,14 +571,20 @@ export class AIContentConverter {
       }
     } else if (isShapeQuestion && typeof rawCorrectAnswer === 'string') {
       // For shape questions, if the correct answer is text but options are emojis, map it
-      const shapeToEmojiMap: { [key: string]: string } = {
-        'Circle': '🔵',
-        'Square': '🟦',
+      // Note: These emojis MUST match the ones used in options conversion
+      const correctAnswerMap: { [key: string]: string } = {
+        'Circle': '⭕',
+        'circle': '⭕',
+        'Square': '⬜',
+        'square': '⬜',
         'Triangle': '🔺',
-        'Rectangle': '🟩',
-        'Oval': '🟢'
+        'triangle': '🔺',
+        'Rectangle': '▬',
+        'rectangle': '▬',
+        'Oval': '🔵',
+        'oval': '🔵'
       };
-      correctAnswer = shapeToEmojiMap[rawCorrectAnswer] || String(rawCorrectAnswer || '');
+      correctAnswer = correctAnswerMap[rawCorrectAnswer] || String(rawCorrectAnswer || '');
     } else {
       // It's the actual answer text
       correctAnswer = String(rawCorrectAnswer || '');
@@ -572,10 +656,14 @@ export class AIContentConverter {
       }
     }
     
+    // Extract reading passage if present
+    const passage = assessment.passage || assessment.context || this.extractPassageFromQuestion(assessment.question);
+
     return {
       id: this.generateQuestionId('assessment'),
       type: 'multiple_choice',
       content: String(assessment.content || assessment.question || ''),
+      passage: passage, // Add the reading passage
       topic: skillInfo.skill_name,
       subject: skillInfo.subject,
       difficulty: 'medium',
@@ -788,21 +876,41 @@ export class AIContentConverter {
 
   private toNumericQuestion(assessment: any, skillInfo: any): NumericQuestion {
     let correctAnswer: number;
-    
-    if (typeof assessment.correct_answer === 'number') {
-      correctAnswer = assessment.correct_answer;
-    } else {
+
+    // Debug logging
+    console.log('🔢 toNumericQuestion input:', {
+      hasCorrectAnswer: 'correct_answer' in assessment,
+      hasCorrectAnswerCamel: 'correctAnswer' in assessment,
+      correct_answer: assessment.correct_answer,
+      correctAnswer: assessment.correctAnswer,
+      allKeys: Object.keys(assessment)
+    });
+
+    // Check both snake_case and camelCase
+    const answer = assessment.correct_answer !== undefined ? assessment.correct_answer : assessment.correctAnswer;
+
+    if (typeof answer === 'number') {
+      correctAnswer = answer;
+    } else if (answer !== undefined && answer !== null) {
       // Parse string to number, handling various formats
-      const parsed = parseFloat(String(assessment.correct_answer).replace(/[^0-9.-]/g, ''));
+      const parsed = parseFloat(String(answer).replace(/[^0-9.-]/g, ''));
       if (isNaN(parsed)) {
         console.error('⚠️ Invalid numeric answer, defaulting to 0:', {
-          original: assessment.correct_answer,
+          original: answer,
           skill: skillInfo.skill_name
         });
         correctAnswer = 0;
       } else {
         correctAnswer = parsed;
       }
+    } else {
+      console.error('⚠️ No answer found for numeric question, defaulting to 0:', {
+        assessment_keys: Object.keys(assessment),
+        correct_answer: assessment.correct_answer,
+        correctAnswer: assessment.correctAnswer,
+        skill: skillInfo.skill_name
+      });
+      correctAnswer = 0;
     }
     
     // Clean the question text if we have a visual

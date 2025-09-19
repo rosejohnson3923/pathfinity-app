@@ -268,17 +268,16 @@ class PathIQService {
   /**
    * Get careers organized by category for a grade level
    */
-  getCareersByCategory(gradeLevel: string): { 
-    category: { id: string; name: string; icon: string }; 
-    careers: CareerRating[] 
+  getCareersByCategory(gradeLevel: string): {
+    category: { id: string; name: string; icon: string };
+    careers: CareerRating[]
   }[] {
     const gradeLevelNum = gradeLevel === 'K' ? 0 : parseInt(gradeLevel);
-    const gradeLevelGroup = gradeLevelNum <= 5 ? 'elementary' :
-                           gradeLevelNum <= 8 ? 'middle' : 'high';
-    
-    const categories = this.CAREER_CATEGORIES[gradeLevelGroup];
+
+    // Use the updated getCategoriesForGrade which properly combines categories
+    const categories = this.getCategoriesForGrade(gradeLevel);
     const allCareers = this.getAllCareersForGrade(gradeLevelNum);
-    
+
     return categories.map(category => ({
       category: {
         id: category.id,
@@ -438,66 +437,35 @@ class PathIQService {
     const multiplier = this.CAREER_PROGRESSION_CONFIG.GRADE_MULTIPLIERS[grade] || 2;
     const baseCount = this.CAREER_PROGRESSION_CONFIG.BASE_CAREERS_PER_CATEGORY;
     const careersPerCategory = baseCount * multiplier;
-    
+
     // Get available categories for this grade
     const availableCategories = this.CAREER_PROGRESSION_CONFIG.GRADE_CATEGORIES[grade] || ['helpers', 'safety', 'health'];
     console.log(`  Categories config for grade ${grade}:`, availableCategories);
-    
-    // Get all careers from appropriate grade level pools
-    // Using proper grade groupings: PreK-2, 3-5, 6-8, 9-12
-    let allCareersPool: any[] = [];
-    
+
+    // Get all careers using the correct progressive system
+    // Use getAllCareersForGrade which properly combines career pools
+    let allCareersPool = this.getAllCareersForGrade(gradeLevelNum);
+
+    // Add KINDERGARTEN_CAREERS for K-2 to maintain existing behavior
+    // But avoid duplicates by filtering
     if (gradeLevelNum <= 2) {
-      // Early Elementary (PreK-2): Base community helper careers
-      // For now using KINDERGARTEN_CAREERS for K and ELEMENTARY_CAREERS for 1-2
-      // TODO: Rename KINDERGARTEN_CAREERS to EARLY_ELEMENTARY_CAREERS
-      if (gradeLevelNum === 0) {
-        allCareersPool = [...this.KINDERGARTEN_CAREERS];
-      } else {
-        // Grade 1-2: Use kindergarten + some elementary careers
-        allCareersPool = [...this.KINDERGARTEN_CAREERS, ...this.ELEMENTARY_CAREERS];
-      }
-    } else if (gradeLevelNum <= 5) {
-      // Elementary (3-5): Early Elementary + new careers (Engineer, Scientist, etc.)
-      allCareersPool = [...this.KINDERGARTEN_CAREERS, ...this.ELEMENTARY_CAREERS];
-    } else if (gradeLevelNum <= 8) {
-      // Middle School (6-8): All previous + Middle School careers
-      allCareersPool = [...this.KINDERGARTEN_CAREERS, ...this.ELEMENTARY_CAREERS, ...this.MIDDLE_SCHOOL_CAREERS];
-      console.log(`  Grade ${grade} (Middle School) pool size: ${allCareersPool.length} careers`);
-    } else {
-      // High School (9-12): All careers available
-      allCareersPool = [...this.KINDERGARTEN_CAREERS, ...this.ELEMENTARY_CAREERS, ...this.MIDDLE_SCHOOL_CAREERS, ...this.HIGH_SCHOOL_CAREERS];
-      console.log(`  Grade ${grade} (High School) pool size: ${allCareersPool.length} careers`);
+      const kindergartenIds = this.KINDERGARTEN_CAREERS.map(c => c.id);
+      const uniqueKindergartenCareers = this.KINDERGARTEN_CAREERS.filter(
+        kc => !allCareersPool.some(ec => ec.id === kc.id)
+      );
+      allCareersPool = [...uniqueKindergartenCareers, ...allCareersPool];
     }
-    
-    // Filter careers by available categories and limit per category
-    const careersByCategory = new Map<string, any[]>();
-    
-    // Group careers by category
-    allCareersPool.forEach(career => {
-      if (!careersByCategory.has(career.category)) {
-        careersByCategory.set(career.category, []);
-      }
-      careersByCategory.get(career.category)!.push(career);
-    });
-    
-    // Select limited careers per category based on grade
-    const selectedCareers: any[] = [];
-    availableCategories.forEach(categoryId => {
-      if (categoryId === 'all') {
-        // For higher grades, include all careers
-        console.log(`  Including ALL careers (categoryId = 'all')`);
-        selectedCareers.push(...allCareersPool);
-      } else {
-        const categoryCareers = careersByCategory.get(categoryId) || [];
-        // Take only the allowed number of careers for this grade
-        console.log(`  Category ${categoryId}: selecting ${Math.min(categoryCareers.length, careersPerCategory)} of ${categoryCareers.length} careers`);
-        selectedCareers.push(...categoryCareers.slice(0, careersPerCategory));
-      }
-    });
-    
-    console.log(`  ✅ Final selected careers count: ${selectedCareers.length}`);
-    return selectedCareers;
+
+    console.log(`  Grade ${grade} total pool size: ${allCareersPool.length} careers`);
+    console.log(`  Available careers:`, allCareersPool.map(c => c.name).join(', '));
+
+    // For "More Careers" (passion careers), return ALL grade-appropriate careers
+    // Don't filter by category limits - that's only for the 3 recommended careers
+    // This ensures students can see ALL careers available for their grade level
+
+    // Return the complete pool without filtering
+    console.log(`  ✅ Returning all ${allCareersPool.length} careers for grade ${grade}`);
+    return allCareersPool;
   }
   
   /**
@@ -706,10 +674,48 @@ class PathIQService {
    */
   private getCategoriesForGrade(grade: string): any[] {
     const gradeLevelNum = grade === 'K' ? 0 : parseInt(grade);
-    const gradeLevelGroup = gradeLevelNum <= 5 ? 'elementary' :
-                           gradeLevelNum <= 8 ? 'middle' : 'high';
-    
-    return this.CAREER_CATEGORIES[gradeLevelGroup] || [];
+
+    // Progressive categories - include all previous levels
+    let categoriesToMerge: any[] = [];
+
+    if (gradeLevelNum <= 5) {
+      // Elementary: just elementary categories
+      categoriesToMerge = this.CAREER_CATEGORIES.elementary || [];
+    } else if (gradeLevelNum <= 8) {
+      // Middle School: elementary + middle categories
+      categoriesToMerge = [
+        ...(this.CAREER_CATEGORIES.elementary || []),
+        ...(this.CAREER_CATEGORIES.middle || [])
+      ];
+    } else {
+      // High School: all categories
+      categoriesToMerge = [
+        ...(this.CAREER_CATEGORIES.elementary || []),
+        ...(this.CAREER_CATEGORIES.middle || []),
+        ...(this.CAREER_CATEGORIES.high || [])
+      ];
+    }
+
+    // Merge categories with duplicate IDs
+    const mergedCategories = new Map<string, any>();
+
+    categoriesToMerge.forEach(category => {
+      if (mergedCategories.has(category.id)) {
+        // Merge careers from duplicate category
+        const existing = mergedCategories.get(category.id);
+        const mergedCareers = [...new Set([...existing.careers, ...category.careers])];
+        mergedCategories.set(category.id, {
+          ...existing,
+          careers: mergedCareers,
+          // Keep the more descriptive name if they differ
+          name: existing.name.length > category.name.length ? existing.name : category.name
+        });
+      } else {
+        mergedCategories.set(category.id, { ...category });
+      }
+    });
+
+    return Array.from(mergedCategories.values());
   }
 
   private getGradeLevel(grade: string): 'early_elementary' | 'elementary' | 'middle' | 'high' {

@@ -35,7 +35,7 @@ export interface UsePathIQGamificationReturn {
   isLoading: boolean;
 }
 
-export function usePathIQGamification(userId: string, grade?: string): UsePathIQGamificationReturn {
+export function usePathIQGamification(userId: string, grade?: string, pauseBackgroundUpdates?: boolean): UsePathIQGamificationReturn {
   const [profile, setProfile] = useState<UserGameProfile>(pathIQGamification.getUserProfile(userId));
   const [availableHints, setAvailableHints] = useState<HintCost[]>([]);
   const [leaderboard, setLeaderboard] = useState<any>(null);
@@ -51,26 +51,43 @@ export function usePathIQGamification(userId: string, grade?: string): UsePathIQ
   useEffect(() => {
     const updateProfile = () => {
       const newProfile = pathIQGamification.getUserProfile(userId);
-      setProfile(newProfile);
+
+      // Only update if profile has actually changed to prevent unnecessary re-renders
+      setProfile(prevProfile => {
+        // Check if the profiles are actually different
+        if (JSON.stringify(prevProfile) !== JSON.stringify(newProfile)) {
+          console.log('Profile updated:', { userId, changes: true });
+          return newProfile;
+        }
+        return prevProfile;
+      });
     };
 
-    // Update profile every 5 seconds
-    const interval = setInterval(updateProfile, 5000);
-    
+    // Initial profile load
+    updateProfile();
+
+    // Only set up interval if background updates are not paused
+    let interval: NodeJS.Timeout | undefined;
+    if (!pauseBackgroundUpdates) {
+      // Update profile every 30 seconds instead of 5 seconds
+      // This reduces unnecessary re-renders during active learning
+      interval = setInterval(updateProfile, 30000);
+    }
+
     // Listen for PathIQ events
     const handlePathIQEvent = (event: CustomEvent) => {
       if (event.detail.data.userId === userId) {
         updateProfile();
       }
     };
-    
+
     window.addEventListener('pathiq-event', handlePathIQEvent as EventListener);
-    
+
     return () => {
-      clearInterval(interval);
+      if (interval) clearInterval(interval);
       window.removeEventListener('pathiq-event', handlePathIQEvent as EventListener);
     };
-  }, [userId]);
+  }, [userId, pauseBackgroundUpdates]);
 
   // Update available hints
   useEffect(() => {
@@ -80,9 +97,14 @@ export function usePathIQGamification(userId: string, grade?: string): UsePathIQ
     };
 
     updateHints();
-    const interval = setInterval(updateHints, 10000);
-    return () => clearInterval(interval);
-  }, [userId]);
+    let interval: NodeJS.Timeout | undefined;
+    if (!pauseBackgroundUpdates) {
+      interval = setInterval(updateHints, 10000);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [userId, pauseBackgroundUpdates]);
 
   // Update leaderboard
   useEffect(() => {
@@ -92,9 +114,14 @@ export function usePathIQGamification(userId: string, grade?: string): UsePathIQ
     };
 
     updateLeaderboard();
-    const interval = setInterval(updateLeaderboard, 30000);
-    return () => clearInterval(interval);
-  }, [userId, grade]);
+    let interval: NodeJS.Timeout | undefined;
+    if (!pauseBackgroundUpdates) {
+      interval = setInterval(updateLeaderboard, 30000);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [userId, grade, pauseBackgroundUpdates]);
 
   // Update insights
   useEffect(() => {
@@ -104,9 +131,14 @@ export function usePathIQGamification(userId: string, grade?: string): UsePathIQ
     };
 
     updateInsights();
-    const interval = setInterval(updateInsights, 20000);
-    return () => clearInterval(interval);
-  }, [userId]);
+    let interval: NodeJS.Timeout | undefined;
+    if (!pauseBackgroundUpdates) {
+      interval = setInterval(updateInsights, 20000);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [userId, pauseBackgroundUpdates]);
 
   // Update grade-appropriate features
   useEffect(() => {
