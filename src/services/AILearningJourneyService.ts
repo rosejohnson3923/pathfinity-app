@@ -4,6 +4,7 @@
  */
 
 import { azureOpenAIService } from './azureOpenAIService';
+import { aiServiceSelector } from './ai-models/AIServiceSelector';
 import { questionTypeValidator } from './questionTypeValidator';
 import { ALL_TYPE_IDS, GRADE_TYPE_MAP } from '../types/questionTypes';
 import { QuestionType } from './content/QuestionTypes';
@@ -203,6 +204,48 @@ export class AILearningJourneyService {
   }
 
   /**
+   * Helper method to use either multi-model or standard Azure OpenAI
+   */
+  private async generateAIContent(
+    prompt: string,
+    student: StudentProfile,
+    skill: LearningSkill,
+    options: any = {}
+  ): Promise<any> {
+    // Check if multi-model is enabled via environment variable
+    const useMultiModel = process.env.ENABLE_MULTI_MODEL === 'true';
+
+    if (useMultiModel) {
+      // Use the new multi-model selector
+      try {
+        const response = await aiServiceSelector.generateContent({
+          prompt,
+          context: {
+            grade: student.grade_level,
+            subject: skill.subject,
+            skill: skill.skill_name,
+            studentProfile: student
+          },
+          maxTokens: options.maxTokens || 4000,
+          temperature: options.temperature || 0.7
+        });
+        return response;
+      } catch (error) {
+        console.error('Multi-model failed, falling back to standard:', error);
+        // Fall back to standard service
+      }
+    }
+
+    // Use standard Azure OpenAI service
+    return azureOpenAIService.generateWithModel(
+      'gpt4o',
+      prompt,
+      'You are an expert educational content creator specializing in personalized, gamified learning experiences.',
+      options
+    );
+  }
+
+  /**
    * Generate AI-powered Learn container content
    * Now follows Practice → Instruction → Assessment flow
    */
@@ -269,10 +312,10 @@ export class AILearningJourneyService {
 
     try {
       // Use the new hierarchical prompt from PromptBuilder
-      const response = await azureOpenAIService.generateWithModel(
-        'gpt4o',
+      const response = await this.generateAIContent(
         enhancedPrompt,
-        'You are an expert educational content creator specializing in personalized, gamified learning experiences.',
+        student,
+        skill,
         { temperature: 0.7, maxTokens: 4000, jsonMode: true }
       );
 
@@ -679,11 +722,11 @@ Return ONLY these fields:
   "examples": [/* 3 teaching examples tailored to performance */]
 }`;
     try {
-      console.log('🤖 Calling Azure OpenAI for adaptive instruction...');
-      const response = await azureOpenAIService.generateWithModel(
-        'gpt4o',
+      console.log('🤖 Calling AI service for adaptive instruction...');
+      const response = await this.generateAIContent(
         prompt,
-        'You are an expert educational tutor who creates personalized teaching content.',
+        student,
+        skill,
         {
           maxTokens: 2000,
           temperature: 0.7,
@@ -1063,10 +1106,10 @@ FINAL CHECK before returning JSON:
 ✓ Not 3 if it should be 4, not 2 if it should be 3 - EXACTLY ${challengeCount}`;
 
     try {
-      const response = await azureOpenAIService.generateWithModel(
-        'gpt4o',
+      const response = await this.generateAIContent(
         prompt,
-        'You are an expert career education specialist creating immersive professional experiences.',
+        student,
+        skill,
         { temperature: 0.8, maxTokens: 3500, jsonMode: true }
       );
 
@@ -1243,10 +1286,10 @@ REQUIRED DISCOVER CONTENT STRUCTURE:
 Generate the complete JSON response with ALL required fields.`;
 
     try {
-      const response = await azureOpenAIService.generateWithModel(
-        'gpt4o',
+      const response = await this.generateAIContent(
         prompt,
-        'You are an expert in inquiry-based learning and discovery education.',
+        student,
+        skill,
         { temperature: 0.8, maxTokens: 3500, jsonMode: true }
       );
 
