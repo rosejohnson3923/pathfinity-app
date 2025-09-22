@@ -3,10 +3,13 @@
  * Provides detailed feedback during AI content generation
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { TwoPanelModal } from '../modals/TwoPanelModal';
 import { useAuth } from '../../hooks/useAuth';
 import { useStudentProfile } from '../../hooks/useStudentProfile';
+import { MasterNarrative } from '../../services/narrative/MasterNarrativeGenerator';
+import { loadingNarrationService } from '../../services/LoadingNarrationService';
+import { azureAudioService } from '../../services/azureAudioService';
 import styles from '../../styles/shared/screens/LoadingScreen.module.css';
 
 interface EnhancedLoadingScreenProps {
@@ -17,6 +20,12 @@ interface EnhancedLoadingScreenProps {
   containerType?: 'learn' | 'experience' | 'discover';
   currentCareer?: string;
   showGamification?: boolean;
+  // New props for narration
+  masterNarrative?: MasterNarrative | null;
+  currentSubject?: 'math' | 'ela' | 'science' | 'socialStudies';
+  companionId?: string;
+  enableNarration?: boolean;
+  isFirstLoad?: boolean;
 }
 
 export const EnhancedLoadingScreen: React.FC<EnhancedLoadingScreenProps> = ({
@@ -26,13 +35,27 @@ export const EnhancedLoadingScreen: React.FC<EnhancedLoadingScreenProps> = ({
   customMessage,
   containerType = 'learn',
   currentCareer,
-  showGamification = true
+  showGamification = true,
+  masterNarrative,
+  currentSubject = 'math',
+  companionId = 'finn',
+  enableNarration = true,
+  isFirstLoad = false
 }) => {
+  console.log('🔊 EnhancedLoadingScreen RENDERED:', {
+    phase,
+    hasMasterNarrative: !!masterNarrative,
+    enableNarration,
+    isFirstLoad,
+    currentSubject,
+    containerType
+  });
   const { user } = useAuth();
   const { profile } = useStudentProfile();
   const [dots, setDots] = useState('');
   const [currentTip, setCurrentTip] = useState(0);
   const [progress, setProgress] = useState(0);
+  const narrationRef = useRef<string | null>(null);
   
   // Loading tips to show while generating content
   const loadingTips = [
@@ -63,7 +86,7 @@ export const EnhancedLoadingScreen: React.FC<EnhancedLoadingScreenProps> = ({
   useEffect(() => {
     const duration = phase === 'practice' ? 5000 : 3000; // Practice takes longer
     const increment = 100 / (duration / 100);
-    
+
     const interval = setInterval(() => {
       setProgress(prev => {
         const next = prev + increment;
@@ -73,7 +96,114 @@ export const EnhancedLoadingScreen: React.FC<EnhancedLoadingScreenProps> = ({
     
     return () => clearInterval(interval);
   }, [phase]);
-  
+
+  // Narration effect - play fun facts during loading
+  useEffect(() => {
+    // Skip if narration is disabled
+    if (!enableNarration) {
+      return;
+    }
+
+    // Skip if no master narrative or fun facts
+    if (!masterNarrative?.subjectContextsAlignedFacts) {
+      console.log('⚠️ EnhancedLoadingScreen: No fun facts available');
+      return;
+    }
+
+    // Create a unique key for this narration attempt
+    const narrationKey = `${phase}-${currentSubject}-${isFirstLoad}`;
+
+    // Check if we already started playing for this specific combination
+    if (narrationRef.current === narrationKey) {
+      return; // Already playing this narration
+    }
+
+    console.log('🔊 EnhancedLoadingScreen: Starting narration process', {
+      narrationKey,
+      hasMasterNarrative: !!masterNarrative,
+      hasFunFacts: !!masterNarrative?.subjectContextsAlignedFacts,
+      phase,
+      currentSubject,
+      isFirstLoad
+    });
+
+    // Mark as attempting to play this specific narration
+    narrationRef.current = narrationKey;
+
+    // Capture values at effect execution time to avoid stale closures
+    const capturedMasterNarrative = masterNarrative;
+    const capturedContainerType = containerType;
+    const capturedStudentName = studentName;
+    const capturedCompanionId = companionId;
+
+    // Use a flag to track if we should still play when timer fires
+    let shouldPlay = true;
+
+    // Select and play narration
+    const playNarration = async () => {
+      if (!shouldPlay) {
+        console.log('🔊 EnhancedLoadingScreen: Narration cancelled before playback');
+        return;
+      }
+
+      try {
+        console.log('🎵 EnhancedLoadingScreen: Selecting narration', {
+          currentSubject,
+          containerType: capturedContainerType,
+          phase,
+          isFirstLoad
+        });
+
+        // Get appropriate narration based on context
+        const narration = loadingNarrationService.selectNarration(
+          capturedMasterNarrative,
+          capturedContainerType,
+          currentSubject,
+          phase === 'instruction' ? 'instruction' : phase === 'assessment' ? 'assessment' : 'practice',
+          isFirstLoad,
+          capturedStudentName
+        );
+
+        if (narration) {
+          console.log('🎵 Loading Screen: Playing narration', {
+            container: capturedContainerType,
+            subject: currentSubject,
+            phase,
+            scriptId: narration.scriptId,
+            text: narration.text.substring(0, 50) + '...'
+          });
+
+          // Play the narration with Azure TTS
+          await azureAudioService.playText(
+            narration.text,
+            capturedCompanionId,
+            {
+              scriptId: narration.scriptId,
+              variables: narration.variables,
+              onStart: () => {
+                console.log('🔊 Loading narration started');
+              },
+              onEnd: () => {
+                console.log('🔊 Loading narration completed');
+              }
+            }
+          );
+        } else {
+          console.log('⚠️ No narration content selected');
+        }
+      } catch (error) {
+        console.error('Error playing loading narration:', error);
+      }
+    };
+
+    // Play narration immediately since component is already mounted
+    playNarration();
+
+    return () => {
+      shouldPlay = false;
+    };
+  }, [phase, currentSubject, isFirstLoad]); // Only re-run when these key values change
+
   const getPhaseMessage = () => {
     switch (phase) {
       case 'practice':
@@ -97,13 +227,6 @@ export const EnhancedLoadingScreen: React.FC<EnhancedLoadingScreenProps> = ({
   const loadingContent = (
     <div className={containerClass}>
       <div className={styles.loadingContainer}>
-        {/* Phase indicator badge */}
-        <div className={`${styles.phaseMessage} ${styles[phase]}`}>
-          {phase === 'practice' ? 'Practice' : 
-           phase === 'instruction' ? 'Lesson' :
-           phase === 'assessment' ? 'Assessment' : 'Complete'}
-        </div>
-        
         {/* Animated Logo/Icon */}
         <div className={styles.loadingIconContainer}>
           <div className={styles.loadingIcon}>

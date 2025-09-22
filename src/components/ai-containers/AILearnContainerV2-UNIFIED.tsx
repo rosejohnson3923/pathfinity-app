@@ -33,6 +33,11 @@ import { learningMetricsService } from '../../services/learningMetricsService';
 import { companionReactionService } from '../../services/companionReactionService';
 import { voiceManagerService } from '../../services/voiceManagerService';
 import { companionVoiceoverService } from '../../services/companionVoiceoverService';
+import { companionAudioService } from '../../services/CompanionAudioService';
+import { CompanionAudioControls } from '../audio/CompanionAudioControls';
+import { simplifiedAudioService } from '../../services/SimplifiedAudioService';
+import { azureAudioService } from '../../services/AzureAudioService';
+import { TestAudioButton } from '../audio/TestAudioButton';
 
 // V2 Features - Rules Engine & Intelligence
 import { learnAIRulesEngine } from '../../rules-engine/containers/LearnAIRulesEngine';
@@ -46,7 +51,11 @@ import { Question, BaseQuestion } from '../../services/content/QuestionTypes';
 import { questionValidator, ValidationResult } from '../../services/content/QuestionValidator';
 import QuestionRenderer, { questionRenderer } from '../../services/content/QuestionRenderer';
 import { BentoLearnCardV2 } from '../bento/BentoLearnCardV2';
+import BentoLearnCardV2Enhanced from '../bento/BentoLearnCardV2Enhanced';
 import { CareerContextScreen } from '../career/CareerContextScreen';
+import InstructionalVideoComponent from '../containers/InstructionalVideoComponent';
+import { contentOrchestratorWithCache } from '../../services/ContentOrchestratorWithCache';
+import { NarrativeToBentoAdapter } from '../../services/adapters/NarrativeToBentoAdapter';
 import { aiContentConverter } from '../../services/content/AIContentConverter';
 import { getDailyLearningContext } from '../../services/content/DailyLearningContextManager';
 import { getJustInTimeContentService } from '../../services/content/JustInTimeContentService';
@@ -111,6 +120,11 @@ interface AILearnContainerV2Props {
   onNext: () => void;
   onBack?: () => void;
   onLoadingChange?: (loading: boolean) => void;
+  // CACHED MASTER NARRATIVE - Passed from parent to prevent regeneration
+  masterNarrative?: any;
+  narrativeLoading?: boolean;
+  // Companion ID for audio narration
+  companionId?: string;
 }
 
 type LearningPhase = 'loading' | 'instruction' | 'practice' | 'assessment' | 'complete';
@@ -128,13 +142,21 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   onNext,
   onBack,
   onLoadingChange,
+  masterNarrative,
+  narrativeLoading,
+  companionId = 'finn'
 }) => {
+  // FEATURE FLAG: Enable Narrative-First Architecture with video instruction
+  const USE_NARRATIVE_ENHANCED = localStorage.getItem('pathfinity_use_narrative_enhanced') === 'true' ||
+                                 import.meta.env.VITE_USE_NARRATIVE_ENHANCED === 'true';
+
   // CRITICAL DEBUG - Component Mount
   console.error('🚨🚨🚨 AILearnContainerV2UNIFIED MOUNTED/RENDERED', {
     timestamp: new Date().toISOString(),
     skill: skill?.id,
     student: student?.id,
     phase: 'initial',
+    narrativeEnhanced: USE_NARRATIVE_ENHANCED,
     stackTrace: new Error().stack?.split('\n').slice(1, 5)
   });
 
@@ -183,6 +205,10 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   const [showAssessmentResult, setShowAssessmentResult] = useState(false);
   const [assessmentIsCorrect, setAssessmentIsCorrect] = useState(false);
 
+  // Narrative-First Architecture state
+  const [narrativeContent, setNarrativeContent] = useState<any>(null);
+  const [learnMicroContent, setLearnMicroContent] = useState<any>(null);
+
   // Debug logging for state changes - MUST be after state declarations
   useEffect(() => {
     console.error('🔍🔍 Assessment State Changed:', {
@@ -209,9 +235,9 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   const { currentMode } = useModeContext();
   const { currentCharacter } = useAICharacter();
 
-  // Pause background updates when actively in practice or assessment phase
-  // This prevents the 5-second re-renders that were causing the component to reset
-  const pauseBackgroundUpdates = phase === 'practice' || phase === 'assessment';
+  // Pause background updates when actively in any learning phase (instruction, practice, or assessment)
+  // This prevents the 10-second re-renders that were causing videos to restart
+  const pauseBackgroundUpdates = phase === 'instruction' || phase === 'practice' || phase === 'assessment';
 
   // Debug logging for background update control
   useEffect(() => {
@@ -240,11 +266,82 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   // Character and Career
   // Fix: Convert selectedCharacter (name) to id for proper lookup
   // Handle both string names and undefined values
-  const characterId = selectedCharacter ? 
-    (typeof selectedCharacter === 'string' ? selectedCharacter.toLowerCase() : selectedCharacter.id) : 
+  const characterId = selectedCharacter ?
+    (typeof selectedCharacter === 'string' ? selectedCharacter.toLowerCase() : selectedCharacter.id) :
     (currentCharacter?.id || 'finn');
   const character = aiCharacterProvider.getCharacterById(characterId) || currentCharacter;
   const career = selectedCareer?.name || 'Explorer';
+
+  // ================================================================
+  // AUDIO NARRATION INTEGRATION
+  // ================================================================
+
+  // Initialize companion audio service
+  useEffect(() => {
+    console.warn('🔊 AUDIO DEBUG - Learn Container:', {
+      masterNarrative: !!masterNarrative,
+      narrativeLoading,
+      companionId,
+      gradeLevel: student.grade_level
+    });
+
+    companionAudioService.setCompanionContext(companionId, student.grade_level);
+
+    // Preload audio if Master Narrative is available
+    if (masterNarrative && !narrativeLoading) {
+      console.warn('🔊 AUDIO DEBUG: Preloading audio for narrative:', masterNarrative.narrativeId);
+      companionAudioService.preloadNarrativeAudio(masterNarrative);
+    }
+
+    return () => {
+      // Clean up audio on unmount
+      companionAudioService.stopCurrent();
+      simplifiedAudioService.stop();
+      azureAudioService.stop();
+    };
+  }, [companionId, student.grade_level, masterNarrative, narrativeLoading]);
+
+  // Play audio based on phase changes
+  useEffect(() => {
+    console.warn('🔊 VOICE DEBUG - Phase change:', {
+      phase,
+      hasMasterNarrative: !!masterNarrative,
+      narrativeLoading,
+      willPlayAudio: !(!masterNarrative || narrativeLoading),
+      narrativeContent: masterNarrative ? {
+        hasGreeting: !!masterNarrative.greeting,
+        hasIntro: !!masterNarrative.introduction,
+        hasMission: !!masterNarrative.careerContext?.mission,
+        greeting: masterNarrative.greeting?.substring(0, 50),
+        intro: masterNarrative.introduction?.substring(0, 50)
+      } : null
+    });
+
+    if (!masterNarrative || narrativeLoading) return;
+
+    const playPhaseAudio = async () => {
+      // Use Azure audio service for better quality TTS
+      switch (phase) {
+        case 'instruction':
+          // Skip playing audio for instruction phase - the video component handles its own intro
+          console.log('🎵 AUDIO: Skipping introduction audio for instruction phase - video component active');
+          return; // Exit early, don't play any audio
+
+        case 'practice':
+          console.log('🎵 Playing mission audio for practice phase with Azure TTS');
+          await azureAudioService.playNarrativeSection(masterNarrative, 'mission', companionId);
+          break;
+
+        case 'complete':
+          // Play celebration audio or use greeting for completion
+          console.log('🎵 Playing completion audio with Azure TTS');
+          await azureAudioService.playNarrativeSection(masterNarrative, 'greeting', companionId);
+          break;
+      }
+    };
+
+    playPhaseAudio();
+  }, [phase, masterNarrative, narrativeLoading]);
   
   
   
@@ -285,9 +382,9 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
     if (student?.id && skill?.id) {
       sessionStateManager.trackContainerProgression(
         student.id,
-        `learn-${skill.id}-${Date.now()}`,
+        `learn-${skill?.id || 'default'}-${Date.now()}`,
         'learn',
-        skill.subject || 'math'
+        skill?.subject || 'math'
       );
     }
     
@@ -360,8 +457,62 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
         
         // STEP 3: Generate Content via JIT (Fast Performance)
         const jitContent = await jitService.generateContainerContent(jitRequest);
-        
-        
+
+        // STEP 3.5: Use CACHED Master Narrative or generate Micro Content only
+        try {
+          // Check if Master Narrative was passed from parent
+          if (masterNarrative && !narrativeLoading) {
+            console.log('✅ Using cached Master Narrative from parent container');
+            setNarrativeContent(masterNarrative);
+
+            // Only generate micro content for this specific skill
+            console.log('🔨 Generating micro content for current skill only');
+            const journeyContent = await contentOrchestratorWithCache.generateLearningJourney({
+              studentName: student.display_name || student.name || 'Sam',
+              studentId: student.id || 'default',
+              gradeLevel: student.grade_level || 'K',
+              career: selectedCareer?.name || career?.name || 'Professional',
+              careerId: selectedCareer?.id || career?.id || 'default',
+              selectedCharacter: selectedCharacter || 'harmony',
+              currentSubject: skill.subject || 'math',
+              currentContainer: 'learn',
+              skillId: skill.id || 'default',
+              subjects: [skill.subject || 'Learning'],
+              containers: ['learn'],
+              useCache: true,  // Enable caching!
+              forceRegenerate: false
+            });
+
+            setLearnMicroContent(journeyContent.containers.learn[skill?.subject?.toLowerCase() || 'math']);
+          } else {
+            // Fallback: Generate everything if no Master Narrative passed
+            console.log('⚠️ No Master Narrative from parent, generating new one');
+            const journeyContent = await contentOrchestratorWithCache.generateLearningJourney({
+              studentName: student.display_name || student.name || 'Sam',
+              studentId: student.id || 'default',
+              gradeLevel: student.grade_level || 'K',
+              career: selectedCareer?.name || career?.name || 'Professional',
+              careerId: selectedCareer?.id || career?.id || 'default',
+              selectedCharacter: selectedCharacter || 'harmony',
+              currentSubject: skill?.subject || 'math',
+              currentContainer: 'learn',
+              skillId: skill?.id || 'default',
+              subjects: [skill?.subject || 'Learning'],
+              containers: ['learn'],
+              useCache: true,
+              forceRegenerate: false
+            });
+
+            setNarrativeContent(journeyContent.narrative);
+            setLearnMicroContent(journeyContent.containers.learn[skill?.subject?.toLowerCase() || 'math']);
+          }
+
+          console.log('✅ Narrative content ready');
+        } catch (narrativeError) {
+          console.warn('⚠️ Narrative generation failed, using fallback:', narrativeError);
+          // Continue with regular JIT content
+        }
+
         // STEP 4: Transform JIT content to AILearnContent format
         let generatedContent: AILearnContent = {
           instruction: jitContent.instruction || jitContent.instructions || {
@@ -513,8 +664,14 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
           });
         }
 
-        console.log('🎉 SETTING INITIAL PHASE TO INSTRUCTION');
-        setPhase('instruction');
+        console.log('🎉 Content ready - will transition to instruction phase after loading screen');
+
+        // Add a minimum display time for loading screen to allow fun facts to play
+        // This ensures users can hear the fun fact narration
+        setTimeout(() => {
+          console.log('🎉 SETTING INITIAL PHASE TO INSTRUCTION');
+          setPhase('instruction');
+        }, 5000); // Give 5 seconds for fun fact narration
         
         // Get initial companion message
         const companionResponse = await companionRules.getCompanionMessage(
@@ -548,11 +705,19 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
       } catch (err) {
         console.error('Content generation error:', err);
         setError('Failed to generate learning content. Please try again.');
-        
+
+        // Even if there's an error, transition to instruction phase with fallback content
+        // This prevents the user from being stuck on a blank loading screen
+        setPhase('instruction');
+
         // Track error - performanceTracker doesn't have trackError method
         // Could track as failed performance data if needed
       } finally {
-        setIsLoading(false);
+        // Delay setting isLoading to false to match the phase transition
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 5000); // Match the phase transition delay
+
         // Mark content as generated to prevent re-generation
         contentGeneratedRef.current = true;
       }
@@ -982,7 +1147,7 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   
   if (isLoading) {
     return (
-      <EnhancedLoadingScreen 
+      <EnhancedLoadingScreen
         phase="practice"
         skillName={skill?.name || "Learning Skills"}
         studentName={student?.display_name || "Student"}
@@ -990,6 +1155,11 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
         containerType="learn"
         currentCareer={selectedCareer?.name || "Exploring"}
         showGamification={true}
+        masterNarrative={masterNarrative || narrativeContent}  // Use narrativeContent as fallback
+        currentSubject={(skill?.subject?.toLowerCase() || 'math') as 'math' | 'ela' | 'science' | 'socialStudies'}
+        companionId={companionId}
+        enableNarration={true}
+        isFirstLoad={true}  // Always true for initial loading
       />
     );
   }
@@ -1062,6 +1232,9 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
 
   return (
     <div className={`ai-learn-container container-learn phase-${phase}`} data-theme={theme}>
+      {/* Test Audio Button for debugging */}
+      <TestAudioButton />
+
       {/* Comprehensive Progress Header */}
       <ProgressHeader
         containerType="LEARN"
@@ -1088,41 +1261,92 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
         hideOnLoading={false}
         onSettingsClick={() => setShowSettings(true)}
       />
-      
+
+      {/* Companion Audio Controls */}
+      <CompanionAudioControls
+        companion={character?.name || 'Finn'}
+        position="bottom-right"
+        theme={theme}
+        showLabel={true}
+      />
+
       {/* XP Display removed - now shown in dock */}
-      
+
       <div className="container-content">
         {/* Debug instruction phase (disabled to reduce console noise) */}
         
         {/* Loading Phase */}
         {phase === 'loading' && (
-          <EnhancedLoadingScreen 
-            subject={skill?.subject || 'Learning'}
-            skill={skill?.skill_name || 'Essential Skills'}
-            character={character}
-            career={career}
+          <EnhancedLoadingScreen
+            phase="practice"  // Change to 'practice' so fun facts will be selected
+            skillName={skill?.skill_name || 'Essential Skills'}
+            studentName={student?.display_name || 'Student'}
+            containerType="learn"
+            currentCareer={career}
+            customMessage="Preparing your personalized learning journey..."
+            masterNarrative={masterNarrative || narrativeContent}  // Use narrativeContent as fallback
+            currentSubject={(skill?.subject?.toLowerCase() || 'math') as 'math' | 'ela' | 'science' | 'socialStudies'}
+            companionId={companionId}
+            enableNarration={true}
+            isFirstLoad={!content}  // Simplified - true when content hasn't loaded yet
           />
         )}
         
-        {/* Instruction Phase - Using CareerContextScreen */}
-        {phase === 'instruction' && content?.instruction && (
-          <CareerContextScreen
-            instruction={content.instruction}
+        {/* Instruction Phase - Using InstructionalVideoComponent */}
+        {phase === 'instruction' && (
+          <InstructionalVideoComponent
+            content={learnMicroContent || {
+              instructional: {
+                introduction: `Hi ${student?.display_name || 'Sam'}! Let's learn ${skill?.skill_name || 'something amazing'}!`,
+                videoIntro: {
+                  hook: `Discover how ${selectedCareer?.name || 'professionals'} use ${skill?.skill_name}`,
+                  careerContext: `This skill is essential for your future career!`
+                },
+                keyLearningPoints: [
+                  `Understanding ${skill?.skill_name}`,
+                  'Practicing with real examples',
+                  'Applying what you learn'
+                ],
+                keyExpert: {
+                  title: 'Expert Guide',
+                  funFact: 'Professionals use this skill every day!'
+                }
+              },
+              metadata: {
+                subject: skill?.subject || 'Learning',
+                skill: skill?.skill_code || 'SKILL001'
+              }
+            }}
+            narrative={narrativeContent || {
+              character: {
+                name: student?.display_name || student?.name || 'Sam',
+                role: selectedCareer?.name || career?.name || 'Professional',
+                greeting: 'Ready to learn something amazing?',
+                encouragement: 'You can do this!',
+                tone: 'friendly'
+              },
+              cohesiveStory: {
+                mission: `help people as a ${selectedCareer?.name || career?.name || 'Professional'}`
+              },
+              narrativeId: 'default',
+              subjectContextsAligned: {}
+            }}
             studentName={student?.display_name || student?.name || 'Sam'}
-            careerName={career?.name || 'Professional'}
             gradeLevel={student?.grade_level || 'K'}
             subject={skill?.subject || 'Learning'}
-            skillName={skill?.skill_name || 'Essential Skills'}
-            containerType="learn"
-            companionName={character?.name || 'Sage'}
-            avatarUrl={character?.avatar_url}
-            onStart={() => {
+            skill={{
+              skillCode: skill?.skill_code || skill?.id || 'SKILL001',
+              skillName: skill?.skill_name || skill?.name || 'Essential Skills',
+              description: skill?.description || ''
+            }}
+            onComplete={() => {
               handleStartPractice();
-              // Mark as shown in session
               const sessionKey = `career_context_learn_${skill?.subject}_${career?.name || 'default'}`;
               sessionStorage.setItem(sessionKey, 'shown');
             }}
-            onSkip={handleSkipToExperience} // Add skip handler for testing
+            onSkipToQuestions={() => {
+              handleStartPractice();
+            }}
           />
         )}
         
@@ -1262,6 +1486,8 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
                       disabled={practiceResults[idx] !== undefined}
                       showFeedback={practiceResults[idx] !== undefined}
                       theme={theme}
+                      gradeLevel={student.grade_level}
+                      companionId={companionId}
                     />
                     
                   </div>

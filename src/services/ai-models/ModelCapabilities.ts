@@ -30,14 +30,14 @@ export const MODEL_CAPABILITIES: Record<string, ModelCapability> = {
     apiKeySecret: 'azure-sweden-api-key',
     costPerMilTokensInput: 0.15,
     costPerMilTokensOutput: 0.60,
-    maxTokens: 2000,
+    maxTokens: 1000,  // Reduced from 2000
     contextWindow: 16000,
     strengths: ['simple instructions', 'counting', 'basic math', 'structured output'],
     weaknesses: ['complex reasoning', 'creative writing', 'long passages'],
     bestForGrades: ['K', '1', '2'],
     supportsVision: false,
     supportsJSON: true,
-    responseFormat: 'json_object',
+    responseFormat: undefined,  // Removed JSON mode temporarily
     temperature: 0.7,
     requiresStructuredPrompt: true
   },
@@ -106,14 +106,14 @@ export const MODEL_CAPABILITIES: Record<string, ModelCapability> = {
     apiKeySecret: 'azure-eastus2-8781-api-key',
     costPerMilTokensInput: 0.50,
     costPerMilTokensOutput: 1.50,
-    maxTokens: 2000,
+    maxTokens: 3000,  // Increased for better completions
     contextWindow: 16000,
     strengths: ['reliable', 'fast', 'good fallback'],
     weaknesses: ['not cutting-edge', 'no vision'],
     bestForGrades: ['K', '1', '2', '3', '4', '5'],
     supportsVision: false,
     supportsJSON: true,
-    responseFormat: 'json_object',
+    responseFormat: undefined,  // Remove forced JSON mode
     temperature: 0.7,
     requiresStructuredPrompt: false
   },
@@ -140,9 +140,9 @@ export const MODEL_CAPABILITIES: Record<string, ModelCapability> = {
 
 // Grade to model mapping
 export const GRADE_MODEL_MAP: Record<string, string> = {
-  'K': 'phi-4',
-  '1': 'phi-4',
-  '2': 'phi-4',
+  'K': 'gpt-35-turbo',  // Switched from phi-4 for reliability
+  '1': 'gpt-35-turbo',  // Switched from phi-4 for reliability
+  '2': 'gpt-35-turbo',  // Switched from phi-4 for reliability
   '3': 'llama-3.3-70b',
   '4': 'llama-3.3-70b',
   '5': 'llama-3.3-70b',

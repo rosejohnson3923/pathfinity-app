@@ -5,10 +5,12 @@
  * with proper TypeScript type safety and validation integration
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import questionStyles from '../../components/questions/QuestionStyles.module.css';
 import styles from './QuestionRenderer.module.css';
 import layoutStyles from '../../design-system/layouts/IntelligentQuestionLayout.module.css';
+import { azureAudioService } from '../AzureAudioService';
+import { Volume2 } from 'lucide-react';
 import {
   Question,
   MultipleChoiceQuestion,
@@ -57,6 +59,8 @@ export interface QuestionRendererProps {
   theme?: 'light' | 'dark';
   careerContext?: string;
   companionName?: string;
+  gradeLevel?: string;
+  companionId?: string;
 }
 
 // ================================================================
@@ -81,7 +85,9 @@ export const QuestionRenderer: React.FC<QuestionRendererProps> = ({
   validationResult,
   theme = 'light',
   careerContext,
-  companionName
+  companionName,
+  gradeLevel,
+  companionId = 'finn'
 }) => {
   // Debug logging at the top level
   console.log('📍 QuestionRenderer - Incoming Question:', {
@@ -102,6 +108,8 @@ export const QuestionRenderer: React.FC<QuestionRendererProps> = ({
         showFeedback={showFeedback}
         validationResult={validationResult}
         theme={theme}
+        gradeLevel={gradeLevel}
+        companionId={companionId}
       />
     );
   }
@@ -115,6 +123,8 @@ export const QuestionRenderer: React.FC<QuestionRendererProps> = ({
         showFeedback={showFeedback}
         validationResult={validationResult}
         theme={theme}
+        gradeLevel={gradeLevel}
+        companionId={companionId}
       />
     );
   }
@@ -311,8 +321,12 @@ const MultipleChoiceRenderer: React.FC<{
   showFeedback: boolean;
   validationResult?: ValidationResult;
   theme: string;
-}> = ({ question, onAnswer, disabled, showFeedback, validationResult, theme }) => {
+  gradeLevel?: string;
+  companionId?: string;
+}> = ({ question, onAnswer, disabled, showFeedback, validationResult, theme, gradeLevel, companionId = 'finn' }) => {
   const [selected, setSelected] = useState<string[]>([]);
+  const audioPlayedRef = useRef(false);
+  const isKindergarten = gradeLevel?.toLowerCase() === 'k' || gradeLevel?.toLowerCase() === 'kindergarten';
 
   // Debug logging for question content
   console.log('🎯 MultipleChoiceRenderer - Question Data:', {
@@ -325,8 +339,81 @@ const MultipleChoiceRenderer: React.FC<{
     optionObjects: question.options,
     optionsLength: question.options?.length,
     firstOptionText: question.options?.[0]?.text,
-    correctOption: question.options?.find(o => o.isCorrect)?.text
+    correctOption: question.options?.find(o => o.isCorrect)?.text,
+    gradeLevel,
+    isKindergarten
   });
+
+  // Auto-narrate question for kindergarten students
+  useEffect(() => {
+    if (isKindergarten && question.content && !audioPlayedRef.current) {
+      audioPlayedRef.current = true;
+
+      // Build the narration text
+      let narrationText = stripEmojis(question.content);
+
+      // Add a pause, then read the options
+      if (question.options && question.options.length > 0) {
+        narrationText += " ... Your choices are: ";
+        question.options.forEach((option, index) => {
+          const letter = String.fromCharCode(65 + index); // A, B, C, D
+          narrationText += `${letter}: ${stripEmojis(option.text)}. `;
+        });
+      }
+
+      console.log('🔊 Auto-narrating kindergarten question:', narrationText);
+      azureAudioService.playText(narrationText, companionId, {
+        scriptId: 'question.multiple_choice',
+        variables: {
+          questionText: stripEmojis(question.content),
+          options: question.options.map((opt, idx) =>
+            `${String.fromCharCode(65 + idx)}: ${stripEmojis(opt.text)}`).join(', ')
+        },
+        emotion: 'friendly',
+        style: 'cheerful'
+      });
+    }
+  }, [isKindergarten, question.content, question.options, companionId]);
+
+  const handleReplayAudio = () => {
+    if (!question.content) return;
+
+    let narrationText = stripEmojis(question.content);
+    if (question.options && question.options.length > 0) {
+      narrationText += " ... Your choices are: ";
+      question.options.forEach((option, index) => {
+        const letter = String.fromCharCode(65 + index);
+        narrationText += `${letter}: ${stripEmojis(option.text)}. `;
+      });
+    }
+
+    azureAudioService.playText(narrationText, companionId, {
+      scriptId: 'question.replay',
+      variables: {
+        questionText: narrationText
+      },
+      emotion: 'friendly',
+      style: 'cheerful'
+    });
+  };
+
+  const handleOptionHover = (optionText: string, optionIndex: number) => {
+    if (!isKindergarten) return;
+
+    const letter = String.fromCharCode(65 + optionIndex);
+    const hoverText = `Option ${letter}: ${stripEmojis(optionText)}`;
+
+    azureAudioService.playText(hoverText, companionId, {
+      scriptId: 'question.option_hover',
+      variables: {
+        letter: letter,
+        optionText: stripEmojis(optionText)
+      },
+      emotion: 'friendly',
+      style: 'cheerful',
+      volume: 0.7
+    });
+  };
 
   const handleSelect = (optionId: string) => {
     if (disabled) return;
@@ -494,9 +581,36 @@ const MultipleChoiceRenderer: React.FC<{
           </div>
         </div>
       )}
-      <div className="question-text">
+      <div className="question-text" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
         {question.content ? (
-          <h3>{stripEmojis(question.content)}</h3>
+          <>
+            <h3 style={{ flex: 1 }}>{stripEmojis(question.content)}</h3>
+            {isKindergarten && (
+              <button
+                onClick={handleReplayAudio}
+                className="audio-replay-button"
+                style={{
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  border: 'none',
+                  borderRadius: '50%',
+                  width: '48px',
+                  height: '48px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                  transition: 'transform 0.2s',
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+                onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                aria-label="Replay question"
+                title="Click to hear the question again"
+              >
+                <Volume2 size={24} color="white" />
+              </button>
+            )}
+          </>
         ) : (
           <h3 className={questionStyles.errorMessage}>⚠️ No question content</h3>
         )}
@@ -531,6 +645,7 @@ const MultipleChoiceRenderer: React.FC<{
             key={option.id}
             className={optionClasses}
             onClick={() => handleSelect(option.id)}
+            onMouseEnter={() => handleOptionHover(option.text, question.options.indexOf(option))}
             disabled={disabled}
           >
             <span className={layoutStyles.optionLabel}>
@@ -563,8 +678,44 @@ const TrueFalseRenderer: React.FC<{
   showFeedback: boolean;
   validationResult?: ValidationResult;
   theme: string;
-}> = ({ question, onAnswer, disabled, showFeedback, validationResult, theme }) => {
+  gradeLevel?: string;
+  companionId?: string;
+}> = ({ question, onAnswer, disabled, showFeedback, validationResult, theme, gradeLevel, companionId = 'finn' }) => {
   const [selected, setSelected] = useState<boolean | null>(null);
+  const audioPlayedRef = useRef(false);
+  const isKindergarten = gradeLevel?.toLowerCase() === 'k' || gradeLevel?.toLowerCase() === 'kindergarten';
+
+  // Auto-narrate question for kindergarten students
+  useEffect(() => {
+    if (isKindergarten && question.content && !audioPlayedRef.current) {
+      audioPlayedRef.current = true;
+
+      const narrationText = `${stripEmojis(question.content)} ... Is this true or false?`;
+
+      console.log('🔊 Auto-narrating kindergarten true/false question:', narrationText);
+      azureAudioService.playText(narrationText, companionId, {
+        scriptId: 'question.true_false',
+        variables: {
+          questionText: stripEmojis(question.content)
+        },
+        emotion: 'friendly',
+        style: 'cheerful'
+      });
+    }
+  }, [isKindergarten, question.content, companionId]);
+
+  const handleReplayAudio = () => {
+    if (!question.content) return;
+    const narrationText = `${stripEmojis(question.content)} ... Is this true or false?`;
+    azureAudioService.playText(narrationText, companionId, {
+      scriptId: 'question.replay',
+      variables: {
+        questionText: narrationText
+      },
+      emotion: 'friendly',
+      style: 'cheerful'
+    });
+  };
 
   const handleSelect = (value: boolean) => {
     if (disabled) return;
@@ -579,7 +730,9 @@ const TrueFalseRenderer: React.FC<{
     contentLength: question.content?.length,
     statement: question.statement,
     media: question.media,
-    correctAnswer: question.correctAnswer
+    correctAnswer: question.correctAnswer,
+    gradeLevel,
+    isKindergarten
   });
 
 

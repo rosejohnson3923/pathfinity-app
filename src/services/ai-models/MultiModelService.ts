@@ -47,18 +47,28 @@ export class MultiModelService {
   private metricsCollector: MetricsCollector;
 
   private constructor(config?: Partial<MultiModelConfig>) {
+    // Handle browser vs Node environment
+    const isBrowser = typeof window !== 'undefined';
+    const getEnvVar = (key: string, defaultValue?: string): string | undefined => {
+      if (isBrowser) {
+        return (import.meta as any).env?.[`VITE_${key}`] || defaultValue;
+      } else {
+        return process?.env?.[key] || defaultValue;
+      }
+    };
+
     this.config = {
-      enableMultiModel: process.env.ENABLE_MULTI_MODEL === 'true',
-      enableValidation: process.env.ENABLE_VALIDATION === 'true',
-      enableCostTracking: process.env.ENABLE_COST_TRACKING === 'true',
-      forceModel: process.env.FORCE_MODEL,
-      validationStrictness: (process.env.VALIDATION_STRICTNESS as any) || 'medium',
-      maxRetries: parseInt(process.env.MAX_RETRIES || '3'),
+      enableMultiModel: getEnvVar('ENABLE_MULTI_MODEL') === 'true',
+      enableValidation: getEnvVar('ENABLE_VALIDATION', 'true') === 'true',
+      enableCostTracking: getEnvVar('ENABLE_COST_TRACKING', 'true') === 'true',
+      forceModel: getEnvVar('FORCE_MODEL'),
+      validationStrictness: (getEnvVar('VALIDATION_STRICTNESS', 'medium') as any),
+      maxRetries: parseInt(getEnvVar('MAX_RETRIES', '3') || '3'),
       ...config
     };
 
     // Initialize Azure Key Vault client
-    const vaultUrl = process.env.AZURE_KEY_VAULT_URL || 'https://pathfinity-kv-2823.vault.azure.net/';
+    const vaultUrl = getEnvVar('AZURE_KEY_VAULT_URL', 'https://pathfinity-kv-2823.vault.azure.net/');
     const credential = new DefaultAzureCredential();
     this.secretClient = new SecretClient(vaultUrl, credential);
 
@@ -156,18 +166,40 @@ export class MultiModelService {
       ...(model.responseFormat && { response_format: { type: model.responseFormat } })
     };
 
-    // Make API call
-    const response = await fetch(
-      `${model.endpoint}openai/deployments/${model.deploymentName}/chat/completions?api-version=2024-08-01-preview`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'api-key': apiKey
-        },
-        body: JSON.stringify(requestBody)
+    // Make API call with timeout
+    const controller = new AbortController();
+    const timeout = setTimeout(() => {
+      console.warn(`⏱️ Request to ${model.name} timed out after 30 seconds`);
+      controller.abort();
+    }, 30000); // 30 second timeout
+
+    console.log(`📡 Calling ${model.name} at ${model.endpoint}`);
+    console.log(`   Deployment: ${model.deploymentName}`);
+    console.log(`   Max tokens: ${requestBody.max_tokens}`);
+
+    let response;
+    try {
+      response = await fetch(
+        `${model.endpoint}openai/deployments/${model.deploymentName}/chat/completions?api-version=2024-08-01-preview`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'api-key': apiKey
+          },
+          body: JSON.stringify(requestBody),
+          signal: controller.signal
+        }
+      );
+    } catch (error: any) {
+      clearTimeout(timeout);
+      if (error.name === 'AbortError') {
+        throw new Error(`${model.name} request timed out after 30 seconds`);
       }
-    );
+      throw error;
+    } finally {
+      clearTimeout(timeout);
+    }
 
     if (!response.ok) {
       const error = await response.text();
@@ -180,9 +212,26 @@ export class MultiModelService {
     // Parse JSON if expected
     if (model.supportsJSON) {
       try {
-        return JSON.parse(content);
+        // Clean up markdown-wrapped JSON (common with some models)
+        let cleanContent = content;
+        if (typeof content === 'string') {
+          // Remove markdown code blocks if present
+          cleanContent = content.replace(/^```json\s*/i, '').replace(/\s*```$/i, '');
+          // Also try without the json label
+          cleanContent = cleanContent.replace(/^```\s*/i, '').replace(/\s*```$/i, '');
+        }
+        return JSON.parse(cleanContent);
       } catch (e) {
-        console.warn(`Failed to parse JSON from ${model.name}, returning raw content`);
+        console.warn(`Failed to parse JSON from ${model.name}, attempting fallback parsing`);
+        // Try to extract JSON from the content
+        const jsonMatch = content.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          try {
+            return JSON.parse(jsonMatch[0]);
+          } catch (e2) {
+            console.warn(`Fallback JSON parsing also failed for ${model.name}`);
+          }
+        }
         return content;
       }
     }
@@ -335,20 +384,31 @@ Return the corrected content in the same JSON format.`;
       return this.apiKeyCache.get(secretName)!;
     }
 
-    try {
-      const secret = await this.secretClient.getSecret(secretName);
-      const apiKey = secret.value!;
+    // First try environment variables (for local development)
+    const isBrowser = typeof window !== 'undefined';
+    const envKey = secretName.toUpperCase().replace(/-/g, '_');
+    const apiKey = isBrowser ? (import.meta as any).env?.[`VITE_${envKey}`] : process?.env?.[envKey];
+
+    if (apiKey) {
+      console.log(`✅ Using API key from environment: VITE_${envKey}`);
       this.apiKeyCache.set(secretName, apiKey);
       return apiKey;
-    } catch (error) {
-      // Fallback to environment variable for local development
-      const envKey = secretName.toUpperCase().replace(/-/g, '_');
-      const apiKey = process.env[envKey];
-      if (!apiKey) {
-        throw new Error(`API key not found for ${secretName}`);
-      }
-      return apiKey;
     }
+
+    // Only try Key Vault if env variable not found and not in browser
+    if (!isBrowser && this.secretClient) {
+      try {
+        const secret = await this.secretClient.getSecret(secretName);
+        const vaultKey = secret.value!;
+        console.log(`✅ Using API key from Key Vault: ${secretName}`);
+        this.apiKeyCache.set(secretName, vaultKey);
+        return vaultKey;
+      } catch (error) {
+        console.warn(`Failed to get key from Key Vault: ${secretName}`, error);
+      }
+    }
+
+    throw new Error(`No API key found for ${secretName}. Looked for env var: VITE_${envKey}`);
   }
 
   /**

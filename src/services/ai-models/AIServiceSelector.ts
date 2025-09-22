@@ -73,7 +73,7 @@ class AIServiceSelector implements AIServiceInterface {
         console.log('║ Status: ACTIVE                                            ║');
         console.log(`║ Target Grades: ${this.targetGrades.join(', ').padEnd(43)}║`);
         console.log(`║ Debug Mode: ${this.debugMode ? 'ON' : 'OFF'}                                          ║`);
-        console.log('║ Cost Savings: 81.6% vs GPT-4o                            ║');
+        console.log('║ Cost Savings: 88% (K-2) to 94% (6-8) vs GPT-4o          ║');
         console.log('╚═══════════════════════════════════════════════════════════╝');
         console.log('');
       } catch (error) {
@@ -151,10 +151,11 @@ class AIServiceSelector implements AIServiceInterface {
         return result.content;
       } else {
         // Use standard Azure OpenAI service
-        const result = await azureOpenAIService.generateContent(
+        const result = await azureOpenAIService.generateWithModel(
+          'gpt-4o',
           params.prompt,
-          params.maxTokens || 2000,
-          params.temperature || 0.7
+          undefined,
+          { type: 'json_object' }
         );
 
         const latency = Date.now() - startTime;
@@ -174,10 +175,11 @@ class AIServiceSelector implements AIServiceInterface {
       // Fallback to standard service on error
       if (this.shouldUseMultiModel(params)) {
         console.log('Falling back to standard Azure OpenAI service');
-        return azureOpenAIService.generateContent(
+        return azureOpenAIService.generateWithModel(
+          'gpt-4o',
           params.prompt,
-          params.maxTokens || 2000,
-          params.temperature || 0.7
+          undefined,
+          { type: 'json_object' }
         );
       }
 
@@ -198,12 +200,15 @@ class AIServiceSelector implements AIServiceInterface {
       studentProfile: {
         grade: params.context?.grade,
         subject: params.context?.subject
-      },
-      promptType: 'content_generation' as const,
-      content: params.prompt
+      } as any,
+      subject: params.context?.subject as any,
+      container: 'LEARN' as any,
+      hasImages: false,
+      isValidation: false
     };
 
-    const selectedModel = ModelRouter.routeRequest(routingContext);
+    const selection = ModelRouter.selectModel(routingContext);
+    const selectedModel = selection.primary;
 
     console.log('');
     console.log('┌─────────────────────────────────────────┐');
@@ -215,13 +220,10 @@ class AIServiceSelector implements AIServiceInterface {
     console.log('└─────────────────────────────────────────┘');
 
     // Generate content with selected model
-    const result = await this.multiModelService.generateContent({
-      grade: params.context?.grade || '5',
-      subject: params.context?.subject || 'General',
-      skill: params.context?.skill || '',
-      contentType: 'learning_content',
-      prompt: params.prompt
-    });
+    const result = await this.multiModelService.generateContent(
+      params.prompt,
+      routingContext
+    );
 
     return result;
   }

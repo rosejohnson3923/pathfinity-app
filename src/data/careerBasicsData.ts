@@ -44,7 +44,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Doctor',
     icon: '👩‍⚕️',
     color: '#10B981',
-    quickDesc: 'Help people feel better',
+    quickDesc: 'Doctors help people feel better when they are sick',
     category: CAREER_CATEGORIES.HEALTHCARE,
     subjects: ['science', 'math', 'ela'],
     gradeRange: { min: 0, max: 12 }
@@ -54,7 +54,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Nurse',
     icon: '👩‍⚕️',
     color: '#E11D48',
-    quickDesc: 'Care for patients',
+    quickDesc: 'Nurses care for patients and help them heal',
     category: CAREER_CATEGORIES.HEALTHCARE,
     subjects: ['science', 'math', 'ela'],
     gradeRange: { min: 6, max: 12 }
@@ -64,7 +64,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Veterinarian',
     icon: '🐾',
     color: '#84CC16',
-    quickDesc: 'Help animals',
+    quickDesc: 'Veterinarians help animals stay healthy',
     category: CAREER_CATEGORIES.HEALTHCARE,
     subjects: ['science', 'math'],
     gradeRange: { min: 0, max: 12 }
@@ -74,7 +74,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Surgeon',
     icon: '🏥',
     color: '#DC2626',
-    quickDesc: 'Perform operations',
+    quickDesc: 'Surgeons perform operations to save lives',
     category: CAREER_CATEGORIES.HEALTHCARE,
     subjects: ['science', 'math'],
     gradeRange: { min: 9, max: 12 }
@@ -84,7 +84,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Psychologist',
     icon: '🧠',
     color: '#9333EA',
-    quickDesc: 'Understand minds',
+    quickDesc: 'Psychologists help people understand their thoughts and feelings',
     category: CAREER_CATEGORIES.HEALTHCARE,
     subjects: ['science', 'social', 'ela'],
     gradeRange: { min: 9, max: 12 }
@@ -96,7 +96,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Teacher',
     icon: '📚',
     color: '#6366F1',
-    quickDesc: 'Help students learn',
+    quickDesc: 'Teachers help students learn new things',
     category: CAREER_CATEGORIES.EDUCATION,
     subjects: ['ela', 'math', 'science', 'social'],
     gradeRange: { min: 0, max: 12 }
@@ -108,7 +108,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Scientist',
     icon: '🔬',
     color: '#10B981',
-    quickDesc: 'Make discoveries',
+    quickDesc: 'Scientists make discoveries about our world',
     category: CAREER_CATEGORIES.STEM,
     subjects: ['science', 'math'],
     gradeRange: { min: 0, max: 12 }
@@ -118,7 +118,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Programmer',
     icon: '💻',
     color: '#7C3AED',
-    quickDesc: 'Create software',
+    quickDesc: 'Programmers create computer programs',
     category: CAREER_CATEGORIES.STEM,
     subjects: ['math', 'science'],
     gradeRange: { min: 6, max: 12 }
@@ -128,7 +128,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Data Scientist',
     icon: '📊',
     color: '#0891B2',
-    quickDesc: 'Analyze data',
+    quickDesc: 'Data scientists analyze information to solve problems',
     category: CAREER_CATEGORIES.STEM,
     subjects: ['math', 'science'],
     gradeRange: { min: 9, max: 12 }
@@ -138,7 +138,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Marine Biologist',
     icon: '🐠',
     color: '#0D9488',
-    quickDesc: 'Study ocean life',
+    quickDesc: 'Marine biologists study ocean life',
     category: CAREER_CATEGORIES.STEM,
     subjects: ['science', 'math'],
     gradeRange: { min: 9, max: 12 }
@@ -148,7 +148,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'AI/ML Engineer',
     icon: '🤖',
     color: '#8B5CF6',
-    quickDesc: 'Create AI systems',
+    quickDesc: 'AI engineers create smart computer systems',
     category: CAREER_CATEGORIES.STEM,
     subjects: ['math', 'science'],
     gradeRange: { min: 9, max: 12 }
@@ -158,7 +158,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Cybersecurity Specialist',
     icon: '🔒',
     color: '#DC2626',
-    quickDesc: 'Protect digital systems',
+    quickDesc: 'Cybersecurity experts protect computers from hackers',
     category: CAREER_CATEGORIES.STEM,
     subjects: ['math', 'science'],
     gradeRange: { min: 9, max: 12 }
@@ -168,7 +168,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Software Engineer',
     icon: '💾',
     color: '#6366F1',
-    quickDesc: 'Build software systems',
+    quickDesc: 'Software engineers build computer programs and apps',
     category: CAREER_CATEGORIES.STEM,
     subjects: ['math', 'science'],
     gradeRange: { min: 9, max: 12 }
@@ -178,7 +178,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Mobile App Developer',
     icon: '📱',
     color: '#F97316',
-    quickDesc: 'Create mobile apps',
+    quickDesc: 'App developers create apps for phones and tablets',
     category: CAREER_CATEGORIES.STEM,
     subjects: ['math', 'science'],
     gradeRange: { min: 9, max: 12 }
@@ -188,7 +188,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Biotech Researcher',
     icon: '🧬',
     color: '#7C3AED',
-    quickDesc: 'Research biotechnology',
+    quickDesc: 'Biotechnology researchers develop new medical treatments',
     category: CAREER_CATEGORIES.STEM,
     subjects: ['science', 'math'],
     gradeRange: { min: 9, max: 12 }
@@ -198,7 +198,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Blockchain Developer',
     icon: '🔗',
     color: '#F59E0B',
-    quickDesc: 'Build blockchain apps',
+    quickDesc: 'Blockchain developers build secure digital systems',
     category: CAREER_CATEGORIES.STEM,
     subjects: ['math', 'science'],
     gradeRange: { min: 9, max: 12 }
@@ -210,7 +210,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Artist',
     icon: '🎨',
     color: '#F59E0B',
-    quickDesc: 'Create beautiful art',
+    quickDesc: 'Artists create beautiful paintings and drawings',
     category: CAREER_CATEGORIES.ARTS_CREATIVE,
     subjects: ['ela', 'social'],
     gradeRange: { min: 0, max: 12 }
@@ -220,7 +220,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Musician',
     icon: '🎵',
     color: '#6366F1',
-    quickDesc: 'Create music',
+    quickDesc: 'Musicians create and perform music',
     category: CAREER_CATEGORIES.ARTS_CREATIVE,
     subjects: ['ela', 'math'],
     gradeRange: { min: 0, max: 12 }
@@ -230,7 +230,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Writer',
     icon: '✍️',
     color: '#D97706',
-    quickDesc: 'Tell stories',
+    quickDesc: 'Writers tell stories through books',
     category: CAREER_CATEGORIES.ARTS_CREATIVE,
     subjects: ['ela', 'social'],
     gradeRange: { min: 6, max: 12 }
@@ -240,7 +240,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Photographer',
     icon: '📷',
     color: '#7E22CE',
-    quickDesc: 'Capture moments',
+    quickDesc: 'Photographers capture special moments with cameras',
     category: CAREER_CATEGORIES.ARTS_CREATIVE,
     subjects: ['ela', 'science'],
     gradeRange: { min: 6, max: 12 }
@@ -250,7 +250,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Dancer',
     icon: '💃',
     color: '#BE185D',
-    quickDesc: 'Express through movement',
+    quickDesc: 'Dancers express feelings through movement',
     category: CAREER_CATEGORIES.ARTS_CREATIVE,
     subjects: ['ela', 'science'],
     gradeRange: { min: 6, max: 12 }
@@ -260,7 +260,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Game Designer',
     icon: '🎮',
     color: '#F97316',
-    quickDesc: 'Create games',
+    quickDesc: 'Game designers create fun video games',
     category: CAREER_CATEGORIES.ARTS_CREATIVE,
     subjects: ['math', 'science', 'ela'],
     gradeRange: { min: 6, max: 12 }
@@ -272,7 +272,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Entrepreneur',
     icon: '💼',
     color: '#EA580C',
-    quickDesc: 'Start businesses',
+    quickDesc: 'Entrepreneurs start new businesses',
     category: CAREER_CATEGORIES.BUSINESS,
     subjects: ['math', 'social', 'ela'],
     gradeRange: { min: 9, max: 12 }
@@ -282,7 +282,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Investment Banker',
     icon: '💰',
     color: '#10B981',
-    quickDesc: 'Manage investments',
+    quickDesc: 'Investment bankers help companies manage money',
     category: CAREER_CATEGORIES.BUSINESS,
     subjects: ['math', 'social'],
     gradeRange: { min: 9, max: 12 }
@@ -292,7 +292,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Marketing Director',
     icon: '📈',
     color: '#EC4899',
-    quickDesc: 'Lead marketing strategy',
+    quickDesc: 'Marketing directors create strategies to sell products',
     category: CAREER_CATEGORIES.BUSINESS,
     subjects: ['ela', 'social', 'math'],
     gradeRange: { min: 9, max: 12 }
@@ -302,7 +302,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Financial Analyst',
     icon: '📊',
     color: '#14B8A6',
-    quickDesc: 'Analyze finances',
+    quickDesc: 'Financial analysts study money and investments',
     category: CAREER_CATEGORIES.BUSINESS,
     subjects: ['math', 'social'],
     gradeRange: { min: 9, max: 12 }
@@ -312,7 +312,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Chief Executive Officer',
     icon: '👔',
     color: '#1E40AF',
-    quickDesc: 'Lead companies',
+    quickDesc: 'CEOs lead companies and make big decisions',
     category: CAREER_CATEGORIES.BUSINESS,
     subjects: ['ela', 'math', 'social'],
     gradeRange: { min: 9, max: 12 }
@@ -324,7 +324,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Police Officer',
     icon: '👮',
     color: '#1E40AF',
-    quickDesc: 'Protect and serve',
+    quickDesc: 'Police officers protect people and keep communities safe',
     category: CAREER_CATEGORIES.PUBLIC_SERVICE,
     subjects: ['social', 'ela'],
     gradeRange: { min: 6, max: 12 }
@@ -334,7 +334,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Firefighter',
     icon: '🚒',
     color: '#DC2626',
-    quickDesc: 'Save lives',
+    quickDesc: 'Firefighters save lives and put out fires',
     category: CAREER_CATEGORIES.PUBLIC_SERVICE,
     subjects: ['science', 'math'],
     gradeRange: { min: 6, max: 12 }
@@ -344,7 +344,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Social Worker',
     icon: '🤝',
     color: '#7C3AED',
-    quickDesc: 'Help communities',
+    quickDesc: 'Social workers help people and families in need',
     category: CAREER_CATEGORIES.PUBLIC_SERVICE,
     subjects: ['social', 'ela'],
     gradeRange: { min: 6, max: 12 }
@@ -354,7 +354,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Lawyer',
     icon: '⚖️',
     color: '#991B1B',
-    quickDesc: 'Fight for justice',
+    quickDesc: 'Lawyers help people with legal problems',
     category: CAREER_CATEGORIES.PUBLIC_SERVICE,
     subjects: ['ela', 'social'],
     gradeRange: { min: 9, max: 12 }
@@ -366,7 +366,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Athlete',
     icon: '⚽',
     color: '#EF4444',
-    quickDesc: 'Play sports',
+    quickDesc: 'Athletes play sports and compete in games',
     category: CAREER_CATEGORIES.SPORTS_FITNESS,
     subjects: ['science', 'math'],
     gradeRange: { min: 0, max: 12 }
@@ -376,7 +376,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Professional Athlete',
     icon: '🏆',
     color: '#F59E0B',
-    quickDesc: 'Compete professionally',
+    quickDesc: 'Professional gamers compete in video game tournaments',
     category: CAREER_CATEGORIES.SPORTS_FITNESS,
     subjects: ['science', 'math'],
     gradeRange: { min: 6, max: 12 }
@@ -388,7 +388,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Farmer',
     icon: '🌾',
     color: '#65A30D',
-    quickDesc: 'Grow food',
+    quickDesc: 'Farmers grow food for people to eat',
     category: CAREER_CATEGORIES.ENVIRONMENT,
     subjects: ['science', 'math'],
     gradeRange: { min: 0, max: 12 }
@@ -400,7 +400,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'YouTuber',
     icon: '📹',
     color: '#EF4444',
-    quickDesc: 'Create content',
+    quickDesc: 'YouTubers create videos for the internet',
     category: CAREER_CATEGORIES.MEDIA_COMMUNICATION,
     subjects: ['ela', 'social'],
     gradeRange: { min: 6, max: 12 }
@@ -412,7 +412,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Engineer',
     icon: '⚙️',
     color: '#059669',
-    quickDesc: 'Design solutions',
+    quickDesc: 'Engineers design solutions to problems',
     category: CAREER_CATEGORIES.ENGINEERING,
     subjects: ['math', 'science'],
     gradeRange: { min: 9, max: 12 }
@@ -422,7 +422,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Builder',
     icon: '🏗️',
     color: '#8B5CF6',
-    quickDesc: 'Construct structures',
+    quickDesc: 'Civil engineers build roads and bridges',
     category: CAREER_CATEGORIES.ENGINEERING,
     subjects: ['math', 'science'],
     gradeRange: { min: 0, max: 12 }
@@ -432,7 +432,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Architect',
     icon: '🏛️',
     color: '#4338CA',
-    quickDesc: 'Design buildings',
+    quickDesc: 'Architects design buildings and homes',
     category: CAREER_CATEGORIES.ENGINEERING,
     subjects: ['math', 'science', 'ela'],
     gradeRange: { min: 9, max: 12 }
@@ -442,7 +442,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Robotics Engineer',
     icon: '🤖',
     color: '#6366F1',
-    quickDesc: 'Build robots',
+    quickDesc: 'Robotics engineers build robots that help people',
     category: CAREER_CATEGORIES.ENGINEERING,
     subjects: ['math', 'science'],
     gradeRange: { min: 9, max: 12 }
@@ -452,7 +452,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Aerospace Engineer',
     icon: '🚀',
     color: '#0EA5E9',
-    quickDesc: 'Design aircraft',
+    quickDesc: 'Aerospace engineers design airplanes and spacecraft',
     category: CAREER_CATEGORIES.ENGINEERING,
     subjects: ['math', 'science'],
     gradeRange: { min: 9, max: 12 }
@@ -462,7 +462,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Renewable Energy Engineer',
     icon: '⚡',
     color: '#10B981',
-    quickDesc: 'Create clean energy',
+    quickDesc: 'Energy engineers develop clean power systems',
     category: CAREER_CATEGORIES.ENGINEERING,
     subjects: ['science', 'math'],
     gradeRange: { min: 9, max: 12 }
@@ -472,7 +472,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Cloud Architect',
     icon: '☁️',
     color: '#0EA5E9',
-    quickDesc: 'Design cloud systems',
+    quickDesc: 'Cloud architects design internet storage systems',
     category: CAREER_CATEGORIES.ENGINEERING,
     subjects: ['math', 'science'],
     gradeRange: { min: 9, max: 12 }
@@ -482,7 +482,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Astronaut',
     icon: '🚀',
     color: '#0EA5E9',
-    quickDesc: 'Explore space',
+    quickDesc: 'Astronauts explore space and conduct experiments',
     category: CAREER_CATEGORIES.ENGINEERING,
     subjects: ['science', 'math'],
     gradeRange: { min: 9, max: 12 }
@@ -492,7 +492,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Pilot',
     icon: '✈️',
     color: '#0284C7',
-    quickDesc: 'Fly aircraft',
+    quickDesc: 'Pilots fly airplanes to transport people safely',
     category: CAREER_CATEGORIES.ENGINEERING,
     subjects: ['math', 'science'],
     gradeRange: { min: 9, max: 12 }
@@ -504,7 +504,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Chef',
     icon: '👨‍🍳',
     color: '#EC4899',
-    quickDesc: 'Create delicious meals',
+    quickDesc: 'Chefs cook delicious meals in restaurants',
     category: CAREER_CATEGORIES.HOSPITALITY,
     subjects: ['math', 'science', 'ela'],
     gradeRange: { min: 0, max: 12 }
@@ -516,7 +516,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Cafeteria Worker',
     icon: '🍽️',
     color: '#EA580C',
-    quickDesc: 'Serve nutritious meals to students',
+    quickDesc: 'Cafeteria workers serve nutritious meals to students',
     category: CAREER_CATEGORIES.COMMUNITY_HELPERS,
     subjects: ['math', 'science', 'social'],
     gradeRange: { min: 0, max: 8 }
@@ -526,7 +526,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Bus Driver',
     icon: '🚌',
     color: '#EAB308',
-    quickDesc: 'Safely transport students',
+    quickDesc: 'School bus drivers safely transport students to school',
     category: CAREER_CATEGORIES.COMMUNITY_HELPERS,
     subjects: ['math', 'social', 'ela'],
     gradeRange: { min: 0, max: 8 }
@@ -536,7 +536,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Crossing Guard',
     icon: '🛑',
     color: '#DC2626',
-    quickDesc: 'Keep students safe crossing streets',
+    quickDesc: 'Crossing guards keep students safe crossing streets',
     category: CAREER_CATEGORIES.COMMUNITY_HELPERS,
     subjects: ['social', 'ela'],
     gradeRange: { min: 0, max: 5 }
@@ -546,7 +546,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Grocery Store Worker',
     icon: '🛒',
     color: '#059669',
-    quickDesc: 'Help people get food and supplies',
+    quickDesc: 'Store clerks help people find and buy things',
     category: CAREER_CATEGORIES.COMMUNITY_HELPERS,
     subjects: ['math', 'social', 'ela'],
     gradeRange: { min: 0, max: 8 }
@@ -556,7 +556,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Janitor',
     icon: '🧹',
     color: '#78716C',
-    quickDesc: 'Keep buildings clean and safe',
+    quickDesc: 'Janitors keep buildings clean and safe',
     category: CAREER_CATEGORIES.COMMUNITY_HELPERS,
     subjects: ['science', 'math', 'social'],
     gradeRange: { min: 0, max: 8 }
@@ -566,7 +566,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Librarian',
     icon: '📚',
     color: '#7C3AED',
-    quickDesc: 'Help people find books and information',
+    quickDesc: 'Librarians help people find books and information',
     category: CAREER_CATEGORIES.EDUCATION,
     subjects: ['ela', 'social', 'science'],
     gradeRange: { min: 0, max: 12 }
@@ -576,7 +576,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Mail Carrier',
     icon: '📬',
     color: '#8B5CF6',
-    quickDesc: 'Deliver mail to homes and businesses',
+    quickDesc: 'Mail carriers deliver mail to homes and businesses',
     category: CAREER_CATEGORIES.COMMUNITY_HELPERS,
     subjects: ['math', 'social', 'ela'],
     gradeRange: { min: 0, max: 8 }
@@ -586,7 +586,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Park Ranger',
     icon: '🌲',
     color: '#10B981',
-    quickDesc: 'Protect nature and help visitors',
+    quickDesc: 'Park rangers protect nature and help visitors',
     category: CAREER_CATEGORIES.ENVIRONMENT,
     subjects: ['science', 'social', 'ela'],
     gradeRange: { min: 0, max: 12 }
@@ -598,7 +598,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Carpenter',
     icon: '🔨',
     color: '#92400E',
-    quickDesc: 'Build with wood and tools',
+    quickDesc: 'Carpenters build things with wood',
     category: CAREER_CATEGORIES.SKILLED_TRADES,
     subjects: ['math', 'science', 'art'],
     gradeRange: { min: 3, max: 12 }
@@ -608,7 +608,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Electrician',
     icon: '⚡',
     color: '#FCD34D',
-    quickDesc: 'Work with electrical systems',
+    quickDesc: 'Electricians install and fix electrical systems',
     category: CAREER_CATEGORIES.SKILLED_TRADES,
     subjects: ['science', 'math'],
     gradeRange: { min: 6, max: 12 }
@@ -618,7 +618,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Plumber',
     icon: '🔧',
     color: '#3B82F6',
-    quickDesc: 'Fix pipes and water systems',
+    quickDesc: 'Plumbers fix pipes and water systems',
     category: CAREER_CATEGORIES.SKILLED_TRADES,
     subjects: ['math', 'science'],
     gradeRange: { min: 6, max: 12 }
@@ -630,7 +630,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Dentist',
     icon: '🦷',
     color: '#F0F9FF',
-    quickDesc: 'Keep teeth healthy',
+    quickDesc: 'Dentists keep teeth healthy and clean',
     category: CAREER_CATEGORIES.HEALTHCARE,
     subjects: ['science', 'math', 'ela'],
     gradeRange: { min: 0, max: 12 }
@@ -640,7 +640,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Mental Health Counselor',
     icon: '💚',
     color: '#86EFAC',
-    quickDesc: 'Help people with feelings',
+    quickDesc: 'Therapists help people understand their feelings',
     category: CAREER_CATEGORIES.HEALTHCARE,
     subjects: ['science', 'social', 'ela'],
     gradeRange: { min: 6, max: 12 }
@@ -650,7 +650,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Pharmacist',
     icon: '💊',
     color: '#C084FC',
-    quickDesc: 'Provide medicine safely',
+    quickDesc: 'Pharmacists prepare and provide medicine',
     category: CAREER_CATEGORIES.HEALTHCARE,
     subjects: ['science', 'math', 'ela'],
     gradeRange: { min: 6, max: 12 }
@@ -660,7 +660,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Psychiatrist',
     icon: '🧠',
     color: '#F472B6',
-    quickDesc: 'Doctor for mental health',
+    quickDesc: 'Psychiatrists help people with mental health',
     category: CAREER_CATEGORIES.HEALTHCARE,
     subjects: ['science', 'social', 'ela'],
     gradeRange: { min: 9, max: 12 }
@@ -672,7 +672,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Drone Operator',
     icon: '🚁',
     color: '#0EA5E9',
-    quickDesc: 'Fly drones for work',
+    quickDesc: 'Drone pilots fly drones for photography and delivery',
     category: CAREER_CATEGORIES.STEM,
     subjects: ['science', 'math', 'technology'],
     gradeRange: { min: 3, max: 12 }
@@ -682,7 +682,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Game Developer',
     icon: '🎮',
     color: '#8B5CF6',
-    quickDesc: 'Create video games',
+    quickDesc: 'Game developers create video games',
     category: CAREER_CATEGORIES.DIGITAL_MEDIA,
     subjects: ['math', 'science', 'art', 'technology'],
     gradeRange: { min: 3, max: 12 }
@@ -692,7 +692,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Podcast Producer',
     icon: '🎙️',
     color: '#EC4899',
-    quickDesc: 'Create audio shows',
+    quickDesc: 'Podcasters create audio shows and interviews',
     category: CAREER_CATEGORIES.MEDIA_COMMUNICATION,
     subjects: ['ela', 'social', 'technology'],
     gradeRange: { min: 6, max: 12 }
@@ -702,7 +702,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Social Media Strategist',
     icon: '📱',
     color: '#06B6D4',
-    quickDesc: 'Manage online presence',
+    quickDesc: 'Social media managers run online accounts for businesses',
     category: CAREER_CATEGORIES.DIGITAL_MEDIA,
     subjects: ['ela', 'art', 'social', 'technology'],
     gradeRange: { min: 6, max: 12 }
@@ -712,7 +712,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'UX/UI Designer',
     icon: '🎨',
     color: '#F59E0B',
-    quickDesc: 'Design apps and websites',
+    quickDesc: 'UX designers make apps and websites easy to use',
     category: CAREER_CATEGORIES.DIGITAL_MEDIA,
     subjects: ['art', 'technology', 'ela'],
     gradeRange: { min: 6, max: 12 }
@@ -722,7 +722,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Video Game Designer',
     icon: '🕹️',
     color: '#10B981',
-    quickDesc: 'Design game experiences',
+    quickDesc: 'Game designers create fun game experiences',
     category: CAREER_CATEGORIES.DIGITAL_MEDIA,
     subjects: ['art', 'math', 'ela', 'technology'],
     gradeRange: { min: 3, max: 12 }
@@ -732,7 +732,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Web Designer',
     icon: '🌐',
     color: '#6366F1',
-    quickDesc: 'Create beautiful websites',
+    quickDesc: 'Web developers create websites',
     category: CAREER_CATEGORIES.DIGITAL_MEDIA,
     subjects: ['art', 'technology', 'ela'],
     gradeRange: { min: 6, max: 12 }
@@ -742,7 +742,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'YouTuber/Content Creator',
     icon: '📹',
     color: '#EF4444',
-    quickDesc: 'Make videos for the internet',
+    quickDesc: 'Content creators make videos for the internet',
     category: CAREER_CATEGORIES.DIGITAL_MEDIA,
     subjects: ['ela', 'art', 'technology', 'social'],
     gradeRange: { min: 3, max: 12 }
@@ -754,7 +754,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Bank Teller',
     icon: '🏦',
     color: '#059669',
-    quickDesc: 'Help people with money',
+    quickDesc: 'Accountants help people manage money',
     category: CAREER_CATEGORIES.BUSINESS,
     subjects: ['math', 'social', 'ela'],
     gradeRange: { min: 6, max: 12 }
@@ -764,7 +764,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Corporate Lawyer',
     icon: '⚖️',
     color: '#1F2937',
-    quickDesc: 'Help businesses with law',
+    quickDesc: 'Corporate lawyers help businesses with legal matters',
     category: CAREER_CATEGORIES.BUSINESS,
     subjects: ['ela', 'social', 'math'],
     gradeRange: { min: 9, max: 12 }
@@ -774,7 +774,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Real Estate Agent',
     icon: '🏡',
     color: '#7C2D12',
-    quickDesc: 'Help people buy and sell homes',
+    quickDesc: 'Real estate agents help people buy and sell homes',
     category: CAREER_CATEGORIES.BUSINESS,
     subjects: ['math', 'social', 'ela'],
     gradeRange: { min: 6, max: 12 }
@@ -786,7 +786,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Coach',
     icon: '🏅',
     color: '#DC2626',
-    quickDesc: 'Train athletes and teams',
+    quickDesc: 'Coaches train athletes and teams',
     category: CAREER_CATEGORIES.SPORTS_FITNESS,
     subjects: ['physical-education', 'science', 'social'],
     gradeRange: { min: 0, max: 12 }
@@ -796,7 +796,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Environmental Scientist',
     icon: '🌍',
     color: '#059669',
-    quickDesc: 'Study and protect the environment',
+    quickDesc: 'Environmental scientists protect our planet',
     category: CAREER_CATEGORIES.ENVIRONMENT,
     subjects: ['science', 'math', 'social'],
     gradeRange: { min: 6, max: 12 }
@@ -806,7 +806,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Graphic Designer',
     icon: '🎨',
     color: '#EC4899',
-    quickDesc: 'Create visual designs',
+    quickDesc: 'Graphic designers create visual designs',
     category: CAREER_CATEGORIES.ARTS_CREATIVE,
     subjects: ['art', 'technology', 'ela'],
     gradeRange: { min: 3, max: 12 }
@@ -816,7 +816,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Journalist',
     icon: '📰',
     color: '#6B7280',
-    quickDesc: 'Report news and stories',
+    quickDesc: 'Journalists report news and tell stories',
     category: CAREER_CATEGORIES.MEDIA_COMMUNICATION,
     subjects: ['ela', 'social', 'technology'],
     gradeRange: { min: 6, max: 12 }
@@ -826,7 +826,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Policy Advisor',
     icon: '📋',
     color: '#4B5563',
-    quickDesc: 'Help make important decisions',
+    quickDesc: 'Policy makers create rules for communities',
     category: CAREER_CATEGORIES.PUBLIC_SERVICE,
     subjects: ['social', 'ela', 'math'],
     gradeRange: { min: 9, max: 12 }
@@ -836,7 +836,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Research Scientist',
     icon: '🔬',
     color: '#7C3AED',
-    quickDesc: 'Discover new things',
+    quickDesc: 'Researchers discover new knowledge',
     category: CAREER_CATEGORIES.STEM,
     subjects: ['science', 'math', 'ela'],
     gradeRange: { min: 6, max: 12 }
@@ -846,7 +846,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Space Industry Professional',
     icon: '🚀',
     color: '#1E40AF',
-    quickDesc: 'Work in space exploration',
+    quickDesc: 'Space scientists study planets and stars',
     category: CAREER_CATEGORIES.STEM,
     subjects: ['science', 'math', 'technology'],
     gradeRange: { min: 3, max: 12 }
@@ -856,7 +856,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Sustainability Consultant',
     icon: '♻️',
     color: '#16A34A',
-    quickDesc: 'Help organizations go green',
+    quickDesc: 'Sustainability consultants help organizations protect the environment',
     category: CAREER_CATEGORIES.ENVIRONMENT,
     subjects: ['science', 'social', 'math'],
     gradeRange: { min: 6, max: 12 }
@@ -866,7 +866,7 @@ export const CAREER_BASICS: Record<string, CareerBasic> = {
     name: 'Team Manager',
     icon: '👥',
     color: '#0891B2',
-    quickDesc: 'Lead groups of people',
+    quickDesc: 'Leaders guide teams and organizations',
     category: CAREER_CATEGORIES.BUSINESS,
     subjects: ['social', 'ela', 'math'],
     gradeRange: { min: 6, max: 12 }

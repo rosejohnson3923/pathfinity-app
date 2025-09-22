@@ -6,6 +6,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import { ModeProvider } from './contexts/ModeContext';
 import { DashboardViewProvider } from './contexts/DashboardViewContext';
 import { ThemeProvider } from './contexts/ThemeContext';
+import { NarrativeProvider } from './contexts/NarrativeContext';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { DashboardRouter } from './components/dashboards/DashboardRouter';
 import { AdminControls } from './components/dashboards/AdminControls';
@@ -45,6 +46,13 @@ import { AdminImageGenerator } from './pages/AdminImageGenerator';
 import { AdminDemoContentGenerator } from './pages/AdminDemoContentGenerator';
 import { DesignSystemTest } from './design-system/test/DesignSystemTestSimple';
 import { TestPage } from './pages/TestPage';
+import YouTubeTest from './test-youtube';
+import NarrativeTest from './test-narrative';
+import LearnMicroTest from './test-learn-micro';
+import FullSystemTest from './test-full-system';
+import TestLearnContainer from './test-learn-container';
+import TestBentoEnhanced from './test-bento-enhanced';
+import TestAzureConfig from './test-azure-config';
 
 import './utils/debugFinnComponents'; // Load debug utilities in development
 
@@ -85,12 +93,20 @@ function App() {
       <ModeProvider>
         <DashboardViewProvider>
           <AuthProvider>
-            <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-                  <Routes>
+            <NarrativeProvider>
+              <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+                    <Routes>
                   {/* Test routes - no auth required */}
                   <Route path="/test" element={<TestPage />} />
                   <Route path="/test/design-system" element={<DesignSystemTest />} />
-                  
+                  <Route path="/test/youtube" element={<YouTubeTest />} />
+                  <Route path="/test/narrative" element={<NarrativeTest />} />
+                  <Route path="/test/learn-micro" element={<LearnMicroTest />} />
+                  <Route path="/test/full-system" element={<FullSystemTest />} />
+                  <Route path="/test/learn-container" element={<TestLearnContainer />} />
+                  <Route path="/test/bento-enhanced" element={<TestBentoEnhanced />} />
+                  <Route path="/test/azure-config" element={<TestAzureConfig />} />
+
                   {/* Default route redirects to login - for development, go directly to login */}
                   <Route path="/" element={<Navigate to="/login" replace />} />
                   
@@ -166,6 +182,7 @@ function App() {
                   <Route path="/login" element={<Login />} />
                 </Routes>
               </Router>
+            </NarrativeProvider>
         </AuthProvider>
       </DashboardViewProvider>
     </ModeProvider>

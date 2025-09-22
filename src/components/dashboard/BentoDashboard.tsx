@@ -88,7 +88,8 @@ export const BentoDashboard: React.FC<BentoDashboardProps> = ({
       
       // Initialize career progression
       if (profile?.selectedCareer) {
-        initializeCareerProgress(profile.selectedCareer);
+        const careerValue = typeof profile.selectedCareer === 'object' ? profile.selectedCareer.name : profile.selectedCareer;
+        initializeCareerProgress(careerValue);
       }
     }
   }, [userId, profile?.selectedCareer]);
@@ -260,7 +261,7 @@ export const BentoDashboard: React.FC<BentoDashboardProps> = ({
           gridSpan={2}
           onClick={onStartLearning}
           actionButton={{
-            label: 'Start Now →',
+            label: 'Continue →',
             onClick: onStartLearning,
             variant: 'primary'
           }}
@@ -307,7 +308,7 @@ export const BentoDashboard: React.FC<BentoDashboardProps> = ({
           gradeLevel={gradeLevelType}
           theme={themeMode}
           title="My Dream Job"
-          subtitle={careerProgress?.careerName || profile?.selectedCareer || 'Choose your career'}
+          subtitle={careerProgress?.careerName || (typeof profile?.selectedCareer === 'object' ? profile?.selectedCareer?.name : profile?.selectedCareer) || 'Choose your career'}
           emoji={(() => {
             const careerEmojis: Record<string, string> = {
               'Chef': '👨‍🍳',
@@ -328,7 +329,8 @@ export const BentoDashboard: React.FC<BentoDashboardProps> = ({
               'Veterinarian': '🐕',
               'Explorer': '🧭'
             };
-            return careerEmojis[careerProgress?.careerName || profile?.selectedCareer || ''] || '💼';
+            const careerName = careerProgress?.careerName || (typeof profile?.selectedCareer === 'object' ? profile?.selectedCareer?.name : profile?.selectedCareer) || '';
+            return careerEmojis[careerName] || '💼';
           })()}
           onClick={onSelectCareer}
           actionButton={{
@@ -732,7 +734,7 @@ export const BentoDashboard: React.FC<BentoDashboardProps> = ({
             gradeLevel={gradeLevelType}
             theme={themeMode}
             title="Career Path"
-            subtitle={profile?.selectedCareer ? `Exploring: ${profile.selectedCareer}` : 'Discover careers'}
+            subtitle={profile?.selectedCareer ? `Exploring: ${typeof profile.selectedCareer === 'object' ? profile.selectedCareer.name : profile.selectedCareer}` : 'Discover careers'}
             emoji="💼"
             onClick={onSelectCareer}
             actionButton={{
@@ -1009,7 +1011,7 @@ export const BentoDashboard: React.FC<BentoDashboardProps> = ({
             gradeLevel={gradeLevelType}
             theme={themeMode}
             title="Career Path"
-            subtitle={profile?.selectedCareer || 'Choose Path'}
+            subtitle={(typeof profile?.selectedCareer === 'object' ? profile?.selectedCareer?.name : profile?.selectedCareer) || 'Choose Path'}
             emoji="💼"
             onClick={onSelectCareer}
             actionButton={{

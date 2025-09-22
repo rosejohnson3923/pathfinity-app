@@ -156,12 +156,12 @@ export function usePathIQGamification(userId: string, grade?: string, pauseBackg
   const awardXP = useCallback((amount: number, reason: string, category: XPTransaction['category'] = 'learning') => {
     const transaction = pathIQGamification.awardXP(userId, amount, reason, category);
     console.log('XP Awarded:', transaction);
-    
+
     // Update profile immediately
     setProfile(pathIQGamification.getUserProfile(userId));
-    
-    // Show visual feedback
-    showXPAnimation(amount);
+
+    // Disabled floating XP animation - using detailed feedback notification instead
+    // showXPAnimation(amount);
   }, [userId]);
 
   // Use hint callback
@@ -195,6 +195,9 @@ export function usePathIQGamification(userId: string, grade?: string, pauseBackg
 
 // Visual feedback helper
 function showXPAnimation(amount: number) {
+  // Don't show animation for 0 XP
+  if (amount <= 0) return;
+
   // Create floating XP indicator
   const indicator = document.createElement('div');
   indicator.className = 'xp-gain-indicator';

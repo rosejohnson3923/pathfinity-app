@@ -3,24 +3,27 @@
  * The main dashboard that contains sub-modals for daily learning journey
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useModalSystem } from '../../hooks/useModalSystem';
 import { useAuth } from '../../hooks/useAuth';
 import { useStudentProfile } from '../../hooks/useStudentProfile';
 import { useTheme } from '../../hooks/useTheme';
+import { useNarrative } from '../../contexts/NarrativeContext';
 import { themeService } from '../../services/themeService';
 import { ModalTypeEnum } from '../../ai-engine/types';
 import { ParticlesBackground } from '../../components/ParticlesBackground';
 import { companionVoiceoverService } from '../../services/companionVoiceoverService';
 import { audioService } from '../../services/audioService';
 import { getCompanionImageUrl } from '../../services/aiCompanionImages';
+import { azureAudioService } from '../../services/AzureAudioService';
+import { SCRIPT_IDS } from '../../constants/scriptRegistry';
 import './DashboardModal.css';
 import modalStyles from '../../styles/shared/components/ModalCard.module.css';
 import styles from '../../styles/shared/components/DashboardModal.module.css';
 
 // Sub-modal components
 import { DailyLearningModal } from './sub-modals/DailyLearningModal';
-import { AICompanionModal } from './sub-modals/AICompanionModal';
+// AICompanionModal doesn't exist - using inline renderAICompanionSelection instead
 import { CareerChoiceModalV2 } from './sub-modals/CareerChoiceModalV2';
 import { SettingsModal } from './sub-modals/SettingsModal';
 import { CompanionChatModal } from './sub-modals/CompanionChatModal';
@@ -29,9 +32,9 @@ import { CompanionChatModal } from './sub-modals/CompanionChatModal';
 import { BentoDashboard } from '../../components/dashboard/BentoDashboard';
 
 export interface DashboardModalProps {
-  onComplete?: (selections: { companion: string; career: string }) => void;
+  onComplete?: (selections: { companion: string; career: string; careerData?: any }) => void;
   theme?: 'light' | 'dark';
-  existingSelections?: { companion: string; career: string } | null;
+  existingSelections?: { companion: string; career: string; careerData?: any } | null;
 }
 
 export const DashboardModal: React.FC<DashboardModalProps> = ({ 
@@ -43,6 +46,7 @@ export const DashboardModal: React.FC<DashboardModalProps> = ({
   const { profile } = useStudentProfile(user?.id, user?.email);
   const { openModal } = useModalSystem();
   const themeContext = useTheme();
+  const { playNarrativeSection } = useNarrative();
   
   const [activeSubModal, setActiveSubModal] = useState<string | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -113,6 +117,33 @@ export const DashboardModal: React.FC<DashboardModalProps> = ({
     careerSelected: dashboardState.careerSelected,
     companionSelected: dashboardState.companionSelected
   });
+
+  // Use ref to prevent double-playing in React StrictMode
+  const audioPlayedRef = useRef(false);
+
+  // Play welcome audio when component mounts
+  useEffect(() => {
+    // Prevent double-playing in StrictMode
+    if (audioPlayedRef.current) return;
+    audioPlayedRef.current = true;
+
+    // Small delay to ensure component is fully mounted
+    const timeoutId = setTimeout(() => {
+      console.warn('🔊 DASHBOARD: Playing welcome audio with Finn (Azure TTS)');
+      // Using a simple greeting since narrative might not be generated yet
+      const welcomeText = "Welcome to Pathfinity! I'm Finn, your learning companion. Let's choose your adventure for today!";
+      azureAudioService.playText(welcomeText, 'finn', {
+        onStart: () => console.log('🔊 Welcome audio started'),
+        onEnd: () => console.log('🔊 Welcome audio ended')
+      });
+    }, 500);
+
+    // Clean up on unmount
+    return () => {
+      clearTimeout(timeoutId);
+      azureAudioService.stop();
+    };
+  }, []); // Only run once on mount
   
   // Auto-show career/companion selection if needed
   useEffect(() => {
@@ -221,9 +252,10 @@ export const DashboardModal: React.FC<DashboardModalProps> = ({
     }
     
     if (section?.isEnabled) {
-      // If clicking "Today's Learning Journey" and both career and companion are selected,
-      // go directly to CareerInc Lobby instead of showing the daily learning modal
+      // Skip the daily-learning modal if both career and companion are selected
+      // Go directly to completion (CareerIncLobby)
       if (sectionId === 'daily-learning' && dashboardState.careerSelected && dashboardState.companionSelected) {
+        console.log('🚀 Skipping daily-learning modal, going to CareerIncLobby');
         handleDashboardComplete();
       } else {
         setActiveSubModal(sectionId);
@@ -294,9 +326,11 @@ export const DashboardModal: React.FC<DashboardModalProps> = ({
           }));
           // Set the companion for voiceover
           companionVoiceoverService.setCompanion(result.companionId || result.companion);
-          // Play companion introduction
-          companionVoiceoverService.playVoiceover('companion-selected', null, { delay: 500 });
-          
+
+          // Note: The continue instruction audio is now played in handleCompanionConfirm
+          // after the confirmation audio ends, ensuring proper sequencing
+          // This prevents overlapping audio playback
+
           // Don't auto-complete here - let user see the BentoDashboard
           // The dashboard will show because both career and companion are now selected
           break;
@@ -304,7 +338,7 @@ export const DashboardModal: React.FC<DashboardModalProps> = ({
           console.log('🎯 Career selected:', result);
           setDashboardState(prev => ({
             ...prev,
-            careerSelected: result.career || result.name || result
+            careerSelected: result // Store the entire career object
           }));
           
           // If companion is not selected yet, directly transition to AI companion selection
@@ -327,9 +361,16 @@ export const DashboardModal: React.FC<DashboardModalProps> = ({
   const handleDashboardComplete = () => {
     console.log('🚀 Dashboard completing with state:', dashboardState);
     if (onComplete && dashboardState.companionSelected && dashboardState.careerSelected) {
+      // Extract career name from object if it's an object, otherwise use as-is
+      const careerName = typeof dashboardState.careerSelected === 'object'
+        ? dashboardState.careerSelected.name
+        : dashboardState.careerSelected;
+
       const selections = {
         companion: dashboardState.companionSelected,
-        career: dashboardState.careerSelected
+        career: careerName,
+        // Pass the full career object for narrative cache key generation
+        careerData: dashboardState.careerSelected
       };
       console.log('📤 Passing selections to parent:', selections);
       onComplete(selections);
@@ -437,6 +478,40 @@ export const DashboardModal: React.FC<DashboardModalProps> = ({
   const handleCompanionConfirm = () => {
     if (selectedCompanionTemp) {
       const companion = companionsWithDetails.find(c => c.id === selectedCompanionTemp);
+      const firstName = profile?.first_name || user?.full_name?.split(' ')[0] || 'friend';
+
+      // Play only the first part of the confirmation audio
+      // The second part will play when the BentoDashboard appears
+      const confirmText = `Excellent choice, ${firstName}! ${companion?.name} is going to be an amazing companion on your learning journey today!`;
+
+      console.log('🔊 DashboardModal: Playing companion selection confirmation');
+
+      azureAudioService.playText(confirmText, 'finn', {
+        scriptId: 'companion.selected',
+        variables: {
+          firstName,
+          companionName: companion?.name || 'your companion'
+        },
+        onStart: () => console.log('🔊 Companion confirmation audio started'),
+        onEnd: () => {
+          console.log('🔊 Companion confirmation audio ended');
+
+          // Play the continue instruction after the confirmation ends
+          setTimeout(() => {
+            const confirmTextPart2 = SCRIPT_IDS['companion.start_instruction'];
+            console.log('🔊 DashboardModal: Playing part 2 - Continue instruction');
+            azureAudioService.playText(confirmTextPart2, 'finn', {
+              scriptId: 'companion.start_instruction',
+              variables: {},
+              onStart: () => console.log('🔊 Continue instruction playing'),
+              onEnd: () => console.log('🔊 Continue instruction ended')
+            });
+          }, 200); // Small delay between audio clips
+        }
+      });
+
+      // Immediately close the modal with the companion selection
+      // User clicked Continue, so we proceed immediately
       handleSubModalClose('ai-companion', {
         companion: selectedCompanionTemp,
         companionId: selectedCompanionTemp,
@@ -445,6 +520,31 @@ export const DashboardModal: React.FC<DashboardModalProps> = ({
       setSelectedCompanionTemp(null); // Reset temp selection
     }
   };
+
+  // Play companion selection narration when modal opens
+  const companionAudioPlayedRef = useRef(false);
+
+  useEffect(() => {
+    if (activeSubModal === 'ai-companion' && !companionAudioPlayedRef.current) {
+      companionAudioPlayedRef.current = true;
+      const firstName = profile?.first_name || user?.full_name?.split(' ')[0] || 'friend';
+      const companionText = `You have an important decision to make, ${firstName}. Which companion would you like to guide you on your journey today? You can click the Hear Voice button to hear them speak.`;
+
+      console.log('🔊 DashboardModal: Playing AI Companion selection audio');
+
+      setTimeout(() => {
+        azureAudioService.playText(companionText, 'finn', {
+          onStart: () => console.log('🔊 AI Companion audio started'),
+          onEnd: () => console.log('🔊 AI Companion audio ended')
+        });
+      }, 500);
+    }
+
+    // Reset flag when modal closes
+    if (activeSubModal !== 'ai-companion') {
+      companionAudioPlayedRef.current = false;
+    }
+  }, [activeSubModal, profile, user]);
 
   const renderAICompanionSelection = () => {
     console.log('🎨 Rendering AI Companion Selection Modal');
@@ -883,7 +983,11 @@ export const DashboardModal: React.FC<DashboardModalProps> = ({
               }}
               userId={user?.id}
               gradeLevel={profile?.grade_level || 'K'}
-              onStartLearning={() => handleSectionClick('daily-learning')}
+              onStartLearning={() => {
+                // When both career and companion are selected, go directly to CareerIncLobby
+                console.log('🚀 Continue clicked - going directly to CareerIncLobby');
+                handleDashboardComplete();
+              }}
               onSelectCareer={() => handleSectionClick('career-choice')}
               onSelectCompanion={() => handleSectionClick('ai-companion')}
               onCompanionChat={() => handleSectionClick('companion-chat')}

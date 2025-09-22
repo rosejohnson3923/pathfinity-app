@@ -3,32 +3,36 @@
  * Shows personalized introduction and daily journey overview
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { useStudentProfile } from '../../hooks/useStudentProfile';
 import { useTheme } from '../../hooks/useTheme';
 import { usePageCategory } from '../../hooks/usePageCategory';
+import { useNarrative } from '../../contexts/NarrativeContext';
 import { pathIQService } from '../../services/pathIQService';
 import { getGradeLevelDisplay, getGradeDisplay } from '../../utils/gradeUtils';
 import { skillsData } from '../../data/skillsDataComplete';
+import { azureAudioService } from '../../services/AzureAudioService';
 import './IntroductionModal.css';
 
 interface IntroductionModalProps {
   onComplete: (selections?: { career: string; companion: string }) => void;
 }
 
-export const IntroductionModal: React.FC<IntroductionModalProps> = ({ 
+export const IntroductionModal: React.FC<IntroductionModalProps> = ({
   onComplete
 }) => {
   // Set page category for proper width management
   usePageCategory('modal');
-  
+
   const theme = useTheme();
   const { user } = useAuth();
   const { profile } = useStudentProfile(user?.id, user?.email);
-  const [currentStep, setCurrentStep] = useState<'welcome' | 'career' | 'companion' | 'journey'>('welcome');
+  const { generateNarrative, playNarrativeSection, narrativeLoading } = useNarrative();
+  const [currentStep, setCurrentStep] = useState<'welcome' | 'career'>('welcome');
   const [selectedCareer, setSelectedCareer] = useState<any>(null);
   const [selectedCompanion, setSelectedCompanion] = useState<any>(null);
+  const [narrativeGenerated, setNarrativeGenerated] = useState(false);
   const [todaysJourney, setTodaysJourney] = useState<any>(null);
   const [hoveredCareer, setHoveredCareer] = useState<number | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -37,6 +41,9 @@ export const IntroductionModal: React.FC<IntroductionModalProps> = ({
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
   const [randomCareers, setRandomCareers] = useState<any[]>([]);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const welcomeAudioPlayedRef = useRef(false);
+  const careerAudioPlayedRef = useRef(false);
+  const companionAudioPlayedRef = useRef(false);
 
   const themeColors = {
     light: {
@@ -247,7 +254,7 @@ export const IntroductionModal: React.FC<IntroductionModalProps> = ({
   const getMotivationalMessage = () => {
     const studentGrade = profile?.grade_level || (user as any)?.grade_level || 'K';
     const gradeDisplay = getGradeLevelDisplay(studentGrade);
-    
+
     const messages = [
       "You're doing amazing! Let's discover new things today.",
       "Ready for another awesome learning adventure?",
@@ -257,6 +264,49 @@ export const IntroductionModal: React.FC<IntroductionModalProps> = ({
     ];
     return messages[Math.floor(Math.random() * messages.length)];
   };
+
+  // Play Finn's welcome audio when entering welcome step
+  useEffect(() => {
+    if (currentStep === 'welcome' && !welcomeAudioPlayedRef.current) {
+      welcomeAudioPlayedRef.current = true;
+      const firstName = profile?.first_name || user?.full_name?.split(' ')[0] || 'friend';
+      const welcomeText = `Hi ${firstName}! Welcome to Pathfinity! Click the purple Start Adventure button below to choose your exciting career for today!`;
+
+      console.log('🔊 IntroductionModal: Playing Finn welcome audio');
+
+      setTimeout(() => {
+        azureAudioService.playText(welcomeText, 'finn', {
+          scriptId: 'intro.welcome',
+          variables: {
+            firstName: firstName
+          },
+          onStart: () => console.log('🔊 Finn welcome audio started'),
+          onEnd: () => console.log('🔊 Finn welcome audio ended')
+        });
+      }, 500);
+    }
+  }, [currentStep, profile, user]);
+
+  // Play Finn's career selection audio when entering career step
+  useEffect(() => {
+    if (currentStep === 'career' && !careerAudioPlayedRef.current) {
+      careerAudioPlayedRef.current = true;
+      const careerText = "What exciting career would you like to learn today? I've picked three perfect matches just for you! Or you can click the More Options button for more exciting choices.";
+
+      console.log('🔊 IntroductionModal: Playing Finn career selection audio');
+
+      setTimeout(() => {
+        azureAudioService.playText(careerText, 'finn', {
+          scriptId: 'intro.career_prompt',
+          variables: {},
+          onStart: () => console.log('🔊 Finn career audio started'),
+          onEnd: () => console.log('🔊 Finn career audio ended')
+        });
+      }, 500);
+    }
+  }, [currentStep]);
+
+  // Companion selection removed - now handled in DashboardModal's renderAICompanionSelection
 
   const studentGradeForSidebar = profile?.grade_level || (user as any)?.grade_level || 'K';
   
@@ -276,8 +326,8 @@ export const IntroductionModal: React.FC<IntroductionModalProps> = ({
       {/* Welcome Step - Personalized Greeting */}
       {currentStep === 'welcome' && (
         <div className="intro-welcome-container animated-fade-in" style={{ textAlign: 'center', maxWidth: '600px' }}>
-          <h1 style={{ 
-            color: colors.text, 
+          <h1 style={{
+            color: colors.text,
             fontSize: '2.5rem',
             marginBottom: '1rem'
           }}>
@@ -364,7 +414,7 @@ export const IntroductionModal: React.FC<IntroductionModalProps> = ({
       {currentStep === 'career' && (() => {
         // Use the pre-fetched careers from state
         const careers = randomCareers;
-        
+
         return (
           <div className="intro-career-container" style={{ 
             display: 'flex',
@@ -446,18 +496,11 @@ export const IntroductionModal: React.FC<IntroductionModalProps> = ({
                       console.log('🎲 Random Career/Category selected:', displayName);
                       setSelectedIndex(index);
                       setSelectedCareer(career);
-                      // Pass the selected career to DashboardModal
-                      // DashboardModal will show it as already selected
+                      // Go directly to dashboard with career selected
                       setTimeout(() => {
-                        console.log('🚀 Calling onComplete with Random Career:', {
+                        onComplete({
                           career: career.name,
-                          fromRandomCareer: true
-                        });
-                        onComplete({ 
-                          career: career.name,
-                          careerId: career.careerId,
-                          companion: null, // Will be selected in DashboardModal
-                          fromRandomCareer: true // Flag to indicate this came from Random Career selection
+                          careerId: career.careerId
                         });
                       }, 300);
                     }}
@@ -623,14 +666,12 @@ export const IntroductionModal: React.FC<IntroductionModalProps> = ({
                     // Quick select the recommended career
                     const topCareer = careers[1];
                     setSelectedCareer(topCareer);
-                    // Navigate to dashboard with the selected career
+                    // Go directly to dashboard with career selected
                     setTimeout(() => {
                       console.log('🚀 Quick Start selected:', topCareer.name);
-                      onComplete({ 
+                      onComplete({
                         career: topCareer.name,
-                        careerId: topCareer.careerId,
-                        companion: null, // Will be selected in DashboardModal
-                        fromRandomCareer: true // Use same flow as random career selection
+                        careerId: topCareer.careerId
                       });
                     }, 300);
                   }}
@@ -700,9 +741,135 @@ export const IntroductionModal: React.FC<IntroductionModalProps> = ({
         );
       })()}
 
+      {/* Companion Selection Step - REMOVED - Now handled in DashboardModal */}
+      {false && currentStep === 'companion' && (
+        <div className="intro-companion-container animated-fade-in" style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '100vh',
+          padding: '2rem',
+          background: colors.background
+        }}>
+          <div style={{
+            textAlign: 'center',
+            marginBottom: '3rem'
+          }}>
+            <h1 style={{
+              color: colors.text,
+              fontSize: '2.2rem',
+              marginBottom: '1rem'
+            }}>
+              Choose Your Learning Companion!
+            </h1>
+            <p style={{
+              color: colors.subtext,
+              fontSize: '1.1rem'
+            }}>
+              Your AI friend will guide you through your {selectedCareer?.name || 'career'} journey today!
+            </p>
+          </div>
 
-      {/* Journey Overview Step */}
-      {currentStep === 'journey' && todaysJourney && (
+          {/* Companion Grid */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '1.5rem',
+            maxWidth: '900px',
+            width: '100%',
+            marginBottom: '2rem'
+          }}>
+            {[
+              { id: 'finn', name: 'Finn', emoji: '🦊', description: 'Friendly & encouraging', color: '#10B981' },
+              { id: 'sage', name: 'Sage', emoji: '🦉', description: 'Wise & thoughtful', color: '#8B5CF6' },
+              { id: 'spark', name: 'Spark', emoji: '✨', description: 'Creative & energetic', color: '#F59E0B' },
+              { id: 'harmony', name: 'Harmony', emoji: '🌈', description: 'Calm & supportive', color: '#EC4899' }
+            ].map((companion) => (
+              <div
+                key={companion.id}
+                onClick={() => {
+                  setSelectedCompanion(companion);
+                  // Generate narrative now that both career and companion are selected
+                  console.log('🎭 Both career and companion selected, generating narrative');
+
+                  const studentGrade = profile?.grade_level || (user as any)?.grade_level || 'K';
+                  generateNarrative({
+                    career: selectedCareer.name,
+                    companion: companion.id,
+                    gradeLevel: studentGrade,
+                    userId: user?.id || 'default',
+                    userName: profile?.first_name || user?.full_name?.split(' ')[0]
+                  });
+
+                  // Navigate to CareerIncLobby
+                  setTimeout(() => {
+                    onComplete({
+                      career: selectedCareer.name,
+                      companion: companion.id
+                    });
+                  }, 500);
+                }}
+                style={{
+                  backgroundColor: colors.cardBg,
+                  padding: '2rem',
+                  borderRadius: '1rem',
+                  border: `3px solid ${selectedCompanion?.id === companion.id ? companion.color : colors.border}`,
+                  cursor: 'pointer',
+                  transition: 'all 0.3s',
+                  transform: selectedCompanion?.id === companion.id ? 'scale(1.05)' : 'scale(1)',
+                  boxShadow: selectedCompanion?.id === companion.id ? `0 10px 30px ${companion.color}40` : '0 2px 10px rgba(0,0,0,0.1)'
+                }}
+                onMouseEnter={(e) => {
+                  if (!selectedCompanion || selectedCompanion.id !== companion.id) {
+                    e.currentTarget.style.transform = 'scale(1.02)';
+                    e.currentTarget.style.borderColor = companion.color;
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!selectedCompanion || selectedCompanion.id !== companion.id) {
+                    e.currentTarget.style.transform = 'scale(1)';
+                    e.currentTarget.style.borderColor = colors.border;
+                  }
+                }}
+              >
+                <div style={{ fontSize: '3rem', marginBottom: '1rem', textAlign: 'center' }}>
+                  {companion.emoji}
+                </div>
+                <h3 style={{
+                  color: colors.text,
+                  fontSize: '1.3rem',
+                  marginBottom: '0.5rem',
+                  textAlign: 'center'
+                }}>
+                  {companion.name}
+                </h3>
+                <p style={{
+                  color: colors.subtext,
+                  fontSize: '0.9rem',
+                  textAlign: 'center'
+                }}>
+                  {companion.description}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {narrativeLoading && (
+            <div style={{
+              padding: '1rem',
+              backgroundColor: colors.cardBg,
+              borderRadius: '0.5rem',
+              marginBottom: '1rem'
+            }}>
+              <p style={{ color: colors.text }}>🎨 Creating your personalized learning journey...</p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Journey Overview Step - REMOVED since we go directly to CareerIncLobby */}
+      {false && currentStep === 'journey' && todaysJourney && (
         <div className="intro-journey-container animated-fade-in" style={{ 
           position: 'fixed',
           top: 0,

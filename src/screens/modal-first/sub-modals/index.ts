@@ -3,7 +3,7 @@
  */
 
 export { DailyLearningModal } from './DailyLearningModal';
-export { AICompanionModal } from './AICompanionModal';
+// AICompanionModal removed - implemented inline in DashboardModal as renderAICompanionSelection
 export { CareerChoiceModal } from './CareerChoiceModal'; // Keep for backward compatibility
 export { CareerChoiceModalV2 } from './CareerChoiceModalV2'; // New progressive disclosure version
 export { SettingsModal } from './SettingsModal';

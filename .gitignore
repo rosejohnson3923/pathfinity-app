@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-=======
-# Logs - updated 07/08/2025 - v1
->>>>>>> 7225b9b8001518dfffce043244e6e1052e5a518a
+# Logs
 logs
 *.log
 npm-debug.log*

@@ -7,6 +7,7 @@ import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { DashboardModal } from '../modal-first/DashboardModal';
 import { IntroductionModal } from '../modal-first/IntroductionModal';
 import { CareerIncLobbyModal } from '../modal-first/CareerIncLobbyModal';
+import { NarrativeIntroductionModal } from '../modal-first/NarrativeIntroductionModal';
 import { MultiSubjectContainer } from '../../components/ai-containers/MultiSubjectContainer';
 import { MultiSubjectContainerAuto } from '../../components/routing/ContainerRouter';
 import { LearningAdaptationListener } from '../../components/metrics/LearningAdaptationListener';
@@ -16,6 +17,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { useStudentProfile } from '../../hooks/useStudentProfile';
 import { useTheme, useThemeControl } from '../../hooks/useTheme';
 import { usePageCategory } from '../../hooks/usePageCategory';
+import { useNarrative } from '../../contexts/NarrativeContext';
 import { themeService } from '../../services/themeService';
 import { skillsData } from '../../data/skillsDataComplete';
 import { ProgressHeader } from '../../components/navigation/ProgressHeader';
@@ -25,11 +27,12 @@ import './StudentDashboard.css';
 const StudentDashboardInner: React.FC = () => {
   // Apply dashboard width management category
   usePageCategory('dashboard');
-  
+
   const { user } = useAuth();
   const { profile } = useStudentProfile();
   const { theme, setTheme } = useThemeControl(); // Use centralized theme service with controls
-  const [currentView, setCurrentView] = useState<'introduction' | 'dashboard' | 'lobby' | 'container'>('introduction');
+  const { generateNarrative, playNarrativeSection, masterNarrative, narrativeLoading } = useNarrative();
+  const [currentView, setCurrentView] = useState<'introduction' | 'dashboard' | 'lobby' | 'narrative' | 'container'>('introduction');
   const [hasSeenIntroduction, setHasSeenIntroduction] = useState(false);
   const [dashboardSelections, setDashboardSelections] = useState<{
     companion: string;
@@ -108,11 +111,11 @@ const StudentDashboardInner: React.FC = () => {
 
   const selectedCareerObject = useMemo(() => {
     if (!dashboardSelections) return null;
-    
+
     // Look up the career by ID (convert name to ID format if needed)
     const careerId = dashboardSelections.career.toLowerCase().replace(/\s+/g, '-');
     const careerData = CAREER_BASICS[careerId];
-    
+
     if (careerData) {
       return {
         id: careerData.id,
@@ -122,7 +125,7 @@ const StudentDashboardInner: React.FC = () => {
         category: careerData.category
       };
     }
-    
+
     // Fallback to simple object if not found
     return {
       id: dashboardSelections.career,
@@ -173,14 +176,14 @@ const StudentDashboardInner: React.FC = () => {
     // setCurrentView('introduction');
   }, [user]);
 
-  const handleIntroductionComplete = (selections?: { career?: string; companion?: string; showCareerChoice?: boolean; fromRandomCareer?: boolean }) => {
+  const handleIntroductionComplete = (selections?: { career?: string; companion?: string; showCareerChoice?: boolean; fromRandomCareer?: boolean; careerId?: string }) => {
     console.log('🎯 handleIntroductionComplete called with:', selections);
-    
+
     // Mark introduction as seen for today
     const today = new Date().toDateString();
     localStorage.setItem(`pathfinity-intro-${user?.id}`, today);
     setHasSeenIntroduction(true);
-    
+
     // Check if user clicked "More Options" button
     if (selections?.showCareerChoice) {
       console.log('📂 User clicked More Options - showing career choice modal');
@@ -190,20 +193,21 @@ const StudentDashboardInner: React.FC = () => {
       setCurrentView('dashboard');
       return;
     }
-    
-    // If user selected a Random Career, pass it to Dashboard with companion null
-    if (selections?.fromRandomCareer && selections?.career) {
-      console.log('🎲 User selected Random Career:', selections.career);
-      // User selected a Random Career - career is complete, companion needs selection
+
+    // ALL career selections now go to dashboard for companion selection
+    // Both direct career selection and fromRandomCareer selection
+    if (selections?.career && !selections?.companion) {
+      console.log('🎯 Career selected - going to dashboard for AI companion selection');
       setDashboardSelections({
         career: selections.career,
-        companion: null // Companion will be selected in DashboardModal
+        careerId: selections.careerId,
+        companion: '' // Empty companion will trigger AI companion modal in DashboardModal
       });
       setCurrentView('dashboard');
       return;
     }
-    
-    // If we have selections from introduction, store them
+
+    // If we have BOTH selections (shouldn't happen anymore but keep for backwards compatibility)
     if (selections?.career && selections?.companion) {
       console.log('✅ Complete selections from intro - going to lobby');
       const dashboardSelections = {
@@ -222,10 +226,30 @@ const StudentDashboardInner: React.FC = () => {
     }
   };
 
-  const handleDashboardComplete = (selections: { companion: string; career: string }) => {
+  const handleDashboardComplete = async (selections: { companion: string; career: string; careerData?: any }) => {
     console.log('Dashboard flow complete - transitioning to CareerInc Lobby', selections);
     setDashboardSelections(selections);
+
+    // Immediately transition to lobby so CareerIncLobbyModal can mount
     setCurrentView('lobby');
+
+    // Generate narrative after transitioning (CareerIncLobby will show loading state)
+    if (user && selections.career && selections.companion) {
+      const gradeLevel = profile?.grade_level || (user as any)?.grade_level || 'K';
+
+      // Use Finn as default if no companion selected
+      const companion = selections.companion || 'finn';
+
+      // Pass careerData if available, otherwise just the career string
+      // This ensures proper cache key generation with the career ID
+      generateNarrative({
+        career: selections.careerData || selections.career,
+        companion: companion,
+        gradeLevel: gradeLevel,
+        userId: user.id || 'default',
+        userName: user.full_name
+      });
+    }
   };
 
   const handleLobbyComplete = (lobbySelections: {
@@ -233,7 +257,7 @@ const StudentDashboardInner: React.FC = () => {
     objectives: string[];
   }) => {
     console.log('Starting container:', lobbySelections.container);
-    
+
     // Ensure all required data is ready before transitioning
     if (!studentProfile || !selectedCareerObject || !dashboardSelections) {
       console.warn('⚠️ Cannot start container - missing required data:', {
@@ -243,13 +267,14 @@ const StudentDashboardInner: React.FC = () => {
       });
       return;
     }
-    
+
     // Ensure the activeContainer has an 'id' property that matches what MockLearningContainer expects
     setActiveContainer({
       id: lobbySelections.container,
       objectives: lobbySelections.objectives
     });
-    setCurrentView('container');
+    // First show the narrative introduction, then the container
+    setCurrentView('narrative');
   };
 
   const handleContainerComplete = () => {
@@ -271,9 +296,18 @@ const StudentDashboardInner: React.FC = () => {
     // This will show the dashboard with the Career Choice modal accessible
   };
 
+  // Debug logging for render state
+  console.log('🎨 StudentDashboard render state:', {
+    currentView,
+    dashboardSelections,
+    narrativeLoading,
+    masterNarrative: !!masterNarrative,
+    timestamp: Date.now()
+  });
+
   return (
-    <div 
-      className="student-dashboard-wrapper" 
+    <div
+      className="student-dashboard-wrapper"
       data-theme={theme}
     >
 
@@ -281,7 +315,7 @@ const StudentDashboardInner: React.FC = () => {
       <LearningAdaptationListener hideVisualFeedback={true} />
 
       {currentView === 'introduction' && !hasSeenIntroduction && (
-        <IntroductionModal 
+        <IntroductionModal
           theme={theme}
           onComplete={handleIntroductionComplete}
         />
@@ -298,18 +332,40 @@ const StudentDashboardInner: React.FC = () => {
       )}
       
       {currentView === 'lobby' && dashboardSelections && (
-        <CareerIncLobbyModal
-          selectedCareer={dashboardSelections.career}
-          selectedCompanion={dashboardSelections.companion}
-          theme={theme}
-          onComplete={handleLobbyComplete}
-          onBack={handleBackToDashboard}
+        <>
+          {console.log('🏢 Rendering CareerIncLobbyModal condition met', {
+            currentView,
+            dashboardSelections,
+            hasDashboardSelections: !!dashboardSelections,
+            timestamp: Date.now()
+          })}
+          <CareerIncLobbyModal
+            selectedCareer={dashboardSelections.career}
+            selectedCompanion={dashboardSelections.companion}
+            theme={theme}
+            onComplete={handleLobbyComplete}
+            onBack={handleBackToDashboard}
+            completedContainers={completedContainers}
+            onContainerReturn={activeContainer?.id}
+            userId={user?.id || 'default'}
+          />
+        </>
+      )}
+
+      {currentView === 'narrative' && activeContainer && dashboardSelections && studentProfile && (
+        <NarrativeIntroductionModal
+          studentName={studentProfile.display_name || studentProfile.name}
+          gradeLevel={studentProfile.grade_level}
+          career={dashboardSelections.career}
+          companion={dashboardSelections.companion}
+          container={activeContainer.id}
           completedContainers={completedContainers}
-          onContainerReturn={activeContainer?.id}
-          userId={user?.id || 'default'}
+          skill={learningSkill}
+          theme={theme}
+          onContinue={() => setCurrentView('container')}
         />
       )}
-      
+
       {currentView === 'container' && activeContainer && dashboardSelections && studentProfile && selectedCareerObject && (
         <>
           {console.log('📤 StudentDashboard passing to container:', {

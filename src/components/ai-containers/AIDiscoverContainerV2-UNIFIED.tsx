@@ -918,7 +918,7 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
           })) || [],
           conclusion: content.conclusion || "Great discoveries today!"
         },
-        career_introduction: content.career_connection || `Discover how professionals use ${skill?.skill_name}`,
+        career_introduction: content.career_connection || `Discover how ${selectedCareer?.name || 'professionals'} use ${skill?.skill_name}`,
         real_world_connections: content.real_world_examples || [],
         // New fields from updated AI generation
         curiosity_questions: content.curiosity_questions || [],

@@ -1,0 +1,118 @@
+/**
+ * Script Registry for TTS Analytics
+ * Maps script IDs to their templates for consistent tracking
+ */
+
+export const SCRIPT_IDS = {
+  // Introduction Flow
+  'intro.welcome': 'Hi {firstName}! Welcome to Pathfinity!',
+  'intro.career_prompt': 'What exciting career would you like to learn today? I\'ve picked three perfect matches just for you!',
+  'intro.career_selected': 'Excellent choice! Let\'s have some fun as a {careerName}, {firstName}!',
+
+  // Career Selection
+  'career.selection_prompt': 'Let\'s have some fun with friends and choose the Top Match for your grade level or click More Options to choose your personal favorite.',
+  'career.preview': '{description}. Skills: {skills}.', // Direct card narration
+
+  // Dashboard/Companion Selection
+  'companion.selection_prompt': 'You have an important decision to make, {firstName}. Choose your AI companion to guide you through today\'s learning adventure.',
+  'companion.selected': 'Excellent choice, {firstName}! {companionName} is going to be an amazing companion on your learning journey today!',
+  'companion.start_instruction': 'Click the Continue button when you are ready to continue your adventure.',
+
+  // CareerIncLobby
+  'lobby.welcome': 'Welcome to Career Inc, {firstName}! I\'m {companionName}, and I\'m thrilled to be your guide today. Let\'s explore the amazing world of being a {careerName} together! Click the purple Learn button to get started.',
+  'career.lobby.introduction': '{introduction}',
+
+  // NarrativeIntroduction (Learn Container)
+  'learn.intro': 'Alright {firstName}, let\'s start with the Learn Foundations container! This is where we\'ll master the core {careerName} concepts together. Click the Begin Your Adventure button when you\'re ready!',
+  'experience.intro': 'Great job completing Learn Foundations, {firstName}! Now it\'s time for hands-on practice in the Experience container.',
+  'discover.intro': 'Wow {firstName}, you\'re doing amazing! Welcome to the Discover container, where we\'ll explore advanced {careerName} concepts.',
+
+  // Practice Questions (Kindergarten)
+  'question.multiple_choice': '{questionText} ... Your choices are: {options}',
+  'question.true_false': '{questionText} ... Is this true or false?',
+  'question.replay': 'Let me repeat the question: {questionText}',
+  'question.option_hover': 'Option {letter}: {optionText}',
+
+  // Feedback
+  'feedback.correct': 'Great job, {firstName}! That\'s correct!',
+  'feedback.incorrect': 'Not quite, {firstName}. Let\'s try again!',
+  'feedback.completion': 'Amazing work, {firstName}! You\'ve completed this activity!',
+
+  // Navigation
+  'nav.container_locked': 'The {containerName} container is locked. Complete {requiredContainer} first to unlock it.',
+  'nav.continue_learning': 'Ready to continue your {careerName} journey, {firstName}?',
+
+  // Generic/Fallback
+  'generic.greeting': 'Hello, {firstName}!',
+  'generic.encouragement': 'You\'re doing great, {firstName}!',
+  'generic.farewell': 'Great learning session today, {firstName}! See you next time!',
+
+  // Loading Screen Fun Facts
+  'loading.fact.math': '{factText}',
+  'loading.fact.ela': '{factText}',
+  'loading.fact.science': '{factText}',
+  'loading.fact.social_studies': '{factText}',
+
+  // Loading Screen Transitions
+  'loading.container.intro': 'Loading {containerName}... {factText}',
+  'loading.subject.transition': 'Preparing {subject} lesson... {factText}',
+  'loading.phase.practice': 'Getting practice questions ready... {factText}',
+  'loading.phase.instruction': 'Loading your lesson... {factText}',
+  'loading.phase.assessment': 'Preparing assessment... {factText}',
+
+  // Loading Screen Career Connections
+  'loading.career.mission': 'Remember, {firstName}, your mission as a {careerRole} is to {mission}!',
+  'loading.career.workplace': 'Welcome back to {workplace}! {factText}',
+  'loading.career.equipment': 'Did you know {careerRole}s use {equipment} in their work?'
+} as const;
+
+export type ScriptId = keyof typeof SCRIPT_IDS;
+
+/**
+ * Get script template by ID
+ */
+export function getScriptTemplate(scriptId: ScriptId): string {
+  return SCRIPT_IDS[scriptId];
+}
+
+/**
+ * Extract variables from a filled script by comparing with template
+ */
+export function extractVariables(scriptId: ScriptId, filledText: string): Record<string, string> {
+  const template = SCRIPT_IDS[scriptId];
+  const variables: Record<string, string> = {};
+
+  // Create regex pattern from template
+  // Replace {varName} with capture groups
+  const pattern = template
+    .replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // Escape special chars
+    .replace(/\\{(\w+)\\}/g, '(.+?)'); // Replace {var} with capture group
+
+  const regex = new RegExp(pattern);
+  const match = filledText.match(regex);
+
+  if (match) {
+    // Extract variable names from template
+    const varNames = [...template.matchAll(/\{(\w+)\}/g)].map(m => m[1]);
+
+    // Map captured values to variable names
+    varNames.forEach((varName, index) => {
+      variables[varName] = match[index + 1];
+    });
+  }
+
+  return variables;
+}
+
+/**
+ * Format a script with variables
+ */
+export function formatScript(scriptId: ScriptId, variables: Record<string, string>): string {
+  let text = SCRIPT_IDS[scriptId];
+
+  Object.entries(variables).forEach(([key, value]) => {
+    text = text.replace(new RegExp(`\\{${key}\\}`, 'g'), value);
+  });
+
+  return text;
+}

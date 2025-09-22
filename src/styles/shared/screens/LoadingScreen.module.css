@@ -439,47 +439,11 @@
 }
 
 /* ============================================
-   PHASE-SPECIFIC MESSAGES
+   PHASE-SPECIFIC STYLES REMOVED
    ============================================ */
-.phaseMessage {
-  position: absolute;
-  top: var(--space-4);
-  left: var(--space-4);
-  padding: var(--space-2) var(--space-4);
-  background: var(--gradient-primary);
-  color: white;
-  border-radius: var(--radius-full);
-  font-size: var(--text-xs);
-  font-weight: var(--font-semibold);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wider);
-  white-space: nowrap;
-  writing-mode: horizontal-tb !important;
-  text-orientation: mixed !important;
-  z-index: 3;
-}
-
-/* Mobile-specific phase message fix */
-@media (max-width: 480px) {
-  .phaseMessage {
-    font-size: 0.625rem !important;
-    padding: 0.25rem 0.5rem !important;
-    top: 0.5rem !important;
-    left: 0.5rem !important;
-  }
-}
-
-.phaseMessage.practice {
-  background: var(--gradient-warning);
-}
-
-.phaseMessage.assessment {
-  background: var(--gradient-error);
-}
-
-.phaseMessage.instruction {
-  background: var(--gradient-info);
-}
+/* Phase badges have been removed as they were misleading
+   showing "PRACTICE" for all loading screens regardless
+   of the actual phase (instruction, practice, assessment) */
 
 /* ============================================
    ANIMATIONS

@@ -213,7 +213,10 @@ export class AILearningJourneyService {
     options: any = {}
   ): Promise<any> {
     // Check if multi-model is enabled via environment variable
-    const useMultiModel = process.env.ENABLE_MULTI_MODEL === 'true';
+    const isBrowser = typeof window !== 'undefined';
+    const useMultiModel = isBrowser
+      ? (import.meta as any).env?.VITE_ENABLE_MULTI_MODEL === 'true'
+      : process?.env?.ENABLE_MULTI_MODEL === 'true';
 
     if (useMultiModel) {
       // Use the new multi-model selector

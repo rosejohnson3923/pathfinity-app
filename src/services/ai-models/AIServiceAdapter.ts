@@ -13,7 +13,10 @@ export class AIServiceAdapter {
 
   constructor() {
     this.multiModelService = MultiModelService.getInstance();
-    this.isMultiModelEnabled = process.env.ENABLE_MULTI_MODEL === 'true';
+    const isBrowser = typeof window !== 'undefined';
+    this.isMultiModelEnabled = isBrowser
+      ? (import.meta as any).env?.VITE_ENABLE_MULTI_MODEL === 'true'
+      : process?.env?.ENABLE_MULTI_MODEL === 'true';
   }
 
   /**
@@ -38,7 +41,11 @@ export class AIServiceAdapter {
     const result = await this.multiModelService.generateContent(prompt, context);
 
     // Log for debugging
-    if (process.env.NODE_ENV === 'development') {
+    const isBrowser = typeof window !== 'undefined';
+    const isDevelopment = isBrowser
+      ? (import.meta as any).env?.MODE === 'development'
+      : process?.env?.NODE_ENV === 'development';
+    if (isDevelopment) {
       console.log(`🤖 Multi-Model Route: ${result.routingDecision.modelName} (was ${modelName})`);
       console.log(`💰 Cost: $${result.cost.toFixed(4)}`);
       console.log(`⚡ Latency: ${result.latency}ms`);
@@ -96,7 +103,10 @@ export class AIServiceAdapter {
     responseFormat?: any
   ): Promise<any> {
     // Use the forced model if specified
-    const forceModel = process.env.FORCE_MODEL;
+    const isBrowser = typeof window !== 'undefined';
+    const forceModel = isBrowser
+      ? (import.meta as any).env?.VITE_FORCE_MODEL
+      : process?.env?.FORCE_MODEL;
     const actualModel = forceModel || this.mapLegacyModel(modelName);
 
     // Get model config

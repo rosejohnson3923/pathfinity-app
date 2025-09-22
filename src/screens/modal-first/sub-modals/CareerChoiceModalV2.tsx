@@ -7,13 +7,14 @@
  * - NO eager loading of all careers
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { ChevronLeft, Info, Volume2, VolumeX, Sparkles, Search, X } from 'lucide-react';
 import { useAuth } from '../../../hooks/useAuth';
 import { useStudentProfile } from '../../../hooks/useStudentProfile';
 import { careerContentService, EnrichedCareerData } from '../../../services/careerContentService';
 import { voiceManagerService } from '../../../services/voiceManagerService';
 import { pathIQService } from '../../../services/pathIQService';
+import { azureAudioService } from '../../../services/AzureAudioService';
 import './CareerChoiceModal.css';
 
 // Career basic data structure matching PathIQ
@@ -40,11 +41,11 @@ interface CareerChoiceModalV2Props {
   profile?: any;
 }
 
-export const CareerChoiceModalV2: React.FC<CareerChoiceModalV2Props> = ({ 
-  theme, 
+export const CareerChoiceModalV2: React.FC<CareerChoiceModalV2Props> = ({
+  theme,
   onClose,
   user: propsUser,
-  profile: propsProfile 
+  profile: propsProfile
 }) => {
   const authContext = useAuth();
   const profileContext = useStudentProfile(authContext?.user?.id, authContext?.user?.email);
@@ -69,10 +70,32 @@ export const CareerChoiceModalV2: React.FC<CareerChoiceModalV2Props> = ({
   const [isLoadingPreview, setIsLoadingPreview] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [soundEnabled, setSoundEnabled] = useState(false);
-  
+
+  // Audio refs
+  const initialAudioPlayedRef = useRef(false);
+  const detailAudioPlayedRef = useRef<Set<string>>(new Set());
+  const audioTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   // Get grade level
   const gradeLevel = profile?.grade_level || (user as any)?.grade_level || 'K';
   const gradeNum = gradeLevel === 'K' || gradeLevel === 'k' ? 0 : parseInt(gradeLevel) || 0;
+
+  // Wrapper for onClose to ensure audio cleanup
+  const handleClose = useCallback((selectedCareer?: any) => {
+    console.log('🔊 CareerChoiceModalV2: Closing modal, stopping audio');
+
+    // Clear any pending audio timeout
+    if (audioTimeoutRef.current) {
+      clearTimeout(audioTimeoutRef.current);
+      audioTimeoutRef.current = null;
+    }
+
+    // Stop any playing audio
+    azureAudioService.stop();
+
+    // Call the original onClose
+    onClose(selectedCareer);
+  }, [onClose]);
   
   // Theme colors
   const colors = theme === 'dark' ? {
@@ -99,11 +122,47 @@ export const CareerChoiceModalV2: React.FC<CareerChoiceModalV2Props> = ({
     warning: '#F59E0B'
   };
   
+  // Clean up audio when component unmounts
+  useEffect(() => {
+    return () => {
+      console.log('🔊 CareerChoiceModalV2: Stopping audio on unmount');
+
+      // Clear any pending audio timeout
+      if (audioTimeoutRef.current) {
+        clearTimeout(audioTimeoutRef.current);
+        audioTimeoutRef.current = null;
+      }
+
+      // Stop Azure TTS audio
+      azureAudioService.stop();
+    };
+  }, []);
+
+  // Play initial narration when modal opens (2.1)
+  useEffect(() => {
+    if (!initialAudioPlayedRef.current && !isLoading) {
+      initialAudioPlayedRef.current = true;
+      const firstName = profile?.first_name || user?.full_name?.split(' ')[0] || 'friend';
+      const narrationText = `Let's have some fun with friends and choose the Top Match for your grade level or click More Options to choose your personal favorite.`;
+
+      console.log('🔊 CareerChoiceModalV2: Playing initial narration');
+
+      setTimeout(() => {
+        azureAudioService.playText(narrationText, 'finn', {
+          scriptId: 'career.selection_prompt',
+          variables: {},
+          onStart: () => console.log('🔊 Career choice initial narration started'),
+          onEnd: () => console.log('🔊 Career choice initial narration ended')
+        });
+      }, 500);
+    }
+  }, [isLoading, profile, user]);
+
   // Initialize on mount - ONLY fetch 3 recommended careers
   useEffect(() => {
     const initializeCareers = async () => {
       setIsLoading(true);
-      
+
       try {
         // Get recommended careers from PathIQ
         const recommendations = pathIQService.getCareerSelections(user?.id || 'default', gradeLevel);
@@ -156,49 +215,132 @@ export const CareerChoiceModalV2: React.FC<CareerChoiceModalV2Props> = ({
   // Handle career preview - fetch enriched data on demand
   const handleCareerPreview = useCallback(async (careerId: string) => {
     setSelectedCareerForPreview(careerId);
-    
+
     // Check if we already have enriched data
     if (!enrichedData.has(careerId)) {
       setIsLoadingPreview(true);
-      
+
       const career = allCareers.find(c => c.careerId === careerId || c.id === careerId);
       if (career) {
         try {
           console.log(`🔍 Fetching enriched data for preview: ${career.name}`);
           const enriched = careerContentService.getEnrichedCareerData(career.name, gradeLevel);
-          
+
           if (enriched) {
             setEnrichedData(prev => {
               const newMap = new Map(prev);
               newMap.set(careerId, enriched);
               return newMap;
             });
+
+            // Play narration for detailed career card (2.2)
+            if (!detailAudioPlayedRef.current.has(careerId)) {
+              detailAudioPlayedRef.current.add(careerId);
+              const description = enriched.description || career.description || 'Explore this amazing career';
+              const skills = enriched.skills?.join(', ') || '';
+
+              // Simply narrate the card content directly
+              const narrationText = skills ? `${description}. Skills: ${skills}.` : description;
+
+              console.log(`🔊 CareerChoiceModalV2: Playing career detail narration for ${career.name}`);
+
+              // Clear any existing timeout
+              if (audioTimeoutRef.current) {
+                clearTimeout(audioTimeoutRef.current);
+              }
+
+              audioTimeoutRef.current = setTimeout(() => {
+                azureAudioService.playText(narrationText, 'finn', {
+                  scriptId: 'career.preview',
+                  variables: {
+                    careerName: career.name,
+                    description: enriched.description || career.description || 'you will have amazing adventures',
+                    skills: enriched.skills?.join(', ') || ''
+                  },
+                  onStart: () => console.log(`🔊 ${career.name} detail narration started`),
+                  onEnd: () => console.log(`🔊 ${career.name} detail narration ended`)
+                });
+              }, 500);
+            }
           }
         } catch (err) {
           console.error(`Failed to fetch enriched data for ${career.name}:`, err);
         }
       }
-      
+
       setIsLoadingPreview(false);
+    } else {
+      // Play narration if we already have data but haven't played audio yet
+      const career = allCareers.find(c => c.careerId === careerId || c.id === careerId);
+      const enriched = enrichedData.get(careerId);
+
+      if (career && enriched && !detailAudioPlayedRef.current.has(careerId)) {
+        detailAudioPlayedRef.current.add(careerId);
+        const description = enriched.description || career.description || 'Explore this amazing career';
+        const skills = enriched.skills?.join(', ') || '';
+
+        // Simply narrate the card content directly
+        const narrationText = skills ? `${description}. Skills: ${skills}.` : description;
+
+        console.log(`🔊 CareerChoiceModalV2: Playing career detail narration for ${career.name}`);
+
+        // Clear any existing timeout
+        if (audioTimeoutRef.current) {
+          clearTimeout(audioTimeoutRef.current);
+        }
+
+        audioTimeoutRef.current = setTimeout(() => {
+          azureAudioService.playText(narrationText, 'finn', {
+            scriptId: 'career.preview',
+            variables: {
+              careerName: career.name,
+              description: enriched.description || career.description || 'you will have amazing adventures',
+              skills: enriched.skills?.join(', ') || ''
+            },
+            onStart: () => console.log(`🔊 ${career.name} detail narration started`),
+            onEnd: () => console.log(`🔊 ${career.name} detail narration ended`)
+          });
+        }, 500);
+      }
     }
-    
+
     setViewMode('preview');
-  }, [enrichedData, gradeLevel]);
+  }, [enrichedData, gradeLevel, allCareers]);
   
   // Handle final career selection
   const handleCareerSelection = (careerId: string) => {
     setSelectedCareerForFinal(careerId);
     const career = allCareers.find(c => c.careerId === careerId || c.id === careerId);
     const enriched = enrichedData.get(careerId);
-    
+
+    // Play confirmation narration (2.3)
+    if (career) {
+      const firstName = profile?.first_name || user?.full_name?.split(' ')[0] || 'friend';
+      const narrationText = `Excellent choice! Let's have some fun as a ${career.name}, ${firstName}!`;
+
+      console.log(`🔊 CareerChoiceModalV2: Playing career selection confirmation for ${career.name}`);
+
+      azureAudioService.playText(narrationText, 'finn', {
+        scriptId: 'intro.career_selected',
+        variables: {
+          careerName: career.name,
+          firstName: firstName
+        },
+        onStart: () => console.log('🔊 Career selection confirmation started'),
+        onEnd: () => console.log('🔊 Career selection confirmation ended')
+      });
+    }
+
     // Pass back the selected career with any enriched data we have
-    onClose({
-      id: careerId,
-      name: career?.name,
-      icon: career?.icon,
-      color: career?.color,
-      enrichedData: enriched
-    });
+    setTimeout(() => {
+      handleClose({
+        id: careerId,
+        name: career?.name,
+        icon: career?.icon,
+        color: career?.color,
+        enrichedData: enriched
+      });
+    }, 5000); // 5 seconds to ensure Finn finishes speaking completely
   };
   
   // Handle search
@@ -334,7 +476,7 @@ export const CareerChoiceModalV2: React.FC<CareerChoiceModalV2Props> = ({
           }}>
             <button
               onClick={() => {
-                setViewMode('expanded');
+                setViewMode('all-careers');
                 setSelectedCareerForPreview(null);
               }}
               style={{
@@ -376,7 +518,7 @@ export const CareerChoiceModalV2: React.FC<CareerChoiceModalV2Props> = ({
               {/* Close Button */}
               <button
                 onClick={() => {
-                  setViewMode('expanded');
+                  setViewMode('all-careers');
                   setSelectedCareerForPreview(null);
                 }}
                 style={{

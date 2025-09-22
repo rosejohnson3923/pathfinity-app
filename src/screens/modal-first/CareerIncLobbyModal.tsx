@@ -6,7 +6,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ParticlesBackground } from '../../components/ParticlesBackground';
 import { companionVoiceoverService } from '../../services/companionVoiceoverService';
+import { azureAudioService } from '../../services/azureAudioService';
 import { useStudentProfile } from '../../hooks/useStudentProfile';
+import { useAuth } from '../../hooks/useAuth';
+import { useNarrative } from '../../contexts/NarrativeContext';
 import './CareerIncLobbyModal.css';
 
 interface CareerIncLobbyModalProps {
@@ -100,6 +103,14 @@ export const CareerIncLobbyModal: React.FC<CareerIncLobbyModalProps> = ({
   onContainerReturn,
   userId = 'default'
 }) => {
+  console.log('🏢 CareerIncLobbyModal MOUNTED', {
+    selectedCareer,
+    selectedCompanion,
+    theme,
+    userId,
+    timestamp: Date.now()
+  });
+
   // Helper to get companion display name from ID
   const getCompanionDisplayName = (companionId: string): string => {
     const companionNames: Record<string, string> = {
@@ -111,6 +122,8 @@ export const CareerIncLobbyModal: React.FC<CareerIncLobbyModalProps> = ({
     return companionNames[companionId.toLowerCase()] || companionId;
   };
   const { profile } = useStudentProfile();
+  const { user } = useAuth();
+  const { playNarrativeSection, masterNarrative } = useNarrative();
   const [selectedContainer, setSelectedContainer] = useState<'LEARN' | 'EXPERIENCE' | 'DISCOVER' | null>(null);
   const [expandedContainer, setExpandedContainer] = useState<string | null>(null);
   const [checkedInTime] = useState(new Date().toLocaleTimeString([], { 
@@ -130,6 +143,7 @@ export const CareerIncLobbyModal: React.FC<CareerIncLobbyModalProps> = ({
   
   // Use ref to prevent double-playing in React StrictMode
   const speechInitiatedRef = useRef(false);
+  const audioPlayedRef = useRef(false);
 
   const containers = getLearningContainers(selectedCareer);
 
@@ -177,10 +191,66 @@ export const CareerIncLobbyModal: React.FC<CareerIncLobbyModalProps> = ({
           sessionStorage.setItem(sessionKey, 'true');
         }
       } else {
-        // First time entering lobby - play welcome
-        console.log('🎤 Playing Career, Inc. lobby welcome for:', selectedCompanion, selectedCareer);
-        companionVoiceoverService.stopCurrent();
-        companionVoiceoverService.playVoiceover('lobby-welcome', { career: selectedCareer }, { delay: 800 });
+        // First time entering lobby - play introduction with companion's voice
+        console.log('🎤 Playing Career, Inc. lobby welcome with companion voice:', selectedCompanion, selectedCareer);
+
+        // Prevent double-playing
+        if (audioPlayedRef.current) {
+          console.log('🔇 Audio already played, skipping');
+          return;
+        }
+        audioPlayedRef.current = true;
+
+        // Get the companion's display name and user's first name
+        const companionName = getCompanionDisplayName(selectedCompanion);
+        const firstName = user?.full_name?.split(' ')[0] || profile?.display_name?.split(' ')[0] || 'friend';
+
+        // Build the introduction text with CTA
+        const introText = `Welcome to Career Inc, ${firstName}! I'm ${companionName}, and I'm thrilled to be your guide today. Let's explore the amazing world of being a ${selectedCareer} together! Click the purple Learn button to get started.`;
+
+        // Check if audio is currently playing and wait for it to finish
+        const playLobbyNarration = () => {
+          if (!isMounted) return;
+
+          // Check if Azure Audio Service is currently speaking
+          if (azureAudioService.speaking) {
+            console.log('🎤 Audio currently playing, waiting to play CareerIncLobby narration...');
+            // Check again in 500ms
+            setTimeout(playLobbyNarration, 500);
+            return;
+          }
+
+          console.log('🎤 Now playing CareerIncLobby welcome narration', {
+            companion: selectedCompanion,
+            firstName: firstName,
+            companionName: companionName,
+            careerName: selectedCareer,
+            textLength: introText.length
+          });
+
+          // Play the introduction using the companion's voice
+          azureAudioService.playText(introText, selectedCompanion, {
+            scriptId: 'lobby.welcome',
+            variables: {
+              firstName: firstName,
+              companionName: companionName,
+              careerName: selectedCareer
+            },
+            emotion: 'friendly',
+            style: 'cheerful',
+            onStart: () => {
+              console.log('🔊 CareerIncLobby audio started');
+            },
+            onEnd: () => {
+              console.log('🔊 CareerIncLobby audio ended');
+            }
+          });
+        };
+
+        // Start checking immediately when the page loads
+        // This will wait for any DashboardModal audio to finish naturally
+        playLobbyNarration();
+
         setHasPlayedWelcome(true);
         sessionStorage.setItem(sessionKey, 'true');
       }
@@ -197,6 +267,7 @@ export const CareerIncLobbyModal: React.FC<CareerIncLobbyModalProps> = ({
       }
       // Stop any speech that might be playing when unmounting
       companionVoiceoverService.stopCurrent();
+      azureAudioService.stop();
     };
   }, [sessionKey]); // Only re-run if sessionKey changes
 

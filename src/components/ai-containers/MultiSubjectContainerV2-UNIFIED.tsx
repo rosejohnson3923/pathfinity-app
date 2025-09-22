@@ -8,10 +8,12 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { AILearnContainerV2UNIFIED as AILearnContainerV2 } from './AILearnContainerV2-UNIFIED';
 import { AIExperienceContainerV2UNIFIED as AIExperienceContainerV2 } from './AIExperienceContainerV2-UNIFIED';
 import { AIDiscoverContainerV2UNIFIED as AIDiscoverContainerV2 } from './AIDiscoverContainerV2-UNIFIED';
+import { EnhancedLoadingScreen } from './EnhancedLoadingScreen';
 import { TwoPanelModal } from '../modals/TwoPanelModal';
 import { useAuth } from '../../hooks/useAuth';
 import { useStudentProfile } from '../../hooks/useStudentProfile';
 import { usePageCategory } from '../../hooks/usePageCategory';
+import { useNarrative } from '../../contexts/NarrativeContext';
 
 // REMOVE direct skillsData import - use adaptive journey instead
 // import { skillsData } from '../../data/skillsDataComplete';
@@ -43,6 +45,8 @@ import { ProgressHeader } from '../navigation/ProgressHeader';
 
 // Import CSS module
 import styles from '../../styles/containers/MultiSubjectContainer.module.css';
+
+// Master Narrative now comes from NarrativeContext
 
 // ============================================================================
 // INTERFACES
@@ -159,6 +163,11 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
   const [sessionStartTime] = useState(Date.now());
   const [skillsLoaded, setSkillsLoaded] = useState(false);
   const [isChildContainerLoading, setIsChildContainerLoading] = useState(true);
+  const [showInitialLoading, setShowInitialLoading] = useState(true);
+
+  // Get Master Narrative from context - already generated at dashboard level
+  const { masterNarrative, narrativeLoading, companionId } = useNarrative();
+
   
   // Define subject order with icons
   const subjects = useMemo(() => [
@@ -250,10 +259,10 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
     const preloadAndInitialize = async () => {
       console.log(`[DB] Preloading skills for ${currentSubject}...`);
       await skillClusterService.preloadSkills(student.grade_level, currentSubject);
-      
+
       // After skills are loaded, initialize/reinitialize the journey
       console.log(`[DB] Skills loaded, initializing journey...`);
-      
+
       // Clear existing journey to force reload with new skills
       const existingJourney = adaptiveJourneyOrchestrator.getJourney(student.id);
       if (existingJourney) {
@@ -261,21 +270,50 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
         // Force reinitialize to pick up the loaded skills
         adaptiveJourneyOrchestrator.clearJourney(student.id);
       }
-      
+
       // Initialize journey (this will now use the preloaded skills)
       console.log('Initializing adaptive journey with preloaded skills');
       await adaptiveJourneyOrchestrator.initializeJourney(student.id, student.grade_level);
-      
+
       setSkillsLoaded(true);
       console.log(`[DB] Journey initialized with database skills`);
     };
-    
-    preloadAndInitialize();
-    
+
+    // Show initial loading screen for fun facts on first mount
+    if (currentSubjectIndex === 0 && showInitialLoading) {
+      console.log('🎵 Showing initial loading screen for fun facts...');
+
+      // Wait 3 seconds before loading skills to allow fun facts to play
+      setTimeout(() => {
+        setShowInitialLoading(false);
+        preloadAndInitialize();
+      }, 3000);
+
+      return;
+    }
+
+    if (!showInitialLoading) {
+      preloadAndInitialize();
+    }
+
     // Initialize career progression
     // Note: Career is passed to containers but not set here
     // Containers handle career-specific content internally
-  }, [student.id, student.grade_level, selectedCareer, currentSubject]);
+  }, [student.id, student.grade_level, selectedCareer, currentSubject, showInitialLoading, currentSubjectIndex]);
+
+  // Log narrative availability from context
+  useEffect(() => {
+    if (masterNarrative) {
+      console.log('✅ Using Master Narrative from context');
+      console.warn('🔊 AUDIO: Master Narrative available from context', {
+        hasNarrative: !!masterNarrative,
+        companionId: companionId,
+        narrativeKeys: Object.keys(masterNarrative)
+      });
+    } else if (!narrativeLoading) {
+      console.warn('⚠️ No Master Narrative available from context');
+    }
+  }, [masterNarrative, narrativeLoading, companionId]);
   
   // ============================================================================
   // COMPANION INTEGRATION
@@ -289,62 +327,26 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
   
   const renderTransition = () => {
     if (!transition.isTransitioning) return null;
-    
-    const companionName = (selectedCharacter || 'spark').toLowerCase();
-    const companionImage = `/images/companions/${companionName}-${theme}.png`;
-    
-    // Don't use transitionOverlay which has fixed positioning - just use the card content
-    const transitionContent = (
-      <div className={styles.transitionContainer}>
-        <div className={styles.transitionCard}>
-          <div className={styles.companionSection}>
-            <img 
-              src={companionImage} 
-              alt={selectedCharacter}
-              className={styles.companionImage}
-              onError={(e) => {
-                console.error('Failed to load companion image:', companionImage);
-                e.currentTarget.src = '/images/companions/spark-light.png';
-              }}
-            />
-          </div>
-          <h2 className={styles.transitionTitle}>
-            {transition.message}
-          </h2>
-          {transition.nextSubject && (
-            <p className={styles.nextSubjectText}>
-              Next up: {transition.nextSubject}
-            </p>
-          )}
-          <div className={styles.progressIndicator}>
-            {subjects.map((subject, idx) => (
-              <div 
-                key={subject.name}
-                className={`${styles.progressDot} ${
-                  idx < currentSubjectIndex ? styles.completed :
-                  idx === currentSubjectIndex ? styles.current :
-                  styles.upcoming
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-    );
 
-    // Wrap transition content with TwoPanelModal for gamification during 22+ second loads
+    // Use EnhancedLoadingScreen for transitions to enable fun facts narration
     return (
-      <TwoPanelModal
+      <EnhancedLoadingScreen
+        phase="practice"
+        skillName={transition.nextSubject || `${currentSubject} Skills`}
+        studentName={student?.display_name || student?.name || 'Student'}
+        customMessage={transition.message || `Loading ${transition.nextSubject}...`}
+        containerType={activeContainerType.toLowerCase() as 'learn' | 'experience' | 'discover'}
+        currentCareer={selectedCareer?.name}
         showGamification={true}
-        sidebarPosition="right"
-        currentSkill={currentSubject || "Transitioning"}
-        currentCareer={selectedCareer?.name || "Exploring"}
-        userId={user?.id || 'default'}
-        gradeLevel={profile?.grade_level || student?.grade_level || 'K'}
-        modalTitle="Loading Next Activity"
-      >
-        {transitionContent}
-      </TwoPanelModal>
+        masterNarrative={masterNarrative}
+        currentSubject={transition.nextSubject ?
+          (transition.nextSubject === 'Social Studies' ? 'socialStudies' : transition.nextSubject.toLowerCase()) as 'math' | 'ela' | 'science' | 'socialStudies' :
+          (currentSubject === 'Social Studies' ? 'socialStudies' : currentSubject.toLowerCase()) as 'math' | 'ela' | 'science' | 'socialStudies'
+        }
+        companionId={companionId || selectedCharacter?.toLowerCase() || 'finn'}
+        enableNarration={true}
+        isFirstLoad={false}
+      />
     );
   };
   
@@ -398,7 +400,7 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
         animation: 'fadeIn'
       });
       
-      // Wait for transition animation
+      // Wait for transition animation (this is when fun facts play!)
       setTimeout(() => {
         setCurrentSubjectIndex(currentSubjectIndex + 1);
         setSkillsLoaded(false); // Reset skills loaded state for new subject
@@ -406,7 +408,7 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
           isTransitioning: false,
           message: ''
         });
-      }, 3000);
+      }, 4000); // Give enough time for fun facts to play
     }
   };
   
@@ -415,13 +417,39 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
     if (transition.isTransitioning) {
       return renderTransition();
     }
-    
-    // Show loading while skills are being loaded from database
+
+    // Show initial loading screen with fun facts on first mount
+    if (showInitialLoading && currentSubjectIndex === 0) {
+      return (
+        <EnhancedLoadingScreen
+          phase="practice"
+          skillName={`${currentSubject} Skills`}
+          studentName={student?.display_name || student?.name || 'Student'}
+          customMessage={`Welcome! Let's start with ${currentSubject}...`}
+          containerType={activeContainerType.toLowerCase() as 'learn' | 'experience' | 'discover'}
+          currentCareer={selectedCareer?.name || career}
+          showGamification={true}
+          masterNarrative={masterNarrative}
+          currentSubject={(currentSubject === 'Social Studies' ? 'socialStudies' : currentSubject?.toLowerCase() || 'math') as 'math' | 'ela' | 'science' | 'socialStudies'}
+          companionId={companionId || 'finn'}
+          enableNarration={true}
+          isFirstLoad={true}
+        />
+      );
+    }
+
+    // Show simple loading while skills are being loaded from database
     if (!skillsLoaded) {
       return (
-        <div className={styles.loadingMessage}>
-          <h3>Loading {currentSubject} skills from database...</h3>
-          <div className={styles.loadingSpinner}></div>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+          fontSize: '1.5rem',
+          color: '#666'
+        }}>
+          Loading {currentSubject} curriculum...
         </div>
       );
     }
@@ -445,10 +473,20 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
         }, 1000);
 
         return (
-          <div className={styles.loadingMessage}>
-            <h3>Checking {currentSubject} curriculum...</h3>
-            <div className={styles.loadingSpinner}></div>
-          </div>
+          <EnhancedLoadingScreen
+            phase="practice"
+            skillName={`${currentSubject} Skills`}
+            studentName={student?.display_name || student?.name || 'Student'}
+            customMessage={`Checking ${currentSubject} curriculum...`}
+            containerType={activeContainerType.toLowerCase() as 'learn' | 'experience' | 'discover'}
+            currentCareer={selectedCareer?.name}
+            showGamification={false}
+            masterNarrative={masterNarrative}
+            currentSubject={(currentSubject === 'Social Studies' ? 'socialStudies' : currentSubject.toLowerCase()) as 'math' | 'ela' | 'science' | 'socialStudies'}
+            companionId={companionId || selectedCharacter?.toLowerCase() || 'finn'}
+            enableNarration={true}
+            isFirstLoad={false}
+          />
         );
       } else {
         // Last subject with no skills - complete the journey
@@ -458,10 +496,20 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
         }, 1000);
 
         return (
-          <div className={styles.loadingMessage}>
-            <h3>Completing learning journey...</h3>
-            <div className={styles.loadingSpinner}></div>
-          </div>
+          <EnhancedLoadingScreen
+            phase="complete"
+            skillName="Learning Journey"
+            studentName={student?.display_name || student?.name || 'Student'}
+            customMessage="Completing learning journey..."
+            containerType={activeContainerType.toLowerCase() as 'learn' | 'experience' | 'discover'}
+            currentCareer={selectedCareer?.name}
+            showGamification={false}
+            masterNarrative={masterNarrative}
+            currentSubject={(currentSubject === 'Social Studies' ? 'socialStudies' : currentSubject.toLowerCase()) as 'math' | 'ela' | 'science' | 'socialStudies'}
+            companionId={companionId || selectedCharacter?.toLowerCase() || 'finn'}
+            enableNarration={true}
+            isFirstLoad={false}
+          />
         );
       }
     }
@@ -503,7 +551,12 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
       onLoadingChange: (loading: boolean) => setIsChildContainerLoading(loading),
       // Pass subject tracking info for Experience container
       totalSubjects: subjects.length,
-      currentSubjectIndex: currentSubjectIndex
+      currentSubjectIndex: currentSubjectIndex,
+      // PASS CACHED MASTER NARRATIVE - This prevents regeneration!
+      masterNarrative: masterNarrative,
+      narrativeLoading: narrativeLoading,
+      // Use companion ID from context (set when narrative was generated)
+      companionId: companionId || selectedCharacter?.toLowerCase() || 'finn'
     };
     
     // Use activeContainerType instead of containerType for dev mode override
@@ -523,7 +576,7 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
   
   return (
     <ToastProvider>
-      <div className={`${styles.multiSubjectContainer} ${styles[theme]}`}>
+      <div className={styles.multiSubjectContainer}>
         {/* Progress Header - Only show when content is loaded and not transitioning/loading */}
         {!transition.isTransitioning && skillsLoaded && getCurrentSkill && !isChildContainerLoading && (
           <ProgressHeader

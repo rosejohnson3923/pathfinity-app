@@ -13,6 +13,8 @@ import { azureAIFoundryService } from '../../services/azureAIFoundryService';
 import { careerBadgeService } from '../../services/careerBadgeService';
 import { CareerBadge } from '../../types/CareerTypes';
 import { PATTY_AVATAR_BASE64 } from '../../assets/pattyAvatar';
+import { azureAudioService } from '../../services/azureAudioService';
+import { MasterNarrative } from '../../services/narrative/MasterNarrativeGenerator';
 
 // Helper function to get skill group name from skill number and result index
 const getSkillGroupDisplayName = (skillNumber: string, subject: string, resultIndex: number): string => {
@@ -40,6 +42,8 @@ interface CareerIncLobbyProps {
   gradeLevel: string;
   learnResults: AssessmentResults[];
   skillGroups?: { [subject: string]: { skill_number: string; skill_name: string } }; // A.0 skill group data from cache
+  masterNarrative?: MasterNarrative; // Optional Master Narrative for audio
+  companionId?: string; // Current companion for voice
   onCareerSelected: (career: CareerChoice, badge?: CareerBadge) => void;
   onExit: () => void;
 }
@@ -55,6 +59,8 @@ export const CareerIncLobby: React.FC<CareerIncLobbyProps> = ({
   gradeLevel,
   learnResults,
   skillGroups,
+  masterNarrative,
+  companionId = 'finn',
   onCareerSelected,
   onExit
 }) => {
@@ -201,6 +207,43 @@ export const CareerIncLobby: React.FC<CareerIncLobbyProps> = ({
       // Fallback to visual-only if TTS fails
     }
   };
+
+  // Initialize companion audio and play narrative audio
+  useEffect(() => {
+    // Play introduction audio if Master Narrative is available
+    if (masterNarrative && !isLoading && showWelcomeAnimation) {
+      console.log('🎵 CareerIncLobby: Playing companion introduction audio', {
+        companionId,
+        hasIntroduction: !!masterNarrative.cohesiveStory?.introduction
+      });
+
+      // Play the career introduction from Master Narrative
+      if (masterNarrative.cohesiveStory?.introduction) {
+        azureAudioService.playText(
+          masterNarrative.cohesiveStory.introduction,
+          companionId,
+          {
+            scriptId: 'career.lobby.introduction',
+            variables: {
+              studentName,
+              careerRole: masterNarrative.character?.role || 'Career Explorer'
+            },
+            onStart: () => {
+              console.log('🔊 CareerIncLobby: Companion introduction started');
+            },
+            onEnd: () => {
+              console.log('🔊 CareerIncLobby: Companion introduction completed');
+            }
+          }
+        );
+      }
+    }
+
+    return () => {
+      // Clean up audio on unmount
+      azureAudioService.stop();
+    };
+  }, [masterNarrative, companionId, studentName, isLoading, showWelcomeAnimation]);
 
   // Virtual receptionist welcome sequence - start only after page loads
   useEffect(() => {
