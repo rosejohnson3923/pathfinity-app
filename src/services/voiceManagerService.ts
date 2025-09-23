@@ -96,6 +96,13 @@ export class VoiceManagerService {
   private getVoiceForCharacter(characterId: string): VoiceSettings {
     // Define character personalities and their voice preferences
     const characterVoices: Record<string, VoiceSettings> = {
+      pat: {
+        // Pat: Friendly female navigation guide
+        voice: 'female', // Will search for female voice
+        rate: 0.95,
+        pitch: 1.1, // Slightly higher for friendly feminine voice
+        volume: 1.0
+      },
       finn: {
         // Finn: Young, enthusiastic boy - use default voice with higher pitch
         voice: 'default', // Will use system default

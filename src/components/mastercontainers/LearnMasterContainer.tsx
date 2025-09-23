@@ -11,8 +11,7 @@ import SimpleParticlesBackground from '../SimpleParticlesBackground';
 import { MasterContainerData, SubjectCard, AssignmentCard } from '../../utils/JourneyCacheManager';
 import { AssessmentResults, ContainerHandoff } from '../../types/LearningTypes';
 import { MasterToolInterface, AssignmentContext, ToolConfiguration } from '../tools/MasterToolInterface';
-import { useMasterTool } from '../../hooks/useMasterTool';
-import { createAgentSystem } from '../../agents/AgentSystem';
+// Agent system imports removed - to be replaced with live chat
 import EmbeddedToolRenderer from '../tools/EmbeddedToolRenderer';
 import { FinnChatbot } from '../chatbot/FinnChatbot';
 
@@ -48,46 +47,23 @@ export const LearnMasterContainer: React.FC<LearnMasterContainerProps> = ({
   const [feedbackMessage, setFeedbackMessage] = useState('');
   const [feedbackType, setFeedbackType] = useState<'neutral' | 'correct' | 'incorrect' | 'hint'>('neutral');
   
-  // Initialize 6-Agent System
-  const [agentSystem, setAgentSystem] = useState<any>(null);
-  
-  useEffect(() => {
-    const initializeAgentSystem = async () => {
-      try {
-        const system = createAgentSystem({
-          enabledAgents: ['see', 'speak', 'think', 'tool', 'safe', 'view'],
-          debugMode: false,
-          logLevel: 'info'
-        });
-        await system.initialize();
-        setAgentSystem(system);
-        console.log('🤖 Agent system initialized for Learn Container');
-      } catch (error) {
-        console.error('❌ Failed to initialize agent system:', error);
-      }
-    };
-    
-    initializeAgentSystem();
-    
-    return () => {
-      if (agentSystem) {
-        agentSystem.shutdown();
-      }
-    };
-  }, []);
-  
-  // Master Tool Integration with Agent System
-  const masterTool = useMasterTool({
-    autoAnalyze: true,
-    enableFinnGuidance: true,
-    agentSystem,
-    enableMultiAgentWorkflows: true,
-    preferredAgents: ['see', 'think', 'tool', 'safe'],
+  // Agent system removed - to be replaced with live chat
+  const agentSystem = null;
+
+  // Master Tool placeholder - to be replaced with live chat
+  const masterTool = {
+    isToolVisible: false,
+    currentTool: null,
+    assignment: null,
+    closeTool: () => {},
+    handleToolComplete: () => {},
+    handleToolProgress: () => {},
+    agentSystem: null
     onToolComplete: async (results) => {
       console.log('🎯 Tool completed in Learn Container:', results);
       
-      // Use FinnSpeak for completion celebration
-      if (agentSystem) {
+      // Agent celebration removed - to be replaced with live chat
+      if (false) {
         try {
           await agentSystem.requestAgentAction('speak', 'provide_guidance', {
             type: 'completion_celebration',

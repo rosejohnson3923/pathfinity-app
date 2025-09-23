@@ -10,8 +10,7 @@ import { GamificationService } from '../../services/gamificationService';
 import SimpleParticlesBackground from '../SimpleParticlesBackground';
 import { MasterContainerData, SubjectCard, AssignmentCard } from '../../utils/JourneyCacheManager';
 import { AssessmentResults, ContainerHandoff } from '../../types/LearningTypes';
-import { createAgentSystem } from '../../agents/AgentSystem';
-import { useMasterTool } from '../../hooks/useMasterTool';
+// Agent system imports removed - to be replaced with live chat
 import { MasterToolInterface, AssignmentContext } from '../tools/MasterToolInterface';
 
 interface DiscoverMasterContainerProps {
@@ -44,38 +43,18 @@ export const DiscoverMasterContainer: React.FC<DiscoverMasterContainerProps> = (
   // Initialize 6-Agent System
   const [agentSystem, setAgentSystem] = useState<any>(null);
   
-  useEffect(() => {
-    const initializeAgentSystem = async () => {
-      try {
-        const system = createAgentSystem({
-          enabledAgents: ['see', 'speak', 'think', 'tool', 'safe', 'view'],
-          debugMode: false,
-          logLevel: 'info'
-        });
-        await system.initialize();
-        setAgentSystem(system);
-        console.log('🤖 Agent system initialized for Discover Container');
-      } catch (error) {
-        console.error('❌ Failed to initialize agent system:', error);
-      }
-    };
-    
-    initializeAgentSystem();
-    
-    return () => {
-      if (agentSystem) {
-        agentSystem.shutdown();
-      }
-    };
-  }, []);
-  
-  // Master Tool Integration with Agent System
-  const masterTool = useMasterTool({
-    autoAnalyze: true,
-    enableFinnGuidance: true,
-    agentSystem,
-    enableMultiAgentWorkflows: true,
-    preferredAgents: ['see', 'speak', 'view', 'safe'],
+  // Agent system removed - to be replaced with live chat
+  const agentSystem = null;
+
+  // Master Tool placeholder - to be replaced with live chat
+  const masterTool = {
+    isToolVisible: false,
+    currentTool: null,
+    assignment: null,
+    closeTool: () => {},
+    handleToolComplete: () => {},
+    handleToolProgress: () => {},
+    agentSystem: null
     onToolComplete: async (results) => {
       console.log('📖 Tool completed in Discover Container:', results);
       

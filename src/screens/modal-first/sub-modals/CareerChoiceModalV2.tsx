@@ -296,7 +296,9 @@ export const CareerChoiceModalV2: React.FC<CareerChoiceModalV2Props> = ({
         }
 
         audioTimeoutRef.current = setTimeout(() => {
-          azureAudioService.playText(narrationText, 'finn', {
+          // Use selected companion voice, or Pat if none selected yet
+          const voiceToUse = sessionStorage.getItem('selectedCompanion') || 'pat';
+          azureAudioService.playText(narrationText, voiceToUse, {
             scriptId: 'career.preview',
             variables: {
               careerName: career.name,

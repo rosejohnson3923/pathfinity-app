@@ -6,8 +6,7 @@ import { BookOpen, Target, CheckCircle, Play, ArrowRight, ArrowLeft, Clock, Star
 import { UpdatedAIContentGenerator, ThreePhaseContent } from '../utils/ThreePhaseContentGenerator';
 import { AssessmentResults, Skill } from '../types/LearningTypes';
 import { MasterToolInterface, AssignmentContext, ToolConfiguration } from './tools/MasterToolInterface';
-import { createAgentSystem } from '../agents/AgentSystem';
-import { useMasterTool } from '../hooks/useMasterTool';
+// Agent system imports removed - to be replaced with live chat
 
 interface ThreePhaseAssignmentPlayerProps {
   skill: {
@@ -48,43 +47,18 @@ export const ThreePhaseAssignmentPlayer: React.FC<ThreePhaseAssignmentPlayerProp
   const [assessmentAttempts, setAssessmentAttempts] = useState<number>(0);
   const [struggledWith, setStruggledWith] = useState<string[]>([]);
   
-  // Initialize 6-Agent System
-  const [agentSystem, setAgentSystem] = useState<any>(null);
-  
-  useEffect(() => {
-    const initializeAgentSystem = async () => {
-      try {
-        const system = createAgentSystem({
-          enabledAgents: ['see', 'speak', 'think', 'tool', 'safe', 'view'],
-          debugMode: false,
-          logLevel: 'info'
-        });
-        await system.initialize();
-        setAgentSystem(system);
-        console.log('🤖 Agent system initialized for ThreePhaseAssignmentPlayer');
-      } catch (error) {
-        console.error('❌ Failed to initialize agent system:', error);
-      }
-    };
-    
-    initializeAgentSystem();
-    
-    return () => {
-      if (agentSystem) {
-        agentSystem.shutdown();
-      }
-    };
-  }, []);
-  
-  // Master Tool Integration with Agent System
-  const masterTool = useMasterTool({
-    autoAnalyze: true,
-    enableFinnGuidance: true,
-    agentSystem,
-    enableMultiAgentWorkflows: true,
-    preferredAgents: context === 'experience' ? ['speak', 'think', 'tool', 'safe'] : 
-                     context === 'discover' ? ['see', 'speak', 'view', 'safe'] : 
-                     ['see', 'think', 'tool', 'safe'],
+  // Agent system removed - to be replaced with live chat
+  const agentSystem = null;
+
+  // Master Tool placeholder - to be replaced with live chat
+  const masterTool = {
+    isToolVisible: false,
+    currentTool: null,
+    assignment: null,
+    closeTool: () => {},
+    handleToolComplete: () => {},
+    handleToolProgress: () => {},
+    agentSystem: null
     onToolComplete: async (results) => {
       console.log('🎯 Tool completed in ThreePhaseAssignmentPlayer:', results);
       

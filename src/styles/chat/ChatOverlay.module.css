@@ -1,0 +1,14 @@
+/**
+ * ChatOverlay Styles
+ * Global container for chat interface
+ */
+
+.chatOverlay {
+  position: fixed;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+.chatOverlay > * {
+  pointer-events: auto;
+}

@@ -9,7 +9,7 @@ import { azureOpenAIService } from './azureOpenAIService';
 import { unifiedLearningAnalyticsService } from './unifiedLearningAnalyticsService';
 import { contentGenerationService } from './contentGenerationService';
 import { gamificationService } from './gamificationService';
-import { createAgentSystem } from '../agents/AgentSystem';
+// Agent system import removed - to be replaced with live chat
 
 // ================================================================
 // TYPES AND INTERFACES
@@ -178,19 +178,9 @@ class AssessmentGradingService {
   }
 
   private async initializeService(): Promise<void> {
-    try {
-      // Initialize agent system for intelligent assessment
-      this.agentSystem = createAgentSystem({
-        enabledAgents: ['think', 'safe'],
-        debugMode: false,
-        logLevel: 'info'
-      });
-      
-      await this.agentSystem.initialize();
-      console.log('📝 Assessment & Grading Service initialized');
-    } catch (error) {
-      console.error('❌ Failed to initialize Assessment Service:', error);
-    }
+    // Agent system initialization removed - to be replaced with live chat
+    this.agentSystem = null;
+    console.log('📝 Assessment & Grading Service initialized (without agents)');
   }
 
   // ================================================================

@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Login } from './components/auth/Login';
+import { ChatOverlay } from './components/chat/ChatOverlay';
 // TenantSelector removed - not used in current routing architecture
 import { AuthProvider } from './contexts/AuthContext';
 import { ModeProvider } from './contexts/ModeContext';
@@ -95,7 +96,10 @@ function App() {
           <AuthProvider>
             <NarrativeProvider>
               <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-                    <Routes>
+                {/* Global Chat Overlay - only show when authenticated */}
+                <ChatOverlay />
+
+                <Routes>
                   {/* Test routes - no auth required */}
                   <Route path="/test" element={<TestPage />} />
                   <Route path="/test/design-system" element={<DesignSystemTest />} />

@@ -11,12 +11,49 @@ export class AzureAudioService {
   private apiUrl: string;
 
   // Map companions to Azure voices
+  // Get speech characteristics based on grade level
+  private getSpeechCharacteristics(gradeLevel?: string): { rate: string, pitch: string, style?: string } {
+    const grade = gradeLevel || 'K';
+    const gradeNum = grade === 'K' || grade === 'k' ? 0 : parseInt(grade) || 0;
+
+    // Adjust speech characteristics based on grade level
+    if (gradeNum <= 2) {
+      // K-2: Very enthusiastic, slower pace, higher energy
+      return {
+        rate: "0.9",  // Slightly slower for younger kids
+        pitch: "+5%",  // Slightly higher pitch for friendliness
+        style: "cheerful"
+      };
+    } else if (gradeNum <= 5) {
+      // 3-5: Still enthusiastic but more natural pace
+      return {
+        rate: "0.95",
+        pitch: "+2%",
+        style: "friendly"
+      };
+    } else if (gradeNum <= 8) {
+      // 6-8: More conversational, normal pace
+      return {
+        rate: "1.0",
+        pitch: "0%",
+        style: "conversational"
+      };
+    } else {
+      // 9-12: Professional but engaging
+      return {
+        rate: "1.05",  // Slightly faster for older students
+        pitch: "-2%",  // Slightly lower for maturity
+        style: "professional"
+      };
+    }
+  }
+
   private voiceMap: Record<string, string> = {
     'pat': 'en-US-AriaNeural',         // Female, neutral narrator/guide voice
-    'finn': 'en-US-DavisNeural',      // Male, friendly
-    'sage': 'en-US-TonyNeural',        // Male, neutral/wise (matches the male image)
-    'spark': 'en-US-JennyNeural',      // Female, energetic
-    'harmony': 'en-US-SaraNeural'      // Female, calm
+    'finn': 'en-US-DavisNeural',      // Male, friendly (default/fallback)
+    'sage': 'en-US-TonyNeural',        // Male, neutral/wise (default/fallback)
+    'spark': 'en-US-JennyNeural',      // Female, energetic (default/fallback)
+    'harmony': 'en-US-SaraNeural'      // Female, calm (default/fallback)
   };
 
   private constructor() {
@@ -33,8 +70,9 @@ export class AzureAudioService {
   /**
    * Generate SSML for Azure TTS
    */
-  private generateSSML(text: string, companion: string): string {
+  private generateSSML(text: string, companion: string, gradeLevel?: string): string {
     const voice = this.voiceMap[companion.toLowerCase()] || 'en-US-DavisNeural';
+    const characteristics = this.getSpeechCharacteristics(gradeLevel);
 
     // First add pronunciation hints, then escape XML (but the phoneme tags should remain)
     const processedText = this.addPronunciationHints(text);
@@ -51,11 +89,17 @@ export class AzureAudioService {
       })
       .join('');
 
+    // Add style element if specified (Azure Neural voices support styles)
+    const styledContent = characteristics.style
+      ? `<mstts:express-as style="${characteristics.style}">${finalText}</mstts:express-as>`
+      : finalText;
+
     return `
-      <speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-US">
+      <speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis"
+             xmlns:mstts="https://www.w3.org/2001/mstts" xml:lang="en-US">
         <voice name="${voice}">
-          <prosody rate="1.0" pitch="0%">
-            ${finalText}
+          <prosody rate="${characteristics.rate}" pitch="${characteristics.pitch}">
+            ${styledContent}
           </prosody>
         </voice>
       </speak>
@@ -96,13 +140,21 @@ export class AzureAudioService {
     rate?: number;
     scriptId?: string;
     variables?: Record<string, string>;
+    gradeLevel?: string;
     onStart?: () => void;
     onEnd?: () => void;
   }): Promise<void> {
+    // Get grade level from localStorage or sessionStorage as fallback
+    const storedGradeLevel = localStorage.getItem('userGradeLevel') ||
+                           sessionStorage.getItem('userGradeLevel') ||
+                           'K';
+    const gradeLevel = options?.gradeLevel || storedGradeLevel;
+
     console.warn('🔊 AZURE TTS: playText called with:', {
       text: text?.substring(0, 100),
       textLength: text?.length,
       companion,
+      gradeLevel,
       scriptId: options?.scriptId || 'unknown',
       apiUrl: this.apiUrl
     });
@@ -117,8 +169,8 @@ export class AzureAudioService {
     this.stop();
 
     try {
-      const ssml = this.generateSSML(text, companion);
-      console.log('🔊 AZURE TTS: Generating audio with SSML');
+      const ssml = this.generateSSML(text, companion, gradeLevel);
+      console.log('🔊 AZURE TTS: Generating audio with SSML for grade:', gradeLevel);
 
       // Call API server to generate audio
       const response = await fetch(`${this.apiUrl}/tts/generate`, {
@@ -129,7 +181,7 @@ export class AzureAudioService {
         body: JSON.stringify({
           ssml,
           companion,
-          gradeLevel: 'K', // Could be dynamic based on user
+          gradeLevel,
           scriptId: options?.scriptId || 'unknown',
           variables: options?.variables || {}
         })
@@ -280,6 +332,18 @@ export class AzureAudioService {
         text = narrative?.cohesiveStory?.mission ||
                narrative?.cohesiveStory?.throughLine ||
                '';
+
+        // Fix improperly generated mission text that uses student name instead of career
+        // e.g., "Sam Brown will help keep spaces clean and safe" -> "Learn how janitors keep spaces clean and safe"
+        const studentName = localStorage.getItem('userName') || sessionStorage.getItem('userName');
+        if (text && studentName && text.includes(studentName)) {
+          const role = narrative?.character?.role || 'professional';
+          // Replace "[StudentName] will help" with "Learn how [career]s"
+          text = text.replace(`${studentName} will help`, `Learn how ${role}s`);
+          // Replace "[StudentName]" at the beginning with "You'll learn to"
+          text = text.replace(new RegExp(`^${studentName}\s+`, 'i'), "You'll learn to ");
+          console.warn('🔊 AZURE TTS: Fixed mission text that incorrectly used student name');
+        }
         break;
     }
 
@@ -310,7 +374,10 @@ export class AzureAudioService {
 
     if (text) {
       console.log(`🎵 Playing ${section} audio (Azure TTS):`, text.substring(0, 50) + '...');
-      await this.playText(text, companion);
+      await this.playText(text, companion, {
+        scriptId: `narrative.${section}`,
+        gradeLevel: localStorage.getItem('userGradeLevel') || sessionStorage.getItem('userGradeLevel') || 'K'
+      });
     } else {
       console.error(`⚠️ AZURE TTS: No text for ${section} in narrative`, narrative);
     }

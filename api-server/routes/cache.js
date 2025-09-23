@@ -7,19 +7,30 @@ const express = require('express');
 const { BlobServiceClient } = require('@azure/storage-blob');
 const router = express.Router();
 
-// Initialize Azure Storage
-const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
-if (!connectionString) {
-  console.error('⚠️ WARNING: Azure Storage connection string not found');
-}
+// Azure Storage configuration - lazy initialization to prevent hanging
+let blobServiceClient = null;
 
-const blobServiceClient = connectionString
-  ? BlobServiceClient.fromConnectionString(connectionString)
-  : null;
+const getBlobServiceClient = () => {
+  if (!blobServiceClient) {
+    const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
+    if (!connectionString) {
+      console.error('⚠️ WARNING: Azure Storage connection string not found');
+      return null;
+    }
+    try {
+      blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
+    } catch (error) {
+      console.error('Failed to initialize blob service client:', error);
+      return null;
+    }
+  }
+  return blobServiceClient;
+};
 
 // Middleware to check Azure connection
 const requireAzure = (req, res, next) => {
-  if (!blobServiceClient) {
+  const client = getBlobServiceClient();
+  if (!client) {
     return res.status(503).json({
       error: 'Azure Storage not configured',
       message: 'Storage service is temporarily unavailable'

@@ -12,11 +12,18 @@ const router = express.Router();
 const speechKey = process.env.AZURE_AI_FOUNDRY_KEY || process.env.AZURE_SPEECH_KEY;
 const speechRegion = process.env.AZURE_AI_FOUNDRY_REGION || process.env.AZURE_SPEECH_REGION || 'eastus';
 
-// Azure Storage configuration
-const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
-const blobServiceClient = connectionString
-  ? BlobServiceClient.fromConnectionString(connectionString)
-  : null;
+// Azure Storage configuration - lazy initialization to prevent hanging
+let blobServiceClient = null;
+const getBlobServiceClient = () => {
+  if (!blobServiceClient && process.env.AZURE_STORAGE_CONNECTION_STRING) {
+    try {
+      blobServiceClient = BlobServiceClient.fromConnectionString(process.env.AZURE_STORAGE_CONNECTION_STRING);
+    } catch (error) {
+      console.error('Failed to initialize blob service client:', error);
+    }
+  }
+  return blobServiceClient;
+};
 
 /**
  * POST /api/tts/generate

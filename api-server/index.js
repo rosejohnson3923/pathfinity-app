@@ -10,11 +10,13 @@ const path = require('path');
 
 // Load environment variables
 dotenv.config({ path: path.join(__dirname, '..', '.env.local') });
+dotenv.config({ path: path.join(__dirname, '..', '.env') }); // Also load main .env for Azure keys
 
 // Import routes
 const cacheRoutes = require('./routes/cache');
 const healthRoutes = require('./routes/health');
 const ttsRoutes = require('./routes/tts');
+const chatRoutes = require('./routes/chat').router;
 
 const app = express();
 const PORT = process.env.PORT || 3002;
@@ -36,6 +38,7 @@ app.use((req, res, next) => {
 app.use('/api/health', healthRoutes);
 app.use('/api/cache', cacheRoutes);
 app.use('/api/tts', ttsRoutes);
+app.use('/api/chat', chatRoutes);
 
 // Error handling
 app.use((err, req, res, next) => {

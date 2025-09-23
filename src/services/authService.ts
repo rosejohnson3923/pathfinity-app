@@ -79,6 +79,11 @@ const clearAuthData = (): void => {
       localStorage.removeItem(`pathfinity-selections-${currentUser.id}`);
       console.log('Cleared user-specific data for:', currentUser.email);
     }
+
+    // Clear session storage items (companion, career selections)
+    sessionStorage.removeItem('selectedCompanion');
+    sessionStorage.removeItem('selectedCareer');
+    sessionStorage.removeItem('selectedAiCompanion');
     
     // Clear any other user-specific keys
     const keysToRemove: string[] = [];

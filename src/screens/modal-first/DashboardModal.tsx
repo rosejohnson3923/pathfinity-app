@@ -131,7 +131,8 @@ export const DashboardModal: React.FC<DashboardModalProps> = ({
     const timeoutId = setTimeout(() => {
       console.warn('🔊 DASHBOARD: Playing welcome audio with Pat/Companion (Azure TTS)');
       // Use previously selected companion if returning, otherwise use Pat as the narrator
-      const voiceToUse = dashboardState.companionSelected || sessionStorage.getItem('selectedCompanion') || 'pat';
+      const userCompanionKey = user?.id ? `selectedCompanion_${user.id}` : 'selectedCompanion';
+      const voiceToUse = dashboardState.companionSelected || sessionStorage.getItem(userCompanionKey) || 'pat';
       const companionName = voiceToUse.charAt(0).toUpperCase() + voiceToUse.slice(1);
       const welcomeText = dashboardState.companionSelected
         ? `Welcome back to Pathfinity! I'm ${companionName}, your learning companion. Let's continue your adventure!`
@@ -324,10 +325,15 @@ export const DashboardModal: React.FC<DashboardModalProps> = ({
           break;
         case 'ai-companion':
           console.log('🤖 Companion selected:', result);
+          const userCompanionKey = user?.id ? `selectedCompanion_${user.id}` : 'selectedCompanion';
+          console.log('💾 Saving companion to sessionStorage with key:', userCompanionKey, 'value:', result.companion);
           setDashboardState(prev => ({
             ...prev,
             companionSelected: result.companion
           }));
+          // Save the selected companion to sessionStorage with user-specific key
+          sessionStorage.setItem(userCompanionKey, result.companion);
+          console.log('✅ Companion saved. Verification:', sessionStorage.getItem(userCompanionKey));
           // Set the companion for voiceover
           companionVoiceoverService.setCompanion(result.companionId || result.companion);
 
@@ -466,16 +472,30 @@ export const DashboardModal: React.FC<DashboardModalProps> = ({
   ];
 
   const handlePlayAudio = async (companionId: string, audioUrl?: string) => {
-    await audioService.playCompanionVoice(
-      companionId,
-      audioUrl,
-      () => setPlayingAudio(companionId),
-      () => setPlayingAudio(null)
-    );
+    // Stop any currently playing audio
+    azureAudioService.stop();
+
+    // Get the companion's greeting message
+    const greetings: { [key: string]: string } = {
+      finn: "Hi! I'm Finn the Explorer! Ready for an epic learning adventure? I love discovering new things and I'm excited to help you learn!",
+      sage: "Greetings! I'm Sage, your wise learning guide. With patience and wisdom, we'll unlock the secrets of knowledge together!",
+      spark: "Hey there! I'm Spark, full of energy and excitement! Let's power up your learning with fun and enthusiasm!",
+      harmony: "Hello, friend! I'm Harmony, your calm and supportive companion. Together we'll create a peaceful and joyful learning experience!"
+    };
+
+    const greeting = greetings[companionId] || "Hello! I'm your learning companion!";
+
+    // Play the greeting using Azure TTS with the companion's actual voice
+    setPlayingAudio(companionId);
+    azureAudioService.playText(greeting, companionId, {
+      scriptId: 'companion.preview',
+      onStart: () => setPlayingAudio(companionId),
+      onEnd: () => setPlayingAudio(null)
+    });
   };
 
   const stopAudio = () => {
-    audioService.stopAll();
+    azureAudioService.stop();
     setPlayingAudio(null);
   };
 
@@ -541,7 +561,8 @@ export const DashboardModal: React.FC<DashboardModalProps> = ({
 
       setTimeout(() => {
         // Use previously selected companion if available, otherwise use Pat
-        const voiceToUse = dashboardState.companionSelected || sessionStorage.getItem('selectedCompanion') || 'pat';
+        const userCompanionKey = user?.id ? `selectedCompanion_${user.id}` : 'selectedCompanion';
+        const voiceToUse = dashboardState.companionSelected || sessionStorage.getItem(userCompanionKey) || 'pat';
         azureAudioService.playText(companionText, voiceToUse, {
           onStart: () => console.log(`🔊 AI Companion audio started with ${voiceToUse}'s voice`),
           onEnd: () => console.log('🔊 AI Companion audio ended')

@@ -8,11 +8,9 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../contexts/AuthContext';
 import { useThemeContext } from '../contexts/ModeContext';
 import { useStudentProfile } from '../hooks/useStudentProfile';
-import { createAgentSystem } from '../agents/AgentSystem';
-// Tool imports removed - to be replaced with Master Tool Interface
+// Agent system removed - to be replaced with new live chat implementation
 import ThreePhaseAssignmentPlayer from './ThreePhaseAssignmentPlayer';
 import ThreeContainerOrchestrator from './containers/ThreeContainerOrchestrator';
-import AgentStatusMonitor from './admin/AgentStatusMonitor';
 import { 
   BookOpen, 
   Calculator, 
@@ -702,35 +700,12 @@ const Dashboard = () => {
   const { darkMode, toggleTheme } = useThemeContext();
   
   // Initialize 6-Agent System
-  const [agentSystem, setAgentSystem] = useState<any>(null);
+  // Agent system state removed - to be replaced with live chat
   
   // Admin panel state
   const [showAdminPanel, setShowAdminPanel] = useState(false);
   
-  useEffect(() => {
-    const initializeAgentSystem = async () => {
-      try {
-        const system = createAgentSystem({
-          enabledAgents: ['see', 'speak', 'think', 'tool', 'safe', 'view'],
-          debugMode: false,
-          logLevel: 'info'
-        });
-        await system.initialize();
-        setAgentSystem(system);
-        console.log('🤖 Agent system initialized for Dashboard');
-      } catch (error) {
-        console.error('❌ Failed to initialize agent system:', error);
-      }
-    };
-    
-    initializeAgentSystem();
-    
-    return () => {
-      if (agentSystem) {
-        agentSystem.shutdown();
-      }
-    };
-  }, []);
+  // Agent system initialization removed - to be replaced with live chat
   
   // Student profile integration with debugging
   console.log('🔍 StudentDashboard - User data:', { userId: user?.id, email: user?.email, role: user?.role });
@@ -899,13 +874,14 @@ const Dashboard = () => {
 
   // Agent-driven assignment analysis
   useEffect(() => {
-    if (studentProfile && user && agentSystem) {
+    if (studentProfile && user) {
       console.log('📊 Profile loaded, analyzing with agent system:', studentProfile.display_name, studentProfile.grade_level);
       
       // Use FinnThink agent to analyze student context
       const analyzeStudentContext = async () => {
         try {
-          await agentSystem.requestAgentAction('think', 'analyze_student_context', {
+          // Agent analysis removed - to be replaced with live chat
+          console.log('Student context:', {
             studentProfile: {
               name: studentProfile.display_name,
               grade: studentProfile.grade_level,
@@ -927,20 +903,21 @@ const Dashboard = () => {
       
       analyzeStudentContext();
     }
-  }, [studentProfile, user, agentSystem, assignments]);
+  }, [studentProfile, user, assignments]);
 
   // Assignment loading is now handled by the production services useEffect above
 
   // Agent-driven lesson planning - Only show Subject Cards after agent analysis is complete
   useEffect(() => {
-    if (studentProfile?.grade_level && agentSystem && !finnPreparationComplete) {
+    if (studentProfile?.grade_level && !finnPreparationComplete) {
       console.log('🎯 Agents are preparing lesson plan for', studentProfile.display_name);
       
       // Use agent system to analyze and prepare personalized content
       const preparePersonalizedContent = async () => {
         try {
           // Use FinnThink for logical analysis
-          await agentSystem.requestAgentAction('think', 'prepare_lesson_plan', {
+          // Agent lesson planning removed - to be replaced with live chat
+          console.log('Lesson context:', {
             student: {
               name: studentProfile.display_name,
               grade: studentProfile.grade_level,
@@ -955,7 +932,8 @@ const Dashboard = () => {
           });
           
           // Safety check with FinnSafe
-          await agentSystem.requestAgentAction('safe', 'validate_content', {
+          // Safety validation removed - to be replaced with live chat
+          console.log('Content validation:', {
             gradeLevel: studentProfile.grade_level,
             assignments: assignments.length > 0 ? assignments.map(a => a.title) : []
           });
@@ -977,7 +955,7 @@ const Dashboard = () => {
       
       preparePersonalizedContent();
     }
-  }, [studentProfile?.grade_level, agentSystem]);
+  }, [studentProfile?.grade_level]);
 
   // ================================================================
   // HELPER FUNCTIONS
@@ -1161,9 +1139,10 @@ const Dashboard = () => {
     console.log('🎯 Launching agent-driven multi-subject journey for grade:', studentProfile.grade_level);
     
     // Use agent system to get personalized recommendations
-    if (agentSystem) {
+    // Agent recommendation removed - to be replaced with live chat
+    if (false) {
       try {
-        const recommendation = await agentSystem.requestAgentAction('think', 'recommend_assignment', {
+        const recommendation = null; // await agentSystem.requestAgentAction removed
           studentProfile: {
             grade: studentProfile.grade_level,
             learningStyle: studentProfile.learning_preferences?.learning_style || 'exploring',
@@ -2075,7 +2054,7 @@ const Dashboard = () => {
                 <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
                   Here's what you'll explore with Finn's specialized agents! Use the "Start Your Journey" button above to begin your personalized learning adventure.
                 </p>
-                {agentSystem && (
+                {false && ( // Agent system removed
                   <div className="flex items-center justify-center space-x-4 text-xs text-gray-500 dark:text-gray-400 mb-4">
                     <div className="flex items-center space-x-1">
                       <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
@@ -2168,7 +2147,7 @@ const Dashboard = () => {
           {/* Admin Panel Toggle - Only show for non-student users 
               Valid roles: student, parent, school_admin, district_admin, product_admin 
               Students should NOT see this button */}
-          {agentSystem && user && user.role && user.role !== 'student' && (
+          {false && user && user.role && user.role !== 'student' && ( // Agent monitoring removed
             <div className="fixed bottom-4 right-4">
               <button
                 onClick={() => setShowAdminPanel(!showAdminPanel)}
@@ -2200,7 +2179,7 @@ const Dashboard = () => {
               </button>
             </div>
             <div className="p-4">
-              <AgentStatusMonitor />
+              {/* AgentStatusMonitor removed - to be replaced with live chat */}
             </div>
           </div>
         </div>

@@ -1,0 +1,161 @@
+/**
+ * ChatInput Styles
+ * Input area styling for chat
+ */
+
+.chatInput {
+  background: white;
+  border-top: 1px solid #e5e7eb;
+  padding: 12px;
+  flex-shrink: 0;
+}
+
+.inputContainer {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+/* Text Input */
+.textInput {
+  flex: 1;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  padding: 10px 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  resize: none;
+  outline: none;
+  transition: border-color 0.2s ease, background 0.2s ease;
+  max-height: 120px;
+  overflow-y: auto;
+  font-family: inherit;
+}
+
+.textInput:focus {
+  background: white;
+  border-color: #8b5cf6;
+}
+
+.textInput:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.textInput::-webkit-scrollbar {
+  width: 4px;
+}
+
+.textInput::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.textInput::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 2px;
+}
+
+/* Input Buttons */
+.inputButton {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #f3f4f6;
+  border: none;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.inputButton:hover:not(:disabled) {
+  background: #e5e7eb;
+  color: #4b5563;
+}
+
+.inputButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Send Button */
+.sendButton {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #e5e7eb;
+  border: none;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sendButton.canSend {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.sendButton.canSend:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.sendButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Recording State */
+.recording {
+  background: #ef4444 !important;
+  color: white !important;
+  animation: pulseRec 1.5s infinite;
+}
+
+@keyframes pulseRec {
+  0% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
+}
+
+/* Recording Indicator */
+.recordingIndicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  margin-top: 8px;
+  background: #fef2f2;
+  border-radius: 8px;
+  color: #991b1b;
+  font-size: 13px;
+}
+
+.recordingDot {
+  width: 8px;
+  height: 8px;
+  background: #ef4444;
+  border-radius: 50%;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}

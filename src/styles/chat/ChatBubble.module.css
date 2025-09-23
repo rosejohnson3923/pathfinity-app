@@ -1,0 +1,137 @@
+/**
+ * ChatBubble Styles
+ * Minimized floating chat bubble
+ * Using design system tokens for theming
+ */
+
+.chatBubble {
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--gradient-primary, linear-gradient(135deg, var(--color-primary-600) 0%, var(--color-primary-700) 100%));
+  box-shadow: var(--shadow-lg, 0 4px 12px rgba(0, 0, 0, 0.15));
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+  user-select: none;
+  border: 2px solid var(--color-border, transparent);
+  z-index: 1000;
+  /* Default position if not set by JS */
+  bottom: 20px;
+  right: 20px;
+}
+
+.chatBubble:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-xl, 0 6px 16px rgba(0, 0, 0, 0.2));
+}
+
+.chatBubble:active {
+  transform: scale(0.95);
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.avatarEmoji {
+  font-size: 28px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.unreadBadge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: var(--color-error, #ef4444);
+  color: var(--color-text-on-error, white);
+  border-radius: 10px;
+  padding: 2px 6px;
+  font-size: 12px;
+  font-weight: bold;
+  min-width: 20px;
+  text-align: center;
+  box-shadow: var(--shadow-sm, 0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.pulseRing {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid var(--color-primary-alpha, rgba(139, 92, 246, 0.5));
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+.typingIndicator {
+  position: absolute;
+  bottom: -8px;
+  right: 50%;
+  transform: translateX(50%);
+  background: var(--color-background, white);
+  padding: 4px 8px;
+  border-radius: 10px;
+  box-shadow: var(--shadow-sm, 0 2px 4px rgba(0, 0, 0, 0.1));
+  display: flex;
+  gap: 3px;
+}
+
+.typingIndicator span {
+  width: 4px;
+  height: 4px;
+  background: var(--color-text-secondary, #6b7280);
+  border-radius: 50%;
+  animation: typingDot 1.4s infinite;
+}
+
+.typingIndicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typingIndicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typingDot {
+  0%, 60%, 100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-10px);
+  }
+}
+
+.hasUnread {
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}

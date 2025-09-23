@@ -83,6 +83,10 @@ export const IntroductionModal: React.FC<IntroductionModalProps> = ({
   const prepareTodaysJourney = useCallback((career?: any) => {
     // Get grade from profile or user auth data
     const studentGrade = profile?.grade_level || (user as any)?.grade_level || 'K';
+
+    // Store grade level for TTS system to use
+    sessionStorage.setItem('userGradeLevel', studentGrade);
+
     console.log('🎯 IntroductionModal: prepareTodaysJourney called with:', {
       profileGradeLevel: profile?.grade_level,
       userGradeLevel: (user as any)?.grade_level,
