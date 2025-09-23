@@ -33,9 +33,6 @@ import { learningMetricsService } from '../../services/learningMetricsService';
 import { companionReactionService } from '../../services/companionReactionService';
 import { voiceManagerService } from '../../services/voiceManagerService';
 import { companionVoiceoverService } from '../../services/companionVoiceoverService';
-import { companionAudioService } from '../../services/CompanionAudioService';
-import { CompanionAudioControls } from '../audio/CompanionAudioControls';
-import { simplifiedAudioService } from '../../services/SimplifiedAudioService';
 import { azureAudioService } from '../../services/AzureAudioService';
 import { TestAudioButton } from '../audio/TestAudioButton';
 
@@ -144,7 +141,7 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   onLoadingChange,
   masterNarrative,
   narrativeLoading,
-  companionId = 'finn'
+  companionId = sessionStorage.getItem('selectedCompanion') || 'pat'
 }) => {
   // FEATURE FLAG: Enable Narrative-First Architecture with video instruction
   const USE_NARRATIVE_ENHANCED = localStorage.getItem('pathfinity_use_narrative_enhanced') === 'true' ||
@@ -285,21 +282,14 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
       gradeLevel: student.grade_level
     });
 
-    companionAudioService.setCompanionContext(companionId, student.grade_level);
-
-    // Preload audio if Master Narrative is available
-    if (masterNarrative && !narrativeLoading) {
-      console.warn('🔊 AUDIO DEBUG: Preloading audio for narrative:', masterNarrative.narrativeId);
-      companionAudioService.preloadNarrativeAudio(masterNarrative);
-    }
+    // Removed redundant companionAudioService preloading - we use azureAudioService now
+    // companionAudioService is no longer needed since we switched to azureAudioService
 
     return () => {
       // Clean up audio on unmount
-      companionAudioService.stopCurrent();
-      simplifiedAudioService.stop();
       azureAudioService.stop();
     };
-  }, [companionId, student.grade_level, masterNarrative, narrativeLoading]);
+  }, [companionId, student.grade_level]);
 
   // Play audio based on phase changes
   useEffect(() => {
@@ -1262,13 +1252,7 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
         onSettingsClick={() => setShowSettings(true)}
       />
 
-      {/* Companion Audio Controls */}
-      <CompanionAudioControls
-        companion={character?.name || 'Finn'}
-        position="bottom-right"
-        theme={theme}
-        showLabel={true}
-      />
+      {/* Companion Audio Controls - Removed as we use azureAudioService now */}
 
       {/* XP Display removed - now shown in dock */}
 

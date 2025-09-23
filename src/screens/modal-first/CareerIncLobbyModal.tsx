@@ -150,7 +150,10 @@ export const CareerIncLobbyModal: React.FC<CareerIncLobbyModalProps> = ({
   // Play welcome voiceover when component mounts or when returning from a container
   useEffect(() => {
     // Don't play if already played this session
-    if (hasPlayedWelcome) return;
+    if (hasPlayedWelcome) {
+      console.log('🔇 CareerIncLobby: Skipping audio - already played in this session', sessionKey);
+      return;
+    }
     
     // Make sure companion is set
     if (selectedCompanion) {
@@ -187,6 +190,8 @@ export const CareerIncLobbyModal: React.FC<CareerIncLobbyModalProps> = ({
           } else {
             companionVoiceoverService.playVoiceover('all-complete', null, { delay: 1000 });
           }
+          // Note: For returning from containers, we can mark as played immediately
+          // since we're not playing the full welcome audio
           setHasPlayedWelcome(true);
           sessionStorage.setItem(sessionKey, 'true');
         }
@@ -243,6 +248,11 @@ export const CareerIncLobbyModal: React.FC<CareerIncLobbyModalProps> = ({
             },
             onEnd: () => {
               console.log('🔊 CareerIncLobby audio ended');
+              // Only mark as played AFTER the audio actually finishes
+              if (isMounted) {
+                setHasPlayedWelcome(true);
+                sessionStorage.setItem(sessionKey, 'true');
+              }
             }
           });
         };
@@ -250,9 +260,6 @@ export const CareerIncLobbyModal: React.FC<CareerIncLobbyModalProps> = ({
         // Start checking immediately when the page loads
         // This will wait for any DashboardModal audio to finish naturally
         playLobbyNarration();
-
-        setHasPlayedWelcome(true);
-        sessionStorage.setItem(sessionKey, 'true');
       }
     }, 100); // Small delay to handle StrictMode
     

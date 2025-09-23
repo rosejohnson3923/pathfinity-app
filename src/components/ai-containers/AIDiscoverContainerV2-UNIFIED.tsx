@@ -945,8 +945,8 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
               description: selectedCareer?.description || 'Discovering new knowledge'
             }}
             companion={{
-              id: selectedCharacter?.toLowerCase() || 'finn',
-              name: selectedCharacter || 'Finn',
+              id: selectedCharacter?.toLowerCase() || sessionStorage.getItem('selectedCompanion') || 'pat',
+              name: selectedCharacter || sessionStorage.getItem('selectedCompanion')?.charAt(0).toUpperCase() + (sessionStorage.getItem('selectedCompanion') || 'pat').slice(1) || 'Pat',
               trait: 'curious'
             }}
             aiContent={mappedContent}

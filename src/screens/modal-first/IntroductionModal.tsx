@@ -270,37 +270,50 @@ export const IntroductionModal: React.FC<IntroductionModalProps> = ({
     if (currentStep === 'welcome' && !welcomeAudioPlayedRef.current) {
       welcomeAudioPlayedRef.current = true;
       const firstName = profile?.first_name || user?.full_name?.split(' ')[0] || 'friend';
-      const welcomeText = `Hi ${firstName}! Welcome to Pathfinity! Click the purple Start Adventure button below to choose your exciting career for today!`;
 
-      console.log('🔊 IntroductionModal: Playing Finn welcome audio');
+      // Check for previously selected companion in sessionStorage
+      const previousCompanion = sessionStorage.getItem('selectedCompanion');
+      const voiceToUse = previousCompanion || 'pat';
+      const companionName = voiceToUse.charAt(0).toUpperCase() + voiceToUse.slice(1);
+
+      const welcomeText = previousCompanion
+        ? `Hi ${firstName}! Welcome back to Pathfinity! I'm ${companionName}, ready for another adventure! Click the purple Start Adventure button below to choose your exciting career for today!`
+        : `Hi ${firstName}! Welcome to Pathfinity! I'm Pat, your guide. Click the purple Start Adventure button below to choose your exciting career for today!`;
+
+      console.log(`🔊 IntroductionModal: Playing welcome audio with ${voiceToUse}'s voice`);
 
       setTimeout(() => {
-        azureAudioService.playText(welcomeText, 'finn', {
+        azureAudioService.playText(welcomeText, voiceToUse, {
           scriptId: 'intro.welcome',
           variables: {
             firstName: firstName
           },
-          onStart: () => console.log('🔊 Finn welcome audio started'),
-          onEnd: () => console.log('🔊 Finn welcome audio ended')
+          onStart: () => console.log('🔊 Welcome audio started'),
+          onEnd: () => console.log('🔊 Welcome audio ended')
         });
       }, 500);
     }
   }, [currentStep, profile, user]);
 
-  // Play Finn's career selection audio when entering career step
+  // Play career selection audio when entering career step
   useEffect(() => {
     if (currentStep === 'career' && !careerAudioPlayedRef.current) {
       careerAudioPlayedRef.current = true;
+
+      // Use previously selected companion if available, otherwise use Pat
+      const previousCompanion = sessionStorage.getItem('selectedCompanion');
+      const voiceToUse = previousCompanion || 'pat';
+
       const careerText = "What exciting career would you like to learn today? I've picked three perfect matches just for you! Or you can click the More Options button for more exciting choices.";
 
-      console.log('🔊 IntroductionModal: Playing Finn career selection audio');
+      console.log(`🔊 IntroductionModal: Playing career selection audio with ${voiceToUse}'s voice`);
 
       setTimeout(() => {
-        azureAudioService.playText(careerText, 'finn', {
+        azureAudioService.playText(careerText, voiceToUse, {
           scriptId: 'intro.career_prompt',
           variables: {},
-          onStart: () => console.log('🔊 Finn career audio started'),
-          onEnd: () => console.log('🔊 Finn career audio ended')
+          onStart: () => console.log('🔊 Career audio started'),
+          onEnd: () => console.log('🔊 Career audio ended')
         });
       }, 500);
     }

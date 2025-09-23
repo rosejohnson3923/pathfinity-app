@@ -38,7 +38,7 @@ export const EnhancedLoadingScreen: React.FC<EnhancedLoadingScreenProps> = ({
   showGamification = true,
   masterNarrative,
   currentSubject = 'math',
-  companionId = 'finn',
+  companionId = sessionStorage.getItem('selectedCompanion') || 'pat',
   enableNarration = true,
   isFirstLoad = false
 }) => {
@@ -56,6 +56,7 @@ export const EnhancedLoadingScreen: React.FC<EnhancedLoadingScreenProps> = ({
   const [currentTip, setCurrentTip] = useState(0);
   const [progress, setProgress] = useState(0);
   const narrationRef = useRef<string | null>(null);
+  const selectedNarrationRef = useRef<any>(null);
   
   // Loading tips to show while generating content
   const loadingTips = [
@@ -118,6 +119,9 @@ export const EnhancedLoadingScreen: React.FC<EnhancedLoadingScreenProps> = ({
       return; // Already playing this narration
     }
 
+    // IMMEDIATELY mark as attempting to play this narration to prevent double execution
+    narrationRef.current = narrationKey;
+
     console.log('🔊 EnhancedLoadingScreen: Starting narration process', {
       narrationKey,
       hasMasterNarrative: !!masterNarrative,
@@ -126,9 +130,6 @@ export const EnhancedLoadingScreen: React.FC<EnhancedLoadingScreenProps> = ({
       currentSubject,
       isFirstLoad
     });
-
-    // Mark as attempting to play this specific narration
-    narrationRef.current = narrationKey;
 
     // Capture values at effect execution time to avoid stale closures
     const capturedMasterNarrative = masterNarrative;
@@ -146,23 +147,43 @@ export const EnhancedLoadingScreen: React.FC<EnhancedLoadingScreenProps> = ({
         return;
       }
 
-      try {
-        console.log('🎵 EnhancedLoadingScreen: Selecting narration', {
-          currentSubject,
-          containerType: capturedContainerType,
-          phase,
-          isFirstLoad
-        });
+      // Check if audio is already playing
+      if (azureAudioService.speaking) {
+        console.log('🔊 EnhancedLoadingScreen: Audio already playing, skipping narration');
+        return;
+      }
 
-        // Get appropriate narration based on context
-        const narration = loadingNarrationService.selectNarration(
-          capturedMasterNarrative,
-          capturedContainerType,
-          currentSubject,
-          phase === 'instruction' ? 'instruction' : phase === 'assessment' ? 'assessment' : 'practice',
-          isFirstLoad,
-          capturedStudentName
-        );
+      try {
+        let narration;
+
+        // Check if we already selected a narration for this key
+        if (selectedNarrationRef.current && selectedNarrationRef.current.key === narrationKey) {
+          console.log('🎵 EnhancedLoadingScreen: Using cached narration');
+          narration = selectedNarrationRef.current.narration;
+        } else {
+          console.log('🎵 EnhancedLoadingScreen: Selecting new narration', {
+            currentSubject,
+            containerType: capturedContainerType,
+            phase,
+            isFirstLoad
+          });
+
+          // Get appropriate narration based on context
+          narration = loadingNarrationService.selectNarration(
+            capturedMasterNarrative,
+            capturedContainerType,
+            currentSubject,
+            phase === 'instruction' ? 'instruction' : phase === 'assessment' ? 'assessment' : 'practice',
+            isFirstLoad,
+            capturedStudentName
+          );
+
+          // Cache the selected narration
+          selectedNarrationRef.current = {
+            key: narrationKey,
+            narration: narration
+          };
+        }
 
         if (narration) {
           console.log('🎵 Loading Screen: Playing narration', {

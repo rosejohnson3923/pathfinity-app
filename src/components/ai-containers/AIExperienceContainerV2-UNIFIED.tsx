@@ -31,8 +31,6 @@ import { unifiedLearningAnalyticsService } from '../../services/unifiedLearningA
 import { voiceManagerService } from '../../services/voiceManagerService';
 import { companionReactionService } from '../../services/companionReactionService';
 import { normalizeCompanionId, getCompanionDisplayName } from '../../utils/companionUtils';
-import { companionAudioService } from '../../services/CompanionAudioService';
-import { CompanionAudioControls } from '../audio/CompanionAudioControls';
 
 // V2-JIT Features - Performance & Caching
 import { Question, BaseQuestion } from '../../services/content/QuestionTypes';
@@ -124,7 +122,7 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
   currentSubjectIndex = 0, // Default to first subject
   masterNarrative,
   narrativeLoading,
-  companionId = 'finn'
+  companionId = sessionStorage.getItem('selectedCompanion') || 'pat'
 }) => {
   // Apply width management category for content containers
   usePageCategory('content');
@@ -254,64 +252,17 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
   // AUDIO NARRATION INTEGRATION
   // ================================================================
 
-  // Initialize companion audio service
-  useEffect(() => {
-    companionAudioService.setCompanionContext(companionId, student.grade_level);
-
-    // Preload audio if Master Narrative is available
-    if (masterNarrative && !narrativeLoading) {
-      companionAudioService.preloadNarrativeAudio(masterNarrative);
-    }
-
-    return () => {
-      // Clean up audio on unmount
-      companionAudioService.stopCurrent();
-    };
-  }, [companionId, student.grade_level, masterNarrative, narrativeLoading]);
+  // Removed redundant companionAudioService initialization
+  // We now use azureAudioService for all narrative audio playback
 
   // Play audio based on phase changes
   useEffect(() => {
     if (!masterNarrative || narrativeLoading) return;
 
     const playPhaseAudio = async () => {
-      switch (phase) {
-        case 'career_intro':
-          console.log('🎵 Playing greeting audio for career intro');
-          await companionAudioService.playMasterNarrativeAudio(
-            masterNarrative,
-            'greeting',
-            {
-              volume: 0.7,
-              onEnd: () => console.log('Career intro audio completed')
-            }
-          );
-          break;
-
-        case 'real_world':
-        case 'simulation':
-          console.log('🎵 Playing mission audio for experience phase');
-          await companionAudioService.playMasterNarrativeAudio(
-            masterNarrative,
-            'mission',
-            {
-              volume: 0.7,
-              onEnd: () => console.log('Experience audio completed')
-            }
-          );
-          break;
-
-        case 'complete':
-          console.log('🎵 Playing introduction audio for completion');
-          await companionAudioService.playMasterNarrativeAudio(
-            masterNarrative,
-            'introduction',
-            {
-              volume: 0.8,
-              onEnd: () => console.log('Completion audio finished')
-            }
-          );
-          break;
-      }
+      // Removed companionAudioService calls - audio is now handled by azureAudioService
+      // in parent components or directly when needed
+      console.log(`🎵 Phase ${phase} - audio handled by azureAudioService`);
     };
 
     playPhaseAudio();

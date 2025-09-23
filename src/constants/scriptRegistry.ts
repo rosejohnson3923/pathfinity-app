@@ -15,7 +15,7 @@ export const SCRIPT_IDS = {
 
   // Dashboard/Companion Selection
   'companion.selection_prompt': 'You have an important decision to make, {firstName}. Choose your AI companion to guide you through today\'s learning adventure.',
-  'companion.selected': 'Excellent choice, {firstName}! {companionName} is going to be an amazing companion on your learning journey today!',
+  'companion.selected': 'Hi {firstName}! I\'m {companionName}, and I\'m so excited to be your learning companion today! Let\'s have an amazing adventure together!',
   'companion.start_instruction': 'Click the Continue button when you are ready to continue your adventure.',
 
   // CareerIncLobby

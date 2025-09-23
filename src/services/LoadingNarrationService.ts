@@ -72,12 +72,14 @@ export class LoadingNarrationService {
     // Get a fun fact for the subject
     const fact = this.getRandomFact(narrative, subject);
 
+    // Just return the fun fact without "Loading container..." prefix
     return {
-      text: `Loading ${containerName} container... ${fact || journeyText}`,
-      scriptId: 'loading.container.intro',
+      text: fact || journeyText,
+      scriptId: 'loading.funfact',
       variables: {
-        containerName,
-        factText: fact || journeyText
+        factText: fact || journeyText,
+        subject: subject,
+        container: container
       },
       duration: 5000
     };
@@ -99,9 +101,10 @@ export class LoadingNarrationService {
     const fallback = narrative.subjectContextsAligned?.[subject]?.[container] ||
                     `Time to explore ${subjectName}!`;
 
+    // Just return the fun fact without "Preparing lesson..." prefix
     return {
-      text: `Preparing ${subjectName} lesson... ${fact || fallback}`,
-      scriptId: 'loading.subject.transition',
+      text: fact || fallback,
+      scriptId: 'loading.subject.funfact',
       variables: {
         subject: subjectName,
         factText: fact || fallback

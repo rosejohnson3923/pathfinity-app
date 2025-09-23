@@ -145,10 +145,14 @@ export const CareerChoiceModalV2: React.FC<CareerChoiceModalV2Props> = ({
       const firstName = profile?.first_name || user?.full_name?.split(' ')[0] || 'friend';
       const narrationText = `Let's have some fun with friends and choose the Top Match for your grade level or click More Options to choose your personal favorite.`;
 
-      console.log('🔊 CareerChoiceModalV2: Playing initial narration');
+      // Check for previously selected companion in sessionStorage, use Pat if none
+      const previousCompanion = sessionStorage.getItem('selectedCompanion');
+      const voiceToUse = previousCompanion || 'pat';
+
+      console.log('🔊 CareerChoiceModalV2: Playing initial narration with voice:', voiceToUse);
 
       setTimeout(() => {
-        azureAudioService.playText(narrationText, 'finn', {
+        azureAudioService.playText(narrationText, voiceToUse, {
           scriptId: 'career.selection_prompt',
           variables: {},
           onStart: () => console.log('🔊 Career choice initial narration started'),
@@ -250,7 +254,9 @@ export const CareerChoiceModalV2: React.FC<CareerChoiceModalV2Props> = ({
               }
 
               audioTimeoutRef.current = setTimeout(() => {
-                azureAudioService.playText(narrationText, 'finn', {
+                // Use selected companion voice, or Pat if none selected yet
+                const voiceToUse = sessionStorage.getItem('selectedCompanion') || 'pat';
+                azureAudioService.playText(narrationText, voiceToUse, {
                   scriptId: 'career.preview',
                   variables: {
                     careerName: career.name,
@@ -320,7 +326,9 @@ export const CareerChoiceModalV2: React.FC<CareerChoiceModalV2Props> = ({
 
       console.log(`🔊 CareerChoiceModalV2: Playing career selection confirmation for ${career.name}`);
 
-      azureAudioService.playText(narrationText, 'finn', {
+      // Use selected companion voice, or Pat if none selected yet
+      const voiceToUse = sessionStorage.getItem('selectedCompanion') || 'pat';
+      azureAudioService.playText(narrationText, voiceToUse, {
         scriptId: 'intro.career_selected',
         variables: {
           careerName: career.name,

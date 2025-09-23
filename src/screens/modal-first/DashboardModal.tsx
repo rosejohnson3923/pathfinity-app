@@ -129,10 +129,14 @@ export const DashboardModal: React.FC<DashboardModalProps> = ({
 
     // Small delay to ensure component is fully mounted
     const timeoutId = setTimeout(() => {
-      console.warn('🔊 DASHBOARD: Playing welcome audio with Finn (Azure TTS)');
-      // Using a simple greeting since narrative might not be generated yet
-      const welcomeText = "Welcome to Pathfinity! I'm Finn, your learning companion. Let's choose your adventure for today!";
-      azureAudioService.playText(welcomeText, 'finn', {
+      console.warn('🔊 DASHBOARD: Playing welcome audio with Pat/Companion (Azure TTS)');
+      // Use previously selected companion if returning, otherwise use Pat as the narrator
+      const voiceToUse = dashboardState.companionSelected || sessionStorage.getItem('selectedCompanion') || 'pat';
+      const companionName = voiceToUse.charAt(0).toUpperCase() + voiceToUse.slice(1);
+      const welcomeText = dashboardState.companionSelected
+        ? `Welcome back to Pathfinity! I'm ${companionName}, your learning companion. Let's continue your adventure!`
+        : "Welcome to Pathfinity! I'm Pat, your guide. Let's choose your adventure for today!";
+      azureAudioService.playText(welcomeText, voiceToUse, {
         onStart: () => console.log('🔊 Welcome audio started'),
         onEnd: () => console.log('🔊 Welcome audio ended')
       });
@@ -480,27 +484,30 @@ export const DashboardModal: React.FC<DashboardModalProps> = ({
       const companion = companionsWithDetails.find(c => c.id === selectedCompanionTemp);
       const firstName = profile?.first_name || user?.full_name?.split(' ')[0] || 'friend';
 
-      // Play only the first part of the confirmation audio
+      // Play confirmation from the companion's perspective (first person)
       // The second part will play when the BentoDashboard appears
-      const confirmText = `Excellent choice, ${firstName}! ${companion?.name} is going to be an amazing companion on your learning journey today!`;
+      const confirmText = `Hi ${firstName}! I'm ${companion?.name}, and I'm so excited to be your learning companion today! Let's have an amazing adventure together!`;
 
       console.log('🔊 DashboardModal: Playing companion selection confirmation');
 
-      azureAudioService.playText(confirmText, 'finn', {
+      // Use the SELECTED companion's voice!
+      const companionVoice = selectedCompanionTemp || 'finn';
+
+      azureAudioService.playText(confirmText, companionVoice, {
         scriptId: 'companion.selected',
         variables: {
           firstName,
           companionName: companion?.name || 'your companion'
         },
-        onStart: () => console.log('🔊 Companion confirmation audio started'),
+        onStart: () => console.log(`🔊 Companion confirmation audio started with ${companionVoice}'s voice`),
         onEnd: () => {
           console.log('🔊 Companion confirmation audio ended');
 
           // Play the continue instruction after the confirmation ends
           setTimeout(() => {
             const confirmTextPart2 = SCRIPT_IDS['companion.start_instruction'];
-            console.log('🔊 DashboardModal: Playing part 2 - Continue instruction');
-            azureAudioService.playText(confirmTextPart2, 'finn', {
+            console.log(`🔊 DashboardModal: Playing part 2 - Continue instruction with ${companionVoice}'s voice`);
+            azureAudioService.playText(confirmTextPart2, companionVoice, {
               scriptId: 'companion.start_instruction',
               variables: {},
               onStart: () => console.log('🔊 Continue instruction playing'),
@@ -533,8 +540,10 @@ export const DashboardModal: React.FC<DashboardModalProps> = ({
       console.log('🔊 DashboardModal: Playing AI Companion selection audio');
 
       setTimeout(() => {
-        azureAudioService.playText(companionText, 'finn', {
-          onStart: () => console.log('🔊 AI Companion audio started'),
+        // Use previously selected companion if available, otherwise use Pat
+        const voiceToUse = dashboardState.companionSelected || sessionStorage.getItem('selectedCompanion') || 'pat';
+        azureAudioService.playText(companionText, voiceToUse, {
+          onStart: () => console.log(`🔊 AI Companion audio started with ${voiceToUse}'s voice`),
           onEnd: () => console.log('🔊 AI Companion audio ended')
         });
       }, 500);

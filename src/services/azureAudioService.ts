@@ -12,6 +12,7 @@ export class AzureAudioService {
 
   // Map companions to Azure voices
   private voiceMap: Record<string, string> = {
+    'pat': 'en-US-AriaNeural',         // Female, neutral narrator/guide voice
     'finn': 'en-US-DavisNeural',      // Male, friendly
     'sage': 'en-US-TonyNeural',        // Male, neutral/wise (matches the male image)
     'spark': 'en-US-JennyNeural',      // Female, energetic
