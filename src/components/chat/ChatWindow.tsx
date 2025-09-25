@@ -8,6 +8,7 @@ import { X, Minimize2, Send, Mic, MicOff, Paperclip, Search, Download } from 'lu
 import ChatMessage from './ChatMessage';
 import ChatInput from './ChatInput';
 import { ChatMessage as ChatMessageType } from './ChatOverlay';
+import { useThemeContext } from '../../contexts/ThemeContext';
 import styles from '../../styles/chat/ChatWindow.module.css';
 
 interface ChatWindowProps {
@@ -63,8 +64,9 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
 
   const currentCompanion = companions[companionId] || companions.pat;
 
-  // Get theme preference
-  const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  // Get theme from context
+  const { theme } = useThemeContext();
+  const isDarkMode = theme === 'dark';
 
   // Get avatar for current companion
   const getAvatar = () => {

@@ -4,10 +4,15 @@
  */
 
 .chatInput {
-  background: white;
-  border-top: 1px solid #e5e7eb;
+  background: var(--color-background, white);
+  border-top: 1px solid var(--color-border, #e5e7eb);
   padding: 12px;
   flex-shrink: 0;
+}
+
+[data-theme="dark"] .chatInput {
+  background: #1f2937;
+  border-top-color: #374151;
 }
 
 .inputContainer {
@@ -19,8 +24,8 @@
 /* Text Input */
 .textInput {
   flex: 1;
-  background: #f3f4f6;
-  border: 1px solid #e5e7eb;
+  background: var(--color-background-secondary, #f3f4f6);
+  border: 1px solid var(--color-border, #e5e7eb);
   border-radius: 20px;
   padding: 10px 16px;
   font-size: 14px;
@@ -31,11 +36,31 @@
   max-height: 120px;
   overflow-y: auto;
   font-family: inherit;
+  color: var(--color-text-primary, #111827);
+}
+
+[data-theme="dark"] .textInput {
+  background: #374151;
+  border-color: #4b5563;
+  color: #f3f4f6;
+}
+
+.textInput::placeholder {
+  color: var(--color-text-secondary, #6b7280);
+}
+
+[data-theme="dark"] .textInput::placeholder {
+  color: #9ca3af;
 }
 
 .textInput:focus {
-  background: white;
+  background: var(--color-background, white);
   border-color: #8b5cf6;
+}
+
+[data-theme="dark"] .textInput:focus {
+  background: #4b5563;
+  border-color: #a78bfa;
 }
 
 .textInput:disabled {
@@ -61,9 +86,9 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: #f3f4f6;
+  background: var(--color-background-secondary, #f3f4f6);
   border: none;
-  color: #6b7280;
+  color: var(--color-text-secondary, #6b7280);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -71,9 +96,19 @@
   transition: background 0.2s ease, color 0.2s ease;
 }
 
+[data-theme="dark"] .inputButton {
+  background: #374151;
+  color: #9ca3af;
+}
+
 .inputButton:hover:not(:disabled) {
-  background: #e5e7eb;
-  color: #4b5563;
+  background: var(--color-background-hover, #e5e7eb);
+  color: var(--color-text-primary, #4b5563);
+}
+
+[data-theme="dark"] .inputButton:hover:not(:disabled) {
+  background: #4b5563;
+  color: #e5e7eb;
 }
 
 .inputButton:disabled {
@@ -86,14 +121,19 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: #e5e7eb;
+  background: var(--color-background-tertiary, #e5e7eb);
   border: none;
-  color: #9ca3af;
+  color: var(--color-text-tertiary, #9ca3af);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
+}
+
+[data-theme="dark"] .sendButton {
+  background: #374151;
+  color: #6b7280;
 }
 
 .sendButton.canSend {
@@ -141,6 +181,11 @@
   border-radius: 8px;
   color: #991b1b;
   font-size: 13px;
+}
+
+[data-theme="dark"] .recordingIndicator {
+  background: rgba(239, 68, 68, 0.1);
+  color: #fca5a5;
 }
 
 .recordingDot {

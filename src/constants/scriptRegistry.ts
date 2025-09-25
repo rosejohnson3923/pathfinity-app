@@ -42,6 +42,20 @@ export const SCRIPT_IDS = {
   'nav.container_locked': 'The {containerName} container is locked. Complete {requiredContainer} first to unlock it.',
   'nav.continue_learning': 'Ready to continue your {careerName} journey, {firstName}?',
 
+  // Welcome Back Modal scripts - first person with self-identification
+  'welcomeback.greeting.K': 'Welcome back {firstName}! It\'s {companionName}! Want to keep playing {careerName} with me?',
+  'welcomeback.greeting.1-2': 'Welcome back {firstName}! It\'s {companionName}! Ready to continue being a {careerName} with me?',
+  'welcomeback.greeting.3-5': 'Welcome back {firstName}! {companionName} here! Should we continue your {careerName} journey together, or would you like to explore something new?',
+  'welcomeback.greeting.6-8': 'Welcome back {firstName}! It\'s {companionName}. Would you like to continue your {careerName} journey with me, or explore a different path?',
+  'welcomeback.greeting.9-12': 'Welcome back {firstName}! {companionName} here. Ready to continue your {careerName} learning path with me, or would you prefer to explore a new career?',
+
+  // Start Over Confirmation scripts - age appropriate with decision guidance
+  'startover.warning.K': 'Wait! Your stars will go away if you start over. Click green to keep playing, or red for a new game.',
+  'startover.warning.1-2': 'Wait, {firstName}! Starting over means losing all your stars and progress. Click the green button to keep going, or the red button if you really want to start fresh.',
+  'startover.warning.3-5': 'Hold on, {firstName}! If you start over, you\'ll lose all your progress and achievements. Choose the green button to continue your adventure, or the red button to start completely fresh.',
+  'startover.warning.6-8': 'Important decision, {firstName}! Starting over will erase all your progress and achievements. Select the green button to continue your current path, or the red button to begin a new journey.',
+  'startover.warning.9-12': 'Critical decision point: Starting over will permanently delete all progress and achievements. Choose the green button to maintain your current learning trajectory, or the red button to reset and explore a new career path.',
+
   // Generic/Fallback
   'generic.greeting': 'Hello, {firstName}!',
   'generic.encouragement': 'You\'re doing great, {firstName}!',

@@ -159,15 +159,21 @@ export const BentoDashboard: React.FC<BentoDashboardProps> = ({
       today.setHours(0, 0, 0, 0);
       
       const supabaseClient = await supabase();
+      // Updated query for new session schema
       const { data: sessions } = await supabaseClient
         .from('learning_sessions')
-        .select('duration, questions_correct, questions_total')
+        .select('total_time_spent, subjects_completed, average_score')
         .eq('user_id', userId)
         .gte('created_at', today.toISOString());
       
       if (sessions && sessions.length > 0) {
-        const totalQuestions = sessions.reduce((acc, s) => acc + (s.questions_total || 0), 0);
-        const correctQuestions = sessions.reduce((acc, s) => acc + (s.questions_correct || 0), 0);
+        // Estimate based on subjects completed (10 questions per subject)
+        const totalQuestions = sessions.reduce((acc, s) => acc + (s.subjects_completed || 0) * 10, 0);
+        const correctQuestions = sessions.reduce((acc, s) => {
+          const score = s.average_score || 0;
+          const questions = (s.subjects_completed || 0) * 10;
+          return acc + Math.round(questions * score / 100);
+        }, 0);
         const dailyProg = totalQuestions > 0 ? Math.round((correctQuestions / totalQuestions) * 100) : 0;
         setDailyProgress(Math.min(dailyProg, 100));
       }
@@ -178,13 +184,14 @@ export const BentoDashboard: React.FC<BentoDashboardProps> = ({
       
       const { data: weekSessions } = await supabaseClient
         .from('learning_sessions')
-        .select('duration')
+        .select('total_time_spent')
         .eq('user_id', userId)
         .gte('created_at', weekAgo.toISOString());
       
       if (weekSessions) {
         // Assuming 7 hours is the weekly goal
-        const totalMinutes = weekSessions.reduce((acc, s) => acc + (s.duration || 0), 0);
+        // total_time_spent is in seconds, convert to minutes
+        const totalMinutes = weekSessions.reduce((acc, s) => acc + ((s.total_time_spent || 0) / 60), 0);
         const weeklyProg = Math.round((totalMinutes / (7 * 60)) * 100);
         setWeeklyProgress(Math.min(weeklyProg, 100));
       }

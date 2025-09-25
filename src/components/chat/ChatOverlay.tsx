@@ -12,6 +12,7 @@ import ChatWindow from './ChatWindow';
 import { useChatConnection } from '../../hooks/useChatConnection';
 import { useAuth } from '../../hooks/useAuth';
 import { useStudentProfile } from '../../hooks/useStudentProfile';
+import { azureAudioService } from '../../services/azureAudioService';
 import styles from '../../styles/chat/ChatOverlay.module.css';
 
 export interface ChatMessage {
@@ -72,6 +73,7 @@ export const ChatOverlay: React.FC<ChatOverlayProps> = ({ enabled = true }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [isSpeaking, setIsSpeaking] = useState(false);
   // Position in bottom-right corner by default, but with safe margin
   const [position, setPosition] = useState({
     x: typeof window !== 'undefined' ? Math.min(window.innerWidth - 120, window.innerWidth - 120) : 20,
@@ -84,9 +86,10 @@ export const ChatOverlay: React.FC<ChatOverlayProps> = ({ enabled = true }) => {
   const { sendMessage, connectionStatus } = useChatConnection();
   console.log('🔍 ChatOverlay connectionStatus from hook:', connectionStatus);
 
-  // Get companion from session - user-specific keys
+  // Get companion from session - user-specific keys only
   const userCompanionKey = user?.id ? `selectedCompanion_${user.id}` : 'selectedCompanion';
-  const selectedCompanion = sessionStorage.getItem(userCompanionKey) || sessionStorage.getItem('selectedAiCompanion');
+  // Only use user-specific companion, don't fall back to generic key that could be from another user
+  const selectedCompanion = sessionStorage.getItem(userCompanionKey);
   const companionId = selectedCompanion || 'pat'; // Pat is the default onboarding companion
 
   const userCareerKey = user?.id ? `selectedCareer_${user.id}` : 'selectedCareer';
@@ -198,6 +201,19 @@ export const ChatOverlay: React.FC<ChatOverlayProps> = ({ enabled = true }) => {
     setPosition({ x: newX, y: newY });
   }, []);
 
+  // Monitor Azure Audio Service speaking state
+  useEffect(() => {
+    const checkSpeakingState = () => {
+      setIsSpeaking(azureAudioService.speaking);
+    };
+
+    // Check immediately and then periodically
+    checkSpeakingState();
+    const interval = setInterval(checkSpeakingState, 100);
+
+    return () => clearInterval(interval);
+  }, []);
+
   // Don't render if disabled, not authenticated, or on restricted pages
   if (!enabled || !isAuthenticated || isOnRestrictedPage) {
     console.log('🔍 ChatOverlay not rendering:', {
@@ -233,6 +249,7 @@ export const ChatOverlay: React.FC<ChatOverlayProps> = ({ enabled = true }) => {
           companionId={companionId}
           position={position}
           isDragging={isDragging}
+          isSpeaking={isSpeaking}
           onClick={handleExpand}
           onDrag={handleDrag}
         />

@@ -33,7 +33,7 @@ import { learningMetricsService } from '../../services/learningMetricsService';
 import { companionReactionService } from '../../services/companionReactionService';
 import { voiceManagerService } from '../../services/voiceManagerService';
 import { companionVoiceoverService } from '../../services/companionVoiceoverService';
-import { azureAudioService } from '../../services/AzureAudioService';
+import { azureAudioService } from '../../services/azureAudioService';
 import { TestAudioButton } from '../audio/TestAudioButton';
 
 // V2 Features - Rules Engine & Intelligence
@@ -458,16 +458,16 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
             // Only generate micro content for this specific skill
             console.log('🔨 Generating micro content for current skill only');
             const journeyContent = await contentOrchestratorWithCache.generateLearningJourney({
-              studentName: student.display_name || student.name || 'Sam',
-              studentId: student.id || 'default',
-              gradeLevel: student.grade_level || 'K',
+              studentName: student?.display_name || student?.name || 'Sam',
+              studentId: student?.id || 'default',
+              gradeLevel: student?.grade_level || 'K',
               career: selectedCareer?.name || career?.name || 'Professional',
               careerId: selectedCareer?.id || career?.id || 'default',
               selectedCharacter: selectedCharacter || 'harmony',
-              currentSubject: skill.subject || 'math',
+              currentSubject: skill?.subject || 'math',
               currentContainer: 'learn',
-              skillId: skill.id || 'default',
-              subjects: [skill.subject || 'Learning'],
+              skillId: skill?.id || 'default',
+              subjects: [skill?.subject || 'Learning'],
               containers: ['learn'],
               useCache: true,  // Enable caching!
               forceRegenerate: false
@@ -478,9 +478,9 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
             // Fallback: Generate everything if no Master Narrative passed
             console.log('⚠️ No Master Narrative from parent, generating new one');
             const journeyContent = await contentOrchestratorWithCache.generateLearningJourney({
-              studentName: student.display_name || student.name || 'Sam',
-              studentId: student.id || 'default',
-              gradeLevel: student.grade_level || 'K',
+              studentName: student?.display_name || student?.name || 'Sam',
+              studentId: student?.id || 'default',
+              gradeLevel: student?.grade_level || 'K',
               career: selectedCareer?.name || career?.name || 'Professional',
               careerId: selectedCareer?.id || career?.id || 'default',
               selectedCharacter: selectedCharacter || 'harmony',
@@ -703,10 +703,40 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
         // Track error - performanceTracker doesn't have trackError method
         // Could track as failed performance data if needed
       } finally {
-        // Delay setting isLoading to false to match the phase transition
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 5000); // Match the phase transition delay
+        // Smart loading timing:
+        // 1. Minimum 3 seconds for users to read loading messages
+        // 2. Wait for audio narration to complete if playing
+        // 3. Complete when both conditions are met
+
+        const minLoadingTime = 3000; // 3 seconds minimum for reading messages
+        const startTime = Date.now();
+
+        const checkLoadingComplete = () => {
+          const elapsedTime = Date.now() - startTime;
+          const minTimeReached = elapsedTime >= minLoadingTime;
+          const audioPlaying = azureAudioService.speaking;
+
+          console.log('⏱️ Loading timing check:', {
+            elapsedTime,
+            minTimeReached,
+            audioPlaying,
+            willComplete: minTimeReached && !audioPlaying
+          });
+
+          if (minTimeReached && !audioPlaying) {
+            // Both conditions met: minimum time passed and audio finished
+            setIsLoading(false);
+          } else if (!minTimeReached) {
+            // Still need to wait for minimum time
+            setTimeout(checkLoadingComplete, Math.min(100, minLoadingTime - elapsedTime));
+          } else {
+            // Minimum time passed, but audio still playing - check again soon
+            setTimeout(checkLoadingComplete, 100);
+          }
+        };
+
+        // Start checking for completion
+        checkLoadingComplete();
 
         // Mark content as generated to prevent re-generation
         contentGeneratedRef.current = true;

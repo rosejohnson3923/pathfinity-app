@@ -85,7 +85,7 @@ export const EnhancedLoadingScreen: React.FC<EnhancedLoadingScreenProps> = ({
   
   // Simulate progress
   useEffect(() => {
-    const duration = phase === 'practice' ? 5000 : 3000; // Practice takes longer
+    const duration = 3000; // Unified 3-second minimum for all phases
     const increment = 100 / (duration / 100);
 
     const interval = setInterval(() => {

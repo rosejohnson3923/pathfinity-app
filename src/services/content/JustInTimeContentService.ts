@@ -969,7 +969,11 @@ export class JustInTimeContentService {
       : '';
     
     // Include career and skill in cache key to prevent content mismatch
-    const careerKey = request.context?.career ? `-${request.context.career}` : '';
+    // Handle career as either string or object with id/name properties
+    const careerValue = typeof request.context?.career === 'string'
+      ? request.context.career
+      : request.context?.career?.id || request.context?.career?.name || '';
+    const careerKey = careerValue ? `-${careerValue}` : '';
     const skillKey = request.context?.skill?.skill_number ? `-${request.context.skill.skill_number}` : '';
     
     return `${request.userId}-${request.container}-${request.subject}${careerKey}${skillKey}${perfKey}`;

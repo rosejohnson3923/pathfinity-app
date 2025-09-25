@@ -11,10 +11,13 @@ const http = require('http');
 
 // Load environment variables
 dotenv.config({ path: path.join(__dirname, '..', '.env.local') });
+// Also load main .env for Supabase credentials
+dotenv.config({ path: path.join(__dirname, '..', '.env') });
 
 // Import routes
 const cacheRoutes = require('./routes/cache');
 const healthRoutes = require('./routes/health');
+const sessionRoutes = require('./routes/sessions');
 
 // Import chat routes with WebSocket
 let chatRoutes, setupWebSocketServer;
@@ -77,6 +80,7 @@ app.use((req, res, next) => {
 app.use('/api/health', healthRoutes);
 app.use('/api/cache', cacheRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/sessions', sessionRoutes);
 
 // Error handling
 app.use((err, req, res, next) => {

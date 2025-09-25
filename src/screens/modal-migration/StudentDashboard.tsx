@@ -22,6 +22,12 @@ import { themeService } from '../../services/themeService';
 import { skillsData } from '../../data/skillsDataComplete';
 import { ProgressHeader } from '../../components/navigation/ProgressHeader';
 import { CAREER_BASICS } from '../../data/careerBasicsData';
+
+// Session persistence imports
+import { SessionLearningContextManager } from '../../services/content/SessionLearningContextManager';
+import { WelcomeBackModal } from '../../components/modals/WelcomeBackModal';
+import { StartOverConfirmation } from '../../components/modals/StartOverConfirmation';
+
 import './StudentDashboard.css';
 
 const StudentDashboardInner: React.FC = () => {
@@ -32,7 +38,7 @@ const StudentDashboardInner: React.FC = () => {
   const { profile } = useStudentProfile();
   const { theme, setTheme } = useThemeControl(); // Use centralized theme service with controls
   const { generateNarrative, playNarrativeSection, masterNarrative, narrativeLoading } = useNarrative();
-  const [currentView, setCurrentView] = useState<'introduction' | 'dashboard' | 'lobby' | 'narrative' | 'container'>('introduction');
+  const [currentView, setCurrentView] = useState<'introduction' | 'dashboard' | 'lobby' | 'narrative' | 'container' | 'welcomeback' | 'startover'>('introduction');
   const [hasSeenIntroduction, setHasSeenIntroduction] = useState(false);
   const [dashboardSelections, setDashboardSelections] = useState<{
     companion: string;
@@ -44,6 +50,12 @@ const StudentDashboardInner: React.FC = () => {
     objectives: string[];
   } | null>(null);
   const [currentSkillIndex, setCurrentSkillIndex] = useState(0);
+
+  // Session management state
+  const [sessionManager] = useState(() => new SessionLearningContextManager());
+  const [activeSession, setActiveSession] = useState<any>(null);
+  const [sessionLoading, setSessionLoading] = useState(true);
+  const [showStartOverConfirm, setShowStartOverConfirm] = useState(false);
 
   // Memoized objects for AI containers (must be at top level to follow Rules of Hooks)
   const studentProfile = useMemo(() => {
@@ -155,33 +167,67 @@ const StudentDashboardInner: React.FC = () => {
     setCurrentSkillIndex(prev => prev + 1);
   }, []);
 
+  // Load session on mount
   useEffect(() => {
-    // Theme is now managed centrally via themeService
-    
-    // Check if user has seen introduction today
-    const lastIntroDate = localStorage.getItem(`pathfinity-intro-${user?.id}`);
-    const today = new Date().toDateString();
-    
-    // Check for saved selections from a previous session
-    const savedSelections = localStorage.getItem(`pathfinity-selections-${user?.id}`);
-    
-    if (lastIntroDate === today && savedSelections) {
-      // Already seen introduction today and have selections, skip to lobby
-      const selections = JSON.parse(savedSelections);
-      setDashboardSelections(selections);
-      setHasSeenIntroduction(true);
-      setCurrentView('lobby');
-    }
-    // For development: Uncomment to always show introduction
-    // setCurrentView('introduction');
-  }, [user]);
+    if (!user?.id) return;
+
+    const loadUserSession = async () => {
+      setSessionLoading(true);
+      try {
+        // Try to load existing session
+        const session = await sessionManager.loadSession(user.id);
+
+        if (session) {
+          console.log('🔄 Found active session:', session);
+          setActiveSession(session);
+
+          // Set dashboard selections from session with full objects
+          // The career needs to be the name/title for the computed properties to work
+          setDashboardSelections({
+            companion: session.companion?.name || session.companion_name || 'pat',
+            career: session.career?.name || session.career?.title || session.career_name || 'Explorer'
+          });
+
+          // Restore completed containers from session progress
+          const completedSet = new Set<string>();
+          if (session.container_progress) {
+            Object.entries(session.container_progress).forEach(([container, progress]: [string, any]) => {
+              // Check if all subjects in the container are completed
+              const subjects = progress || {};
+              const allSubjectsCompleted = Object.values(subjects).every((s: any) => s.completed);
+              if (allSubjectsCompleted && Object.keys(subjects).length > 0) {
+                completedSet.add(container.toUpperCase());
+              }
+            });
+          }
+          setCompletedContainers(completedSet);
+
+          // Check if user has made progress in Learn container
+          const hasLearnProgress = sessionManager.isInLearnWithProgress();
+
+          // Show welcome back modal if they have an active session
+          setCurrentView('welcomeback');
+          setHasSeenIntroduction(true);
+        } else {
+          console.log('🆕 No active session found');
+          // No active session, show introduction
+          setCurrentView('introduction');
+        }
+      } catch (error) {
+        console.error('Failed to load session:', error);
+        // On error, default to introduction
+        setCurrentView('introduction');
+      } finally {
+        setSessionLoading(false);
+      }
+    };
+
+    loadUserSession();
+  }, [user?.id]);
 
   const handleIntroductionComplete = (selections?: { career?: string; companion?: string; showCareerChoice?: boolean; fromRandomCareer?: boolean; careerId?: string }) => {
     console.log('🎯 handleIntroductionComplete called with:', selections);
 
-    // Mark introduction as seen for today
-    const today = new Date().toDateString();
-    localStorage.setItem(`pathfinity-intro-${user?.id}`, today);
     setHasSeenIntroduction(true);
 
     // Check if user clicked "More Options" button
@@ -215,8 +261,7 @@ const StudentDashboardInner: React.FC = () => {
         career: selections.career
       };
       setDashboardSelections(dashboardSelections);
-      // Save selections for returning users
-      localStorage.setItem(`pathfinity-selections-${user?.id}`, JSON.stringify(dashboardSelections));
+      // Session is now saved in database, no need for localStorage
       // Skip the DashboardModal and go directly to lobby since we have selections
       setCurrentView('lobby');
     } else {
@@ -227,8 +272,41 @@ const StudentDashboardInner: React.FC = () => {
   };
 
   const handleDashboardComplete = async (selections: { companion: string; career: string; careerData?: any }) => {
-    console.log('Dashboard flow complete - transitioning to CareerInc Lobby', selections);
+    console.log('Dashboard flow complete - creating session and transitioning to CareerInc Lobby', selections);
     setDashboardSelections(selections);
+
+    // Create a new session with the selections
+    if (user && selections.career && selections.companion) {
+      try {
+        const studentData = {
+          id: user.id || 'default',
+          name: user.full_name || 'Student',
+          display_name: user.full_name || 'Student',
+          grade_level: profile?.grade_level || (user as any)?.grade_level || 'K'
+        };
+
+        const careerData = {
+          id: selections.career.toLowerCase().replace(/\s+/g, '-'),
+          name: selections.career
+        };
+
+        const companionData = {
+          id: selections.companion,
+          name: selections.companion
+        };
+
+        const newSession = await sessionManager.createSession(
+          studentData,
+          careerData,
+          companionData
+        );
+
+        setActiveSession(newSession);
+        console.log('✅ Session created:', newSession);
+      } catch (error) {
+        console.error('Failed to create session:', error);
+      }
+    }
 
     // Immediately transition to lobby so CareerIncLobbyModal can mount
     setCurrentView('lobby');
@@ -242,13 +320,23 @@ const StudentDashboardInner: React.FC = () => {
 
       // Pass careerData if available, otherwise just the career string
       // This ensures proper cache key generation with the career ID
-      generateNarrative({
+      const narrativeResult = await generateNarrative({
         career: selections.careerData || selections.career,
         companion: companion,
         gradeLevel: gradeLevel,
         userId: user.id || 'default',
         userName: user.full_name
       });
+
+      // Cache the master narrative in the session
+      if (narrativeResult && sessionManager) {
+        try {
+          await sessionManager.cacheMasterNarrative(narrativeResult);
+          console.log('✅ Master narrative cached in session');
+        } catch (error) {
+          console.error('Failed to cache master narrative:', error);
+        }
+      }
     }
   };
 
@@ -277,15 +365,86 @@ const StudentDashboardInner: React.FC = () => {
     setCurrentView('narrative');
   };
 
-  const handleContainerComplete = () => {
-    if (activeContainer) {
+  const handleContainerComplete = async () => {
+    if (activeContainer && activeSession) {
       console.log('Container completed:', activeContainer.id);
+
+      // Update session progress
+      try {
+        await sessionManager.updateProgress(
+          activeContainer.id.toLowerCase(),
+          currentSkillIndex,
+          {
+            completed: true,
+            score: 100, // You might want to get actual score from container
+            time_spent: 30 // You might want to track actual time
+          }
+        );
+      } catch (error) {
+        console.error('Failed to update session progress:', error);
+      }
+
       // Mark container as completed
       setCompletedContainers(prev => new Set(prev).add(activeContainer.id));
       // Return to lobby
       setCurrentView('lobby');
       setActiveContainer(null);
     }
+  };
+
+  // Handle welcome back modal actions
+  const handleWelcomeBackContinue = () => {
+    console.log('✅ CONTINUE button clicked in WelcomeBack modal');
+    console.log('🎮 Continuing journey with existing session');
+    console.log('📊 Dashboard selections:', dashboardSelections);
+    console.log('👤 Student profile:', studentProfile);
+    console.log('💼 Selected career object:', selectedCareerObject);
+    console.log('🔄 Changing view from', currentView, 'to lobby');
+    setCurrentView('lobby');
+  };
+
+  const handleWelcomeBackStartOver = () => {
+    console.log('🚀 START NEW ADVENTURE button clicked!');
+    console.log('📊 Current state before action:', {
+      activeSession: activeSession?.id,
+      currentView,
+      hasSeenIntroduction,
+      showStartOverConfirm
+    });
+    console.log('🔄 User wants to start over - showing confirmation');
+    setShowStartOverConfirm(true);
+    setCurrentView('startover');
+    console.log('✅ State updated - should show StartOver confirmation');
+  };
+
+  const handleConfirmStartOver = async () => {
+    console.log('🆕 Starting over with new session');
+
+    // Clear the current session and start fresh
+    try {
+      // Clear the session in manager (doesn't delete from database yet)
+      sessionManager.clearSession();
+
+      // Clear local state
+      setActiveSession(null);
+      setDashboardSelections(null);
+      setCompletedContainers(new Set());
+      setCurrentSkillIndex(0);
+      setShowStartOverConfirm(false);
+      setHasSeenIntroduction(false);
+
+      // Go to introduction to start fresh journey
+      // User will select new career & companion, then a new session will be created
+      setCurrentView('introduction');
+    } catch (error) {
+      console.error('Failed to start over:', error);
+    }
+  };
+
+  const handleCancelStartOver = () => {
+    console.log('❌ Cancelled start over - returning to welcome back');
+    setShowStartOverConfirm(false);
+    setCurrentView('welcomeback');
   };
 
 
@@ -305,6 +464,15 @@ const StudentDashboardInner: React.FC = () => {
     timestamp: Date.now()
   });
 
+  // Show loading state while checking session
+  if (sessionLoading) {
+    return (
+      <div className="student-dashboard-wrapper student-dashboard-loading" data-theme={theme}>
+        <div>Loading your journey...</div>
+      </div>
+    );
+  }
+
   return (
     <div
       className="student-dashboard-wrapper"
@@ -313,6 +481,26 @@ const StudentDashboardInner: React.FC = () => {
 
       {/* Learning Adaptation Listener - modified to only handle struggle detection */}
       <LearningAdaptationListener hideVisualFeedback={true} />
+
+      {/* Welcome Back Modal for returning users */}
+      {currentView === 'welcomeback' && activeSession && (
+        <WelcomeBackModal
+          session={activeSession}
+          onContinue={handleWelcomeBackContinue}
+          onChooseNew={handleWelcomeBackStartOver}
+          // No onClose handler - modal can't be closed by backdrop click
+          // User must choose Continue or Start New Adventure
+        />
+      )}
+
+      {/* Start Over Confirmation */}
+      {currentView === 'startover' && activeSession && (
+        <StartOverConfirmation
+          session={activeSession}
+          onConfirm={handleConfirmStartOver}
+          onCancel={handleCancelStartOver}
+        />
+      )}
 
       {currentView === 'introduction' && !hasSeenIntroduction && (
         <IntroductionModal

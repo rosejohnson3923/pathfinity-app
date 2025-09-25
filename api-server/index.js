@@ -7,6 +7,7 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
+const http = require('http');
 
 // Load environment variables
 dotenv.config({ path: path.join(__dirname, '..', '.env.local') });
@@ -16,10 +17,14 @@ dotenv.config({ path: path.join(__dirname, '..', '.env') }); // Also load main .
 const cacheRoutes = require('./routes/cache');
 const healthRoutes = require('./routes/health');
 const ttsRoutes = require('./routes/tts');
-const chatRoutes = require('./routes/chat').router;
+const { router: chatRoutes, setupWebSocketServer } = require('./routes/chat');
+const sessionRoutes = require('./routes/sessions');
 
 const app = express();
 const PORT = process.env.PORT || 3002;
+
+// Create HTTP server for WebSocket support
+const server = http.createServer(app);
 
 // Middleware
 app.use(cors({
@@ -39,6 +44,7 @@ app.use('/api/health', healthRoutes);
 app.use('/api/cache', cacheRoutes);
 app.use('/api/tts', ttsRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/sessions', sessionRoutes);
 
 // Error handling
 app.use((err, req, res, next) => {
@@ -49,9 +55,16 @@ app.use((err, req, res, next) => {
   });
 });
 
+// Setup WebSocket server
+if (setupWebSocketServer) {
+  setupWebSocketServer(server);
+  console.log('🔌 WebSocket server initialized');
+}
+
 // Start server
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`🚀 Pathfinity API Server running on port ${PORT}`);
   console.log(`📦 Azure Storage Account: pathfinitystorage`);
   console.log(`🔐 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🔌 WebSocket endpoint: ws://localhost:${PORT}/ws/chat`);
 });

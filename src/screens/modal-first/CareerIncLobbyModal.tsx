@@ -112,7 +112,9 @@ export const CareerIncLobbyModal: React.FC<CareerIncLobbyModalProps> = ({
   });
 
   // Helper to get companion display name from ID
-  const getCompanionDisplayName = (companionId: string): string => {
+  const getCompanionDisplayName = (companionId: string | undefined): string => {
+    if (!companionId) return 'Your Companion';
+
     const companionNames: Record<string, string> = {
       'finn': 'Finn',
       'sage': 'Sage',

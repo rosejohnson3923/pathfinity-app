@@ -13,6 +13,7 @@ interface ChatBubbleProps {
   companionId: string;
   position: { x: number; y: number };
   isDragging: boolean;
+  isSpeaking?: boolean;
   onClick: () => void;
   onDrag: (x: number, y: number) => void;
 }
@@ -22,6 +23,7 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({
   companionId,
   position,
   isDragging,
+  isSpeaking = false,
   onClick,
   onDrag
 }) => {
@@ -123,13 +125,14 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({
     companionId,
     position: bubblePosition,
     unreadCount,
-    isDragging
+    isDragging,
+    isSpeaking
   });
 
   return (
     <div
       ref={bubbleRef}
-      className={`${styles.chatBubble} ${unreadCount > 0 ? styles.hasUnread : ''}`}
+      className={`${styles.chatBubble} ${unreadCount > 0 ? styles.hasUnread : ''} ${isSpeaking ? styles.isSpeaking : ''}`}
       style={{
         left: `${bubblePosition.x}px`,
         top: `${bubblePosition.y}px`
@@ -171,9 +174,17 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({
         </div>
       )}
 
-      {/* Pulse Animation for Attention */}
-      {unreadCount > 0 && (
-        <div className={styles.pulseRing}></div>
+      {/* Pulse Animation for Attention or Speaking */}
+      {(unreadCount > 0 || isSpeaking) && (
+        <div className={`${styles.pulseRing} ${isSpeaking ? styles.speakingPulse : ''}`}></div>
+      )}
+
+      {/* Additional rings for speaking animation */}
+      {isSpeaking && (
+        <>
+          <div className={`${styles.pulseRing} ${styles.speakingPulse2}`}></div>
+          <div className={`${styles.pulseRing} ${styles.speakingPulse3}`}></div>
+        </>
       )}
 
       {/* Typing Indicator */}

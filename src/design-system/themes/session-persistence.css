@@ -1,0 +1,391 @@
+/**
+ * Session Persistence Theme Styles
+ * Design tokens and animations for session management UI
+ */
+
+/* Container-specific color variables */
+:root {
+  /* Learn Container Colors */
+  --session-learn-primary: #a855f7;
+  --session-learn-secondary: #ec4899;
+  --session-learn-accent: #3b82f6;
+  --session-learn-gradient: linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #3b82f6 100%);
+  --session-learn-glow: 0 0 20px rgba(168, 85, 247, 0.3);
+
+  /* Experience Container Colors */
+  --session-experience-primary: #22c55e;
+  --session-experience-secondary: #10b981;
+  --session-experience-accent: #14b8a6;
+  --session-experience-gradient: linear-gradient(135deg, #22c55e 0%, #10b981 50%, #14b8a6 100%);
+  --session-experience-glow: 0 0 20px rgba(34, 197, 94, 0.3);
+
+  /* Discover Container Colors */
+  --session-discover-primary: #fb923c;
+  --session-discover-secondary: #f59e0b;
+  --session-discover-accent: #eab308;
+  --session-discover-gradient: linear-gradient(135deg, #fb923c 0%, #f59e0b 50%, #eab308 100%);
+  --session-discover-glow: 0 0 20px rgba(251, 146, 60, 0.3);
+
+  /* Session State Colors */
+  --session-active: #10b981;
+  --session-inactive: #6b7280;
+  --session-expired: #ef4444;
+  --session-warning: #f59e0b;
+
+  /* Animation Durations */
+  --session-animation-fast: 200ms;
+  --session-animation-medium: 400ms;
+  --session-animation-slow: 600ms;
+  --session-animation-spring: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Dark mode overrides */
+[data-theme="dark"] {
+  --session-learn-glow: 0 0 30px rgba(168, 85, 247, 0.5);
+  --session-experience-glow: 0 0 30px rgba(34, 197, 94, 0.5);
+  --session-discover-glow: 0 0 30px rgba(251, 146, 60, 0.5);
+}
+
+/* Welcome Back Modal Styles */
+.welcome-back-modal {
+  animation: slideInUp var(--session-animation-medium) var(--session-animation-spring);
+}
+
+.welcome-back-avatar {
+  animation: floatAnimation 3s ease-in-out infinite;
+  filter: drop-shadow(var(--session-learn-glow));
+}
+
+.welcome-back-progress-bar {
+  position: relative;
+  overflow: hidden;
+}
+
+.welcome-back-progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmer 2s infinite;
+}
+
+/* Start Over Confirmation Styles */
+.start-over-modal {
+  animation: shakeWarning var(--session-animation-medium) ease-in-out;
+}
+
+.progress-loss-indicator {
+  background: linear-gradient(90deg, #ef4444, #dc2626);
+  animation: pulseWarning 2s ease-in-out infinite;
+}
+
+/* Achievement Badge Animations */
+.achievement-badge {
+  animation: badgePop var(--session-animation-medium) var(--session-animation-spring);
+  position: relative;
+}
+
+.achievement-badge::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: var(--session-learn-gradient);
+  border-radius: inherit;
+  opacity: 0;
+  animation: badgeGlow 2s ease-in-out infinite;
+}
+
+/* Container Transition Effects */
+.container-transition-learn {
+  background: var(--session-learn-gradient);
+  animation: containerSlideIn var(--session-animation-slow) ease-out;
+}
+
+.container-transition-experience {
+  background: var(--session-experience-gradient);
+  animation: containerSlideIn var(--session-animation-slow) ease-out;
+}
+
+.container-transition-discover {
+  background: var(--session-discover-gradient);
+  animation: containerSlideIn var(--session-animation-slow) ease-out;
+}
+
+/* Progress Tracking Styles */
+.session-progress-ring {
+  stroke-dasharray: 283;
+  stroke-dashoffset: 283;
+  animation: progressRingFill 1s ease-out forwards;
+  filter: drop-shadow(0 0 10px currentColor);
+}
+
+.session-progress-ring.learn {
+  stroke: var(--session-learn-primary);
+}
+
+.session-progress-ring.experience {
+  stroke: var(--session-experience-primary);
+}
+
+.session-progress-ring.discover {
+  stroke: var(--session-discover-primary);
+}
+
+/* Streak Counter Styles */
+.streak-counter {
+  position: relative;
+  font-weight: bold;
+  background: linear-gradient(45deg, #f59e0b, #ef4444);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.streak-fire {
+  animation: fireFlicker 1s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 5px #f59e0b);
+}
+
+/* Session Timer Styles */
+.session-timer {
+  position: relative;
+  font-variant-numeric: tabular-nums;
+}
+
+.session-timer.warning {
+  color: var(--session-warning);
+  animation: timerPulse 1s ease-in-out infinite;
+}
+
+.session-timer.expired {
+  color: var(--session-expired);
+  animation: timerBlink 500ms ease-in-out infinite;
+}
+
+/* Skill Adaptation Indicators */
+.skill-adaptation-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  animation: slideInRight var(--session-animation-fast) ease-out;
+}
+
+.skill-adaptation-badge.easier {
+  background: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.skill-adaptation-badge.harder {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* Glass Morphism Effects */
+.session-glass-card {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] .session-glass-card {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Parallax Container */
+.parallax-container {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.parallax-layer {
+  transform: translateZ(var(--parallax-offset, 0));
+  transition: transform var(--session-animation-medium) ease-out;
+}
+
+/* Keyframe Animations */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes floatAnimation {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes shimmer {
+  to {
+    left: 100%;
+  }
+}
+
+@keyframes shakeWarning {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+@keyframes pulseWarning {
+  0%, 100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes badgePop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes badgeGlow {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes containerSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes progressRingFill {
+  to {
+    stroke-dashoffset: calc(283 * (1 - var(--progress, 0)));
+  }
+}
+
+@keyframes fireFlicker {
+  0% {
+    transform: scale(1) rotate(-2deg);
+  }
+  100% {
+    transform: scale(1.1) rotate(2deg);
+  }
+}
+
+@keyframes timerPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes timerBlink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 640px) {
+  .welcome-back-modal,
+  .start-over-modal {
+    width: calc(100vw - 2rem);
+    max-height: calc(100vh - 4rem);
+  }
+
+  .session-glass-card {
+    backdrop-filter: blur(5px);
+  }
+}
+
+/* Transition Classes */
+.session-fade-enter {
+  opacity: 0;
+}
+
+.session-fade-enter-active {
+  opacity: 1;
+  transition: opacity var(--session-animation-medium) ease-in;
+}
+
+.session-fade-exit {
+  opacity: 1;
+}
+
+.session-fade-exit-active {
+  opacity: 0;
+  transition: opacity var(--session-animation-medium) ease-out;
+}
+
+/* Utility Classes */
+.session-glow-learn {
+  box-shadow: var(--session-learn-glow);
+}
+
+.session-glow-experience {
+  box-shadow: var(--session-experience-glow);
+}
+
+.session-glow-discover {
+  box-shadow: var(--session-discover-glow);
+}
+
+.session-gradient-text {
+  background: var(--session-learn-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
