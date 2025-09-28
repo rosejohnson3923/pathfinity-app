@@ -180,11 +180,34 @@ export const DashboardModal: React.FC<DashboardModalProps> = ({
       }
     }
     
-    // Log when both are selected
+    // Debug logging
+    console.log('📊 Dashboard state check:', {
+      careerSelected: dashboardState.careerSelected,
+      companionSelected: dashboardState.companionSelected,
+      hasCareer: !!dashboardState.careerSelected,
+      hasCompanion: !!dashboardState.companionSelected,
+      existingSelections,
+      activeSubModal
+    });
+
+    // When both are selected, call onComplete if this is a new selection (not from existing selections)
     if (dashboardState.careerSelected && dashboardState.companionSelected) {
-      console.log('✅ Both career and companion selected - showing BentoDashboard');
+      console.log('✅ Both career and companion selected');
+
+      // If we didn't have existing selections when we started, this is a NEW selection
+      // Call onComplete to trigger the companion transition screen
+      if (!existingSelections && onComplete) {
+        console.log('🎉 New selections complete - calling onComplete for companion transition');
+        onComplete({
+          companion: dashboardState.companionSelected,
+          career: dashboardState.careerSelected,
+          careerData: dashboardState.careerSelected
+        });
+      } else {
+        console.log('📊 Existing selections - showing BentoDashboard');
+      }
     }
-  }, [existingSelections, dashboardState.careerSelected, dashboardState.companionSelected, activeSubModal, hasAutoOpened]);
+  }, [existingSelections, dashboardState.careerSelected, dashboardState.companionSelected, activeSubModal, hasAutoOpened, onComplete]);
 
   // Theme colors based on UI guidelines
   const themeColors = {

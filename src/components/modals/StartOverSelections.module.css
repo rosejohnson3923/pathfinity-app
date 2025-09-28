@@ -1,0 +1,416 @@
+/**
+ * StartOverSelections Styles
+ * Split-view layout for career and companion selection
+ */
+
+@import '../../design-system/index.css';
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+}
+
+.modalContent {
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-xl);
+  max-width: 1200px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-2xl);
+  border: 2px solid var(--color-border);
+}
+
+.header {
+  padding: var(--space-6);
+  text-align: center;
+  border-bottom: 2px solid var(--color-border);
+  background: var(--color-bg-secondary);
+}
+
+.header h2 {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  color: var(--color-text-primary);
+  margin: 0;
+  margin-bottom: var(--space-2);
+}
+
+.header p {
+  font-size: var(--text-lg);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* Split View Layout */
+.splitView {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: var(--space-6);
+  padding: var(--space-6);
+  min-height: 400px;
+}
+
+.careerPanel,
+.companionPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.panelHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
+}
+
+.panelIcon {
+  width: 24px;
+  height: 24px;
+  color: var(--color-primary);
+}
+
+.panelHeader h3 {
+  font-size: var(--text-xl);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+/* Career Category Filter */
+.categoryFilter {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+}
+
+.categoryFilter label {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--color-text-secondary);
+}
+
+.categorySelect {
+  flex: 1;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.categorySelect:hover {
+  border-color: var(--color-primary);
+}
+
+.categorySelect:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-alpha-20);
+}
+
+/* Career Grid */
+.careerGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: var(--space-3);
+  max-height: 300px;
+  overflow-y: auto;
+  padding: var(--space-2);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+}
+
+.careerCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--color-bg-primary);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.careerCard:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.careerCard.selected {
+  border-color: var(--color-primary);
+  background: var(--color-primary-alpha-10);
+}
+
+.careerCard.current {
+  border-style: dashed;
+  border-color: var(--color-success);
+}
+
+.careerIcon {
+  font-size: var(--text-2xl);
+}
+
+.careerName {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--color-text-primary);
+  text-align: center;
+}
+
+/* Companion Grid */
+.companionGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
+  padding: var(--space-2);
+}
+
+.companionCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  background: var(--color-bg-primary);
+  border: 3px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.companionCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+}
+
+.companionCard.selected {
+  background: var(--color-primary-alpha-10);
+}
+
+.companionCard.current {
+  border-style: dashed;
+}
+
+.companionEmoji {
+  font-size: var(--text-4xl);
+}
+
+.companionName {
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  color: var(--color-text-primary);
+}
+
+.companionPersonality {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+/* Badges and Icons */
+.currentBadge {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  background: var(--color-success);
+  color: white;
+  font-size: var(--text-xs);
+  font-weight: var(--font-bold);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+}
+
+.checkIcon {
+  position: absolute;
+  bottom: var(--space-2);
+  right: var(--space-2);
+  width: 20px;
+  height: 20px;
+  color: var(--color-primary);
+}
+
+/* Divider */
+.divider {
+  width: 2px;
+  background: var(--color-border);
+  margin: var(--space-4) 0;
+}
+
+/* Change Summary */
+.changeSummary {
+  display: flex;
+  gap: var(--space-6);
+  padding: var(--space-4) var(--space-6);
+  background: var(--color-bg-secondary);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.changeItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex: 1;
+}
+
+.changeLabel {
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-secondary);
+}
+
+.oldValue {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  text-decoration: line-through;
+}
+
+.arrow {
+  width: 16px;
+  height: 16px;
+  color: var(--color-text-secondary);
+}
+
+.newValue {
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+  color: var(--color-success);
+}
+
+.unchangedValue {
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+}
+
+/* Action Buttons */
+.actionButtons {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding: var(--space-6);
+}
+
+.cancelButton {
+  padding: var(--space-3) var(--space-6);
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancelButton:hover:not(:disabled) {
+  background: var(--color-bg-tertiary);
+  border-color: var(--color-text-secondary);
+}
+
+.confirmButton {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
+  background: var(--color-primary-gradient);
+  color: white;
+  border: none;
+  border-radius: var(--radius-lg);
+  font-size: var(--text-base);
+  font-weight: var(--font-bold);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.confirmButton:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-xl);
+}
+
+.confirmButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.buttonIcon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .modalContent {
+    width: 95%;
+    max-height: 95vh;
+  }
+
+  .splitView {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto 1fr;
+  }
+
+  .divider {
+    width: 100%;
+    height: 2px;
+    margin: 0;
+  }
+
+  .careerGrid {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    max-height: 200px;
+  }
+
+  .companionGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .changeSummary {
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+}
+
+/* Dark Theme Adjustments */
+[data-theme="dark"] .modalOverlay {
+  background: rgba(0, 0, 0, 0.85);
+}
+
+[data-theme="dark"] .modalContent {
+  background: var(--color-bg-primary);
+  border-color: var(--color-primary-alpha-30);
+}
+
+[data-theme="dark"] .categorySelect {
+  background: var(--color-bg-secondary);
+}
+
+[data-theme="dark"] .careerCard,
+[data-theme="dark"] .companionCard {
+  background: var(--color-bg-secondary);
+}
+
+[data-theme="dark"] .careerCard.selected,
+[data-theme="dark"] .companionCard.selected {
+  background: var(--color-primary-alpha-20);
+}

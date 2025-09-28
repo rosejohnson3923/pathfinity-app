@@ -29,7 +29,7 @@ export const IntroductionModal: React.FC<IntroductionModalProps> = ({
   const { user } = useAuth();
   const { profile } = useStudentProfile(user?.id, user?.email);
   const { generateNarrative, playNarrativeSection, narrativeLoading } = useNarrative();
-  const [currentStep, setCurrentStep] = useState<'welcome' | 'career'>('welcome');
+  const [currentStep, setCurrentStep] = useState<'welcome'>('welcome');
   const [selectedCareer, setSelectedCareer] = useState<any>(null);
   const [selectedCompanion, setSelectedCompanion] = useState<any>(null);
   const [narrativeGenerated, setNarrativeGenerated] = useState(false);
@@ -399,7 +399,11 @@ export const IntroductionModal: React.FC<IntroductionModalProps> = ({
           </div>
 
           <button
-            onClick={() => setCurrentStep('career')}
+            onClick={() => {
+              // Complete introduction and proceed to career selection modal
+              console.log('🎯 IntroductionModal: Completing introduction and moving to career selection');
+              onComplete();
+            }}
             style={{
               backgroundColor: colors.primary,
               color: 'white',
@@ -421,14 +425,14 @@ export const IntroductionModal: React.FC<IntroductionModalProps> = ({
               fontSize: '0.9rem',
               opacity: 0.8
             }}>
-              (Career → Learn → Story)
+              (Choose Your Adventure)
             </span>
           </button>
         </div>
       )}
 
-      {/* Career Selection Step - Focused UI */}
-      {currentStep === 'career' && (() => {
+      {/* Career Selection Step - Removed (now in CareerChoiceModalV2) */}
+      {false && (() => {
         // Use the pre-fetched careers from state
         const careers = randomCareers;
 

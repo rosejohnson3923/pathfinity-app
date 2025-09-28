@@ -27,6 +27,10 @@ import { CAREER_BASICS } from '../../data/careerBasicsData';
 import { SessionLearningContextManager } from '../../services/content/SessionLearningContextManager';
 import { WelcomeBackModal } from '../../components/modals/WelcomeBackModal';
 import { StartOverConfirmation } from '../../components/modals/StartOverConfirmation';
+import { SelectionConfirmationScreen } from '../../components/modals/SelectionConfirmationScreen';
+import { CareerChoiceModalV2 } from '../modal-first/sub-modals/CareerChoiceModalV2';
+import { AICompanionModalV2 } from '../modal-first/sub-modals/AICompanionModalV2';
+import { StartOverSelections } from '../../components/modals/StartOverSelections';
 
 import './StudentDashboard.css';
 
@@ -38,7 +42,7 @@ const StudentDashboardInner: React.FC = () => {
   const { profile } = useStudentProfile();
   const { theme, setTheme } = useThemeControl(); // Use centralized theme service with controls
   const { generateNarrative, playNarrativeSection, masterNarrative, narrativeLoading } = useNarrative();
-  const [currentView, setCurrentView] = useState<'introduction' | 'dashboard' | 'lobby' | 'narrative' | 'container' | 'welcomeback' | 'startover'>('introduction');
+  const [currentView, setCurrentView] = useState<'introduction' | 'career-selection' | 'companion-selection' | 'selection-confirmation' | 'dashboard' | 'lobby' | 'narrative' | 'container' | 'welcomeback' | 'startover'>('introduction');
   const [hasSeenIntroduction, setHasSeenIntroduction] = useState(false);
   const [dashboardSelections, setDashboardSelections] = useState<{
     companion: string;
@@ -225,58 +229,44 @@ const StudentDashboardInner: React.FC = () => {
     loadUserSession();
   }, [user?.id]);
 
-  const handleIntroductionComplete = (selections?: { career?: string; companion?: string; showCareerChoice?: boolean; fromRandomCareer?: boolean; careerId?: string }) => {
-    console.log('🎯 handleIntroductionComplete called with:', selections);
-
+  const handleIntroductionComplete = () => {
+    console.log('🎯 Introduction complete - starting career selection');
     setHasSeenIntroduction(true);
+    setCurrentView('career-selection');
+  };
 
-    // Check if user clicked "More Options" button
-    if (selections?.showCareerChoice) {
-      console.log('📂 User clicked More Options - showing career choice modal');
-      // Navigate to dashboard with a flag to open career choice modal
-      // Pass empty selections to trigger the career choice modal to open
-      setDashboardSelections({ companion: '', career: '' });
-      setCurrentView('dashboard');
-      return;
-    }
+  const handleCareerSelection = (selection: { career: string; careerId: string }) => {
+    console.log('🎯 Career selected:', selection);
+    setDashboardSelections({
+      career: selection.career,
+      careerId: selection.careerId,
+      companion: ''
+    });
+    setCurrentView('companion-selection');
+  };
 
-    // ALL career selections now go to dashboard for companion selection
-    // Both direct career selection and fromRandomCareer selection
-    if (selections?.career && !selections?.companion) {
-      console.log('🎯 Career selected - going to dashboard for AI companion selection');
-      setDashboardSelections({
-        career: selections.career,
-        careerId: selections.careerId,
-        companion: '' // Empty companion will trigger AI companion modal in DashboardModal
-      });
-      setCurrentView('dashboard');
-      return;
-    }
-
-    // If we have BOTH selections (shouldn't happen anymore but keep for backwards compatibility)
-    if (selections?.career && selections?.companion) {
-      console.log('✅ Complete selections from intro - going to lobby');
-      const dashboardSelections = {
-        companion: selections.companion,
-        career: selections.career
-      };
-      setDashboardSelections(dashboardSelections);
-      // Session is now saved in database, no need for localStorage
-      // Skip the DashboardModal and go directly to lobby since we have selections
-      setCurrentView('lobby');
-    } else {
-      console.log('📋 No selections - showing dashboard');
-      // No selections from introduction, show dashboard
-      setCurrentView('dashboard');
-    }
+  const handleCompanionSelection = (selection: { companion: string }) => {
+    console.log('🤖 Companion selected:', selection);
+    setDashboardSelections(prev => ({
+      ...prev!,
+      companion: selection.companion
+    }));
+    setCurrentView('selection-confirmation');
   };
 
   const handleDashboardComplete = async (selections: { companion: string; career: string; careerData?: any }) => {
-    console.log('Dashboard flow complete - creating session and transitioning to CareerInc Lobby', selections);
+    console.log('Dashboard flow complete - showing selection confirmation', selections);
     setDashboardSelections(selections);
 
+    // Show the selection confirmation screen
+    setCurrentView('selection-confirmation');
+  };
+
+  const handleSelectionConfirmationComplete = async () => {
+    console.log('Selection confirmation complete - creating session and going to dashboard');
+
     // Create a new session with the selections
-    if (user && selections.career && selections.companion) {
+    if (user && dashboardSelections?.career && dashboardSelections?.companion) {
       try {
         const studentData = {
           id: user.id || 'default',
@@ -286,13 +276,13 @@ const StudentDashboardInner: React.FC = () => {
         };
 
         const careerData = {
-          id: selections.career.toLowerCase().replace(/\s+/g, '-'),
-          name: selections.career
+          id: dashboardSelections.career.toLowerCase().replace(/\s+/g, '-'),
+          name: dashboardSelections.career
         };
 
         const companionData = {
-          id: selections.companion,
-          name: selections.companion
+          id: dashboardSelections.companion,
+          name: dashboardSelections.companion
         };
 
         const newSession = await sessionManager.createSession(
@@ -308,20 +298,20 @@ const StudentDashboardInner: React.FC = () => {
       }
     }
 
-    // Immediately transition to lobby so CareerIncLobbyModal can mount
+    // Transition to CareerIncLobby after selections are confirmed
     setCurrentView('lobby');
 
     // Generate narrative after transitioning (CareerIncLobby will show loading state)
-    if (user && selections.career && selections.companion) {
+    if (user && dashboardSelections?.career && dashboardSelections?.companion) {
       const gradeLevel = profile?.grade_level || (user as any)?.grade_level || 'K';
 
       // Use Finn as default if no companion selected
-      const companion = selections.companion || 'finn';
+      const companion = dashboardSelections.companion || 'finn';
 
       // Pass careerData if available, otherwise just the career string
       // This ensures proper cache key generation with the career ID
       const narrativeResult = await generateNarrative({
-        career: selections.careerData || selections.career,
+        career: dashboardSelections.careerData || dashboardSelections.career,
         companion: companion,
         gradeLevel: gradeLevel,
         userId: user.id || 'default',
@@ -417,25 +407,36 @@ const StudentDashboardInner: React.FC = () => {
     console.log('✅ State updated - should show StartOver confirmation');
   };
 
-  const handleConfirmStartOver = async () => {
-    console.log('🆕 Starting over with new session');
+  const handleConfirmStartOver = () => {
+    console.log('🆕 User confirmed start over - showing selections modal');
+    // Show the StartOverSelections modal
+    setCurrentView('startover-selections');
+  };
 
-    // Clear the current session and start fresh
+  const handleStartOverSelectionsComplete = async (selections: { career: string; companion: string; changed: 'career' | 'companion' | 'both' | 'none' }) => {
+    console.log('🆕 Starting over with new selections:', selections);
+
+    // Clear the current session and start fresh with new selections
     try {
-      // Clear the session in manager (doesn't delete from database yet)
+      // Clear the session in manager
       sessionManager.clearSession();
 
-      // Clear local state
+      // Set new selections
+      setDashboardSelections({
+        career: selections.career,
+        careerId: selections.career.toLowerCase().replace(/\s+/g, '-'),
+        companion: selections.companion
+      });
+
+      // Clear other state
       setActiveSession(null);
-      setDashboardSelections(null);
       setCompletedContainers(new Set());
       setCurrentSkillIndex(0);
       setShowStartOverConfirm(false);
-      setHasSeenIntroduction(false);
+      setHasSeenIntroduction(true); // Skip intro, user already knows the flow
 
-      // Go to introduction to start fresh journey
-      // User will select new career & companion, then a new session will be created
-      setCurrentView('introduction');
+      // Go to selection confirmation with new choices
+      setCurrentView('selection-confirmation');
     } catch (error) {
       console.error('Failed to start over:', error);
     }
@@ -502,6 +503,62 @@ const StudentDashboardInner: React.FC = () => {
         />
       )}
 
+      {/* Start Over Selections - Dual panel for career and companion */}
+      {currentView === 'startover-selections' && activeSession && (
+        <StartOverSelections
+          currentCareer={activeSession.career?.name || 'Coach'}
+          currentCompanion={activeSession.companion?.id || activeSession.companion?.name || 'finn'}
+          onConfirm={handleStartOverSelectionsComplete}
+          onCancel={handleCancelStartOver}
+        />
+      )}
+
+      {/* Career Selection for New Users */}
+      {currentView === 'career-selection' && (
+        <CareerChoiceModalV2
+          theme={theme}
+          onClose={(selectedCareer) => {
+            if (selectedCareer) {
+              handleCareerSelection({
+                career: selectedCareer.career || selectedCareer.name || selectedCareer.title,
+                careerId: selectedCareer.careerId || selectedCareer.id
+              });
+            }
+          }}
+          user={user}
+          profile={profile}
+        />
+      )}
+
+      {currentView === 'companion-selection' && dashboardSelections && (
+        <AICompanionModalV2
+          theme={theme}
+          onClose={(result) => {
+            if (result) {
+              handleCompanionSelection({
+                companion: result.companionId
+              });
+            } else {
+              // User closed without selecting - go back to career
+              setCurrentView('career-selection');
+            }
+          }}
+          user={user}
+          profile={profile}
+        />
+      )}
+
+      {currentView === 'selection-confirmation' && dashboardSelections && (
+        <SelectionConfirmationScreen
+          companionName={dashboardSelections.companion}
+          companionId={dashboardSelections.companion.toLowerCase()}
+          userName={user?.full_name || 'Student'}
+          careerName={dashboardSelections.career}
+          theme={theme}
+          onComplete={handleSelectionConfirmationComplete}
+        />
+      )}
+
       {currentView === 'introduction' && !hasSeenIntroduction && (
         <IntroductionModal
           theme={theme}
@@ -509,12 +566,13 @@ const StudentDashboardInner: React.FC = () => {
         />
       )}
       
+
       {currentView === 'dashboard' && (
         <ModalProvider>
-          <DashboardModal 
+          <DashboardModal
             theme={theme}
             onComplete={handleDashboardComplete}
-            existingSelections={dashboardSelections}
+            existingSelections={dashboardSelections} // Pass the career selection from IntroductionModal
           />
         </ModalProvider>
       )}
