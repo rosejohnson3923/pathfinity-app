@@ -45,15 +45,25 @@ initializeAIResponsive();
 // Application Pages
 import { AdminImageGenerator } from './pages/AdminImageGenerator';
 import { AdminDemoContentGenerator } from './pages/AdminDemoContentGenerator';
+import { DailyLessonPlanPage } from './components/dashboards/DailyLessonPlanPage';
 import { DesignSystemTest } from './design-system/test/DesignSystemTestSimple';
 import { TestPage } from './pages/TestPage';
-import YouTubeTest from './test-youtube';
-import NarrativeTest from './test-narrative';
-import LearnMicroTest from './test-learn-micro';
-import FullSystemTest from './test-full-system';
-import TestLearnContainer from './test-learn-container';
-import TestBentoEnhanced from './test-bento-enhanced';
-import TestAzureConfig from './test-azure-config';
+import TestPremiumCareers from './test-premium-careers';
+import { TestJourneyArc } from './test-journey-arc';
+import { TestLessonGenerator } from './components/TestLessonGenerator';
+import { TestSelectLessonTemplate } from './components/TestSelectLessonTemplate';
+import { TestUnifiedLessonWithCareerSelector } from './components/TestUnifiedLessonWithCareerSelector';
+import { TestUnifiedLessonSimple } from './components/TestUnifiedLessonSimple';
+import { TestCareerSelectionWithGradeLevel } from './components/TestCareerSelectionWithGradeLevel';
+import { TestCareerProgressionDatabase } from './components/TestCareerProgressionDatabase';
+// Test components moved to Archive - commented out
+// import YouTubeTest from './test-youtube';
+// import NarrativeTest from './test-narrative';
+// import LearnMicroTest from './test-learn-micro';
+// import FullSystemTest from './test-full-system';
+// import TestLearnContainer from './test-learn-container';
+// import TestBentoEnhanced from './test-bento-enhanced';
+// import TestAzureConfig from './test-azure-config';
 
 import './utils/debugFinnComponents'; // Load debug utilities in development
 
@@ -61,19 +71,19 @@ function App() {
   // Initialize authentication and data services
   React.useEffect(() => {
     const initializeApp = async () => {
-      console.log('🚀 Initializing Pathfinity application...');
+      // Initializing Pathfinity application
       
       try {
         // Initialize authentication system
         await initializeAuth();
-        console.log('✅ Authentication system initialized');
+        // Authentication system initialized
         
         // Initialize data service for hybrid mock/real data
         const currentUser = localStorage.getItem('pathfinity_user');
         if (currentUser) {
           const user = JSON.parse(currentUser);
           await initializeDataService(user.email, user.tenant_id);
-          console.log('✅ Data service initialized for user:', user.email);
+          // Data service initialized for user
         }
         
       } catch (error) {
@@ -103,13 +113,22 @@ function App() {
                   {/* Test routes - no auth required */}
                   <Route path="/test" element={<TestPage />} />
                   <Route path="/test/design-system" element={<DesignSystemTest />} />
+                  <Route path="/test/premium-careers" element={<TestPremiumCareers />} />
+                  <Route path="/test/lesson-generator" element={<TestLessonGenerator />} />
+                  <Route path="/test/select-template" element={<TestSelectLessonTemplate />} />
+                  <Route path="/test/journey-arc" element={<TestJourneyArc />} />
+                  <Route path="/test/unified-career" element={<TestUnifiedLessonWithCareerSelector />} />
+                  <Route path="/test/simple" element={<TestUnifiedLessonSimple />} />
+                  <Route path="/test/career-grade-level" element={<TestCareerSelectionWithGradeLevel />} />
+                  <Route path="/test/career-database" element={<TestCareerProgressionDatabase />} />
+                  {/* Test routes commented out - components moved to Archive
                   <Route path="/test/youtube" element={<YouTubeTest />} />
                   <Route path="/test/narrative" element={<NarrativeTest />} />
                   <Route path="/test/learn-micro" element={<LearnMicroTest />} />
                   <Route path="/test/full-system" element={<FullSystemTest />} />
                   <Route path="/test/learn-container" element={<TestLearnContainer />} />
                   <Route path="/test/bento-enhanced" element={<TestBentoEnhanced />} />
-                  <Route path="/test/azure-config" element={<TestAzureConfig />} />
+                  <Route path="/test/azure-config" element={<TestAzureConfig />} /> */}
 
                   {/* Default route redirects to login - for development, go directly to login */}
                   <Route path="/" element={<Navigate to="/login" replace />} />
@@ -163,6 +182,11 @@ function App() {
                   <Route path="/app/custom-paths" element={
                     <ProtectedRoute allowedRoles={['educator', 'parent', 'school_admin', 'district_admin', 'product_admin']}>
                       <CustomPathCreator />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/app/daily-lessons" element={
+                    <ProtectedRoute allowedRoles={['educator', 'parent']}>
+                      <DailyLessonPlanPage />
                     </ProtectedRoute>
                   } />
                   <Route path="/admin/image-generator" element={
