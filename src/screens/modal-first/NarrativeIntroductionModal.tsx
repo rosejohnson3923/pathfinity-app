@@ -6,7 +6,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { BookOpen, Sparkles, ChevronRight, Zap, Compass, ArrowLeft } from 'lucide-react';
 import { ProgressHeader } from '../../components/navigation/ProgressHeader';
-import { azureAudioService } from '../../services/azureAudioService';
+import { azureAudioService } from '../../services/AzureAudioService';
 import styles from './NarrativeIntroductionModal.module.css';
 
 // Age-appropriate gamification messaging
