@@ -67,12 +67,12 @@ const clearAuthData = (): void => {
   try {
     // Get current user to clear their specific data
     const currentUser = getCurrentUser();
-    
+
     // Clear auth tokens
     localStorage.removeItem(AUTH_TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
     localStorage.removeItem(SELECTED_TENANT_KEY);
-    
+
     // Clear user-specific data if we have a user ID
     if (currentUser?.id) {
       localStorage.removeItem(`pathfinity-intro-${currentUser.id}`);
@@ -84,7 +84,7 @@ const clearAuthData = (): void => {
     sessionStorage.removeItem('selectedCompanion');
     sessionStorage.removeItem('selectedCareer');
     sessionStorage.removeItem('selectedAiCompanion');
-    
+
     // Clear any other user-specific keys
     const keysToRemove: string[] = [];
     for (let i = 0; i < localStorage.length; i++) {
@@ -94,7 +94,13 @@ const clearAuthData = (): void => {
       }
     }
     keysToRemove.forEach(key => localStorage.removeItem(key));
-    
+
+    // Clear the browser console to reset logs
+    if (typeof console.clear === 'function') {
+      console.clear();
+      console.log('🔄 Console cleared for new session');
+    }
+
   } catch (error) {
     console.error('Error clearing auth data:', error);
   }
@@ -102,13 +108,33 @@ const clearAuthData = (): void => {
 
 // Helper to get current user from localStorage
 export const getCurrentUser = (): AuthUser | null => {
+  console.log('🔥 getCurrentUser called - URL:', window.location.href);
+
+  // Check for demo mode override first - clear existing auth if switching demo users
+  const urlParams = new URLSearchParams(window.location.search);
+  const isDemoMode = urlParams.get('demo') === 'true';
+  const demoUser = urlParams.get('user');
+
+  console.log('🔥 Demo check - isDemoMode:', isDemoMode, 'demoUser:', demoUser);
+
+  if (isDemoMode && demoUser) {
+    console.log('🔄 Demo mode detected in getCurrentUser - clearing existing auth for demo user:', demoUser);
+    // Clear existing auth storage
+    localStorage.removeItem(USER_KEY);
+    localStorage.removeItem(SELECTED_TENANT_KEY);
+    sessionStorage.removeItem(USER_KEY);
+    sessionStorage.removeItem(SELECTED_TENANT_KEY);
+    // Return null to force fresh login
+    return null;
+  }
+
   // First try to get user from mock auth (prioritize mock auth for demo)
   try {
     const userJson = localStorage.getItem(USER_KEY);
     if (userJson) {
       const user = JSON.parse(userJson);
       if (user && user.id) {
-        console.log('getCurrentUser: Found mock auth user:', user.email, 'grade_level:', user.grade_level);
+        // Found mock auth user
         
         // If grade_level is missing, try to get it from mockUsers
         if (!user.grade_level && user.email) {
@@ -117,7 +143,7 @@ export const getCurrentUser = (): AuthUser | null => {
             user.grade_level = mockUser.grade_level;
             // Update localStorage with the enriched user data
             localStorage.setItem(USER_KEY, JSON.stringify(user));
-            console.log('getCurrentUser: Added grade_level from mock data:', mockUser.grade_level);
+            // Added grade_level from mock data
           }
         }
         
@@ -132,7 +158,7 @@ export const getCurrentUser = (): AuthUser | null => {
   try {
     const session = JSON.parse(localStorage.getItem('sb-auth-token') || '{}');
     if (session?.user) {
-      console.log('getCurrentUser: Found Supabase user:', session.user.email);
+      // Found Supabase user
       return {
         id: session.user.id,
         email: session.user.email,
@@ -145,7 +171,7 @@ export const getCurrentUser = (): AuthUser | null => {
     console.warn('Error parsing Supabase session:', error);
   }
   
-  console.log('getCurrentUser: No user found in either auth system');
+  // No user found in either auth system
   return null;
 };
 
@@ -178,6 +204,11 @@ export const signInWithEmailPassword = async (email: string, password: string): 
   if (existingUser && existingUser.email !== email) {
     console.log('Switching users from', existingUser.email, 'to', email);
     clearAuthData();
+    // Extra console clear for user switch to ensure fresh start
+    if (typeof console.clear === 'function') {
+      console.clear();
+      console.log('🔄 Starting fresh session for:', email);
+    }
   }
   
   // First try to sign in with Supabase
@@ -222,9 +253,28 @@ export const signInWithEmailPassword = async (email: string, password: string): 
     // Simulate network delay
     await new Promise(resolve => setTimeout(resolve, 800));
     
-    const user = findUserByEmail(email);
+    let user = findUserByEmail(email);
     console.log('signInWithEmailPassword: findUserByEmail result:', user ? user.email : 'null');
-    
+
+    // Special handling for Samantha Johnson (micro school teacher)
+    if (!user && email.toLowerCase() === 'samantha.johnson@newfrontier.pathfinity.edu') {
+      console.log('🔧 Creating Samantha Johnson user object directly');
+      user = {
+        id: '30eb6e8c-eb5b-433f-9ed0-f9599c2c7c30',
+        email: 'samantha.johnson@newfrontier.pathfinity.edu',
+        password: 'password123',
+        full_name: 'Samantha Johnson',
+        role: 'educator',
+        avatar_url: 'https://images.pexels.com/photos/3769021/pexels-photo-3769021.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=2',
+        grade_level: null,
+        subjects: ['Math', 'ELA', 'Science', 'Social Studies'],
+        school: 'New Frontier Micro School',
+        district: null,
+        tenant_ids: ['new-frontier-micro-school-001'],
+        sso_provider: null
+      };
+    }
+
     if (!user) {
       console.log('signInWithEmailPassword: User not found in mock data');
       return { user: null, error: new Error('User not found') };
@@ -320,15 +370,22 @@ export const signUpWithEmailPassword = async (
 export const signOut = async (): Promise<{ error: Error | null }> => {
   try {
     console.log('🔴 DEBUG: authService signOut() called');
+
+    // Clear console at the start of sign out
+    if (typeof console.clear === 'function') {
+      console.clear();
+      console.log('🔄 Signing out and clearing session...');
+    }
+
     console.log('🔴 DEBUG: Starting 100ms delay simulation');
     // Reduced delay for demo
     await new Promise(resolve => setTimeout(resolve, 100));
     console.log('🔴 DEBUG: 100ms delay completed');
-    
+
     console.log('🔴 DEBUG: Calling clearAuthData()');
     clearAuthData();
     console.log('🔴 DEBUG: clearAuthData() completed');
-    
+
     console.log('🔴 DEBUG: authService signOut() returning success');
     return { error: null };
   } catch (error) {
@@ -475,7 +532,7 @@ export const initializeAuth = async (): Promise<void> => {
       await initializeSupabase();
       console.log('✅ Supabase authentication initialized');
     } else {
-      console.log('🧪 Using mock authentication for development');
+      // Using mock authentication for development
     }
   } catch (error) {
     console.error('❌ Failed to initialize authentication:', error);

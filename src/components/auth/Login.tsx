@@ -17,6 +17,8 @@ import {
 export function Login() {
   // Set page category for proper width management
   usePageCategory('auth');
+
+  console.log('🚀 LOGIN COMPONENT MOUNTING - Component is rendering!');
   
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
@@ -58,6 +60,10 @@ export function Login() {
     'brenda-teacher': { email: 'brenda.sea@oceanview.plainviewisd.edu', password: 'password123', name: 'Ms. Brenda Sea', role: 'Teacher' },
     'john-teacher': { email: 'john.land@cityview.plainviewisd.edu', password: 'password123', name: 'Mr. John Land', role: 'Teacher' },
     'lisa-teacher': { email: 'lisa.johnson@cityview.plainviewisd.edu', password: 'password123', name: 'Ms. Lisa Johnson', role: 'Teacher' },
+
+    // Micro School Teacher
+    'samantha-teacher': { email: 'samantha.johnson@newfrontier.pathfinity.edu', password: 'password123', name: 'Ms. Samantha Johnson', role: 'Teacher' },
+    'microschool-teacher': { email: 'samantha.johnson@newfrontier.pathfinity.edu', password: 'password123', name: 'Ms. Samantha Johnson', role: 'Teacher' },
     
     // Admin view (school level)
     'admin-view': { email: 'principal@plainviewisd.edu', password: 'password123', name: 'Dr. Maria Rodriguez', role: 'Principal' },
@@ -76,15 +82,35 @@ export function Login() {
   useEffect(() => {
     const isDemoMode = searchParams.get('demo') === 'true';
     const demoUser = searchParams.get('user');
-    
+
+    console.log('🔍 Login useEffect - searchParams:', searchParams.toString());
+    console.log('🔍 Login useEffect - isDemoMode:', isDemoMode, 'demoUser:', demoUser);
+    console.log('🔍 Available demo users:', Object.keys(demoUsers));
+    console.log('🔍 Does demoUser exist in demoUsers?', demoUser && demoUsers[demoUser as keyof typeof demoUsers]);
+
     if (isDemoMode && demoUser && demoUsers[demoUser as keyof typeof demoUsers]) {
+      // Clear any existing auth state when switching to a different demo user
+      console.log('🧹 Clearing existing auth state for demo user switch');
+      localStorage.removeItem('pathfinity_auth_token');
+      localStorage.removeItem('pathfinity_user');
+      localStorage.removeItem('pathfinity_tenant');
+      sessionStorage.removeItem('pathfinity_auth_token');
+      sessionStorage.removeItem('pathfinity_user');
+      sessionStorage.removeItem('pathfinity_tenant');
+
       const user = demoUsers[demoUser as keyof typeof demoUsers];
+      console.log('🎯 Auto-populating credentials for:', user.name);
       setEmail(user.email);
       setPassword(user.password);
-      
+
       // Set demo mode flag in localStorage for TenantSelector timeout detection
       localStorage.setItem('demo_mode', 'true');
       console.log('🎯 Demo mode flag set in localStorage');
+    } else {
+      console.log('🚫 Not auto-populating - conditions not met');
+      console.log('🚫 isDemoMode:', isDemoMode);
+      console.log('🚫 demoUser:', demoUser);
+      console.log('🚫 user exists:', demoUser && demoUsers[demoUser as keyof typeof demoUsers]);
     }
   }, [searchParams]);
 
@@ -121,6 +147,7 @@ export function Login() {
             'brenda.sea@oceanview.plainviewisd.edu',
             'john.land@cityview.plainviewisd.edu',
             'lisa.johnson@cityview.plainviewisd.edu',
+            'samantha.johnson@newfrontier.pathfinity.edu',
             'principal@plainviewisd.edu',
             'superintendent@plainviewisd.edu',
             'sarah.davis@family.pathfinity.edu',
@@ -196,7 +223,7 @@ export function Login() {
   };
 
   // Demo credentials helper with proper Plainview ISD testbed assignments
-  const fillDemoCredentials = (userType: 'alex' | 'sam' | 'jordan' | 'taylor' | 'jenna' | 'brenda' | 'john' | 'principal' | 'superintendent' | 'sarah' | 'mike' | 'lisa') => {
+  const fillDemoCredentials = (userType: 'alex' | 'sam' | 'jordan' | 'taylor' | 'jenna' | 'brenda' | 'john' | 'principal' | 'superintendent' | 'sarah' | 'mike' | 'lisa' | 'samantha') => {
     switch (userType) {
       case 'alex':
         setEmail('alex.davis@sandview.plainviewisd.edu');
@@ -216,6 +243,10 @@ export function Login() {
         break;
       case 'jenna':
         setEmail('jenna.grain@sandview.plainviewisd.edu');
+        setPassword('password123');
+        break;
+      case 'samantha':
+        setEmail('samantha.johnson@newfrontier.pathfinity.edu');
         setPassword('password123');
         break;
       case 'brenda':
@@ -597,6 +628,13 @@ export function Login() {
                     className="text-xs bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-1 rounded border border-blue-200 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-800"
                   >
                     👩‍🏫 Ms. Jenna Grain<br />Sand View Elementary
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => fillDemoCredentials('samantha')}
+                    className="text-xs bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 px-2 py-1 rounded border border-green-200 dark:border-green-700 hover:bg-green-100 dark:hover:bg-green-800"
+                  >
+                    👩‍🏫 Ms. Samantha Johnson<br />New Frontier Micro School
                   </button>
                   <button
                     type="button"

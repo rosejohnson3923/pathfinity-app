@@ -19,6 +19,7 @@ const DEMO_USER_EMAILS = [
   'brenda.sea@oceanview.plainviewisd.edu',
   'john.land@cityview.plainviewisd.edu',
   'lisa.johnson@cityview.plainviewisd.edu',
+  'samantha.johnson@newfrontier.pathfinity.edu',
   'principal@plainviewisd.edu',
   'superintendent@plainviewisd.edu',
   'sarah.davis@family.pathfinity.edu',
@@ -27,13 +28,14 @@ const DEMO_USER_EMAILS = [
 
 const DEMO_USER_NAMES = [
   'Sam Brown',
-  'Alex Davis', 
+  'Alex Davis',
   'Jordan Smith',
   'Taylor Johnson',
   'Jenna Grain',
   'Brenda Sea',
   'John Land',
   'Lisa Johnson',
+  'Samantha Johnson',
   'Dr. Maria Rodriguez',
   'Dr. James Wilson',
   'Sarah Davis',
