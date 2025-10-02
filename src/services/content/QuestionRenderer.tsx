@@ -9,7 +9,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import questionStyles from '../../components/questions/QuestionStyles.module.css';
 import styles from './QuestionRenderer.module.css';
 import layoutStyles from '../../design-system/layouts/IntelligentQuestionLayout.module.css';
-import { azureAudioService } from '../AzureAudioService';
+import { azureAudioService } from '../azureAudioService';
 import { Volume2 } from 'lucide-react';
 import {
   Question,

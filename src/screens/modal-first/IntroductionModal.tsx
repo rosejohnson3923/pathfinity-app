@@ -12,7 +12,7 @@ import { useNarrative } from '../../contexts/NarrativeContext';
 import { pathIQService } from '../../services/pathIQService';
 import { getGradeLevelDisplay, getGradeDisplay } from '../../utils/gradeUtils';
 import { skillsData } from '../../data/skillsDataComplete';
-import { azureAudioService } from '../../services/AzureAudioService';
+import { azureAudioService } from '../../services/azureAudioService';
 import './IntroductionModal.css';
 
 interface IntroductionModalProps {

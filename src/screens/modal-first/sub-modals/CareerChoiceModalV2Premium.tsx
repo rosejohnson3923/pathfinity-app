@@ -9,7 +9,7 @@ import { pathIQServiceV2 } from '../../../services/pathIQServiceV2';
 import { subscriptionService } from '../../../services/subscriptionService';
 import { careerContentService, EnrichedCareerData } from '../../../services/careerContentService';
 import { audioService } from '../../../services/audioService';
-import { azureAudioService } from '../../../services/AzureAudioService';
+import { azureAudioService } from '../../../services/azureAudioService';
 import { PremiumUpgradeModal } from '../../../components/modals/PremiumUpgradeModal';
 import { CAREER_CATEGORIES } from '../../../data/careerCategories';
 

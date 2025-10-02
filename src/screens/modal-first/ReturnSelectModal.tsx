@@ -16,7 +16,7 @@ import { ParticlesBackground } from '../../components/ParticlesBackground';
 import { companionVoiceoverService } from '../../services/companionVoiceoverService';
 import { audioService } from '../../services/audioService';
 import { getCompanionImageUrl } from '../../services/aiCompanionImages';
-import { azureAudioService } from '../../services/AzureAudioService';
+import { azureAudioService } from '../../services/azureAudioService';
 import { SCRIPT_IDS } from '../../constants/scriptRegistry';
 import './ReturnSelectModal.css';
 import modalStyles from '../../styles/shared/components/ModalCard.module.css';
