@@ -14,7 +14,7 @@ import { Search, ChevronLeft, Info, Sparkles, Star, Volume2, VolumeX, ChevronRig
 import { pathIQService, CareerOption } from '../../../services/pathIQService';
 import { careerContentService, EnrichedCareerData } from '../../../services/careerContentService';
 import { audioService } from '../../../services/audioService';
-import { azureAudioService } from '../../../services/AzureAudioService';
+import { azureAudioService } from '../../../services/azureAudioService';
 import { CAREER_CATEGORIES } from '../../../data/careerCategories';
 
 interface CareerData {
