@@ -1386,6 +1386,902 @@ export const DEMO_LESSON_CONTENT = {
       }
     }
   } as CareerProgression,
+
+  // ===================================
+  // MICRO SCHOOL STUDENTS
+  // ===================================
+
+  // ===================================
+  // ZARA JONES (K) - DOCTOR CAREER PROGRESSION
+  // ===================================
+  zara_k_doctor: {
+    role1: {
+      math: {
+        setup: "Welcome to New Frontier Medical Center! You're Zara's medical helper today. The nurse needs help counting medicine for patients.",
+        activities: [
+          "Count 1 bandage for the small cut on patient's finger",
+          "Put 2 stethoscopes on the medical cart for the doctors",
+          "Help organize 3 tongue depressors in the examination room"
+        ],
+        challenge: "How many thermometers do we need for the 3 patients waiting?",
+        hint: "Count with me: 1 thermometer, 2 thermometers, 3 thermometers. Each patient needs 1!",
+        questions: [
+          "Point to the number 1 on the medicine bottle",
+          "Show me 2 cotton swabs from the medical kit",
+          "Count the band-aids: how many do you see?"
+        ],
+        answers: ["1", "2 cotton swabs", "3 band-aids"],
+        learningOutcome: "Zara can identify and count numbers 1-3 in medical contexts"
+      },
+      ela: {
+        setup: "Time to read patient charts! Doctors need to find the right letters to understand patient information.",
+        activities: [
+          "Find the letter 'H' in 'HEART' on the medical chart",
+          "Point to the 'B' in 'BLOOD' on the test results",
+          "Circle the 'M' in 'MEDICINE' on the prescription pad"
+        ],
+        challenge: "What letter does 'DOCTOR' start with?",
+        hint: "Look at the first letter. It makes the 'duh' sound like in doctor.",
+        questions: [
+          "Which letter comes first in 'ANKLE'?",
+          "Find the letter 'P' in 'PULSE'",
+          "What letter do you see at the start of 'NURSE'?"
+        ],
+        answers: ["A", "P", "N"],
+        learningOutcome: "Zara can identify uppercase letters in medical and healthcare contexts"
+      },
+      science: {
+        setup: "Doctors are scientists too! We need to sort medical supplies by their shapes before treating patients.",
+        activities: [
+          "Sort the round pills from the square bandage boxes",
+          "Put all the circular stethoscope pieces in one group",
+          "Group the rectangular medicine cards together"
+        ],
+        challenge: "Look at this x-ray film. What shape is it?",
+        hint: "X-ray films have four equal sides and look like rectangles or squares!",
+        questions: [
+          "What shape is this medical mirror?",
+          "How many sides does this medicine box have?",
+          "Which medical tools are round like circles?"
+        ],
+        answers: ["Circle", "4 sides (rectangle)", "Stethoscope ends and pills"],
+        learningOutcome: "Zara can classify medical items by basic 2D shapes"
+      },
+      social_studies: {
+        setup: "Doctors work as part of a medical community. Everyone helps each other to keep patients healthy and safe.",
+        activities: [
+          "Help the head doctor by organizing medical supplies",
+          "Share the medical tools with other helpers",
+          "Say 'please' and 'thank you' when asking for bandages"
+        ],
+        challenge: "A patient asks what the doctor will do to help them feel better. How should you respond?",
+        hint: "Be kind and caring! Tell them the doctor will check them carefully and help them feel better.",
+        questions: [
+          "How do medical helpers work together?",
+          "Why is it important to be gentle with patients?",
+          "What makes a good medical helper?"
+        ],
+        answers: [
+          "They share tools, help each other, and work as a team to help patients",
+          "Because patients might be scared or hurt, and gentle care helps them feel safe",
+          "Being kind, helpful, careful, and working well with the medical team"
+        ],
+        learningOutcome: "Zara understands medical community helpers and caring patient interaction using Grade K social studies skills"
+      }
+    },
+    role2: {
+      math: {
+        setup: "Junior Doctors need to count medicine doses and track patient visits. Help organize the medical schedules!",
+        activities: [
+          "Count morning patients: 1, 2, 3 - make sure each gets their medicine",
+          "Organize afternoon checkups by counting patient appointment cards up to 3",
+          "Help track medicine doses by counting pills: 1 for headache, 2 for infection, 3 for vitamins"
+        ],
+        challenge: "How many patients need their blood pressure checked today?",
+        hint: "Count each patient chart carefully - I see 3 charts that need blood pressure checks!",
+        learningOutcome: "Zara can count medical appointments and medicine doses up to 3 using number recognition skills"
+      },
+      ela: {
+        setup: "Junior Doctors read patient information and medical instructions. Help practice reading important medical words!",
+        activities: [
+          "Read patient names on charts: look for familiar letters and sounds",
+          "Practice reading simple medical words: 'ARM', 'LEG', 'EYE'",
+          "Help identify letters in medicine names for proper patient care"
+        ],
+        challenge: "Can you read this patient's symptom: 'COUGH'?",
+        hint: "Sound it out: C-O-U-G-H. It's the sound people make when their throat is scratchy!",
+        learningOutcome: "Zara can read simple medical words and identify letters in healthcare contexts"
+      },
+      science: {
+        setup: "Junior Doctors observe patients and notice different shapes of medical equipment and body parts!",
+        activities: [
+          "Observe how medical tools have different shapes for different jobs",
+          "Notice that some medicine comes in round pills, some in square tablets",
+          "Help sort medical equipment by shape: round, square, triangle"
+        ],
+        challenge: "Why do you think pills are usually round?",
+        hint: "Round shapes are easy to swallow and don't have sharp corners that might hurt!",
+        learningOutcome: "Zara can observe and categorize medical items by shape and understand functional design"
+      },
+      social_studies: {
+        setup: "Junior Doctors learn about the medical community and how healthcare helpers take care of people in our neighborhood!",
+        activities: [
+          "Learn about different medical helpers: doctors, nurses, dentists",
+          "Practice being gentle and kind when helping pretend patients",
+          "Understand how medical helpers serve our community"
+        ],
+        challenge: "How do doctors help make our community healthier?",
+        hint: "Doctors help sick people feel better, keep healthy people from getting sick, and teach everyone about staying healthy!",
+        learningOutcome: "Zara understands medical community roles and healthcare service using Grade K social studies concepts"
+      }
+    },
+    role3: {
+      math: {
+        setup: "Emergency Medical Helpers need advanced counting for urgent patient care. Count medical supplies quickly and accurately!",
+        activities: [
+          "Emergency count: 1 ambulance arriving, 2 paramedics helping, 3 patients needing care",
+          "Count emergency medicine: 1 for pain, 2 for heart, 3 for breathing",
+          "Track medical equipment: count bandages, medicine, and tools up to 3"
+        ],
+        challenge: "Emergency! How many medical helpers do we have for 3 urgent patients?",
+        hint: "Count the helpers: 1 doctor, 2 nurses = 3 helpers total for 3 patients. Perfect!",
+        learningOutcome: "Zara can count medical resources under time pressure using emergency healthcare scenarios"
+      },
+      ela: {
+        setup: "Emergency Medical Helpers read urgent patient information quickly. Practice reading medical emergency words!",
+        activities: [
+          "Read emergency signs: 'HELP', 'HURT', 'CALL'",
+          "Identify important letters in emergency medical words",
+          "Practice reading patient emergency information clearly"
+        ],
+        challenge: "Read this emergency word: 'PAIN'",
+        hint: "P-A-I-N spells PAIN. It means someone is hurting and needs medical help!",
+        learningOutcome: "Zara can read emergency medical vocabulary for urgent patient care situations"
+      },
+      science: {
+        setup: "Emergency Medical Helpers use scientific observation to quickly assess patient needs by looking at shapes and patterns!",
+        activities: [
+          "Observe patient symptoms and organize them by type and shape",
+          "Notice how medical equipment shapes help in emergencies",
+          "Sort emergency supplies by shape for quick access"
+        ],
+        challenge: "Why are emergency medical bags usually rectangular?",
+        hint: "Rectangle shapes pack supplies efficiently and fit well in ambulances and emergency spaces!",
+        learningOutcome: "Zara applies shape recognition to emergency medical organization and equipment design"
+      },
+      social_studies: {
+        setup: "Emergency Medical Helpers serve the community by providing urgent care and working with emergency teams!",
+        activities: [
+          "Learn how emergency medical helpers work with police and firefighters",
+          "Practice calling for help and giving clear information",
+          "Understand community emergency response and medical care"
+        ],
+        challenge: "Who should you call if someone needs emergency medical help?",
+        hint: "Call 911! Emergency medical helpers will come quickly to provide urgent care and help!",
+        learningOutcome: "Zara understands emergency medical community response and urgent healthcare service roles"
+      }
+    },
+    role4: {
+      math: {
+        setup: "AI Medical Assistants help smart computer systems learn to count medical data and assist doctors with patient care!",
+        activities: [
+          "Teach AI to count: 1 patient symptom, 2 medicine types, 3 treatment steps",
+          "Help AI learn medical counting: pulse beats, medicine doses, appointment times",
+          "Show AI how to count and organize patient information"
+        ],
+        challenge: "How do you teach AI to count patient heartbeats?",
+        hint: "Show the AI: 1 beat, 2 beats, 3 beats. Help it learn to count each heartbeat to monitor patient health!",
+        learningOutcome: "Zara teaches AI systems basic medical counting and patient data organization"
+      },
+      ela: {
+        setup: "AI Medical Assistants teach computer systems to read patient information and medical words to help doctors!",
+        activities: [
+          "Teach AI to recognize medical letters: H for HEART, L for LUNG, E for EYE",
+          "Help AI learn to read simple medical words and patient names",
+          "Show AI how to identify important letters in medical charts"
+        ],
+        challenge: "How do you teach AI to read the word 'FEVER'?",
+        hint: "Show the AI each letter: F-E-V-E-R. Teach it that FEVER means the patient's body is too hot!",
+        learningOutcome: "Zara teaches AI systems medical letter recognition and basic healthcare vocabulary"
+      },
+      science: {
+        setup: "AI Medical Assistants help smart systems learn about medical equipment shapes and organize healthcare tools!",
+        activities: [
+          "Teach AI to recognize medical shapes: round pills, square bandages, triangle warning signs",
+          "Help AI sort medical equipment by shape for efficient organization",
+          "Show AI how different medical tool shapes serve different healthcare purposes"
+        ],
+        challenge: "Why should AI know that medicine comes in different shapes?",
+        hint: "Different shapes mean different types of medicine! Round pills, square patches, triangle warnings - each shape has a medical purpose!",
+        learningOutcome: "Zara teaches AI systems medical equipment classification and functional shape recognition"
+      },
+      social_studies: {
+        setup: "AI Medical Assistants learn about healthcare communities and help computer systems understand how medical helpers work together!",
+        activities: [
+          "Teach AI about medical community helpers: doctors, nurses, patients",
+          "Help AI learn how medical helpers work together to provide care",
+          "Show AI the importance of kindness and care in medical communities"
+        ],
+        challenge: "How do you teach AI to be helpful in medical communities?",
+        hint: "Teach the AI to be gentle, kind, and helpful - just like human medical helpers who care for patients and work as a team!",
+        learningOutcome: "Zara teaches AI systems about medical community cooperation and caring healthcare service"
+      }
+    }
+  } as CareerProgression,
+
+  // ===================================
+  // ALEXIS MARTIN (1ST) - TEACHER CAREER PROGRESSION
+  // ===================================
+  alexis_1st_teacher: {
+    role1: {
+      math: {
+        setup: "Welcome to New Frontier Learning Center! You're Alexis's teaching helper today. We need to help students learn to count and do math problems.",
+        activities: [
+          "Help students count pencils: start with 1, 2, 3... up to 10 for the math lesson",
+          "Organize classroom supplies by counting crayons from 1-10 for art time",
+          "Practice counting backwards from 10-1 to help students learn number order"
+        ],
+        challenge: "How many students are in our reading circle?",
+        hint: "Count each student carefully: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10. We have 10 students!",
+        questions: [
+          "Point to the number 5 on the classroom number line",
+          "Show me 7 books from the reading shelf",
+          "Count the markers: how many do you see?"
+        ],
+        answers: ["5", "7 books", "10 markers"],
+        learningOutcome: "Alexis can count and review numbers up to 10 in teaching and classroom contexts"
+      },
+      ela: {
+        setup: "Teaching helpers need to know about letters and sounds to help students learn to read and write!",
+        activities: [
+          "Sort classroom letter cards into consonants and vowels for phonics lessons",
+          "Help students identify vowels: A, E, I, O, U in simple words",
+          "Practice consonant sounds to help students with reading"
+        ],
+        challenge: "Which letters are vowels in the word 'APPLE'?",
+        hint: "Look for A, E, I, O, U. In APPLE, I see A and E - those are vowels!",
+        questions: [
+          "Which of these letters are vowels: B, A, D, E?",
+          "Find the consonants in 'CAT'",
+          "What vowel sound do you hear in 'EGG'?"
+        ],
+        answers: ["A and E", "C and T", "E"],
+        learningOutcome: "Alexis can sort consonants and vowels to help with student phonics instruction"
+      },
+      science: {
+        setup: "Teaching helpers use science to help students explore and discover how things work in our classroom and world!",
+        activities: [
+          "Help students observe classroom plants and describe what they see",
+          "Guide students in simple experiments like mixing colors",
+          "Encourage students to ask questions about how things work"
+        ],
+        challenge: "A student asks why plants need sunlight. How do you help them discover the answer?",
+        hint: "Help them observe! Put one plant in sunlight and one in darkness, then watch what happens over a few days!",
+        questions: [
+          "What do you observe when you mix red and yellow paint?",
+          "How can we test if plants need water?",
+          "What happens when we drop different objects?"
+        ],
+        answers: [
+          "Orange color appears",
+          "Give water to one plant and not the other, then observe the difference",
+          "Heavy objects fall faster, light objects might float or fall slowly"
+        ],
+        learningOutcome: "Alexis can guide simple observations and experiments to help students learn scientific thinking"
+      },
+      social_studies: {
+        setup: "Teaching helpers learn about classroom communities and help students understand how people work together in school!",
+        activities: [
+          "Help students understand classroom rules and why they're important",
+          "Practice sharing classroom materials fairly with all students",
+          "Learn about different helper jobs in our school community"
+        ],
+        challenge: "A student is sad because they don't have anyone to play with. How do you help?",
+        hint: "Help them find friends! Introduce them to other students, suggest games they can play together, and teach about kindness!",
+        questions: [
+          "How do we make our classroom a happy community?",
+          "Who are the helpers in our school?",
+          "Why is it important to be kind to classmates?"
+        ],
+        answers: [
+          "By sharing, being kind, helping each other, and following classroom rules",
+          "Teachers, principal, librarian, custodian, nurse, cafeteria workers",
+          "It makes everyone feel safe, happy, and excited to learn together"
+        ],
+        learningOutcome: "Alexis understands classroom community building and helping students learn social cooperation"
+      }
+    },
+    role2: {
+      math: {
+        setup: "Student Teachers help plan math lessons and organize learning activities. Practice advanced counting and number skills!",
+        activities: [
+          "Create counting games for students using numbers 1-10",
+          "Help organize math manipulatives by counting and sorting them",
+          "Practice teaching number recognition by pointing to numbers on charts"
+        ],
+        challenge: "How would you teach a student to count from 1 to 10?",
+        hint: "Make it fun! Use songs, clapping, jumping, or counting toys. Let them practice with their fingers too!",
+        learningOutcome: "Alexis can create engaging counting activities and teach number recognition to students"
+      },
+      ela: {
+        setup: "Student Teachers help with reading lessons and phonics instruction. Practice teaching letters and sounds!",
+        activities: [
+          "Help students practice letter sounds and phonics rules",
+          "Create activities for sorting consonants and vowels",
+          "Practice reading simple books with beginning readers"
+        ],
+        challenge: "How do you help a student who confuses 'b' and 'd'?",
+        hint: "Use memory tricks! 'b' has its belly before the stick, 'd' has its belly after. Practice with hands and movements!",
+        learningOutcome: "Alexis can teach phonics concepts and help students with letter recognition difficulties"
+      },
+      science: {
+        setup: "Student Teachers guide science discovery and help young learners explore the natural world safely!",
+        activities: [
+          "Lead simple science experiments with classroom materials",
+          "Help students make observations and ask scientific questions",
+          "Guide students in recording what they discover during experiments"
+        ],
+        challenge: "Students want to know why ice melts. How do you help them discover this?",
+        hint: "Set up an experiment! Put ice in different places - warm sun, cool shade, room temperature. Let them observe and discover!",
+        learningOutcome: "Alexis can design age-appropriate science investigations and guide student discovery"
+      },
+      social_studies: {
+        setup: "Student Teachers help create positive classroom communities and teach students about cooperation and friendship!",
+        activities: [
+          "Lead classroom meetings and help students solve problems together",
+          "Teach students about different types of communities and helpers",
+          "Help students practice good citizenship and kindness"
+        ],
+        challenge: "Two students are arguing over a toy. How do you help them solve this problem?",
+        hint: "Help them talk it through! Listen to both sides, teach sharing and taking turns, and help them find a fair solution together!",
+        learningOutcome: "Alexis can facilitate conflict resolution and teach students community cooperation skills"
+      }
+    },
+    role3: {
+      math: {
+        setup: "Curriculum Specialists design advanced math learning experiences and create educational materials for effective teaching!",
+        activities: [
+          "Design creative counting activities that make math fun and engaging",
+          "Create math games using numbers 1-10 for different learning styles",
+          "Develop assessment methods to check student understanding of numbers"
+        ],
+        challenge: "How do you create a math lesson that helps visual, auditory, and kinesthetic learners?",
+        hint: "Use pictures and colors (visual), songs and rhymes (auditory), and movement and manipulatives (kinesthetic) all in one lesson!",
+        learningOutcome: "Alexis can design comprehensive math curricula that address diverse learning styles and needs"
+      },
+      ela: {
+        setup: "Curriculum Specialists create reading programs and develop phonics materials for effective literacy instruction!",
+        activities: [
+          "Design phonics programs that help students master consonants and vowels",
+          "Create reading materials appropriate for different skill levels",
+          "Develop literacy assessments to track student reading progress"
+        ],
+        challenge: "How do you create a phonics program for students who learn at different speeds?",
+        hint: "Create multiple pathways! Fast learners get enrichment activities, slower learners get extra practice, and everyone gets success at their level!",
+        learningOutcome: "Alexis can develop differentiated literacy curricula that support all students' reading development"
+      },
+      science: {
+        setup: "Curriculum Specialists design science programs that inspire curiosity and develop scientific thinking in young learners!",
+        activities: [
+          "Create hands-on science curricula that encourage exploration and discovery",
+          "Design safety protocols for classroom science experiments",
+          "Develop science assessments that measure observation and inquiry skills"
+        ],
+        challenge: "How do you design a science curriculum that builds scientific thinking from kindergarten through 5th grade?",
+        hint: "Start with observation and questioning, add simple experiments, then build to hypothesis testing and data collection as students grow!",
+        learningOutcome: "Alexis can design progressive science curricula that develop scientific inquiry skills across grade levels"
+      },
+      social_studies: {
+        setup: "Curriculum Specialists create social studies programs that teach citizenship, community, and cultural understanding!",
+        activities: [
+          "Design community studies curricula that connect classroom learning to real world",
+          "Create multicultural education materials that celebrate diversity",
+          "Develop character education programs that build positive school communities"
+        ],
+        challenge: "How do you create a social studies curriculum that teaches both local community and global citizenship?",
+        hint: "Start with classroom and school community, expand to neighborhood and city, then connect to state, country, and world!",
+        learningOutcome: "Alexis can design comprehensive social studies curricula that build from local to global citizenship understanding"
+      }
+    },
+    role4: {
+      math: {
+        setup: "AI Education Specialists teach computer systems how to help students learn math and provide personalized instruction!",
+        activities: [
+          "Teach AI to recognize when students understand counting vs. when they need more help",
+          "Help AI learn to create math problems that match each student's skill level",
+          "Show AI how to give encouraging feedback that helps students learn"
+        ],
+        challenge: "How do you teach AI to know if a student understands counting to 10?",
+        hint: "Teach the AI to watch for patterns! If students count correctly several times and can start from different numbers, they understand!",
+        learningOutcome: "Alexis teaches AI systems to assess mathematical understanding and provide adaptive math instruction"
+      },
+      ela: {
+        setup: "AI Education Specialists help computer systems learn to teach reading and provide personalized phonics instruction!",
+        activities: [
+          "Teach AI to recognize letter sounds and help students with phonics",
+          "Help AI learn to identify when students confuse consonants and vowels",
+          "Show AI how to provide reading support that matches each student's needs"
+        ],
+        challenge: "How do you teach AI to help a student who struggles with letter recognition?",
+        hint: "Teach the AI to use multiple approaches! Try visual cards, audio sounds, tracing movements, and games until the student succeeds!",
+        learningOutcome: "Alexis teaches AI systems to provide personalized literacy support and adaptive reading instruction"
+      },
+      science: {
+        setup: "AI Education Specialists help computer systems understand how to guide scientific discovery and inquiry-based learning!",
+        activities: [
+          "Teach AI to recognize good scientific questions from students",
+          "Help AI learn to suggest safe, age-appropriate experiments",
+          "Show AI how to encourage scientific thinking and observation skills"
+        ],
+        challenge: "How do you teach AI to encourage a student's scientific curiosity safely?",
+        hint: "Teach the AI to praise good questions, suggest safe experiments, and help students observe carefully and draw conclusions!",
+        learningOutcome: "Alexis teaches AI systems to foster scientific inquiry and guide safe educational discovery"
+      },
+      social_studies: {
+        setup: "AI Education Specialists teach computer systems about community building and help AI support positive classroom environments!",
+        activities: [
+          "Teach AI to recognize social conflicts and suggest resolution strategies",
+          "Help AI learn about community helpers and citizenship concepts",
+          "Show AI how to encourage kindness, sharing, and cooperation"
+        ],
+        challenge: "How do you teach AI to help build a positive classroom community?",
+        hint: "Teach the AI to recognize kindness, encourage sharing, celebrate diversity, and help students solve problems together peacefully!",
+        learningOutcome: "Alexis teaches AI systems to support social-emotional learning and positive community building"
+      }
+    }
+  } as CareerProgression,
+
+  // ===================================
+  // DAVID BROWN (7TH) - TALENT AGENT CAREER PROGRESSION
+  // ===================================
+  david_7th_talent_agent: {
+    role1: {
+      math: {
+        setup: "Welcome to New Frontier Talent Agency! You're David's assistant today. We need to help organize client schedules and count audition times.",
+        activities: [
+          "Count client appointments: organize 5 morning auditions and 3 afternoon callbacks",
+          "Help calculate basic percentages: if 8 out of 10 actors get callbacks, what percentage succeeded?",
+          "Practice adding and subtracting with negative numbers for budget calculations"
+        ],
+        challenge: "A client's audition is at 2:30 PM, but they're running 15 minutes late. What time will they actually arrive?",
+        hint: "Add 15 minutes to 2:30 PM. 2:30 + 0:15 = 2:45 PM!",
+        questions: [
+          "If an actor has 3 auditions in the morning and 2 in the afternoon, how many total?",
+          "What's 25% of 20 callback opportunities?",
+          "If the temperature drops from 5°F to -3°F, what's the change?"
+        ],
+        answers: ["5 auditions", "5 callbacks", "8 degree drop"],
+        learningOutcome: "David can use integers and basic math operations in talent management contexts"
+      },
+      ela: {
+        setup: "Talent agents need strong reading skills to understand contracts, scripts, and industry communications.",
+        activities: [
+          "Read and summarize script excerpts to understand character requirements",
+          "Identify the main idea in casting call descriptions",
+          "Practice reading industry contracts and highlighting key terms"
+        ],
+        challenge: "Read this casting notice and determine the main idea: 'Seeking energetic performers aged 13-17 for upcoming musical theater production. Must be comfortable with singing, dancing, and acting. Rehearsals begin in January.'",
+        hint: "The main idea is that they're looking for teenage musical theater performers with triple-threat skills!",
+        questions: [
+          "What is the main idea of this actor's bio paragraph?",
+          "Which details support the main idea in this script summary?",
+          "What is the central theme of this performance review?"
+        ],
+        answers: [
+          "The actor's main strengths and experience",
+          "Details about characters, plot, and genre",
+          "The overall quality and impact of the performance"
+        ],
+        learningOutcome: "David can determine main ideas in entertainment industry texts and professional communications"
+      },
+      science: {
+        setup: "Talent agents use scientific inquiry to research market trends and analyze what makes performers successful.",
+        activities: [
+          "Research current entertainment trends using systematic observation",
+          "Form hypotheses about what types of roles are most in demand",
+          "Design experiments to test which marketing strategies work best for clients"
+        ],
+        challenge: "You notice that musical theater auditions have increased 40% this year. How would you use scientific inquiry to understand why?",
+        hint: "Start with observation, form a hypothesis (maybe a popular musical movie?), then gather data to test your theory!",
+        questions: [
+          "How do you research what casting directors are looking for?",
+          "What data would you collect to help a client improve their auditions?",
+          "How can you test if a new marketing strategy works?"
+        ],
+        answers: [
+          "Observe casting calls, interview directors, analyze successful bookings",
+          "Audition feedback, booking rates, industry trends, client skills assessment",
+          "Track booking rates before and after, compare with control group, analyze results"
+        ],
+        learningOutcome: "David can apply scientific inquiry methods to talent industry research and client success analysis"
+      },
+      social_studies: {
+        setup: "Talent agents work in the entertainment industry, which spans global markets and diverse cultural communities.",
+        activities: [
+          "Study entertainment markets in different countries using latitude and longitude",
+          "Research how cultural differences affect casting and performance opportunities",
+          "Map global film and theater production locations for client opportunities"
+        ],
+        challenge: "A client wants to audition for an international production filming in Vancouver, Canada. Use latitude and longitude to explain why Vancouver is popular for filming.",
+        hint: "Vancouver is at 49°N, 123°W - similar latitude to many US cities but with favorable currency exchange and tax incentives!",
+        questions: [
+          "How do you identify global opportunities for clients?",
+          "Why do production companies choose different filming locations?",
+          "How does cultural understanding help in international casting?"
+        ],
+        answers: [
+          "Research international productions, understand visa requirements, network globally",
+          "Tax incentives, currency exchange, local talent pools, geographic features",
+          "Helps match clients to appropriate roles and understand cultural sensitivities"
+        ],
+        learningOutcome: "David can use geographic knowledge and cultural understanding for global talent management"
+      }
+    },
+    role2: {
+      math: {
+        setup: "Talent Scouts analyze industry data and calculate client success rates using advanced mathematical reasoning.",
+        activities: [
+          "Calculate booking percentages and success rates for different client types",
+          "Analyze salary negotiations using positive and negative integers",
+          "Create statistical reports on audition-to-booking ratios"
+        ],
+        challenge: "If a client books 3 jobs out of 15 auditions, and the industry average is 1 in 8, how much better than average are they?",
+        hint: "Client: 3/15 = 20%. Industry: 1/8 = 12.5%. They're 7.5% better than average!",
+        learningOutcome: "David can analyze complex talent industry statistics and calculate performance metrics"
+      },
+      ela: {
+        setup: "Talent Scouts read industry publications, scripts, and market analysis to identify emerging opportunities.",
+        activities: [
+          "Analyze industry trade publications for market trends",
+          "Read and evaluate script quality for client suitability",
+          "Summarize complex industry reports for client presentations"
+        ],
+        challenge: "Read this industry report and identify the main trend: 'Streaming platforms increased original content by 35% this quarter, with particular growth in limited series featuring diverse casts...'",
+        hint: "The main trend is streaming platforms creating more diverse original content, especially limited series!",
+        learningOutcome: "David can analyze complex industry texts and extract actionable insights for talent strategy"
+      },
+      science: {
+        setup: "Talent Scouts use systematic inquiry to predict industry trends and understand what drives entertainment success.",
+        activities: [
+          "Conduct market research using scientific methodology",
+          "Test hypotheses about casting trends through data analysis",
+          "Design studies to understand audience preferences and industry needs"
+        ],
+        challenge: "You hypothesize that social media following correlates with casting success. How do you test this scientifically?",
+        hint: "Collect data on clients' social media followers and booking rates, analyze correlation, control for other variables like experience!",
+        learningOutcome: "David can design and conduct scientific research studies for entertainment industry analysis"
+      },
+      social_studies: {
+        setup: "Talent Scouts understand global entertainment markets and cultural trends that influence casting decisions.",
+        activities: [
+          "Map international production hubs and understand their specialties",
+          "Research cultural trends that influence content creation globally",
+          "Analyze how geographic factors affect entertainment industry development"
+        ],
+        challenge: "Why are certain countries becoming major animation production centers? Consider geographic and economic factors.",
+        hint: "Consider factors like technology infrastructure, labor costs, time zones for global collaboration, and government incentives!",
+        learningOutcome: "David can analyze global entertainment markets using geographic and cultural knowledge"
+      }
+    },
+    role3: {
+      math: {
+        setup: "Agency Partners manage complex financial portfolios and negotiate multi-million dollar contracts using advanced mathematics.",
+        activities: [
+          "Calculate complex percentage deals for profit-sharing arrangements",
+          "Analyze risk-reward ratios for different types of entertainment investments",
+          "Model financial projections for client career trajectories"
+        ],
+        challenge: "A client is offered a film role with $2M upfront plus 5% of profits after the studio recoups $50M. If the film makes $200M, what does the client earn total?",
+        hint: "Upfront: $2M. Profit: $200M - $50M = $150M. Client's share: 5% of $150M = $7.5M. Total: $2M + $7.5M = $9.5M!",
+        learningOutcome: "David can calculate complex entertainment industry financial arrangements and profit-sharing deals"
+      },
+      ela: {
+        setup: "Agency Partners read and negotiate complex contracts, industry analyses, and strategic business communications.",
+        activities: [
+          "Analyze multi-page entertainment contracts for key terms and risks",
+          "Write compelling pitch documents that highlight client strengths",
+          "Interpret complex industry legal documents and market reports"
+        ],
+        challenge: "Read this contract clause and identify the main concern: 'Artist agrees to exclusivity for promotional activities during the 90-day period commencing with principal photography, subject to prior professional commitments...'",
+        hint: "The main concern is that the client can't do other promotional work for 90 days, but existing commitments are protected!",
+        learningOutcome: "David can analyze complex legal and business documents in entertainment industry contexts"
+      },
+      science: {
+        setup: "Agency Partners use data science and systematic analysis to predict industry trends and optimize client strategies.",
+        activities: [
+          "Conduct comprehensive market research using scientific methodology",
+          "Analyze big data sets to identify emerging entertainment trends",
+          "Design predictive models for client career development"
+        ],
+        challenge: "Using scientific inquiry, how would you determine whether investing in a client's social media presence increases their booking rate?",
+        hint: "Design a controlled study: baseline booking rates, implement social media strategy, measure results, control for variables, analyze data!",
+        learningOutcome: "David can apply advanced scientific inquiry methods to entertainment industry strategy and client development"
+      },
+      social_studies: {
+        setup: "Agency Partners understand global entertainment economics and cultural factors that drive international success.",
+        activities: [
+          "Analyze global entertainment markets and cultural export/import trends",
+          "Understand how geographic factors influence content creation and distribution",
+          "Research international co-production opportunities and cultural considerations"
+        ],
+        challenge: "Explain why Korean entertainment content has become globally successful, considering geographic, cultural, and economic factors.",
+        hint: "Consider cultural authenticity, government support, geographic advantage for Asian markets, and unique storytelling traditions!",
+        learningOutcome: "David can analyze global entertainment markets using advanced geographic and cultural economic principles"
+      }
+    },
+    role4: {
+      math: {
+        setup: "AI Talent Strategists teach computer systems advanced mathematical modeling for entertainment industry analysis and client optimization.",
+        activities: [
+          "Teach AI to calculate complex entertainment industry financial models",
+          "Help AI understand statistical analysis for predicting client success",
+          "Guide AI in optimizing mathematical models for talent strategy"
+        ],
+        challenge: "How do you teach AI to calculate the optimal number of auditions a client should take based on success rate, time investment, and career goals?",
+        hint: "Teach the AI to balance success probability, time costs, and strategic career value using multi-variable optimization!",
+        learningOutcome: "David teaches AI systems advanced mathematical modeling for entertainment industry strategy and optimization"
+      },
+      ela: {
+        setup: "AI Talent Strategists help computer systems understand complex entertainment industry texts and communication strategies.",
+        activities: [
+          "Teach AI to analyze contract language and identify key terms",
+          "Help AI understand nuanced industry communications and cultural context",
+          "Guide AI in writing compelling client presentations and marketing materials"
+        ],
+        challenge: "How do you teach AI to identify the main concerns in a complex entertainment contract?",
+        hint: "Teach the AI to recognize key legal terms, financial obligations, exclusivity clauses, and rights management - then prioritize by impact!",
+        learningOutcome: "David teaches AI systems to analyze complex entertainment industry communications and legal documents"
+      },
+      science: {
+        setup: "AI Talent Strategists help computer systems master scientific inquiry for entertainment industry research and prediction.",
+        activities: [
+          "Teach AI to conduct systematic entertainment industry research",
+          "Help AI design experiments to test marketing and strategy hypotheses",
+          "Guide AI in analyzing complex data sets for trend prediction"
+        ],
+        challenge: "How do you teach AI to predict which entertainment trends will succeed using scientific methodology?",
+        hint: "Teach the AI to analyze historical patterns, test current indicators, consider cultural factors, and validate predictions with data!",
+        learningOutcome: "David teaches AI systems to apply scientific inquiry for entertainment industry analysis and trend prediction"
+      },
+      social_studies: {
+        setup: "AI Talent Strategists teach computer systems about global entertainment markets and cultural intelligence for international success.",
+        activities: [
+          "Teach AI to understand global entertainment market dynamics",
+          "Help AI analyze cultural factors that influence international content success",
+          "Guide AI in mapping optimal geographic strategies for client development"
+        ],
+        challenge: "How do you teach AI to understand why certain content succeeds globally while other content remains culturally specific?",
+        hint: "Teach the AI to analyze universal themes vs. cultural specificity, market access, cultural translation, and audience preferences!",
+        learningOutcome: "David teaches AI systems global entertainment market analysis and cultural intelligence for international talent strategy"
+      }
+    }
+  } as CareerProgression,
+
+  // ===================================
+  // MIKE JOHNSON (10TH) - PRO FOOTBALL PLAYER CAREER PROGRESSION
+  // ===================================
+  mike_10th_football_player: {
+    role1: {
+      math: {
+        setup: "Welcome to New Frontier Sports Academy! You're Mike's training assistant today. We need to track player statistics and game performance.",
+        activities: [
+          "Compare and order player statistics: rushing yards, passing yards, and touchdowns",
+          "Organize team rankings by comparing positive and negative point differentials",
+          "Calculate game performance by ordering integers from lowest to highest scores"
+        ],
+        challenge: "The team scored 28 points but allowed 35 points. Express the point differential as a positive or negative integer.",
+        hint: "28 - 35 = -7. The team has a negative 7 point differential (they lost by 7 points)!",
+        questions: [
+          "Order these rushing yards from best to worst: 156, -3, 89, 201",
+          "Which is better: +14 point differential or -7 point differential?",
+          "Compare these temperatures for outdoor practice: 15°F, -5°F, 32°F"
+        ],
+        answers: ["201, 156, 89, -3", "+14 is better (team won)", "32°F is warmest, then 15°F, then -5°F"],
+        learningOutcome: "Mike can compare and order integers in sports performance and statistical contexts"
+      },
+      ela: {
+        setup: "Football players need strong reading skills to understand playbooks, scouting reports, and game analysis.",
+        activities: [
+          "Read and determine the main idea of scouting reports on opposing teams",
+          "Analyze game film transcripts to understand opponent strategies",
+          "Study playbook passages and identify key strategic concepts"
+        ],
+        challenge: "Read this scouting report and determine the main idea: 'The opposing defense favors aggressive blitz packages on third down, particularly when the offense is in shotgun formation. They struggle with quick slant routes and screen passes.'",
+        hint: "The main idea is that the opposing defense blitzes on third down but is vulnerable to quick, short passes!",
+        questions: [
+          "What is the main idea of this game recap article?",
+          "Which details support the main strategy in this play description?",
+          "What is the central message of this coach's motivational speech?"
+        ],
+        answers: [
+          "The key factors that determined the game outcome",
+          "Details about player positioning, timing, and execution",
+          "The importance of teamwork, preparation, or mental toughness"
+        ],
+        learningOutcome: "Mike can determine the main idea of sports-related texts and strategic communications"
+      },
+      science: {
+        setup: "Football players use scientific inquiry to analyze performance, understand physics of the game, and optimize training.",
+        activities: [
+          "Use scientific methods to analyze what training techniques improve performance",
+          "Study the physics of football: trajectory, force, and momentum",
+          "Design experiments to test equipment effectiveness and safety"
+        ],
+        challenge: "You want to improve your 40-yard dash time. How would you use scientific inquiry to find the best training method?",
+        hint: "Observe current performance, research training methods, form hypothesis, test different approaches, analyze results, draw conclusions!",
+        questions: [
+          "How do you scientifically test if a new training drill improves performance?",
+          "What factors affect how far a football travels when thrown?",
+          "How can you measure the effectiveness of protective equipment?"
+        ],
+        answers: [
+          "Baseline measurement, controlled testing, data collection, statistical analysis",
+          "Force applied, angle of release, wind conditions, air resistance",
+          "Impact testing, injury rate analysis, player comfort and mobility assessment"
+        ],
+        learningOutcome: "Mike can apply scientific inquiry methods to sports performance analysis and athletic development"
+      },
+      social_studies: {
+        setup: "Football brings together players from diverse backgrounds and is played worldwide with different cultural approaches.",
+        activities: [
+          "Study how football is played in different countries and regions",
+          "Research the cultural significance of football in American communities",
+          "Learn about the social impact of sports on community building"
+        ],
+        challenge: "Football is played differently around the world. Research American football vs. other forms and explain the cultural differences.",
+        hint: "American football emphasizes strategy and specialization, while other forms like Australian Rules focus on continuous action and versatility!",
+        questions: [
+          "How does football serve as a community builder in different regions?",
+          "What role does football play in school and local community identity?",
+          "How do different cultures approach team sports and competition?"
+        ],
+        answers: [
+          "Brings people together for shared experiences, local pride, economic impact",
+          "School spirit, community traditions, local business support, family involvement",
+          "Some emphasize individual excellence, others focus on team harmony and collective success"
+        ],
+        learningOutcome: "Mike understands football's cultural significance and community impact across different social contexts"
+      }
+    },
+    role2: {
+      math: {
+        setup: "College Football Players analyze complex game statistics and performance metrics to improve their strategic understanding.",
+        activities: [
+          "Calculate advanced statistics like yards per attempt and completion percentages",
+          "Compare team and individual performance using positive and negative differentials",
+          "Analyze recruiting rankings and scholarship allocations using integer operations"
+        ],
+        challenge: "A quarterback completes 18 of 26 passes for 287 yards. Calculate completion percentage and yards per attempt.",
+        hint: "Completion percentage: 18/26 = 69.2%. Yards per attempt: 287/26 = 11.0 yards per attempt!",
+        learningOutcome: "Mike can calculate and analyze complex football statistics and performance metrics"
+      },
+      ela: {
+        setup: "College Football Players read advanced scouting reports, academic materials, and media communications.",
+        activities: [
+          "Analyze complex scouting reports and game film breakdowns",
+          "Read academic coursework while balancing athletic commitments",
+          "Understand media interviews and public communication strategies"
+        ],
+        challenge: "Read this advanced scouting report and identify the main strategic insight for game planning.",
+        hint: "Look for the key weakness or pattern that your team can exploit, and the main strength you need to prepare for!",
+        learningOutcome: "Mike can analyze complex sports strategy documents and extract actionable intelligence"
+      },
+      science: {
+        setup: "College Football Players use advanced scientific analysis for performance optimization and injury prevention.",
+        activities: [
+          "Study biomechanics and sports science for performance improvement",
+          "Analyze nutrition science and recovery methods",
+          "Research training methodologies using scientific literature"
+        ],
+        challenge: "Design a scientific study to determine the optimal recovery time between intense training sessions.",
+        hint: "Control variables like intensity, measure performance indicators, test different recovery periods, analyze results for optimal timing!",
+        learningOutcome: "Mike can apply scientific research methods to athletic performance and health optimization"
+      },
+      social_studies: {
+        setup: "College Football Players understand the social, economic, and cultural impact of collegiate athletics.",
+        activities: [
+          "Study the economic impact of college football on communities",
+          "Research the role of athletics in higher education and student development",
+          "Analyze the cultural significance of college sports traditions"
+        ],
+        challenge: "Analyze how college football programs affect local and regional economies.",
+        hint: "Consider game day revenue, tourism, local business impact, facility construction, and media attention bringing investment!",
+        learningOutcome: "Mike can analyze the broader social and economic impacts of collegiate athletics"
+      }
+    },
+    role3: {
+      math: {
+        setup: "Professional Athletes manage complex contracts, investments, and performance analytics using advanced mathematical reasoning.",
+        activities: [
+          "Calculate multi-year contract values with incentives and bonuses",
+          "Analyze investment portfolios and financial planning strategies",
+          "Use statistical modeling to optimize performance and career longevity"
+        ],
+        challenge: "A contract offers $10M over 4 years with $2M signing bonus and $500K performance bonuses each year if targets are met. What's the maximum total value?",
+        hint: "Base: $10M + Signing: $2M + Performance: $500K × 4 years = $2M. Total maximum: $14M!",
+        learningOutcome: "Mike can calculate complex professional sports contracts and financial arrangements"
+      },
+      ela: {
+        setup: "Professional Athletes read contracts, endorsement deals, and complex business communications while managing media relationships.",
+        activities: [
+          "Analyze multi-page professional contracts and endorsement agreements",
+          "Understand legal documents related to image rights and licensing",
+          "Communicate effectively with media while protecting personal and team interests"
+        ],
+        challenge: "Read this endorsement contract clause and identify the main obligation: 'Athlete agrees to make no fewer than 12 social media posts per quarter featuring the product...'",
+        hint: "The main obligation is to post about the product on social media at least 12 times every 3 months!",
+        learningOutcome: "Mike can analyze complex professional sports contracts and business communications"
+      },
+      science: {
+        setup: "Professional Athletes use cutting-edge sports science for peak performance, injury prevention, and career optimization.",
+        activities: [
+          "Apply advanced biomechanics research to improve technique",
+          "Use data analytics and wearable technology for performance optimization",
+          "Collaborate with sports scientists on injury prevention and recovery protocols"
+        ],
+        challenge: "Using scientific inquiry, how would you determine the optimal training load to maximize performance while minimizing injury risk?",
+        hint: "Monitor biomarkers, track performance metrics, analyze injury patterns, test different load progressions, use data to find optimal balance!",
+        learningOutcome: "Mike can apply advanced sports science research methods for professional athletic optimization"
+      },
+      social_studies: {
+        setup: "Professional Athletes understand their role as public figures and the global impact of professional sports.",
+        activities: [
+          "Study the global expansion of American football and cultural exchange",
+          "Research social responsibility and community impact of professional athletes",
+          "Analyze the economic and cultural influence of professional sports leagues"
+        ],
+        challenge: "Analyze how professional athletes can positively impact their communities while advancing their careers.",
+        hint: "Consider youth programs, educational initiatives, economic development, social causes, and being positive role models!",
+        learningOutcome: "Mike can analyze the social responsibility and community impact potential of professional athletics"
+      }
+    },
+    role4: {
+      math: {
+        setup: "AI Sports Analysts teach computer systems advanced mathematical modeling for sports performance optimization and strategic analysis.",
+        activities: [
+          "Teach AI to calculate complex sports analytics and predictive modeling",
+          "Help AI understand statistical analysis for player evaluation and team strategy",
+          "Guide AI in optimizing mathematical models for performance and career development"
+        ],
+        challenge: "How do you teach AI to predict injury risk using mathematical models based on training load, previous injuries, and performance data?",
+        hint: "Teach the AI to weight risk factors, analyze historical patterns, model probability curves, and update predictions with new data!",
+        learningOutcome: "Mike teaches AI systems advanced mathematical modeling for sports analytics and performance optimization"
+      },
+      ela: {
+        setup: "AI Sports Analysts help computer systems understand complex sports communications, contracts, and strategic documents.",
+        activities: [
+          "Teach AI to analyze sports contracts and identify key terms and risks",
+          "Help AI understand sports journalism and media communications",
+          "Guide AI in writing performance reports and strategic communications"
+        ],
+        challenge: "How do you teach AI to understand the main strategic insights in complex scouting reports?",
+        hint: "Teach the AI to identify key patterns, strengths/weaknesses, strategic recommendations, and translate analysis into actionable game plans!",
+        learningOutcome: "Mike teaches AI systems to analyze complex sports communications and strategic documents"
+      },
+      science: {
+        setup: "AI Sports Analysts help computer systems master scientific inquiry for sports research and performance analysis.",
+        activities: [
+          "Teach AI to conduct systematic sports science research",
+          "Help AI design experiments for training and performance optimization",
+          "Guide AI in analyzing complex biometric and performance data"
+        ],
+        challenge: "How do you teach AI to use scientific methodology to optimize athlete training programs?",
+        hint: "Teach the AI to analyze baseline data, test training variables, measure outcomes, control for factors, and continuously optimize based on results!",
+        learningOutcome: "Mike teaches AI systems to apply scientific inquiry for sports research and athletic development"
+      },
+      social_studies: {
+        setup: "AI Sports Analysts teach computer systems about global sports culture and the social impact of athletics.",
+        activities: [
+          "Teach AI to understand sports' role in different cultures and societies",
+          "Help AI analyze the economic and social impact of professional sports",
+          "Guide AI in understanding athlete social responsibility and community engagement"
+        ],
+        challenge: "How do you teach AI to understand the cultural significance of sports in different societies?",
+        hint: "Teach the AI to analyze historical context, community values, economic impact, and social traditions that make sports meaningful to different cultures!",
+        learningOutcome: "Mike teaches AI systems to understand global sports culture and social impact analysis"
+      }
+    }
+  } as CareerProgression,
 };
 
 // Utility function to get lesson content for a specific user, role, and subject

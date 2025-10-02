@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Bell, Search, MessageSquare, Settings, GraduationCap, LogOut, Building, BookOpen, School } from 'lucide-react';
+import { Search, MessageSquare, Settings, GraduationCap, LogOut, Building, BookOpen, School, Sun, Moon } from 'lucide-react';
 import { AdminMenu } from './AdminMenu';
 import { ArrowLeft } from 'lucide-react';
 import { useAuthContext } from '../contexts/AuthContext';
+import { useThemeControl } from '../hooks/useTheme';
 import { useStudentProfile } from '../hooks/useStudentProfile';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { isDemoUser, getLogoutRedirectPath, logDemoUserDetection } from '../utils/demoUserDetection';
@@ -39,6 +40,7 @@ export function Header({
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const { signOut, tenant, user, profile } = useAuthContext();
+  const { theme, toggleTheme } = useThemeControl();
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -271,13 +273,25 @@ export function Header({
               <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5" />
               <span className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full"></span>
             </button>
-            <button 
-              className="relative p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
-              aria-label="Notifications"
-            >
-              <Bell className="w-4 h-4 sm:w-5 sm:h-5" />
-              <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-            </button>
+            {/* Theme Toggle */}
+            {showThemeToggle && (
+              <button
+                onClick={toggleTheme}
+                className="relative p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+                aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+                style={{
+                  backgroundColor: 'var(--color-bg-elevated)',
+                  color: 'var(--color-text-secondary)',
+                  border: '1px solid var(--color-border)'
+                }}
+              >
+                {theme === 'light' ? (
+                  <Moon className="w-4 h-4 sm:w-5 sm:h-5" />
+                ) : (
+                  <Sun className="w-4 h-4 sm:w-5 sm:h-5" />
+                )}
+              </button>
+            )}
             {/* Admin Menu for admin users, Sign Out button for others */}
             {showUserMenu && (
               user?.role === 'school_admin' || user?.role === 'district_admin' || user?.role === 'product_admin' ? (

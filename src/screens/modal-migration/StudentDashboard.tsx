@@ -1,10 +1,10 @@
 /**
  * Student Dashboard - Modal-First Wrapper
- * Renders the new modal-first Dashboard
+ * Manages the complete user journey through modals
  */
 
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
-import { DashboardModal } from '../modal-first/DashboardModal';
+import { ReturnSelectModal } from '../modal-first/ReturnSelectModal';
 import { IntroductionModal } from '../modal-first/IntroductionModal';
 import { CareerIncLobbyModal } from '../modal-first/CareerIncLobbyModal';
 import { NarrativeIntroductionModal } from '../modal-first/NarrativeIntroductionModal';
@@ -450,10 +450,10 @@ const StudentDashboardInner: React.FC = () => {
 
 
   const handleBackToDashboard = () => {
-    // Go back to dashboard and clear selections to allow re-selection
-    setCurrentView('dashboard');
+    // Go back to selection modal to allow changing career/companion
+    setCurrentView('dashboard'); // Shows ReturnSelectModal
     // Keep the selections but allow user to change them
-    // This will show the dashboard with the Career Choice modal accessible
+    // This opens the return selection interface for editing choices
   };
 
   // Debug logging for render state
@@ -567,12 +567,13 @@ const StudentDashboardInner: React.FC = () => {
       )}
       
 
+      {/* Return Select Modal - for changing selections from lobby */}
       {currentView === 'dashboard' && (
         <ModalProvider>
-          <DashboardModal
+          <ReturnSelectModal
             theme={theme}
             onComplete={handleDashboardComplete}
-            existingSelections={dashboardSelections} // Pass the career selection from IntroductionModal
+            existingSelections={dashboardSelections} // Pass current selections for editing
           />
         </ModalProvider>
       )}

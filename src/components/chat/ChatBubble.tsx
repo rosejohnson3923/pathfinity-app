@@ -120,14 +120,7 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({
     onDrag(bubblePosition.x, bubblePosition.y);
   };
 
-  // Log render for debugging
-  console.log('🎈 ChatBubble rendering:', {
-    companionId,
-    position: bubblePosition,
-    unreadCount,
-    isDragging,
-    isSpeaking
-  });
+  // ChatBubble render state tracked
 
   return (
     <div

@@ -60,7 +60,7 @@ export const LearnMasterContainer: React.FC<LearnMasterContainerProps> = ({
     handleToolProgress: () => {},
     agentSystem: null
     onToolComplete: async (results) => {
-      console.log('🎯 Tool completed in Learn Container:', results);
+  // Removed debug log
       
       // Agent celebration removed - to be replaced with live chat
       if (false) {
@@ -76,7 +76,7 @@ export const LearnMasterContainer: React.FC<LearnMasterContainerProps> = ({
       }
     },
     onToolProgress: async (progress) => {
-      console.log('📊 Tool progress in Learn Container:', progress);
+  // Removed debug log
       
       // Use FinnSee for visual progress feedback
       if (agentSystem && progress.needsVisualSupport) {
@@ -99,7 +99,7 @@ export const LearnMasterContainer: React.FC<LearnMasterContainerProps> = ({
   const isLastAssignment = currentAssignmentIndex === currentSubject?.assignments.length - 1;
 
   // Debug logging
-  console.log('🔍 Learn Master Container State:', {
+  // Removed debug log
     currentStep,
     currentSubjectIndex,
     currentAssignmentIndex,
@@ -123,27 +123,27 @@ export const LearnMasterContainer: React.FC<LearnMasterContainerProps> = ({
 
   // Handle step completion
   const handleStepComplete = (stepResults: any) => {
-    console.log(`📚 Completed ${currentStep} for ${currentAssignment.skill.skill_number}`, stepResults);
-    console.log(`📚 Current assignment:`, currentAssignment.title);
-    console.log(`📚 Current subject assignments length:`, currentSubject.assignments.length);
-    console.log(`📚 Current assignment index:`, currentAssignmentIndex);
-    console.log(`📚 Current subject index:`, currentSubjectIndex);
+  // Removed debug log
+  // Removed debug log
+  // Removed debug log
+  // Removed debug log
+  // Removed debug log
 
     // Calculate XP reward based on step type
     let xpGain = 0;
     if (currentStep === 'instruction') {
       xpGain = 10; // Base XP for instruction
-      console.log(`📚 Moving from instruction to practice`);
+  // Removed debug log
       setCurrentStep('practice');
     } else if (currentStep === 'practice') {
       xpGain = 15; // Base XP for practice
-      console.log(`📚 Moving from practice to assessment`);
+  // Removed debug log
       
       // Clear Finn feedback when leaving practice step
       setShowFeedback(false);
       setFeedbackMessage('');
       setFeedbackType('neutral');
-      console.log('🦉 Cleared Finn feedback on practice completion');
+  // Removed debug log
       
       setCurrentStep('assessment');
     } else if (currentStep === 'assessment') {
@@ -180,18 +180,18 @@ export const LearnMasterContainer: React.FC<LearnMasterContainerProps> = ({
       // Move to next assignment or subject
       if (currentAssignmentIndex < currentSubject.assignments.length - 1) {
         // Next assignment in same subject
-        console.log(`📚 Moving to next assignment: ${currentAssignmentIndex + 1}`);
+  // Removed debug log
         setCurrentAssignmentIndex(currentAssignmentIndex + 1);
         setCurrentStep('instruction');
       } else if (currentSubjectIndex < masterContainerData.subjectCards.length - 1) {
         // Next subject
-        console.log(`📚 Moving to next subject: ${currentSubjectIndex + 1}`);
+  // Removed debug log
         setCurrentSubjectIndex(currentSubjectIndex + 1);
         setCurrentAssignmentIndex(0);
         setCurrentStep('instruction');
       } else {
         // Show completion recap page
-        console.log(`📚 Showing Learn Master Container completion recap with ${updatedResults.length} results`);
+  // Removed debug log
         setCurrentStep('completion');
       }
     }
@@ -201,7 +201,7 @@ export const LearnMasterContainer: React.FC<LearnMasterContainerProps> = ({
       setStudentXP(prev => prev + xpGain);
       setLastXPGain(xpGain);
       setShowXPGain(true);
-      console.log(`🎮 Awarded ${xpGain} XP for ${currentStep} completion`);
+  // Removed debug log
       
       // Hide XP animation after 3 seconds
       setTimeout(() => setShowXPGain(false), 3000);
@@ -209,8 +209,8 @@ export const LearnMasterContainer: React.FC<LearnMasterContainerProps> = ({
   };
 
   const handleMasterContainerComplete = (results: AssessmentResults[]) => {
-    console.log('🎯 Learn Master Container completed with results:', results);
-    console.log('🎯 Calling onComplete with handoff...');
+  // Removed debug log
+  // Removed debug log
 
     // Analyze results for handoff to Experience Master Container
     const avgScore = results.reduce((sum, r) => sum + r.score, 0) / results.length;
@@ -263,7 +263,7 @@ export const LearnMasterContainer: React.FC<LearnMasterContainerProps> = ({
   }
 
   if (!currentSubject || !currentAssignment) {
-    console.log('❌ Learn Master Container - Missing data:', {
+  // Removed debug log
       currentSubject: !!currentSubject,
       currentAssignment: !!currentAssignment,
       subjectCards: masterContainerData.subjectCards.length,
@@ -312,7 +312,7 @@ export const LearnMasterContainer: React.FC<LearnMasterContainerProps> = ({
               setCurrentSubjectIndex(nextSubjectIndex);
               setCurrentAssignmentIndex(0);
               setCurrentStep('instruction');
-              console.log(`🚀 Skip: Moving to subject ${nextSubjectIndex} (${masterContainerData.subjectCards[nextSubjectIndex]?.subject})`);
+  // Removed debug log
             }}
             className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-1"
             title="Skip to next subject for testing"
@@ -564,7 +564,7 @@ const PracticeStep: React.FC<{
   
   // Generate 10 practice questions based on the assignment skill
   const generatePracticeQuestions = () => {
-    console.log('🚨 QUESTION GENERATOR RUNNING - assignment object:', assignment);
+  // Removed debug log
     
     const skillName = assignment.skill.skillName || assignment.skill.skill_name || 'Unknown Skill';
     const skillCode = assignment.skill.skillCode || assignment.skill.skill_code || assignment.skill.skill_number || '';
@@ -573,7 +573,7 @@ const PracticeStep: React.FC<{
     const gradeLevel = parseInt(rawGradeLevel.toString().replace(/[^0-9]/g, '')) || 0;
     const questions = [];
     
-    console.log('🎯 SKILL DATA:', { 
+  // Removed debug log
       fullSkillObject: assignment.skill,
       extractedSkillName: skillName, 
       extractedSkillCode: skillCode, 
@@ -582,7 +582,7 @@ const PracticeStep: React.FC<{
       subject: assignment.skill.subject 
     });
     
-    console.log('🔍 A.1 CONDITION CHECK:', {
+  // Removed debug log
       skillCodeMatch: skillCode === 'A.1',
       skillNameMatch: skillName.toLowerCase().includes('identify numbers'),
       skillNameIncludes: skillName.toLowerCase().includes('identify'),
@@ -706,7 +706,7 @@ const PracticeStep: React.FC<{
       }
     } else if (skillCode === 'A.1' && skillName.toLowerCase().includes('consonants') && skillName.toLowerCase().includes('vowels')) {
       // A.1 Sort consonants and vowels (1st Grade ELA): "Sort consonants and vowels"
-      console.log('📝 A.1 ELA: Generating consonants and vowels sorting questions');
+  // Removed debug log
       const vowelConsonantScenarios = [
         { letter: 'A', type: 'vowel', question: 'Is the letter A a vowel or consonant?', answer: 'vowel' },
         { letter: 'E', type: 'vowel', question: 'Is the letter E a vowel or consonant?', answer: 'vowel' },
@@ -1002,7 +1002,7 @@ const PracticeStep: React.FC<{
       });
     } else if (skillCode === 'A.1' && skillName.toLowerCase().includes('identify') && assignment.skill.subject === 'SocialStudies' && gradeLevel >= 6) {
       // A.1 Social Studies (7th Grade): "Identify lines of latitude and longitude" - use diverse map reading scenarios
-      console.log('🗺️ A.1 Social Studies: Generating diverse map reading questions');
+  // Removed debug log
       const mapScenarios = [
         {
           mapContext: "You're looking at a US map with latitude and longitude lines marked. You need to identify which type of line runs east-west across the United States.",
@@ -1318,7 +1318,7 @@ const PracticeStep: React.FC<{
       }
     } else {
       // Diverse number sequence scenarios for early elementary (PreK-2)
-      console.log('🔢 Generating diverse number line sequence questions for early elementary');
+  // Removed debug log
       const numberScenarios = [
         { start: 1, question: "What number comes next after 1?", answer: 2, hint: "Think: 1, and then what comes next?" },
         { start: 2, question: "What number comes next after 2?", answer: 3, hint: "Count: 1, 2, and then..." },
@@ -1346,7 +1346,7 @@ const PracticeStep: React.FC<{
       });
     }
     
-    console.log('🎯 Generated questions:', questions.slice(0, 2)); // Log first 2 questions
+  // Removed debug log
     return questions;
   };
 
@@ -1516,7 +1516,7 @@ const PracticeStep: React.FC<{
   
   // Validate answer and provide FinnSpeak feedback
   const validateAnswer = async (submittedAnswer: string) => {
-    console.log('🎯 FinnSpeak: validateAnswer called with:', submittedAnswer);
+  // Removed debug log
     setIsProcessingAnswer(true);
     setShowFeedback(false);
     
@@ -1537,7 +1537,7 @@ const PracticeStep: React.FC<{
       const emoji = currentQ?.questionType === 'main_idea' ? '🎯' : 
                     currentQ?.questionType === 'scientific_inquiry' ? '🔬' : 
                     currentQ?.questionType === 'map_reading' ? '🗺️' : '🌍';
-      console.log(`${emoji} ${currentQ?.questionType} Validation:`, {
+  // Removed debug log
         submittedLetter: submittedAnswer,
         correctAnswer,
         correctOptionIndex,
@@ -1549,7 +1549,7 @@ const PracticeStep: React.FC<{
       // For consonant/vowel sorting questions, compare directly (no letter conversion)
       isCorrect = submittedAnswer === correctAnswer;
       
-      console.log('🔤 Consonant/Vowel Validation:', {
+  // Removed debug log
         submittedAnswer,
         correctAnswer,
         isCorrect,
@@ -1559,7 +1559,7 @@ const PracticeStep: React.FC<{
       // For shape identification questions, compare directly (no letter conversion)
       isCorrect = submittedAnswer === correctAnswer;
       
-      console.log('🔷 Shape Identification Validation:', {
+  // Removed debug log
         submittedAnswer,
         correctAnswer,
         isCorrect,
@@ -1569,7 +1569,7 @@ const PracticeStep: React.FC<{
       // For rules and laws questions, compare directly (no letter conversion)
       isCorrect = submittedAnswer === correctAnswer;
       
-      console.log('🏛️ Rules and Laws Validation:', {
+  // Removed debug log
         submittedAnswer,
         correctAnswer,
         isCorrect,
@@ -1579,7 +1579,7 @@ const PracticeStep: React.FC<{
       // For letter identification questions, compare directly (case-insensitive)
       isCorrect = submittedAnswer.toUpperCase() === correctAnswer.toString().toUpperCase();
       
-      console.log('🔤 Letter Identification Validation:', {
+  // Removed debug log
         submittedAnswer,
         correctAnswer,
         isCorrect,
@@ -1589,7 +1589,7 @@ const PracticeStep: React.FC<{
       // For community helper questions, compare directly (case-insensitive)
       isCorrect = submittedAnswer.toLowerCase() === correctAnswer.toString().toLowerCase();
       
-      console.log('🏘️ Community Helper Validation:', {
+  // Removed debug log
         submittedAnswer,
         correctAnswer,
         isCorrect,
@@ -1600,7 +1600,7 @@ const PracticeStep: React.FC<{
       const studentAnswer = parseInt(submittedAnswer);
       isCorrect = studentAnswer === correctAnswer;
       
-      console.log('🎯 Numeric Validation:', {
+  // Removed debug log
         submittedAnswer,
         correctAnswer,
         studentAnswer,
@@ -1629,9 +1629,9 @@ const PracticeStep: React.FC<{
       setTimeout(() => {
         if (currentQuestion < practiceQuestions.length - 1) {
           const nextQuestionIndex = currentQuestion + 1;
-          console.log('🔄 Practice Questions: Advancing from question', currentQuestion, 'to question', nextQuestionIndex);
-          console.log('🔄 Previous question:', practiceQuestions[currentQuestion]);
-          console.log('🔄 Next question will be:', practiceQuestions[nextQuestionIndex]);
+  // Removed debug log
+  // Removed debug log
+  // Removed debug log
           
           setCurrentQuestion(nextQuestionIndex);
           setShowFeedback(false);
@@ -1666,25 +1666,25 @@ const PracticeStep: React.FC<{
   
   // Handle calculator result capture
   const handleCalculatorResult = (result: string) => {
-    console.log('🧮 Calculator result captured:', result);
+  // Removed debug log
     setCalculatorResult(result);
     // Auto-validate when calculator shows a result
     if (result && !isNaN(parseInt(result))) {
-      console.log('🧮 Auto-validating calculator result:', result);
+  // Removed debug log
       validateAnswer(result);
     } else {
-      console.log('🧮 Calculator result not numeric, not auto-validating');
+  // Removed debug log
     }
   };
   
   // Handle manual answer submission
   const handleAnswerSubmit = () => {
     const answer = answers[currentQuestion] || calculatorResult;
-    console.log('🎯 FinnSpeak: Submitting answer:', answer);
+  // Removed debug log
     if (answer) {
       validateAnswer(answer);
     } else {
-      console.log('⚠️ FinnSpeak: No answer to submit');
+  // Removed debug log
     }
   };
   
@@ -1692,11 +1692,11 @@ const PracticeStep: React.FC<{
   const clearCalculator = () => {
     setCalculatorResult('');
     setClearCalculatorTrigger(prev => !prev); // Toggle trigger to reset calculator
-    console.log('🧮 Calculator cleared for next question');
+  // Removed debug log
   };
   
   // Debug initial state
-  console.log('🧮 PracticeStep Debug:', {
+  // Removed debug log
     currentQuestion,
     calculatorResult,
     showFeedback,
@@ -1727,11 +1727,11 @@ const PracticeStep: React.FC<{
       setAssignmentContext(context);
       
       // Get tool configuration without opening modal
-      console.log('🎯 Preparing tool config for split-screen practice:', context);
+  // Removed debug log
       
       // Trigger tool discovery but don't open modal
       // We'll use a direct approach to avoid opening the modal
-      console.log('🎯 Using direct tool discovery for embedded mode');
+  // Removed debug log
       
       // Actually call MCP discovery for real tools
       let demoToolConfig: ToolConfiguration;
@@ -1744,19 +1744,19 @@ const PracticeStep: React.FC<{
         maxResults: 1
       });
       
-      console.log('🔍 MCP Discovery Result:', discoveredTools);
+  // Removed debug log
       
       // Log the actual structure to debug
       if (discoveredTools?.success) {
-        console.log('🔍 Tools data structure:', discoveredTools.data);
-        console.log('🔍 First tool:', discoveredTools.data?.discoveredTools?.[0] || discoveredTools.data?.tools?.[0]);
+  // Removed debug log
+  // Removed debug log
       }
       
       // Use the first discovered tool or fallback - check both possible structures
       const tools = discoveredTools?.data?.discoveredTools || discoveredTools?.data?.tools || [];
       if (discoveredTools?.success && tools.length > 0) {
         const tool = tools[0];
-        console.log('🎯 Using discovered tool:', tool);
+  // Removed debug log
         
         demoToolConfig = {
           toolType: 'generic',
@@ -1919,9 +1919,9 @@ const PracticeStep: React.FC<{
                 <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-2">
                   {(() => {
                     const currentQ = practiceQuestions[currentQuestion];
-                    console.log('🎯 Practice Questions Display: currentQuestion =', currentQuestion);
-                    console.log('🎯 Practice Questions Display: question =', currentQ?.question);
-                    console.log('🎯 Practice Questions Display: options =', currentQ?.options);
+  // Removed debug log
+  // Removed debug log
+  // Removed debug log
                     return currentQ?.question;
                   })()}
                 </div>
@@ -1971,7 +1971,7 @@ const PracticeStep: React.FC<{
                       {/* Add World Map for Map Context questions */}
                       {(() => {
                         const currentQ = practiceQuestions[currentQuestion];
-                        console.log('🗺️ Map Display Debug:', {
+  // Removed debug log
                           currentQuestion,
                           hasMapContext: !!currentQ?.mapContext,
                           mapContext: currentQ?.mapContext,
@@ -2105,15 +2105,15 @@ const PracticeStep: React.FC<{
                                   style={{ transform: 'scale(1)', transformOrigin: 'center' }}
                                   draggable={false}
                                   onLoad={() => {
-                                    console.log('🗺️ Educational US Map with coordinate grid loaded successfully');
+  // Removed debug log
                                   }}
                                   onError={(e) => {
                                     const target = e.target as HTMLImageElement;
-                                    console.log('❌ Primary map failed, trying fallback:', target.src);
+  // Removed debug log
                                     // Try the alternative educational map
                                     target.src = "https://www.mapsofworld.com/lat_long/maps/USA-lat-long.jpg";
                                     target.onError = (fallbackError) => {
-                                      console.log('❌ Fallback map also failed, using Wikipedia backup');
+  // Removed debug log
                                       (fallbackError.target as HTMLImageElement).src = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Blank_US_Map_%28states_only%29.svg/800px-Blank_US_Map_%28states_only%29.svg.png";
                                     };
                                   }}
@@ -2266,157 +2266,157 @@ const PracticeStep: React.FC<{
                 configuration={toolConfig}
                 currentQuestion={practiceQuestions[currentQuestion]}
                 onInteraction={(action, data) => {
-                  console.log('📊 Tool interaction received:', action, data);
+  // Removed debug log
                   
                   // Capture calculator results from iframe interactions
                   if (action === 'calculator_result' && data) {
-                    console.log('🧮 Calculator result from iframe:', data);
+  // Removed debug log
                     handleCalculatorResult(data.toString());
                   }
                   
                   // Handle calculator display changes
                   if (action === 'calculator_display' && data) {
-                    console.log('🧮 Calculator display change:', data);
+  // Removed debug log
                     setCalculatorResult(data.toString());
                   }
                   
                   // Handle Number Line tool results - auto-submit answer
                   if (action === 'number_line_result' && data) {
-                    console.log('🔢 Number Line answer selected:', data);
+  // Removed debug log
                     // Update the answer for current question
                     const newAnswers = [...answers];
                     newAnswers[currentQuestion] = data.toString();
                     setAnswers(newAnswers);
                     
                     // Auto-submit the answer
-                    console.log('🎯 Auto-submitting Number Line answer:', data);
+  // Removed debug log
                     validateAnswer(data.toString());
                   }
                   
                   // Handle Letter Identification tool results - auto-submit answer
                   if (action === 'letter_identification_result' && data) {
-                    console.log('🔤 Letter Identification answer selected:', data);
+  // Removed debug log
                     // Update the answer for current question
                     const newAnswers = [...answers];
                     newAnswers[currentQuestion] = data.toString();
                     setAnswers(newAnswers);
                     
                     // Auto-submit the answer
-                    console.log('🎯 Auto-submitting Letter Identification answer:', data);
+  // Removed debug log
                     validateAnswer(data.toString());
                   }
                   
                   // Handle Shape Sorting tool results - auto-submit answer
                   if (action === 'shape_sorting_result' && data) {
-                    console.log('🔷 Shape Sorting answer selected:', data);
+  // Removed debug log
                     // Update the answer for current question
                     const newAnswers = [...answers];
                     newAnswers[currentQuestion] = data.toString();
                     setAnswers(newAnswers);
                     
                     // Auto-submit the answer
-                    console.log('🎯 Auto-submitting Shape Sorting answer:', data);
+  // Removed debug log
                     validateAnswer(data.toString());
                   }
                   
                   // Handle Community Helper tool results - auto-submit answer
                   if (action === 'community_helper_result' && data) {
-                    console.log('🏘️ Community Helper answer selected:', data);
+  // Removed debug log
                     // Update the answer for current question
                     const newAnswers = [...answers];
                     newAnswers[currentQuestion] = data.toString();
                     setAnswers(newAnswers);
                     
                     // Auto-submit the answer
-                    console.log('🎯 Auto-submitting Community Helper answer:', data);
+  // Removed debug log
                     validateAnswer(data.toString());
                   }
                   
                   // Handle Rules and Laws tool results - auto-submit answer
                   if (action === 'rules_and_laws_result' && data) {
-                    console.log('🏛️ Rules and Laws answer selected:', data);
+  // Removed debug log
                     // Update the answer for current question
                     const newAnswers = [...answers];
                     newAnswers[currentQuestion] = data.toString();
                     setAnswers(newAnswers);
                     
                     // Auto-submit the answer
-                    console.log('🎯 Auto-submitting Rules and Laws answer:', data);
+  // Removed debug log
                     validateAnswer(data.toString());
                   }
                   
                   // Handle Grammar tool results - auto-submit answer
                   if (action === 'grammar_result' && data) {
-                    console.log('📝 Grammar answer selected:', data);
+  // Removed debug log
                     // Update the answer for current question
                     const newAnswers = [...answers];
                     newAnswers[currentQuestion] = data.toString();
                     setAnswers(newAnswers);
                     
                     // Auto-submit the answer
-                    console.log('🎯 Auto-submitting Grammar answer:', data);
+  // Removed debug log
                     validateAnswer(data.toString());
                   }
                   
                   // Handle Reading Comprehension tool results - auto-submit answer
                   if (action === 'reading_result' && data) {
-                    console.log('📖 Reading Comprehension answer selected:', data);
+  // Removed debug log
                     // Update the answer for current question
                     const newAnswers = [...answers];
                     newAnswers[currentQuestion] = data.toString();
                     setAnswers(newAnswers);
                     
                     // Auto-submit the answer
-                    console.log('🎯 Auto-submitting Reading Comprehension answer:', data);
+  // Removed debug log
                     validateAnswer(data.toString());
                   }
                   
                   // Handle Main Idea tool results - populate answer box only (no auto-submit)
                   if (action === 'main_idea_result' && data) {
-                    console.log('🎯 Main Idea answer selected:', data);
+  // Removed debug log
                     // Update the answer for current question
                     const newAnswers = [...answers];
                     newAnswers[currentQuestion] = data.toString();
                     setAnswers(newAnswers);
                     
                     // No auto-submit - let user click Submit button manually
-                    console.log('🎯 Main Idea answer populated in answer box:', data);
+  // Removed debug log
                   }
                   
                   // Handle Scientific Inquiry tool results - populate answer box only (no auto-submit)
                   if (action === 'scientific_inquiry_result' && data) {
-                    console.log('🔬 Scientific Inquiry answer selected:', data);
+  // Removed debug log
                     // Update the answer for current question
                     const newAnswers = [...answers];
                     newAnswers[currentQuestion] = data.toString();
                     setAnswers(newAnswers);
                     
                     // No auto-submit - let user click Submit button manually
-                    console.log('🔬 Scientific Inquiry answer populated in answer box:', data);
+  // Removed debug log
                   }
                   
                   // Handle Map Reading tool results - populate answer box only (no auto-submit)
                   if (action === 'map_reading_result' && data) {
-                    console.log('🗺️ Map Reading answer selected:', data);
+  // Removed debug log
                     // Update the answer for current question
                     const newAnswers = [...answers];
                     newAnswers[currentQuestion] = data.toString();
                     setAnswers(newAnswers);
                     
                     // No auto-submit - let user click Submit button manually
-                    console.log('🗺️ Map Reading answer populated in answer box:', data);
+  // Removed debug log
                   }
                   
                   // Also capture tool-loaded events
                   if (action === 'tool-loaded') {
-                    console.log('🧮 Tool loaded successfully');
+  // Removed debug log
                   }
                   
                   // Forward to master tool handler
                   masterTool.handleToolProgress(action, data);
                 }}
                 onComplete={(results) => {
-                  console.log('📊 Tool completed:', results);
+  // Removed debug log
                   
                   // If the tool provides a final result, validate it
                   if (results && results.finalAnswer) {

@@ -80,7 +80,7 @@ class ThemeService {
    */
   setTheme(theme: Theme, source: string = 'unknown'): void {
     // Only allow theme changes from authorized sources
-    const authorizedSources = ['DashboardModal', 'StudentDashboard', 'SettingsModal', 'ThemeContext', 'system'];
+    const authorizedSources = ['ReturnSelectModal', 'StudentDashboard', 'SettingsModal', 'ThemeContext', 'system'];
     
     if (!authorizedSources.includes(source)) {
       console.warn(`Theme change attempted from unauthorized source: ${source}`);

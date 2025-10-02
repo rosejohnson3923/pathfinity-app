@@ -440,7 +440,26 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
               learning_style: student.learning_style || 'visual'
             },
             career: selectedCareer || { name: career },
-            careerDescription: `${career} professional`
+            careerDescription: `${career} professional`,
+            // NARRATIVE CONTEXT for Learn Container
+            // Instruction/Video: Uses subject|skill combo (e.g., "Math|Count to 3") - NO narrative
+            // Practice/Assessment: Uses narrative context for career-integrated questions
+            narrativeContext: masterNarrative ? {
+              // Learn-specific setting and narrative (for Practice/Assessment ONLY)
+              setting: masterNarrative.settingProgression?.learn?.location,
+              context: masterNarrative.settingProgression?.learn?.context,
+              narrative: masterNarrative.settingProgression?.learn?.narrative,
+
+              // Overall story elements
+              mission: masterNarrative.cohesiveStory?.mission,
+              throughLine: masterNarrative.cohesiveStory?.throughLine,
+
+              // Companion personality for consistent interactions
+              companion: masterNarrative.companionIntegration,
+
+              // Subject-specific context for Practice/Assessment questions
+              subjectContext: masterNarrative.subjectContextsAligned?.[skill.subject || 'Math']
+            } : undefined
           },
           timeConstraint: 15 // minutes
         };

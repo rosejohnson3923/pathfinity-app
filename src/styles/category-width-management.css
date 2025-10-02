@@ -52,10 +52,10 @@ html, body, #root {
 
 /* Modal content containers - flexible sizing */
 /* IMPORTANT: Exclude Bento components, Dashboard content, TwoPanelModal, and AI Companion Modal */
-/* EXCLUDING DashboardModal, TwoPanelModal, and AI Companion Modal which should be full width */
-.modal-container:not(.dashboardModal):not(.two-panel-modal .modal-container),
+/* EXCLUDING ReturnSelectModal, TwoPanelModal, and AI Companion Modal which should be full width */
+.modal-container:not(.returnSelectModal):not(.two-panel-modal .modal-container),
 .modal-content:not(.bento-content):not([class*="dashboard"]):not(.two-panel-modal .modal-content),
-[class*="Modal"]:not(.modal-overlay):not(.modal-backdrop):not([class*="Bento"]):not([class*="Dashboard"]):not(.introduction-modal):not(.dashboardModal):not([class*="dashboardModal"]):not(.two-panel-modal):not(.ai-companion-modal),
+[class*="Modal"]:not(.modal-overlay):not(.modal-backdrop):not([class*="Bento"]):not([class*="Dashboard"]):not(.introduction-modal):not(.returnSelectModal):not([class*="returnSelectModal"]):not(.two-panel-modal):not(.ai-companion-modal),
 .settings-modal,
 .companion-chat-modal {
   position: relative !important;
@@ -169,25 +169,25 @@ html, body, #root {
   box-sizing: border-box !important;
 }
 
-/* DashboardModal is actually a dashboard page, not a modal overlay */
-.dashboardModal,
-.dashboard-modal,
-[class*="dashboardModal"] {
+/* ReturnSelectModal is actually a dashboard page for reselecting choices, not a modal overlay */
+.returnSelectModal,
+.return-select-modal,
+[class*="returnSelectModal"] {
   width: 100% !important;
   max-width: 100% !important; /* Full viewport for dashboard */
   margin: 0 !important;
   padding: 0 !important;
 }
 
-/* Everything inside DashboardModal should respect full width */
-.dashboardModal *,
-[class*="dashboardModal"] * {
+/* Everything inside ReturnSelectModal should respect full width */
+.returnSelectModal *,
+[class*="returnSelectModal"] * {
   max-width: none !important; /* Remove any max-width constraints */
 }
 
 /* Except for specific content that needs constraints */
-.dashboardModal .modal-content,
-[class*="dashboardModal"] .modal-content {
+.returnSelectModal .modal-content,
+[class*="returnSelectModal"] .modal-content {
   max-width: 100% !important;
 }
 
@@ -229,10 +229,10 @@ html, body, #root {
   box-sizing: border-box !important;
 }
 
-/* Bento components inside DashboardModal should use full dashboard width */
-.dashboardModal [class*="Bento"],
-.dashboard-modal [class*="Bento"],
-[class*="dashboardModal"] [class*="bento"] {
+/* Bento components inside ReturnSelectModal should use full dashboard width */
+.returnSelectModal [class*="Bento"],
+.return-select-modal [class*="Bento"],
+[class*="returnSelectModal"] [class*="bento"] {
   width: 100% !important;
   max-width: 100% !important; /* Use parent's width */
   margin: 0 !important;
@@ -249,8 +249,8 @@ html, body, #root {
 /* Fix mainContent width constraint in BentoLearn */
 [class*="BentoLearn"] [class*="mainContent"],
 [class*="bentoLearn"] [class*="mainContent"],
-.dashboardModal [class*="mainContent"],
-.dashboard-modal [class*="mainContent"],
+.returnSelectModal [class*="mainContent"],
+.return-select-modal [class*="mainContent"],
 /* Target the specific module CSS class pattern */
 [class*="_mainContent_"] {
   max-width: 100% !important; /* Use full available width instead of 720px */

@@ -25,14 +25,14 @@ export function useAuth() {
   // Initialize auth state from localStorage
   useEffect(() => {
     const initAuth = async () => {
-      console.log('useAuth: Starting auth initialization');
+      // Removed debug log
       setLoading(true);
       try {
         const currentUser = getCurrentUser();
         const selectedTenant = getSelectedTenant();
         
-        console.log('useAuth: Current user from storage:', currentUser);
-        console.log('useAuth: Selected tenant from storage:', selectedTenant);
+      // Removed debug log
+      // Removed debug log
         
         setUser(currentUser);
         setTenant(selectedTenant);
@@ -40,20 +40,20 @@ export function useAuth() {
         if (currentUser) {
           
           // Fetch user tenants
-          console.log('useAuth: Fetching tenants for user:', currentUser.id);
+      // Removed debug log
           const { tenants: userTenants, error } = await getUserTenantsList(currentUser.id);
           
           if (error) {
             console.error('useAuth: Error fetching tenants:', error);
             setTenants([]);
           } else {
-            console.log('useAuth: Fetched tenants:', userTenants);
+      // Removed debug log
             setTenants(userTenants || []);
             
             // Auto-select first tenant if no tenant is selected (bypass tenant selector)
             if (!selectedTenant && userTenants && userTenants.length > 0) {
               const firstTenant = userTenants[0];
-              console.log('useAuth: Auto-selecting first tenant:', firstTenant);
+      // Removed debug log
               
               // Store the selected tenant
               localStorage.setItem('pathfinity_selected_tenant', JSON.stringify(firstTenant));
@@ -73,14 +73,14 @@ export function useAuth() {
             }
           }
         } else {
-          console.log('useAuth: No current user found');
+      // Removed debug log
           setTenants([]);
         }
       } catch (error) {
         console.error('Error initializing auth:', error);
         setTenants([]);
       } finally {
-        console.log('useAuth: Auth initialization complete');
+      // Removed debug log
         setLoading(false);
       }
     };
@@ -156,32 +156,32 @@ export function useAuth() {
   };
 
   const handleSignOut = async () => {
-    console.log('🔴 DEBUG: useAuth handleSignOut() called');
-    console.log('🔴 DEBUG: Setting loading to true');
+      // Removed debug log
+      // Removed debug log
     setLoading(true);
     try {
-      console.log('🔴 DEBUG: Calling authService signOut()');
+      // Removed debug log
       const { error } = await signOut();
-      console.log('🔴 DEBUG: authService signOut() returned:', { error });
+      // Removed debug log
       
       if (error) {
-        console.log('🔴 DEBUG: signOut error, returning early');
+      // Removed debug log
         return { error };
       }
       
-      console.log('🔴 DEBUG: Clearing user state');
+      // Removed debug log
       setUser(null);
       setProfile(null);
       setTenant(null);
       setTenants([]);
       
-      console.log('🔴 DEBUG: useAuth signOut completed successfully');
+      // Removed debug log
       return { error: null };
     } catch (error) {
       console.error('🔴 DEBUG: Sign out error:', error);
       return { error };
     } finally {
-      console.log('🔴 DEBUG: Setting loading to false');
+      // Removed debug log
       setLoading(false);
     }
   };

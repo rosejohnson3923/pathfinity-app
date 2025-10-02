@@ -279,7 +279,24 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
             learning_style: student.learning_style || 'visual'
           },
           career: selectedCareer,
-          careerDescription: `${selectedCareer} professional`
+          careerDescription: `${selectedCareer} professional`,
+          // ADD NARRATIVE CONTEXT for Discover Container (Challenge generation)
+          narrativeContext: masterNarrative ? {
+            // Discover-specific setting and narrative
+            setting: masterNarrative.settingProgression?.discover?.location,
+            context: masterNarrative.settingProgression?.discover?.context,
+            narrative: masterNarrative.settingProgression?.discover?.narrative,
+
+            // Overall story elements
+            mission: masterNarrative.cohesiveStory?.mission,
+            throughLine: masterNarrative.cohesiveStory?.throughLine,
+
+            // Companion personality for consistent interactions
+            companion: masterNarrative.companionIntegration,
+
+            // Subject-specific context for this subject
+            subjectContext: masterNarrative.subjectContextsAligned?.[skill.subject || 'Science']
+          } : undefined
         },
         timeConstraint: 15 // minutes
       };

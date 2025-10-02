@@ -33,8 +33,7 @@ interface ChatOverlayProps {
 }
 
 export const ChatOverlay: React.FC<ChatOverlayProps> = ({ enabled = true }) => {
-  // Debug logging
-  console.log('🔍 ChatOverlay rendering', { enabled });
+  // Chat overlay component initialized
 
   // Context and hooks - check auth first
   const { user } = useAuth();
@@ -56,17 +55,7 @@ export const ChatOverlay: React.FC<ChatOverlayProps> = ({ enabled = true }) => {
                              currentPath.includes('/app/onboarding') ||
                              (!isOnDashboard && currentPath.includes('login'));
 
-  console.log('🔍 ChatOverlay auth state:', {
-    isAuthenticated,
-    currentPath,
-    isOnDashboard,
-    isOnRestrictedPage,
-    user: user?.email,
-    hasId: !!user?.id,
-    hasEmail: !!user?.email,
-    enabled,
-    willRender: enabled && isAuthenticated && !isOnRestrictedPage
-  });
+  // Auth state checked for chat visibility
 
   // State management
   const [isExpanded, setIsExpanded] = useState(false);
@@ -84,7 +73,7 @@ export const ChatOverlay: React.FC<ChatOverlayProps> = ({ enabled = true }) => {
   // Always call hooks (React rules) but they handle auth internally
   const { profile } = useStudentProfile();
   const { sendMessage, connectionStatus } = useChatConnection();
-  console.log('🔍 ChatOverlay connectionStatus from hook:', connectionStatus);
+  // Connection status retrieved from hook
 
   // Get companion from session - user-specific keys only
   const userCompanionKey = user?.id ? `selectedCompanion_${user.id}` : 'selectedCompanion';
@@ -95,14 +84,7 @@ export const ChatOverlay: React.FC<ChatOverlayProps> = ({ enabled = true }) => {
   const userCareerKey = user?.id ? `selectedCareer_${user.id}` : 'selectedCareer';
   const career = sessionStorage.getItem(userCareerKey) || 'Explorer';
 
-  console.log('🎭 ChatOverlay companion selection:', {
-    selectedCompanion,
-    companionId,
-    userCompanionKey,
-    userId: user?.id,
-    fromStorage: sessionStorage.getItem(userCompanionKey),
-    fromAiStorage: sessionStorage.getItem('selectedAiCompanion')
-  });
+  // Companion selection retrieved from session storage
 
   // Load message history from localStorage
   useEffect(() => {
@@ -216,19 +198,11 @@ export const ChatOverlay: React.FC<ChatOverlayProps> = ({ enabled = true }) => {
 
   // Don't render if disabled, not authenticated, or on restricted pages
   if (!enabled || !isAuthenticated || isOnRestrictedPage) {
-    console.log('🔍 ChatOverlay not rendering:', {
-      enabled,
-      isAuthenticated,
-      isOnRestrictedPage,
-      currentPath,
-      hasUser: !!user,
-      userId: user?.id,
-      userEmail: user?.email
-    });
+    // Chat overlay not rendering due to auth or page restrictions
     return null;
   }
 
-  console.log('✅ ChatOverlay rendering portal with:', { isExpanded, companionId, position });
+  // Rendering chat overlay portal
 
   // Create portal for overlay
   return ReactDOM.createPortal(

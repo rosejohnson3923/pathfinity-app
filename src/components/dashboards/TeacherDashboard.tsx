@@ -5,6 +5,7 @@ import { FeatureAvailability } from '../subscription/FeatureAvailability';
 import { useSubscription } from '../../hooks/useSubscription';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { getRoleLabels, type EducatorData, type StudentChildData } from '../../types/RelationshipTypes';
+import { DailyLessonPlanPage } from './DailyLessonPlanPage';
 import { 
   Users, 
   BookOpen, 
@@ -31,11 +32,80 @@ const createEducatorData = (user: any): EducatorData => {
   const isParent = user?.role === 'parent';
   const labels = getRoleLabels(isParent ? 'parent' : 'educator');
   
-  // Same student/child data regardless of role
-  const studentsChildren: StudentChildData[] = [
+  // Check if this is a micro school teacher and show appropriate students
+  const isMicroSchool = user?.email?.includes('newfrontier.pathfinity.edu');
+
+  const studentsChildren: StudentChildData[] = isMicroSchool ? [
+    // Micro school students for Samantha Johnson
+    {
+      id: 'zara-jones',
+      name: 'Zara Jones',
+      grade: 'K',
+      last_activity: '2025-07-14',
+      total_xp: 1300,
+      containers_completed: 3,
+      avg_accuracy: 92,
+      learning_streak: 7,
+      current_container: 'Complete',
+      subjects_mastered: ['Math', 'ELA', 'Science', 'Social Studies'],
+      time_spent_minutes: 195,
+      badges_earned: 14,
+      preferred_session_time: 'Morning',
+      engagement_level: 'High'
+    },
+    {
+      id: 'alexis-martin',
+      name: 'Alexis Martin',
+      grade: '1',
+      last_activity: '2025-07-14',
+      total_xp: 1250,
+      containers_completed: 3,
+      avg_accuracy: 89,
+      learning_streak: 6,
+      current_container: 'Complete',
+      subjects_mastered: ['Math', 'ELA', 'Science', 'Social Studies'],
+      time_spent_minutes: 185,
+      badges_earned: 13,
+      preferred_session_time: 'Afternoon',
+      engagement_level: 'High'
+    },
+    {
+      id: 'david-brown',
+      name: 'David Brown',
+      grade: '7',
+      last_activity: '2025-07-14',
+      total_xp: 2100,
+      containers_completed: 4,
+      avg_accuracy: 91,
+      learning_streak: 8,
+      current_container: 'Complete',
+      subjects_mastered: ['Math', 'ELA', 'Science', 'Social Studies'],
+      time_spent_minutes: 220,
+      badges_earned: 18,
+      preferred_session_time: 'Evening',
+      engagement_level: 'High'
+    },
+    {
+      id: 'mike-johnson',
+      name: 'Mike Johnson',
+      grade: '10',
+      last_activity: '2025-07-14',
+      total_xp: 2350,
+      containers_completed: 4,
+      avg_accuracy: 87,
+      learning_streak: 5,
+      current_container: 'Complete',
+      subjects_mastered: ['Math', 'ELA', 'Science', 'Social Studies'],
+      time_spent_minutes: 240,
+      badges_earned: 20,
+      preferred_session_time: 'Evening',
+      engagement_level: 'High'
+    }
+  ] : [
+    // Public school students for other teachers
     {
       id: 'sam-brown',
-      name: 'Sam Brown', 
+      name: 'Sam Brown',
       grade: 'K',
       last_activity: '2025-07-14',
       total_xp: 1200,
@@ -72,9 +142,9 @@ const createEducatorData = (user: any): EducatorData => {
     name: user?.full_name || 'Ms. Jenna Grain',
     email: user?.email || 'jenna.grain@sandview.plainviewisd.edu',
     role: isParent ? 'parent' : 'educator',
-    school: isParent ? 'Davis Family School' : 'Sand View Elementary School',
-    district: isParent ? undefined : 'Plainview ISD',
-    tenant_ids: user?.tenant_ids || ['sand-view-elementary-school-001'],
+    school: isParent ? 'Davis Family School' : (user?.email?.includes('newfrontier.pathfinity.edu') ? 'New Frontier Micro School' : 'Sand View Elementary School'),
+    district: isParent ? undefined : (user?.email?.includes('newfrontier.pathfinity.edu') ? 'New Frontier Educational Network' : 'Plainview ISD'),
+    tenant_ids: user?.tenant_ids || [user?.email?.includes('newfrontier.pathfinity.edu') ? 'new-frontier-micro-school-001' : 'sand-view-elementary-school-001'],
     students_children: studentsChildren,
     dashboard_preferences: {
       primary_tab_label: labels.primary_tab_label,
@@ -147,44 +217,81 @@ const SubjectPortlet: React.FC<SubjectPortletProps> = ({
   return (
     <div className={`${colors.bg} rounded-xl border-2 ${colors.border} overflow-hidden`}>
       {/* Portlet Header */}
-      <div className="p-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className={`text-lg font-bold ${colors.text} flex items-center`}>
-            <span className="text-2xl mr-2">{icon}</span>
+      <div style={{
+        padding: 'var(--space-4)',
+        backgroundColor: 'var(--color-bg-elevated)',
+        borderBottom: '1px solid var(--color-border)'
+      }}>
+        {/* Subject Title - Line 1 */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          marginBottom: 'var(--space-3)'
+        }}>
+          <span style={{
+            fontSize: 'var(--text-2xl)',
+            marginRight: 'var(--space-2)'
+          }}>{icon}</span>
+          <h3 style={{
+            fontSize: 'var(--text-lg)',
+            fontWeight: 'var(--font-bold)',
+            color: 'var(--color-text-primary)',
+            margin: 0
+          }}>
             {subject}
           </h3>
-          <div className="flex space-x-1">
-            <button 
-              onClick={() => setActiveView('overview')}
-              className={`px-3 py-1 text-xs rounded ${
-                activeView === 'overview' 
-                  ? colors.button
-                  : 'text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700'
-              }`}
-            >
-              Overview
-            </button>
-            <button 
-              onClick={() => setActiveView('assignments')}
-              className={`px-3 py-1 text-xs rounded ${
-                activeView === 'assignments' 
-                  ? colors.button
-                  : 'text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700'
-              }`}
-            >
-              Progress
-            </button>
-            <button 
-              onClick={() => setActiveView('students')}
-              className={`px-3 py-1 text-xs rounded ${
-                activeView === 'students' 
-                  ? colors.button
-                  : 'text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700'
-              }`}
-            >
-              Students
-            </button>
-          </div>
+        </div>
+
+        {/* Navigation Buttons - Line 2 */}
+        <div style={{
+          display: 'flex',
+          gap: 'var(--space-2)'
+        }}>
+          <button
+            onClick={() => setActiveView('overview')}
+            style={{
+              padding: 'var(--space-1) var(--space-3)',
+              fontSize: 'var(--text-xs)',
+              borderRadius: 'var(--space-1)',
+              border: 'none',
+              backgroundColor: activeView === 'overview' ? 'var(--blue-100)' : 'transparent',
+              color: activeView === 'overview' ? 'var(--blue-800)' : 'var(--color-text-secondary)',
+              cursor: 'pointer',
+              fontWeight: 'var(--font-medium)'
+            }}
+          >
+            Overview
+          </button>
+          <button
+            onClick={() => setActiveView('assignments')}
+            style={{
+              padding: 'var(--space-1) var(--space-3)',
+              fontSize: 'var(--text-xs)',
+              borderRadius: 'var(--space-1)',
+              border: 'none',
+              backgroundColor: activeView === 'assignments' ? 'var(--blue-100)' : 'transparent',
+              color: activeView === 'assignments' ? 'var(--blue-800)' : 'var(--color-text-secondary)',
+              cursor: 'pointer',
+              fontWeight: 'var(--font-medium)'
+            }}
+          >
+            Progress
+          </button>
+          <button
+            onClick={() => setActiveView('students')}
+            style={{
+              padding: 'var(--space-1) var(--space-3)',
+              fontSize: 'var(--text-xs)',
+              borderRadius: 'var(--space-1)',
+              border: 'none',
+              backgroundColor: activeView === 'students' ? 'var(--blue-100)' : 'transparent',
+              color: activeView === 'students' ? 'var(--blue-800)' : 'var(--color-text-secondary)',
+              cursor: 'pointer',
+              fontWeight: 'var(--font-medium)'
+            }}
+          >
+            Students
+          </button>
         </div>
       </div>
       
@@ -269,7 +376,7 @@ export function TeacherDashboard() {
   const { user } = useAuthContext();
   const navigate = useNavigate();
   const [educatorData] = useState(() => createEducatorData(user));
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState('lesson-plans');
   
   // Dynamic labels from unified structure
   const { dashboard_preferences } = educatorData;
@@ -314,6 +421,16 @@ export function TeacherDashboard() {
           <div className="border-b border-gray-200 dark:border-gray-700">
             <nav className="-mb-px flex space-x-8">
               <button
+                onClick={() => setActiveTab('lesson-plans')}
+                className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
+                  activeTab === 'lesson-plans'
+                    ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
+                }`}
+              >
+                📚 Lesson Plans
+              </button>
+              <button
                 onClick={() => setActiveTab('overview')}
                 className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
                   activeTab === 'overview'
@@ -338,6 +455,14 @@ export function TeacherDashboard() {
         </div>
 
         {/* Dashboard Content */}
+        {/* Lesson Plans Tab */}
+        {activeTab === 'lesson-plans' && (
+          <div className="space-y-6">
+            {/* Embedded Daily Lesson Plan Page */}
+            <DailyLessonPlanPage embedded={true} />
+          </div>
+        )}
+
         {activeTab === 'overview' && (
           <div className="space-y-6">
             {/* Subject Navigation */}
@@ -686,15 +811,10 @@ export function TeacherDashboard() {
                         </div>
                         <div>
                           <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{student.name}</h3>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">Grade {student.grade} • Last active: {student.last_activity}</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">Grade {student.grade}</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">Last active: {student.last_activity}</p>
+                          <p className="text-sm font-medium text-gray-600 dark:text-gray-300">{student.engagement_level}</p>
                         </div>
-                      </div>
-                      <div className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        student.engagement_level === 'High' 
-                          ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
-                          : 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'
-                      }`}>
-                        {student.engagement_level}
                       </div>
                     </div>
                   </div>

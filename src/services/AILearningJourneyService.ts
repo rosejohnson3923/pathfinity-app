@@ -161,19 +161,32 @@ export class AILearningJourneyService {
   private getStorylineContext(
     skillKey: string,
     skill: LearningSkill,
-    career?: { name: string; description?: string }
+    career?: { name: string; description?: string },
+    narrativeContext?: any  // From MasterNarrative
   ) {
     const existingContext = this.storylineContext.get(skillKey);
-    
+
     // Use existing context if recent (within 30 minutes)
-    if (existingContext && 
+    if (existingContext &&
         (new Date().getTime() - existingContext.timestamp.getTime()) < 30 * 60 * 1000) {
       console.log('📚 Using existing storyline context for continuity');
       return existingContext;
     }
 
-    // Create new context
-    const newContext = {
+    // Use MasterNarrative context if available, otherwise create generic
+    const newContext = narrativeContext ? {
+      // Rich context from MasterNarrative
+      scenario: narrativeContext.narrative || `helping in a ${career?.name || 'professional'} environment`,
+      character: career ? `a ${career.name}` : 'a professional',
+      setting: narrativeContext.setting || this.getCareerSetting(career?.name),
+      currentChallenge: narrativeContext.context || `applying ${skill.skill_name} skills`,
+      careerConnection: narrativeContext.throughLine || (career ? `how ${career.name}s use ${skill.skill_name}` : `using ${skill.skill_name} professionally`),
+      mission: narrativeContext.mission,
+      companion: narrativeContext.companion,
+      subjectContext: narrativeContext.subjectContext,
+      timestamp: new Date()
+    } : {
+      // Fallback generic context
       scenario: `helping in a ${career?.name || 'professional'} environment`,
       character: career ? `a ${career.name}` : 'a professional',
       setting: this.getCareerSetting(career?.name),
@@ -181,9 +194,9 @@ export class AILearningJourneyService {
       careerConnection: career ? `how ${career.name}s use ${skill.skill_name}` : `using ${skill.skill_name} professionally`,
       timestamp: new Date()
     };
-    
+
     this.storylineContext.set(skillKey, newContext);
-    console.log('📖 Created new storyline context:', newContext);
+    console.log(narrativeContext ? '🎯 Using MasterNarrative context:' : '📖 Created generic context:', newContext);
     return newContext;
   }
 
@@ -266,7 +279,9 @@ export class AILearningJourneyService {
 
     // Get or create storyline context for continuity
     const skillKey = `${student.id}-${skill.skill_number}`;
-    const storylineContext = this.getStorylineContext(skillKey, skill, career);
+    // Pass narrative context if available (from MasterNarrative)
+    const narrativeContext = (career as any)?.narrativeContext;
+    const storylineContext = this.getStorylineContext(skillKey, skill, career, narrativeContext);
 
     // Build context for PromptBuilder
     const context: PromptContext = {
@@ -288,7 +303,9 @@ export class AILearningJourneyService {
         id: student.id,
         display_name: student.display_name || student.name || 'Student',
         grade_level: student.grade_level || 'K'
-      }
+      },
+      // Pass narrative context from MasterNarrative if available
+      narrativeContext: narrativeContext
     };
 
     // Generate prompt using hierarchical rules
@@ -687,7 +704,9 @@ export class AILearningJourneyService {
         id: student.id,
         display_name: student.display_name || 'Student',
         grade_level: student.grade_level || 'K'
-      }
+      },
+      // Pass narrative context from MasterNarrative if available
+      narrativeContext: narrativeContext
     };
     
     // Generate base prompt using PromptBuilder
@@ -947,7 +966,9 @@ Return ONLY these fields:
 
     // Get or create storyline context for continuity
     const skillKey = `${student.id}-${skill.skill_number}`;
-    const storylineContext = this.getStorylineContext(skillKey, skill, career);
+    // Pass narrative context if available (from MasterNarrative)
+    const narrativeContext = (career as any)?.narrativeContext;
+    const storylineContext = this.getStorylineContext(skillKey, skill, career, narrativeContext);
 
     // Experience is ALWAYS career-focused - use provided career or generate appropriate one
     const careerToUse = career?.name || this.getDefaultCareerForGrade(student.grade_level, skill.subject);
@@ -988,7 +1009,9 @@ Return ONLY these fields:
         id: student.id,
         display_name: student.display_name || 'Student',
         grade_level: student.grade_level || 'K'
-      }
+      },
+      // Pass narrative context from MasterNarrative if available
+      narrativeContext: narrativeContext
     };
     
     // Generate base prompt using PromptBuilder
@@ -1182,7 +1205,9 @@ FINAL CHECK before returning JSON:
 
     // Get or create storyline context for continuity
     const skillKey = `${student.id}-${skill.skill_number}`;
-    const storylineContext = this.getStorylineContext(skillKey, skill, career);
+    // Pass narrative context if available (from MasterNarrative)
+    const narrativeContext = (career as any)?.narrativeContext;
+    const storylineContext = this.getStorylineContext(skillKey, skill, career, narrativeContext);
     
     // Build context for PromptBuilder
     const context: PromptContext = {
@@ -1204,7 +1229,9 @@ FINAL CHECK before returning JSON:
         id: student.id,
         display_name: student.display_name || 'Student',
         grade_level: student.grade_level || 'K'
-      }
+      },
+      // Pass narrative context from MasterNarrative if available
+      narrativeContext: narrativeContext
     };
     
     // Generate base prompt using PromptBuilder

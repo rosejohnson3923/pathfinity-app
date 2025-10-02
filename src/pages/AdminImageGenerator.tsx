@@ -171,6 +171,8 @@ export const AdminImageGenerator: React.FC = () => {
   const [savedImages, setSavedImages] = useState<string[]>([]);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [logoImages, setLogoImages] = useState<Record<string, string>>({});
+  const [customPrompt, setCustomPrompt] = useState<string>('');
+  const [customImage, setCustomImage] = useState<string | null>(null);
 
   const getLogoPrompt = (logo: LogoConfig, theme: 'light' | 'dark'): string => {
     const backgroundColor = theme === 'light' ? 'clean white' : 'dark charcoal gray (#1f2937)';
@@ -236,6 +238,38 @@ export const AdminImageGenerator: React.FC = () => {
     } catch (error) {
       console.error('Failed to convert image to base64:', error);
       return imageUrl; // Return original URL as fallback
+    }
+  };
+
+  const generateCustomImage = async () => {
+    if (!customPrompt.trim()) {
+      setError('Please enter a prompt for image generation');
+      return;
+    }
+
+    setGenerating('custom');
+    setError(null);
+
+    try {
+      console.log('🎨 Generating custom image...');
+
+      const imageUrl = await imageGenerationService.generateEducationalImage(
+        customPrompt,
+        'K', // Use K for most cartoon-friendly style
+        {
+          size: '1024x1024',
+          quality: 'hd',
+          style: 'vivid'
+        }
+      );
+
+      setCustomImage(imageUrl);
+      console.log('✅ Generated custom image');
+    } catch (err) {
+      console.error('❌ Failed to generate custom image:', err);
+      setError(`Failed to generate custom image: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    } finally {
+      setGenerating(null);
     }
   };
 
@@ -484,6 +518,128 @@ export const AdminImageGenerator: React.FC = () => {
             ⚠️ {error}
           </div>
         )}
+
+        {/* Custom Image Generator Section */}
+        <div style={{
+          marginBottom: '2rem',
+          padding: '1.5rem',
+          backgroundColor: 'white',
+          borderRadius: '0.5rem',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+          border: '2px solid #8b5cf6'
+        }}>
+          <h2 style={{ margin: '0 0 1rem', color: '#1f2937' }}>
+            🎨 Custom Image Generator (Free Form)
+          </h2>
+
+          <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+            <textarea
+              value={customPrompt}
+              onChange={(e) => setCustomPrompt(e.target.value)}
+              placeholder="Enter any prompt for DALL-E image generation. Be as descriptive as possible..."
+              style={{
+                flex: 1,
+                minHeight: '100px',
+                padding: '0.75rem',
+                border: '2px solid #e5e7eb',
+                borderRadius: '0.5rem',
+                fontSize: '1rem',
+                fontFamily: 'inherit',
+                resize: 'vertical'
+              }}
+            />
+          </div>
+
+          <button
+            onClick={generateCustomImage}
+            disabled={generating === 'custom' || !customPrompt.trim()}
+            style={{
+              padding: '0.75rem 1.5rem',
+              backgroundColor: generating === 'custom' || !customPrompt.trim() ? '#9ca3af' : '#8b5cf6',
+              color: 'white',
+              border: 'none',
+              borderRadius: '0.5rem',
+              fontWeight: 'bold',
+              cursor: generating === 'custom' || !customPrompt.trim() ? 'not-allowed' : 'pointer',
+              marginBottom: '1rem'
+            }}
+          >
+            {generating === 'custom' ? '⚙️ Generating...' : '✨ Generate Custom Image'}
+          </button>
+
+          {customImage && (
+            <div style={{
+              marginTop: '1rem',
+              padding: '1rem',
+              backgroundColor: '#f9fafb',
+              borderRadius: '0.5rem',
+              border: '1px solid #e5e7eb'
+            }}>
+              <div style={{
+                marginBottom: '1rem',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center'
+              }}>
+                <h3 style={{ margin: 0, color: '#374151' }}>Generated Image:</h3>
+                <button
+                  onClick={async () => {
+                    try {
+                      const response = await fetch(customImage);
+                      const blob = await response.blob();
+                      const url = window.URL.createObjectURL(blob);
+                      const link = document.createElement('a');
+                      link.href = url;
+                      link.download = `custom-image-${Date.now()}.png`;
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                      window.URL.revokeObjectURL(url);
+                    } catch (err) {
+                      console.error('Failed to download:', err);
+                    }
+                  }}
+                  style={{
+                    padding: '0.5rem 1rem',
+                    backgroundColor: '#10b981',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '0.375rem',
+                    fontWeight: 'semibold',
+                    cursor: 'pointer'
+                  }}
+                >
+                  ⬇️ Download
+                </button>
+              </div>
+              <div style={{
+                width: '100%',
+                maxHeight: '500px',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: 'white',
+                borderRadius: '0.5rem',
+                padding: '1rem'
+              }}>
+                <img
+                  src={customImage}
+                  alt="Generated custom image"
+                  style={{
+                    maxWidth: '100%',
+                    maxHeight: '500px',
+                    objectFit: 'contain',
+                    borderRadius: '0.5rem'
+                  }}
+                />
+              </div>
+            </div>
+          )}
+        </div>
+
+        <h2 style={{ margin: '0 0 1rem', color: '#1f2937' }}>
+          🤖 AI Companion Images
+        </h2>
 
         <div style={{
           display: 'grid',

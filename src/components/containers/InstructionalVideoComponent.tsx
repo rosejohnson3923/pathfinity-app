@@ -45,11 +45,16 @@ export const InstructionalVideoComponent: React.FC<InstructionalVideoComponentPr
   const [videoState, setVideoState] = useState({
     isPlaying: false,
     currentTime: 0,
-    duration: 0
+    duration: 0,
+    volume: 100,
+    isMuted: false
   });
 
   const youtubeServiceRef = useRef<YouTubeService | null>(null);
   const watchTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const iframeRef = useRef<HTMLIFrameElement | null>(null);
+  const playerReadyRef = useRef<boolean>(false);
+  const pendingCommandsRef = useRef<Array<{command: string, args?: any}>>([])
 
   const skillDisplayName = skill?.skill_name || skill?.name || 'essential concepts';
   const narrativeRole = narrative?.careerContext?.title || 'Professional';
@@ -113,6 +118,70 @@ export const InstructionalVideoComponent: React.FC<InstructionalVideoComponentPr
     }
   };
 
+  // YouTube Player Control Functions
+  const sendCommandToPlayer = (command: string, args?: any) => {
+    if (!playerReadyRef.current) {
+      // Queue commands if player isn't ready yet
+      pendingCommandsRef.current.push({ command, args });
+      return;
+    }
+
+    if (iframeRef.current && iframeRef.current.contentWindow) {
+      const message = {
+        event: 'command',
+        func: command,
+        args: args || []
+      };
+      iframeRef.current.contentWindow.postMessage(message, 'https://www.youtube.com');
+    }
+  };
+
+  // Process any pending commands when player becomes ready
+  const processPendingCommands = () => {
+    while (pendingCommandsRef.current.length > 0) {
+      const { command, args } = pendingCommandsRef.current.shift()!;
+      sendCommandToPlayer(command, args);
+    }
+  };
+
+  const handlePlayPause = () => {
+    if (videoState.isPlaying) {
+      sendCommandToPlayer('pauseVideo');
+      setVideoState(prev => ({ ...prev, isPlaying: false }));
+    } else {
+      sendCommandToPlayer('playVideo');
+      setVideoState(prev => ({ ...prev, isPlaying: true }));
+    }
+  };
+
+  const handleVolumeChange = (newVolume: number) => {
+    sendCommandToPlayer('setVolume', [newVolume]);
+    setVideoState(prev => ({ ...prev, volume: newVolume }));
+  };
+
+  const handleMuteToggle = () => {
+    if (videoState.isMuted) {
+      sendCommandToPlayer('unMute');
+      setVideoState(prev => ({ ...prev, isMuted: false }));
+    } else {
+      sendCommandToPlayer('mute');
+      setVideoState(prev => ({ ...prev, isMuted: true }));
+    }
+  };
+
+  const handleFullscreen = () => {
+    if (iframeRef.current) {
+      const iframe = iframeRef.current;
+      if (iframe.requestFullscreen) {
+        iframe.requestFullscreen();
+      } else if ((iframe as any).webkitRequestFullscreen) {
+        (iframe as any).webkitRequestFullscreen();
+      } else if ((iframe as any).mozRequestFullScreen) {
+        (iframe as any).mozRequestFullScreen();
+      }
+    }
+  };
+
   const handleVideoComplete = () => {
     if (watchTimerRef.current) {
       clearTimeout(watchTimerRef.current);
@@ -124,6 +193,13 @@ export const InstructionalVideoComponent: React.FC<InstructionalVideoComponentPr
     setSelectedVideo(video);
     setHasWatched(false);
     setVideoError(null);
+    setVideoState({
+      isPlaying: false,
+      currentTime: 0,
+      duration: 0,
+      volume: 100,
+      isMuted: false
+    });
   };
 
   useEffect(() => {
@@ -139,6 +215,68 @@ export const InstructionalVideoComponent: React.FC<InstructionalVideoComponentPr
       }
     };
   }, [selectedVideo, hasWatched]);
+
+  // Listen for YouTube player ready messages
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      // Only handle messages from YouTube
+      if (event.origin !== 'https://www.youtube.com' && event.origin !== 'https://www.youtube-nocookie.com') {
+        return;
+      }
+
+      try {
+        const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+
+        if (data.event === 'onReady') {
+          playerReadyRef.current = true;
+          processPendingCommands();
+          // Auto-play is already handled by autoplay=1 in URL
+          setVideoState(prev => ({ ...prev, isPlaying: true }));
+        }
+
+        // Handle state change events
+        if (data.event === 'onStateChange') {
+          if (data.info === 1) { // Playing
+            setVideoState(prev => ({ ...prev, isPlaying: true }));
+          } else if (data.info === 2) { // Paused
+            setVideoState(prev => ({ ...prev, isPlaying: false }));
+          } else if (data.info === 0) { // Ended
+            setVideoState(prev => ({ ...prev, isPlaying: false }));
+            setHasWatched(true);
+          }
+        }
+
+        // Handle info updates (time, duration, volume)
+        if (data.event === 'infoDelivery') {
+          if (data.info?.currentTime !== undefined) {
+            setVideoState(prev => ({ ...prev, currentTime: data.info.currentTime }));
+          }
+          if (data.info?.duration !== undefined) {
+            setVideoState(prev => ({ ...prev, duration: data.info.duration }));
+          }
+          if (data.info?.volume !== undefined) {
+            setVideoState(prev => ({ ...prev, volume: data.info.volume }));
+          }
+          if (data.info?.muted !== undefined) {
+            setVideoState(prev => ({ ...prev, isMuted: data.info.muted }));
+          }
+        }
+      } catch (error) {
+        // Ignore non-JSON messages
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => {
+      window.removeEventListener('message', handleMessage);
+    };
+  }, []);
+
+  // Reset player ready state when video changes
+  useEffect(() => {
+    playerReadyRef.current = false;
+    pendingCommandsRef.current = [];
+  }, [selectedVideo]);
 
   return (
     <div className={styles.container} data-theme={theme}>
@@ -288,14 +426,43 @@ export const InstructionalVideoComponent: React.FC<InstructionalVideoComponentPr
                     <div className={styles.videoError}>{videoError}</div>
                   )}
                   {selectedVideo.id ? (
-                    <iframe
-                      src={`https://www.youtube.com/embed/${selectedVideo.id}?autoplay=1&rel=0&modestbranding=1&enablejsapi=1&origin=${window.location.origin}`}
-                      title={selectedVideo.title}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      allowFullScreen
-                      referrerPolicy="strict-origin-when-cross-origin"
-                      className={styles.videoFrame}
-                    />
+                    <>
+                      <iframe
+                        ref={iframeRef}
+                        src={`https://www.youtube.com/embed/${selectedVideo.id}?autoplay=1&controls=0&disablekb=1&modestbranding=1&rel=0&showinfo=0&fs=0&iv_load_policy=3&autohide=1&enablejsapi=1&origin=${window.location.origin}&playsinline=1`}
+                        title={selectedVideo.title}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                        referrerPolicy="strict-origin-when-cross-origin"
+                        className={styles.videoFrame}
+                        style={{ pointerEvents: 'none' }}
+                        onLoad={() => {
+                          // Send initial listening message to enable API
+                          if (iframeRef.current && iframeRef.current.contentWindow) {
+                            const message = {
+                              event: 'listening',
+                              id: selectedVideo.id,
+                              channel: 'https://www.youtube.com'
+                            };
+                            iframeRef.current.contentWindow.postMessage(message, 'https://www.youtube.com');
+                          }
+                        }}
+                      />
+                      {/* Click overlay to block YouTube controls but allow play/pause on video area */}
+                      <div
+                        className={styles.videoClickOverlay}
+                        onClick={handlePlayPause}
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          bottom: 60, // Leave space for our controls
+                          zIndex: 2,
+                          cursor: 'pointer'
+                        }}
+                      />
+                    </>
                   ) : (
                     <div className={styles.noVideo}>
                       <p>Video ID not available</p>
@@ -307,17 +474,37 @@ export const InstructionalVideoComponent: React.FC<InstructionalVideoComponentPr
                 <div className={styles.videoControls}>
                   <div className={styles.controlsContent}>
                     <div className={styles.controlsLeft}>
-                      <button className={styles.controlButton}>
+                      <button
+                        className={styles.controlButton}
+                        onClick={handlePlayPause}
+                        title={videoState.isPlaying ? "Pause" : "Play"}
+                      >
                         {videoState.isPlaying ? <Pause className={styles.controlIcon} /> : <Play className={styles.controlIcon} />}
                       </button>
                       <div className={styles.volumeControl}>
-                        <Volume2 className={styles.volumeIcon} />
-                        <div className={styles.volumeSlider}>
-                          <div className={styles.volumeLevel}></div>
-                        </div>
+                        <button
+                          onClick={handleMuteToggle}
+                          className={styles.volumeButton}
+                          title={videoState.isMuted ? "Unmute" : "Mute"}
+                        >
+                          <Volume2 className={styles.volumeIcon} />
+                        </button>
+                        <input
+                          type="range"
+                          min="0"
+                          max="100"
+                          value={videoState.volume}
+                          onChange={(e) => handleVolumeChange(Number(e.target.value))}
+                          className={styles.volumeSlider}
+                          title="Volume"
+                        />
                       </div>
                     </div>
-                    <button className={styles.controlButton}>
+                    <button
+                      className={styles.controlButton}
+                      onClick={handleFullscreen}
+                      title="Fullscreen"
+                    >
                       <Maximize2 className={styles.controlIcon} />
                     </button>
                   </div>

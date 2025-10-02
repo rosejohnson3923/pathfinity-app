@@ -53,6 +53,16 @@ export const mockTenants = [
     domain: 'brown.family.pathfinity.edu',
     subscription_tier: 'family',
     logo: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=200&h=200&dpr=2'
+  },
+
+  // Micro School Tenant
+  {
+    id: 'new-frontier-micro-school-001',
+    name: 'New Frontier Micro School',
+    slug: 'new-frontier-micro',
+    domain: 'newfrontier.pathfinity.edu',
+    subscription_tier: 'premium',
+    logo: 'https://images.pexels.com/photos/5427648/pexels-photo-5427648.jpeg?auto=compress&cs=tinysrgb&w=200&h=200&dpr=2'
   }
 ];
 
@@ -148,6 +158,21 @@ export const mockUsers = [
     tenant_ids: ['city-view-high-school-001'],
     sso_provider: null
   },
+  // Teacher - Ms Brenda Sea (Middle School ELA)
+  {
+    id: '20eb6e8c-eb5b-433f-9ed0-f9599c2c7c20',
+    email: 'brenda.sea@oceanview.plainviewisd.edu',
+    password: 'password123',
+    full_name: 'Ms. Brenda Sea',
+    role: 'educator',
+    avatar_url: 'https://images.pexels.com/photos/3769021/pexels-photo-3769021.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=2',
+    grade_level: null,
+    subjects: ['ELA', 'Math', 'Science', 'Social Studies'],
+    school: 'Ocean View Middle School',
+    district: 'Plainview ISD',
+    tenant_ids: ['ocean-view-middle-school-001'],
+    sso_provider: null
+  },
   // School Admin - Mr David Wilson (Elementary Principal)
   {
     id: '14eb6e8c-eb5b-433f-9ed0-f9599c2c7c14',
@@ -208,35 +233,35 @@ export const mockUsers = [
     tenant_ids: ['sand-view-elementary-school-001', 'ocean-view-middle-school-001', 'city-view-high-school-001'],
     sso_provider: null
   },
-  // Parent - Sarah Davis (Alex's Mom - Individual Homeschool Family)
+  // Parent - Sarah Davis (Alex's Mom - Public School Parent)
   {
     id: '16eb6e8c-eb5b-433f-9ed0-f9599c2c7c17',
-    email: 'sarah.davis@family.pathfinity.edu',
+    email: 'sarah.davis@sandview.plainviewisd.edu',
     password: 'password123',
     full_name: 'Sarah Davis',
     role: 'parent',
     avatar_url: 'https://images.pexels.com/photos/1181424/pexels-photo-1181424.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=2',
     grade_level: null,
     subjects: null,
-    school: 'Davis Family School', // Individual family tenant
-    district: null,
-    tenant_ids: ['davis-family-school-001'], // Own family tenant
+    school: 'Sand View Elementary School', // Same school as child
+    district: 'Plainview ISD',
+    tenant_ids: ['sand-view-elementary-school-001'], // Access to child's school
     sso_provider: null,
     children: ['18eb6e8c-eb5b-433f-9ed0-f9599c2c7c01'] // Alex Davis
   },
-  // Parent - Mike Brown (Sam's Dad - Individual Homeschool Family) 
+  // Parent - Mike Brown (Sam's Dad - Public School Parent)
   {
     id: '17eb6e8c-eb5b-433f-9ed0-f9599c2c7c18',
-    email: 'mike.brown@family.pathfinity.edu',
+    email: 'mike.brown@sandview.plainviewisd.edu',
     password: 'password123',
     full_name: 'Mike Brown',
     role: 'parent',
     avatar_url: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=2',
     grade_level: null,
     subjects: null,
-    school: 'Brown Family School', // Individual family tenant
-    district: null,
-    tenant_ids: ['brown-family-school-001'], // Own family tenant
+    school: 'Sand View Elementary School', // Same school as child
+    district: 'Plainview ISD',
+    tenant_ids: ['sand-view-elementary-school-001'], // Access to child's school
     sso_provider: null,
     children: ['d472ea4d-4174-432f-a273-ea213f2ebae4'] // Sam Brown
   },
@@ -256,6 +281,83 @@ export const mockUsers = [
     sso_provider: null,
     children: ['c7518a53-36e7-459d-a41a-43d413b02230'] // Taylor Johnson
   },
+
+  // NEW FRONTIER MICRO SCHOOL USERS
+  // Teacher - Samantha Johnson (Micro School Teacher)
+  {
+    id: '30eb6e8c-eb5b-433f-9ed0-f9599c2c7c30',
+    email: 'samantha.johnson@newfrontier.pathfinity.edu',
+    password: 'password123',
+    full_name: 'Samantha Johnson',
+    role: 'educator',
+    avatar_url: 'https://images.pexels.com/photos/3769021/pexels-photo-3769021.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=2',
+    grade_level: null,
+    subjects: ['Math', 'ELA', 'Science', 'Social Studies'],
+    school: 'New Frontier Micro School',
+    district: null,
+    tenant_ids: ['new-frontier-micro-school-001'],
+    sso_provider: null
+  },
+  // Student - Zara Jones (Grade K)
+  {
+    id: '31eb6e8c-eb5b-433f-9ed0-f9599c2c7c31',
+    email: 'zara.jones@newfrontier.pathfinity.edu',
+    password: 'password123',
+    full_name: 'Zara Jones',
+    role: 'student',
+    avatar_url: 'https://images.pexels.com/photos/3785079/pexels-photo-3785079.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=2',
+    grade_level: 'K',
+    subjects: null,
+    school: 'New Frontier Micro School',
+    district: null,
+    tenant_ids: ['new-frontier-micro-school-001'],
+    sso_provider: null
+  },
+  // Student - Alexis Martin (Grade 1)
+  {
+    id: '32eb6e8c-eb5b-433f-9ed0-f9599c2c7c32',
+    email: 'alexis.martin@newfrontier.pathfinity.edu',
+    password: 'password123',
+    full_name: 'Alexis Martin',
+    role: 'student',
+    avatar_url: 'https://images.pexels.com/photos/3769021/pexels-photo-3769021.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=2',
+    grade_level: '1',
+    subjects: null,
+    school: 'New Frontier Micro School',
+    district: null,
+    tenant_ids: ['new-frontier-micro-school-001'],
+    sso_provider: null
+  },
+  // Student - David Brown (Grade 7) - Talent Agent
+  {
+    id: '33eb6e8c-eb5b-433f-9ed0-f9599c2c7c33',
+    email: 'david.brown@newfrontier.pathfinity.edu',
+    password: 'password123',
+    full_name: 'David Brown',
+    role: 'student',
+    avatar_url: 'https://images.pexels.com/photos/2381069/pexels-photo-2381069.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=2',
+    grade_level: '7',
+    subjects: null,
+    school: 'New Frontier Micro School',
+    district: null,
+    tenant_ids: ['new-frontier-micro-school-001'],
+    sso_provider: null
+  },
+  // Student - Mike Johnson (Grade 10) - mentioned as Sports Analyst
+  {
+    id: '34eb6e8c-eb5b-433f-9ed0-f9599c2c7c34',
+    email: 'mike.johnson@newfrontier.pathfinity.edu',
+    password: 'password123',
+    full_name: 'Mike Johnson',
+    role: 'student',
+    avatar_url: 'https://images.pexels.com/photos/1462630/pexels-photo-1462630.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=2',
+    grade_level: '10',
+    subjects: null,
+    school: 'New Frontier Micro School',
+    district: null,
+    tenant_ids: ['new-frontier-micro-school-001'],
+    sso_provider: null
+  },
 ];
 
 // Mock user profiles (what would be stored in user_profiles table)
@@ -271,7 +373,11 @@ export const mockUserProfiles = mockUsers.map(user => {
 
 // Helper function to find user by email
 export const findUserByEmail = (email: string) => {
-  return mockUsers.find(user => user.email.toLowerCase() === email.toLowerCase());
+  console.log('🔍 findUserByEmail called with:', email);
+  console.log('🔍 Available emails:', mockUsers.map(u => u.email));
+  const result = mockUsers.find(user => user.email.toLowerCase() === email.toLowerCase());
+  console.log('🔍 findUserByEmail result:', result ? `Found: ${result.full_name}` : 'NOT FOUND');
+  return result;
 };
 
 // Helper function to find user by ID

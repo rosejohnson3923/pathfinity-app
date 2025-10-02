@@ -42,14 +42,7 @@ export const EnhancedLoadingScreen: React.FC<EnhancedLoadingScreenProps> = ({
   enableNarration = true,
   isFirstLoad = false
 }) => {
-  console.log('🔊 EnhancedLoadingScreen RENDERED:', {
-    phase,
-    hasMasterNarrative: !!masterNarrative,
-    enableNarration,
-    isFirstLoad,
-    currentSubject,
-    containerType
-  });
+  // Loading screen initialized with narration support
   const { user } = useAuth();
   const { profile } = useStudentProfile();
   const [dots, setDots] = useState('');
@@ -107,7 +100,7 @@ export const EnhancedLoadingScreen: React.FC<EnhancedLoadingScreenProps> = ({
 
     // Skip if no master narrative or fun facts
     if (!masterNarrative?.subjectContextsAlignedFacts) {
-      console.log('⚠️ EnhancedLoadingScreen: No fun facts available');
+      // No fun facts available for narration
       return;
     }
 
@@ -122,14 +115,7 @@ export const EnhancedLoadingScreen: React.FC<EnhancedLoadingScreenProps> = ({
     // IMMEDIATELY mark as attempting to play this narration to prevent double execution
     narrationRef.current = narrationKey;
 
-    console.log('🔊 EnhancedLoadingScreen: Starting narration process', {
-      narrationKey,
-      hasMasterNarrative: !!masterNarrative,
-      hasFunFacts: !!masterNarrative?.subjectContextsAlignedFacts,
-      phase,
-      currentSubject,
-      isFirstLoad
-    });
+    // Starting narration process for loading phase
 
     // Capture values at effect execution time to avoid stale closures
     const capturedMasterNarrative = masterNarrative;
@@ -143,13 +129,13 @@ export const EnhancedLoadingScreen: React.FC<EnhancedLoadingScreenProps> = ({
     // Select and play narration
     const playNarration = async () => {
       if (!shouldPlay) {
-        console.log('🔊 EnhancedLoadingScreen: Narration cancelled before playback');
+        // Narration cancelled before playback
         return;
       }
 
       // Check if audio is already playing
       if (azureAudioService.speaking) {
-        console.log('🔊 EnhancedLoadingScreen: Audio already playing, skipping narration');
+        // Audio already playing, skipping narration
         return;
       }
 
@@ -158,15 +144,10 @@ export const EnhancedLoadingScreen: React.FC<EnhancedLoadingScreenProps> = ({
 
         // Check if we already selected a narration for this key
         if (selectedNarrationRef.current && selectedNarrationRef.current.key === narrationKey) {
-          console.log('🎵 EnhancedLoadingScreen: Using cached narration');
+          // Using cached narration
           narration = selectedNarrationRef.current.narration;
         } else {
-          console.log('🎵 EnhancedLoadingScreen: Selecting new narration', {
-            currentSubject,
-            containerType: capturedContainerType,
-            phase,
-            isFirstLoad
-          });
+          // Selecting new narration for current context
 
           // Get appropriate narration based on context
           narration = loadingNarrationService.selectNarration(
@@ -186,13 +167,7 @@ export const EnhancedLoadingScreen: React.FC<EnhancedLoadingScreenProps> = ({
         }
 
         if (narration) {
-          console.log('🎵 Loading Screen: Playing narration', {
-            container: capturedContainerType,
-            subject: currentSubject,
-            phase,
-            scriptId: narration.scriptId,
-            text: narration.text.substring(0, 50) + '...'
-          });
+          // Playing narration for loading screen
 
           // Play the narration with Azure TTS
           await azureAudioService.playText(
@@ -202,15 +177,15 @@ export const EnhancedLoadingScreen: React.FC<EnhancedLoadingScreenProps> = ({
               scriptId: narration.scriptId,
               variables: narration.variables,
               onStart: () => {
-                console.log('🔊 Loading narration started');
+                // Loading narration started
               },
               onEnd: () => {
-                console.log('🔊 Loading narration completed');
+                // Loading narration completed
               }
             }
           );
         } else {
-          console.log('⚠️ No narration content selected');
+          // No narration content available
         }
       } catch (error) {
         console.error('Error playing loading narration:', error);

@@ -47,6 +47,19 @@ export const WelcomeBackModal: React.FC<WelcomeBackModalProps> = ({
   // Get user's grade level for age-appropriate language
   const gradeLevel = user?.grade_level || 'K';
 
+  // Get companion ID from session
+  // The session from SessionLearningContextManager has companion as nested object:
+  // session.companion = { id: 'sage', name: 'Sage', personality: 'encouraging', voice: '...' }
+  // Priority order:
+  // 1. session.companion.id (from SessionLearningContextManager)
+  // 2. session.companion_id (if directly from API)
+  // 3. Convert companion name to lowercase as fallback
+  const companionId = session.companion?.id ||
+                      session.companion_id ||
+                      session.companion?.name?.toLowerCase() ||
+                      session.companion_name?.toLowerCase() ||
+                      'finn'; // Default to finn if missing
+
   // Helper function for age-appropriate text based on grade level
   const getAgeAppropriateText = (textKey: string): string => {
     const gradeNum = gradeLevel === 'K' ? 0 : parseInt(gradeLevel);
@@ -205,36 +218,19 @@ export const WelcomeBackModal: React.FC<WelcomeBackModalProps> = ({
         companion: session.companion,
         companion_id: session.companion_id,
         companion_name: session.companion_name,
+        companionFromSession: session.companion?.name,
+        companionIdFromSession: session.companion?.id,
+        resolvedCompanionId: companionId,
         fullSession: session
       });
 
-      // Map companion name to ID (since session doesn't have companion_id)
-      const companionNameToId: Record<string, string> = {
-        'Pat': 'pat',
-        'Finn': 'finn',
-        'Sage': 'sage',
-        'Spark': 'spark',
-        'Harmony': 'harmony',
-        'Sam': 'sam',
-        'Alex': 'alex',
-        'Jordan': 'jordan',
-        'Taylor': 'taylor',
-        'Morgan': 'morgan',
-        'Casey': 'casey',
-        'Riley': 'riley'
-      };
+      // Use the companion ID from session (already computed at component level)
+      const narratorCompanionId = companionId;
 
-      // Get companion ID - try multiple sources
-      const companionId = session.companion_id ||
-                         session.companion?.id ||
-                         companionNameToId[companionName] ||
-                         companionNameToId[session.companion_name] ||
-                         'pat'; // Pat is the default companion
-
-      console.log('🎯 Resolved companion:', {
-        finalId: companionId,
-        fromName: companionName,
-        mappedId: companionNameToId[companionName]
+      console.log('🎯 Using companion for narration:', {
+        companionId: narratorCompanionId,
+        sessionCompanionId: session.companion_id,
+        companionName
       });
 
       // Play the narration with the companion's voice
@@ -263,7 +259,7 @@ export const WelcomeBackModal: React.FC<WelcomeBackModalProps> = ({
       console.log('📝 Formatted narration text:', narrationText);
 
       // Play the formatted narration text
-      azureAudioService.playText(narrationText, companionId, {
+      azureAudioService.playText(narrationText, narratorCompanionId, {
         scriptId: scriptKey,
         variables: {
           firstName,
@@ -527,13 +523,19 @@ export const WelcomeBackModal: React.FC<WelcomeBackModalProps> = ({
                       whileHover={{ scale: 1.1, rotate: 5 }}
                     >
                       <img
-                        src={`/images/companions/${session.companion_id || 'finn'}-${theme || 'dark'}.png`}
+                        src={`/images/companions/${companionId}-${theme || 'dark'}.png`}
                         alt={session.companion_name || 'Your Companion'}
                         className="w-full h-full object-cover"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
-                          // Fallback to finn if companion not found
+                          // Fallback to finn if image fails to load
                           target.src = `/images/companions/finn-${theme || 'dark'}.png`;
+                          console.error('Failed to load companion image for:', {
+                            companion_id: session.companion_id,
+                            companion_name: session.companion_name,
+                            companion: session.companion,
+                            attemptedSrc: target.src
+                          });
                         }}
                       />
                     </motion.div>

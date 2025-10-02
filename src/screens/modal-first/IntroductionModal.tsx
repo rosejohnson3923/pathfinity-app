@@ -323,7 +323,7 @@ export const IntroductionModal: React.FC<IntroductionModalProps> = ({
     }
   }, [currentStep]);
 
-  // Companion selection removed - now handled in DashboardModal's renderAICompanionSelection
+  // Companion selection removed - now handled in ReturnSelectModal's renderAICompanionSelection
 
   const studentGradeForSidebar = profile?.grade_level || (user as any)?.grade_level || 'K';
   
@@ -762,7 +762,7 @@ export const IntroductionModal: React.FC<IntroductionModalProps> = ({
         );
       })()}
 
-      {/* Companion Selection Step - REMOVED - Now handled in DashboardModal */}
+      {/* Companion Selection Step - REMOVED - Now handled in ReturnSelectModal */}
       {false && currentStep === 'companion' && (
         <div className="intro-companion-container animated-fade-in" style={{
           display: 'flex',

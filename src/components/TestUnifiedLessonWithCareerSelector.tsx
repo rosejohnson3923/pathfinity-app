@@ -62,6 +62,59 @@ const DEMO_STUDENTS = {
       science: 'The process of scientific inquiry',
       social_studies: 'Purposes of government'
     }
+  },
+  // New Frontier Micro School Students
+  zara_k: {
+    name: 'Zara',
+    grade: 'K',
+    companion: 'Spark',
+    career_family: 'doctor',
+    skill_cluster: 'A.1',
+    academic_skills: {
+      math: 'Count numbers 1-3',
+      ela: 'Find uppercase letters',
+      science: 'Classify objects by shape',
+      social_studies: 'What is a community?'
+    }
+  },
+  alexis_1: {
+    name: 'Alexis',
+    grade: '1',
+    companion: 'Finn',
+    career_family: 'teacher',
+    skill_cluster: 'A.1',
+    academic_skills: {
+      math: 'Counting review - up to 10',
+      ela: 'Sort consonants and vowels',
+      science: 'Classify objects by two-dimensional shape',
+      social_studies: 'Rules and laws'
+    }
+  },
+  david_7: {
+    name: 'David',
+    grade: '7',
+    companion: 'Sage',
+    career_family: 'talent_agent',
+    skill_cluster: 'A.1',
+    academic_skills: {
+      math: 'Understanding integers',
+      ela: 'Determine main idea of passage',
+      science: 'Process of scientific inquiry',
+      social_studies: 'Identify lines of latitude/longitude'
+    }
+  },
+  mike_10: {
+    name: 'Mike',
+    grade: '10',
+    companion: 'Harmony',
+    career_family: 'football_player',
+    skill_cluster: 'A.1',
+    academic_skills: {
+      math: 'Compare and order integers',
+      ela: 'Determine the main idea of a passage',
+      science: 'The process of scientific inquiry',
+      social_studies: 'Purposes of government'
+    }
   }
 };
 
@@ -90,6 +143,31 @@ const CAREER_PROGRESSIONS = {
     premium: { title: 'Player Scout', emoji: '🔍🏈', booster_type: null },
     booster: { title: 'Contract Negotiator', emoji: '💼🏈', booster_type: 'Corporate' },
     aifirst: { title: 'AI Sports Scout', emoji: '🤖🏈', booster_type: 'AIFirst' }
+  },
+  // New Frontier Micro School Students
+  zara_k: {
+    select: { title: 'Medical Helper', emoji: '👶‍⚕️', booster_type: null },
+    premium: { title: 'Junior Doctor', emoji: '👨‍⚕️', booster_type: null },
+    booster: { title: 'Emergency Medical Helper', emoji: '🚑⚕️', booster_type: 'Trade/Skill' },
+    aifirst: { title: 'AI Medical Assistant', emoji: '🤖👨‍⚕️', booster_type: 'AIFirst' }
+  },
+  alexis_1: {
+    select: { title: 'Classroom Helper', emoji: '👶‍🏫', booster_type: null },
+    premium: { title: 'Student Teacher', emoji: '👨‍🏫', booster_type: null },
+    booster: { title: 'Curriculum Designer', emoji: '📚💼', booster_type: 'Corporate' },
+    aifirst: { title: 'AI Learning Coach', emoji: '🤖👨‍🏫', booster_type: 'AIFirst' }
+  },
+  david_7: {
+    select: { title: 'Entertainment Helper', emoji: '👶🎬', booster_type: null },
+    premium: { title: 'Junior Agent', emoji: '🎭💼', booster_type: null },
+    booster: { title: 'Talent Manager', emoji: '⭐💼', booster_type: 'Corporate' },
+    aifirst: { title: 'AI Talent Scout', emoji: '🤖🎬', booster_type: 'AIFirst' }
+  },
+  mike_10: {
+    select: { title: 'Team Helper', emoji: '👶🏈', booster_type: null },
+    premium: { title: 'Rookie Player', emoji: '🏈💪', booster_type: null },
+    booster: { title: 'Pro Athlete', emoji: '🏆🏈', booster_type: 'Trade/Skill' },
+    aifirst: { title: 'AI Sports Analyst', emoji: '🤖🏈', booster_type: 'AIFirst' }
   }
 };
 
@@ -436,7 +514,12 @@ export const TestUnifiedLessonWithCareerSelector: React.FC = () => {
       'Sam': 'sam_k_chef',
       'Alex': 'alex_1st_doctor',
       'Jordan': 'jordan_7th_game_designer',
-      'Taylor': 'taylor_10th_sports_agent'
+      'Taylor': 'taylor_10th_sports_agent',
+      // New Frontier Micro School Students
+      'Zara': 'zara_k_doctor',
+      'Alexis': 'alexis_1st_teacher',
+      'David': 'david_7th_talent_agent',
+      'Mike': 'mike_10th_football_player'
     };
 
     return nameGradeMap[studentName as keyof typeof nameGradeMap] || 'sam_k_chef';
@@ -588,37 +671,83 @@ export const TestUnifiedLessonWithCareerSelector: React.FC = () => {
       {/* Student Selector */}
       <div style={{ marginBottom: '30px' }}>
         <h3>Select Demo Student</h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '15px', marginTop: '15px' }}>
-          {Object.entries(DEMO_STUDENTS).map(([key, student]) => (
-            <div
-              key={key}
-              onClick={() => {
-                setSelectedStudent(key);
-                setSelectedCareer(null);
-                setSelectedTier('select');
-              }}
-              style={{
-                padding: '15px',
-                borderRadius: '12px',
-                backgroundColor: selectedStudent === key ? '#EFF6FF' : '#F9FAFB',
-                border: selectedStudent === key ? '3px solid #3B82F6' : '2px solid #E5E7EB',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                textAlign: 'center'
-              }}
-            >
-              <div style={{ fontSize: '24px', marginBottom: '8px' }}>👨‍🎓</div>
-              <h4 style={{ margin: '0 0 5px 0', fontSize: '16px', fontWeight: 'bold' }}>
-                {student.name} (Grade {student.grade})
-              </h4>
-              <p style={{ fontSize: '12px', color: '#6B7280', margin: '0 0 5px 0' }}>
-                AI Companion: {student.companion}
-              </p>
-              <p style={{ fontSize: '12px', color: '#8B5CF6', margin: '0', fontWeight: '500' }}>
-                {student.career_family.charAt(0).toUpperCase() + student.career_family.slice(1).replace('_', ' ')} Career
-              </p>
-            </div>
-          ))}
+
+        {/* Public School Students */}
+        <div style={{ marginBottom: '20px' }}>
+          <h4 style={{ color: '#1E40AF', marginBottom: '10px', fontSize: '14px', fontWeight: '600' }}>
+            📚 Public School Students
+          </h4>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '15px' }}>
+            {Object.entries(DEMO_STUDENTS).slice(0, 4).map(([key, student]) => (
+              <div
+                key={key}
+                onClick={() => {
+                  setSelectedStudent(key);
+                  setSelectedCareer(null);
+                  setSelectedTier('select');
+                }}
+                style={{
+                  padding: '15px',
+                  borderRadius: '12px',
+                  backgroundColor: selectedStudent === key ? '#EFF6FF' : '#F9FAFB',
+                  border: selectedStudent === key ? '3px solid #3B82F6' : '2px solid #E5E7EB',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  textAlign: 'center'
+                }}
+              >
+                <div style={{ fontSize: '24px', marginBottom: '8px' }}>👨‍🎓</div>
+                <h4 style={{ margin: '0 0 5px 0', fontSize: '16px', fontWeight: 'bold' }}>
+                  {student.name} (Grade {student.grade})
+                </h4>
+                <p style={{ fontSize: '12px', color: '#6B7280', margin: '0 0 5px 0' }}>
+                  AI Companion: {student.companion}
+                </p>
+                <p style={{ fontSize: '12px', color: '#8B5CF6', margin: '0', fontWeight: '500' }}>
+                  {student.career_family.charAt(0).toUpperCase() + student.career_family.slice(1).replace('_', ' ')} Career
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* New Frontier Micro School Students */}
+        <div>
+          <h4 style={{ color: '#059669', marginBottom: '10px', fontSize: '14px', fontWeight: '600' }}>
+            🏠 New Frontier Micro School Students
+          </h4>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '15px' }}>
+            {Object.entries(DEMO_STUDENTS).slice(4).map(([key, student]) => (
+              <div
+                key={key}
+                onClick={() => {
+                  setSelectedStudent(key);
+                  setSelectedCareer(null);
+                  setSelectedTier('select');
+                }}
+                style={{
+                  padding: '15px',
+                  borderRadius: '12px',
+                  backgroundColor: selectedStudent === key ? '#ECFDF5' : '#F9FAFB',
+                  border: selectedStudent === key ? '3px solid #10B981' : '2px solid #E5E7EB',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  textAlign: 'center'
+                }}
+              >
+                <div style={{ fontSize: '24px', marginBottom: '8px' }}>👨‍🎓</div>
+                <h4 style={{ margin: '0 0 5px 0', fontSize: '16px', fontWeight: 'bold' }}>
+                  {student.name} (Grade {student.grade})
+                </h4>
+                <p style={{ fontSize: '12px', color: '#6B7280', margin: '0 0 5px 0' }}>
+                  AI Companion: {student.companion}
+                </p>
+                <p style={{ fontSize: '12px', color: '#059669', margin: '0', fontWeight: '500' }}>
+                  {student.career_family.charAt(0).toUpperCase() + student.career_family.slice(1).replace('_', ' ')} Career
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 

@@ -6,7 +6,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import MonitoringService, { HealthCheckResult, MetricEvent } from '../../services/monitoring/MonitoringService';
 import AnalyticsService, { EngagementMetrics } from '../../services/monitoring/AnalyticsService';
-import { supabase } from '../../lib/supabaseClient';
+import { supabase } from '../../lib/supabase';
 import './MonitoringDashboard.css';
 
 interface SystemMetrics {

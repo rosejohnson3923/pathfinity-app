@@ -62,6 +62,7 @@
     "@azure/identity": "^4.10.2",
     "@azure/keyvault-secrets": "^4.10.0",
     "@azure/storage-blob": "^12.28.0",
+    "@react-pdf/renderer": "^4.3.1",
     "@sentry/react": "^10.6.0",
     "@sentry/tracing": "^7.120.4",
     "@supabase/supabase-js": "^2.39.7",

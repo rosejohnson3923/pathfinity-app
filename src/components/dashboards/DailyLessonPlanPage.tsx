@@ -66,20 +66,155 @@ const SUBSCRIPTION_TIERS = {
   }
 };
 
-export const DailyLessonPlanPage: React.FC = () => {
+interface DailyLessonPlanPageProps {
+  embedded?: boolean; // When true, hides the header for dashboard embedding
+}
+
+export const DailyLessonPlanPage: React.FC<DailyLessonPlanPageProps> = ({ embedded = false }) => {
   const { user } = useAuth();
   const { profile } = useStudentProfile();
   const [selectedTier, setSelectedTier] = useState<string>('select');
   const [generatedLesson, setGeneratedLesson] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const [selectedStudentId, setSelectedStudentId] = useState<string>('');
 
-  // Create student profile from authenticated user data
+  // Check if this is a teacher viewing the page
+  const isTeacher = user?.role === 'teacher' || user?.role === 'educator';
+  const isMicroSchoolTeacher = user?.email?.includes('newfrontier.pathfinity.edu');
+
+  // Available students for teachers
+  const availableStudents = useMemo(() => {
+    if (!isTeacher) return [];
+
+    if (isMicroSchoolTeacher) {
+      return [
+        { id: 'zara-jones', name: 'Zara Jones', grade: 'K', career: 'doctor' },
+        { id: 'alexis-martin', name: 'Alexis Martin', grade: '1', career: 'teacher' },
+        { id: 'david-brown', name: 'David Brown', grade: '7', career: 'talent_agent' },
+        { id: 'mike-johnson', name: 'Mike Johnson', grade: '10', career: 'football_player' }
+      ];
+    } else {
+      return [
+        { id: 'sam-brown', name: 'Sam Brown', grade: 'K', career: 'chef' },
+        { id: 'alex-davis', name: 'Alex Davis', grade: '1', career: 'doctor' }
+      ];
+    }
+  }, [isTeacher, isMicroSchoolTeacher]);
+
+  // Auto-select first student for teachers
+  React.useEffect(() => {
+    if (isTeacher && availableStudents.length > 0 && !selectedStudentId) {
+      setSelectedStudentId(availableStudents[0].id);
+    }
+  }, [isTeacher, availableStudents, selectedStudentId]);
+
+  // Create student profile from authenticated user data or selected student
   const currentStudent: Student = useMemo(() => {
+    if (isTeacher) {
+      // For teachers, use selected student data
+      const selectedStudent = availableStudents.find(s => s.id === selectedStudentId) || availableStudents[0];
+      if (!selectedStudent) {
+        return {
+          id: 'no-student',
+          name: 'No Student Selected',
+          grade: 'K',
+          companion: 'Spark',
+          career_family: 'doctor',
+          skill_cluster: 'A.1',
+          academic_skills: {
+            math: 'Select a student',
+            ela: 'Select a student',
+            science: 'Select a student',
+            social_studies: 'Select a student'
+          }
+        };
+      }
+
+      const grade = selectedStudent.grade;
+      const studentName = selectedStudent.name;
+      const careerFamily = selectedStudent.career;
+
+      // Map grade to appropriate AI companion based on micro school logic
+      const gradeMapping = isMicroSchoolTeacher ? {
+        'K': { companion: 'Spark', career: 'doctor' },
+        '1': { companion: 'Finn', career: 'teacher' },
+        '7': { companion: 'Sage', career: 'talent_agent' },
+        '10': { companion: 'Harmony', career: 'football_player' }
+      } : {
+        'K': { companion: 'Spark', career: 'chef' },
+        '1': { companion: 'Finn', career: 'doctor' }
+      };
+
+      const mapping = gradeMapping[grade as keyof typeof gradeMapping] || gradeMapping['K'];
+
+      // Grade-appropriate academic skills
+      const academicSkills = {
+        'K': {
+          math: 'Count numbers 1-3',
+          ela: 'Find uppercase letters',
+          science: 'Classify objects by shape',
+          social_studies: 'What is a community?'
+        },
+        '1': {
+          math: 'Count numbers 1-10',
+          ela: 'Recognize sight words',
+          science: 'Identify living/non-living',
+          social_studies: 'Community helpers'
+        },
+        '7': {
+          math: 'Understanding integers',
+          ela: 'Determine main idea of passage',
+          science: 'Process of scientific inquiry',
+          social_studies: 'Identify lines of latitude/longitude'
+        },
+        '10': {
+          math: 'Linear equations',
+          ela: 'Analyze complex texts',
+          science: 'Physics principles',
+          social_studies: 'Economic systems'
+        }
+      };
+
+      const skills = academicSkills[grade as keyof typeof academicSkills] || academicSkills['K'];
+
+      return {
+        id: selectedStudent.id,
+        name: studentName,
+        grade,
+        companion: mapping.companion,
+        career_family: careerFamily,
+        skill_cluster: 'A.1',
+        academic_skills: skills
+      };
+    }
+
+    // For students, use their own profile data
     const grade = profile?.grade_level || 'K';
     const studentName = user?.full_name || 'Student';
 
     // Map grade to appropriate AI companion and career family
-    const gradeMapping = {
+    // Check if user is from micro school
+    const isMicroSchool = user?.email?.includes('newfrontier.pathfinity.edu') ||
+                         profile?.school?.includes('New Frontier') ||
+                         profile?.district?.includes('New Frontier');
+
+    const gradeMapping = isMicroSchool ? {
+      // Micro School Mapping
+      'K': { companion: 'Spark', career: 'doctor' },        // Zara - Doctor
+      '1': { companion: 'Finn', career: 'teacher' },        // Alexis - Teacher
+      '2': { companion: 'Finn', career: 'teacher' },
+      '3': { companion: 'Finn', career: 'teacher' },
+      '4': { companion: 'Finn', career: 'teacher' },
+      '5': { companion: 'Finn', career: 'teacher' },
+      '6': { companion: 'Sage', career: 'talent_agent' },
+      '7': { companion: 'Sage', career: 'talent_agent' },   // David - Talent Agent
+      '8': { companion: 'Sage', career: 'talent_agent' },
+      '9': { companion: 'Harmony', career: 'football_player' },
+      '10': { companion: 'Harmony', career: 'football_player' }, // Mike - Football Player
+      '11': { companion: 'Harmony', career: 'football_player' },
+      '12': { companion: 'Harmony', career: 'football_player' }
+    } : {
+      // Public School Mapping
       'K': { companion: 'Spark', career: 'chef' },
       '1': { companion: 'Finn', career: 'doctor' },
       '2': { companion: 'Finn', career: 'doctor' },
@@ -136,7 +271,7 @@ export const DailyLessonPlanPage: React.FC = () => {
       skill_cluster: 'A.1',
       academic_skills: skills
     };
-  }, [user, profile]);
+  }, [user, profile, isTeacher, isMicroSchoolTeacher, selectedStudentId, availableStudents]);
 
   // Career progressions based on career family
   const careerProgressions: CareerProgression = useMemo(() => {
@@ -164,6 +299,25 @@ export const DailyLessonPlanPage: React.FC = () => {
         premium: { title: 'Professional Player', emoji: '🏈', booster_type: null },
         booster: { title: 'Sports Franchise Owner', emoji: '💼🏈', booster_type: 'Entrepreneur' },
         aifirst: { title: 'AI Sports Talent Agency', emoji: '🤖🏈', booster_type: 'AIFirst' }
+      },
+      // Micro School Career Progressions
+      teacher: {
+        select: { title: 'Classroom Helper', emoji: '👶‍🏫', booster_type: null },
+        premium: { title: 'Student Teacher', emoji: '👨‍🏫', booster_type: null },
+        booster: { title: 'Curriculum Designer', emoji: '📚💼', booster_type: 'Corporate' },
+        aifirst: { title: 'AI Learning Coach', emoji: '🤖👨‍🏫', booster_type: 'AIFirst' }
+      },
+      talent_agent: {
+        select: { title: 'Entertainment Helper', emoji: '👶🎬', booster_type: null },
+        premium: { title: 'Junior Agent', emoji: '🎭💼', booster_type: null },
+        booster: { title: 'Talent Manager', emoji: '⭐💼', booster_type: 'Corporate' },
+        aifirst: { title: 'AI Talent Scout', emoji: '🤖🎬', booster_type: 'AIFirst' }
+      },
+      football_player: {
+        select: { title: 'Team Helper', emoji: '👶🏈', booster_type: null },
+        premium: { title: 'Rookie Player', emoji: '🏈💪', booster_type: null },
+        booster: { title: 'Pro Athlete', emoji: '🏆🏈', booster_type: 'Trade/Skill' },
+        aifirst: { title: 'AI Sports Analyst', emoji: '🤖🏈', booster_type: 'AIFirst' }
       }
     };
 
@@ -474,11 +628,28 @@ export const DailyLessonPlanPage: React.FC = () => {
 
   // Helper function to get demo user ID based on grade and career
   const getDemoUserId = (grade: string, careerTitle: string) => {
+    // Check if user is from micro school based on their email domain
+    const isMicroSchool = user?.email?.includes('newfrontier.pathfinity.edu') ||
+                         profile?.school?.includes('New Frontier') ||
+                         profile?.district?.includes('New Frontier');
+
+    if (isMicroSchool) {
+      // Micro school student mapping
+      const microSchoolMap = {
+        'K': 'zara_k_doctor',
+        '1': 'alexis_1st_teacher',
+        '7': 'david_7th_talent_agent',
+        '10': 'mike_10th_football_player'
+      };
+      return microSchoolMap[grade as keyof typeof microSchoolMap] || 'zara_k_doctor';
+    }
+
+    // Public school student mapping
     const gradeCareerMap = {
       'K': 'sam_k_chef',
       '1': 'alex_1st_doctor',
-      '10': 'taylor_10th_sports_agent',
-      '12': 'jordan_12th_game_designer'
+      '7': 'jordan_7th_game_designer',
+      '10': 'taylor_10th_sports_agent'
     };
 
     return gradeCareerMap[grade as keyof typeof gradeCareerMap] || 'sam_k_chef';
@@ -488,12 +659,16 @@ export const DailyLessonPlanPage: React.FC = () => {
   const getRoleName = (careerTitle: string, roleNumber: number) => {
     const roleNames = {
       chef: ['Kitchen Helper', 'Little Chef', 'Bakery Helper', 'AI Kitchen Friend'],
-      doctor: ['Medical Assistant', 'Nurse Helper', 'Junior Doctor', 'AI Medical Consultant'],
+      doctor: ['Medical Helper', 'Junior Doctor', 'Emergency Medical Helper', 'AI Medical Assistant'],
       'sports talent agency': ['Team Helper', 'Player Scout', 'Contract Negotiator', 'AI Sports Analyst'],
-      'game designer': ['Game Tester', 'Level Designer', 'Character Creator', 'AI Game Master']
+      'game designer': ['Game Helper', 'Junior Designer', 'AI Game Maker', 'AI Game Publisher'],
+      // Micro School Careers
+      teacher: ['Classroom Helper', 'Student Teacher', 'Curriculum Designer', 'AI Learning Coach'],
+      talent_agent: ['Entertainment Helper', 'Junior Agent', 'Talent Manager', 'AI Talent Scout'],
+      football_player: ['Team Helper', 'Rookie Player', 'Pro Athlete', 'AI Sports Analyst']
     };
 
-    const careerKey = careerTitle.toLowerCase();
+    const careerKey = careerTitle.toLowerCase().replace(' ', '_');
     const roles = roleNames[careerKey as keyof typeof roleNames] || ['Role 1', 'Role 2', 'Role 3', 'Role 4'];
     return roles[roleNumber - 1] || `Role ${roleNumber}`;
   };
@@ -602,38 +777,117 @@ export const DailyLessonPlanPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen" style={{
-      backgroundColor: 'var(--color-background)',
-      color: 'var(--color-text)',
-      fontFamily: 'Inter, system-ui, sans-serif'
+    <div className={embedded ? "" : "min-h-screen"} style={{
+      backgroundColor: 'var(--color-bg-primary)',
+      color: 'var(--color-text-primary)',
+      fontFamily: 'var(--font-sans)'
     }}>
-      {/* Header */}
-      <div style={{
-        backgroundColor: 'var(--color-card)',
-        borderBottom: '1px solid var(--color-border)',
-        padding: '1.5rem 2rem'
-      }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-center gap-3 mb-2">
-            <BookOpen size={28} style={{ color: 'var(--color-primary)' }} />
-            <h1 style={{
-              fontSize: '1.875rem',
-              fontWeight: '700',
-              color: 'var(--color-text)'
+      {/* Header - only show when not embedded */}
+      {!embedded && (
+        <div style={{
+          backgroundColor: 'var(--color-bg-elevated)',
+          borderBottom: '1px solid var(--color-border)',
+          padding: 'var(--space-6) var(--space-8)'
+        }}>
+          <div className="max-w-6xl mx-auto">
+            <div className="flex items-center gap-3 mb-2" style={{ gap: 'var(--space-3)', marginBottom: 'var(--space-2)' }}>
+              <BookOpen size={28} style={{ color: 'var(--purple-600)' }} />
+              <h1 style={{
+                fontSize: 'var(--text-3xl)',
+                fontWeight: 'var(--font-bold)',
+                color: 'var(--color-text-primary)'
+              }}>
+                Daily Lesson Plans
+              </h1>
+            </div>
+            <p style={{
+              color: 'var(--color-text-secondary)',
+              fontSize: 'var(--text-base)'
             }}>
-              Daily Lesson Plans
-            </h1>
+              {isTeacher ?
+                `Generate career-focused learning experiences for your students` :
+                `Explore career-focused learning experiences tailored to ${currentStudent.name}'s Grade ${currentStudent.grade} curriculum`
+              }
+            </p>
           </div>
-          <p style={{
-            color: 'var(--color-text-secondary)',
-            fontSize: '1rem'
-          }}>
-            Explore career-focused learning experiences tailored to {currentStudent.name}'s Grade {currentStudent.grade} curriculum
-          </p>
         </div>
-      </div>
+      )}
 
-      <div className="max-w-6xl mx-auto p-6">
+      <div className={embedded ? "" : "max-w-6xl mx-auto p-6"}>
+        {/* Student Selector for Teachers */}
+        {isTeacher && availableStudents.length > 0 && (
+          <ThemeAwareCard className="mb-6">
+            <div style={{ padding: 'var(--space-6)' }}>
+              <h3 style={{
+                fontSize: 'var(--text-xl)',
+                fontWeight: 'var(--font-semibold)',
+                marginBottom: 'var(--space-4)',
+                color: 'var(--color-text-primary)'
+              }}>
+                Select Student for Lesson Plan
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4" style={{ gap: 'var(--space-4)' }}>
+                {availableStudents.map((student) => (
+                  <div
+                    key={student.id}
+                    onClick={() => setSelectedStudentId(student.id)}
+                    style={{
+                      padding: 'var(--space-4)',
+                      borderRadius: 'var(--space-2)',
+                      border: selectedStudentId === student.id ? '2px solid var(--purple-600)' : '2px solid var(--color-border)',
+                      backgroundColor: selectedStudentId === student.id
+                        ? 'color-mix(in srgb, var(--purple-600) 10%, var(--color-bg-elevated))'
+                        : 'var(--color-bg-elevated)',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    <div style={{
+                      width: 'var(--space-10)',
+                      height: 'var(--space-10)',
+                      borderRadius: '50%',
+                      backgroundColor: 'var(--purple-600)',
+                      color: 'var(--color-text-inverse)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: 'var(--text-lg)',
+                      fontWeight: 'var(--font-semibold)',
+                      marginBottom: 'var(--space-3)'
+                    }}>
+                      {student.name.charAt(0)}
+                    </div>
+                    <div style={{
+                      fontWeight: 'var(--font-semibold)',
+                      marginBottom: 'var(--space-1)',
+                      color: 'var(--color-text-primary)',
+                      fontSize: 'var(--text-base)'
+                    }}>
+                      {student.name}
+                    </div>
+                    <div style={{
+                      fontSize: 'var(--text-sm)',
+                      color: 'var(--color-text-secondary)'
+                    }}>
+                      Grade {student.grade} • {student.career.charAt(0).toUpperCase() + student.career.slice(1).replace('_', ' ')}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {!selectedStudentId && (
+                <p style={{
+                  marginTop: 'var(--space-4)',
+                  fontSize: 'var(--text-sm)',
+                  color: 'var(--color-text-tertiary)',
+                  textAlign: 'center'
+                }}>
+                  Select a student above to generate their lesson plan
+                </p>
+              )}
+            </div>
+          </ThemeAwareCard>
+        )}
+
         {/* Student Profile Card */}
         <ThemeAwareCard className="mb-8">
           <div className="p-6">
@@ -795,16 +1049,16 @@ export const DailyLessonPlanPage: React.FC = () => {
         <div className="text-center mb-8">
           <button
             onClick={generateDailyLessonPlan}
-            disabled={loading}
+            disabled={loading || (isTeacher && !selectedStudentId)}
             style={{
               padding: '1rem 2rem',
               fontSize: '1.125rem',
               fontWeight: '600',
-              backgroundColor: loading ? 'var(--color-text-secondary)' : 'var(--color-primary)',
+              backgroundColor: loading || (isTeacher && !selectedStudentId) ? 'var(--color-text-secondary)' : 'var(--color-primary)',
               color: 'white',
               border: 'none',
               borderRadius: '8px',
-              cursor: loading ? 'not-allowed' : 'pointer',
+              cursor: loading || (isTeacher && !selectedStudentId) ? 'not-allowed' : 'pointer',
               display: 'inline-flex',
               alignItems: 'center',
               gap: '0.5rem',

@@ -82,6 +82,16 @@ export interface PromptContext {
     name: string;
     personality?: string;
   };
+  // Narrative context from MasterNarrative
+  narrativeContext?: {
+    setting?: string;
+    context?: string;
+    narrative?: string;
+    mission?: string;
+    throughLine?: string;
+    companion?: any;
+    subjectContext?: any;
+  };
 }
 
 export class PromptBuilder {
@@ -129,11 +139,33 @@ If you generate ANY Math content for this ELA lesson, the entire response will b
 ⚠️⚠️⚠️ END CRITICAL VALIDATION ⚠️⚠️⚠️
 ` : '';
 
+    // Add narrative context if available
+    const narrativeSection = context.narrativeContext ? `
+========================================
+NARRATIVE CONTEXT - MAINTAIN CONTINUITY
+========================================
+${context.narrativeContext.setting ? `Setting: ${context.narrativeContext.setting}` : ''}
+${context.narrativeContext.narrative ? `Story: ${context.narrativeContext.narrative}` : ''}
+${context.narrativeContext.mission ? `Mission: ${context.narrativeContext.mission}` : ''}
+${context.narrativeContext.throughLine ? `Career Connection: ${context.narrativeContext.throughLine}` : ''}
+${context.narrativeContext.context ? `Context: ${context.narrativeContext.context}` : ''}
+${context.narrativeContext.companion ? `
+Companion: ${context.narrativeContext.companion.name || 'AI Assistant'}
+Personality: ${context.narrativeContext.companion.personality || ''}
+Teaching Style: ${context.narrativeContext.companion.teachingStyle || ''}
+` : ''}
+
+CRITICAL: All content must align with this narrative context!
+========================================
+` : '';
+
     // Build the complete prompt based on container type
     const prompt = `
 You are an expert educational content creator specializing in personalized, gamified learning experiences.
 
 ${preValidation}
+
+${narrativeSection}
 
 ${this.getSystemContext(student, career, skill, companion)}
 

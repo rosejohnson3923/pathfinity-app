@@ -1,4 +1,4 @@
-export type SubscriptionTier = 'basic' | 'premium' | 'enterprise';
+export type SubscriptionTier = 'select' | 'premium' | 'enterprise';
 
 export interface SubscriptionFeature {
   id: string;
@@ -26,25 +26,25 @@ export const subscriptionFeatures: SubscriptionFeature[] = [
     id: 'core_learning',
     name: 'Core Learning Platform',
     description: 'Personalized learning paths, assessments, and progress tracking',
-    tiers: ['basic', 'premium', 'enterprise']
+    tiers: ['select', 'premium', 'enterprise']
   },
   {
     id: 'ai_assistant',
     name: 'AI Learning Assistant',
     description: 'AI-powered learning guide and homework helper',
-    tiers: ['basic', 'premium', 'enterprise']
+    tiers: ['select', 'premium', 'enterprise']
   },
   {
-    id: 'basic_analytics',
-    name: 'Basic Analytics',
+    id: 'select_analytics',
+    name: 'Select Analytics',
     description: 'Student progress and performance metrics',
-    tiers: ['basic', 'premium', 'enterprise']
+    tiers: ['select', 'premium', 'enterprise']
   },
   {
     id: 'content_library',
     name: 'Content Library',
     description: 'Access to educational resources and materials',
-    tiers: ['basic', 'premium', 'enterprise']
+    tiers: ['select', 'premium', 'enterprise']
   },
   {
     id: 'collab_projects',
@@ -118,10 +118,10 @@ export const subscriptionFeatures: SubscriptionFeature[] = [
 // Subscription plan definitions
 export const subscriptionPlans: SubscriptionPlan[] = [
   {
-    tier: 'basic',
-    name: 'Basic',
+    tier: 'select',
+    name: 'Select',
     description: 'Essential learning tools for small organizations',
-    features: ['core_learning', 'ai_assistant', 'basic_analytics', 'content_library'],
+    features: ['core_learning', 'ai_assistant', 'select_analytics', 'content_library'],
     maxUsers: 100,
     maxStorage: 50,
     price: 5, // per user per month
@@ -132,7 +132,7 @@ export const subscriptionPlans: SubscriptionPlan[] = [
     name: 'Premium',
     description: 'Advanced features for growing educational institutions',
     features: [
-      'core_learning', 'ai_assistant', 'basic_analytics', 'content_library',
+      'core_learning', 'ai_assistant', 'select_analytics', 'content_library',
       'collab_projects', 'advanced_analytics', 'adaptive_learning', 'career_pathways',
       'ai_content_generation'
     ],
@@ -147,7 +147,7 @@ export const subscriptionPlans: SubscriptionPlan[] = [
     name: 'Enterprise',
     description: 'Comprehensive solution for large organizations with custom needs',
     features: [
-      'core_learning', 'ai_assistant', 'basic_analytics', 'content_library',
+      'core_learning', 'ai_assistant', 'select_analytics', 'content_library',
       'collab_projects', 'advanced_analytics', 'adaptive_learning', 'career_pathways',
       'api_access', 'sso_integration', 'custom_branding', 'dedicated_support',
       'advanced_security', 'ai_content_generation', 'virtual_reality'

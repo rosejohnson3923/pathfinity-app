@@ -12,7 +12,7 @@
  * - Learning insights generation
  */
 
-import { supabase } from '../../config/supabase';
+import { supabase } from '../../lib/supabase';
 
 export interface AnalyticsEvent {
   eventType: string;

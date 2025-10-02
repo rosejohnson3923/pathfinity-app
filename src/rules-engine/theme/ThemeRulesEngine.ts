@@ -132,7 +132,7 @@ export class ThemeRulesEngine extends BaseRulesEngine<ThemeContext> {
   private themes: Map<ThemeMode, ThemeRules> = new Map();
   private componentOverrides: Map<string, ComponentThemeOverride[]> = new Map();
   private authorizedSources: Set<string> = new Set([
-    'DashboardModal',
+    'ReturnSelectModal',
     'StudentDashboard',
     'SettingsModal',
     'MasterAIRulesEngine',

@@ -1,13 +1,35 @@
 /**
- * Master Narrative Generator - Phase 1 Implementation
- * Generates comprehensive career-based narratives that span all subjects and containers
- * Based on the MASTER RUBRIC structure (Sam K Doctor example)
+ * Master Narrative Generator - Best-in-Class Implementation
+ *
+ * ⚠️ IMPORTANT: FOR STUDENT LEARNING ONLY
+ *
+ * This generator is used for:
+ * ✅ Student Dashboard - After career/companion selection (Screen 4)
+ * ✅ Learn Container - Real-time content generation context
+ * ✅ Experience Container - Live scenario generation context
+ * ✅ Discover Container - Active exploration content context
+ * ✅ Progress Tracking - Actual learning metrics
+ *
+ * DO NOT USE FOR:
+ * ❌ Parent Dashboard
+ * ❌ Teacher Dashboard
+ * ❌ Admin Dashboard
+ * ❌ Marketing/Approval workflows
+ *
+ * For parent/teacher previews, use: DemonstrativeMasterNarrativeGenerator
+ *
+ * KEY FEATURES:
+ * - Generates RICH mission briefings with career-specific challenges
+ * - Creates cohesive narrative that JIT uses for real-time generation
+ * - Provides three-act structure (Learn → Experience → Discover)
+ * - Integrates companion personality throughout journey
+ * - Delivers same quality as demonstrative version (parents' expectation)
  */
 
 import { MultiModelService } from '../ai-models/MultiModelService';
 
 /**
- * Master Narrative Interface - Matches our MASTER RUBRIC exactly
+ * Enhanced Master Narrative Interface - Best-in-Class Quality
  */
 export interface MasterNarrative {
   narrativeId: string;
@@ -18,12 +40,22 @@ export interface MasterNarrative {
     personality: string;              // "Caring, gentle, helpful"
     equipment: string[];              // ["Toy stethoscope", "Doctor coat", etc.]
   };
-  journeyArc: {
-    checkIn: string;                  // "Sam arrives at CareerInc Lobby as Junior Doctor Helper"
-    learn: string;                    // "Virtual Academy - Medical Helper Basics"
-    experience: string;               // "Virtual Workplace - CareerInc Children's Clinic"
-    discover: string;                 // "Virtual Field Trip - Community Health Fair"
+
+  // ENHANCED: Rich mission briefing with career-specific challenge
+  missionBriefing: {
+    greeting: string;                 // Career-specific welcome
+    situation: string;                // The problem/challenge to solve
+    challenge: string;                // Specific mission details
+    skillsNeeded: string;            // How learned skills will help
+    companionSupport: string;        // Companion's promise to help
+    closingMotivation: string;      // Exciting call to action
   };
+
+  // Container-specific narrative contexts
+  // These map to actual container implementations:
+  // Learn → Instruction/Video/Practice/Assessment
+  // Experience → Scenario/Practice/Assessment
+  // Discover → Challenge/Practice/Assessment
   cohesiveStory: {
     medicalFocus?: string;            // For medical careers
     technicalFocus?: string;          // For technical careers
@@ -85,6 +117,19 @@ export interface MasterNarrative {
     science: string[];                // 3-4 fun facts about how career uses science
     socialStudies: string[];          // 3-4 fun facts about career's community impact
   };
+
+  // ENHANCED: Companion personality integration
+  companionIntegration: {
+    name: string;                     // Companion's name
+    personality: string;              // Companion's personality type
+    greetingStyle: string;           // How companion greets
+    encouragementStyle: string;      // How companion encourages
+    teachingStyle: string;           // How companion teaches
+    celebrationStyle: string;        // How companion celebrates
+    catchphrase: string;             // Companion's signature phrase
+    transitionPhrases: string[];     // Phrases between activities
+  };
+
   generatedAt: Date;
   generationCost: number;
 }
@@ -96,7 +141,12 @@ export interface MasterNarrativeParams {
   studentName: string;
   gradeLevel: string;
   career: string;
+  companion: {
+    name: string;      // Sage, Harmony, Finn, or Spark
+    personality: string; // Wise, Balanced, Adventurous, or Energetic
+  };
   subjects: string[];  // Always ['math', 'ela', 'science', 'socialStudies']
+  currentDate?: Date;  // For contextual greeting
 }
 
 /**
@@ -106,7 +156,13 @@ export class MasterNarrativeGenerator {
   private aiService: MultiModelService;
 
   constructor() {
-    this.aiService = new MultiModelService();
+    // Initialize AI service only if available
+    try {
+      this.aiService = new MultiModelService();
+    } catch (error) {
+      console.warn('AI Service not available, using mock mode');
+      this.aiService = null as any;
+    }
   }
 
   /**
@@ -114,7 +170,13 @@ export class MasterNarrativeGenerator {
    * Phase 1: No caching, direct AI call every time
    */
   async generateMasterNarrative(params: MasterNarrativeParams): Promise<MasterNarrative> {
-    console.log('🎭 Generating Master Narrative for:', params);
+    // Generating Master Narrative
+
+    // Use mock data if AI service is not available
+    if (!this.aiService) {
+      // Using mock narrative (AI service not available)
+      return this.getMockNarrative(params);
+    }
 
     try {
       // Build the comprehensive prompt
@@ -138,19 +200,14 @@ export class MasterNarrativeGenerator {
       );
 
       const generationTime = Date.now() - startTime;
-      console.log(`✅ Master Narrative generated in ${generationTime}ms`);
+      // Master Narrative generation completed
 
       // Parse and validate the response
       const narrative = this.parseAndValidateNarrative(response, params);
 
       // Log if fun facts are present
       if (narrative.subjectContextsAlignedFacts) {
-        console.log('🎉 Fun facts included in Master Narrative:', {
-          math: narrative.subjectContextsAlignedFacts.math?.length || 0,
-          ela: narrative.subjectContextsAlignedFacts.ela?.length || 0,
-          science: narrative.subjectContextsAlignedFacts.science?.length || 0,
-          socialStudies: narrative.subjectContextsAlignedFacts.socialStudies?.length || 0
-        });
+        // Fun facts included in narrative
       } else {
         console.warn('⚠️ No fun facts found in Master Narrative response');
       }
@@ -166,7 +223,7 @@ export class MasterNarrativeGenerator {
 
       // For development, return a mock narrative if generation fails
       if (process.env.NODE_ENV === 'development') {
-        console.log('🔄 Using mock narrative for development');
+        // Using mock narrative for development
         return this.getMockNarrative(params);
       }
 
@@ -197,11 +254,13 @@ The narrative must follow this EXACT JSON structure:
     "personality": "[3-4 positive traits appropriate for the career]",
     "equipment": ["List 4 career-specific tools/items"]
   },
-  "journeyArc": {
-    "checkIn": "${studentName} arrives at CareerInc Lobby as Junior ${career} Helper",
-    "learn": "Virtual Academy - ${career} Helper Basics",
-    "experience": "Virtual Workplace - CareerInc ${career} [specific workplace]",
-    "discover": "Virtual Field Trip - [Community location for ${career}]"
+  "missionBriefing": {
+    "greeting": "Welcome to CareerInc ${career} Center, ${career} ${studentName}!",
+    "situation": "[Exciting problem or challenge that needs solving]",
+    "challenge": "[Specific mission details]",
+    "skillsNeeded": "[How the skills from all subjects will help]",
+    "companionSupport": "[Companion's promise to help]",
+    "closingMotivation": "[Exciting call to action to start the journey]"
   },
   "cohesiveStory": {
     "[focusType]": "[Specific focus area for ${career}]",
@@ -278,6 +337,20 @@ The narrative must follow this EXACT JSON structure:
       "${career}s make our community better by [community contribution]!",
       "Cool fact: There are ${career}s in every [location/community]!"
     ]
+  },
+  "companionIntegration": {
+    "name": "[Companion name: Sage, Harmony, Finn, or Spark]",
+    "personality": "[Companion's personality type]",
+    "greetingStyle": "[How companion greets the student]",
+    "encouragementStyle": "[How companion provides encouragement]",
+    "teachingStyle": "[How companion helps teach concepts]",
+    "celebrationStyle": "[How companion celebrates successes]",
+    "catchphrase": "[Companion's signature phrase]",
+    "transitionPhrases": [
+      "[Phrase for moving between activities]",
+      "[Another transition phrase]",
+      "[One more transition phrase]"
+    ]
   }
 }
 
@@ -291,6 +364,9 @@ IMPORTANT:
 - Include specific, concrete examples
 - Make the career aspirational but accessible
 - Use "CareerInc" branding consistently
+- NEVER use time-of-day references (no morning, afternoon, evening, today, tonight, etc.)
+- Use progress-based milestones instead of time-based ones
+- Keep flexibility for home/micro school scheduling
 - For subjectContextsAlignedFacts: Create fun, exciting facts that will engage ${gradeLevel} students
 - Facts should be short (one sentence), enthusiastic, and relate the career to the subject
 - Start facts with "Fun fact:", "Did you know?", "${career}s", or "Cool fact:" as shown
@@ -343,7 +419,7 @@ IMPORTANT:
    */
   private parseAndValidateNarrative(response: any, params: MasterNarrativeParams): MasterNarrative {
     try {
-      console.log('Raw AI response:', response);
+      // AI response received
 
       // If response is a string, parse it as JSON
       let narrative = typeof response === 'string' ? JSON.parse(response) : response;
@@ -372,13 +448,13 @@ IMPORTANT:
       // If narrativeId is missing, generate one
       if (!narrative.narrativeId) {
         narrative.narrativeId = `narr_${params.studentName.toLowerCase()}_${params.career.toLowerCase().replace(/\s+/g, '_')}_${params.gradeLevel.toLowerCase()}_${Date.now()}`;
-        console.log('Generated narrativeId:', narrative.narrativeId);
+        // Generated unique narrative ID
       }
 
       // Validate required fields
       const required = [
         'character',
-        'journeyArc',
+        'missionBriefing',
         'cohesiveStory',
         'settingProgression',
         'visualTheme',
@@ -419,10 +495,12 @@ IMPORTANT:
    * Get mock narrative for development/testing
    */
   private getMockNarrative(params: MasterNarrativeParams): MasterNarrative {
-    const { studentName, gradeLevel, career } = params;
+    const { studentName, gradeLevel, career, companion } = params;
 
     // Generate career-specific mock data
     const careerData = this.getCareerMockData(career);
+    const missionBriefing = this.generateMissionBriefing(career, studentName, companion);
+    const companionIntegration = this.getCompanionIntegration(companion);
 
     return {
       narrativeId: `narr_${studentName.toLowerCase()}_${career.toLowerCase().replace(/\s+/g, '_')}_${gradeLevel.toLowerCase()}_${Date.now()}`,
@@ -433,12 +511,7 @@ IMPORTANT:
         personality: careerData.personality,
         equipment: careerData.equipment
       },
-      journeyArc: {
-        checkIn: `${studentName} arrives at CareerInc Lobby as Junior ${career} Helper`,
-        learn: `Virtual Academy - ${career} Helper Basics`,
-        experience: `Virtual Workplace - CareerInc ${careerData.workplace}`,
-        discover: `Virtual Field Trip - ${careerData.fieldTrip}`
-      },
+      missionBriefing,
       cohesiveStory: {
         ...careerData.focus,
         mission: careerData.mission,
@@ -468,6 +541,7 @@ IMPORTANT:
       },
       subjectContextsAligned: this.getMockSubjectContexts(career, studentName, gradeLevel).contexts,
       subjectContextsAlignedFacts: this.getMockSubjectContexts(career, studentName, gradeLevel).facts,
+      companionIntegration,
       generatedAt: new Date(),
       generationCost: 0.00  // Mock is free
     };
@@ -652,7 +726,7 @@ IMPORTANT:
 
     // Generic fallback for unknown careers
     if (!careerMap[career]) {
-      console.log(`Creating generic mock data for unknown career: ${career}`);
+      // Creating generic mock data for unknown career
       const careerLower = career.toLowerCase();
       return {
         personality: "Dedicated, skilled, friendly",
@@ -741,26 +815,139 @@ IMPORTANT:
   }
 
   /**
+   * Generate rich mission briefing for career
+   */
+  private generateMissionBriefing(career: string, studentName: string, companion: { name: string; personality: string }): any {
+    const briefings: Record<string, any> = {
+      'Doctor': {
+        greeting: `Welcome to CareerInc Medical Center, Dr. ${studentName}!`,
+        situation: `Emergency! The Teddy Bear Clinic has 5 patients with mysterious symptoms.`,
+        challenge: `We need to diagnose and treat each patient using careful observation and medical knowledge.`,
+        skillsNeeded: `You'll use math to measure doses, reading to understand charts, science to diagnose, and teamwork to help everyone.`,
+        companionSupport: `${companion.name} says: "I'll help you examine each patient and find the right treatment!"`,
+        closingMotivation: `Let's save the day and help all our teddy bear patients feel better!`
+      },
+      'Chef': {
+        greeting: `Welcome to Le Magnifique Restaurant, Chef ${studentName}!`,
+        situation: `The famous food critic Antoine Delacroix is coming for dinner service!`,
+        challenge: `We must prepare a perfect 5-course meal using precise measurements and timing.`,
+        skillsNeeded: `You'll use math for measurements, reading for recipes, science for cooking chemistry, and creativity for presentation.`,
+        companionSupport: `${companion.name} says: "Together we'll create the most amazing meal ever!"`,
+        closingMotivation: `Let's earn that fifth Michelin star!`
+      },
+      'Scientist': {
+        greeting: `Welcome to the Discovery Lab, Scientist ${studentName}!`,
+        situation: `We've detected an unusual chemical reaction in our latest experiment!`,
+        challenge: `We need to safely investigate and document this discovery through careful experimentation.`,
+        skillsNeeded: `You'll use math for measurements, reading for research, science for experiments, and documentation for sharing findings.`,
+        companionSupport: `${companion.name} says: "This could be a breakthrough discovery! I'll help you test every hypothesis!"`,
+        closingMotivation: `Let's make scientific history together!`
+      },
+      'Teacher': {
+        greeting: `Welcome to Pathfinity Elementary, Teacher ${studentName}!`,
+        situation: `Your stuffed animal students are ready for their big test tomorrow!`,
+        challenge: `Help each student master their lessons through creative teaching methods.`,
+        skillsNeeded: `You'll use math for lesson planning, reading for materials, science for demonstrations, and patience for teaching.`,
+        companionSupport: `${companion.name} says: "You're going to be an amazing teacher! I'll help make learning fun!"`,
+        closingMotivation: `Let's help every student succeed!`
+      }
+    };
+
+    // Return specific briefing or generate generic one
+    return briefings[career] || {
+      greeting: `Welcome to CareerInc ${career} Center, ${career} ${studentName}!`,
+      situation: `An important ${career.toLowerCase()} challenge awaits!`,
+      challenge: `Use your skills to solve this mission.`,
+      skillsNeeded: `You'll use all your subjects to succeed as a ${career.toLowerCase()}.`,
+      companionSupport: `${companion.name} says: "I'm here to help you every step of the way!"`,
+      closingMotivation: `Let's show everyone what an amazing ${career.toLowerCase()} you are!`
+    };
+  }
+
+  /**
+   * Get companion personality integration
+   */
+  private getCompanionIntegration(companion: { name: string; personality: string }): any {
+    const personalities: Record<string, any> = {
+      'Sage': {
+        name: 'Sage',
+        personality: 'Wise and thoughtful',
+        greetingStyle: 'Sage adjusts glasses thoughtfully and smiles warmly',
+        encouragementStyle: 'offers wise insights and patient guidance',
+        teachingStyle: 'explains concepts clearly with real-world examples',
+        celebrationStyle: 'nods approvingly with a proud smile',
+        catchphrase: 'Every problem has a solution when we think it through!',
+        transitionPhrases: [
+          'Sage whispers: "Each discovery brings us closer to the answer..."',
+          'Sage notes: "Excellent observation! Let\'s explore further..."',
+          'Sage encourages: "You\'re thinking like a true professional!"'
+        ]
+      },
+      'Harmony': {
+        name: 'Harmony',
+        personality: 'Balanced and supportive',
+        greetingStyle: 'Harmony offers a reassuring smile and calming presence',
+        encouragementStyle: 'provides balanced feedback and steady support',
+        teachingStyle: 'guides with gentle suggestions and clear steps',
+        celebrationStyle: 'celebrates with graceful excitement',
+        catchphrase: 'Together we can achieve perfect balance!',
+        transitionPhrases: [
+          'Harmony suggests: "Let\'s take this step by step..."',
+          'Harmony observes: "You\'re finding your rhythm perfectly!"',
+          'Harmony guides: "Balance is key to mastering this skill!"'
+        ]
+      },
+      'Finn': {
+        name: 'Finn',
+        personality: 'Adventurous and brave',
+        greetingStyle: 'Finn grins adventurously and gives a thumbs up',
+        encouragementStyle: 'cheers enthusiastically and celebrates every attempt',
+        teachingStyle: 'turns learning into exciting adventures',
+        celebrationStyle: 'does victory dances and high-fives',
+        catchphrase: 'Every day is an adventure when we\'re learning!',
+        transitionPhrases: [
+          'Finn exclaims: "What an adventure this is becoming!"',
+          'Finn cheers: "You\'re braver than you know!"',
+          'Finn encourages: "Let\'s explore this challenge together!"'
+        ]
+      },
+      'Spark': {
+        name: 'Spark',
+        personality: 'Energetic and enthusiastic',
+        greetingStyle: 'Spark bounces excitedly with electric energy',
+        encouragementStyle: 'provides high-energy motivation and excitement',
+        teachingStyle: 'makes every lesson feel like a fun game',
+        celebrationStyle: 'explodes with joy and sparkly effects',
+        catchphrase: 'Learning is AMAZING when we do it together!',
+        transitionPhrases: [
+          'Spark buzzes: "This is getting SO exciting!"',
+          'Spark zips: "You\'re on fire with these skills!"',
+          'Spark sparkles: "WOW! Look what you just discovered!"'
+        ]
+      }
+    };
+
+    return personalities[companion.name] || personalities['Sage'];
+  }
+
+  /**
    * Test method to generate narratives for different careers
    */
   async testGeneration(): Promise<void> {
     const testCareers = ['Doctor', 'Teacher', 'Chef', 'Scientist', 'Artist'];
 
     for (const career of testCareers) {
-      console.log(`\n🧪 Testing generation for: ${career}`);
+      // Testing generation for career
 
       const narrative = await this.generateMasterNarrative({
         studentName: 'Sam',
         gradeLevel: 'K',
         career,
+        companion: { name: 'Sage', personality: 'Wise and thoughtful' },
         subjects: ['math', 'ela', 'science', 'socialStudies']
       });
 
-      console.log(`✅ Generated narrative for ${career}:`);
-      console.log(`   - Role: ${narrative.character.role}`);
-      console.log(`   - Workplace: ${narrative.character.workplace}`);
-      console.log(`   - Mission: ${narrative.cohesiveStory.mission}`);
-      console.log(`   - Cost: $${narrative.generationCost}`);
+      // Generated narrative for career
     }
   }
 }

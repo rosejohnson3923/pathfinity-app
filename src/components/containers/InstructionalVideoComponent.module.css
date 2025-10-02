@@ -97,6 +97,8 @@
 /* Video Player */
 .videoWrapper {
   position: relative;
+  /* Prevent any clicks from reaching YouTube controls */
+  user-select: none;
 }
 
 .videoPlayer {
@@ -106,12 +108,32 @@
   align-items: center;
   justify-content: center;
   position: relative;
+  overflow: hidden;
 }
 
 .videoFrame {
   width: 100%;
   height: 100%;
   border: none;
+  /* Push YouTube player slightly larger to hide any remaining controls at bottom */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(100% + 40px); /* Hide YouTube's bottom control bar */
+  pointer-events: none; /* Prevent direct interaction with iframe */
+}
+
+/* Click overlay for play/pause functionality */
+.videoClickOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  cursor: pointer;
+  background: transparent;
 }
 
 .loadingState {
@@ -156,8 +178,10 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7) 40%, transparent);
   padding: var(--space-4);
+  z-index: 10; /* Ensure controls are above the blocking overlay */
+  pointer-events: auto; /* Allow interaction with our controls */
 }
 
 .controlsContent {

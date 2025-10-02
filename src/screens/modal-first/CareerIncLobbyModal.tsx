@@ -213,7 +213,8 @@ export const CareerIncLobbyModal: React.FC<CareerIncLobbyModalProps> = ({
         const firstName = user?.full_name?.split(' ')[0] || profile?.display_name?.split(' ')[0] || 'friend';
 
         // Build the introduction text with CTA
-        const introText = `Welcome to Career Inc, ${firstName}! I'm ${companionName}, and I'm thrilled to be your guide today. Let's explore the amazing world of being a ${selectedCareer} together! Click the purple Learn button to get started.`;
+        // Companion has already introduced themselves in CompanionTransitionScreen, so skip re-introduction
+        const introText = `Welcome to Career Inc, ${firstName}! Ready to start your journey as a ${selectedCareer}? We'll explore through three amazing containers: Learn, Experience, and Discover. Each one helps you grow in different ways! Click the purple Learn button to begin your adventure.`;
 
         // Check if audio is currently playing and wait for it to finish
         const playLobbyNarration = () => {
@@ -260,7 +261,7 @@ export const CareerIncLobbyModal: React.FC<CareerIncLobbyModalProps> = ({
         };
 
         // Start checking immediately when the page loads
-        // This will wait for any DashboardModal audio to finish naturally
+        // This will wait for any ReturnSelectModal audio to finish naturally
         playLobbyNarration();
       }
     }, 100); // Small delay to handle StrictMode

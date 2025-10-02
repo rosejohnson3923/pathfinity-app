@@ -352,7 +352,24 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
             learning_style: student.learning_style || 'visual'
           },
           career: selectedCareer,
-          careerDescription: `${selectedCareer} professional`
+          careerDescription: `${selectedCareer} professional`,
+          // ADD NARRATIVE CONTEXT for Experience Container (Scenario generation)
+          narrativeContext: masterNarrative ? {
+            // Experience-specific setting and narrative
+            setting: masterNarrative.settingProgression?.experience?.location,
+            context: masterNarrative.settingProgression?.experience?.context,
+            narrative: masterNarrative.settingProgression?.experience?.narrative,
+
+            // Overall story elements
+            mission: masterNarrative.cohesiveStory?.mission,
+            throughLine: masterNarrative.cohesiveStory?.throughLine,
+
+            // Companion personality for consistent interactions
+            companion: masterNarrative.companionIntegration,
+
+            // Subject-specific context for this subject
+            subjectContext: masterNarrative.subjectContextsAligned?.[skill.subject]
+          } : undefined
         },
         timeConstraint: 10 // minutes
       };

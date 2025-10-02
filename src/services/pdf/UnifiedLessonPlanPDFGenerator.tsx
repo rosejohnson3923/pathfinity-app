@@ -444,9 +444,8 @@ export const UnifiedLessonPlanPDF = ({ lessonPlan }: { lessonPlan: any }) => {
             )}
 
             {/* Show Math activities grouped by role */}
-            {lessonPlan.content.subjectContents.Math.challenges.map((roleGroup, roleIdx) => {
-              console.log('🔍 PDF Math Role Debug:', { roleIdx, roleGroup, activities: roleGroup.activities });
-              return roleGroup.isRoleGroup ? (
+            {lessonPlan.content.subjectContents.Math.challenges.map((roleGroup, roleIdx) =>
+              roleGroup.isRoleGroup ? (
                 <View key={roleIdx} style={{ marginBottom: 12 }}>
                   {/* Role Header */}
                   <View style={{ backgroundColor: colors.gray[100], padding: 12, borderRadius: 8, marginBottom: 8 }}>
@@ -456,22 +455,19 @@ export const UnifiedLessonPlanPDF = ({ lessonPlan }: { lessonPlan: any }) => {
                   </View>
 
                   {/* Role Activities */}
-                  {roleGroup.activities && roleGroup.activities.map((activity, actIdx) => {
-                    console.log('🔍 PDF Math Activity Debug:', { actIdx, activity, type: typeof activity });
-                    return (
-                      <View key={actIdx} style={[styles.challengeBox, { marginLeft: 16, marginBottom: 8 }]}>
-                        <Text style={styles.challengeContent}>
-                          {activity}
-                        </Text>
+                  {roleGroup.activities && roleGroup.activities.map((activity, actIdx) => (
+                    <View key={actIdx} style={[styles.challengeBox, { marginLeft: 16, marginBottom: 8 }]}>
+                      <Text style={styles.challengeContent}>
+                        {activity}
+                      </Text>
 
-                        {roleGroup.hint && actIdx === 0 && (
-                          <Text style={{ fontSize: 8, color: '#6B7280', fontStyle: 'italic', marginTop: 3 }}>
-                            Hint: {roleGroup.hint}
-                          </Text>
-                        )}
-                      </View>
-                    );
-                  })}
+                      {roleGroup.hint && actIdx === 0 && (
+                        <Text style={{ fontSize: 8, color: '#6B7280', fontStyle: 'italic', marginTop: 3 }}>
+                          Hint: {roleGroup.hint}
+                        </Text>
+                      )}
+                    </View>
+                  ))}
                 </View>
               ) : (
                 // Fallback for non-role-grouped challenges
@@ -483,8 +479,8 @@ export const UnifiedLessonPlanPDF = ({ lessonPlan }: { lessonPlan: any }) => {
                     {roleGroup.description || roleGroup.question || 'Math challenge involving counting and numbers'}
                   </Text>
                 </View>
-              );
-            })}
+              )
+            )}
           </View>
         )}
 

@@ -50,6 +50,16 @@ export interface JITContentRequest {
     };
     career?: string;
     careerDescription?: string;
+    // Narrative context from MasterNarrative
+    narrativeContext?: {
+      setting?: string;
+      context?: string;
+      narrative?: string;
+      mission?: string;
+      throughLine?: string;
+      companion?: any;
+      subjectContext?: any;
+    };
   };
 }
 
@@ -178,9 +188,10 @@ export class JustInTimeContentService {
    */
   public async generateContainerContent(
     request: JITContentRequest
-  ): Promise<GeneratedContent> {
-    const startTime = typeof window !== 'undefined' && window.performance ? 
-      window.performance.now() : Date.now();
+  ): Promise<GeneratedContent | null> {
+    try {
+      const startTime = typeof window !== 'undefined' && window.performance ?
+        window.performance.now() : Date.now();
     
     // Build cache key
     const cacheKey = this.buildCacheKey(request);
@@ -271,6 +282,11 @@ export class JustInTimeContentService {
     console.log('[JIT] Content generated in', generationTime.toFixed(0), 'ms');
     
     return content;
+    } catch (error) {
+      console.error('Error generating content:', error);
+      // Return null on error - the orchestrator will handle with fallback
+      return null;
+    }
   }
 
   /**
@@ -679,7 +695,9 @@ export class JustInTimeContentService {
     
     const career = context.career ? {
       name: typeof context.career === 'string' ? context.career : context.career.name || context.career.title,
-      description: context.careerDescription || (typeof context.career === 'string' ? `${context.career} professional` : context.career.description || `${context.career.name || context.career.title} professional`)
+      description: context.careerDescription || (typeof context.career === 'string' ? `${context.career} professional` : context.career.description || `${context.career.name || context.career.title} professional`),
+      // Pass narrative context to AI service
+      narrativeContext: context.narrativeContext
     } : undefined;
     
     console.log('[JIT] 📚 Calling AI service with:', {
@@ -746,23 +764,49 @@ export class JustInTimeContentService {
       instructions = aiContent.greeting + '\n\n' + aiContent.concept;
       
     } else if (containerType === 'experience' && aiContent.interactive_simulation) {
-      // Convert experience challenges to questions
+      // Debug log the first challenge to see what we're getting
+      if (aiContent.interactive_simulation.challenges?.[0]) {
+        console.log('🔍 JIT - Raw AI challenge structure:', {
+          challenge: aiContent.interactive_simulation.challenges[0],
+          hasDescription: !!aiContent.interactive_simulation.challenges[0].description
+        });
+      }
+
+      // Convert experience challenges to questions - PRESERVE ALL RICH CONTENT
       questions = aiContent.interactive_simulation.challenges.map((c: any, idx: number) => ({
         id: `${request.container}-q-${idx}`,
         type: c.question_type || 'multiple_choice',
-        question: c.question,
+        // Use the full description as the question (this is what we want to show!)
+        question: c.description || c.question || '',
+        description: c.description,  // Full challenge description
+        challenge_summary: c.challenge_summary,  // Short summary
         options: c.options || [],
-        correctAnswer: c.correct_answer,
+        correct_choice: c.correct_choice,  // Index of correct answer
+        correctAnswer: c.correct_answer || (c.correct_choice !== undefined ? c.options?.[c.correct_choice] : ''),
         hint: c.hint || '',
-        explanation: c.feedback || '',
-        scenario: c.scenario,
+        outcome: c.outcome || '',  // What happens when answered correctly
+        learning_point: c.learning_point || '',  // Learning takeaway
+        explanation: c.feedback || c.outcome || '',
+        scenario: c.scenario || aiContent.scenario,
         metadata: {
           difficulty: c.difficulty || 'medium',
           skill: skillFocus,
           career: careerContext
         }
       }));
-      instructions = aiContent.scenario + '\n\n' + aiContent.character_context;
+
+      // Debug log what we mapped
+      if (questions.length > 0) {
+        console.log('🔍 JIT - Mapped question structure:', {
+          firstQuestion: questions[0],
+          hasDescription: !!questions[0].description,
+          descriptionValue: questions[0].description
+        });
+      }
+
+      // Use the setup from interactive_simulation if available
+      instructions = aiContent.interactive_simulation.setup ||
+                    (aiContent.scenario + '\n\n' + aiContent.character_context);
       
     } else if (containerType === 'discover') {
       // Handle new 3-2-1 structure where all 6 scenarios are in "practice" array

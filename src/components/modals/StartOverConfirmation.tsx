@@ -12,8 +12,9 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AlertTriangle, Clock, Target, TrendingUp, X, CheckCircle } from 'lucide-react';
+import { AlertTriangle, Clock, Target, TrendingUp, X, CheckCircle, Sparkles } from 'lucide-react';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { useThemeContext } from '../../contexts/ThemeContext';
 import { azureAudioService } from '../../services/azureAudioService';
 import { SCRIPT_IDS } from '../../constants/scriptRegistry';
 import '../../design-system/index.css';
@@ -22,14 +23,17 @@ interface StartOverConfirmationProps {
   session: any;
   onConfirm: () => void;
   onCancel: () => void;
+  onChangeSelections?: () => void;
 }
 
 export const StartOverConfirmation: React.FC<StartOverConfirmationProps> = ({
   session,
   onConfirm,
-  onCancel
+  onCancel,
+  onChangeSelections
 }) => {
   const { user } = useAuthContext();
+  const { theme } = useThemeContext();
   const [isConfirming, setIsConfirming] = useState(false);
   const [narrationComplete, setNarrationComplete] = useState(false);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
@@ -180,7 +184,12 @@ export const StartOverConfirmation: React.FC<StartOverConfirmationProps> = ({
       else scriptKey += '9-12';
 
       const firstName = user?.full_name?.split(' ')[0] || user?.email?.split('@')[0] || 'friend';
-      const companionId = session.companion_id || 'finn';
+      // Get companion ID from nested structure (same logic as avatar display)
+      const companionId = session.companion?.id ||
+                         session.companion_id ||
+                         session.companion?.name?.toLowerCase() ||
+                         session.companion_name?.toLowerCase() ||
+                         'finn';
 
       console.log('🎤 StartOver warning narration:', {
         scriptKey,
@@ -234,12 +243,18 @@ export const StartOverConfirmation: React.FC<StartOverConfirmationProps> = ({
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
       >
-        {/* Backdrop */}
+        {/* Backdrop - no onClick to prevent accidental cancellation */}
         <motion.div
           className="absolute inset-0 bg-black/60 backdrop-blur-sm"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          onClick={handleCancel}
+          onClick={(e) => {
+            e.stopPropagation();
+            console.log('🖱️ StartOver backdrop clicked - ignoring to prevent accidental cancellation');
+            console.log('💡 User must explicitly click Cancel or Start Fresh buttons');
+            // Don't close on backdrop click - prevents accidental navigation
+            // handleCancel(); // Disabled to prevent backdrop click issues
+          }}
         />
 
         {/* Modal Content */}
@@ -335,17 +350,39 @@ export const StartOverConfirmation: React.FC<StartOverConfirmationProps> = ({
                 )}
 
                 {/* Companion Avatar */}
-                <div className="relative w-full h-full rounded-full bg-gradient-to-br from-red-400 to-orange-500 flex items-center justify-center shadow-lg">
-                  <span className="text-2xl">
-                    {session.companion_id === 'pat' ? '🤖' :
-                     session.companion_id === 'sam' ? '🦉' :
-                     session.companion_id === 'alex' ? '🦊' :
-                     session.companion_id === 'jordan' ? '🐻' :
-                     session.companion_id === 'taylor' ? '🦄' :
-                     session.companion_id === 'morgan' ? '🐉' :
-                     session.companion_id === 'casey' ? '🦁' :
-                     session.companion_id === 'riley' ? '🐧' : '🎓'}
-                  </span>
+                <div className="relative w-full h-full rounded-full bg-gradient-to-br from-red-400 to-orange-500 flex items-center justify-center shadow-lg overflow-hidden">
+                  {(() => {
+                    // Get companion ID from nested structure (same as WelcomeBackModal)
+                    const companionId = session.companion?.id ||
+                                       session.companion_id ||
+                                       session.companion?.name?.toLowerCase() ||
+                                       session.companion_name?.toLowerCase();
+
+                    if (companionId && ['finn', 'sage', 'harmony', 'spark'].includes(companionId)) {
+                      return (
+                        <img
+                          src={`/images/companions/${companionId}-${theme || 'dark'}.png`}
+                          alt={session.companion?.name || session.companion_name || companionId}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.style.display = 'none';
+                            // Show emoji fallback if image fails
+                            const fallbackSpan = document.createElement('span');
+                            fallbackSpan.className = 'text-2xl';
+                            fallbackSpan.textContent = '🎓';
+                            target.parentElement?.appendChild(fallbackSpan);
+                          }}
+                        />
+                      );
+                    } else {
+                      return (
+                        <span className="text-2xl">
+                          {companionId === 'pat' ? '🧭' : '🎓'}
+                        </span>
+                      );
+                    }
+                  })()}
                 </div>
 
                 {/* Speaking Indicator */}
@@ -585,14 +622,28 @@ export const StartOverConfirmation: React.FC<StartOverConfirmationProps> = ({
               >
                 <span className="flex items-center justify-center space-x-2">
                   <CheckCircle className="w-5 h-5" />
-                  <span>Finish as {session.career_name}</span>
+                  <span>Continue Journey</span>
                 </span>
               </motion.button>
+
+              {onChangeSelections && (
+                <motion.button
+                  onClick={onChangeSelections}
+                  className="flex-1 py-3 px-6 bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-bold rounded-xl shadow-lg hover:from-purple-600 hover:to-indigo-700 transition-all"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <span className="flex items-center justify-center space-x-2">
+                    <Sparkles className="w-5 h-5" />
+                    <span>Change Selections</span>
+                  </span>
+                </motion.button>
+              )}
 
               <motion.button
                 onClick={handleConfirmStart}
                 disabled={isConfirming}
-                className="flex-1 py-3 px-6 bg-white dark:bg-gray-800 border-2 border-red-300 dark:border-red-700 text-red-600 dark:text-red-400 font-bold rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 transition-all disabled:opacity-50"
+                className="py-3 px-6 bg-white dark:bg-gray-800 border-2 border-red-300 dark:border-red-700 text-red-600 dark:text-red-400 font-bold rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 transition-all disabled:opacity-50"
                 whileHover={{ scale: isConfirming ? 1 : 1.02 }}
                 whileTap={{ scale: isConfirming ? 1 : 0.98 }}
               >

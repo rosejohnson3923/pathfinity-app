@@ -1,5 +1,5 @@
 /**
- * AI Companion Modal V2 - Extracted from DashboardModal
+ * AI Companion Modal V2 - Extracted from ReturnSelectModal
  *
  * Displays 4 AI companions in a grid layout with voice preview
  * Used by both new user flow and dashboard modal

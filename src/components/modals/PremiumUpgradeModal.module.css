@@ -1,0 +1,311 @@
+/* Premium Upgrade Modal Styles */
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+}
+
+.modalContent {
+  background: white;
+  border-radius: 20px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+/* Career Preview Section */
+.careerPreview {
+  padding: 30px;
+  text-align: center;
+  border-radius: 20px 20px 0 0;
+  position: relative;
+}
+
+.careerIcon {
+  font-size: 60px;
+  margin-bottom: 15px;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.careerName {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 0 0 10px;
+  color: #1a1a1a;
+}
+
+.premiumBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.premiumBadge svg {
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.2);
+  }
+}
+
+/* Career Details */
+.careerDetails {
+  padding: 20px 30px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.careerDescription {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.careerStat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.careerStat svg {
+  color: #667eea;
+}
+
+/* Benefits Section */
+.benefitsSection {
+  padding: 30px;
+  background: #f8f9fa;
+}
+
+.benefitsTitle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #1a1a1a;
+}
+
+.unlockIcon {
+  color: #667eea;
+}
+
+.benefitsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  space-y: 15px;
+}
+
+.benefitsList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 15px;
+  font-size: 15px;
+  color: #444;
+  line-height: 1.5;
+}
+
+.checkIcon {
+  color: #10b981;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.benefitsList strong {
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+/* Pricing Section */
+.pricingSection {
+  padding: 30px;
+  background: white;
+  border-top: 1px solid #f0f0f0;
+}
+
+.priceTag {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.priceLabel {
+  display: block;
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.price {
+  display: block;
+  font-size: 36px;
+  font-weight: bold;
+  color: #667eea;
+  margin: 5px 0;
+}
+
+.priceNote {
+  display: block;
+  font-size: 13px;
+  color: #999;
+}
+
+/* Action Buttons */
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.upgradeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.upgradeButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.upgradeButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.upgradeButton svg {
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+.teacherButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: #f3f4f6;
+  color: #4b5563;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.teacherButton:hover {
+  background: #e5e7eb;
+  border-color: #d1d5db;
+}
+
+.continueButton {
+  padding: 10px 20px;
+  background: transparent;
+  color: #9ca3af;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.continueButton:hover {
+  color: #6b7280;
+  text-decoration: underline;
+}
+
+/* Social Proof */
+.socialProof {
+  padding: 20px;
+  background: #fef3c7;
+  text-align: center;
+  border-radius: 0 0 20px 20px;
+}
+
+.socialProof p {
+  margin: 0;
+  font-size: 14px;
+  color: #92400e;
+}
+
+.socialProof strong {
+  font-weight: 600;
+}
+
+/* Mobile Responsive */
+@media (max-width: 640px) {
+  .modalContent {
+    max-width: 100%;
+    margin: 10px;
+    max-height: 100vh;
+  }
+
+  .careerIcon {
+    font-size: 48px;
+  }
+
+  .careerName {
+    font-size: 24px;
+  }
+
+  .price {
+    font-size: 30px;
+  }
+
+  .benefitsSection,
+  .pricingSection {
+    padding: 20px;
+  }
+}
