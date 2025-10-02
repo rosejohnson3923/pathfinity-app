@@ -4,7 +4,6 @@
  */
 
 import * as Sentry from '@sentry/react';
-import { BrowserTracing } from '@sentry/tracing';
 import MonitoringService from './MonitoringService';
 
 export interface SentryConfig {
@@ -46,16 +45,16 @@ class SentryIntegration {
         environment: config.environment,
         release: config.release || process.env.VITE_APP_VERSION,
         integrations: [
-          new BrowserTracing(),
-          new Sentry.Replay({
+          Sentry.browserTracingIntegration(),
+          Sentry.replayIntegration({
             maskAllText: false,
             blockAllMedia: false,
-            // Capture 10% of all sessions
-            sessionSampleRate: 0.1,
-            // Capture 100% of sessions with errors
-            errorSampleRate: 1.0,
           })
         ],
+
+        // Session replay
+        replaysSessionSampleRate: 0.1,
+        replaysOnErrorSampleRate: 1.0,
         
         // Performance Monitoring
         tracesSampleRate: config.tracesSampleRate || 0.1,
@@ -257,14 +256,14 @@ class SentryIntegration {
   /**
    * Start a transaction for performance monitoring
    */
-  startTransaction(name: string, op: string): Sentry.Transaction {
-    return Sentry.startTransaction({
+  startTransaction(name: string, op: string): any {
+    return Sentry.startSpan({
       name,
       op,
       data: {
         start_time: Date.now()
       }
-    });
+    }, (span) => span);
   }
   
   /**
