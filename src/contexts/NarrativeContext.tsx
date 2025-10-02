@@ -6,7 +6,7 @@
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { contentOrchestratorWithCache } from '../services/ContentOrchestratorWithCache';
-import { azureAudioService } from '../services/AzureAudioService';
+import { azureAudioService } from '../services/azureAudioService';
 
 interface NarrativeContextType {
   masterNarrative: any | null;
