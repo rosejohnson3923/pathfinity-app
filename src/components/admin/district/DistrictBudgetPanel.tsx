@@ -19,6 +19,12 @@ import {
   Edit,
   Calculator
 } from 'lucide-react';
+import '../../../design-system/tokens/colors.css';
+import '../../../design-system/tokens/spacing.css';
+import '../../../design-system/tokens/borders.css';
+import '../../../design-system/tokens/typography.css';
+import '../../../design-system/tokens/shadows.css';
+import '../../../design-system/tokens/dashboard.css';
 
 interface BudgetCategory {
   id: string;
@@ -229,6 +235,17 @@ export function DistrictBudgetPanel() {
   const [selectedView, setSelectedView] = useState<'overview' | 'by-school' | 'by-category'>('overview');
   const [isLoading, setIsLoading] = useState(false);
 
+  const getTabStyle = (isActive: boolean) => ({
+    padding: 'var(--space-4) var(--space-2)',
+    borderRadius: 'var(--radius-lg)',
+    fontSize: 'var(--text-sm)',
+    fontWeight: 'var(--font-medium)',
+    cursor: 'pointer',
+    border: 'none',
+    backgroundColor: isActive ? 'var(--dashboard-action-bg-active)' : 'transparent',
+    color: isActive ? 'var(--dashboard-action-text-active)' : 'var(--dashboard-text-secondary)'
+  });
+
   const totalDistrictBudget = budgetData.reduce((sum, school) => sum + school.totalAllocated, 0);
   const totalDistrictSpent = budgetData.reduce((sum, school) => sum + school.totalSpent, 0);
   const totalDistrictRemaining = budgetData.reduce((sum, school) => sum + school.totalRemaining, 0);
@@ -317,30 +334,61 @@ export function DistrictBudgetPanel() {
   };
 
   return (
-    <div className="space-y-6">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">District Budget Management</h2>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">Financial planning and budget allocation across all schools</p>
+          <h2 style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)' }}>District Budget Management</h2>
+          <p style={{ color: 'var(--dashboard-text-secondary)', marginTop: 'var(--space-1)' }}>Financial planning and budget allocation across all schools</p>
         </div>
-        <div className="flex gap-3">
+        <div style={{ display: 'flex', gap: 'var(--space-3)' }}>
           <button
             onClick={handleRefresh}
             disabled={isLoading}
-            className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 text-gray-700 dark:text-gray-200"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--space-2)',
+              padding: 'var(--space-2) var(--space-4)',
+              border: '1px solid var(--dashboard-border-primary)',
+              borderRadius: 'var(--radius-lg)',
+              color: 'var(--dashboard-text-primary)',
+              backgroundColor: 'var(--dashboard-bg-elevated)',
+              cursor: isLoading ? 'not-allowed' : 'pointer',
+              opacity: isLoading ? 0.5 : 1
+            }}
           >
             <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
             Refresh
           </button>
           <button
             onClick={handleExportBudget}
-            className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--space-2)',
+              padding: 'var(--space-2) var(--space-4)',
+              backgroundColor: '#059669',
+              color: 'white',
+              borderRadius: 'var(--radius-lg)',
+              border: 'none',
+              cursor: 'pointer'
+            }}
           >
             <Download className="w-4 h-4" />
             Export Budget
           </button>
-          <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+          <button style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 'var(--space-2)',
+            padding: 'var(--space-2) var(--space-4)',
+            backgroundColor: 'var(--dashboard-action-primary)',
+            color: 'white',
+            borderRadius: 'var(--radius-lg)',
+            border: 'none',
+            cursor: 'pointer'
+          }}>
             <Plus className="w-4 h-4" />
             New Budget Request
           </button>
@@ -349,41 +397,41 @@ export function DistrictBudgetPanel() {
 
       {/* District Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between">
+        <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', padding: 'var(--space-6)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total District Budget</p>
-              <p className="text-2xl font-bold text-blue-600">{formatCurrency(totalDistrictBudget)}</p>
+              <p style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)' }}>Total District Budget</p>
+              <p style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: '#3B82F6' }}>{formatCurrency(totalDistrictBudget)}</p>
             </div>
             <Calculator className="w-8 h-8 text-blue-600" />
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between">
+        <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', padding: 'var(--space-6)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Spent</p>
-              <p className="text-2xl font-bold text-red-600">{formatCurrency(totalDistrictSpent)}</p>
+              <p style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)' }}>Total Spent</p>
+              <p style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: '#EF4444' }}>{formatCurrency(totalDistrictSpent)}</p>
             </div>
             <TrendingDown className="w-8 h-8 text-red-600" />
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between">
+        <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', padding: 'var(--space-6)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Remaining Budget</p>
-              <p className="text-2xl font-bold text-green-600">{formatCurrency(totalDistrictRemaining)}</p>
+              <p style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)' }}>Remaining Budget</p>
+              <p style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: '#10B981' }}>{formatCurrency(totalDistrictRemaining)}</p>
             </div>
             <TrendingUp className="w-8 h-8 text-green-600" />
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between">
+        <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', padding: 'var(--space-6)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Avg Utilization</p>
-              <p className="text-2xl font-bold text-purple-600">{avgUtilization.toFixed(1)}%</p>
+              <p style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)' }}>Avg Utilization</p>
+              <p style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: '#A855F7' }}>{avgUtilization.toFixed(1)}%</p>
             </div>
             <PieChart className="w-8 h-8 text-purple-600" />
           </div>
@@ -391,35 +439,23 @@ export function DistrictBudgetPanel() {
       </div>
 
       {/* View Toggle */}
-      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
-        <div className="flex gap-2">
+      <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', padding: 'var(--space-4)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)' }}>
+        <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
           <button
             onClick={() => setSelectedView('overview')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium ${
-              selectedView === 'overview'
-                ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
-                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
-            }`}
+            style={getTabStyle(selectedView === 'overview')}
           >
             District Overview
           </button>
           <button
             onClick={() => setSelectedView('by-school')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium ${
-              selectedView === 'by-school'
-                ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
-                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
-            }`}
+            style={getTabStyle(selectedView === 'by-school')}
           >
             By School
           </button>
           <button
             onClick={() => setSelectedView('by-category')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium ${
-              selectedView === 'by-category'
-                ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
-                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
-            }`}
+            style={getTabStyle(selectedView === 'by-category')}
           >
             By Category
           </button>
@@ -430,36 +466,36 @@ export function DistrictBudgetPanel() {
       {selectedView === 'by-school' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
           {budgetData.map((school) => (
-            <div key={school.schoolId} className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow">
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-3">
+            <div key={school.schoolId} style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)', transition: 'box-shadow 200ms ease' }}>
+              <div style={{ padding: 'var(--space-6)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-4)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
                     <Building className="w-6 h-6 text-blue-600" />
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{school.schoolName}</h3>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Utilization: {school.utilizationRate}%</p>
+                      <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)' }}>{school.schoolName}</h3>
+                      <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Utilization: {school.utilizationRate}%</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="space-y-3 mb-4">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">Total Budget</span>
-                    <span className="font-medium text-gray-900 dark:text-white">{formatCurrency(school.totalAllocated)}</span>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)', marginBottom: 'var(--space-4)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Total Budget</span>
+                    <span style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>{formatCurrency(school.totalAllocated)}</span>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">Spent</span>
-                    <span className="font-medium text-red-600">{formatCurrency(school.totalSpent)}</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Spent</span>
+                    <span style={{ fontWeight: 'var(--font-medium)', color: '#EF4444' }}>{formatCurrency(school.totalSpent)}</span>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">Remaining</span>
-                    <span className="font-medium text-green-600">{formatCurrency(school.totalRemaining)}</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Remaining</span>
+                    <span style={{ fontWeight: 'var(--font-medium)', color: '#10B981' }}>{formatCurrency(school.totalRemaining)}</span>
                   </div>
                 </div>
 
                 {/* Budget Progress Bar */}
-                <div className="mb-4">
-                  <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mb-1">
+                <div style={{ marginBottom: 'var(--space-4)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)', marginBottom: 'var(--space-1)' }}>
                     <span>Budget Usage</span>
                     <span>{school.utilizationRate}%</span>
                   </div>
@@ -474,14 +510,31 @@ export function DistrictBudgetPanel() {
                   </div>
                 </div>
 
-                <div className="flex gap-2">
+                <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
                   <button
                     onClick={() => setSelectedSchool(school)}
-                    className="flex-1 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
+                    style={{
+                      flex: 1,
+                      padding: 'var(--space-2) var(--space-3)',
+                      backgroundColor: 'var(--dashboard-action-primary)',
+                      color: 'white',
+                      borderRadius: 'var(--radius-lg)',
+                      fontSize: 'var(--text-sm)',
+                      border: 'none',
+                      cursor: 'pointer'
+                    }}
                   >
                     View Details
                   </button>
-                  <button className="px-3 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-sm">
+                  <button style={{
+                    padding: 'var(--space-2) var(--space-3)',
+                    border: '1px solid var(--dashboard-border-primary)',
+                    color: 'var(--dashboard-text-primary)',
+                    backgroundColor: 'var(--dashboard-bg-elevated)',
+                    borderRadius: 'var(--radius-lg)',
+                    fontSize: 'var(--text-sm)',
+                    cursor: 'pointer'
+                  }}>
                     <Edit className="w-4 h-4" />
                   </button>
                 </div>
@@ -493,31 +546,31 @@ export function DistrictBudgetPanel() {
 
       {/* Category Budget Overview */}
       {selectedView === 'by-category' && (
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Budget by Category</h3>
+        <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)' }}>
+          <div style={{ padding: 'var(--space-4) var(--space-6)', borderBottom: '1px solid var(--dashboard-border-primary)' }}>
+            <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)' }}>Budget by Category</h3>
           </div>
-          <div className="p-6">
-            <div className="overflow-x-auto">
+          <div style={{ padding: 'var(--space-6)' }}>
+            <div style={{ overflowX: 'auto' }}>
               <table className="w-full">
                 <thead className="bg-gray-50 dark:bg-gray-700">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    <th style={{ padding: 'var(--space-3) var(--space-6)', textAlign: 'left', fontSize: 'var(--text-xs)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                       Category
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    <th style={{ padding: 'var(--space-3) var(--space-6)', textAlign: 'left', fontSize: 'var(--text-xs)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                       Total Allocated
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    <th style={{ padding: 'var(--space-3) var(--space-6)', textAlign: 'left', fontSize: 'var(--text-xs)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                       Total Spent
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    <th style={{ padding: 'var(--space-3) var(--space-6)', textAlign: 'left', fontSize: 'var(--text-xs)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                       Remaining
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    <th style={{ padding: 'var(--space-3) var(--space-6)', textAlign: 'left', fontSize: 'var(--text-xs)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                       Utilization
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    <th style={{ padding: 'var(--space-3) var(--space-6)', textAlign: 'left', fontSize: 'var(--text-xs)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                       Status
                     </th>
                   </tr>
@@ -539,10 +592,10 @@ export function DistrictBudgetPanel() {
 
                     return (
                       <tr key={categoryId} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center gap-3">
+                        <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
                             {getCategoryIcon(categoryId)}
-                            <span className="text-sm font-medium text-gray-900 dark:text-white capitalize">
+                            <span style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)', textTransform: 'capitalize' }}>
                               {categoryId === 'personnel' ? 'Personnel & Salaries' :
                                categoryId === 'instructional' ? 'Instructional Materials' :
                                categoryId === 'technology' ? 'Technology & Equipment' :
@@ -551,19 +604,19 @@ export function DistrictBudgetPanel() {
                             </span>
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                        <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap', fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-primary)' }}>
                           {formatCurrency(categoryData.allocated)}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                        <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap', fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-primary)' }}>
                           {formatCurrency(categoryData.spent)}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                        <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap', fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-primary)' }}>
                           {formatCurrency(categoryData.remaining)}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                        <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap', fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-primary)' }}>
                           {utilization.toFixed(1)}%
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap' }}>
                           <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(status)}`}>
                             {getStatusIcon(status)}
                             <span className="ml-1 capitalize">{status.replace('-', ' ')}</span>
@@ -582,22 +635,22 @@ export function DistrictBudgetPanel() {
       {/* District Overview Charts */}
       {selectedView === 'overview' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-            <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Budget Allocation by School</h3>
+          <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)' }}>
+            <div style={{ padding: 'var(--space-4) var(--space-6)', borderBottom: '1px solid var(--dashboard-border-primary)' }}>
+              <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)' }}>Budget Allocation by School</h3>
             </div>
-            <div className="p-6">
-              <div className="space-y-4">
+            <div style={{ padding: 'var(--space-6)' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
                 {budgetData.map((school) => (
-                  <div key={school.schoolId} className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
+                  <div key={school.schoolId} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
                       <Building className="w-5 h-5 text-gray-400 dark:text-gray-500" />
-                      <span className="text-sm font-medium text-gray-900 dark:text-white">{school.schoolName}</span>
+                      <span style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>{school.schoolName}</span>
                     </div>
-                    <div className="flex items-center gap-4">
-                      <div className="text-right">
-                        <p className="text-sm font-medium text-gray-900 dark:text-white">{formatCurrency(school.totalAllocated)}</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-4)' }}>
+                      <div style={{ textAlign: 'right' }}>
+                        <p style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>{formatCurrency(school.totalAllocated)}</p>
+                        <p style={{ fontSize: 'var(--text-xs)', color: 'var(--dashboard-text-secondary)' }}>
                           {((school.totalAllocated / totalDistrictBudget) * 100).toFixed(1)}% of total
                         </p>
                       </div>
@@ -614,22 +667,22 @@ export function DistrictBudgetPanel() {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-            <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Budget Utilization Status</h3>
+          <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)' }}>
+            <div style={{ padding: 'var(--space-4) var(--space-6)', borderBottom: '1px solid var(--dashboard-border-primary)' }}>
+              <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)' }}>Budget Utilization Status</h3>
             </div>
-            <div className="p-6">
-              <div className="space-y-4">
+            <div style={{ padding: 'var(--space-6)' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
                 {budgetData.map((school) => (
-                  <div key={school.schoolId} className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
+                  <div key={school.schoolId} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
                       <Building className="w-5 h-5 text-gray-400 dark:text-gray-500" />
-                      <span className="text-sm font-medium text-gray-900 dark:text-white">{school.schoolName}</span>
+                      <span style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>{school.schoolName}</span>
                     </div>
-                    <div className="flex items-center gap-4">
-                      <div className="text-right">
-                        <p className="text-sm font-medium text-gray-900 dark:text-white">{school.utilizationRate}%</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">utilized</p>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-4)' }}>
+                      <div style={{ textAlign: 'right' }}>
+                        <p style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>{school.utilizationRate}%</p>
+                        <p style={{ fontSize: 'var(--text-xs)', color: 'var(--dashboard-text-secondary)' }}>utilized</p>
                       </div>
                       <div className="w-24 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                         <div
@@ -651,17 +704,17 @@ export function DistrictBudgetPanel() {
 
       {/* School Detail Modal */}
       {selectedSchool && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white dark:bg-gray-800 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              <div className="flex justify-between items-start mb-6">
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0, 0, 0, 0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 'var(--space-4)', zIndex: 50 }}>
+          <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-lg)', maxWidth: '64rem', width: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
+            <div style={{ padding: 'var(--space-6)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--space-6)' }}>
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{selectedSchool.schoolName} Budget</h2>
-                  <p className="text-gray-600 dark:text-gray-400">Detailed budget breakdown and category analysis</p>
+                  <h2 style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)' }}>{selectedSchool.schoolName} Budget</h2>
+                  <p style={{ color: 'var(--dashboard-text-secondary)' }}>Detailed budget breakdown and category analysis</p>
                 </div>
                 <button
                   onClick={() => setSelectedSchool(null)}
-                  className="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+                  style={{ color: 'var(--dashboard-text-secondary)', cursor: 'pointer', backgroundColor: 'transparent', border: 'none' }}
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -669,36 +722,36 @@ export function DistrictBudgetPanel() {
                 </button>
               </div>
 
-              <div className="space-y-6">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
                 {selectedSchool.categories.map((category) => (
                   <div key={category.id} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-3">
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-4)' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
                         {getCategoryIcon(category.id)}
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{category.name}</h3>
+                        <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)' }}>{category.name}</h3>
                       </div>
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(category.status)}`}>
                         {getStatusIcon(category.status)}
                         <span className="ml-1 capitalize">{category.status.replace('-', ' ')}</span>
                       </span>
                     </div>
-                    
+
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
                       <div>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">Allocated</p>
-                        <p className="text-lg font-semibold text-gray-900 dark:text-white">{formatCurrency(category.allocated)}</p>
+                        <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Allocated</p>
+                        <p style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)' }}>{formatCurrency(category.allocated)}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">Spent</p>
-                        <p className="text-lg font-semibold text-red-600">{formatCurrency(category.spent)}</p>
+                        <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Spent</p>
+                        <p style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: '#EF4444' }}>{formatCurrency(category.spent)}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">Remaining</p>
-                        <p className="text-lg font-semibold text-green-600">{formatCurrency(category.remaining)}</p>
+                        <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Remaining</p>
+                        <p style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: '#10B981' }}>{formatCurrency(category.remaining)}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">Utilization</p>
-                        <p className="text-lg font-semibold text-gray-900 dark:text-white">{category.percentage}%</p>
+                        <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Utilization</p>
+                        <p style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)' }}>{category.percentage}%</p>
                       </div>
                     </div>
 
@@ -713,14 +766,14 @@ export function DistrictBudgetPanel() {
                     </div>
 
                     {category.subcategories && (
-                      <div className="mt-4 space-y-2">
-                        <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Subcategories:</h4>
+                      <div style={{ marginTop: 'var(--space-4)', display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
+                        <h4 style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Subcategories:</h4>
                         {category.subcategories.map((sub) => (
-                          <div key={sub.id} className="flex items-center justify-between text-sm">
-                            <span className="text-gray-600 dark:text-gray-400">{sub.name}</span>
-                            <div className="flex items-center gap-4">
+                          <div key={sub.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 'var(--text-sm)' }}>
+                            <span style={{ color: 'var(--dashboard-text-secondary)' }}>{sub.name}</span>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-4)' }}>
                               <span>{formatCurrency(sub.spent)}</span>
-                              <span className="text-gray-500 dark:text-gray-400">/ {formatCurrency(sub.allocated)}</span>
+                              <span style={{ color: 'var(--dashboard-text-secondary)' }}>/ {formatCurrency(sub.allocated)}</span>
                             </div>
                           </div>
                         ))}
@@ -729,15 +782,29 @@ export function DistrictBudgetPanel() {
                   </div>
                 ))}
               </div>
-              
-              <div className="mt-6 flex justify-end gap-3">
+
+              <div style={{ marginTop: 'var(--space-6)', display: 'flex', justifyContent: 'flex-end', gap: 'var(--space-3)' }}>
                 <button
                   onClick={() => setSelectedSchool(null)}
-                  className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700"
+                  style={{
+                    padding: 'var(--space-2) var(--space-4)',
+                    border: '1px solid var(--dashboard-border-primary)',
+                    color: 'var(--dashboard-text-primary)',
+                    backgroundColor: 'var(--dashboard-bg-elevated)',
+                    borderRadius: 'var(--radius-lg)',
+                    cursor: 'pointer'
+                  }}
                 >
                   Close
                 </button>
-                <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                <button style={{
+                  padding: 'var(--space-2) var(--space-4)',
+                  backgroundColor: 'var(--dashboard-action-primary)',
+                  color: 'white',
+                  borderRadius: 'var(--radius-lg)',
+                  border: 'none',
+                  cursor: 'pointer'
+                }}>
                   Edit Budget
                 </button>
               </div>

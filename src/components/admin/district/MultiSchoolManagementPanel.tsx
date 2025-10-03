@@ -18,6 +18,12 @@ import {
   Search,
   Filter
 } from 'lucide-react';
+import '../../../design-system/tokens/colors.css';
+import '../../../design-system/tokens/spacing.css';
+import '../../../design-system/tokens/borders.css';
+import '../../../design-system/tokens/typography.css';
+import '../../../design-system/tokens/shadows.css';
+import '../../../design-system/tokens/dashboard.css';
 
 interface Principal {
   id: string;
@@ -244,14 +250,24 @@ export function MultiSchoolManagementPanel() {
   };
 
   return (
-    <div className="space-y-6">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Multi-School Management</h2>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">Manage all schools in Plainview ISD district</p>
+          <h2 style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)' }}>Multi-School Management</h2>
+          <p style={{ color: 'var(--dashboard-text-secondary)', marginTop: 'var(--space-1)' }}>Manage all schools in Plainview ISD district</p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+        <button style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 'var(--space-2)',
+          padding: 'var(--space-2) var(--space-4)',
+          backgroundColor: 'var(--dashboard-action-primary)',
+          color: 'white',
+          borderRadius: 'var(--radius-lg)',
+          border: 'none',
+          cursor: 'pointer'
+        }}>
           <Plus className="w-4 h-4" />
           Add School
         </button>
@@ -259,21 +275,21 @@ export function MultiSchoolManagementPanel() {
 
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between">
+        <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', padding: 'var(--space-6)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Schools</p>
-              <p className="text-2xl font-bold text-blue-600">{schools.length}</p>
+              <p style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)' }}>Total Schools</p>
+              <p style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: '#3B82F6' }}>{schools.length}</p>
             </div>
             <Building className="w-8 h-8 text-blue-600" />
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between">
+        <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', padding: 'var(--space-6)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Enrollment</p>
-              <p className="text-2xl font-bold text-green-600">
+              <p style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)' }}>Total Enrollment</p>
+              <p style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: '#10B981' }}>
                 {schools.reduce((sum, school) => sum + school.enrollment.current, 0).toLocaleString()}
               </p>
             </div>
@@ -281,11 +297,11 @@ export function MultiSchoolManagementPanel() {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between">
+        <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', padding: 'var(--space-6)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Staff</p>
-              <p className="text-2xl font-bold text-purple-600">
+              <p style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)' }}>Total Staff</p>
+              <p style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: '#A855F7' }}>
                 {schools.reduce((sum, school) => sum + school.staff.total, 0)}
               </p>
             </div>
@@ -293,11 +309,11 @@ export function MultiSchoolManagementPanel() {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between">
+        <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', padding: 'var(--space-6)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Avg Performance</p>
-              <p className="text-2xl font-bold text-orange-600">
+              <p style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)' }}>Avg Performance</p>
+              <p style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: '#F97316' }}>
                 {(schools.reduce((sum, school) => sum + school.performance.overallRating, 0) / schools.length).toFixed(1)}%
               </p>
             </div>
@@ -307,26 +323,42 @@ export function MultiSchoolManagementPanel() {
       </div>
 
       {/* Search and Filters */}
-      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
-        <div className="flex gap-4">
-          <div className="flex-1">
-            <div className="relative">
-              <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+      <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', padding: 'var(--space-4)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)' }}>
+        <div style={{ display: 'flex', gap: 'var(--space-4)' }}>
+          <div style={{ flex: 1 }}>
+            <div style={{ position: 'relative' }}>
+              <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" style={{ position: 'absolute', left: 'var(--space-3)', top: '50%', transform: 'translateY(-50%)', color: 'var(--dashboard-text-secondary)' }} />
               <input
                 type="text"
                 placeholder="Search schools or principals..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                style={{
+                  width: '100%',
+                  paddingLeft: '2.5rem',
+                  paddingRight: 'var(--space-4)',
+                  paddingTop: 'var(--space-2)',
+                  paddingBottom: 'var(--space-2)',
+                  border: '1px solid var(--dashboard-border-primary)',
+                  borderRadius: 'var(--radius-lg)',
+                  backgroundColor: 'var(--dashboard-bg-elevated)',
+                  color: 'var(--dashboard-text-primary)'
+                }}
               />
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
             <Filter className="w-5 h-5 text-gray-400 dark:text-gray-500" />
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value as any)}
-              className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              style={{
+                padding: 'var(--space-2) var(--space-3)',
+                border: '1px solid var(--dashboard-border-primary)',
+                borderRadius: 'var(--radius-lg)',
+                backgroundColor: 'var(--dashboard-bg-elevated)',
+                color: 'var(--dashboard-text-primary)'
+              }}
             >
               <option value="all">All Status</option>
               <option value="active">Active</option>
@@ -340,13 +372,13 @@ export function MultiSchoolManagementPanel() {
       {/* Schools Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
         {filteredSchools.map((school) => (
-          <div key={school.id} className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow">
-            <div className="p-6">
+          <div key={school.id} style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)', transition: 'box-shadow 200ms ease' }}>
+            <div style={{ padding: 'var(--space-6)' }}>
               {/* School Header */}
-              <div className="flex justify-between items-start mb-4">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--space-4)' }}>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{school.name}</h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 capitalize">{school.type} School • Est. {school.establishedYear}</p>
+                  <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)' }}>{school.name}</h3>
+                  <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)', textTransform: 'capitalize' }}>{school.type} School • Est. {school.establishedYear}</p>
                 </div>
                 <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(school.status)}`}>
                   {school.status === 'active' && <CheckCircle className="w-3 h-3 mr-1" />}
@@ -357,79 +389,116 @@ export function MultiSchoolManagementPanel() {
               </div>
 
               {/* Key Metrics */}
-              <div className="space-y-3 mb-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Enrollment</span>
-                  <span className="font-medium">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)', marginBottom: 'var(--space-4)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Enrollment</span>
+                  <span style={{ fontWeight: 'var(--font-medium)' }}>
                     {school.enrollment.current}/{school.enrollment.capacity}
                     {school.enrollment.waitlist > 0 && (
-                      <span className="text-xs text-blue-600 ml-1">
+                      <span style={{ fontSize: 'var(--text-xs)', color: '#3B82F6', marginLeft: 'var(--space-1)' }}>
                         (+{school.enrollment.waitlist} waiting)
                       </span>
                     )}
                   </span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Staff</span>
-                  <span className="font-medium">{school.staff.total} ({school.staff.teachers} teachers)</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Staff</span>
+                  <span style={{ fontWeight: 'var(--font-medium)' }}>{school.staff.total} ({school.staff.teachers} teachers)</span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Performance</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Performance</span>
                   <span className={`font-medium ${getPerformanceColor(school.performance.overallRating)}`}>
                     {school.performance.overallRating}%
                   </span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Budget Usage</span>
-                  <span className="font-medium">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Budget Usage</span>
+                  <span style={{ fontWeight: 'var(--font-medium)' }}>
                     {Math.round((school.budget.spent / school.budget.allocated) * 100)}%
                   </span>
                 </div>
               </div>
 
               {/* Principal Info */}
-              <div className="border-t border-gray-200 dark:border-gray-700 pt-4 mb-4">
-                <div className="flex items-center gap-3">
+              <div style={{ borderTop: '1px solid var(--dashboard-border-primary)', paddingTop: 'var(--space-4)', marginBottom: 'var(--space-4)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
                   <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
                     <GraduationCap className="w-5 h-5 text-blue-600" />
                   </div>
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-white">{school.principal.name}</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Principal</p>
+                    <p style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>{school.principal.name}</p>
+                    <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Principal</p>
                   </div>
                 </div>
               </div>
 
               {/* Contact Info */}
-              <div className="space-y-2 mb-4 text-xs text-gray-500 dark:text-gray-400">
-                <div className="flex items-center gap-2">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)', marginBottom: 'var(--space-4)', fontSize: 'var(--text-xs)', color: 'var(--dashboard-text-secondary)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
                   <MapPin className="w-3 h-3" />
-                  <span className="truncate">{school.address}</span>
+                  <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{school.address}</span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
                   <Phone className="w-3 h-3" />
                   <span>{school.phone}</span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
                   <Mail className="w-3 h-3" />
-                  <span className="truncate">{school.email}</span>
+                  <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{school.email}</span>
                 </div>
               </div>
 
               {/* Action Buttons */}
-              <div className="flex gap-2">
-                <button 
+              <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
+                <button
                   onClick={() => setSelectedSchool(school)}
-                  className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
+                  style={{
+                    flex: 1,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 'var(--space-2)',
+                    padding: 'var(--space-2) var(--space-3)',
+                    backgroundColor: 'var(--dashboard-action-primary)',
+                    color: 'white',
+                    borderRadius: 'var(--radius-lg)',
+                    fontSize: 'var(--text-sm)',
+                    border: 'none',
+                    cursor: 'pointer'
+                  }}
                 >
                   <Eye className="w-4 h-4" />
                   View Details
                 </button>
-                <button className="flex items-center justify-center gap-2 px-3 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-sm">
+                <button style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 'var(--space-2)',
+                  padding: 'var(--space-2) var(--space-3)',
+                  border: '1px solid var(--dashboard-border-primary)',
+                  color: 'var(--dashboard-text-primary)',
+                  backgroundColor: 'var(--dashboard-bg-elevated)',
+                  borderRadius: 'var(--radius-lg)',
+                  fontSize: 'var(--text-sm)',
+                  cursor: 'pointer'
+                }}>
                   <Edit className="w-4 h-4" />
                   Edit
                 </button>
-                <button className="flex items-center justify-center gap-2 px-3 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-sm">
+                <button style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 'var(--space-2)',
+                  padding: 'var(--space-2) var(--space-3)',
+                  border: '1px solid var(--dashboard-border-primary)',
+                  color: 'var(--dashboard-text-primary)',
+                  backgroundColor: 'var(--dashboard-bg-elevated)',
+                  borderRadius: 'var(--radius-lg)',
+                  fontSize: 'var(--text-sm)',
+                  cursor: 'pointer'
+                }}>
                   <Settings className="w-4 h-4" />
                 </button>
               </div>
@@ -440,17 +509,17 @@ export function MultiSchoolManagementPanel() {
 
       {/* School Detail Modal */}
       {selectedSchool && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white dark:bg-gray-800 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              <div className="flex justify-between items-start mb-6">
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0, 0, 0, 0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 'var(--space-4)', zIndex: 50 }}>
+          <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-lg)', maxWidth: '64rem', width: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
+            <div style={{ padding: 'var(--space-6)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--space-6)' }}>
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{selectedSchool.name}</h2>
-                  <p className="text-gray-600 dark:text-gray-400">Detailed school information and metrics</p>
+                  <h2 style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)' }}>{selectedSchool.name}</h2>
+                  <p style={{ color: 'var(--dashboard-text-secondary)' }}>Detailed school information and metrics</p>
                 </div>
                 <button
                   onClick={() => setSelectedSchool(null)}
-                  className="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+                  style={{ color: 'var(--dashboard-text-secondary)', cursor: 'pointer', backgroundColor: 'transparent', border: 'none' }}
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -460,104 +529,118 @@ export function MultiSchoolManagementPanel() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Basic Information */}
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Basic Information</h3>
-                  <div className="space-y-3">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
+                  <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)' }}>Basic Information</h3>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
                     <div>
-                      <label className="text-sm font-medium text-gray-600 dark:text-gray-400">School Type</label>
-                      <p className="capitalize text-gray-900 dark:text-white">{selectedSchool.type} School</p>
+                      <label style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)' }}>School Type</label>
+                      <p style={{ textTransform: 'capitalize', color: 'var(--dashboard-text-primary)' }}>{selectedSchool.type} School</p>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Grades Served</label>
-                      <p className="text-gray-900 dark:text-white">{selectedSchool.grades}</p>
+                      <label style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)' }}>Grades Served</label>
+                      <p style={{ color: 'var(--dashboard-text-primary)' }}>{selectedSchool.grades}</p>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Established</label>
-                      <p className="text-gray-900 dark:text-white">{selectedSchool.establishedYear}</p>
+                      <label style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)' }}>Established</label>
+                      <p style={{ color: 'var(--dashboard-text-primary)' }}>{selectedSchool.establishedYear}</p>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Address</label>
-                      <p className="text-gray-900 dark:text-white">{selectedSchool.address}</p>
+                      <label style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)' }}>Address</label>
+                      <p style={{ color: 'var(--dashboard-text-primary)' }}>{selectedSchool.address}</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Performance Metrics */}
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Performance Metrics</h3>
-                  <div className="space-y-3">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
+                  <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)' }}>Performance Metrics</h3>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
                     <div>
-                      <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Overall Rating</label>
+                      <label style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)' }}>Overall Rating</label>
                       <p className={getPerformanceColor(selectedSchool.performance.overallRating)}>
                         {selectedSchool.performance.overallRating}%
                       </p>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Test Scores</label>
-                      <p className="text-gray-900 dark:text-white">{selectedSchool.performance.testScores}%</p>
+                      <label style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)' }}>Test Scores</label>
+                      <p style={{ color: 'var(--dashboard-text-primary)' }}>{selectedSchool.performance.testScores}%</p>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Attendance Rate</label>
-                      <p className="text-gray-900 dark:text-white">{selectedSchool.performance.attendance}%</p>
+                      <label style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)' }}>Attendance Rate</label>
+                      <p style={{ color: 'var(--dashboard-text-primary)' }}>{selectedSchool.performance.attendance}%</p>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Engagement Rate</label>
-                      <p className="text-gray-900 dark:text-white">{selectedSchool.performance.engagement}%</p>
+                      <label style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)' }}>Engagement Rate</label>
+                      <p style={{ color: 'var(--dashboard-text-primary)' }}>{selectedSchool.performance.engagement}%</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Budget Information */}
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Budget Information</h3>
-                  <div className="space-y-3">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
+                  <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)' }}>Budget Information</h3>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
                     <div>
-                      <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Allocated Budget</label>
-                      <p className="text-gray-900 dark:text-white">{formatCurrency(selectedSchool.budget.allocated)}</p>
+                      <label style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)' }}>Allocated Budget</label>
+                      <p style={{ color: 'var(--dashboard-text-primary)' }}>{formatCurrency(selectedSchool.budget.allocated)}</p>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Amount Spent</label>
-                      <p className="text-gray-900 dark:text-white">{formatCurrency(selectedSchool.budget.spent)}</p>
+                      <label style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)' }}>Amount Spent</label>
+                      <p style={{ color: 'var(--dashboard-text-primary)' }}>{formatCurrency(selectedSchool.budget.spent)}</p>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Remaining</label>
-                      <p className="text-green-600">{formatCurrency(selectedSchool.budget.remaining)}</p>
+                      <label style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)' }}>Remaining</label>
+                      <p style={{ color: '#10B981' }}>{formatCurrency(selectedSchool.budget.remaining)}</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Principal Information */}
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Principal Information</h3>
-                  <div className="space-y-3">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
+                  <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)' }}>Principal Information</h3>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
                     <div>
-                      <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Name</label>
-                      <p className="text-gray-900 dark:text-white">{selectedSchool.principal.name}</p>
+                      <label style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)' }}>Name</label>
+                      <p style={{ color: 'var(--dashboard-text-primary)' }}>{selectedSchool.principal.name}</p>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Email</label>
-                      <p className="text-gray-900 dark:text-white">{selectedSchool.principal.email}</p>
+                      <label style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)' }}>Email</label>
+                      <p style={{ color: 'var(--dashboard-text-primary)' }}>{selectedSchool.principal.email}</p>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Phone</label>
-                      <p className="text-gray-900 dark:text-white">{selectedSchool.principal.phone}</p>
+                      <label style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)' }}>Phone</label>
+                      <p style={{ color: 'var(--dashboard-text-primary)' }}>{selectedSchool.principal.phone}</p>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Start Date</label>
-                      <p className="text-gray-900 dark:text-white">{new Date(selectedSchool.principal.startDate).toLocaleDateString()}</p>
+                      <label style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)' }}>Start Date</label>
+                      <p style={{ color: 'var(--dashboard-text-primary)' }}>{new Date(selectedSchool.principal.startDate).toLocaleDateString()}</p>
                     </div>
                   </div>
                 </div>
               </div>
-              
-              <div className="mt-6 flex justify-end gap-3">
+
+              <div style={{ marginTop: 'var(--space-6)', display: 'flex', justifyContent: 'flex-end', gap: 'var(--space-3)' }}>
                 <button
                   onClick={() => setSelectedSchool(null)}
-                  className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700"
+                  style={{
+                    padding: 'var(--space-2) var(--space-4)',
+                    border: '1px solid var(--dashboard-border-primary)',
+                    color: 'var(--dashboard-text-primary)',
+                    backgroundColor: 'var(--dashboard-bg-elevated)',
+                    borderRadius: 'var(--radius-lg)',
+                    cursor: 'pointer'
+                  }}
                 >
                   Close
                 </button>
-                <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                <button style={{
+                  padding: 'var(--space-2) var(--space-4)',
+                  backgroundColor: 'var(--dashboard-action-primary)',
+                  color: 'white',
+                  borderRadius: 'var(--radius-lg)',
+                  border: 'none',
+                  cursor: 'pointer'
+                }}>
                   Edit School
                 </button>
               </div>
