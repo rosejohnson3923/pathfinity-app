@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { 
-  BarChart3, 
-  Users, 
-  FileText, 
-  Activity, 
-  Server, 
-  Download, 
-  Calendar, 
+import {
+  BarChart3,
+  Users,
+  FileText,
+  Activity,
+  Server,
+  Download,
+  Calendar,
   Filter,
   RefreshCw,
   TrendingUp,
@@ -20,6 +20,12 @@ import { MetricCard } from './MetricCard';
 import { SimpleChart } from './SimpleChart';
 import { DateRange, ReportType, ReportFormat, getDateRangeLabel } from '../../../types/analytics';
 import { PermissionGate, AdminOnly } from '../../auth/PermissionGate';
+import '../../../design-system/tokens/colors.css';
+import '../../../design-system/tokens/spacing.css';
+import '../../../design-system/tokens/borders.css';
+import '../../../design-system/tokens/typography.css';
+import '../../../design-system/tokens/shadows.css';
+import '../../../design-system/tokens/dashboard.css';
 
 interface ReportsPanelProps {
   className?: string;
@@ -54,6 +60,18 @@ export function ReportsPanel({ className = '' }: ReportsPanelProps) {
   const [showExportModal, setShowExportModal] = useState(false);
   const [exportFormat, setExportFormat] = useState<ReportFormat>('pdf');
   const [exporting, setExporting] = useState(false);
+
+  const getTabStyle = (isActive: boolean) => ({
+    padding: 'var(--space-4) var(--space-1)',
+    borderBottom: isActive ? '2px solid var(--dashboard-nav-tab-active)' : '2px solid transparent',
+    fontWeight: 'var(--font-medium)',
+    fontSize: 'var(--text-sm)',
+    color: isActive ? 'var(--dashboard-nav-tab-active)' : 'var(--dashboard-nav-tab-inactive)',
+    backgroundColor: 'transparent',
+    cursor: 'pointer',
+    transition: 'color 200ms ease',
+    border: 'none'
+  });
 
   const {
     reportData,
@@ -315,8 +333,13 @@ export function ReportsPanel({ className = '' }: ReportsPanelProps) {
 
   if (loading) {
     return (
-      <div className={`bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 ${className}`}>
-        <div className="flex items-center justify-center h-96">
+      <div className={className} style={{
+        backgroundColor: 'var(--dashboard-bg-elevated)',
+        borderRadius: 'var(--radius-xl)',
+        boxShadow: 'var(--shadow-sm)',
+        border: '1px solid var(--dashboard-border-primary)'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '24rem' }}>
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
         </div>
       </div>
@@ -325,31 +348,45 @@ export function ReportsPanel({ className = '' }: ReportsPanelProps) {
 
   return (
     <AdminOnly fallback={
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-8">
-        <div className="text-center">
+      <div style={{
+        backgroundColor: 'var(--dashboard-bg-elevated)',
+        borderRadius: 'var(--radius-xl)',
+        boxShadow: 'var(--shadow-sm)',
+        border: '1px solid var(--dashboard-border-primary)',
+        padding: 'var(--space-8)'
+      }}>
+        <div style={{ textAlign: 'center' }}>
           <AlertCircle className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+          <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)', marginBottom: 'var(--space-2)' }}>
             Admin Access Required
           </h3>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p style={{ color: 'var(--dashboard-text-secondary)' }}>
             You need administrator privileges to access reports and analytics.
           </p>
         </div>
       </div>
     }>
-      <div className={`bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 ${className}`}>
+      <div className={className} style={{
+        backgroundColor: 'var(--dashboard-bg-elevated)',
+        borderRadius: 'var(--radius-xl)',
+        boxShadow: 'var(--shadow-sm)',
+        border: '1px solid var(--dashboard-border-primary)'
+      }}>
         {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+        <div style={{
+          padding: 'var(--space-4) var(--space-6)',
+          borderBottom: '1px solid var(--dashboard-border-primary)'
+        }}>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="flex items-center space-x-3">
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
               <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
                 <BarChart3 className="h-6 w-6 text-blue-600 dark:text-blue-400" />
               </div>
               <div>
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                <h2 style={{ fontSize: 'var(--text-xl)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)' }}>
                   Reports & Analytics
                 </h2>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>
                   {getDateRangeLabel(dateRange)} • Last updated: {reportData ? new Date(reportData.generatedAt).toLocaleString() : 'Never'}
                 </p>
               </div>
@@ -427,24 +464,20 @@ export function ReportsPanel({ className = '' }: ReportsPanelProps) {
         </div>
 
         {/* Tab Navigation */}
-        <div className="border-b border-gray-200 dark:border-gray-700">
-          <nav className="flex space-x-8 px-6" aria-label="Report sections">
+        <div style={{ borderBottom: '1px solid var(--dashboard-border-primary)' }}>
+          <nav style={{ display: 'flex', gap: 'var(--space-8)', padding: '0 var(--space-6)' }} aria-label="Report sections">
             {REPORT_TABS.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
-              
+
               return (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                    isActive
-                      ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-200'
-                  }`}
+                  style={getTabStyle(isActive)}
                   aria-current={isActive ? 'page' : undefined}
                 >
-                  <div className="flex items-center space-x-2">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
                     <Icon className="h-4 w-4" />
                     <span>{tab.label}</span>
                   </div>

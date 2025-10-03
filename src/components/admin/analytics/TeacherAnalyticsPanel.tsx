@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { 
-  TrendingUp, 
-  Users, 
-  Clock, 
-  BookOpen, 
-  Star, 
+import {
+  TrendingUp,
+  Users,
+  Clock,
+  BookOpen,
+  Star,
   Activity,
   ChevronDown,
   Download,
@@ -16,6 +16,12 @@ import {
   Filter,
   Phone
 } from 'lucide-react';
+import '../../../design-system/tokens/colors.css';
+import '../../../design-system/tokens/spacing.css';
+import '../../../design-system/tokens/borders.css';
+import '../../../design-system/tokens/typography.css';
+import '../../../design-system/tokens/shadows.css';
+import '../../../design-system/tokens/dashboard.css';
 
 interface TeacherStats {
   id: string;
@@ -201,18 +207,29 @@ export function TeacherAnalyticsPanel() {
   };
 
   return (
-    <div className="space-y-6">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Teacher Analytics</h2>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">Performance metrics and insights for teaching staff</p>
+          <h2 style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)' }}>Teacher Analytics</h2>
+          <p style={{ color: 'var(--dashboard-text-secondary)', marginTop: 'var(--space-1)' }}>Performance metrics and insights for teaching staff</p>
         </div>
-        <div className="flex gap-3">
+        <div style={{ display: 'flex', gap: 'var(--space-3)' }}>
           <button
             onClick={handleRefresh}
             disabled={isLoading}
-            className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 text-gray-700 dark:text-gray-200"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--space-2)',
+              padding: 'var(--space-2) var(--space-4)',
+              border: '1px solid var(--dashboard-border-primary)',
+              borderRadius: 'var(--radius-lg)',
+              backgroundColor: 'transparent',
+              color: 'var(--dashboard-text-primary)',
+              cursor: 'pointer',
+              opacity: isLoading ? 0.5 : 1
+            }}
           >
             <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
             Refresh
@@ -228,11 +245,16 @@ export function TeacherAnalyticsPanel() {
       </div>
 
       {/* School Filter */}
-      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
+      <div style={{
+        backgroundColor: 'var(--dashboard-bg-elevated)',
+        padding: 'var(--space-4)',
+        borderRadius: 'var(--radius-lg)',
+        border: '1px solid var(--dashboard-border-primary)'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-4)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
             <Filter className="w-5 h-5 text-gray-400 dark:text-gray-500" />
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Filter by School:</label>
+            <label style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Filter by School:</label>
           </div>
           <select
             value={selectedSchool}
@@ -244,7 +266,7 @@ export function TeacherAnalyticsPanel() {
               <option key={school} value={school}>{school}</option>
             ))}
           </select>
-          <span className="text-sm text-gray-500 dark:text-gray-400">
+          <span style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>
             Showing {filteredTeachers.length} of {analytics.teachers.length} teachers
           </span>
         </div>
@@ -252,11 +274,16 @@ export function TeacherAnalyticsPanel() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between">
+        <div style={{
+          backgroundColor: 'var(--dashboard-bg-elevated)',
+          padding: 'var(--space-6)',
+          borderRadius: 'var(--radius-lg)',
+          border: '1px solid var(--dashboard-border-primary)'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Teachers</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{analytics.totalTeachers}</p>
+              <p style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)' }}>Total Teachers</p>
+              <p style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)' }}>{analytics.totalTeachers}</p>
             </div>
             <Users className="w-8 h-8 text-blue-600" />
           </div>
@@ -304,9 +331,16 @@ export function TeacherAnalyticsPanel() {
       </div>
 
       {/* Teacher Performance Table */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Individual Teacher Performance</h3>
+      <div style={{
+        backgroundColor: 'var(--dashboard-bg-elevated)',
+        borderRadius: 'var(--radius-lg)',
+        border: '1px solid var(--dashboard-border-primary)'
+      }}>
+        <div style={{
+          padding: 'var(--space-4) var(--space-6)',
+          borderBottom: '1px solid var(--dashboard-border-primary)'
+        }}>
+          <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)' }}>Individual Teacher Performance</h3>
         </div>
         
         <div className="overflow-x-auto">
@@ -454,12 +488,19 @@ export function TeacherAnalyticsPanel() {
       </div>
 
       {/* Recent Activity */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Recent Teacher Activities</h3>
+      <div style={{
+        backgroundColor: 'var(--dashboard-bg-elevated)',
+        borderRadius: 'var(--radius-lg)',
+        border: '1px solid var(--dashboard-border-primary)'
+      }}>
+        <div style={{
+          padding: 'var(--space-4) var(--space-6)',
+          borderBottom: '1px solid var(--dashboard-border-primary)'
+        }}>
+          <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)' }}>Recent Teacher Activities</h3>
         </div>
-        <div className="p-6">
-          <div className="space-y-4">
+        <div style={{ padding: 'var(--space-6)' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
             <div className="flex items-center gap-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
               <Award className="w-5 h-5 text-blue-600" />
               <div className="flex-1">

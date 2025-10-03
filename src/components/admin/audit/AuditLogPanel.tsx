@@ -7,6 +7,12 @@ import { AuditLogSummary } from './AuditLogSummary';
 import { AuditLogExportModal } from './AuditLogExportModal';
 import { AuditLogEntry, AuditLogExportOptions } from '../../../types/auditLog';
 import { PermissionGate } from '../../auth/PermissionGate';
+import '../../../design-system/tokens/colors.css';
+import '../../../design-system/tokens/spacing.css';
+import '../../../design-system/tokens/borders.css';
+import '../../../design-system/tokens/typography.css';
+import '../../../design-system/tokens/shadows.css';
+import '../../../design-system/tokens/dashboard.css';
 
 export function AuditLogPanel() {
   const {
@@ -30,6 +36,19 @@ export function AuditLogPanel() {
   const [showFilters, setShowFilters] = useState(false);
   const [showExportModal, setShowExportModal] = useState(false);
   const [selectedEntry, setSelectedEntry] = useState<AuditLogEntry | null>(null);
+
+  const getTabStyle = (isActive: boolean) => ({
+    padding: 'var(--space-4) var(--space-1)',
+    borderBottom: isActive ? '2px solid var(--dashboard-nav-tab-active)' : '2px solid transparent',
+    fontWeight: 'var(--font-medium)',
+    fontSize: 'var(--text-sm)',
+    whiteSpace: 'nowrap' as const,
+    color: isActive ? 'var(--dashboard-nav-tab-active)' : 'var(--dashboard-nav-tab-inactive)',
+    backgroundColor: 'transparent',
+    cursor: 'pointer',
+    transition: 'color 200ms ease',
+    border: 'none'
+  });
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
@@ -65,20 +84,31 @@ export function AuditLogPanel() {
         </div>
       }
     >
-      <div className="space-y-6">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Audit Trail</h2>
-            <p className="text-gray-600 dark:text-gray-400">
+            <h2 style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)' }}>Audit Trail</h2>
+            <p style={{ color: 'var(--dashboard-text-secondary)' }}>
               Comprehensive logging of all administrative actions and system events
             </p>
           </div>
-          <div className="flex items-center space-x-3">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
             <button
               onClick={refreshLogs}
               disabled={loading}
-              className="px-4 py-2 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 transition-colors flex items-center space-x-2"
+              style={{
+                padding: 'var(--space-2) var(--space-4)',
+                color: 'var(--dashboard-text-primary)',
+                border: '1px solid var(--dashboard-border-primary)',
+                borderRadius: 'var(--radius-lg)',
+                backgroundColor: 'transparent',
+                cursor: 'pointer',
+                opacity: loading ? 0.5 : 1,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 'var(--space-2)'
+              }}
             >
               <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
               <span>Refresh</span>
@@ -98,14 +128,19 @@ export function AuditLogPanel() {
         {/* Stats Cards */}
         {summary && (
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
-              <div className="flex items-center">
+            <div style={{
+              backgroundColor: 'var(--dashboard-bg-elevated)',
+              borderRadius: 'var(--radius-xl)',
+              boxShadow: 'var(--shadow-sm)',
+              padding: 'var(--space-6)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
                 <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
                   <Activity className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                 </div>
-                <div className="ml-4">
-                  <p className="text-sm text-gray-500 dark:text-gray-400">Total Events</p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">{summary.totalEntries.toLocaleString()}</p>
+                <div style={{ marginLeft: 'var(--space-4)' }}>
+                  <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Total Events</p>
+                  <p style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)' }}>{summary.totalEntries.toLocaleString()}</p>
                 </div>
               </div>
             </div>
@@ -151,25 +186,17 @@ export function AuditLogPanel() {
         )}
 
         {/* Tabs */}
-        <div className="border-b border-gray-200 dark:border-gray-700">
-          <nav className="flex space-x-8">
+        <div style={{ borderBottom: '1px solid var(--dashboard-border-primary)' }}>
+          <nav style={{ display: 'flex', gap: 'var(--space-8)' }}>
             <button
               onClick={() => setActiveTab('logs')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
-                activeTab === 'logs'
-                  ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-              }`}
+              style={getTabStyle(activeTab === 'logs')}
             >
               Audit Logs
             </button>
             <button
               onClick={() => setActiveTab('summary')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
-                activeTab === 'summary'
-                  ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-              }`}
+              style={getTabStyle(activeTab === 'summary')}
             >
               Analytics & Summary
             </button>
@@ -178,9 +205,14 @@ export function AuditLogPanel() {
 
         {/* Content */}
         {activeTab === 'logs' && (
-          <div className="space-y-6">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
             {/* Search and Filter Bar */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+            <div style={{
+              backgroundColor: 'var(--dashboard-bg-elevated)',
+              borderRadius: 'var(--radius-xl)',
+              boxShadow: 'var(--shadow-sm)',
+              padding: 'var(--space-6)'
+            }}>
               <div className="flex flex-col sm:flex-row gap-4">
                 <div className="flex-1">
                   <div className="relative">

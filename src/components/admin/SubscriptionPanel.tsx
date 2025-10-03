@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { 
+import {
   Crown,
   CreditCard,
   Calendar,
@@ -18,6 +18,12 @@ import {
   Zap,
   Star
 } from 'lucide-react';
+import '../../design-system/tokens/colors.css';
+import '../../design-system/tokens/spacing.css';
+import '../../design-system/tokens/borders.css';
+import '../../design-system/tokens/typography.css';
+import '../../design-system/tokens/shadows.css';
+import '../../design-system/tokens/dashboard.css';
 
 interface SubscriptionData {
   tier: 'basic' | 'premium' | 'enterprise';
@@ -141,6 +147,22 @@ export function SubscriptionPanel() {
   const [activeSection, setActiveSection] = useState('overview');
   const [isLoading, setIsLoading] = useState(false);
 
+  const getTabStyle = (isActive: boolean) => ({
+    padding: 'var(--space-4) var(--space-1)',
+    borderBottom: isActive ? '2px solid var(--dashboard-nav-tab-active)' : '2px solid transparent',
+    fontWeight: 'var(--font-medium)',
+    fontSize: 'var(--text-sm)',
+    whiteSpace: 'nowrap' as const,
+    color: isActive ? 'var(--dashboard-nav-tab-active)' : 'var(--dashboard-nav-tab-inactive)',
+    backgroundColor: 'transparent',
+    cursor: 'pointer',
+    transition: 'color 200ms ease',
+    border: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    gap: 'var(--space-2)'
+  });
+
   const formatCurrency = (amount: number, currency: string) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -200,18 +222,29 @@ export function SubscriptionPanel() {
   };
 
   return (
-    <div className="space-y-6">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Subscription Management</h2>
-          <p className="text-gray-600 mt-1">Manage your district's subscription and billing</p>
+          <h2 style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)' }}>Subscription Management</h2>
+          <p style={{ color: 'var(--dashboard-text-secondary)', marginTop: 'var(--space-1)' }}>Manage your district's subscription and billing</p>
         </div>
-        <div className="flex gap-3">
+        <div style={{ display: 'flex', gap: 'var(--space-3)' }}>
           <button
             onClick={handleRefresh}
             disabled={isLoading}
-            className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--space-2)',
+              padding: 'var(--space-2) var(--space-4)',
+              border: '1px solid var(--dashboard-border-primary)',
+              borderRadius: 'var(--radius-lg)',
+              backgroundColor: 'transparent',
+              color: 'var(--dashboard-text-primary)',
+              cursor: 'pointer',
+              opacity: isLoading ? 0.5 : 1
+            }}
           >
             <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
             Refresh
@@ -220,20 +253,30 @@ export function SubscriptionPanel() {
       </div>
 
       {/* Current Plan Overview */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
+      <div style={{
+        backgroundColor: 'var(--dashboard-bg-elevated)',
+        borderRadius: 'var(--radius-lg)',
+        border: '1px solid var(--dashboard-border-primary)',
+        padding: 'var(--space-6)'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-6)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
             {getTierIcon(subscription.tier)}
             <div>
-              <h3 className="text-xl font-semibold text-gray-900 capitalize">
+              <h3 style={{
+                fontSize: 'var(--text-xl)',
+                fontWeight: 'var(--font-semibold)',
+                color: 'var(--dashboard-text-primary)',
+                textTransform: 'capitalize'
+              }}>
                 {subscription.tier} Plan
               </h3>
-              <p className="text-gray-600">PlainviewISD District License</p>
+              <p style={{ color: 'var(--dashboard-text-secondary)' }}>PlainviewISD District License</p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
             {getStatusIcon(subscription.status)}
-            <span className="font-medium text-gray-900 capitalize">{subscription.status}</span>
+            <span style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)', textTransform: 'capitalize' }}>{subscription.status}</span>
           </div>
         </div>
 
@@ -281,8 +324,8 @@ export function SubscriptionPanel() {
       </div>
 
       {/* Navigation Tabs */}
-      <div className="border-b border-gray-200">
-        <nav className="flex space-x-8">
+      <div style={{ borderBottom: '1px solid var(--dashboard-border-primary)' }}>
+        <nav style={{ display: 'flex', gap: 'var(--space-8)' }}>
           {[
             { id: 'overview', label: 'Overview', icon: TrendingUp },
             { id: 'usage', label: 'Usage & Limits', icon: Server },
@@ -292,11 +335,7 @@ export function SubscriptionPanel() {
             <button
               key={id}
               onClick={() => setActiveSection(id)}
-              className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap flex items-center gap-2 ${
-                activeSection === id
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
-              }`}
+              style={getTabStyle(activeSection === id)}
             >
               <Icon className="w-4 h-4" />
               {label}
@@ -309,8 +348,18 @@ export function SubscriptionPanel() {
       {activeSection === 'overview' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Payment Method */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Payment Method</h3>
+          <div style={{
+            backgroundColor: 'var(--dashboard-bg-elevated)',
+            borderRadius: 'var(--radius-lg)',
+            border: '1px solid var(--dashboard-border-primary)',
+            padding: 'var(--space-6)'
+          }}>
+            <h3 style={{
+              fontSize: 'var(--text-lg)',
+              fontWeight: 'var(--font-semibold)',
+              color: 'var(--dashboard-text-primary)',
+              marginBottom: 'var(--space-4)'
+            }}>Payment Method</h3>
             <div className="flex items-center gap-4">
               <div className="w-12 h-8 bg-blue-600 rounded flex items-center justify-center">
                 <CreditCard className="w-6 h-6 text-white" />
@@ -327,16 +376,26 @@ export function SubscriptionPanel() {
           </div>
 
           {/* Billing Period */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Current Billing Period</h3>
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Period Start:</span>
-                <span className="font-medium">{formatDate(subscription.currentPeriodStart)}</span>
+          <div style={{
+            backgroundColor: 'var(--dashboard-bg-elevated)',
+            borderRadius: 'var(--radius-lg)',
+            border: '1px solid var(--dashboard-border-primary)',
+            padding: 'var(--space-6)'
+          }}>
+            <h3 style={{
+              fontSize: 'var(--text-lg)',
+              fontWeight: 'var(--font-semibold)',
+              color: 'var(--dashboard-text-primary)',
+              marginBottom: 'var(--space-4)'
+            }}>Current Billing Period</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: 'var(--dashboard-text-secondary)' }}>Period Start:</span>
+                <span style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>{formatDate(subscription.currentPeriodStart)}</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Period End:</span>
-                <span className="font-medium">{formatDate(subscription.currentPeriodEnd)}</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: 'var(--dashboard-text-secondary)' }}>Period End:</span>
+                <span style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>{formatDate(subscription.currentPeriodEnd)}</span>
               </div>
             </div>
           </div>
@@ -344,12 +403,17 @@ export function SubscriptionPanel() {
       )}
 
       {activeSection === 'usage' && (
-        <div className="space-y-6">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
           {/* Usage Metrics */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-900">Users</h3>
+            <div style={{
+              backgroundColor: 'var(--dashboard-bg-elevated)',
+              borderRadius: 'var(--radius-lg)',
+              border: '1px solid var(--dashboard-border-primary)',
+              padding: 'var(--space-6)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-4)' }}>
+                <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)' }}>Users</h3>
                 <Users className="w-6 h-6 text-blue-600" />
               </div>
               <div className="space-y-2">
@@ -408,9 +472,19 @@ export function SubscriptionPanel() {
       )}
 
       {activeSection === 'billing' && (
-        <div className="bg-white rounded-lg border border-gray-200">
-          <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-            <h3 className="text-lg font-semibold text-gray-900">Billing History</h3>
+        <div style={{
+          backgroundColor: 'var(--dashboard-bg-elevated)',
+          borderRadius: 'var(--radius-lg)',
+          border: '1px solid var(--dashboard-border-primary)'
+        }}>
+          <div style={{
+            padding: 'var(--space-4) var(--space-6)',
+            borderBottom: '1px solid var(--dashboard-border-primary)',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}>
+            <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)' }}>Billing History</h3>
             <button className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700">
               <Download className="w-4 h-4" />
               Export All
@@ -480,8 +554,18 @@ export function SubscriptionPanel() {
       )}
 
       {activeSection === 'features' && (
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-6">Plan Features</h3>
+        <div style={{
+          backgroundColor: 'var(--dashboard-bg-elevated)',
+          borderRadius: 'var(--radius-lg)',
+          border: '1px solid var(--dashboard-border-primary)',
+          padding: 'var(--space-6)'
+        }}>
+          <h3 style={{
+            fontSize: 'var(--text-lg)',
+            fontWeight: 'var(--font-semibold)',
+            color: 'var(--dashboard-text-primary)',
+            marginBottom: 'var(--space-6)'
+          }}>Plan Features</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {subscription.features.map((feature, index) => (
               <div key={index} className="flex items-center justify-between p-3 rounded-lg border border-gray-100">
