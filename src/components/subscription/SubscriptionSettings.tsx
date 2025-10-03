@@ -37,21 +37,19 @@ export function SubscriptionSettings() {
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Subscription Settings</h2>
         <div className="flex space-x-3">
-          <button 
+          <button
             className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center space-x-2"
             onClick={() => {}}
           >
             <Download className="h-4 w-4" />
             <span>Invoices</span>
           </button>
-          {tier !== 'enterprise' && (
-            <button 
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              onClick={() => setIsUpgradeModalOpen(true)}
-            >
-              Upgrade Plan
-            </button>
-          )}
+          <button
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            onClick={() => window.open('mailto:sales@pathfinity.com?subject=Plan Inquiry', '_blank')}
+          >
+            Contact Sales
+          </button>
         </div>
       </div>
       
@@ -100,7 +98,7 @@ export function SubscriptionSettings() {
               usersCount={usersCount}
               storageUsed={storageUsed}
               renewalDate={renewalDate}
-              onUpgrade={() => setIsUpgradeModalOpen(true)}
+              onUpgrade={() => window.open('mailto:sales@pathfinity.com?subject=Plan Upgrade Inquiry', '_blank')}
             />
             
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow">
@@ -108,13 +106,8 @@ export function SubscriptionSettings() {
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white">Available Plans</h3>
               </div>
               <div className="p-6">
-                <PricingPlans 
-                  currentTier={tier} 
-                  onSelectPlan={(newTier) => {
-                    if (newTier !== tier) {
-                      setIsUpgradeModalOpen(true);
-                    }
-                  }}
+                <PricingPlans
+                  currentTier={tier}
                 />
               </div>
             </div>

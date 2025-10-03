@@ -46,9 +46,9 @@ export function PricingPlans({
             <p className="mt-2 text-gray-500 dark:text-gray-400 text-sm">{plan.description}</p>
             
             <p className="mt-4">
-              <span className="text-4xl font-extrabold text-gray-900 dark:text-white">${plan.price}</span>
-              <span className="text-base font-medium text-gray-500 dark:text-gray-400">/user/month</span>
+              <span className="text-2xl font-semibold text-gray-900 dark:text-white">Enterprise Pricing</span>
             </p>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Contact our sales team for custom pricing</p>
             
             <div className="mt-6">
               <h4 className="text-sm font-medium text-gray-900 dark:text-white">What's included:</h4>
@@ -94,21 +94,16 @@ export function PricingPlans({
             </div>
           </div>
           
-          {onSelectPlan && (
-            <div className="mt-8">
-              <button
-                onClick={() => onSelectPlan(plan.tier)}
-                disabled={currentTier === plan.tier}
-                className={`w-full inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium ${
-                  currentTier === plan.tier
-                    ? 'bg-gray-100 text-gray-400 dark:bg-gray-700 dark:text-gray-500 cursor-not-allowed'
-                    : `text-white bg-${plan.color}-600 hover:bg-${plan.color}-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${plan.color}-500`
-                }`}
-              >
-                {currentTier === plan.tier ? 'Current Plan' : 'Upgrade'}
-              </button>
-            </div>
-          )}
+          <div className="mt-8">
+            <button
+              onClick={() => window.open('mailto:sales@pathfinity.com?subject=Enterprise Plan Inquiry', '_blank')}
+              className={`w-full inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
+                currentTier === plan.tier ? 'ring-2 ring-blue-500' : ''
+              }`}
+            >
+              {currentTier === plan.tier ? 'Current Plan - Contact Sales' : 'Contact Sales'}
+            </button>
+          </div>
         </div>
       ))}
     </div>
