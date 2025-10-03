@@ -4004,5 +4004,417 @@
       "Librarian",
       "Park Ranger"
     ]
+  },
+  "Zara Jones": {
+    "user": {
+      "name": "Zara Jones",
+      "grade": "K",
+      "gradeLevel": "Kindergarten"
+    },
+    "dashboardCards": [
+      {
+        "subject": "Math",
+        "title": "Numbers to 3",
+        "description": "Learn Math fundamentals",
+        "skillNumber": "A.1"
+      },
+      {
+        "subject": "ELA",
+        "title": "Letter identification",
+        "description": "Learn ELA fundamentals",
+        "skillNumber": "A.1"
+      },
+      {
+        "subject": "Science",
+        "title": "Shapes and colors",
+        "description": "Learn Science fundamentals",
+        "skillNumber": "A.1"
+      },
+      {
+        "subject": "SocialStudies",
+        "title": "Community",
+        "description": "Learn SocialStudies fundamentals",
+        "skillNumber": "A.1"
+      }
+    ],
+    "skills": {
+      "Math": {
+        "A.1": {
+          "id": "zara_math_a1",
+          "subject": "Math",
+          "grade": "K",
+          "skills_area": "Math Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.1",
+          "skill_name": "Numbers to 3",
+          "skill_description": "Count and identify numbers 1-3 in medical contexts",
+          "difficulty_level": 3,
+          "estimated_time_minutes": 25,
+          "prerequisites": null,
+          "created_at": "2025-10-02T21:30:00.000Z",
+          "updated_at": "2025-10-02T21:30:00.000Z"
+        }
+      },
+      "ELA": {
+        "A.1": {
+          "id": "zara_ela_a1",
+          "subject": "ELA",
+          "grade": "K",
+          "skills_area": "Reading Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.1",
+          "skill_name": "Letter identification",
+          "skill_description": "Find and identify uppercase letters in medical contexts",
+          "difficulty_level": 3,
+          "estimated_time_minutes": 25,
+          "prerequisites": null,
+          "created_at": "2025-10-02T21:30:00.000Z",
+          "updated_at": "2025-10-02T21:30:00.000Z"
+        }
+      },
+      "Science": {
+        "A.1": {
+          "id": "zara_science_a1",
+          "subject": "Science",
+          "grade": "K",
+          "skills_area": "Science Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.1",
+          "skill_name": "Shapes and colors",
+          "skill_description": "Classify objects by shape and identify colors in medical contexts",
+          "difficulty_level": 3,
+          "estimated_time_minutes": 25,
+          "prerequisites": null,
+          "created_at": "2025-10-02T21:30:00.000Z",
+          "updated_at": "2025-10-02T21:30:00.000Z"
+        }
+      },
+      "SocialStudies": {
+        "A.1": {
+          "id": "zara_social_a1",
+          "subject": "SocialStudies",
+          "grade": "K",
+          "skills_area": "Social Studies Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.1",
+          "skill_name": "Community",
+          "skill_description": "Understanding community helpers and medical professionals",
+          "difficulty_level": 3,
+          "estimated_time_minutes": 25,
+          "prerequisites": null,
+          "created_at": "2025-10-02T21:30:00.000Z",
+          "updated_at": "2025-10-02T21:30:00.000Z"
+        }
+      }
+    }
+  },
+  "Alexis Martin": {
+    "user": {
+      "name": "Alexis Martin",
+      "grade": "1",
+      "gradeLevel": "Grade 1"
+    },
+    "dashboardCards": [
+      {
+        "subject": "Math",
+        "title": "Counting to 10",
+        "description": "Learn Math fundamentals",
+        "skillNumber": "A.1"
+      },
+      {
+        "subject": "ELA",
+        "title": "Consonants and vowels",
+        "description": "Learn ELA fundamentals",
+        "skillNumber": "A.1"
+      },
+      {
+        "subject": "Science",
+        "title": "Classification skills",
+        "description": "Learn Science fundamentals",
+        "skillNumber": "A.1"
+      },
+      {
+        "subject": "SocialStudies",
+        "title": "Rules and laws",
+        "description": "Learn SocialStudies fundamentals",
+        "skillNumber": "A.1"
+      }
+    ],
+    "skills": {
+      "Math": {
+        "A.1": {
+          "id": "alexis_math_a1",
+          "subject": "Math",
+          "grade": "1",
+          "skills_area": "Math Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.1",
+          "skill_name": "Counting to 10",
+          "skill_description": "Count and organize numbers up to 10 in teaching contexts",
+          "difficulty_level": 3,
+          "estimated_time_minutes": 25,
+          "prerequisites": null,
+          "created_at": "2025-10-02T21:30:00.000Z",
+          "updated_at": "2025-10-02T21:30:00.000Z"
+        }
+      },
+      "ELA": {
+        "A.1": {
+          "id": "alexis_ela_a1",
+          "subject": "ELA",
+          "grade": "1",
+          "skills_area": "Reading Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.1",
+          "skill_name": "Consonants and vowels",
+          "skill_description": "Sort and identify consonants and vowels for teaching",
+          "difficulty_level": 3,
+          "estimated_time_minutes": 25,
+          "prerequisites": null,
+          "created_at": "2025-10-02T21:30:00.000Z",
+          "updated_at": "2025-10-02T21:30:00.000Z"
+        }
+      },
+      "Science": {
+        "A.1": {
+          "id": "alexis_science_a1",
+          "subject": "Science",
+          "grade": "1",
+          "skills_area": "Science Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.1",
+          "skill_name": "Classification skills",
+          "skill_description": "Classify objects by two-dimensional shape in educational contexts",
+          "difficulty_level": 3,
+          "estimated_time_minutes": 25,
+          "prerequisites": null,
+          "created_at": "2025-10-02T21:30:00.000Z",
+          "updated_at": "2025-10-02T21:30:00.000Z"
+        }
+      },
+      "SocialStudies": {
+        "A.1": {
+          "id": "alexis_social_a1",
+          "subject": "SocialStudies",
+          "grade": "1",
+          "skills_area": "Social Studies Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.1",
+          "skill_name": "Rules and laws",
+          "skill_description": "Understanding classroom rules and educational guidelines",
+          "difficulty_level": 3,
+          "estimated_time_minutes": 25,
+          "prerequisites": null,
+          "created_at": "2025-10-02T21:30:00.000Z",
+          "updated_at": "2025-10-02T21:30:00.000Z"
+        }
+      }
+    }
+  },
+  "David Brown": {
+    "user": {
+      "name": "David Brown",
+      "grade": "7",
+      "gradeLevel": "Grade 7"
+    },
+    "dashboardCards": [
+      {
+        "subject": "Math",
+        "title": "Understanding integers",
+        "description": "Learn Math fundamentals",
+        "skillNumber": "A.1"
+      },
+      {
+        "subject": "ELA",
+        "title": "Reading comprehension",
+        "description": "Learn ELA fundamentals",
+        "skillNumber": "A.1"
+      },
+      {
+        "subject": "Science",
+        "title": "Scientific inquiry",
+        "description": "Learn Science fundamentals",
+        "skillNumber": "A.1"
+      },
+      {
+        "subject": "SocialStudies",
+        "title": "Geography skills",
+        "description": "Learn SocialStudies fundamentals",
+        "skillNumber": "A.1"
+      }
+    ],
+    "skills": {
+      "Math": {
+        "A.1": {
+          "id": "david_math_a1",
+          "subject": "Math",
+          "grade": "7",
+          "skills_area": "Math Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.1",
+          "skill_name": "Understanding integers",
+          "skill_description": "Work with integers in talent agent business contexts",
+          "difficulty_level": 5,
+          "estimated_time_minutes": 30,
+          "prerequisites": null,
+          "created_at": "2025-10-02T21:30:00.000Z",
+          "updated_at": "2025-10-02T21:30:00.000Z"
+        }
+      },
+      "ELA": {
+        "A.1": {
+          "id": "david_ela_a1",
+          "subject": "ELA",
+          "grade": "7",
+          "skills_area": "Reading Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.1",
+          "skill_name": "Reading comprehension",
+          "skill_description": "Determine main idea of passages in entertainment industry contexts",
+          "difficulty_level": 5,
+          "estimated_time_minutes": 30,
+          "prerequisites": null,
+          "created_at": "2025-10-02T21:30:00.000Z",
+          "updated_at": "2025-10-02T21:30:00.000Z"
+        }
+      },
+      "Science": {
+        "A.1": {
+          "id": "david_science_a1",
+          "subject": "Science",
+          "grade": "7",
+          "skills_area": "Science Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.1",
+          "skill_name": "Scientific inquiry",
+          "skill_description": "Process of scientific inquiry in talent industry research",
+          "difficulty_level": 5,
+          "estimated_time_minutes": 30,
+          "prerequisites": null,
+          "created_at": "2025-10-02T21:30:00.000Z",
+          "updated_at": "2025-10-02T21:30:00.000Z"
+        }
+      },
+      "SocialStudies": {
+        "A.1": {
+          "id": "david_social_a1",
+          "subject": "SocialStudies",
+          "grade": "7",
+          "skills_area": "Social Studies Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.1",
+          "skill_name": "Geography skills",
+          "skill_description": "Identify lines of latitude/longitude for talent agent travel",
+          "difficulty_level": 5,
+          "estimated_time_minutes": 30,
+          "prerequisites": null,
+          "created_at": "2025-10-02T21:30:00.000Z",
+          "updated_at": "2025-10-02T21:30:00.000Z"
+        }
+      }
+    }
+  },
+  "Mike Johnson": {
+    "user": {
+      "name": "Mike Johnson",
+      "grade": "10",
+      "gradeLevel": "Grade 10"
+    },
+    "dashboardCards": [
+      {
+        "subject": "Math",
+        "title": "Advanced number concepts",
+        "description": "Learn Math fundamentals",
+        "skillNumber": "A.1"
+      },
+      {
+        "subject": "ELA",
+        "title": "Advanced text analysis",
+        "description": "Learn ELA fundamentals",
+        "skillNumber": "A.1"
+      },
+      {
+        "subject": "Science",
+        "title": "Advanced research methods",
+        "description": "Learn Science fundamentals",
+        "skillNumber": "A.1"
+      },
+      {
+        "subject": "SocialStudies",
+        "title": "Government systems",
+        "description": "Learn SocialStudies fundamentals",
+        "skillNumber": "A.1"
+      }
+    ],
+    "skills": {
+      "Math": {
+        "A.1": {
+          "id": "mike_math_a1",
+          "subject": "Math",
+          "grade": "10",
+          "skills_area": "Math Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.1",
+          "skill_name": "Advanced number concepts",
+          "skill_description": "Compare and order integers in football statistics",
+          "difficulty_level": 7,
+          "estimated_time_minutes": 35,
+          "prerequisites": null,
+          "created_at": "2025-10-02T21:30:00.000Z",
+          "updated_at": "2025-10-02T21:30:00.000Z"
+        }
+      },
+      "ELA": {
+        "A.1": {
+          "id": "mike_ela_a1",
+          "subject": "ELA",
+          "grade": "10",
+          "skills_area": "Reading Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.1",
+          "skill_name": "Advanced text analysis",
+          "skill_description": "Determine main idea of passages in sports contexts",
+          "difficulty_level": 7,
+          "estimated_time_minutes": 35,
+          "prerequisites": null,
+          "created_at": "2025-10-02T21:30:00.000Z",
+          "updated_at": "2025-10-02T21:30:00.000Z"
+        }
+      },
+      "Science": {
+        "A.1": {
+          "id": "mike_science_a1",
+          "subject": "Science",
+          "grade": "10",
+          "skills_area": "Science Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.1",
+          "skill_name": "Advanced research methods",
+          "skill_description": "Process of scientific inquiry in sports science",
+          "difficulty_level": 7,
+          "estimated_time_minutes": 35,
+          "prerequisites": null,
+          "created_at": "2025-10-02T21:30:00.000Z",
+          "updated_at": "2025-10-02T21:30:00.000Z"
+        }
+      },
+      "SocialStudies": {
+        "A.1": {
+          "id": "mike_social_a1",
+          "subject": "SocialStudies",
+          "grade": "10",
+          "skills_area": "Social Studies Foundations",
+          "skills_cluster": "A.",
+          "skill_number": "A.1",
+          "skill_name": "Government systems",
+          "skill_description": "Understanding purposes of government in sports governance",
+          "difficulty_level": 7,
+          "estimated_time_minutes": 35,
+          "prerequisites": null,
+          "created_at": "2025-10-02T21:30:00.000Z",
+          "updated_at": "2025-10-02T21:30:00.000Z"
+        }
+      }
+    }
   }
 }

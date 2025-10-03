@@ -10,7 +10,8 @@ import { useStudentProfile } from '../../hooks/useStudentProfile';
 import { UnifiedPDFButton } from '../UnifiedLessonDownload';
 import { ThemeAwareCard } from '../ui/ThemeAwareCard';
 import { lessonOrchestrator } from '../../services/orchestration/LessonPlanOrchestrator';
-import { getDemoLessonContent, getRolesForTier } from '../../data/DemoLessonContent';
+import { DEMO_LESSON_CONTENT, getDemoLessonContent, getRolesForTier } from '../../data/DemoLessonContent';
+import { shouldUseCachedContent, logCacheDetection } from '../../utils/cacheUserDetection';
 
 interface Student {
   id: string;
@@ -332,6 +333,23 @@ export const DailyLessonPlanPage: React.FC<DailyLessonPlanPageProps> = ({ embedd
     setLoading(true);
 
     try {
+      // Check if this user should use cached content
+      const studentName = isTeacher ?
+        availableStudents.find(s => s.id === selectedStudentId)?.name || currentStudent.name :
+        currentStudent.name;
+
+      const studentEmail = isTeacher ?
+        user?.email : // Use teacher's email for cache detection
+        user?.email;
+
+      logCacheDetection(studentEmail, studentName);
+
+      if (shouldUseCachedContent(studentEmail, studentName)) {
+        console.log('🎯 Using cached content for demo user:', studentName);
+        await generateCachedLesson(studentName);
+        return;
+      }
+
       console.log('🚀 Generating hybrid lesson plan using lessonOrchestrator + tier progression');
 
       // Get the base career name from the student's career family
@@ -624,6 +642,90 @@ export const DailyLessonPlanPage: React.FC<DailyLessonPlanPageProps> = ({ embedd
         interactivity: getTierInteractivity(tier)
       };
     });
+  };
+
+  // Generate cached lesson using DemoLessonContent.ts
+  const generateCachedLesson = async (studentName: string) => {
+    console.log('🎯 Generating cached lesson for:', studentName);
+
+    const selectedCareer = careerProgressions[selectedTier as keyof typeof careerProgressions];
+    const tierInfo = SUBSCRIPTION_TIERS[selectedTier as keyof typeof SUBSCRIPTION_TIERS];
+
+    try {
+      // Generate role progression lessons using cached demo data
+      const roleProgressionSubjects = generateRoleProgressionLesson(
+        currentStudent,
+        {
+          title: currentStudent.career_family.charAt(0).toUpperCase() + currentStudent.career_family.slice(1),
+          emoji: selectedCareer?.emoji || '🎯'
+        },
+        selectedTier
+      );
+
+      // Create lesson structure using cached content
+      const lesson = {
+        student: {
+          name: currentStudent.name,
+          grade: currentStudent.grade,
+          companion: currentStudent.companion
+        },
+        career: {
+          careerName: currentStudent.career_family.charAt(0).toUpperCase() + currentStudent.career_family.slice(1),
+          icon: selectedCareer?.emoji || '🎯',
+          tier: selectedTier
+        },
+        subjects: roleProgressionSubjects,
+        lessonSummary: `${currentStudent.name} explores ${currentStudent.career_family.replace('_', ' ')} work using grade ${currentStudent.grade} A.1 skills with ${tierInfo.description.toLowerCase()}.`,
+        tierFeatures: getTierFeatures(selectedTier),
+        estimatedDuration: getTierDuration(selectedTier),
+        generatedAt: new Date().toISOString(),
+        subscription: { tier: selectedTier },
+        // Ensure PDF compatibility with cached content structure
+        content: {
+          subjectContents: roleProgressionSubjects.reduce((acc, subject) => {
+            let challenges = [];
+            let setup = '';
+
+            if (subject.roles && subject.roles.length > 0) {
+              setup = subject.roles[0].setup || `${subject.subject} activities for ${currentStudent.career_family.replace('_', ' ')}`;
+
+              challenges = subject.roles.map(role => ({
+                roleName: role.roleName,
+                roleNumber: role.roleNumber,
+                setup: role.setup,
+                activities: role.activities || [],
+                hint: role.hint,
+                challenge: role.challenge,
+                learningOutcome: role.learningOutcome,
+                isRoleGroup: true
+              }));
+            }
+
+            if (challenges.length === 0) {
+              challenges = generateSubjectChallenges(subject.subject, selectedCareer, selectedTier, currentStudent.grade, subject.skill.objective);
+            }
+
+            acc[subject.subject] = {
+              skill: { objective: subject.skill.objective },
+              setup: setup,
+              challenges: challenges,
+              activities: subject.activities,
+              assessmentLevel: subject.assessmentLevel,
+              interactivity: subject.interactivity
+            };
+            return acc;
+          }, {} as any)
+        }
+      };
+
+      console.log('✅ Generated cached lesson plan:', lesson);
+      setGeneratedLesson(lesson);
+
+    } catch (error) {
+      console.error('❌ Error generating cached lesson plan:', error);
+      // Fallback to mock data if cache fails
+      await generateFallbackLesson();
+    }
   };
 
   // Helper function to get demo user ID based on grade and career
@@ -1082,7 +1184,7 @@ export const DailyLessonPlanPage: React.FC<DailyLessonPlanPageProps> = ({ embedd
 
         {/* Generated Lesson Display */}
         {generatedLesson && (
-          <ThemeAwareCard>
+          <ThemeAwareCard className="bg-gray-800 dark:bg-gray-900">
             <div className="p-6">
               <div className="flex items-center justify-between mb-6">
                 <h3 style={{ fontSize: '1.5rem', fontWeight: '600' }}>
@@ -1092,12 +1194,7 @@ export const DailyLessonPlanPage: React.FC<DailyLessonPlanPageProps> = ({ embedd
               </div>
 
               {/* Lesson Overview */}
-              <div style={{
-                padding: '1.5rem',
-                backgroundColor: 'var(--color-background)',
-                borderRadius: '8px',
-                marginBottom: '2rem'
-              }}>
+              <div className="p-6 bg-gray-700 dark:bg-gray-800 rounded-lg mb-8">
                 <div className="flex items-center gap-4 mb-4">
                   <span style={{ fontSize: '3rem' }}>{generatedLesson.career.icon}</span>
                   <div>
@@ -1161,33 +1258,15 @@ export const DailyLessonPlanPage: React.FC<DailyLessonPlanPageProps> = ({ embedd
                     return (
                       <div
                         key={index}
+                        className="p-6 bg-gray-800 dark:bg-gray-700 rounded-lg border border-gray-600 dark:border-gray-500"
                         style={{
-                          padding: '1.5rem',
-                          backgroundColor: 'var(--color-card)',
-                          borderRadius: '8px',
-                          borderLeft: `4px solid ${borderColor}`,
-                          border: '1px solid var(--color-border)'
+                          borderLeft: `4px solid ${borderColor}`
                         }}
                       >
                         {/* Subject Header Row */}
-                        <div style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          marginBottom: '1rem',
-                          flexWrap: 'wrap',
-                          gap: '1rem'
-                        }}>
-                          <h6 style={{
-                            fontSize: '1.125rem',
-                            fontWeight: '600',
-                            margin: 0,
-                            color: borderColor,
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.5rem'
-                          }}>
-                            <span style={{ fontSize: '1.5rem' }}>
+                        <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
+                          <h6 className="text-lg font-semibold m-0 flex items-center gap-2" style={{ color: borderColor }}>
+                            <span className="text-2xl">
                               {subjectData.subject === 'Math' ? '🔢' :
                                subjectData.subject === 'ELA' ? '📚' :
                                subjectData.subject === 'Science' ? '🧪' : '🌎'}
@@ -1195,59 +1274,30 @@ export const DailyLessonPlanPage: React.FC<DailyLessonPlanPageProps> = ({ embedd
                             {subjectData.subject}
                           </h6>
 
-                          <div style={{
-                            display: 'flex',
-                            gap: '1rem',
-                            fontSize: '0.875rem',
-                            color: 'var(--color-text-secondary)',
-                            flexWrap: 'wrap'
-                          }}>
+                          <div className="flex gap-4 text-sm text-gray-400 dark:text-gray-300 flex-wrap">
                             <span><strong>Assessment:</strong> {subjectData.assessmentLevel}</span>
                             <span><strong>Interactivity:</strong> {subjectData.interactivity}</span>
                           </div>
                         </div>
 
                         {/* Content Grid */}
-                        <div style={{
-                          display: 'grid',
-                          gridTemplateColumns: 'minmax(250px, 1fr) minmax(250px, 1fr)',
-                          gap: '1.5rem',
-                          alignItems: 'start'
-                        }}>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
                           {/* Left Column - Skills & Connection */}
                           <div>
-                            <div style={{ marginBottom: '1rem' }}>
-                              <strong style={{
-                                color: 'var(--color-text)',
-                                fontSize: '0.875rem',
-                                display: 'block',
-                                marginBottom: '0.25rem'
-                              }}>
+                            <div className="mb-4">
+                              <strong className="text-gray-800 dark:text-gray-200 text-sm block mb-1">
                                 Academic Skill:
                               </strong>
-                              <span style={{
-                                color: 'var(--color-text-secondary)',
-                                fontSize: '0.9rem',
-                                lineHeight: '1.4'
-                              }}>
+                              <span className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
                                 {subjectData.skill.objective}
                               </span>
                             </div>
 
                             <div>
-                              <strong style={{
-                                color: 'var(--color-accent)',
-                                fontSize: '0.875rem',
-                                display: 'block',
-                                marginBottom: '0.25rem'
-                              }}>
+                              <strong className="text-purple-600 dark:text-purple-400 text-sm block mb-1">
                                 Career Connection:
                               </strong>
-                              <span style={{
-                                color: 'var(--color-text-secondary)',
-                                fontSize: '0.9rem',
-                                lineHeight: '1.4'
-                              }}>
+                              <span className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
                                 {subjectData.skill.careerConnection}
                               </span>
                             </div>
@@ -1255,39 +1305,19 @@ export const DailyLessonPlanPage: React.FC<DailyLessonPlanPageProps> = ({ embedd
 
                           {/* Right Column - Role Progression Activities */}
                           <div>
-                            <strong style={{
-                              color: 'var(--color-primary)',
-                              fontSize: '0.875rem',
-                              display: 'block',
-                              marginBottom: '0.5rem'
-                            }}>
+                            <strong className="text-blue-600 dark:text-blue-400 text-sm block mb-2">
                               Learning Activities:
                             </strong>
                             {subjectData.roles && subjectData.roles.length > 0 ? (
                               // Display role progression content
                               subjectData.roles.map((role: any, roleIdx: number) => (
-                                <div key={roleIdx} style={{ marginBottom: '1rem' }}>
-                                  <div style={{
-                                    color: 'var(--color-accent)',
-                                    fontSize: '0.8rem',
-                                    fontWeight: 'bold',
-                                    marginBottom: '0.25rem'
-                                  }}>
+                                <div key={roleIdx} className="mb-4">
+                                  <div className="text-purple-600 dark:text-purple-400 text-xs font-bold mb-1">
                                     {role.roleName}
                                   </div>
-                                  <ul style={{
-                                    margin: 0,
-                                    paddingLeft: '1rem',
-                                    listStyleType: 'disc',
-                                    marginBottom: '0.5rem'
-                                  }}>
+                                  <ul className="m-0 pl-4 list-disc mb-2">
                                     {role.activities && role.activities.map((activity: string, idx: number) => (
-                                      <li key={idx} style={{
-                                        color: 'var(--color-text-secondary)',
-                                        marginBottom: '0.375rem',
-                                        fontSize: '0.9rem',
-                                        lineHeight: '1.4'
-                                      }}>
+                                      <li key={idx} className="text-gray-600 dark:text-gray-300 mb-1.5 text-sm leading-relaxed">
                                         {activity}
                                       </li>
                                     ))}
@@ -1296,18 +1326,9 @@ export const DailyLessonPlanPage: React.FC<DailyLessonPlanPageProps> = ({ embedd
                               ))
                             ) : (
                               // Fallback to simple activities list
-                              <ul style={{
-                                margin: 0,
-                                paddingLeft: '1rem',
-                                listStyleType: 'disc'
-                              }}>
+                              <ul className="m-0 pl-4 list-disc">
                                 {subjectData.activities.map((activity: string, idx: number) => (
-                                  <li key={idx} style={{
-                                    color: 'var(--color-text-secondary)',
-                                    marginBottom: '0.375rem',
-                                    fontSize: '0.9rem',
-                                    lineHeight: '1.4'
-                                  }}>
+                                  <li key={idx} className="text-gray-600 dark:text-gray-300 mb-1.5 text-sm leading-relaxed">
                                     {activity}
                                   </li>
                                 ))}
