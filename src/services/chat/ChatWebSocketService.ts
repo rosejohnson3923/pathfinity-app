@@ -111,7 +111,7 @@ class ChatWebSocketService {
    */
   private attemptReconnect(): void {
     if (this.reconnectAttempts >= this.maxReconnectAttempts) {
-      console.error('Max reconnection attempts reached');
+      console.log('[WebSocket] Max reconnection attempts reached - using API mode');
       return;
     }
 

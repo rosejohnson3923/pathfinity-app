@@ -63,14 +63,16 @@ export function ReportsPanel({ className = '' }: ReportsPanelProps) {
 
   const getTabStyle = (isActive: boolean) => ({
     padding: 'var(--space-4) var(--space-1)',
+    borderTop: 'none',
+    borderLeft: 'none',
+    borderRight: 'none',
     borderBottom: isActive ? '2px solid var(--dashboard-nav-tab-active)' : '2px solid transparent',
     fontWeight: 'var(--font-medium)',
     fontSize: 'var(--text-sm)',
     color: isActive ? 'var(--dashboard-nav-tab-active)' : 'var(--dashboard-nav-tab-inactive)',
     backgroundColor: 'transparent',
     cursor: 'pointer',
-    transition: 'color 200ms ease',
-    border: 'none'
+    transition: 'color 200ms ease'
   });
 
   const {

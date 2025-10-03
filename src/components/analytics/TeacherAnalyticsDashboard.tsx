@@ -23,7 +23,7 @@ import {
   Download,
   Filter
 } from 'lucide-react';
-import { teacherAnalyticsService, AnalyticsInsights, ClassAnalytics } from '../../services/teacherAnalyticsService';
+import { teacherAnalyticsService, ClassInsights } from '../../services/teacherAnalyticsService';
 import { useAuthContext } from '../../contexts/AuthContext';
 
 interface TeacherAnalyticsDashboardProps {
@@ -38,7 +38,7 @@ export const TeacherAnalyticsDashboard: React.FC<TeacherAnalyticsDashboardProps>
   timeRange = '1m'
 }) => {
   const { user } = useAuthContext();
-  const [analytics, setAnalytics] = useState<AnalyticsInsights | null>(null);
+  const [analytics, setAnalytics] = useState<ClassInsights | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedTimeRange, setSelectedTimeRange] = useState(timeRange);
@@ -54,16 +54,13 @@ export const TeacherAnalyticsDashboard: React.FC<TeacherAnalyticsDashboardProps>
 
   const loadAnalytics = async () => {
     if (!currentTeacherId) return;
-    
+
     setLoading(true);
     setError(null);
-    
+
     try {
-      const insights = await teacherAnalyticsService.generateClassAnalytics(
-        currentTeacherId,
-        subject,
-        selectedTimeRange
-      );
+      // Use getClassInsights method which exists in the service
+      const insights = await teacherAnalyticsService.getClassInsights(currentTeacherId);
       setAnalytics(insights);
     } catch (err) {
       console.error('Analytics loading error:', err);
