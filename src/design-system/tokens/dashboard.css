@@ -165,6 +165,105 @@
   --dashboard-nav-tab-active: var(--dashboard-nav-tab-active-light);
   --dashboard-nav-tab-inactive: var(--dashboard-nav-tab-inactive-light);
   --dashboard-nav-tab-hover: var(--dashboard-nav-tab-hover-light);
+
+  /* =========================
+     ADMIN-SPECIFIC TOKENS
+     ========================= */
+
+  /* Status Colors - Light Theme */
+  --dashboard-status-active-bg-light: #D1FAE5;
+  --dashboard-status-active-text-light: #065F46;
+  --dashboard-status-active-border-light: #34D399;
+
+  --dashboard-status-pending-bg-light: #FEF3C7;
+  --dashboard-status-pending-text-light: #92400E;
+  --dashboard-status-pending-border-light: #FBBF24;
+
+  --dashboard-status-suspended-bg-light: #FEE2E2;
+  --dashboard-status-suspended-text-light: #991B1B;
+  --dashboard-status-suspended-border-light: #F87171;
+
+  --dashboard-status-info-bg-light: #DBEAFE;
+  --dashboard-status-info-text-light: #1E40AF;
+  --dashboard-status-info-border-light: #60A5FA;
+
+  /* Status Colors - Dark Theme */
+  --dashboard-status-active-bg-dark: #065F46;
+  --dashboard-status-active-text-dark: #D1FAE5;
+  --dashboard-status-active-border-dark: #10B981;
+
+  --dashboard-status-pending-bg-dark: #92400E;
+  --dashboard-status-pending-text-dark: #FEF3C7;
+  --dashboard-status-pending-border-dark: #F59E0B;
+
+  --dashboard-status-suspended-bg-dark: #991B1B;
+  --dashboard-status-suspended-text-dark: #FEE2E2;
+  --dashboard-status-suspended-border-dark: #EF4444;
+
+  --dashboard-status-info-bg-dark: #1E40AF;
+  --dashboard-status-info-text-dark: #DBEAFE;
+  --dashboard-status-info-border-dark: #3B82F6;
+
+  /* Role Badge Colors - Light Theme */
+  --dashboard-role-admin-bg-light: #DBEAFE;
+  --dashboard-role-admin-text-light: #1E40AF;
+
+  --dashboard-role-teacher-bg-light: #D1FAE5;
+  --dashboard-role-teacher-text-light: #065F46;
+
+  --dashboard-role-student-bg-light: #F3E8FF;
+  --dashboard-role-student-text-light: #6B21A8;
+
+  --dashboard-role-parent-bg-light: #FCE7F3;
+  --dashboard-role-parent-text-light: #9F1239;
+
+  /* Role Badge Colors - Dark Theme */
+  --dashboard-role-admin-bg-dark: #1E40AF;
+  --dashboard-role-admin-text-dark: #DBEAFE;
+
+  --dashboard-role-teacher-bg-dark: #065F46;
+  --dashboard-role-teacher-text-dark: #D1FAE5;
+
+  --dashboard-role-student-bg-dark: #6B21A8;
+  --dashboard-role-student-text-dark: #F3E8FF;
+
+  --dashboard-role-parent-bg-dark: #9F1239;
+  --dashboard-role-parent-text-dark: #FCE7F3;
+
+  /* Active Theme Status Colors (default to light) */
+  --dashboard-status-active-bg: var(--dashboard-status-active-bg-light);
+  --dashboard-status-active-text: var(--dashboard-status-active-text-light);
+  --dashboard-status-active-border: var(--dashboard-status-active-border-light);
+
+  --dashboard-status-pending-bg: var(--dashboard-status-pending-bg-light);
+  --dashboard-status-pending-text: var(--dashboard-status-pending-text-light);
+  --dashboard-status-pending-border: var(--dashboard-status-pending-border-light);
+
+  --dashboard-status-suspended-bg: var(--dashboard-status-suspended-bg-light);
+  --dashboard-status-suspended-text: var(--dashboard-status-suspended-text-light);
+  --dashboard-status-suspended-border: var(--dashboard-status-suspended-border-light);
+
+  --dashboard-status-info-bg: var(--dashboard-status-info-bg-light);
+  --dashboard-status-info-text: var(--dashboard-status-info-text-light);
+  --dashboard-status-info-border: var(--dashboard-status-info-border-light);
+
+  /* Active Theme Role Colors (default to light) */
+  --dashboard-role-admin-bg: var(--dashboard-role-admin-bg-light);
+  --dashboard-role-admin-text: var(--dashboard-role-admin-text-light);
+
+  --dashboard-role-teacher-bg: var(--dashboard-role-teacher-bg-light);
+  --dashboard-role-teacher-text: var(--dashboard-role-teacher-text-light);
+
+  --dashboard-role-student-bg: var(--dashboard-role-student-bg-light);
+  --dashboard-role-student-text: var(--dashboard-role-student-text-light);
+
+  --dashboard-role-parent-bg: var(--dashboard-role-parent-bg-light);
+  --dashboard-role-parent-text: var(--dashboard-role-parent-text-light);
+
+  /* Table styling */
+  --dashboard-table-header-bg: var(--dashboard-bg-secondary);
+  --dashboard-table-row-hover: var(--dashboard-bg-secondary);
+  --dashboard-table-border: var(--dashboard-border);
 }
 
 /* =========================
@@ -221,4 +320,34 @@
   --dashboard-shadow-card-hover: 0 8px 20px rgba(0, 0, 0, 0.4), 0 3px 8px rgba(0, 0, 0, 0.3);
   --dashboard-shadow-portlet: 0 3px 10px rgba(0, 0, 0, 0.35), 0 1px 4px rgba(0, 0, 0, 0.25);
   --dashboard-shadow-portlet-hover: 0 8px 24px rgba(0, 0, 0, 0.45), 0 4px 12px rgba(0, 0, 0, 0.35);
+
+  /* Admin-specific Status Colors */
+  --dashboard-status-active-bg: var(--dashboard-status-active-bg-dark);
+  --dashboard-status-active-text: var(--dashboard-status-active-text-dark);
+  --dashboard-status-active-border: var(--dashboard-status-active-border-dark);
+
+  --dashboard-status-pending-bg: var(--dashboard-status-pending-bg-dark);
+  --dashboard-status-pending-text: var(--dashboard-status-pending-text-dark);
+  --dashboard-status-pending-border: var(--dashboard-status-pending-border-dark);
+
+  --dashboard-status-suspended-bg: var(--dashboard-status-suspended-bg-dark);
+  --dashboard-status-suspended-text: var(--dashboard-status-suspended-text-dark);
+  --dashboard-status-suspended-border: var(--dashboard-status-suspended-border-dark);
+
+  --dashboard-status-info-bg: var(--dashboard-status-info-bg-dark);
+  --dashboard-status-info-text: var(--dashboard-status-info-text-dark);
+  --dashboard-status-info-border: var(--dashboard-status-info-border-dark);
+
+  /* Admin-specific Role Colors */
+  --dashboard-role-admin-bg: var(--dashboard-role-admin-bg-dark);
+  --dashboard-role-admin-text: var(--dashboard-role-admin-text-dark);
+
+  --dashboard-role-teacher-bg: var(--dashboard-role-teacher-bg-dark);
+  --dashboard-role-teacher-text: var(--dashboard-role-teacher-text-dark);
+
+  --dashboard-role-student-bg: var(--dashboard-role-student-bg-dark);
+  --dashboard-role-student-text: var(--dashboard-role-student-text-dark);
+
+  --dashboard-role-parent-bg: var(--dashboard-role-parent-bg-dark);
+  --dashboard-role-parent-text: var(--dashboard-role-parent-text-dark);
 }

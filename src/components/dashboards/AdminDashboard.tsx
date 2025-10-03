@@ -49,6 +49,14 @@ import {
   Mail
 } from 'lucide-react';
 
+// Design System Imports
+import '../../design-system/tokens/colors.css';
+import '../../design-system/tokens/spacing.css';
+import '../../design-system/tokens/borders.css';
+import '../../design-system/tokens/typography.css';
+import '../../design-system/tokens/shadows.css';
+import '../../design-system/tokens/dashboard.css';
+
 export function AdminDashboard() {
   const { user, tenant } = useAuthContext();
   const navigate = useNavigate();
@@ -281,80 +289,158 @@ export function AdminDashboard() {
 
   return (
     <AdminOnly fallback={
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <div className="text-center">
-          <div className="inline-flex items-center justify-center p-4 bg-red-100 dark:bg-red-900/20 rounded-full mb-4">
-            <Building className="h-8 w-8 text-red-600 dark:text-red-400" />
+      <div style={{ minHeight: '100vh', backgroundColor: 'var(--dashboard-bg-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 'var(--space-4)', backgroundColor: 'var(--dashboard-status-suspended-bg)', borderRadius: '9999px', marginBottom: 'var(--space-4)' }}>
+            <Building style={{ height: '2rem', width: '2rem', color: 'var(--dashboard-status-suspended-text)' }} />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Access Denied</h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">
+          <h2 style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)', marginBottom: 'var(--space-2)' }}>Access Denied</h2>
+          <p style={{ color: 'var(--dashboard-text-secondary)', marginBottom: 'var(--space-6)' }}>
             You don't have permission to access the admin dashboard.
           </p>
           <button
             onClick={() => window.history.back()}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            style={{
+              padding: 'var(--space-2) var(--space-6)',
+              backgroundColor: 'var(--blue-600)',
+              color: 'white',
+              borderRadius: 'var(--radius-lg)',
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'background-color 200ms ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'var(--blue-700)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'var(--blue-600)';
+            }}
           >
             Go Back
           </button>
         </div>
       </div>
     }>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+      <div style={{ minHeight: '100vh', backgroundColor: 'var(--dashboard-bg-primary)', transition: 'background-color 200ms ease' }}>
         <Header 
           showBackButton={false} 
           onSearch={handleGlobalSearch}
           isSearchActive={activeTab === 'users' || activeTab === 'content'}
         />
       
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex items-center justify-between mb-8">
+      <main style={{ maxWidth: '80rem', margin: '0 auto', padding: 'var(--space-8) var(--space-4)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-8)' }}>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Admin Dashboard</h1>
-            <p className="text-gray-600 dark:text-gray-400">
-              {tenant?.subscription_tier === 'enterprise' 
-                ? 'Enterprise administration portal' 
+            <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)' }}>Admin Dashboard</h1>
+            <p style={{ color: 'var(--dashboard-text-secondary)' }}>
+              {tenant?.subscription_tier === 'enterprise'
+                ? 'Enterprise administration portal'
                 : 'Organization administration portal'}
             </p>
           </div>
-          <div className="flex space-x-3">
+          <div style={{ display: 'flex', gap: 'var(--space-3)' }}>
             <PermissionGate permission="users:create">
-              <button 
+              <button
                 onClick={() => setIsAddUserModalOpen(true)}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+                style={{
+                  padding: 'var(--space-2) var(--space-4)',
+                  backgroundColor: 'var(--blue-600)',
+                  color: 'white',
+                  borderRadius: 'var(--radius-lg)',
+                  border: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 'var(--space-2)',
+                  cursor: 'pointer',
+                  transition: 'background-color 200ms ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'var(--blue-700)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'var(--blue-600)';
+                }}
               >
-                <UserPlus className="h-4 w-4" />
+                <UserPlus style={{ height: '1rem', width: '1rem' }} />
                 <span>Add User</span>
               </button>
             </PermissionGate>
             <PermissionGate permission="users:create">
-              <button 
+              <button
                 onClick={() => handleBulkOperation('invite', [], [])}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-2"
+                style={{
+                  padding: 'var(--space-2) var(--space-4)',
+                  backgroundColor: 'var(--green-600)',
+                  color: 'white',
+                  borderRadius: 'var(--radius-lg)',
+                  border: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 'var(--space-2)',
+                  cursor: 'pointer',
+                  transition: 'background-color 200ms ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'var(--green-700)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'var(--green-600)';
+                }}
               >
-                <Mail className="h-4 w-4" />
+                <Mail style={{ height: '1rem', width: '1rem' }} />
                 <span>Bulk Invite</span>
               </button>
             </PermissionGate>
-            <button 
+            <button
               onClick={() => navigate('/app/admin-controls')}
-              className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              style={{
+                padding: 'var(--space-2) var(--space-4)',
+                backgroundColor: 'var(--dashboard-bg-elevated)',
+                color: 'var(--dashboard-text-primary)',
+                border: '1px solid var(--dashboard-border-strong)',
+                borderRadius: 'var(--radius-lg)',
+                cursor: 'pointer',
+                transition: 'background-color 200ms ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = 'var(--dashboard-bg-secondary)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'var(--dashboard-bg-elevated)';
+              }}
               title="Admin Controls"
             >
-              <Settings className="h-5 w-5" />
+              <Settings style={{ height: '1.25rem', width: '1.25rem' }} />
             </button>
           </div>
         </div>
 
         {/* Tabs */}
-        <div className="border-b border-gray-200 dark:border-gray-700 mb-6">
-          <nav className="flex space-x-8 overflow-x-auto">
+        <div style={{ borderBottom: '1px solid var(--dashboard-border)', marginBottom: 'var(--space-6)' }}>
+          <nav style={{ display: 'flex', gap: 'var(--space-8)', overflowX: 'auto' }}>
             <button
               onClick={() => setActiveTab('overview')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
-                activeTab === 'overview'
-                  ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-              }`}
+              style={{
+                padding: 'var(--space-4) var(--space-1)',
+                borderBottom: activeTab === 'overview' ? '2px solid var(--dashboard-nav-tab-active)' : '2px solid transparent',
+                fontWeight: 'var(--font-medium)',
+                fontSize: 'var(--text-sm)',
+                whiteSpace: 'nowrap',
+                color: activeTab === 'overview' ? 'var(--dashboard-nav-tab-active)' : 'var(--dashboard-nav-tab-inactive)',
+                background: 'none',
+                cursor: 'pointer',
+                transition: 'color 200ms ease, border-color 200ms ease'
+              }}
+              onMouseEnter={(e) => {
+                if (activeTab !== 'overview') {
+                  e.currentTarget.style.color = 'var(--dashboard-nav-tab-hover)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (activeTab !== 'overview') {
+                  e.currentTarget.style.color = 'var(--dashboard-nav-tab-inactive)';
+                }
+              }}
             >
               Overview
             </button>
@@ -460,45 +546,45 @@ export function AdminDashboard() {
         </div>
 
         {/* Dashboard Content */}
-        <div className="space-y-6">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
           {activeTab === 'overview' && (
             <>
               {/* Stats Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6 flex items-center space-x-4">
-                  <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-                    <Users className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 'var(--space-6)' }}>
+                <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-xl)', boxShadow: 'var(--dashboard-shadow-card)', padding: 'var(--space-6)', display: 'flex', alignItems: 'center', gap: 'var(--space-4)' }}>
+                  <div style={{ padding: 'var(--space-3)', backgroundColor: '#DBEAFE', borderRadius: 'var(--radius-lg)' }}>
+                    <Users style={{ height: '1.5rem', width: '1.5rem', color: '#2563EB' }} />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Total Users</p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">1,248</p>
+                    <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-tertiary)' }}>Total Users</p>
+                    <p style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)' }}>1,248</p>
                   </div>
                 </div>
-                <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6 flex items-center space-x-4">
-                  <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-lg">
-                    <UserCheck className="h-6 w-6 text-green-600 dark:text-green-400" />
+                <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-xl)', boxShadow: 'var(--dashboard-shadow-card)', padding: 'var(--space-6)', display: 'flex', alignItems: 'center', gap: 'var(--space-4)' }}>
+                  <div style={{ padding: 'var(--space-3)', backgroundColor: '#D1FAE5', borderRadius: 'var(--radius-lg)' }}>
+                    <UserCheck style={{ height: '1.5rem', width: '1.5rem', color: '#059669' }} />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Active Users</p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">1,156</p>
+                    <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-tertiary)' }}>Active Users</p>
+                    <p style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)' }}>1,156</p>
                   </div>
                 </div>
-                <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6 flex items-center space-x-4">
-                  <div className="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
-                    <Database className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-xl)', boxShadow: 'var(--dashboard-shadow-card)', padding: 'var(--space-6)', display: 'flex', alignItems: 'center', gap: 'var(--space-4)' }}>
+                  <div style={{ padding: 'var(--space-3)', backgroundColor: '#F3E8FF', borderRadius: 'var(--radius-lg)' }}>
+                    <Database style={{ height: '1.5rem', width: '1.5rem', color: '#7C3AED' }} />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Storage Used</p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">24.5 GB</p>
+                    <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-tertiary)' }}>Storage Used</p>
+                    <p style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)' }}>24.5 GB</p>
                   </div>
                 </div>
-                <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6 flex items-center space-x-4">
-                  <div className="p-3 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg">
-                    <Clock className="h-6 w-6 text-yellow-600 dark:text-yellow-400" />
+                <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-xl)', boxShadow: 'var(--dashboard-shadow-card)', padding: 'var(--space-6)', display: 'flex', alignItems: 'center', gap: 'var(--space-4)' }}>
+                  <div style={{ padding: 'var(--space-3)', backgroundColor: '#FEF3C7', borderRadius: 'var(--radius-lg)' }}>
+                    <Clock style={{ height: '1.5rem', width: '1.5rem', color: '#D97706' }} />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Uptime</p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">99.9%</p>
+                    <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-tertiary)' }}>Uptime</p>
+                    <p style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)' }}>99.9%</p>
                   </div>
                 </div>
               </div>
@@ -513,48 +599,48 @@ export function AdminDashboard() {
               />
 
               {/* Recent Activity */}
-              <div className="bg-white dark:bg-gray-800 rounded-xl shadow">
-                <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-                  <h3 className="text-lg font-medium text-gray-900 dark:text-white">Recent System Activity</h3>
-                  <button className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
+              <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-xl)', boxShadow: 'var(--dashboard-shadow-card)' }}>
+                <div style={{ padding: 'var(--space-6)', borderBottom: '1px solid var(--dashboard-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Recent System Activity</h3>
+                  <button style={{ fontSize: 'var(--text-sm)', color: 'var(--blue-600)', cursor: 'pointer' }}>
                     View All
                   </button>
                 </div>
-                <div className="p-6 space-y-6">
-                  <div className="flex items-start space-x-4">
-                    <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-                      <UserPlus className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                <div style={{ padding: 'var(--space-6)', display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
+                  <div style={{ display: 'flex', alignItems: 'start', gap: 'var(--space-4)' }}>
+                    <div style={{ padding: 'var(--space-2)', backgroundColor: '#DBEAFE', borderRadius: 'var(--radius-lg)' }}>
+                      <UserPlus style={{ height: '1.25rem', width: '1.25rem', color: '#2563EB' }} />
                     </div>
-                    <div className="flex-1">
-                      <div className="flex justify-between">
-                        <p className="font-medium text-gray-900 dark:text-white">New User Created</p>
-                        <span className="text-sm text-gray-500 dark:text-gray-400">2 hours ago</span>
+                    <div style={{ flex: '1' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <p style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>New User Created</p>
+                        <span style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-tertiary)' }}>2 hours ago</span>
                       </div>
-                      <p className="text-gray-600 dark:text-gray-400 text-sm">Admin user created a new student account for "Jamie Smith"</p>
+                      <p style={{ color: 'var(--dashboard-text-secondary)', fontSize: 'var(--text-sm)' }}>Admin user created a new student account for "Jamie Smith"</p>
                     </div>
                   </div>
-                  <div className="flex items-start space-x-4">
-                    <div className="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg">
-                      <Settings className="h-5 w-5 text-green-600 dark:text-green-400" />
+                  <div style={{ display: 'flex', alignItems: 'start', gap: 'var(--space-4)' }}>
+                    <div style={{ padding: 'var(--space-2)', backgroundColor: '#D1FAE5', borderRadius: 'var(--radius-lg)' }}>
+                      <Settings style={{ height: '1.25rem', width: '1.25rem', color: '#059669' }} />
                     </div>
-                    <div className="flex-1">
-                      <div className="flex justify-between">
-                        <p className="font-medium text-gray-900 dark:text-white">System Settings Updated</p>
-                        <span className="text-sm text-gray-500 dark:text-gray-400">5 hours ago</span>
+                    <div style={{ flex: '1' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <p style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>System Settings Updated</p>
+                        <span style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-tertiary)' }}>5 hours ago</span>
                       </div>
-                      <p className="text-gray-600 dark:text-gray-400 text-sm">Email notification settings were updated</p>
+                      <p style={{ color: 'var(--dashboard-text-secondary)', fontSize: 'var(--text-sm)' }}>Email notification settings were updated</p>
                     </div>
                   </div>
-                  <div className="flex items-start space-x-4">
-                    <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
-                      <Database className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                  <div style={{ display: 'flex', alignItems: 'start', gap: 'var(--space-4)' }}>
+                    <div style={{ padding: 'var(--space-2)', backgroundColor: '#F3E8FF', borderRadius: 'var(--radius-lg)' }}>
+                      <Database style={{ height: '1.25rem', width: '1.25rem', color: '#7C3AED' }} />
                     </div>
-                    <div className="flex-1">
-                      <div className="flex justify-between">
-                        <p className="font-medium text-gray-900 dark:text-white">Database Backup</p>
-                        <span className="text-sm text-gray-500 dark:text-gray-400">Yesterday</span>
+                    <div style={{ flex: '1' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <p style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Database Backup</p>
+                        <span style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-tertiary)' }}>Yesterday</span>
                       </div>
-                      <p className="text-gray-600 dark:text-gray-400 text-sm">Automatic database backup completed successfully</p>
+                      <p style={{ color: 'var(--dashboard-text-secondary)', fontSize: 'var(--text-sm)' }}>Automatic database backup completed successfully</p>
                     </div>
                   </div>
                 </div>
@@ -570,16 +656,16 @@ export function AdminDashboard() {
               fallback={
                 <div className="text-center py-12">
                   <Users className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 dark:text-white">Access Restricted</h3>
-                  <p className="text-gray-500 dark:text-gray-400">You don't have permission to view user management.</p>
+                  <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Access Restricted</h3>
+                  <p style={{ color: 'var(--dashboard-text-tertiary)' }}>You don't have permission to view user management.</p>
                 </div>
               }
             >
-            <div className="space-y-6">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
               {/* Search and Filter Bar */}
-              <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+              <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-xl)', boxShadow: 'var(--dashboard-shadow-card)', padding: 'var(--space-6)' }}>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <div className="flex-1">
+                  <div style={{ flex: '1' }}>
                     <div className="relative">
                       <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                       <input
@@ -647,64 +733,64 @@ export function AdminDashboard() {
               fallback={
                 <div className="text-center py-12">
                   <Database className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 dark:text-white">Access Restricted</h3>
-                  <p className="text-gray-500 dark:text-gray-400">You don't have permission to view the content library.</p>
+                  <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Access Restricted</h3>
+                  <p style={{ color: 'var(--dashboard-text-tertiary)' }}>You don't have permission to view the content library.</p>
                 </div>
               }
             >
-            <div className="space-y-6">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
               {/* Content Stats */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 'var(--space-6)' }}>
+                <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-xl)', boxShadow: 'var(--dashboard-shadow-card)', padding: 'var(--space-6)' }}>
                   <div className="flex items-center">
-                    <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-                      <Database className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                    <div style={{ padding: 'var(--space-3)', backgroundColor: '#DBEAFE', borderRadius: 'var(--radius-lg)' }}>
+                      <Database style={{ height: '1.5rem', width: '1.5rem', color: '#2563EB' }} />
                     </div>
                     <div className="ml-4">
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Total Content</p>
-                      <p className="text-2xl font-bold text-gray-900 dark:text-white">{contentStats.totalContent}</p>
+                      <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-tertiary)' }}>Total Content</p>
+                      <p style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)' }}>{contentStats.totalContent}</p>
                     </div>
                   </div>
                 </div>
-                <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+                <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-xl)', boxShadow: 'var(--dashboard-shadow-card)', padding: 'var(--space-6)' }}>
                   <div className="flex items-center">
-                    <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-lg">
-                      <TrendingUp className="h-6 w-6 text-green-600 dark:text-green-400" />
+                    <div style={{ padding: 'var(--space-3)', backgroundColor: '#D1FAE5', borderRadius: 'var(--radius-lg)' }}>
+                      <TrendingUp style={{ height: '1.5rem', width: '1.5rem', color: '#059669' }} />
                     </div>
                     <div className="ml-4">
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Published</p>
-                      <p className="text-2xl font-bold text-gray-900 dark:text-white">{contentStats.publishedContent}</p>
+                      <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-tertiary)' }}>Published</p>
+                      <p style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)' }}>{contentStats.publishedContent}</p>
                     </div>
                   </div>
                 </div>
-                <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+                <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-xl)', boxShadow: 'var(--dashboard-shadow-card)', padding: 'var(--space-6)' }}>
                   <div className="flex items-center">
-                    <div className="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
-                      <Users className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                    <div style={{ padding: 'var(--space-3)', backgroundColor: '#F3E8FF', borderRadius: 'var(--radius-lg)' }}>
+                      <Users style={{ height: '1.5rem', width: '1.5rem', color: '#7C3AED' }} />
                     </div>
                     <div className="ml-4">
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Shared Content</p>
-                      <p className="text-2xl font-bold text-gray-900 dark:text-white">{contentStats.sharedContent}</p>
+                      <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-tertiary)' }}>Shared Content</p>
+                      <p style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)' }}>{contentStats.sharedContent}</p>
                     </div>
                   </div>
                 </div>
-                <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+                <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-xl)', boxShadow: 'var(--dashboard-shadow-card)', padding: 'var(--space-6)' }}>
                   <div className="flex items-center">
-                    <div className="p-3 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg">
-                      <Clock className="h-6 w-6 text-yellow-600 dark:text-yellow-400" />
+                    <div style={{ padding: 'var(--space-3)', backgroundColor: '#FEF3C7', borderRadius: 'var(--radius-lg)' }}>
+                      <Clock style={{ height: '1.5rem', width: '1.5rem', color: '#D97706' }} />
                     </div>
                     <div className="ml-4">
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Draft Content</p>
-                      <p className="text-2xl font-bold text-gray-900 dark:text-white">{contentStats.draftContent}</p>
+                      <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-tertiary)' }}>Draft Content</p>
+                      <p style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)' }}>{contentStats.draftContent}</p>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Search and Actions Bar */}
-              <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+              <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-xl)', boxShadow: 'var(--dashboard-shadow-card)', padding: 'var(--space-6)' }}>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <div className="flex-1">
+                  <div style={{ flex: '1' }}>
                     <div className="relative">
                       <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                       <input
