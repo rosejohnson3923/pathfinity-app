@@ -61,6 +61,25 @@ export function AdminDashboard() {
   const { user, tenant } = useAuthContext();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
+
+  // Tab button style helper
+  const getTabButtonStyle = (tabName: string) => ({
+    padding: 'var(--space-4) var(--space-1)',
+    borderBottom: activeTab === tabName ? '2px solid var(--dashboard-nav-tab-active)' : '2px solid transparent',
+    fontWeight: 'var(--font-medium)',
+    fontSize: 'var(--text-sm)',
+    whiteSpace: 'nowrap' as const,
+    color: activeTab === tabName ? 'var(--dashboard-nav-tab-active)' : 'var(--dashboard-nav-tab-inactive)',
+    background: 'none',
+    cursor: 'pointer',
+    transition: 'color 200ms ease, border-color 200ms ease'
+  });
+
+  const handleTabHover = (e: React.MouseEvent<HTMLButtonElement>, tabName: string, isEnter: boolean) => {
+    if (activeTab !== tabName) {
+      e.currentTarget.style.color = isEnter ? 'var(--dashboard-nav-tab-hover)' : 'var(--dashboard-nav-tab-inactive)';
+    }
+  };
   const { 
     tier, 
     usersCount, 
@@ -447,11 +466,9 @@ export function AdminDashboard() {
             <PermissionGate permission="users:read">
               <button
                 onClick={() => setActiveTab('users')}
-                className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
-                  activeTab === 'users'
-                    ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-                }`}
+                style={getTabButtonStyle('users')}
+                onMouseEnter={(e) => handleTabHover(e, 'users', true)}
+                onMouseLeave={(e) => handleTabHover(e, 'users', false)}
               >
                 User Management
               </button>
@@ -459,11 +476,9 @@ export function AdminDashboard() {
             <PermissionGate permission="content:read">
               <button
                 onClick={() => setActiveTab('content')}
-                className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
-                  activeTab === 'content'
-                    ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-                }`}
+                style={getTabButtonStyle('content')}
+                onMouseEnter={(e) => handleTabHover(e, 'content', true)}
+                onMouseLeave={(e) => handleTabHover(e, 'content', false)}
               >
                 Content Library
               </button>
@@ -471,11 +486,9 @@ export function AdminDashboard() {
             <PermissionGate permission="reports:view">
               <button
                 onClick={() => setActiveTab('reports')}
-                className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
-                  activeTab === 'reports'
-                    ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-                }`}
+                style={getTabButtonStyle('reports')}
+                onMouseEnter={(e) => handleTabHover(e, 'reports', true)}
+                onMouseLeave={(e) => handleTabHover(e, 'reports', false)}
               >
                 Reports & Analytics
               </button>
@@ -483,11 +496,9 @@ export function AdminDashboard() {
             <PermissionGate permission="reports:view">
               <button
                 onClick={() => setActiveTab('teacher-analytics')}
-                className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
-                  activeTab === 'teacher-analytics'
-                    ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-                }`}
+                style={getTabButtonStyle('teacher-analytics')}
+                onMouseEnter={(e) => handleTabHover(e, 'teacher-analytics', true)}
+                onMouseLeave={(e) => handleTabHover(e, 'teacher-analytics', false)}
               >
                 Staff Analytics
               </button>
@@ -495,11 +506,9 @@ export function AdminDashboard() {
             <PermissionGate permission="settings:billing">
               <button
                 onClick={() => setActiveTab('subscription')}
-                className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
-                  activeTab === 'subscription'
-                    ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-                }`}
+                style={getTabButtonStyle('subscription')}
+                onMouseEnter={(e) => handleTabHover(e, 'subscription', true)}
+                onMouseLeave={(e) => handleTabHover(e, 'subscription', false)}
               >
                 Subscription
               </button>
@@ -510,21 +519,17 @@ export function AdminDashboard() {
               <>
                 <button
                   onClick={() => setActiveTab('district-analytics')}
-                  className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
-                    activeTab === 'district-analytics'
-                      ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-                  }`}
+                  style={getTabButtonStyle('district-analytics')}
+                  onMouseEnter={(e) => handleTabHover(e, 'district-analytics', true)}
+                  onMouseLeave={(e) => handleTabHover(e, 'district-analytics', false)}
                 >
                   District Analytics
                 </button>
                 <button
                   onClick={() => setActiveTab('district-reports')}
-                  className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
-                    activeTab === 'district-reports'
-                      ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-                  }`}
+                  style={getTabButtonStyle('district-reports')}
+                  onMouseEnter={(e) => handleTabHover(e, 'district-reports', true)}
+                  onMouseLeave={(e) => handleTabHover(e, 'district-reports', false)}
                 >
                   District Reports
                 </button>
@@ -533,11 +538,9 @@ export function AdminDashboard() {
             <PermissionGate permission="audit:view">
               <button
                 onClick={() => setActiveTab('audit')}
-                className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
-                  activeTab === 'audit'
-                    ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-                }`}
+                style={getTabButtonStyle('audit')}
+                onMouseEnter={(e) => handleTabHover(e, 'audit', true)}
+                onMouseLeave={(e) => handleTabHover(e, 'audit', false)}
               >
                 Audit Trail
               </button>
@@ -654,8 +657,8 @@ export function AdminDashboard() {
               permission="users:read" 
               showFallback={true}
               fallback={
-                <div className="text-center py-12">
-                  <Users className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                <div style={{ textAlign: 'center', padding: 'var(--space-12) 0' }}>
+                  <Users style={{ height: '4rem', width: '4rem', color: 'var(--dashboard-text-tertiary)', margin: '0 auto var(--space-4)' }} />
                   <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Access Restricted</h3>
                   <p style={{ color: 'var(--dashboard-text-tertiary)' }}>You don't have permission to view user management.</p>
                 </div>
@@ -664,27 +667,27 @@ export function AdminDashboard() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
               {/* Search and Filter Bar */}
               <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-xl)', boxShadow: 'var(--dashboard-shadow-card)', padding: 'var(--space-6)' }}>
-                <div className="flex flex-col sm:flex-row gap-4">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }} data-responsive="sm:flex-row">
                   <div style={{ flex: '1' }}>
-                    <div className="relative">
-                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <div style={{ position: 'relative' }}>
+                      <Search style={{ position: 'absolute', left: 'var(--space-3)', top: '50%', transform: 'translateY(-50%)', height: '1rem', width: '1rem', color: 'var(--dashboard-text-tertiary)' }} />
                       <input
                         type="text"
                         placeholder="Search users by name, email, or role..."
                         value={searchQuery}
                         onChange={handleSearchChange}
-                        className="pl-10 w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                        style={{ paddingLeft: '2.5rem', width: '100%', padding: 'var(--space-2) var(--space-3)', border: '1px solid var(--dashboard-border)', borderRadius: 'var(--radius-lg)', backgroundColor: 'var(--dashboard-bg-elevated)', color: 'var(--dashboard-text-primary)' }}
                       />
                     </div>
                   </div>
-                  <div className="flex gap-2">
+                  <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
                     <UserFilters
                       filters={searchParams.filters || {}}
                       onFiltersChange={handleFiltersChange}
                       onClearFilters={clearFilters}
                     />
-                    <button className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center space-x-2">
-                      <Download className="h-4 w-4" />
+                    <button style={{ padding: 'var(--space-2) var(--space-4)', border: '1px solid var(--dashboard-border-strong)', color: 'var(--dashboard-text-primary)', borderRadius: 'var(--radius-lg)', backgroundColor: 'transparent', display: 'flex', alignItems: 'center', gap: 'var(--space-2)', cursor: 'pointer', transition: 'background-color 200ms ease' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--dashboard-bg-secondary)'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}>
+                      <Download style={{ height: '1rem', width: '1rem' }} />
                       <span>Export</span>
                     </button>
                   </div>
@@ -693,8 +696,8 @@ export function AdminDashboard() {
 
               {/* Error Message */}
               {userError && (
-                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
-                  <p className="text-red-800 dark:text-red-200">{userError}</p>
+                <div style={{ backgroundColor: 'var(--dashboard-status-suspended-bg)', border: '1px solid var(--dashboard-status-suspended-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-4)' }}>
+                  <p style={{ color: 'var(--dashboard-status-suspended-text)' }}>{userError}</p>
                 </div>
               )}
 
@@ -731,8 +734,8 @@ export function AdminDashboard() {
               permission="content:read" 
               showFallback={true}
               fallback={
-                <div className="text-center py-12">
-                  <Database className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                <div style={{ textAlign: 'center', padding: 'var(--space-12) 0' }}>
+                  <Database style={{ height: '4rem', width: '4rem', color: 'var(--dashboard-text-tertiary)', margin: '0 auto var(--space-4)' }} />
                   <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Access Restricted</h3>
                   <p style={{ color: 'var(--dashboard-text-tertiary)' }}>You don't have permission to view the content library.</p>
                 </div>
@@ -742,44 +745,44 @@ export function AdminDashboard() {
               {/* Content Stats */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 'var(--space-6)' }}>
                 <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-xl)', boxShadow: 'var(--dashboard-shadow-card)', padding: 'var(--space-6)' }}>
-                  <div className="flex items-center">
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
                     <div style={{ padding: 'var(--space-3)', backgroundColor: '#DBEAFE', borderRadius: 'var(--radius-lg)' }}>
                       <Database style={{ height: '1.5rem', width: '1.5rem', color: '#2563EB' }} />
                     </div>
-                    <div className="ml-4">
+                    <div style={{ marginLeft: 'var(--space-4)' }}>
                       <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-tertiary)' }}>Total Content</p>
                       <p style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)' }}>{contentStats.totalContent}</p>
                     </div>
                   </div>
                 </div>
                 <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-xl)', boxShadow: 'var(--dashboard-shadow-card)', padding: 'var(--space-6)' }}>
-                  <div className="flex items-center">
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
                     <div style={{ padding: 'var(--space-3)', backgroundColor: '#D1FAE5', borderRadius: 'var(--radius-lg)' }}>
                       <TrendingUp style={{ height: '1.5rem', width: '1.5rem', color: '#059669' }} />
                     </div>
-                    <div className="ml-4">
+                    <div style={{ marginLeft: 'var(--space-4)' }}>
                       <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-tertiary)' }}>Published</p>
                       <p style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)' }}>{contentStats.publishedContent}</p>
                     </div>
                   </div>
                 </div>
                 <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-xl)', boxShadow: 'var(--dashboard-shadow-card)', padding: 'var(--space-6)' }}>
-                  <div className="flex items-center">
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
                     <div style={{ padding: 'var(--space-3)', backgroundColor: '#F3E8FF', borderRadius: 'var(--radius-lg)' }}>
                       <Users style={{ height: '1.5rem', width: '1.5rem', color: '#7C3AED' }} />
                     </div>
-                    <div className="ml-4">
+                    <div style={{ marginLeft: 'var(--space-4)' }}>
                       <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-tertiary)' }}>Shared Content</p>
                       <p style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)' }}>{contentStats.sharedContent}</p>
                     </div>
                   </div>
                 </div>
                 <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-xl)', boxShadow: 'var(--dashboard-shadow-card)', padding: 'var(--space-6)' }}>
-                  <div className="flex items-center">
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
                     <div style={{ padding: 'var(--space-3)', backgroundColor: '#FEF3C7', borderRadius: 'var(--radius-lg)' }}>
                       <Clock style={{ height: '1.5rem', width: '1.5rem', color: '#D97706' }} />
                     </div>
-                    <div className="ml-4">
+                    <div style={{ marginLeft: 'var(--space-4)' }}>
                       <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-tertiary)' }}>Draft Content</p>
                       <p style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)' }}>{contentStats.draftContent}</p>
                     </div>
@@ -789,20 +792,20 @@ export function AdminDashboard() {
 
               {/* Search and Actions Bar */}
               <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-xl)', boxShadow: 'var(--dashboard-shadow-card)', padding: 'var(--space-6)' }}>
-                <div className="flex flex-col sm:flex-row gap-4">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }} data-responsive="sm:flex-row">
                   <div style={{ flex: '1' }}>
-                    <div className="relative">
-                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <div style={{ position: 'relative' }}>
+                      <Search style={{ position: 'absolute', left: 'var(--space-3)', top: '50%', transform: 'translateY(-50%)', height: '1rem', width: '1rem', color: 'var(--dashboard-text-tertiary)' }} />
                       <input
                         type="text"
                         placeholder="Search content by title, subject, or tags..."
                         value={contentSearchQuery}
                         onChange={handleContentSearchChange}
-                        className="pl-10 w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                        style={{ paddingLeft: '2.5rem', width: '100%', padding: 'var(--space-2) var(--space-3)', border: '1px solid var(--dashboard-border)', borderRadius: 'var(--radius-lg)', backgroundColor: 'var(--dashboard-bg-elevated)', color: 'var(--dashboard-text-primary)' }}
                       />
                     </div>
                   </div>
-                  <div className="flex gap-2">
+                  <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
                     <ContentFilters
                       filters={contentSearchParams.filters || {}}
                       onFiltersChange={handleContentFiltersChange}
@@ -811,9 +814,9 @@ export function AdminDashboard() {
                     <PermissionGate permission="content:create">
                       <button 
                         onClick={() => setIsAddContentModalOpen(true)}
-                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center space-x-2"
+                        style={{ padding: 'var(--space-2) var(--space-4)', backgroundColor: 'var(--blue-600)', color: 'white', borderRadius: 'var(--radius-lg)', border: 'none', display: 'flex', alignItems: 'center', gap: 'var(--space-2)', cursor: 'pointer', transition: 'background-color 200ms ease' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--blue-700)'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--blue-600)'}
                       >
-                        <Plus className="h-4 w-4" />
+                        <Plus style={{ height: '1rem', width: '1rem' }} />
                         <span>Add Content</span>
                       </button>
                     </PermissionGate>
@@ -823,8 +826,8 @@ export function AdminDashboard() {
 
               {/* Error Message */}
               {contentError && (
-                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
-                  <p className="text-red-800 dark:text-red-200">{contentError}</p>
+                <div style={{ backgroundColor: 'var(--dashboard-status-suspended-bg)', border: '1px solid var(--dashboard-status-suspended-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-4)' }}>
+                  <p style={{ color: 'var(--dashboard-status-suspended-text)' }}>{contentError}</p>
                 </div>
               )}
 
