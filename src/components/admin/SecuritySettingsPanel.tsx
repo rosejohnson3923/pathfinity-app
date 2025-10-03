@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { 
+import {
   Shield,
   Lock,
   Key,
@@ -24,6 +24,12 @@ import {
   XCircle,
   Save
 } from 'lucide-react';
+import '../../design-system/tokens/colors.css';
+import '../../design-system/tokens/spacing.css';
+import '../../design-system/tokens/borders.css';
+import '../../design-system/tokens/typography.css';
+import '../../design-system/tokens/shadows.css';
+import '../../design-system/tokens/dashboard.css';
 
 interface SecurityConfig {
   passwordPolicy: {
@@ -170,6 +176,22 @@ export function SecuritySettingsPanel() {
   const [showSensitiveData, setShowSensitiveData] = useState(false);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
+  const getTabStyle = (isActive: boolean) => ({
+    padding: 'var(--space-4) var(--space-1)',
+    borderBottom: isActive ? '2px solid var(--dashboard-nav-tab-active)' : '2px solid transparent',
+    fontWeight: 'var(--font-medium)',
+    fontSize: 'var(--text-sm)',
+    whiteSpace: 'nowrap' as const,
+    color: isActive ? 'var(--dashboard-nav-tab-active)' : 'var(--dashboard-nav-tab-inactive)',
+    backgroundColor: 'transparent',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    gap: 'var(--space-2)',
+    transition: 'color 200ms ease',
+    border: 'none'
+  });
+
   const handleConfigChange = (section: keyof SecurityConfig, field: string, value: any) => {
     setConfig(prev => ({
       ...prev,
@@ -199,13 +221,13 @@ export function SecuritySettingsPanel() {
   const getAlertIcon = (type: string) => {
     switch (type) {
       case 'critical':
-        return <AlertTriangle className="w-5 h-5 text-red-600" />;
+        return <AlertTriangle style={{ width: '1.25rem', height: '1.25rem', color: '#DC2626' }} />;
       case 'warning':
-        return <AlertTriangle className="w-5 h-5 text-yellow-600" />;
+        return <AlertTriangle style={{ width: '1.25rem', height: '1.25rem', color: '#D97706' }} />;
       case 'info':
-        return <CheckCircle className="w-5 h-5 text-blue-600" />;
+        return <CheckCircle style={{ width: '1.25rem', height: '1.25rem', color: '#2563EB' }} />;
       default:
-        return <AlertTriangle className="w-5 h-5 text-gray-600" />;
+        return <AlertTriangle style={{ width: '1.25rem', height: '1.25rem', color: '#4B5563' }} />;
     }
   };
 
@@ -231,29 +253,55 @@ export function SecuritySettingsPanel() {
   const criticalAlerts = unresolvedAlerts.filter(alert => alert.type === 'critical');
 
   return (
-    <div className="space-y-6">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Security Settings</h2>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">Manage district security policies and compliance</p>
+          <h2 style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)' }}>Security Settings</h2>
+          <p style={{ color: 'var(--dashboard-text-secondary)', marginTop: 'var(--space-1)' }}>Manage district security policies and compliance</p>
         </div>
-        <div className="flex gap-3">
+        <div style={{ display: 'flex', gap: 'var(--space-3)' }}>
           <button
             onClick={handleRefresh}
             disabled={isLoading}
-            className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 disabled:opacity-50"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--space-2)',
+              padding: 'var(--space-2) var(--space-4)',
+              border: '1px solid var(--dashboard-border-primary)',
+              borderRadius: 'var(--radius-lg)',
+              backgroundColor: 'transparent',
+              color: 'var(--dashboard-text-secondary)',
+              cursor: 'pointer',
+              opacity: isLoading ? 0.5 : 1
+            }}
+            onMouseEnter={(e) => !isLoading && (e.currentTarget.style.backgroundColor = 'var(--dashboard-bg-hover)')}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
           >
-            <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+            <RefreshCw style={{ width: '1rem', height: '1rem', animation: isLoading ? 'spin 1s linear infinite' : 'none' }} />
             Refresh
           </button>
           {hasUnsavedChanges && (
             <button
               onClick={handleSave}
               disabled={isLoading}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 'var(--space-2)',
+                padding: 'var(--space-2) var(--space-4)',
+                backgroundColor: '#2563EB',
+                color: 'white',
+                borderRadius: 'var(--radius-lg)',
+                border: 'none',
+                cursor: 'pointer',
+                opacity: isLoading ? 0.5 : 1
+              }}
+              onMouseEnter={(e) => !isLoading && (e.currentTarget.style.backgroundColor = '#1D4ED8')}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#2563EB')}
             >
-              <Save className="w-4 h-4" />
+              <Save style={{ width: '1rem', height: '1rem' }} />
               {isLoading ? 'Saving...' : 'Save Changes'}
             </button>
           )}
@@ -262,65 +310,82 @@ export function SecuritySettingsPanel() {
 
       {/* Security Status Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between mb-4">
-            <Shield className="w-8 h-8 text-green-600" />
-            <span className="text-2xl font-bold text-green-600">Secure</span>
+        <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', padding: 'var(--space-6)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-4)' }}>
+            <Shield style={{ width: '2rem', height: '2rem', color: '#16A34A' }} />
+            <span style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: '#16A34A' }}>Secure</span>
           </div>
-          <h3 className="font-medium text-gray-900 dark:text-white">Overall Status</h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400">All security measures active</p>
+          <h3 style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Overall Status</h3>
+          <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>All security measures active</p>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between mb-4">
-            <AlertTriangle className="w-8 h-8 text-yellow-600" />
-            <span className="text-2xl font-bold text-yellow-600">{unresolvedAlerts.length}</span>
+        <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', padding: 'var(--space-6)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-4)' }}>
+            <AlertTriangle style={{ width: '2rem', height: '2rem', color: '#D97706' }} />
+            <span style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: '#D97706' }}>{unresolvedAlerts.length}</span>
           </div>
-          <h3 className="font-medium text-gray-900 dark:text-white">Active Alerts</h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400">{criticalAlerts.length} critical</p>
+          <h3 style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Active Alerts</h3>
+          <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>{criticalAlerts.length} critical</p>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between mb-4">
-            <Users className="w-8 h-8 text-blue-600" />
-            <span className="text-2xl font-bold text-blue-600">98.5%</span>
+        <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', padding: 'var(--space-6)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-4)' }}>
+            <Users style={{ width: '2rem', height: '2rem', color: '#2563EB' }} />
+            <span style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: '#2563EB' }}>98.5%</span>
           </div>
-          <h3 className="font-medium text-gray-900 dark:text-white">2FA Adoption</h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400">1,228 of 1,248 users</p>
+          <h3 style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>2FA Adoption</h3>
+          <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>1,228 of 1,248 users</p>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between mb-4">
-            <Calendar className="w-8 h-8 text-purple-600" />
-            <span className="text-2xl font-bold text-purple-600">242</span>
+        <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', padding: 'var(--space-6)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-4)' }}>
+            <Calendar style={{ width: '2rem', height: '2rem', color: '#9333EA' }} />
+            <span style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: '#9333EA' }}>242</span>
           </div>
-          <h3 className="font-medium text-gray-900 dark:text-white">Days Until Audit</h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400">Sep 15, 2024</p>
+          <h3 style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Days Until Audit</h3>
+          <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Sep 15, 2024</p>
         </div>
       </div>
 
       {/* Security Alerts */}
       {unresolvedAlerts.length > 0 && (
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Security Alerts</h3>
+        <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)' }}>
+          <div style={{ padding: 'var(--space-4) var(--space-6)', borderBottom: '1px solid var(--dashboard-border-primary)' }}>
+            <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)' }}>Security Alerts</h3>
           </div>
-          <div className="p-6">
-            <div className="space-y-4">
+          <div style={{ padding: 'var(--space-6)' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
               {unresolvedAlerts.slice(0, 3).map((alert) => (
-                <div key={alert.id} className={`flex items-start gap-3 p-4 rounded-lg border ${
-                  alert.type === 'critical' ? 'border-red-200 bg-red-50' :
-                  alert.type === 'warning' ? 'border-yellow-200 bg-yellow-50' :
-                  'border-blue-200 bg-blue-50'
-                }`}>
+                <div key={alert.id} style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: 'var(--space-3)',
+                  padding: 'var(--space-4)',
+                  borderRadius: 'var(--radius-lg)',
+                  border: alert.type === 'critical' ? '1px solid #FECACA' :
+                         alert.type === 'warning' ? '1px solid #FEF3C7' :
+                         '1px solid #BFDBFE',
+                  backgroundColor: alert.type === 'critical' ? '#FEF2F2' :
+                                  alert.type === 'warning' ? '#FFFBEB' :
+                                  '#EFF6FF'
+                }}>
                   {getAlertIcon(alert.type)}
-                  <div className="flex-1">
-                    <h4 className="font-medium text-gray-900 dark:text-white">{alert.title}</h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{alert.description}</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">{formatTimestamp(alert.timestamp)}</p>
+                  <div style={{ flex: 1 }}>
+                    <h4 style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>{alert.title}</h4>
+                    <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-tertiary)', marginTop: 'var(--space-1)' }}>{alert.description}</p>
+                    <p style={{ fontSize: 'var(--text-xs)', color: '#6B7280', marginTop: 'var(--space-2)' }}>{formatTimestamp(alert.timestamp)}</p>
                   </div>
-                  <button className="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300">
-                    <XCircle className="w-5 h-5" />
+                  <button
+                    style={{
+                      color: '#9CA3AF',
+                      backgroundColor: 'transparent',
+                      border: 'none',
+                      cursor: 'pointer'
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = '#4B5563'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = '#9CA3AF'}
+                  >
+                    <XCircle style={{ width: '1.25rem', height: '1.25rem' }} />
                   </button>
                 </div>
               ))}
@@ -330,8 +395,8 @@ export function SecuritySettingsPanel() {
       )}
 
       {/* Navigation Tabs */}
-      <div className="border-b border-gray-200 dark:border-gray-700">
-        <nav className="flex space-x-8 overflow-x-auto">
+      <div style={{ borderBottom: '1px solid var(--dashboard-border-primary)' }}>
+        <nav style={{ display: 'flex', gap: 'var(--space-8)', overflowX: 'auto' }}>
           {[
             { id: 'overview', label: 'Overview', icon: Shield },
             { id: 'passwords', label: 'Password Policy', icon: Lock },
@@ -343,13 +408,11 @@ export function SecuritySettingsPanel() {
             <button
               key={id}
               onClick={() => setActiveSection(id)}
-              className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap flex items-center gap-2 ${
-                activeSection === id
-                  ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-              }`}
+              style={getTabStyle(activeSection === id)}
+              onMouseEnter={(e) => activeSection !== id && (e.currentTarget.style.color = 'var(--dashboard-nav-tab-hover)')}
+              onMouseLeave={(e) => activeSection !== id && (e.currentTarget.style.color = 'var(--dashboard-nav-tab-inactive)')}
             >
-              <Icon className="w-4 h-4" />
+              <Icon style={{ width: '1rem', height: '1rem' }} />
               {label}
             </button>
           ))}
@@ -358,54 +421,99 @@ export function SecuritySettingsPanel() {
 
       {/* Content Sections */}
       {activeSection === 'overview' && (
-        <div className="space-y-6">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Compliance Status */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Compliance Status</h3>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-700 dark:text-gray-300">FERPA Compliant</span>
-                  <CheckCircle className="w-5 h-5 text-green-600" />
+            <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)', padding: 'var(--space-6)' }}>
+              <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)', marginBottom: 'var(--space-4)' }}>Compliance Status</h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <span style={{ color: 'var(--dashboard-text-secondary)' }}>FERPA Compliant</span>
+                  <CheckCircle style={{ width: '1.25rem', height: '1.25rem', color: '#16A34A' }} />
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-700 dark:text-gray-300">COPPA Compliant</span>
-                  <CheckCircle className="w-5 h-5 text-green-600" />
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <span style={{ color: 'var(--dashboard-text-secondary)' }}>COPPA Compliant</span>
+                  <CheckCircle style={{ width: '1.25rem', height: '1.25rem', color: '#16A34A' }} />
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-700 dark:text-gray-300">GDPR Compliant</span>
-                  <CheckCircle className="w-5 h-5 text-green-600" />
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <span style={{ color: 'var(--dashboard-text-secondary)' }}>GDPR Compliant</span>
+                  <CheckCircle style={{ width: '1.25rem', height: '1.25rem', color: '#16A34A' }} />
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-700 dark:text-gray-300">Last Security Audit</span>
-                  <span className="text-sm text-gray-600 dark:text-gray-400">{formatDate(config.compliance.lastSecurityAudit)}</span>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <span style={{ color: 'var(--dashboard-text-secondary)' }}>Last Security Audit</span>
+                  <span style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>{formatDate(config.compliance.lastSecurityAudit)}</span>
                 </div>
               </div>
             </div>
 
             {/* Quick Actions */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Quick Actions</h3>
-              <div className="space-y-3">
-                <button className="w-full flex items-center gap-3 p-3 text-left border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
-                  <Download className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+            <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)', padding: 'var(--space-6)' }}>
+              <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)', marginBottom: 'var(--space-4)' }}>Quick Actions</h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+                <button
+                  style={{
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'var(--space-3)',
+                    padding: 'var(--space-3)',
+                    textAlign: 'left',
+                    border: '1px solid var(--dashboard-border-primary)',
+                    borderRadius: 'var(--radius-lg)',
+                    backgroundColor: 'var(--dashboard-bg-elevated)',
+                    cursor: 'pointer'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--dashboard-bg-hover)'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--dashboard-bg-elevated)'}
+                >
+                  <Download style={{ width: '1.25rem', height: '1.25rem', color: 'var(--dashboard-text-tertiary)' }} />
                   <div>
-                    <div className="font-medium text-gray-900 dark:text-white">Export Security Report</div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">Generate comprehensive security report</div>
+                    <div style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Export Security Report</div>
+                    <div style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Generate comprehensive security report</div>
                   </div>
                 </button>
-                <button className="w-full flex items-center gap-3 p-3 text-left border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
-                  <Activity className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                <button
+                  style={{
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'var(--space-3)',
+                    padding: 'var(--space-3)',
+                    textAlign: 'left',
+                    border: '1px solid var(--dashboard-border-primary)',
+                    borderRadius: 'var(--radius-lg)',
+                    backgroundColor: 'var(--dashboard-bg-elevated)',
+                    cursor: 'pointer'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--dashboard-bg-hover)'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--dashboard-bg-elevated)'}
+                >
+                  <Activity style={{ width: '1.25rem', height: '1.25rem', color: 'var(--dashboard-text-tertiary)' }} />
                   <div>
-                    <div className="font-medium text-gray-900 dark:text-white">View Audit Logs</div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">Review recent security events</div>
+                    <div style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>View Audit Logs</div>
+                    <div style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Review recent security events</div>
                   </div>
                 </button>
-                <button className="w-full flex items-center gap-3 p-3 text-left border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
-                  <Bell className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                <button
+                  style={{
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'var(--space-3)',
+                    padding: 'var(--space-3)',
+                    textAlign: 'left',
+                    border: '1px solid var(--dashboard-border-primary)',
+                    borderRadius: 'var(--radius-lg)',
+                    backgroundColor: 'var(--dashboard-bg-elevated)',
+                    cursor: 'pointer'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--dashboard-bg-hover)'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--dashboard-bg-elevated)'}
+                >
+                  <Bell style={{ width: '1.25rem', height: '1.25rem', color: 'var(--dashboard-text-tertiary)' }} />
                   <div>
-                    <div className="font-medium text-gray-900 dark:text-white">Configure Alerts</div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">Set up security notifications</div>
+                    <div style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Configure Alerts</div>
+                    <div style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Set up security notifications</div>
                   </div>
                 </button>
               </div>
@@ -415,40 +523,63 @@ export function SecuritySettingsPanel() {
       )}
 
       {activeSection === 'passwords' && (
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">Password Policy Settings</h3>
+        <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)', padding: 'var(--space-6)' }}>
+          <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)', marginBottom: 'var(--space-6)' }}>Password Policy Settings</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="minimumpasswordlengt" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Minimum Password Length
-              </label><input id="minimumpasswordlengt"
+              <label htmlFor="minimumpasswordlengt" style={{ display: 'block', fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)', marginBottom: 'var(--space-2)' }}>Minimum Password Length
+              </label>
+              <input id="minimumpasswordlengt"
                 type="number"
                 min="8"
                 max="32"
                 value={config.passwordPolicy.minLength}
                 onChange={(e) => handleConfigChange('passwordPolicy', 'minLength', parseInt(e.target.value))}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                style={{
+                  width: '100%',
+                  padding: 'var(--space-2) var(--space-3)',
+                  border: '1px solid var(--dashboard-border-primary)',
+                  borderRadius: 'var(--radius-lg)',
+                  backgroundColor: 'var(--dashboard-bg-elevated)',
+                  color: 'var(--dashboard-text-primary)',
+                  outline: 'none'
+                }}
+                onFocus={(e) => e.currentTarget.style.borderColor = '#2563EB'}
+                onBlur={(e) => e.currentTarget.style.borderColor = 'var(--dashboard-border-primary)'}
               />
             </div>
             <div>
-              <label htmlFor="passwordexpirydays" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Password Expiry (days)
-              </label><input id="passwordexpirydays"
+              <label htmlFor="passwordexpirydays" style={{ display: 'block', fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)', marginBottom: 'var(--space-2)' }}>Password Expiry (days)
+              </label>
+              <input id="passwordexpirydays"
                 type="number"
                 min="30"
                 max="365"
                 value={config.passwordPolicy.passwordExpiry}
                 onChange={(e) => handleConfigChange('passwordPolicy', 'passwordExpiry', parseInt(e.target.value))}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                style={{
+                  width: '100%',
+                  padding: 'var(--space-2) var(--space-3)',
+                  border: '1px solid var(--dashboard-border-primary)',
+                  borderRadius: 'var(--radius-lg)',
+                  backgroundColor: 'var(--dashboard-bg-elevated)',
+                  color: 'var(--dashboard-text-primary)',
+                  outline: 'none'
+                }}
+                onFocus={(e) => e.currentTarget.style.borderColor = '#2563EB'}
+                onBlur={(e) => e.currentTarget.style.borderColor = 'var(--dashboard-border-primary)'}
               />
             </div>
           </div>
-          
-          <div className="mt-6 space-y-4">
-            <div className="flex items-center justify-between">
+
+          <div style={{ marginTop: 'var(--space-6)', display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div>
-                <div className="font-medium text-gray-900 dark:text-white">Require Uppercase Letters</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">At least one uppercase letter (A-Z)</div>
+                <div style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Require Uppercase Letters</div>
+                <div style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>At least one uppercase letter (A-Z)</div>
               </div>
-              <label htmlFor="input00cdxu" className="relative inline-flex items-center cursor-pointer"><input id="input00cdxu"
+              <label htmlFor="input00cdxu" className="relative inline-flex items-center cursor-pointer">
+                <input id="input00cdxu"
                   type="checkbox"
                   checked={config.passwordPolicy.requireUppercase}
                   onChange={(e) => handleConfigChange('passwordPolicy', 'requireUppercase', e.target.checked)}
@@ -457,13 +588,14 @@ export function SecuritySettingsPanel() {
                 <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
               </label>
             </div>
-            
-            <div className="flex items-center justify-between">
+
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div>
-                <div className="font-medium text-gray-900 dark:text-white">Require Special Characters</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">At least one special character (!@#$%^&*)</div>
+                <div style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Require Special Characters</div>
+                <div style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>At least one special character (!@#$%^&*)</div>
               </div>
-              <label htmlFor="inputdlkola" className="relative inline-flex items-center cursor-pointer"><input id="inputdlkola"
+              <label htmlFor="inputdlkola" className="relative inline-flex items-center cursor-pointer">
+                <input id="inputdlkola"
                   type="checkbox"
                   checked={config.passwordPolicy.requireSpecialChars}
                   onChange={(e) => handleConfigChange('passwordPolicy', 'requireSpecialChars', e.target.checked)}
@@ -477,16 +609,17 @@ export function SecuritySettingsPanel() {
       )}
 
       {activeSection === 'authentication' && (
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">Two-Factor Authentication</h3>
-          
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
+        <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)', padding: 'var(--space-6)' }}>
+          <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)', marginBottom: 'var(--space-6)' }}>Two-Factor Authentication</h3>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div>
-                <div className="font-medium text-gray-900 dark:text-white">Enable Two-Factor Authentication</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Require additional verification for all users</div>
+                <div style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Enable Two-Factor Authentication</div>
+                <div style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Require additional verification for all users</div>
               </div>
-              <label htmlFor="inputkbb56u" className="relative inline-flex items-center cursor-pointer"><input id="inputkbb56u"
+              <label htmlFor="inputkbb56u" className="relative inline-flex items-center cursor-pointer">
+                <input id="inputkbb56u"
                   type="checkbox"
                   checked={config.twoFactorAuth.enabled}
                   onChange={(e) => handleConfigChange('twoFactorAuth', 'enabled', e.target.checked)}
@@ -498,56 +631,56 @@ export function SecuritySettingsPanel() {
 
             {config.twoFactorAuth.enabled && (
               <>
-                <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-                  <h4 className="font-medium text-gray-900 dark:text-white mb-4">Authentication Methods</h4>
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3">
+                <div style={{ borderTop: '1px solid var(--dashboard-border-primary)', paddingTop: 'var(--space-6)' }}>
+                  <h4 style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)', marginBottom: 'var(--space-4)' }}>Authentication Methods</h4>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
                       <input
                         type="checkbox"
                         id="email-2fa"
                         checked={config.twoFactorAuth.methods.includes('email')}
                         onChange={(e) => {
-                          const methods = e.target.checked 
+                          const methods = e.target.checked
                             ? [...config.twoFactorAuth.methods, 'email']
                             : config.twoFactorAuth.methods.filter(m => m !== 'email');
                           handleConfigChange('twoFactorAuth', 'methods', methods);
                         }}
                         className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                       />
-                      <Mail className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-                      <label htmlFor="email-2fa" className="text-gray-900 dark:text-white">Email verification</label>
+                      <Mail style={{ width: '1.25rem', height: '1.25rem', color: 'var(--dashboard-text-tertiary)' }} />
+                      <label htmlFor="email-2fa" style={{ color: 'var(--dashboard-text-primary)' }}>Email verification</label>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
                       <input
                         type="checkbox"
                         id="sms-2fa"
                         checked={config.twoFactorAuth.methods.includes('sms')}
                         onChange={(e) => {
-                          const methods = e.target.checked 
+                          const methods = e.target.checked
                             ? [...config.twoFactorAuth.methods, 'sms']
                             : config.twoFactorAuth.methods.filter(m => m !== 'sms');
                           handleConfigChange('twoFactorAuth', 'methods', methods);
                         }}
                         className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                       />
-                      <Smartphone className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-                      <label htmlFor="sms-2fa" className="text-gray-900 dark:text-white">SMS verification</label>
+                      <Smartphone style={{ width: '1.25rem', height: '1.25rem', color: 'var(--dashboard-text-tertiary)' }} />
+                      <label htmlFor="sms-2fa" style={{ color: 'var(--dashboard-text-primary)' }}>SMS verification</label>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
                       <input
                         type="checkbox"
                         id="authenticator-2fa"
                         checked={config.twoFactorAuth.methods.includes('authenticator')}
                         onChange={(e) => {
-                          const methods = e.target.checked 
+                          const methods = e.target.checked
                             ? [...config.twoFactorAuth.methods, 'authenticator']
                             : config.twoFactorAuth.methods.filter(m => m !== 'authenticator');
                           handleConfigChange('twoFactorAuth', 'methods', methods);
                         }}
                         className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                       />
-                      <Fingerprint className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-                      <label htmlFor="authenticator-2fa" className="text-gray-900 dark:text-white">Authenticator app</label>
+                      <Fingerprint style={{ width: '1.25rem', height: '1.25rem', color: 'var(--dashboard-text-tertiary)' }} />
+                      <label htmlFor="authenticator-2fa" style={{ color: 'var(--dashboard-text-primary)' }}>Authenticator app</label>
                     </div>
                   </div>
                 </div>
@@ -558,41 +691,64 @@ export function SecuritySettingsPanel() {
       )}
 
       {activeSection === 'access' && (
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">Access Control Settings</h3>
-          
-          <div className="space-y-6">
+        <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)', padding: 'var(--space-6)' }}>
+          <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)', marginBottom: 'var(--space-6)' }}>Access Control Settings</h3>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label htmlFor="maxfailedloginattemp" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Max Failed Login Attempts
-                </label><input id="maxfailedloginattemp"
+                <label htmlFor="maxfailedloginattemp" style={{ display: 'block', fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)', marginBottom: 'var(--space-2)' }}>Max Failed Login Attempts
+                </label>
+                <input id="maxfailedloginattemp"
                   type="number"
                   min="3"
                   max="10"
                   value={config.accessControl.maxFailedAttempts}
                   onChange={(e) => handleConfigChange('accessControl', 'maxFailedAttempts', parseInt(e.target.value))}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  style={{
+                    width: '100%',
+                    padding: 'var(--space-2) var(--space-3)',
+                    border: '1px solid var(--dashboard-border-primary)',
+                    borderRadius: 'var(--radius-lg)',
+                    backgroundColor: 'var(--dashboard-bg-elevated)',
+                    color: 'var(--dashboard-text-primary)',
+                    outline: 'none'
+                  }}
+                  onFocus={(e) => e.currentTarget.style.borderColor = '#2563EB'}
+                  onBlur={(e) => e.currentTarget.style.borderColor = 'var(--dashboard-border-primary)'}
                 />
               </div>
               <div>
-                <label htmlFor="lockoutdurationminut" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Lockout Duration (minutes)
-                </label><input id="lockoutdurationminut"
+                <label htmlFor="lockoutdurationminut" style={{ display: 'block', fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)', marginBottom: 'var(--space-2)' }}>Lockout Duration (minutes)
+                </label>
+                <input id="lockoutdurationminut"
                   type="number"
                   min="5"
                   max="1440"
                   value={config.accessControl.lockoutDuration}
                   onChange={(e) => handleConfigChange('accessControl', 'lockoutDuration', parseInt(e.target.value))}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  style={{
+                    width: '100%',
+                    padding: 'var(--space-2) var(--space-3)',
+                    border: '1px solid var(--dashboard-border-primary)',
+                    borderRadius: 'var(--radius-lg)',
+                    backgroundColor: 'var(--dashboard-bg-elevated)',
+                    color: 'var(--dashboard-text-primary)',
+                    outline: 'none'
+                  }}
+                  onFocus={(e) => e.currentTarget.style.borderColor = '#2563EB'}
+                  onBlur={(e) => e.currentTarget.style.borderColor = 'var(--dashboard-border-primary)'}
                 />
               </div>
             </div>
 
-            <div className="flex items-center justify-between">
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div>
-                <div className="font-medium text-gray-900 dark:text-white">Block Suspicious Login Attempts</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Automatically block login attempts from suspicious locations</div>
+                <div style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Block Suspicious Login Attempts</div>
+                <div style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Automatically block login attempts from suspicious locations</div>
               </div>
-              <label htmlFor="input6dfzu" className="relative inline-flex items-center cursor-pointer"><input id="input6dfzu"
+              <label htmlFor="input6dfzu" className="relative inline-flex items-center cursor-pointer">
+                <input id="input6dfzu"
                   type="checkbox"
                   checked={config.accessControl.blockSuspiciousLogins}
                   onChange={(e) => handleConfigChange('accessControl', 'blockSuspiciousLogins', e.target.checked)}
@@ -606,45 +762,56 @@ export function SecuritySettingsPanel() {
       )}
 
       {activeSection === 'data' && (
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">Data Protection Settings</h3>
-          
-          <div className="space-y-6">
+        <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)', padding: 'var(--space-6)' }}>
+          <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)', marginBottom: 'var(--space-6)' }}>Data Protection Settings</h3>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-600 rounded-lg">
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 'var(--space-4)', border: '1px solid var(--dashboard-border-primary)', borderRadius: 'var(--radius-lg)' }}>
                 <div>
-                  <div className="font-medium text-gray-900 dark:text-white">Encryption at Rest</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">Database encryption</div>
+                  <div style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Encryption at Rest</div>
+                  <div style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Database encryption</div>
                 </div>
-                <CheckCircle className="w-6 h-6 text-green-600" />
+                <CheckCircle style={{ width: '1.5rem', height: '1.5rem', color: '#16A34A' }} />
               </div>
-              <div className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-600 rounded-lg">
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 'var(--space-4)', border: '1px solid var(--dashboard-border-primary)', borderRadius: 'var(--radius-lg)' }}>
                 <div>
-                  <div className="font-medium text-gray-900 dark:text-white">Encryption in Transit</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">TLS/SSL encryption</div>
+                  <div style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Encryption in Transit</div>
+                  <div style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>TLS/SSL encryption</div>
                 </div>
-                <CheckCircle className="w-6 h-6 text-green-600" />
+                <CheckCircle style={{ width: '1.5rem', height: '1.5rem', color: '#16A34A' }} />
               </div>
-              <div className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-600 rounded-lg">
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 'var(--space-4)', border: '1px solid var(--dashboard-border-primary)', borderRadius: 'var(--radius-lg)' }}>
                 <div>
-                  <div className="font-medium text-gray-900 dark:text-white">Backup Encryption</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">Encrypted backups</div>
+                  <div style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Backup Encryption</div>
+                  <div style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Encrypted backups</div>
                 </div>
-                <CheckCircle className="w-6 h-6 text-green-600" />
+                <CheckCircle style={{ width: '1.5rem', height: '1.5rem', color: '#16A34A' }} />
               </div>
             </div>
 
             <div>
-              <label htmlFor="dataretentionperiodd" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Data Retention Period (days)
-              </label><input id="dataretentionperiodd"
+              <label htmlFor="dataretentionperiodd" style={{ display: 'block', fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)', marginBottom: 'var(--space-2)' }}>Data Retention Period (days)
+              </label>
+              <input id="dataretentionperiodd"
                 type="number"
                 min="30"
                 max="3650"
                 value={config.dataProtection.dataRetentionPeriod}
                 onChange={(e) => handleConfigChange('dataProtection', 'dataRetentionPeriod', parseInt(e.target.value))}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                style={{
+                  width: '100%',
+                  padding: 'var(--space-2) var(--space-3)',
+                  border: '1px solid var(--dashboard-border-primary)',
+                  borderRadius: 'var(--radius-lg)',
+                  backgroundColor: 'var(--dashboard-bg-elevated)',
+                  color: 'var(--dashboard-text-primary)',
+                  outline: 'none'
+                }}
+                onFocus={(e) => e.currentTarget.style.borderColor = '#2563EB'}
+                onBlur={(e) => e.currentTarget.style.borderColor = 'var(--dashboard-border-primary)'}
               />
-              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+              <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-tertiary)', marginTop: 'var(--space-1)' }}>
                 Currently set to {Math.round(config.dataProtection.dataRetentionPeriod / 365)} years
               </p>
             </div>
@@ -653,41 +820,41 @@ export function SecuritySettingsPanel() {
       )}
 
       {activeSection === 'compliance' && (
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">Compliance & Auditing</h3>
-          
-          <div className="space-y-6">
+        <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)', padding: 'var(--space-6)' }}>
+          <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)', marginBottom: 'var(--space-6)' }}>Compliance & Auditing</h3>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="text-center p-6 border border-gray-200 dark:border-gray-600 rounded-lg">
-                <CheckCircle className="w-12 h-12 text-green-600 mx-auto mb-3" />
-                <h4 className="font-medium text-gray-900 dark:text-white">FERPA</h4>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Educational Privacy</p>
-                <span className="inline-block mt-2 px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">Compliant</span>
+              <div style={{ textAlign: 'center', padding: 'var(--space-6)', border: '1px solid var(--dashboard-border-primary)', borderRadius: 'var(--radius-lg)' }}>
+                <CheckCircle style={{ width: '3rem', height: '3rem', color: '#16A34A', margin: '0 auto var(--space-3)' }} />
+                <h4 style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>FERPA</h4>
+                <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Educational Privacy</p>
+                <span style={{ display: 'inline-block', marginTop: 'var(--space-2)', padding: 'var(--space-1) var(--space-2)', fontSize: 'var(--text-xs)', backgroundColor: '#DCFCE7', color: '#166534', borderRadius: '9999px' }}>Compliant</span>
               </div>
-              <div className="text-center p-6 border border-gray-200 dark:border-gray-600 rounded-lg">
-                <CheckCircle className="w-12 h-12 text-green-600 mx-auto mb-3" />
-                <h4 className="font-medium text-gray-900 dark:text-white">COPPA</h4>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Children's Privacy</p>
-                <span className="inline-block mt-2 px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">Compliant</span>
+              <div style={{ textAlign: 'center', padding: 'var(--space-6)', border: '1px solid var(--dashboard-border-primary)', borderRadius: 'var(--radius-lg)' }}>
+                <CheckCircle style={{ width: '3rem', height: '3rem', color: '#16A34A', margin: '0 auto var(--space-3)' }} />
+                <h4 style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>COPPA</h4>
+                <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Children's Privacy</p>
+                <span style={{ display: 'inline-block', marginTop: 'var(--space-2)', padding: 'var(--space-1) var(--space-2)', fontSize: 'var(--text-xs)', backgroundColor: '#DCFCE7', color: '#166534', borderRadius: '9999px' }}>Compliant</span>
               </div>
-              <div className="text-center p-6 border border-gray-200 dark:border-gray-600 rounded-lg">
-                <CheckCircle className="w-12 h-12 text-green-600 mx-auto mb-3" />
-                <h4 className="font-medium text-gray-900 dark:text-white">GDPR</h4>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Data Protection</p>
-                <span className="inline-block mt-2 px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">Compliant</span>
+              <div style={{ textAlign: 'center', padding: 'var(--space-6)', border: '1px solid var(--dashboard-border-primary)', borderRadius: 'var(--radius-lg)' }}>
+                <CheckCircle style={{ width: '3rem', height: '3rem', color: '#16A34A', margin: '0 auto var(--space-3)' }} />
+                <h4 style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>GDPR</h4>
+                <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Data Protection</p>
+                <span style={{ display: 'inline-block', marginTop: 'var(--space-2)', padding: 'var(--space-1) var(--space-2)', fontSize: 'var(--text-xs)', backgroundColor: '#DCFCE7', color: '#166534', borderRadius: '9999px' }}>Compliant</span>
               </div>
             </div>
 
-            <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-              <h4 className="font-medium text-gray-900 dark:text-white mb-4">Security Audits</h4>
+            <div style={{ borderTop: '1px solid var(--dashboard-border-primary)', paddingTop: 'var(--space-6)' }}>
+              <h4 style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)', marginBottom: 'var(--space-4)' }}>Security Audits</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Last Security Audit</label>
-                  <p className="text-lg text-gray-900 dark:text-white">{formatDate(config.compliance.lastSecurityAudit)}</p>
+                  <label style={{ display: 'block', fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)', marginBottom: 'var(--space-1)' }}>Last Security Audit</label>
+                  <p style={{ fontSize: 'var(--text-lg)', color: 'var(--dashboard-text-primary)' }}>{formatDate(config.compliance.lastSecurityAudit)}</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Next Scheduled Audit</label>
-                  <p className="text-lg text-gray-900 dark:text-white">{formatDate(config.compliance.nextScheduledAudit)}</p>
+                  <label style={{ display: 'block', fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)', marginBottom: 'var(--space-1)' }}>Next Scheduled Audit</label>
+                  <p style={{ fontSize: 'var(--text-lg)', color: 'var(--dashboard-text-primary)' }}>{formatDate(config.compliance.nextScheduledAudit)}</p>
                 </div>
               </div>
             </div>
