@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { 
+import {
   Database,
   Download,
   Upload,
@@ -24,6 +24,12 @@ import {
   Save,
   Info
 } from 'lucide-react';
+import '../../design-system/tokens/colors.css';
+import '../../design-system/tokens/spacing.css';
+import '../../design-system/tokens/borders.css';
+import '../../design-system/tokens/typography.css';
+import '../../design-system/tokens/shadows.css';
+import '../../design-system/tokens/dashboard.css';
 
 interface DataSnapshot {
   id: string;
@@ -192,6 +198,22 @@ export function DataManagementPanel() {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
 
+  const getTabStyle = (isActive: boolean) => ({
+    padding: 'var(--space-4) var(--space-1)',
+    borderBottom: isActive ? '2px solid var(--dashboard-nav-tab-active)' : '2px solid transparent',
+    fontWeight: 'var(--font-medium)',
+    fontSize: 'var(--text-sm)',
+    whiteSpace: 'nowrap' as const,
+    color: isActive ? 'var(--dashboard-nav-tab-active)' : 'var(--dashboard-nav-tab-inactive)',
+    backgroundColor: 'transparent',
+    cursor: 'pointer',
+    transition: 'color 200ms ease',
+    border: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    gap: 'var(--space-2)'
+  });
+
   const filteredSnapshots = snapshots.filter(snapshot => {
     const matchesSearch = snapshot.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = statusFilter === 'all' || snapshot.status === statusFilter;
@@ -215,26 +237,26 @@ export function DataManagementPanel() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'completed':
-        return <CheckCircle className="w-4 h-4 text-green-600" />;
+        return <CheckCircle style={{ width: '1rem', height: '1rem', color: '#059669' }} />;
       case 'processing':
-        return <Clock className="w-4 h-4 text-blue-600 animate-spin" />;
+        return <Clock style={{ width: '1rem', height: '1rem', color: '#2563EB' }} className="animate-spin" />;
       case 'failed':
-        return <AlertTriangle className="w-4 h-4 text-red-600" />;
+        return <AlertTriangle style={{ width: '1rem', height: '1rem', color: '#DC2626' }} />;
       default:
-        return <Clock className="w-4 h-4 text-gray-600" />;
+        return <Clock style={{ width: '1rem', height: '1rem', color: '#6B7280' }} />;
     }
   };
 
   const getLocationIcon = (location: string) => {
     switch (location) {
       case 'azure':
-        return <Cloud className="w-4 h-4 text-blue-600" />;
+        return <Cloud style={{ width: '1rem', height: '1rem', color: '#2563EB' }} />;
       case 'cloud':
-        return <Cloud className="w-4 h-4 text-purple-600" />;
+        return <Cloud style={{ width: '1rem', height: '1rem', color: '#9333EA' }} />;
       case 'local':
-        return <HardDrive className="w-4 h-4 text-gray-600" />;
+        return <HardDrive style={{ width: '1rem', height: '1rem', color: '#6B7280' }} />;
       default:
-        return <Server className="w-4 h-4 text-gray-600" />;
+        return <Server style={{ width: '1rem', height: '1rem', color: '#6B7280' }} />;
     }
   };
 
@@ -269,28 +291,54 @@ export function DataManagementPanel() {
   const totalDataLimit = dataUsage.reduce((sum, item) => sum + item.limit, 0);
 
   return (
-    <div className="space-y-6">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Data Management</h2>
-          <p className="text-gray-600 mt-1">Manage data backups, exports, and retention policies</p>
+          <h2 style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)' }}>Data Management</h2>
+          <p style={{ color: 'var(--dashboard-text-secondary)', marginTop: 'var(--space-1)' }}>Manage data backups, exports, and retention policies</p>
         </div>
-        <div className="flex gap-3">
+        <div style={{ display: 'flex', gap: 'var(--space-3)' }}>
           <button
             onClick={handleRefresh}
             disabled={isLoading}
-            className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--space-2)',
+              padding: 'var(--space-2) var(--space-4)',
+              border: '1px solid var(--dashboard-border-primary)',
+              borderRadius: 'var(--radius-lg)',
+              backgroundColor: 'transparent',
+              color: 'var(--dashboard-text-secondary)',
+              cursor: isLoading ? 'not-allowed' : 'pointer',
+              opacity: isLoading ? 0.5 : 1
+            }}
+            onMouseEnter={(e) => !isLoading && (e.currentTarget.style.backgroundColor = 'var(--dashboard-bg-hover)')}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
           >
-            <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+            <RefreshCw style={{ width: '1rem', height: '1rem' }} className={isLoading ? 'animate-spin' : ''} />
             Refresh
           </button>
           <button
             onClick={handleCreateBackup}
             disabled={isLoading}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--space-2)',
+              padding: 'var(--space-2) var(--space-4)',
+              border: 'none',
+              borderRadius: 'var(--radius-lg)',
+              backgroundColor: '#2563EB',
+              color: 'white',
+              cursor: isLoading ? 'not-allowed' : 'pointer',
+              opacity: isLoading ? 0.5 : 1
+            }}
+            onMouseEnter={(e) => !isLoading && (e.currentTarget.style.backgroundColor = '#1D4ED8')}
+            onMouseLeave={(e) => !isLoading && (e.currentTarget.style.backgroundColor = '#2563EB')}
           >
-            <Save className="w-4 h-4" />
+            <Save style={{ width: '1rem', height: '1rem' }} />
             Create Backup
           </button>
         </div>
@@ -298,52 +346,52 @@ export function DataManagementPanel() {
 
       {/* Data Usage Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white p-6 rounded-lg border border-gray-200">
-          <div className="flex items-center justify-between mb-4">
-            <Database className="w-8 h-8 text-blue-600" />
-            <span className="text-2xl font-bold text-blue-600">{totalDataUsed.toFixed(1)} GB</span>
+        <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', padding: 'var(--space-6)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-4)' }}>
+            <Database style={{ width: '2rem', height: '2rem', color: '#2563EB' }} />
+            <span style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: '#2563EB' }}>{totalDataUsed.toFixed(1)} GB</span>
           </div>
-          <h3 className="font-medium text-gray-900">Total Data Used</h3>
-          <p className="text-sm text-gray-600">of {totalDataLimit} GB allocated</p>
-          <div className="mt-3 w-full bg-gray-200 rounded-full h-2">
-            <div 
-              className={`h-2 rounded-full ${getUsageColor(getUsagePercentage(totalDataUsed, totalDataLimit))}`}
-              style={{ width: `${getUsagePercentage(totalDataUsed, totalDataLimit)}%` }}
+          <h3 style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Total Data Used</h3>
+          <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>of {totalDataLimit} GB allocated</p>
+          <div style={{ marginTop: 'var(--space-3)', width: '100%', backgroundColor: '#E5E7EB', borderRadius: '9999px', height: '0.5rem' }}>
+            <div
+              className={getUsageColor(getUsagePercentage(totalDataUsed, totalDataLimit))}
+              style={{ height: '0.5rem', borderRadius: '9999px', width: `${getUsagePercentage(totalDataUsed, totalDataLimit)}%` }}
             />
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-lg border border-gray-200">
-          <div className="flex items-center justify-between mb-4">
-            <Archive className="w-8 h-8 text-green-600" />
-            <span className="text-2xl font-bold text-green-600">{snapshots.length}</span>
+        <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', padding: 'var(--space-6)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-4)' }}>
+            <Archive style={{ width: '2rem', height: '2rem', color: '#059669' }} />
+            <span style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: '#059669' }}>{snapshots.length}</span>
           </div>
-          <h3 className="font-medium text-gray-900">Data Snapshots</h3>
-          <p className="text-sm text-gray-600">{snapshots.filter(s => s.status === 'completed').length} completed</p>
+          <h3 style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Data Snapshots</h3>
+          <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>{snapshots.filter(s => s.status === 'completed').length} completed</p>
         </div>
 
-        <div className="bg-white p-6 rounded-lg border border-gray-200">
-          <div className="flex items-center justify-between mb-4">
-            <Shield className="w-8 h-8 text-purple-600" />
-            <span className="text-2xl font-bold text-purple-600">100%</span>
+        <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', padding: 'var(--space-6)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-4)' }}>
+            <Shield style={{ width: '2rem', height: '2rem', color: '#9333EA' }} />
+            <span style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: '#9333EA' }}>100%</span>
           </div>
-          <h3 className="font-medium text-gray-900">Encryption</h3>
-          <p className="text-sm text-gray-600">All data encrypted</p>
+          <h3 style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Encryption</h3>
+          <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>All data encrypted</p>
         </div>
 
-        <div className="bg-white p-6 rounded-lg border border-gray-200">
-          <div className="flex items-center justify-between mb-4">
-            <Calendar className="w-8 h-8 text-orange-600" />
-            <span className="text-2xl font-bold text-orange-600">7</span>
+        <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', padding: 'var(--space-6)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-4)' }}>
+            <Calendar style={{ width: '2rem', height: '2rem', color: '#EA580C' }} />
+            <span style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: '#EA580C' }}>7</span>
           </div>
-          <h3 className="font-medium text-gray-900">Retention Policies</h3>
-          <p className="text-sm text-gray-600">{retentionPolicies.length} active policies</p>
+          <h3 style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Retention Policies</h3>
+          <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>{retentionPolicies.length} active policies</p>
         </div>
       </div>
 
       {/* Navigation Tabs */}
-      <div className="border-b border-gray-200">
-        <nav className="flex space-x-8 overflow-x-auto">
+      <div style={{ borderBottom: '1px solid var(--dashboard-border-primary)' }}>
+        <nav style={{ display: 'flex', gap: 'var(--space-8)', overflowX: 'auto' }}>
           {[
             { id: 'overview', label: 'Overview', icon: BarChart3 },
             { id: 'snapshots', label: 'Data Snapshots', icon: Archive },
@@ -354,13 +402,9 @@ export function DataManagementPanel() {
             <button
               key={id}
               onClick={() => setActiveSection(id)}
-              className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap flex items-center gap-2 ${
-                activeSection === id
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
-              }`}
+              style={getTabStyle(activeSection === id)}
             >
-              <Icon className="w-4 h-4" />
+              <Icon style={{ width: '1rem', height: '1rem' }} />
               {label}
             </button>
           ))}
@@ -369,28 +413,28 @@ export function DataManagementPanel() {
 
       {/* Content Sections */}
       {activeSection === 'overview' && (
-        <div className="space-y-6">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
           {/* Recent Activity */}
-          <div className="bg-white rounded-lg border border-gray-200">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900">Recent Data Operations</h3>
+          <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)' }}>
+            <div style={{ padding: 'var(--space-4) var(--space-6)', borderBottom: '1px solid var(--dashboard-border-primary)' }}>
+              <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)' }}>Recent Data Operations</h3>
             </div>
-            <div className="p-6">
-              <div className="space-y-4">
+            <div style={{ padding: 'var(--space-6)' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
                 {snapshots.slice(0, 4).map((snapshot) => (
-                  <div key={snapshot.id} className="flex items-center justify-between p-4 border border-gray-100 rounded-lg">
-                    <div className="flex items-center gap-3">
+                  <div key={snapshot.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 'var(--space-4)', border: '1px solid #F3F4F6', borderRadius: 'var(--radius-lg)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
                       {getStatusIcon(snapshot.status)}
                       <div>
-                        <div className="font-medium text-gray-900">{snapshot.name}</div>
-                        <div className="text-sm text-gray-600">
+                        <div style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>{snapshot.name}</div>
+                        <div style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>
                           {formatFileSize(snapshot.size)} • {formatDate(snapshot.created_at)}
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
                       {getLocationIcon(snapshot.location)}
-                      <span className="text-sm text-gray-600 capitalize">{snapshot.location}</span>
+                      <span style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)', textTransform: 'capitalize' }}>{snapshot.location}</span>
                     </div>
                   </div>
                 ))}
@@ -401,35 +445,68 @@ export function DataManagementPanel() {
       )}
 
       {activeSection === 'snapshots' && (
-        <div className="space-y-6">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
           {/* Search and Filters */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="flex-1">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)', padding: 'var(--space-6)' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }} className="sm:flex-row">
+              <div style={{ flex: 1 }}>
+                <div style={{ position: 'relative' }}>
+                  <Search style={{ position: 'absolute', left: 'var(--space-3)', top: '50%', transform: 'translateY(-50%)', height: '1rem', width: '1rem', color: '#9CA3AF' }} />
                   <input
                     type="text"
                     placeholder="Search snapshots..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    style={{
+                      paddingLeft: '2.5rem',
+                      width: '100%',
+                      padding: 'var(--space-2) var(--space-3)',
+                      border: '1px solid var(--dashboard-border-primary)',
+                      borderRadius: 'var(--radius-lg)',
+                      backgroundColor: 'var(--dashboard-bg-elevated)',
+                      color: 'var(--dashboard-text-primary)',
+                      outline: 'none'
+                    }}
+                    onFocus={(e) => e.currentTarget.style.borderColor = '#2563EB'}
+                    onBlur={(e) => e.currentTarget.style.borderColor = 'var(--dashboard-border-primary)'}
                   />
                 </div>
               </div>
-              <div className="flex gap-2">
+              <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="focus:ring-2 focus:ring-blue-500"
+                  style={{
+                    padding: 'var(--space-2) var(--space-3)',
+                    border: '1px solid var(--dashboard-border-primary)',
+                    borderRadius: 'var(--radius-lg)',
+                    backgroundColor: 'var(--dashboard-bg-elevated)',
+                    color: 'var(--dashboard-text-primary)',
+                    outline: 'none'
+                  }}
                 >
                   <option value="all">All Status</option>
                   <option value="completed">Completed</option>
                   <option value="processing">Processing</option>
                   <option value="failed">Failed</option>
                 </select>
-                <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
-                  <Download className="w-4 h-4" />
+                <button
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'var(--space-2)',
+                    padding: 'var(--space-2) var(--space-4)',
+                    border: '1px solid var(--dashboard-border-primary)',
+                    borderRadius: 'var(--radius-lg)',
+                    backgroundColor: 'transparent',
+                    color: 'var(--dashboard-text-secondary)',
+                    cursor: 'pointer'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--dashboard-bg-hover)'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                >
+                  <Download style={{ width: '1rem', height: '1rem' }} />
                   Export List
                 </button>
               </div>
@@ -437,55 +514,60 @@ export function DataManagementPanel() {
           </div>
 
           {/* Snapshots Table */}
-          <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900">
+          <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)', overflow: 'hidden' }}>
+            <div style={{ padding: 'var(--space-4) var(--space-6)', borderBottom: '1px solid var(--dashboard-border-primary)' }}>
+              <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)' }}>
                 Data Snapshots ({filteredSnapshots.length})
               </h3>
             </div>
-            
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-50">
+
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%' }}>
+                <thead style={{ backgroundColor: '#F9FAFB' }}>
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th style={{ padding: 'var(--space-3) var(--space-6)', textAlign: 'left', fontSize: 'var(--text-xs)', fontWeight: 'var(--font-medium)', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                       Snapshot
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th style={{ padding: 'var(--space-3) var(--space-6)', textAlign: 'left', fontSize: 'var(--text-xs)', fontWeight: 'var(--font-medium)', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                       Type
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th style={{ padding: 'var(--space-3) var(--space-6)', textAlign: 'left', fontSize: 'var(--text-xs)', fontWeight: 'var(--font-medium)', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                       Size
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th style={{ padding: 'var(--space-3) var(--space-6)', textAlign: 'left', fontSize: 'var(--text-xs)', fontWeight: 'var(--font-medium)', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                       Location
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th style={{ padding: 'var(--space-3) var(--space-6)', textAlign: 'left', fontSize: 'var(--text-xs)', fontWeight: 'var(--font-medium)', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                       Status
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th style={{ padding: 'var(--space-3) var(--space-6)', textAlign: 'left', fontSize: 'var(--text-xs)', fontWeight: 'var(--font-medium)', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                       Created
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th style={{ padding: 'var(--space-3) var(--space-6)', textAlign: 'left', fontSize: 'var(--text-xs)', fontWeight: 'var(--font-medium)', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                       Actions
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody style={{ backgroundColor: 'var(--dashboard-bg-elevated)' }}>
                   {filteredSnapshots.map((snapshot) => (
-                    <tr key={snapshot.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center gap-2">
-                          <Shield className="w-4 h-4 text-green-600" />
+                    <tr
+                      key={snapshot.id}
+                      style={{ borderTop: '1px solid #E5E7EB' }}
+                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--dashboard-bg-hover)'}
+                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                    >
+                      <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+                          <Shield style={{ width: '1rem', height: '1rem', color: '#059669' }} />
                           <div>
-                            <div className="text-sm font-medium text-gray-900">{snapshot.name}</div>
-                            <div className="text-xs text-gray-500">
+                            <div style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>{snapshot.name}</div>
+                            <div style={{ fontSize: 'var(--text-xs)', color: '#6B7280' }}>
                               Retention: {snapshot.retention_days} days
                             </div>
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap' }}>
                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                           snapshot.type === 'backup' ? 'bg-blue-100 text-blue-800' :
                           snapshot.type === 'export' ? 'bg-green-100 text-green-800' :
@@ -494,34 +576,46 @@ export function DataManagementPanel() {
                           {snapshot.type}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap', fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-primary)' }}>
                         {formatFileSize(snapshot.size)}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center gap-2">
+                      <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
                           {getLocationIcon(snapshot.location)}
-                          <span className="text-sm text-gray-900 capitalize">{snapshot.location}</span>
+                          <span style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-primary)', textTransform: 'capitalize' }}>{snapshot.location}</span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center gap-2">
+                      <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
                           {getStatusIcon(snapshot.status)}
-                          <span className="text-sm text-gray-900 capitalize">{snapshot.status}</span>
+                          <span style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-primary)', textTransform: 'capitalize' }}>{snapshot.status}</span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap', fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-primary)' }}>
                         {formatDate(snapshot.created_at)}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        <div className="flex items-center gap-2">
-                          <button className="text-blue-600 hover:text-blue-800 p-1">
-                            <Download className="w-4 h-4" />
+                      <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap', fontSize: 'var(--text-sm)', color: '#6B7280' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+                          <button
+                            style={{ color: '#2563EB', padding: 'var(--space-1)', cursor: 'pointer', border: 'none', backgroundColor: 'transparent' }}
+                            onMouseEnter={(e) => e.currentTarget.style.color = '#1D4ED8'}
+                            onMouseLeave={(e) => e.currentTarget.style.color = '#2563EB'}
+                          >
+                            <Download style={{ width: '1rem', height: '1rem' }} />
                           </button>
-                          <button className="text-gray-600 hover:text-gray-800 p-1">
-                            <Eye className="w-4 h-4" />
+                          <button
+                            style={{ color: '#6B7280', padding: 'var(--space-1)', cursor: 'pointer', border: 'none', backgroundColor: 'transparent' }}
+                            onMouseEnter={(e) => e.currentTarget.style.color = '#374151'}
+                            onMouseLeave={(e) => e.currentTarget.style.color = '#6B7280'}
+                          >
+                            <Eye style={{ width: '1rem', height: '1rem' }} />
                           </button>
-                          <button className="text-red-600 hover:text-red-800 p-1">
-                            <Trash2 className="w-4 h-4" />
+                          <button
+                            style={{ color: '#DC2626', padding: 'var(--space-1)', cursor: 'pointer', border: 'none', backgroundColor: 'transparent' }}
+                            onMouseEnter={(e) => e.currentTarget.style.color = '#B91C1C'}
+                            onMouseLeave={(e) => e.currentTarget.style.color = '#DC2626'}
+                          >
+                            <Trash2 style={{ width: '1rem', height: '1rem' }} />
                           </button>
                         </div>
                       </td>
@@ -535,26 +629,26 @@ export function DataManagementPanel() {
       )}
 
       {activeSection === 'usage' && (
-        <div className="space-y-6">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
           {/* Storage Usage by Category */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-6">Storage Usage by Category</h3>
-            <div className="space-y-4">
+          <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)', padding: 'var(--space-6)' }}>
+            <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)', marginBottom: 'var(--space-6)' }}>Storage Usage by Category</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
               {dataUsage.map((usage, index) => (
-                <div key={index} className="border border-gray-100 rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <h4 className="font-medium text-gray-900">{usage.category}</h4>
-                    <div className="text-sm text-gray-600">
+                <div key={index} style={{ border: '1px solid #F3F4F6', borderRadius: 'var(--radius-lg)', padding: 'var(--space-4)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-2)' }}>
+                    <h4 style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>{usage.category}</h4>
+                    <div style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>
                       {usage.current_size.toFixed(1)} GB / {usage.limit} GB
                     </div>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
-                    <div 
-                      className={`h-2 rounded-full ${getUsageColor(getUsagePercentage(usage.current_size, usage.limit))}`}
-                      style={{ width: `${getUsagePercentage(usage.current_size, usage.limit)}%` }}
+                  <div style={{ width: '100%', backgroundColor: '#E5E7EB', borderRadius: '9999px', height: '0.5rem', marginBottom: 'var(--space-2)' }}>
+                    <div
+                      className={getUsageColor(getUsagePercentage(usage.current_size, usage.limit))}
+                      style={{ height: '0.5rem', borderRadius: '9999px', width: `${getUsagePercentage(usage.current_size, usage.limit)}%` }}
                     />
                   </div>
-                  <div className="flex justify-between text-xs text-gray-500">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--text-xs)', color: '#6B7280' }}>
                     <span>Growth: {usage.growth_rate}% per month</span>
                     <span>Projected full: {new Date(usage.projected_full).toLocaleDateString()}</span>
                   </div>
@@ -566,59 +660,64 @@ export function DataManagementPanel() {
       )}
 
       {activeSection === 'retention' && (
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-6">Data Retention Policies</h3>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50">
+        <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)', padding: 'var(--space-6)' }}>
+          <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)', marginBottom: 'var(--space-6)' }}>Data Retention Policies</h3>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%' }}>
+              <thead style={{ backgroundColor: '#F9FAFB' }}>
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th style={{ padding: 'var(--space-3) var(--space-6)', textAlign: 'left', fontSize: 'var(--text-xs)', fontWeight: 'var(--font-medium)', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                     Data Type
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th style={{ padding: 'var(--space-3) var(--space-6)', textAlign: 'left', fontSize: 'var(--text-xs)', fontWeight: 'var(--font-medium)', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                     Retention Period
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th style={{ padding: 'var(--space-3) var(--space-6)', textAlign: 'left', fontSize: 'var(--text-xs)', fontWeight: 'var(--font-medium)', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                     Auto Delete
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th style={{ padding: 'var(--space-3) var(--space-6)', textAlign: 'left', fontSize: 'var(--text-xs)', fontWeight: 'var(--font-medium)', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                     Backup Required
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th style={{ padding: 'var(--space-3) var(--space-6)', textAlign: 'left', fontSize: 'var(--text-xs)', fontWeight: 'var(--font-medium)', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                     Compliance
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th style={{ padding: 'var(--space-3) var(--space-6)', textAlign: 'left', fontSize: 'var(--text-xs)', fontWeight: 'var(--font-medium)', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                     Last Reviewed
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th style={{ padding: 'var(--space-3) var(--space-6)', textAlign: 'left', fontSize: 'var(--text-xs)', fontWeight: 'var(--font-medium)', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody style={{ backgroundColor: 'var(--dashboard-bg-elevated)' }}>
                 {retentionPolicies.map((policy, index) => (
-                  <tr key={index} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">{policy.data_type}</div>
+                  <tr
+                    key={index}
+                    style={{ borderTop: '1px solid #E5E7EB' }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--dashboard-bg-hover)'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                  >
+                    <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap' }}>
+                      <div style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>{policy.data_type}</div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap', fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-primary)' }}>
                       {Math.round(policy.retention_period / 365)} years
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap' }}>
                       {policy.auto_delete ? (
-                        <CheckCircle className="w-5 h-5 text-green-600" />
+                        <CheckCircle style={{ width: '1.25rem', height: '1.25rem', color: '#059669' }} />
                       ) : (
-                        <div className="w-5 h-5 border-2 border-gray-300 rounded-full" />
+                        <div style={{ width: '1.25rem', height: '1.25rem', border: '2px solid #D1D5DB', borderRadius: '9999px' }} />
                       )}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap' }}>
                       {policy.backup_required ? (
-                        <CheckCircle className="w-5 h-5 text-green-600" />
+                        <CheckCircle style={{ width: '1.25rem', height: '1.25rem', color: '#059669' }} />
                       ) : (
-                        <div className="w-5 h-5 border-2 border-gray-300 rounded-full" />
+                        <div style={{ width: '1.25rem', height: '1.25rem', border: '2px solid #D1D5DB', borderRadius: '9999px' }} />
                       )}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap' }}>
                       {policy.compliance_required ? (
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                           Required
@@ -629,12 +728,16 @@ export function DataManagementPanel() {
                         </span>
                       )}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap', fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-primary)' }}>
                       {new Date(policy.last_reviewed).toLocaleDateString()}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      <button className="text-blue-600 hover:text-blue-800">
-                        <Settings className="w-4 h-4" />
+                    <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap', fontSize: 'var(--text-sm)', color: '#6B7280' }}>
+                      <button
+                        style={{ color: '#2563EB', cursor: 'pointer', border: 'none', backgroundColor: 'transparent' }}
+                        onMouseEnter={(e) => e.currentTarget.style.color = '#1D4ED8'}
+                        onMouseLeave={(e) => e.currentTarget.style.color = '#2563EB'}
+                      >
+                        <Settings style={{ width: '1rem', height: '1rem' }} />
                       </button>
                     </td>
                   </tr>
@@ -646,36 +749,36 @@ export function DataManagementPanel() {
       )}
 
       {activeSection === 'compliance' && (
-        <div className="space-y-6">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Compliance Status */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Compliance Status</h3>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <CheckCircle className="w-6 h-6 text-green-600" />
+            <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)', padding: 'var(--space-6)' }}>
+              <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)', marginBottom: 'var(--space-4)' }}>Compliance Status</h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 'var(--space-3)', backgroundColor: '#F0FDF4', borderRadius: 'var(--radius-lg)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+                    <CheckCircle style={{ width: '1.5rem', height: '1.5rem', color: '#059669' }} />
                     <div>
-                      <div className="font-medium text-gray-900">FERPA Compliance</div>
-                      <div className="text-sm text-gray-600">Educational privacy protection</div>
+                      <div style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>FERPA Compliance</div>
+                      <div style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Educational privacy protection</div>
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <CheckCircle className="w-6 h-6 text-green-600" />
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 'var(--space-3)', backgroundColor: '#F0FDF4', borderRadius: 'var(--radius-lg)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+                    <CheckCircle style={{ width: '1.5rem', height: '1.5rem', color: '#059669' }} />
                     <div>
-                      <div className="font-medium text-gray-900">Data Encryption</div>
-                      <div className="text-sm text-gray-600">AES-256 encryption at rest and in transit</div>
+                      <div style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Data Encryption</div>
+                      <div style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>AES-256 encryption at rest and in transit</div>
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <CheckCircle className="w-6 h-6 text-green-600" />
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 'var(--space-3)', backgroundColor: '#F0FDF4', borderRadius: 'var(--radius-lg)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+                    <CheckCircle style={{ width: '1.5rem', height: '1.5rem', color: '#059669' }} />
                     <div>
-                      <div className="font-medium text-gray-900">Backup Retention</div>
-                      <div className="text-sm text-gray-600">7-year retention for academic records</div>
+                      <div style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Backup Retention</div>
+                      <div style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>7-year retention for academic records</div>
                     </div>
                   </div>
                 </div>
@@ -683,28 +786,28 @@ export function DataManagementPanel() {
             </div>
 
             {/* Data Governance */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Data Governance</h3>
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <Info className="w-5 h-5 text-blue-600 mt-0.5" />
+            <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--dashboard-border-primary)', padding: 'var(--space-6)' }}>
+              <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)', marginBottom: 'var(--space-4)' }}>Data Governance</h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
+                <div style={{ display: 'flex', alignItems: 'start', gap: 'var(--space-3)' }}>
+                  <Info style={{ width: '1.25rem', height: '1.25rem', color: '#2563EB', marginTop: '0.125rem' }} />
                   <div>
-                    <div className="font-medium text-gray-900">Access Controls</div>
-                    <div className="text-sm text-gray-600">Role-based access with audit logging</div>
+                    <div style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Access Controls</div>
+                    <div style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Role-based access with audit logging</div>
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <Info className="w-5 h-5 text-blue-600 mt-0.5" />
+                <div style={{ display: 'flex', alignItems: 'start', gap: 'var(--space-3)' }}>
+                  <Info style={{ width: '1.25rem', height: '1.25rem', color: '#2563EB', marginTop: '0.125rem' }} />
                   <div>
-                    <div className="font-medium text-gray-900">Data Classification</div>
-                    <div className="text-sm text-gray-600">Automatic PII detection and protection</div>
+                    <div style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Data Classification</div>
+                    <div style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Automatic PII detection and protection</div>
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <Info className="w-5 h-5 text-blue-600 mt-0.5" />
+                <div style={{ display: 'flex', alignItems: 'start', gap: 'var(--space-3)' }}>
+                  <Info style={{ width: '1.25rem', height: '1.25rem', color: '#2563EB', marginTop: '0.125rem' }} />
                   <div>
-                    <div className="font-medium text-gray-900">Regular Audits</div>
-                    <div className="text-sm text-gray-600">Quarterly data governance reviews</div>
+                    <div style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Regular Audits</div>
+                    <div style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Quarterly data governance reviews</div>
                   </div>
                 </div>
               </div>
