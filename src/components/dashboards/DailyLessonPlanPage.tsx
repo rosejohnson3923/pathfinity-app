@@ -13,6 +13,15 @@ import { lessonOrchestrator } from '../../services/orchestration/LessonPlanOrche
 import { DEMO_LESSON_CONTENT, getDemoLessonContent, getRolesForTier } from '../../data/DemoLessonContent';
 import { shouldUseCachedContent, logCacheDetection } from '../../utils/cacheUserDetection';
 
+// Design System Imports
+import '../../design-system/tokens/colors.css';
+import '../../design-system/tokens/spacing.css';
+import '../../design-system/tokens/borders.css';
+import '../../design-system/tokens/effects.css';
+import '../../design-system/tokens/typography.css';
+import '../../design-system/tokens/shadows.css';
+import '../../design-system/tokens/dashboard.css';
+
 interface Student {
   id: string;
   name: string;
@@ -35,32 +44,32 @@ interface CareerProgression {
   aifirst: { title: string; emoji: string; booster_type: string };
 }
 
-// Subscription tier definitions
+// Subscription tier definitions using design tokens
 const SUBSCRIPTION_TIERS = {
   select: {
     name: 'Select',
-    color: 'var(--color-primary)',
+    color: 'var(--blue-500)',
     icon: '✓',
     description: 'Essential learning foundation',
     locked: false,
   },
   premium: {
     name: 'Premium',
-    color: '#3B82F6',
+    color: 'var(--blue-600)',
     icon: '⭐',
     description: 'Enhanced learning experiences',
     locked: true,
   },
   booster: {
     name: 'Booster',
-    color: '#8B5CF6',
+    color: 'var(--purple-600)',
     icon: '⚡',
     description: 'Specialized career preparation',
     locked: true,
   },
   aifirst: {
     name: 'AIFirst',
-    color: '#F59E0B',
+    color: 'var(--amber-600)',
     icon: '🤖',
     description: 'AI-powered personalized learning',
     locked: true,
@@ -891,7 +900,10 @@ export const DailyLessonPlanPage: React.FC<DailyLessonPlanPageProps> = ({ embedd
           borderBottom: '1px solid var(--color-border)',
           padding: 'var(--space-6) var(--space-8)'
         }}>
-          <div className="max-w-6xl mx-auto">
+          <div style={{
+            maxWidth: '72rem',
+            margin: '0 auto'
+          }}>
             <div className="flex items-center gap-3 mb-2" style={{ gap: 'var(--space-3)', marginBottom: 'var(--space-2)' }}>
               <BookOpen size={28} style={{ color: 'var(--purple-600)' }} />
               <h1 style={{
@@ -915,10 +927,14 @@ export const DailyLessonPlanPage: React.FC<DailyLessonPlanPageProps> = ({ embedd
         </div>
       )}
 
-      <div className={embedded ? "" : "max-w-6xl mx-auto p-6"}>
+      <div style={{
+        maxWidth: embedded ? 'none' : '72rem',
+        margin: embedded ? '0' : '0 auto',
+        padding: embedded ? '0' : 'var(--space-6)'
+      }}>
         {/* Student Selector for Teachers */}
         {isTeacher && availableStudents.length > 0 && (
-          <ThemeAwareCard className="mb-6">
+          <ThemeAwareCard style={{ marginBottom: 'var(--space-6)' }}>
             <div style={{ padding: 'var(--space-6)' }}>
               <h3 style={{
                 fontSize: 'var(--text-xl)',
@@ -935,41 +951,58 @@ export const DailyLessonPlanPage: React.FC<DailyLessonPlanPageProps> = ({ embedd
                     onClick={() => setSelectedStudentId(student.id)}
                     style={{
                       padding: 'var(--space-4)',
-                      borderRadius: 'var(--space-2)',
-                      border: selectedStudentId === student.id ? '2px solid var(--purple-600)' : '2px solid var(--color-border)',
+                      borderRadius: 'var(--radius-lg)',
+                      border: selectedStudentId === student.id ? '2px solid var(--purple-600)' : '2px solid var(--dashboard-border)',
                       backgroundColor: selectedStudentId === student.id
-                        ? 'color-mix(in srgb, var(--purple-600) 10%, var(--color-bg-elevated))'
-                        : 'var(--color-bg-elevated)',
+                        ? 'color-mix(in srgb, var(--purple-600) 10%, var(--dashboard-bg-elevated))'
+                        : 'var(--dashboard-bg-elevated)',
                       cursor: 'pointer',
-                      transition: 'all 0.2s ease'
+                      transition: 'all 0.3s ease',
+                      boxShadow: selectedStudentId === student.id
+                        ? 'var(--dashboard-shadow-card), 0 0 0 3px rgba(139, 92, 246, 0.1)'
+                        : 'var(--dashboard-shadow-sm)'
+                    }}
+                    onMouseEnter={(e) => {
+                      if (selectedStudentId !== student.id) {
+                        e.currentTarget.style.boxShadow = 'var(--dashboard-shadow-card)';
+                        e.currentTarget.style.transform = 'translateY(-2px)';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (selectedStudentId !== student.id) {
+                        e.currentTarget.style.boxShadow = 'var(--dashboard-shadow-sm)';
+                        e.currentTarget.style.transform = 'translateY(0)';
+                      }
                     }}
                   >
                     <div style={{
                       width: 'var(--space-10)',
                       height: 'var(--space-10)',
                       borderRadius: '50%',
-                      backgroundColor: 'var(--purple-600)',
-                      color: 'var(--color-text-inverse)',
+                      backgroundColor: selectedStudentId === student.id ? 'var(--purple-600)' : 'var(--purple-500)',
+                      color: '#ffffff',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       fontSize: 'var(--text-lg)',
-                      fontWeight: 'var(--font-semibold)',
-                      marginBottom: 'var(--space-3)'
+                      fontWeight: 'var(--font-bold)',
+                      marginBottom: 'var(--space-3)',
+                      boxShadow: '0 2px 4px rgba(139, 92, 246, 0.3)',
+                      transition: 'all 0.3s ease'
                     }}>
                       {student.name.charAt(0)}
                     </div>
                     <div style={{
                       fontWeight: 'var(--font-semibold)',
                       marginBottom: 'var(--space-1)',
-                      color: 'var(--color-text-primary)',
+                      color: 'var(--dashboard-text-primary)',
                       fontSize: 'var(--text-base)'
                     }}>
                       {student.name}
                     </div>
                     <div style={{
                       fontSize: 'var(--text-sm)',
-                      color: 'var(--color-text-secondary)'
+                      color: 'var(--dashboard-text-secondary)'
                     }}>
                       Grade {student.grade} • {student.career.charAt(0).toUpperCase() + student.career.slice(1).replace('_', ' ')}
                     </div>
@@ -991,7 +1024,7 @@ export const DailyLessonPlanPage: React.FC<DailyLessonPlanPageProps> = ({ embedd
         )}
 
         {/* Student Profile Card */}
-        <ThemeAwareCard className="mb-8">
+        <ThemeAwareCard style={{ marginBottom: 'var(--space-8)' }}>
           <div className="p-6">
             <div className="flex items-center gap-4 mb-4">
               <div style={{
@@ -1027,33 +1060,61 @@ export const DailyLessonPlanPage: React.FC<DailyLessonPlanPageProps> = ({ embedd
                 Current Academic Skills
               </h3>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                {Object.entries(currentStudent.academic_skills).map(([subject, skill]) => (
-                  <div key={subject} style={{
-                    padding: '1rem',
-                    backgroundColor: 'var(--color-background)',
-                    borderRadius: '8px',
-                    border: '1px solid var(--color-border)'
-                  }}>
-                    <div style={{
-                      fontWeight: '600',
-                      color: 'var(--color-primary)',
-                      marginBottom: '0.5rem',
-                      fontSize: '0.875rem'
-                    }}>
-                      {subject.charAt(0).toUpperCase() + subject.slice(1).replace('_', ' ')}
+                {Object.entries(currentStudent.academic_skills).map(([subject, skill]) => {
+                  // Map subject names to dashboard subject keys
+                  const subjectMap: Record<string, string> = {
+                    'math': 'math',
+                    'ela': 'ela',
+                    'science': 'science',
+                    'social_studies': 'social'
+                  };
+                  const subjectKey = subjectMap[subject] || 'math';
+
+                  return (
+                    <div key={subject} style={{
+                      padding: 'var(--space-4)',
+                      backgroundColor: `var(--dashboard-subject-${subjectKey})`,
+                      borderRadius: 'var(--radius-lg)',
+                      border: `2px solid var(--dashboard-subject-${subjectKey}-border)`,
+                      boxShadow: 'var(--dashboard-shadow-sm)',
+                      transition: 'all 0.3s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.boxShadow = 'var(--dashboard-shadow-card)';
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.boxShadow = 'var(--dashboard-shadow-sm)';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                    }}
+                    >
+                      <div style={{
+                        fontWeight: 'var(--font-bold)',
+                        color: `var(--dashboard-subject-${subjectKey}-accent)`,
+                        marginBottom: 'var(--space-2)',
+                        fontSize: 'var(--text-sm)',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em'
+                      }}>
+                        {subject.charAt(0).toUpperCase() + subject.slice(1).replace('_', ' ')}
+                      </div>
+                      <div style={{
+                        fontSize: 'var(--text-sm)',
+                        color: `var(--dashboard-subject-${subjectKey}-text)`,
+                        lineHeight: '1.5'
+                      }}>
+                        {skill}
+                      </div>
                     </div>
-                    <div style={{ fontSize: '0.875rem', color: 'var(--color-text)' }}>
-                      {skill}
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>
         </ThemeAwareCard>
 
         {/* Subscription Tier Selector */}
-        <ThemeAwareCard className="mb-8">
+        <ThemeAwareCard style={{ marginBottom: 'var(--space-8)' }}>
           <div className="p-6">
             <h3 style={{ fontSize: '1.5rem', fontWeight: '600', marginBottom: '0.5rem' }}>
               Choose Your Learning Experience
@@ -1184,8 +1245,8 @@ export const DailyLessonPlanPage: React.FC<DailyLessonPlanPageProps> = ({ embedd
 
         {/* Generated Lesson Display */}
         {generatedLesson && (
-          <ThemeAwareCard className="bg-gray-800 dark:bg-gray-900">
-            <div className="p-6">
+          <ThemeAwareCard style={{ backgroundColor: 'var(--color-bg-secondary)' }}>
+            <div style={{ padding: 'var(--space-6)' }}>
               <div className="flex items-center justify-between mb-6">
                 <h3 style={{ fontSize: '1.5rem', fontWeight: '600' }}>
                   📚 Your {SUBSCRIPTION_TIERS[selectedTier as keyof typeof SUBSCRIPTION_TIERS].name} Daily Lesson Plan
@@ -1194,7 +1255,12 @@ export const DailyLessonPlanPage: React.FC<DailyLessonPlanPageProps> = ({ embedd
               </div>
 
               {/* Lesson Overview */}
-              <div className="p-6 bg-gray-700 dark:bg-gray-800 rounded-lg mb-8">
+              <div style={{
+                padding: 'var(--space-6)',
+                backgroundColor: 'var(--color-bg-tertiary)',
+                borderRadius: 'var(--radius-lg)',
+                marginBottom: 'var(--space-8)'
+              }}>
                 <div className="flex items-center gap-4 mb-4">
                   <span style={{ fontSize: '3rem' }}>{generatedLesson.career.icon}</span>
                   <div>
@@ -1258,8 +1324,11 @@ export const DailyLessonPlanPage: React.FC<DailyLessonPlanPageProps> = ({ embedd
                     return (
                       <div
                         key={index}
-                        className="p-6 bg-gray-800 dark:bg-gray-700 rounded-lg border border-gray-600 dark:border-gray-500"
                         style={{
+                          padding: 'var(--space-6)',
+                          backgroundColor: 'var(--color-bg-elevated)',
+                          borderRadius: 'var(--radius-lg)',
+                          border: '1px solid var(--color-border)',
                           borderLeft: `4px solid ${borderColor}`
                         }}
                       >
@@ -1274,7 +1343,13 @@ export const DailyLessonPlanPage: React.FC<DailyLessonPlanPageProps> = ({ embedd
                             {subjectData.subject}
                           </h6>
 
-                          <div className="flex gap-4 text-sm text-gray-400 dark:text-gray-300 flex-wrap">
+                          <div style={{
+                            display: 'flex',
+                            gap: 'var(--space-4)',
+                            fontSize: 'var(--text-sm)',
+                            color: 'var(--color-text-secondary)',
+                            flexWrap: 'wrap'
+                          }}>
                             <span><strong>Assessment:</strong> {subjectData.assessmentLevel}</span>
                             <span><strong>Interactivity:</strong> {subjectData.interactivity}</span>
                           </div>
@@ -1285,19 +1360,37 @@ export const DailyLessonPlanPage: React.FC<DailyLessonPlanPageProps> = ({ embedd
                           {/* Left Column - Skills & Connection */}
                           <div>
                             <div className="mb-4">
-                              <strong className="text-gray-800 dark:text-gray-200 text-sm block mb-1">
+                              <strong style={{
+                                color: 'var(--color-text-primary)',
+                                fontSize: 'var(--text-sm)',
+                                display: 'block',
+                                marginBottom: 'var(--space-1)'
+                              }}>
                                 Academic Skill:
                               </strong>
-                              <span className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+                              <span style={{
+                                color: 'var(--color-text-secondary)',
+                                fontSize: 'var(--text-sm)',
+                                lineHeight: 'var(--leading-relaxed)'
+                              }}>
                                 {subjectData.skill.objective}
                               </span>
                             </div>
 
                             <div>
-                              <strong className="text-purple-600 dark:text-purple-400 text-sm block mb-1">
+                              <strong style={{
+                                color: 'var(--purple-600)',
+                                fontSize: 'var(--text-sm)',
+                                display: 'block',
+                                marginBottom: 'var(--space-1)'
+                              }}>
                                 Career Connection:
                               </strong>
-                              <span className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+                              <span style={{
+                                color: 'var(--color-text-secondary)',
+                                fontSize: 'var(--text-sm)',
+                                lineHeight: 'var(--leading-relaxed)'
+                              }}>
                                 {subjectData.skill.careerConnection}
                               </span>
                             </div>
@@ -1305,19 +1398,39 @@ export const DailyLessonPlanPage: React.FC<DailyLessonPlanPageProps> = ({ embedd
 
                           {/* Right Column - Role Progression Activities */}
                           <div>
-                            <strong className="text-blue-600 dark:text-blue-400 text-sm block mb-2">
+                            <strong style={{
+                              color: 'var(--blue-600)',
+                              fontSize: 'var(--text-sm)',
+                              display: 'block',
+                              marginBottom: 'var(--space-2)'
+                            }}>
                               Learning Activities:
                             </strong>
                             {subjectData.roles && subjectData.roles.length > 0 ? (
                               // Display role progression content
                               subjectData.roles.map((role: any, roleIdx: number) => (
                                 <div key={roleIdx} className="mb-4">
-                                  <div className="text-purple-600 dark:text-purple-400 text-xs font-bold mb-1">
+                                  <div style={{
+                                    color: 'var(--purple-600)',
+                                    fontSize: 'var(--text-xs)',
+                                    fontWeight: 'var(--font-bold)',
+                                    marginBottom: 'var(--space-1)'
+                                  }}>
                                     {role.roleName}
                                   </div>
-                                  <ul className="m-0 pl-4 list-disc mb-2">
+                                  <ul style={{
+                                    margin: 0,
+                                    paddingLeft: 'var(--space-4)',
+                                    listStyleType: 'disc',
+                                    marginBottom: 'var(--space-2)'
+                                  }}>
                                     {role.activities && role.activities.map((activity: string, idx: number) => (
-                                      <li key={idx} className="text-gray-600 dark:text-gray-300 mb-1.5 text-sm leading-relaxed">
+                                      <li key={idx} style={{
+                                        color: 'var(--color-text-secondary)',
+                                        marginBottom: 'var(--space-1-5)',
+                                        fontSize: 'var(--text-sm)',
+                                        lineHeight: 'var(--leading-relaxed)'
+                                      }}>
                                         {activity}
                                       </li>
                                     ))}
@@ -1326,9 +1439,18 @@ export const DailyLessonPlanPage: React.FC<DailyLessonPlanPageProps> = ({ embedd
                               ))
                             ) : (
                               // Fallback to simple activities list
-                              <ul className="m-0 pl-4 list-disc">
+                              <ul style={{
+                                margin: 0,
+                                paddingLeft: 'var(--space-4)',
+                                listStyleType: 'disc'
+                              }}>
                                 {subjectData.activities.map((activity: string, idx: number) => (
-                                  <li key={idx} className="text-gray-600 dark:text-gray-300 mb-1.5 text-sm leading-relaxed">
+                                  <li key={idx} style={{
+                                    color: 'var(--color-text-secondary)',
+                                    marginBottom: 'var(--space-1-5)',
+                                    fontSize: 'var(--text-sm)',
+                                    lineHeight: 'var(--leading-relaxed)'
+                                  }}>
                                     {activity}
                                   </li>
                                 ))}

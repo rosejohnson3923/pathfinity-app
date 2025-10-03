@@ -27,6 +27,15 @@ import {
   Sparkles
 } from 'lucide-react';
 
+// Design System Imports
+import '../../design-system/tokens/colors.css';
+import '../../design-system/tokens/spacing.css';
+import '../../design-system/tokens/borders.css';
+import '../../design-system/tokens/effects.css';
+import '../../design-system/tokens/typography.css';
+import '../../design-system/tokens/shadows.css';
+import '../../design-system/tokens/dashboard.css';
+
 // Unified educator data - works for both teachers and parents
 const createEducatorData = (user: any): EducatorData => {
   const isParent = user?.role === 'parent';
@@ -168,59 +177,49 @@ interface SubjectPortletProps {
   careerFocus: string;
 }
 
-const SubjectPortlet: React.FC<SubjectPortletProps> = ({ 
-  subject, 
-  icon, 
-  color, 
-  students, 
-  learnXP, 
-  experienceXP, 
-  discoverXP, 
-  topics, 
-  careerFocus 
+const SubjectPortlet: React.FC<SubjectPortletProps> = ({
+  subject,
+  icon,
+  color,
+  students,
+  learnXP,
+  experienceXP,
+  discoverXP,
+  topics,
+  careerFocus
 }) => {
   const [activeView, setActiveView] = useState('overview');
-  
-  const colorClasses = {
-    blue: {
-      bg: 'bg-blue-50 dark:bg-blue-900/20',
-      border: 'border-blue-200 dark:border-blue-700',
-      text: 'text-blue-900 dark:text-blue-200',
-      accent: 'text-blue-600 dark:text-blue-400',
-      button: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'
-    },
-    emerald: {
-      bg: 'bg-emerald-50 dark:bg-emerald-900/20',
-      border: 'border-emerald-200 dark:border-emerald-700',
-      text: 'text-emerald-900 dark:text-emerald-200',
-      accent: 'text-emerald-600 dark:text-emerald-400',
-      button: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300'
-    },
-    purple: {
-      bg: 'bg-purple-50 dark:bg-purple-900/20',
-      border: 'border-purple-200 dark:border-purple-700',
-      text: 'text-purple-900 dark:text-purple-200',
-      accent: 'text-purple-600 dark:text-purple-400',
-      button: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300'
-    },
-    amber: {
-      bg: 'bg-amber-50 dark:bg-amber-900/20',
-      border: 'border-amber-200 dark:border-amber-700',
-      text: 'text-amber-900 dark:text-amber-200',
-      accent: 'text-amber-600 dark:text-amber-400',
-      button: 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300'
-    }
+
+  // Map subject to design system tokens
+  const getSubjectClass = (subject: string) => {
+    const subjectMap = {
+      'Math': 'math',
+      'ELA': 'ela',
+      'Science': 'science',
+      'Social Studies': 'social'
+    };
+    return subjectMap[subject as keyof typeof subjectMap] || 'math';
   };
-  
-  const colors = colorClasses[color as keyof typeof colorClasses] || colorClasses.blue;
+
+  const subjectKey = getSubjectClass(subject);
   
   return (
-    <div className={`${colors.bg} rounded-xl border-2 ${colors.border} overflow-hidden`}>
+    <div
+      style={{
+        backgroundColor: `var(--dashboard-subject-${subjectKey})`,
+        borderColor: `var(--dashboard-subject-${subjectKey}-border)`,
+        borderRadius: 'var(--radius-xl)',
+        border: '2px solid',
+        overflow: 'hidden',
+        boxShadow: 'var(--dashboard-shadow-portlet)',
+        transition: 'box-shadow 300ms ease, transform 300ms ease'
+      }}
+    >
       {/* Portlet Header */}
       <div style={{
         padding: 'var(--space-4)',
-        backgroundColor: 'var(--color-bg-elevated)',
-        borderBottom: '1px solid var(--color-border)'
+        backgroundColor: 'var(--dashboard-bg-elevated)',
+        borderBottom: '2px solid var(--dashboard-border)'
       }}>
         {/* Subject Title - Line 1 */}
         <div style={{
@@ -235,7 +234,7 @@ const SubjectPortlet: React.FC<SubjectPortletProps> = ({
           <h3 style={{
             fontSize: 'var(--text-lg)',
             fontWeight: 'var(--font-bold)',
-            color: 'var(--color-text-primary)',
+            color: 'var(--dashboard-text-primary)',
             margin: 0
           }}>
             {subject}
@@ -254,8 +253,8 @@ const SubjectPortlet: React.FC<SubjectPortletProps> = ({
               fontSize: 'var(--text-xs)',
               borderRadius: 'var(--space-1)',
               border: 'none',
-              backgroundColor: activeView === 'overview' ? 'var(--blue-100)' : 'transparent',
-              color: activeView === 'overview' ? 'var(--blue-800)' : 'var(--color-text-secondary)',
+              backgroundColor: activeView === 'overview' ? `var(--dashboard-subject-${subjectKey}-accent)` : 'transparent',
+              color: activeView === 'overview' ? '#ffffff' : 'var(--dashboard-text-secondary)',
               cursor: 'pointer',
               fontWeight: 'var(--font-medium)'
             }}
@@ -269,8 +268,8 @@ const SubjectPortlet: React.FC<SubjectPortletProps> = ({
               fontSize: 'var(--text-xs)',
               borderRadius: 'var(--space-1)',
               border: 'none',
-              backgroundColor: activeView === 'assignments' ? 'var(--blue-100)' : 'transparent',
-              color: activeView === 'assignments' ? 'var(--blue-800)' : 'var(--color-text-secondary)',
+              backgroundColor: activeView === 'assignments' ? `var(--dashboard-subject-${subjectKey}-accent)` : 'transparent',
+              color: activeView === 'assignments' ? '#ffffff' : 'var(--dashboard-text-secondary)',
               cursor: 'pointer',
               fontWeight: 'var(--font-medium)'
             }}
@@ -284,8 +283,8 @@ const SubjectPortlet: React.FC<SubjectPortletProps> = ({
               fontSize: 'var(--text-xs)',
               borderRadius: 'var(--space-1)',
               border: 'none',
-              backgroundColor: activeView === 'students' ? 'var(--blue-100)' : 'transparent',
-              color: activeView === 'students' ? 'var(--blue-800)' : 'var(--color-text-secondary)',
+              backgroundColor: activeView === 'students' ? `var(--dashboard-subject-${subjectKey}-accent)` : 'transparent',
+              color: activeView === 'students' ? '#ffffff' : 'var(--dashboard-text-secondary)',
               cursor: 'pointer',
               fontWeight: 'var(--font-medium)'
             }}
@@ -296,48 +295,53 @@ const SubjectPortlet: React.FC<SubjectPortletProps> = ({
       </div>
       
       {/* Portlet Content */}
-      <div className="p-4">
+      <div style={{ padding: 'var(--space-4)' }}>
         {activeView === 'overview' && (
-          <div className="space-y-3">
-            <div className="grid grid-cols-3 gap-2 text-center">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-2)', textAlign: 'center' }}>
               <div>
-                <p className={`text-xs ${colors.accent}`}>Learn</p>
-                <p className={`font-bold ${colors.text}`}>{Math.round((learnXP[0] + learnXP[1]) / 2)} XP</p>
+                <p style={{ fontSize: 'var(--text-xs)', color: `var(--dashboard-subject-${subjectKey}-accent)` }}>Learn</p>
+                <p style={{ fontWeight: 'var(--font-bold)', color: `var(--dashboard-subject-${subjectKey}-text)` }}>{Math.round((learnXP[0] + learnXP[1]) / 2)} XP</p>
               </div>
               <div>
-                <p className={`text-xs ${colors.accent}`}>Experience</p>
-                <p className={`font-bold ${colors.text}`}>{Math.round((experienceXP[0] + experienceXP[1]) / 2)} XP</p>
+                <p style={{ fontSize: 'var(--text-xs)', color: `var(--dashboard-subject-${subjectKey}-accent)` }}>Experience</p>
+                <p style={{ fontWeight: 'var(--font-bold)', color: `var(--dashboard-subject-${subjectKey}-text)` }}>{Math.round((experienceXP[0] + experienceXP[1]) / 2)} XP</p>
               </div>
               <div>
-                <p className={`text-xs ${colors.accent}`}>Discover</p>
-                <p className={`font-bold ${colors.text}`}>{Math.round((discoverXP[0] + discoverXP[1]) / 2)} XP</p>
+                <p style={{ fontSize: 'var(--text-xs)', color: `var(--dashboard-subject-${subjectKey}-accent)` }}>Discover</p>
+                <p style={{ fontWeight: 'var(--font-bold)', color: `var(--dashboard-subject-${subjectKey}-text)` }}>{Math.round((discoverXP[0] + discoverXP[1]) / 2)} XP</p>
               </div>
             </div>
-            <div className={`text-xs ${colors.accent}`}>
+            <div style={{ fontSize: 'var(--text-xs)', color: `var(--dashboard-subject-${subjectKey}-accent)` }}>
               <p><strong>Focus:</strong> {careerFocus}</p>
             </div>
           </div>
         )}
         
         {activeView === 'assignments' && (
-          <div className="space-y-2">
-            <div className="text-xs space-y-1">
-              <div className="flex justify-between">
-                <span className={colors.accent}>📘 Learn Phase:</span>
-                <span className={`font-semibold ${colors.text}`}>100% Complete</span>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
+            <div style={{ fontSize: 'var(--text-xs)', display: 'flex', flexDirection: 'column', gap: 'var(--space-1)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: `var(--dashboard-subject-${subjectKey}-accent)` }}>📘 Learn Phase:</span>
+                <span style={{ fontWeight: 'var(--font-semibold)', color: `var(--dashboard-subject-${subjectKey}-text)` }}>100% Complete</span>
               </div>
-              <div className="flex justify-between">
-                <span className={colors.accent}>🎯 Experience Phase:</span>
-                <span className={`font-semibold ${colors.text}`}>100% Complete</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: `var(--dashboard-subject-${subjectKey}-accent)` }}>🎯 Experience Phase:</span>
+                <span style={{ fontWeight: 'var(--font-semibold)', color: `var(--dashboard-subject-${subjectKey}-text)` }}>100% Complete</span>
               </div>
-              <div className="flex justify-between">
-                <span className={colors.accent}>⚡ Discover Phase:</span>
-                <span className={`font-semibold ${colors.text}`}>100% Complete</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: `var(--dashboard-subject-${subjectKey}-accent)` }}>⚡ Discover Phase:</span>
+                <span style={{ fontWeight: 'var(--font-semibold)', color: `var(--dashboard-subject-${subjectKey}-text)` }}>100% Complete</span>
               </div>
             </div>
-            <div className={`text-xs ${colors.accent} pt-2 border-t ${colors.border}`}>
+            <div style={{
+              fontSize: 'var(--text-xs)',
+              color: `var(--dashboard-subject-${subjectKey}-accent)`,
+              paddingTop: 'var(--space-2)',
+              borderTop: `1px solid var(--dashboard-subject-${subjectKey}-border)`
+            }}>
               <p><strong>Current Topics:</strong></p>
-              <ul className="ml-2">
+              <ul style={{ marginLeft: 'var(--space-2)' }}>
                 {topics.map((topic, idx) => (
                   <li key={idx}>• {topic}</li>
                 ))}
@@ -347,20 +351,25 @@ const SubjectPortlet: React.FC<SubjectPortletProps> = ({
         )}
         
         {activeView === 'students' && (
-          <div className="space-y-2">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
             {students.map((student, idx) => (
-              <div key={student.id} className="flex justify-between items-center text-xs">
-                <span className={`font-medium ${colors.text}`}>{student.name}</span>
-                <div className="text-right">
-                  <div className={`font-bold ${colors.text}`}>
+              <div key={student.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 'var(--text-xs)' }}>
+                <span style={{ fontWeight: 'var(--font-medium)', color: `var(--dashboard-subject-${subjectKey}-text)` }}>{student.name}</span>
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ fontWeight: 'var(--font-bold)', color: `var(--dashboard-subject-${subjectKey}-text)` }}>
                     {(learnXP[idx] + experienceXP[idx] + discoverXP[idx])} XP
                   </div>
-                  <div className={colors.accent}>{student.avg_accuracy}% avg</div>
+                  <div style={{ color: `var(--dashboard-subject-${subjectKey}-accent)` }}>{student.avg_accuracy}% avg</div>
                 </div>
               </div>
             ))}
-            <div className={`text-xs ${colors.accent} pt-2 border-t ${colors.border}`}>
-              Total Subject XP: {students.reduce((sum, _, idx) => 
+            <div style={{
+              fontSize: 'var(--text-xs)',
+              color: `var(--dashboard-subject-${subjectKey}-accent)`,
+              paddingTop: 'var(--space-2)',
+              borderTop: `1px solid var(--dashboard-subject-${subjectKey}-border)`
+            }}>
+              Total Subject XP: {students.reduce((sum, _, idx) =>
                 sum + learnXP[idx] + experienceXP[idx] + discoverXP[idx], 0
               ).toLocaleString()}
             </div>
@@ -386,67 +395,127 @@ export function TeacherDashboard() {
   const possessiveTerm = dashboard_preferences.possessive_term;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+    <div style={{
+      minHeight: '100vh',
+      backgroundColor: 'var(--dashboard-bg-primary)',
+      transition: 'background-color 200ms'
+    }}>
       <Header showBackButton={false} />
       
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex items-center justify-between mb-8">
+      <main style={{
+        maxWidth: '80rem',
+        margin: '0 auto',
+        padding: 'var(--space-8) var(--space-4)'
+      }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: 'var(--space-8)'
+        }}>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <h1 style={{
+              fontSize: 'var(--text-2xl)',
+              fontWeight: 'var(--font-bold)',
+              color: 'var(--dashboard-text-primary)',
+              margin: 0,
+              marginBottom: 'var(--space-2)'
+            }}>
               {user?.full_name || 'User'}'s Dashboard
             </h1>
-            <p className="text-gray-600 dark:text-gray-400">
+            <p style={{
+              color: 'var(--dashboard-text-secondary)',
+              margin: 0
+            }}>
               {educatorData.role === 'parent'
-                ? `Monitor ${possessiveTerm} AI-guided learning progress and achievements` 
+                ? `Monitor ${possessiveTerm} AI-guided learning progress and achievements`
                 : `Monitor AI-guided learning, track ${relationshipTerm} progress, and set learning objectives`
               }
             </p>
           </div>
-          <div className="flex space-x-3">
-            <button 
+          <div style={{ display: 'flex', gap: 'var(--space-3)' }}>
+            <button
               onClick={() => navigate('/app/custom-paths')}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+              style={{
+                padding: 'var(--space-2) var(--space-4)',
+                backgroundColor: 'var(--blue-600)',
+                color: '#ffffff',
+                borderRadius: 'var(--radius-lg)',
+                border: 'none',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 'var(--space-2)',
+                transition: 'background-color 200ms'
+              }}
             >
-              <Sparkles className="w-4 h-4" />
+              <Sparkles style={{ width: '1rem', height: '1rem' }} />
               <span>Create Custom Path</span>
             </button>
-            <button className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+            <button style={{
+              padding: 'var(--space-2) var(--space-4)',
+              backgroundColor: 'var(--dashboard-bg-elevated)',
+              color: 'var(--dashboard-text-primary)',
+              border: '1px solid var(--dashboard-border)',
+              borderRadius: 'var(--radius-lg)',
+              cursor: 'pointer',
+              transition: 'background-color 200ms',
+              boxShadow: 'var(--dashboard-shadow-sm)'
+            }}>
               Generate Reports
             </button>
           </div>
         </div>
 
         {/* Tab Navigation */}
-        <div className="mb-6">
-          <div className="border-b border-gray-200 dark:border-gray-700">
-            <nav className="-mb-px flex space-x-8">
+        <div style={{ marginBottom: 'var(--space-6)' }}>
+          <div style={{ borderBottom: '2px solid var(--dashboard-border)' }}>
+            <nav style={{ marginBottom: '-1px', display: 'flex', gap: 'var(--space-8)' }}>
               <button
                 onClick={() => setActiveTab('lesson-plans')}
-                className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
-                  activeTab === 'lesson-plans'
-                    ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
-                }`}
+                style={{
+                  padding: 'var(--space-2) var(--space-1)',
+                  fontWeight: 'var(--font-medium)',
+                  fontSize: 'var(--text-sm)',
+                  color: activeTab === 'lesson-plans' ? 'var(--dashboard-nav-tab-active)' : 'var(--dashboard-nav-tab-inactive)',
+                  background: 'none',
+                  border: 'none',
+                  borderBottom: activeTab === 'lesson-plans' ? '3px solid var(--dashboard-nav-tab-active)' : '3px solid transparent',
+                  cursor: 'pointer',
+                  transition: 'color 200ms'
+                }}
               >
                 📚 Lesson Plans
               </button>
               <button
                 onClick={() => setActiveTab('overview')}
-                className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
-                  activeTab === 'overview'
-                    ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
-                }`}
+                style={{
+                  padding: 'var(--space-2) var(--space-1)',
+                  fontWeight: 'var(--font-medium)',
+                  fontSize: 'var(--text-sm)',
+                  color: activeTab === 'overview' ? 'var(--dashboard-nav-tab-active)' : 'var(--dashboard-nav-tab-inactive)',
+                  background: 'none',
+                  border: 'none',
+                  borderBottom: activeTab === 'overview' ? '3px solid var(--dashboard-nav-tab-active)' : '3px solid transparent',
+                  cursor: 'pointer',
+                  transition: 'color 200ms'
+                }}
               >
                 {dashboardLabel}
               </button>
               <button
                 onClick={() => setActiveTab('students')}
-                className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
-                  activeTab === 'students'
-                    ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
-                }`}
+                style={{
+                  padding: 'var(--space-2) var(--space-1)',
+                  fontWeight: 'var(--font-medium)',
+                  fontSize: 'var(--text-sm)',
+                  color: activeTab === 'students' ? 'var(--dashboard-nav-tab-active)' : 'var(--dashboard-nav-tab-inactive)',
+                  background: 'none',
+                  border: 'none',
+                  borderBottom: activeTab === 'students' ? '3px solid var(--dashboard-nav-tab-active)' : '3px solid transparent',
+                  cursor: 'pointer',
+                  transition: 'color 200ms'
+                }}
               >
                 {studentLabel} ({educatorData.students_children.length})
               </button>
@@ -457,41 +526,82 @@ export function TeacherDashboard() {
         {/* Dashboard Content */}
         {/* Lesson Plans Tab */}
         {activeTab === 'lesson-plans' && (
-          <div className="space-y-6">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
             {/* Embedded Daily Lesson Plan Page */}
             <DailyLessonPlanPage embedded={true} />
           </div>
         )}
 
         {activeTab === 'overview' && (
-          <div className="space-y-6">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
             {/* Subject Navigation */}
-            <div className="mb-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Subject Areas</h2>
-                <div className="text-sm text-gray-500 dark:text-gray-400">
+            <div style={{ marginBottom: 'var(--space-6)' }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: 'var(--space-4)'
+              }}>
+                <h2 style={{
+                  fontSize: 'var(--text-lg)',
+                  fontWeight: 'var(--font-semibold)',
+                  color: 'var(--dashboard-text-primary)',
+                  margin: 0
+                }}>Subject Areas</h2>
+                <div style={{
+                  fontSize: 'var(--text-sm)',
+                  color: 'var(--dashboard-text-secondary)'
+                }}>
                   Click any portlet to explore detailed analytics
                 </div>
               </div>
             </div>
           {/* Welcome Section */}
-          <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl shadow-lg p-6 text-white mb-6">
-            <div className="flex items-center justify-between">
+          <div style={{
+            background: 'var(--dashboard-welcome-gradient)',
+            borderRadius: 'var(--radius-xl)',
+            boxShadow: 'var(--dashboard-shadow-lg)',
+            padding: 'var(--space-6)',
+            color: '#ffffff',
+            marginBottom: 'var(--space-6)'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div>
-                <h2 className="text-2xl font-bold mb-1">Welcome back, {educatorData.name}!</h2>
-                <p className="text-blue-100">
+                <h2 style={{
+                  fontSize: 'var(--text-2xl)',
+                  fontWeight: 'var(--font-bold)',
+                  marginBottom: 'var(--space-1)',
+                  margin: 0
+                }}>Welcome back, {educatorData.name}!</h2>
+                <p style={{
+                  color: 'rgba(255, 255, 255, 0.8)',
+                  margin: 0
+                }}>
                   {educatorData.school}{educatorData.district && ` • ${educatorData.district}`}
                 </p>
-                <p className="text-blue-200 text-sm mt-1">
-                  {educatorData.role === 'parent' 
+                <p style={{
+                  color: 'rgba(255, 255, 255, 0.7)',
+                  fontSize: 'var(--text-sm)',
+                  marginTop: 'var(--space-1)',
+                  margin: 0
+                }}>
+                  {educatorData.role === 'parent'
                     ? `Managing ${possessiveTerm} learning journey`
                     : `Teaching ${educatorData.students_children.length} ${relationshipTerm}`
                   }
                 </p>
               </div>
-              <div className="text-right">
-                <p className="text-sm text-blue-100">Today's Date</p>
-                <p className="text-lg font-semibold">{new Date().toLocaleDateString()}</p>
+              <div style={{ textAlign: 'right' }}>
+                <p style={{
+                  fontSize: 'var(--text-sm)',
+                  color: 'rgba(255, 255, 255, 0.8)',
+                  margin: 0
+                }}>Today's Date</p>
+                <p style={{
+                  fontSize: 'var(--text-lg)',
+                  fontWeight: 'var(--font-semibold)',
+                  margin: 0
+                }}>{new Date().toLocaleDateString()}</p>
               </div>
             </div>
           </div>
@@ -505,7 +615,12 @@ export function TeacherDashboard() {
           )}
 
           {/* Subject Portlets Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+            gap: 'var(--space-6)',
+            marginBottom: 'var(--space-6)'
+          }}>
             {/* Math Portlet */}
             <SubjectPortlet 
               subject="Math"
@@ -560,35 +675,128 @@ export function TeacherDashboard() {
           </div>
 
           {/* Three-Phase Learning Summary */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg">
-            <div className="px-6 py-5 border-b border-gray-200 dark:border-gray-700">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Three-Phase Learning Journey Summary</h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Progressive mastery through Learn → Experience → Discover</p>
+          <div style={{
+            backgroundColor: 'var(--dashboard-bg-elevated)',
+            borderRadius: 'var(--radius-xl)',
+            boxShadow: 'var(--dashboard-shadow-card)'
+          }}>
+            <div style={{
+              padding: 'var(--space-6) var(--space-6) var(--space-5)',
+              borderBottom: '1px solid var(--dashboard-border)'
+            }}>
+              <h3 style={{
+                fontSize: 'var(--text-lg)',
+                fontWeight: 'var(--font-semibold)',
+                color: 'var(--dashboard-text-primary)',
+                margin: 0
+              }}>Three-Phase Learning Journey Summary</h3>
+              <p style={{
+                fontSize: 'var(--text-sm)',
+                color: 'var(--dashboard-text-secondary)',
+                marginTop: 'var(--space-1)',
+                margin: 0
+              }}>Progressive mastery through Learn → Experience → Discover</p>
             </div>
-            <div className="p-6">
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="text-center">
-                  <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg mb-3">
-                    <BookOpen className="h-8 w-8 text-blue-600 dark:text-blue-400 mx-auto mb-2" />
-                    <h4 className="font-bold text-blue-900 dark:text-blue-200">Learn Phase</h4>
-                    <p className="text-sm text-blue-700 dark:text-blue-300">Foundation Building</p>
-                    <p className="text-2xl font-bold text-blue-900 dark:text-blue-200 mt-2">65 XP avg</p>
+            <div style={{ padding: 'var(--space-6)' }}>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                gap: 'var(--space-6)'
+              }}>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{
+                    padding: 'var(--space-4)',
+                    backgroundColor: 'var(--dashboard-subject-math)',
+                    borderRadius: 'var(--radius-lg)',
+                    marginBottom: 'var(--space-3)'
+                  }}>
+                    <BookOpen style={{
+                      height: '2rem',
+                      width: '2rem',
+                      color: 'var(--dashboard-subject-math-accent)',
+                      margin: '0 auto var(--space-2)'
+                    }} />
+                    <h4 style={{
+                      fontWeight: 'var(--font-bold)',
+                      color: 'var(--dashboard-subject-math-text)',
+                      margin: 0
+                    }}>Learn Phase</h4>
+                    <p style={{
+                      fontSize: 'var(--text-sm)',
+                      color: 'var(--dashboard-subject-math-accent)',
+                      margin: 0
+                    }}>Foundation Building</p>
+                    <p style={{
+                      fontSize: 'var(--text-2xl)',
+                      fontWeight: 'var(--font-bold)',
+                      color: 'var(--dashboard-subject-math-text)',
+                      marginTop: 'var(--space-2)',
+                      margin: 0
+                    }}>65 XP avg</p>
                   </div>
                 </div>
-                <div className="text-center">
-                  <div className="p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg mb-3">
-                    <Target className="h-8 w-8 text-emerald-600 dark:text-emerald-400 mx-auto mb-2" />
-                    <h4 className="font-bold text-emerald-900 dark:text-emerald-200">Experience Phase</h4>
-                    <p className="text-sm text-emerald-700 dark:text-emerald-300">Career Application</p>
-                    <p className="text-2xl font-bold text-emerald-900 dark:text-emerald-200 mt-2">85 XP avg</p>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{
+                    padding: 'var(--space-4)',
+                    backgroundColor: 'var(--dashboard-subject-ela)',
+                    borderRadius: 'var(--radius-lg)',
+                    marginBottom: 'var(--space-3)'
+                  }}>
+                    <Target style={{
+                      height: '2rem',
+                      width: '2rem',
+                      color: 'var(--dashboard-subject-ela-accent)',
+                      margin: '0 auto var(--space-2)'
+                    }} />
+                    <h4 style={{
+                      fontWeight: 'var(--font-bold)',
+                      color: 'var(--dashboard-subject-ela-text)',
+                      margin: 0
+                    }}>Experience Phase</h4>
+                    <p style={{
+                      fontSize: 'var(--text-sm)',
+                      color: 'var(--dashboard-subject-ela-accent)',
+                      margin: 0
+                    }}>Career Application</p>
+                    <p style={{
+                      fontSize: 'var(--text-2xl)',
+                      fontWeight: 'var(--font-bold)',
+                      color: 'var(--dashboard-subject-ela-text)',
+                      marginTop: 'var(--space-2)',
+                      margin: 0
+                    }}>85 XP avg</p>
                   </div>
                 </div>
-                <div className="text-center">
-                  <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg mb-3">
-                    <Activity className="h-8 w-8 text-purple-600 dark:text-purple-400 mx-auto mb-2" />
-                    <h4 className="font-bold text-purple-900 dark:text-purple-200">Discover Phase</h4>
-                    <p className="text-sm text-purple-700 dark:text-purple-300">Creative Mastery</p>
-                    <p className="text-2xl font-bold text-purple-900 dark:text-purple-200 mt-2">140 XP avg</p>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{
+                    padding: 'var(--space-4)',
+                    backgroundColor: 'var(--dashboard-subject-science)',
+                    borderRadius: 'var(--radius-lg)',
+                    marginBottom: 'var(--space-3)'
+                  }}>
+                    <Activity style={{
+                      height: '2rem',
+                      width: '2rem',
+                      color: 'var(--dashboard-subject-science-accent)',
+                      margin: '0 auto var(--space-2)'
+                    }} />
+                    <h4 style={{
+                      fontWeight: 'var(--font-bold)',
+                      color: 'var(--dashboard-subject-science-text)',
+                      margin: 0
+                    }}>Discover Phase</h4>
+                    <p style={{
+                      fontSize: 'var(--text-sm)',
+                      color: 'var(--dashboard-subject-science-accent)',
+                      margin: 0
+                    }}>Creative Mastery</p>
+                    <p style={{
+                      fontSize: 'var(--text-2xl)',
+                      fontWeight: 'var(--font-bold)',
+                      color: 'var(--dashboard-subject-science-text)',
+                      marginTop: 'var(--space-2)',
+                      margin: 0
+                    }}>140 XP avg</p>
                   </div>
                 </div>
               </div>
@@ -596,45 +804,149 @@ export function TeacherDashboard() {
           </div>
 
           {/* Quick Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6 flex items-center space-x-4">
-              <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-                <Users className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+            gap: 'var(--space-6)'
+          }}>
+            <div style={{
+              backgroundColor: 'var(--dashboard-bg-elevated)',
+              borderRadius: 'var(--radius-xl)',
+              boxShadow: 'var(--shadow-card)',
+              padding: 'var(--space-6)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--space-4)'
+            }}>
+              <div style={{
+                padding: 'var(--space-3)',
+                backgroundColor: 'var(--dashboard-subject-math)',
+                borderRadius: 'var(--radius-lg)'
+              }}>
+                <Users style={{
+                  height: '1.5rem',
+                  width: '1.5rem',
+                  color: 'var(--dashboard-subject-math-accent)'
+                }} />
               </div>
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Total {relationshipTerm}</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">{educatorData.students_children.length}</p>
+                <p style={{
+                  fontSize: 'var(--text-sm)',
+                  color: 'var(--dashboard-text-secondary)',
+                  margin: 0
+                }}>Total {relationshipTerm}</p>
+                <p style={{
+                  fontSize: 'var(--text-2xl)',
+                  fontWeight: 'var(--font-bold)',
+                  color: 'var(--dashboard-text-primary)',
+                  margin: 0
+                }}>{educatorData.students_children.length}</p>
               </div>
             </div>
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6 flex items-center space-x-4">
-              <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-lg">
-                <BookOpenCheck className="h-6 w-6 text-green-600 dark:text-green-400" />
+            <div style={{
+              backgroundColor: 'var(--dashboard-bg-elevated)',
+              borderRadius: 'var(--radius-xl)',
+              boxShadow: 'var(--shadow-card)',
+              padding: 'var(--space-6)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--space-4)'
+            }}>
+              <div style={{
+                padding: 'var(--space-3)',
+                backgroundColor: 'var(--dashboard-subject-ela)',
+                borderRadius: 'var(--radius-lg)'
+              }}>
+                <BookOpenCheck style={{
+                  height: '1.5rem',
+                  width: '1.5rem',
+                  color: 'var(--dashboard-subject-ela-accent)'
+                }} />
               </div>
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Complete Journeys</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                <p style={{
+                  fontSize: 'var(--text-sm)',
+                  color: 'var(--dashboard-text-secondary)',
+                  margin: 0
+                }}>Complete Journeys</p>
+                <p style={{
+                  fontSize: 'var(--text-2xl)',
+                  fontWeight: 'var(--font-bold)',
+                  color: 'var(--dashboard-text-primary)',
+                  margin: 0
+                }}>
                   {educatorData.students_children.filter(s => s.containers_completed === 3).length}
                 </p>
               </div>
             </div>
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6 flex items-center space-x-4">
-              <div className="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
-                <Star className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+            <div style={{
+              backgroundColor: 'var(--dashboard-bg-elevated)',
+              borderRadius: 'var(--radius-xl)',
+              boxShadow: 'var(--shadow-card)',
+              padding: 'var(--space-6)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--space-4)'
+            }}>
+              <div style={{
+                padding: 'var(--space-3)',
+                backgroundColor: 'var(--dashboard-subject-science)',
+                borderRadius: 'var(--radius-lg)'
+              }}>
+                <Star style={{
+                  height: '1.5rem',
+                  width: '1.5rem',
+                  color: 'var(--dashboard-subject-science-accent)'
+                }} />
               </div>
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Total XP Earned</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                <p style={{
+                  fontSize: 'var(--text-sm)',
+                  color: 'var(--dashboard-text-secondary)',
+                  margin: 0
+                }}>Total XP Earned</p>
+                <p style={{
+                  fontSize: 'var(--text-2xl)',
+                  fontWeight: 'var(--font-bold)',
+                  color: 'var(--dashboard-text-primary)',
+                  margin: 0
+                }}>
                   {educatorData.students_children.reduce((sum, s) => sum + s.total_xp, 0).toLocaleString()}
                 </p>
               </div>
             </div>
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6 flex items-center space-x-4">
-              <div className="p-3 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg">
-                <Trophy className="h-6 w-6 text-yellow-600 dark:text-yellow-400" />
+            <div style={{
+              backgroundColor: 'var(--dashboard-bg-elevated)',
+              borderRadius: 'var(--radius-xl)',
+              boxShadow: 'var(--shadow-card)',
+              padding: 'var(--space-6)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--space-4)'
+            }}>
+              <div style={{
+                padding: 'var(--space-3)',
+                backgroundColor: 'var(--dashboard-subject-social)',
+                borderRadius: 'var(--radius-lg)'
+              }}>
+                <Trophy style={{
+                  height: '1.5rem',
+                  width: '1.5rem',
+                  color: 'var(--dashboard-subject-social-accent)'
+                }} />
               </div>
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Learning Streaks</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                <p style={{
+                  fontSize: 'var(--text-sm)',
+                  color: 'var(--dashboard-text-secondary)',
+                  margin: 0
+                }}>Learning Streaks</p>
+                <p style={{
+                  fontSize: 'var(--text-2xl)',
+                  fontWeight: 'var(--font-bold)',
+                  color: 'var(--dashboard-text-primary)',
+                  margin: 0
+                }}>
                   {Math.round(educatorData.students_children.reduce((sum, s) => sum + s.learning_streak, 0) / educatorData.students_children.length)} days
                 </p>
               </div>
@@ -643,82 +955,257 @@ export function TeacherDashboard() {
 
 
           {/* Learning Analytics - Side by Side */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+            gap: 'var(--space-6)'
+          }}>
             {/* Learning Time Allocation */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow">
-              <div className="px-6 py-5 border-b border-gray-200 dark:border-gray-700">
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white">Learning Time Allocation</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            <div style={{
+              backgroundColor: 'var(--dashboard-bg-elevated)',
+              borderRadius: 'var(--radius-xl)',
+              boxShadow: 'var(--shadow-card)'
+            }}>
+              <div style={{
+                padding: 'var(--space-6) var(--space-6) var(--space-5)',
+                borderBottom: '1px solid var(--dashboard-border)'
+              }}>
+                <h3 style={{
+                  fontSize: 'var(--text-lg)',
+                  fontWeight: 'var(--font-medium)',
+                  color: 'var(--dashboard-text-primary)',
+                  margin: 0
+                }}>Learning Time Allocation</h3>
+                <p style={{
+                  fontSize: 'var(--text-sm)',
+                  color: 'var(--dashboard-text-secondary)',
+                  marginTop: 'var(--space-1)',
+                  margin: 0
+                }}>
                   AI-guided learning hours across subjects {educatorData.role === 'parent' ? 'for your children' : 'for your students'}
                 </p>
               </div>
-              <div className="p-6 space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-                      <BookOpen className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+              <div style={{
+                padding: 'var(--space-6)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 'var(--space-4)'
+              }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between'
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'var(--space-3)'
+                  }}>
+                    <div style={{
+                      padding: 'var(--space-2)',
+                      backgroundColor: 'var(--dashboard-subject-math)',
+                      borderRadius: 'var(--radius-lg)'
+                    }}>
+                      <BookOpen style={{
+                        height: '1.25rem',
+                        width: '1.25rem',
+                        color: 'var(--dashboard-subject-math-accent)'
+                      }} />
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-white">Math</p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Both {relationshipTerm} active</p>
+                      <p style={{
+                        fontWeight: 'var(--font-medium)',
+                        color: 'var(--dashboard-text-primary)',
+                        margin: 0
+                      }}>Math</p>
+                      <p style={{
+                        fontSize: 'var(--text-sm)',
+                        color: 'var(--dashboard-text-secondary)',
+                        margin: 0
+                      }}>Both {relationshipTerm} active</p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="font-semibold text-gray-900 dark:text-white">95 min</p>
-                    <p className="text-xs text-green-600 dark:text-green-400">This week</p>
+                  <div style={{ textAlign: 'right' }}>
+                    <p style={{
+                      fontWeight: 'var(--font-semibold)',
+                      color: 'var(--dashboard-text-primary)',
+                      margin: 0
+                    }}>95 min</p>
+                    <p style={{
+                      fontSize: 'var(--text-xs)',
+                      color: 'var(--green-600)',
+                      margin: 0
+                    }}>This week</p>
                   </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg">
-                      <FileText className="h-5 w-5 text-green-600 dark:text-green-400" />
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between'
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'var(--space-3)'
+                  }}>
+                    <div style={{
+                      padding: 'var(--space-2)',
+                      backgroundColor: 'var(--dashboard-subject-ela)',
+                      borderRadius: 'var(--radius-lg)'
+                    }}>
+                      <FileText style={{
+                        height: '1.25rem',
+                        width: '1.25rem',
+                        color: 'var(--dashboard-subject-ela-accent)'
+                      }} />
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-white">ELA</p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Reading & writing focus</p>
+                      <p style={{
+                        fontWeight: 'var(--font-medium)',
+                        color: 'var(--dashboard-text-primary)',
+                        margin: 0
+                      }}>ELA</p>
+                      <p style={{
+                        fontSize: 'var(--text-sm)',
+                        color: 'var(--dashboard-text-secondary)',
+                        margin: 0
+                      }}>Reading & writing focus</p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="font-semibold text-gray-900 dark:text-white">78 min</p>
-                    <p className="text-xs text-green-600 dark:text-green-400">This week</p>
+                  <div style={{ textAlign: 'right' }}>
+                    <p style={{
+                      fontWeight: 'var(--font-semibold)',
+                      color: 'var(--dashboard-text-primary)',
+                      margin: 0
+                    }}>78 min</p>
+                    <p style={{
+                      fontSize: 'var(--text-xs)',
+                      color: 'var(--green-600)',
+                      margin: 0
+                    }}>This week</p>
                   </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
-                      <Activity className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between'
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'var(--space-3)'
+                  }}>
+                    <div style={{
+                      padding: 'var(--space-2)',
+                      backgroundColor: 'var(--dashboard-subject-science)',
+                      borderRadius: 'var(--radius-lg)'
+                    }}>
+                      <Activity style={{
+                        height: '1.25rem',
+                        width: '1.25rem',
+                        color: 'var(--dashboard-subject-science-accent)'
+                      }} />
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-white">Science</p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Discovery-based learning</p>
+                      <p style={{
+                        fontWeight: 'var(--font-medium)',
+                        color: 'var(--dashboard-text-primary)',
+                        margin: 0
+                      }}>Science</p>
+                      <p style={{
+                        fontSize: 'var(--text-sm)',
+                        color: 'var(--dashboard-text-secondary)',
+                        margin: 0
+                      }}>Discovery-based learning</p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="font-semibold text-gray-900 dark:text-white">62 min</p>
-                    <p className="text-xs text-blue-600 dark:text-blue-400">This week</p>
+                  <div style={{ textAlign: 'right' }}>
+                    <p style={{
+                      fontWeight: 'var(--font-semibold)',
+                      color: 'var(--dashboard-text-primary)',
+                      margin: 0
+                    }}>62 min</p>
+                    <p style={{
+                      fontSize: 'var(--text-xs)',
+                      color: 'var(--blue-600)',
+                      margin: 0
+                    }}>This week</p>
                   </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className="p-2 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg">
-                      <Users className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between'
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'var(--space-3)'
+                  }}>
+                    <div style={{
+                      padding: 'var(--space-2)',
+                      backgroundColor: 'var(--dashboard-subject-social)',
+                      borderRadius: 'var(--radius-lg)'
+                    }}>
+                      <Users style={{
+                        height: '1.25rem',
+                        width: '1.25rem',
+                        color: 'var(--dashboard-subject-social-accent)'
+                      }} />
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-white">Social Studies</p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Community & culture</p>
+                      <p style={{
+                        fontWeight: 'var(--font-medium)',
+                        color: 'var(--dashboard-text-primary)',
+                        margin: 0
+                      }}>Social Studies</p>
+                      <p style={{
+                        fontSize: 'var(--text-sm)',
+                        color: 'var(--dashboard-text-secondary)',
+                        margin: 0
+                      }}>Community & culture</p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="font-semibold text-gray-900 dark:text-white">48 min</p>
-                    <p className="text-xs text-blue-600 dark:text-blue-400">This week</p>
+                  <div style={{ textAlign: 'right' }}>
+                    <p style={{
+                      fontWeight: 'var(--font-semibold)',
+                      color: 'var(--dashboard-text-primary)',
+                      margin: 0
+                    }}>48 min</p>
+                    <p style={{
+                      fontSize: 'var(--text-xs)',
+                      color: 'var(--blue-600)',
+                      margin: 0
+                    }}>This week</p>
                   </div>
                 </div>
-                <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Learning Time:</span>
-                    <span className="text-lg font-bold text-gray-900 dark:text-white">283 min</span>
+                <div style={{
+                  marginTop: 'var(--space-4)',
+                  paddingTop: 'var(--space-4)',
+                  borderTop: '1px solid var(--dashboard-border)'
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                  }}>
+                    <span style={{
+                      fontSize: 'var(--text-sm)',
+                      fontWeight: 'var(--font-medium)',
+                      color: 'var(--dashboard-text-secondary)'
+                    }}>Total Learning Time:</span>
+                    <span style={{
+                      fontSize: 'var(--text-lg)',
+                      fontWeight: 'var(--font-bold)',
+                      color: 'var(--dashboard-text-primary)'
+                    }}>283 min</span>
                   </div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  <p style={{
+                    fontSize: 'var(--text-xs)',
+                    color: 'var(--dashboard-text-secondary)',
+                    marginTop: 'var(--space-1)',
+                    margin: 0
+                  }}>
                     AI optimizes timing based on {educatorData.role === 'parent' ? 'child' : 'student'} engagement
                   </p>
                 </div>
@@ -726,65 +1213,204 @@ export function TeacherDashboard() {
             </div>
 
             {/* Learning Phase Allocation */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow">
-              <div className="px-6 py-5 border-b border-gray-200 dark:border-gray-700">
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white">Learning Phase Allocation</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            <div style={{
+              backgroundColor: 'var(--dashboard-bg-elevated)',
+              borderRadius: 'var(--radius-xl)',
+              boxShadow: 'var(--shadow-card)'
+            }}>
+              <div style={{
+                padding: 'var(--space-6) var(--space-6) var(--space-5)',
+                borderBottom: '1px solid var(--dashboard-border)'
+              }}>
+                <h3 style={{
+                  fontSize: 'var(--text-lg)',
+                  fontWeight: 'var(--font-medium)',
+                  color: 'var(--dashboard-text-primary)',
+                  margin: 0
+                }}>Learning Phase Allocation</h3>
+                <p style={{
+                  fontSize: 'var(--text-sm)',
+                  color: 'var(--dashboard-text-secondary)',
+                  marginTop: 'var(--space-1)',
+                  margin: 0
+                }}>
                   Three-Phase Learning progression breakdown across Learn → Experience → Discover
                 </p>
               </div>
-              <div className="p-6 space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-                      <BookOpen className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+              <div style={{
+                padding: 'var(--space-6)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 'var(--space-4)'
+              }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between'
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'var(--space-3)'
+                  }}>
+                    <div style={{
+                      padding: 'var(--space-2)',
+                      backgroundColor: 'var(--dashboard-subject-math)',
+                      borderRadius: 'var(--radius-lg)'
+                    }}>
+                      <BookOpen style={{
+                        height: '1.25rem',
+                        width: '1.25rem',
+                        color: 'var(--dashboard-subject-math-accent)'
+                      }} />
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-white">Learn Phase</p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Foundation building & instruction</p>
+                      <p style={{
+                        fontWeight: 'var(--font-medium)',
+                        color: 'var(--dashboard-text-primary)',
+                        margin: 0
+                      }}>Learn Phase</p>
+                      <p style={{
+                        fontSize: 'var(--text-sm)',
+                        color: 'var(--dashboard-text-secondary)',
+                        margin: 0
+                      }}>Foundation building & instruction</p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="font-semibold text-gray-900 dark:text-white">98 min</p>
-                    <p className="text-xs text-blue-600 dark:text-blue-400">This week</p>
+                  <div style={{ textAlign: 'right' }}>
+                    <p style={{
+                      fontWeight: 'var(--font-semibold)',
+                      color: 'var(--dashboard-text-primary)',
+                      margin: 0
+                    }}>98 min</p>
+                    <p style={{
+                      fontSize: 'var(--text-xs)',
+                      color: 'var(--dashboard-subject-math-accent)',
+                      margin: 0
+                    }}>This week</p>
                   </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className="p-2 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg">
-                      <Target className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between'
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'var(--space-3)'
+                  }}>
+                    <div style={{
+                      padding: 'var(--space-2)',
+                      backgroundColor: 'var(--dashboard-subject-ela)',
+                      borderRadius: 'var(--radius-lg)'
+                    }}>
+                      <Target style={{
+                        height: '1.25rem',
+                        width: '1.25rem',
+                        color: 'var(--dashboard-subject-ela-accent)'
+                      }} />
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-white">Experience Phase</p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Career application & practice</p>
+                      <p style={{
+                        fontWeight: 'var(--font-medium)',
+                        color: 'var(--dashboard-text-primary)',
+                        margin: 0
+                      }}>Experience Phase</p>
+                      <p style={{
+                        fontSize: 'var(--text-sm)',
+                        color: 'var(--dashboard-text-secondary)',
+                        margin: 0
+                      }}>Career application & practice</p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="font-semibold text-gray-900 dark:text-white">112 min</p>
-                    <p className="text-xs text-green-600 dark:text-green-400">This week</p>
+                  <div style={{ textAlign: 'right' }}>
+                    <p style={{
+                      fontWeight: 'var(--font-semibold)',
+                      color: 'var(--dashboard-text-primary)',
+                      margin: 0
+                    }}>112 min</p>
+                    <p style={{
+                      fontSize: 'var(--text-xs)',
+                      color: 'var(--dashboard-subject-ela-accent)',
+                      margin: 0
+                    }}>This week</p>
                   </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
-                      <Sparkles className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between'
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'var(--space-3)'
+                  }}>
+                    <div style={{
+                      padding: 'var(--space-2)',
+                      backgroundColor: 'var(--dashboard-subject-science)',
+                      borderRadius: 'var(--radius-lg)'
+                    }}>
+                      <Sparkles style={{
+                        height: '1.25rem',
+                        width: '1.25rem',
+                        color: 'var(--dashboard-subject-science-accent)'
+                      }} />
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-white">Discover Phase</p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Creative mastery & storytelling</p>
+                      <p style={{
+                        fontWeight: 'var(--font-medium)',
+                        color: 'var(--dashboard-text-primary)',
+                        margin: 0
+                      }}>Discover Phase</p>
+                      <p style={{
+                        fontSize: 'var(--text-sm)',
+                        color: 'var(--dashboard-text-secondary)',
+                        margin: 0
+                      }}>Creative mastery & storytelling</p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="font-semibold text-gray-900 dark:text-white">73 min</p>
-                    <p className="text-xs text-green-600 dark:text-green-400">This week</p>
+                  <div style={{ textAlign: 'right' }}>
+                    <p style={{
+                      fontWeight: 'var(--font-semibold)',
+                      color: 'var(--dashboard-text-primary)',
+                      margin: 0
+                    }}>73 min</p>
+                    <p style={{
+                      fontSize: 'var(--text-xs)',
+                      color: 'var(--dashboard-subject-science-accent)',
+                      margin: 0
+                    }}>This week</p>
                   </div>
                 </div>
-                <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Phase Time:</span>
-                    <span className="text-lg font-bold text-gray-900 dark:text-white">283 min</span>
+                <div style={{
+                  marginTop: 'var(--space-4)',
+                  paddingTop: 'var(--space-4)',
+                  borderTop: '1px solid var(--dashboard-border)'
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                  }}>
+                    <span style={{
+                      fontSize: 'var(--text-sm)',
+                      fontWeight: 'var(--font-medium)',
+                      color: 'var(--dashboard-text-secondary)'
+                    }}>Total Phase Time:</span>
+                    <span style={{
+                      fontSize: 'var(--text-lg)',
+                      fontWeight: 'var(--font-bold)',
+                      color: 'var(--dashboard-text-primary)'
+                    }}>283 min</span>
                   </div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  <p style={{
+                    fontSize: 'var(--text-xs)',
+                    color: 'var(--dashboard-text-secondary)',
+                    marginTop: 'var(--space-1)',
+                    margin: 0
+                  }}>
                     Progressive mastery through the Three-Phase Learning journey
                   </p>
                 </div>
@@ -796,105 +1422,264 @@ export function TeacherDashboard() {
 
         {/* Student Dashboard Tab */}
         {activeTab === 'students' && (
-          <div className="space-y-6">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
             {/* Student Overview Cards */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+              gap: 'var(--space-6)'
+            }}>
               {educatorData.students_children.map((student) => (
-                <div key={student.id} className="bg-white dark:bg-gray-800 rounded-xl shadow-lg">
-                  <div className="px-6 py-5 border-b border-gray-200 dark:border-gray-700">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg ${
-                          student.engagement_level === 'High' ? 'bg-green-500' : 'bg-blue-500'
-                        }`}>
+                <div key={student.id} style={{
+                  backgroundColor: 'var(--dashboard-bg-elevated)',
+                  borderRadius: 'var(--radius-xl)',
+                  boxShadow: 'var(--dashboard-shadow-card)'
+                }}>
+                  <div style={{
+                    padding: 'var(--space-6) var(--space-6) var(--space-5)',
+                    borderBottom: '1px solid var(--dashboard-border)'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+                        <div style={{
+                          width: '3rem',
+                          height: '3rem',
+                          borderRadius: 'var(--radius-full)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          color: '#ffffff',
+                          fontWeight: 'var(--font-bold)',
+                          fontSize: 'var(--text-lg)',
+                          backgroundColor: student.engagement_level === 'High' ? 'var(--green-500)' : 'var(--blue-500)'
+                        }}>
                           {student.name.split(' ').map(n => n[0]).join('')}
                         </div>
                         <div>
-                          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{student.name}</h3>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">Grade {student.grade}</p>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">Last active: {student.last_activity}</p>
-                          <p className="text-sm font-medium text-gray-600 dark:text-gray-300">{student.engagement_level}</p>
+                          <h3 style={{
+                            fontSize: 'var(--text-lg)',
+                            fontWeight: 'var(--font-semibold)',
+                            color: 'var(--dashboard-text-primary)',
+                            margin: 0
+                          }}>{student.name}</h3>
+                          <p style={{
+                            fontSize: 'var(--text-sm)',
+                            color: 'var(--dashboard-text-secondary)',
+                            margin: 0
+                          }}>Grade {student.grade}</p>
+                          <p style={{
+                            fontSize: 'var(--text-sm)',
+                            color: 'var(--dashboard-text-secondary)',
+                            margin: 0
+                          }}>Last active: {student.last_activity}</p>
+                          <p style={{
+                            fontSize: 'var(--text-sm)',
+                            fontWeight: 'var(--font-medium)',
+                            color: 'var(--dashboard-text-secondary)',
+                            margin: 0
+                          }}>{student.engagement_level}</p>
                         </div>
                       </div>
                     </div>
                   </div>
-                  
-                  <div className="p-6">
-                    <div className="grid grid-cols-2 gap-4 mb-4">
-                      <div className="text-center">
-                        <div className="flex items-center justify-center mb-1">
-                          <Star className="h-4 w-4 text-yellow-500 mr-1" />
-                          <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Total XP</span>
+
+                  <div style={{ padding: 'var(--space-6)' }}>
+                    <div style={{
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(2, 1fr)',
+                      gap: 'var(--space-4)',
+                      marginBottom: 'var(--space-4)'
+                    }}>
+                      <div style={{ textAlign: 'center' }}>
+                        <div style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          marginBottom: 'var(--space-1)'
+                        }}>
+                          <Star style={{ height: '1rem', width: '1rem', color: 'var(--amber-500)', marginRight: 'var(--space-1)' }} />
+                          <span style={{
+                            fontSize: 'var(--text-sm)',
+                            fontWeight: 'var(--font-medium)',
+                            color: 'var(--dashboard-text-secondary)'
+                          }}>Total XP</span>
                         </div>
-                        <p className="text-2xl font-bold text-gray-900 dark:text-white">{student.total_xp.toLocaleString()}</p>
+                        <p style={{
+                          fontSize: 'var(--text-2xl)',
+                          fontWeight: 'var(--font-bold)',
+                          color: 'var(--dashboard-text-primary)',
+                          margin: 0
+                        }}>{student.total_xp.toLocaleString()}</p>
                       </div>
-                      <div className="text-center">
-                        <div className="flex items-center justify-center mb-1">
-                          <Target className="h-4 w-4 text-blue-500 mr-1" />
-                          <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Accuracy</span>
+                      <div style={{ textAlign: 'center' }}>
+                        <div style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          marginBottom: 'var(--space-1)'
+                        }}>
+                          <Target style={{ height: '1rem', width: '1rem', color: 'var(--blue-500)', marginRight: 'var(--space-1)' }} />
+                          <span style={{
+                            fontSize: 'var(--text-sm)',
+                            fontWeight: 'var(--font-medium)',
+                            color: 'var(--dashboard-text-secondary)'
+                          }}>Accuracy</span>
                         </div>
-                        <p className="text-2xl font-bold text-gray-900 dark:text-white">{student.avg_accuracy}%</p>
+                        <p style={{
+                          fontSize: 'var(--text-2xl)',
+                          fontWeight: 'var(--font-bold)',
+                          color: 'var(--dashboard-text-primary)',
+                          margin: 0
+                        }}>{student.avg_accuracy}%</p>
                       </div>
                     </div>
-                    
-                    <div className="grid grid-cols-2 gap-4 mb-4">
-                      <div className="text-center">
-                        <div className="flex items-center justify-center mb-1">
-                          <Zap className="h-4 w-4 text-orange-500 mr-1" />
-                          <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Streak</span>
+
+                    <div style={{
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(2, 1fr)',
+                      gap: 'var(--space-4)',
+                      marginBottom: 'var(--space-4)'
+                    }}>
+                      <div style={{ textAlign: 'center' }}>
+                        <div style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          marginBottom: 'var(--space-1)'
+                        }}>
+                          <Zap style={{ height: '1rem', width: '1rem', color: 'var(--amber-500)', marginRight: 'var(--space-1)' }} />
+                          <span style={{
+                            fontSize: 'var(--text-sm)',
+                            fontWeight: 'var(--font-medium)',
+                            color: 'var(--dashboard-text-secondary)'
+                          }}>Streak</span>
                         </div>
-                        <p className="text-xl font-bold text-gray-900 dark:text-white">{student.learning_streak} days</p>
+                        <p style={{
+                          fontSize: 'var(--text-xl)',
+                          fontWeight: 'var(--font-bold)',
+                          color: 'var(--dashboard-text-primary)',
+                          margin: 0
+                        }}>{student.learning_streak} days</p>
                       </div>
-                      <div className="text-center">
-                        <div className="flex items-center justify-center mb-1">
-                          <Trophy className="h-4 w-4 text-purple-500 mr-1" />
-                          <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Badges</span>
+                      <div style={{ textAlign: 'center' }}>
+                        <div style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          marginBottom: 'var(--space-1)'
+                        }}>
+                          <Trophy style={{ height: '1rem', width: '1rem', color: 'var(--purple-500)', marginRight: 'var(--space-1)' }} />
+                          <span style={{
+                            fontSize: 'var(--text-sm)',
+                            fontWeight: 'var(--font-medium)',
+                            color: 'var(--dashboard-text-secondary)'
+                          }}>Badges</span>
                         </div>
-                        <p className="text-xl font-bold text-gray-900 dark:text-white">{student.badges_earned}</p>
+                        <p style={{
+                          fontSize: 'var(--text-xl)',
+                          fontWeight: 'var(--font-bold)',
+                          color: 'var(--dashboard-text-primary)',
+                          margin: 0
+                        }}>{student.badges_earned}</p>
                       </div>
                     </div>
-                    
-                    <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 mb-3">
-                      <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Learning Journey Progress</p>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">
-                        Status: <span className="font-medium text-green-600 dark:text-green-400">{student.current_container}</span>
+
+                    <div style={{
+                      backgroundColor: 'var(--dashboard-bg-secondary)',
+                      borderRadius: 'var(--radius-lg)',
+                      padding: 'var(--space-3)',
+                      marginBottom: 'var(--space-3)'
+                    }}>
+                      <p style={{
+                        fontSize: 'var(--text-sm)',
+                        fontWeight: 'var(--font-medium)',
+                        color: 'var(--dashboard-text-primary)',
+                        marginBottom: 'var(--space-1)',
+                        margin: 0
+                      }}>Learning Journey Progress</p>
+                      <p style={{
+                        fontSize: 'var(--text-xs)',
+                        color: 'var(--dashboard-text-secondary)',
+                        margin: 0
+                      }}>
+                        Status: <span style={{ fontWeight: 'var(--font-medium)', color: 'var(--green-600)' }}>{student.current_container}</span>
                       </p>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">
+                      <p style={{
+                        fontSize: 'var(--text-xs)',
+                        color: 'var(--dashboard-text-secondary)',
+                        margin: 0
+                      }}>
                         Subjects: {student.subjects_mastered.join(', ')}
                       </p>
                     </div>
-                    
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-500 dark:text-gray-400">Time spent: {student.time_spent_minutes}min</span>
-                      <span className="text-gray-500 dark:text-gray-400">Prefers: {student.preferred_session_time}</span>
+
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      fontSize: 'var(--text-sm)'
+                    }}>
+                      <span style={{ color: 'var(--dashboard-text-secondary)' }}>Time spent: {student.time_spent_minutes}min</span>
+                      <span style={{ color: 'var(--dashboard-text-secondary)' }}>Prefers: {student.preferred_session_time}</span>
                     </div>
 
                     {/* Enhanced Student Analytics */}
-                    <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Subject Performance</h4>
-                      <div className="grid grid-cols-4 gap-2 text-xs">
-                        <div className="text-center">
-                          <div className="bg-blue-50 dark:bg-blue-900/20 rounded p-2">
-                            <p className="font-semibold text-blue-900 dark:text-blue-200">Math</p>
-                            <p className="text-blue-600 dark:text-blue-400">300 XP</p>
+                    <div style={{
+                      marginTop: 'var(--space-4)',
+                      paddingTop: 'var(--space-4)',
+                      borderTop: '1px solid var(--dashboard-border)'
+                    }}>
+                      <h4 style={{
+                        fontSize: 'var(--text-sm)',
+                        fontWeight: 'var(--font-medium)',
+                        color: 'var(--dashboard-text-primary)',
+                        marginBottom: 'var(--space-3)',
+                        margin: 0
+                      }}>Subject Performance</h4>
+                      <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(4, 1fr)',
+                        gap: 'var(--space-2)',
+                        fontSize: 'var(--text-xs)'
+                      }}>
+                        <div style={{ textAlign: 'center' }}>
+                          <div style={{
+                            backgroundColor: 'var(--dashboard-subject-math)',
+                            borderRadius: 'var(--radius-md)',
+                            padding: 'var(--space-2)'
+                          }}>
+                            <p style={{ fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-subject-math-text)', margin: 0 }}>Math</p>
+                            <p style={{ color: 'var(--dashboard-subject-math-accent)', margin: 0 }}>300 XP</p>
                           </div>
                         </div>
-                        <div className="text-center">
-                          <div className="bg-emerald-50 dark:bg-emerald-900/20 rounded p-2">
-                            <p className="font-semibold text-emerald-900 dark:text-emerald-200">ELA</p>
-                            <p className="text-emerald-600 dark:text-emerald-400">300 XP</p>
+                        <div style={{ textAlign: 'center' }}>
+                          <div style={{
+                            backgroundColor: 'var(--dashboard-subject-ela)',
+                            borderRadius: 'var(--radius-md)',
+                            padding: 'var(--space-2)'
+                          }}>
+                            <p style={{ fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-subject-ela-text)', margin: 0 }}>ELA</p>
+                            <p style={{ color: 'var(--dashboard-subject-ela-accent)', margin: 0 }}>300 XP</p>
                           </div>
                         </div>
-                        <div className="text-center">
-                          <div className="bg-purple-50 dark:bg-purple-900/20 rounded p-2">
-                            <p className="font-semibold text-purple-900 dark:text-purple-200">Science</p>
-                            <p className="text-purple-600 dark:text-purple-400">300 XP</p>
+                        <div style={{ textAlign: 'center' }}>
+                          <div style={{
+                            backgroundColor: 'var(--dashboard-subject-science)',
+                            borderRadius: 'var(--radius-md)',
+                            padding: 'var(--space-2)'
+                          }}>
+                            <p style={{ fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-subject-science-text)', margin: 0 }}>Science</p>
+                            <p style={{ color: 'var(--dashboard-subject-science-accent)', margin: 0 }}>300 XP</p>
                           </div>
                         </div>
-                        <div className="text-center">
-                          <div className="bg-amber-50 dark:bg-amber-900/20 rounded p-2">
-                            <p className="font-semibold text-amber-900 dark:text-amber-200">Social St.</p>
-                            <p className="text-amber-600 dark:text-amber-400">300 XP</p>
+                        <div style={{ textAlign: 'center' }}>
+                          <div style={{
+                            backgroundColor: 'var(--dashboard-subject-social)',
+                            borderRadius: 'var(--radius-md)',
+                            padding: 'var(--space-2)'
+                          }}>
+                            <p style={{ fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-subject-social-text)', margin: 0 }}>Social St.</p>
+                            <p style={{ color: 'var(--dashboard-subject-social-accent)', margin: 0 }}>300 XP</p>
                           </div>
                         </div>
                       </div>
@@ -905,39 +1690,129 @@ export function TeacherDashboard() {
             </div>
 
             {/* Detailed Analytics Section */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg">
-              <div className="px-6 py-5 border-b border-gray-200 dark:border-gray-700">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <div style={{
+              backgroundColor: 'var(--dashboard-bg-elevated)',
+              borderRadius: 'var(--radius-xl)',
+              boxShadow: 'var(--dashboard-shadow-card)'
+            }}>
+              <div style={{
+                padding: 'var(--space-6) var(--space-6) var(--space-5)',
+                borderBottom: '1px solid var(--dashboard-border)'
+              }}>
+                <h3 style={{
+                  fontSize: 'var(--text-lg)',
+                  fontWeight: 'var(--font-semibold)',
+                  color: 'var(--dashboard-text-primary)',
+                  margin: 0
+                }}>
                 Detailed {educatorData.role === 'parent' ? 'Child' : 'Student'} Analytics
               </h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                <p style={{
+                  fontSize: 'var(--text-sm)',
+                  color: 'var(--dashboard-text-secondary)',
+                  marginTop: 'var(--space-1)',
+                  margin: 0
+                }}>
                   Deep-dive insights into individual {educatorData.role === 'parent' ? 'child' : 'student'} performance
                 </p>
               </div>
-              <div className="p-6">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                  <div className="text-center">
-                    <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                      <Activity className="h-8 w-8 text-blue-600 dark:text-blue-400 mx-auto mb-2" />
-                      <h4 className="font-bold text-blue-900 dark:text-blue-200">Engagement Trends</h4>
-                      <p className="text-sm text-blue-700 dark:text-blue-300">Weekly activity patterns</p>
-                      <p className="text-2xl font-bold text-blue-900 dark:text-blue-200 mt-2">↗️ +15%</p>
+              <div style={{ padding: 'var(--space-6)' }}>
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                  gap: 'var(--space-6)'
+                }}>
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{
+                      padding: 'var(--space-4)',
+                      backgroundColor: 'var(--dashboard-subject-math)',
+                      borderRadius: 'var(--radius-lg)'
+                    }}>
+                      <Activity style={{
+                        height: '2rem',
+                        width: '2rem',
+                        color: 'var(--dashboard-subject-math-accent)',
+                        margin: '0 auto var(--space-2)'
+                      }} />
+                      <h4 style={{
+                        fontWeight: 'var(--font-bold)',
+                        color: 'var(--dashboard-subject-math-text)',
+                        margin: 0
+                      }}>Engagement Trends</h4>
+                      <p style={{
+                        fontSize: 'var(--text-sm)',
+                        color: 'var(--dashboard-subject-math-accent)',
+                        margin: 0
+                      }}>Weekly activity patterns</p>
+                      <p style={{
+                        fontSize: 'var(--text-2xl)',
+                        fontWeight: 'var(--font-bold)',
+                        color: 'var(--dashboard-subject-math-text)',
+                        marginTop: 'var(--space-2)',
+                        margin: 0
+                      }}>↗️ +15%</p>
                     </div>
                   </div>
-                  <div className="text-center">
-                    <div className="p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
-                      <TrendingUp className="h-8 w-8 text-emerald-600 dark:text-emerald-400 mx-auto mb-2" />
-                      <h4 className="font-bold text-emerald-900 dark:text-emerald-200">Learning Velocity</h4>
-                      <p className="text-sm text-emerald-700 dark:text-emerald-300">Skills mastered per week</p>
-                      <p className="text-2xl font-bold text-emerald-900 dark:text-emerald-200 mt-2">2.3 avg</p>
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{
+                      padding: 'var(--space-4)',
+                      backgroundColor: 'var(--dashboard-subject-ela)',
+                      borderRadius: 'var(--radius-lg)'
+                    }}>
+                      <TrendingUp style={{
+                        height: '2rem',
+                        width: '2rem',
+                        color: 'var(--dashboard-subject-ela-accent)',
+                        margin: '0 auto var(--space-2)'
+                      }} />
+                      <h4 style={{
+                        fontWeight: 'var(--font-bold)',
+                        color: 'var(--dashboard-subject-ela-text)',
+                        margin: 0
+                      }}>Learning Velocity</h4>
+                      <p style={{
+                        fontSize: 'var(--text-sm)',
+                        color: 'var(--dashboard-subject-ela-accent)',
+                        margin: 0
+                      }}>Skills mastered per week</p>
+                      <p style={{
+                        fontSize: 'var(--text-2xl)',
+                        fontWeight: 'var(--font-bold)',
+                        color: 'var(--dashboard-subject-ela-text)',
+                        marginTop: 'var(--space-2)',
+                        margin: 0
+                      }}>2.3 avg</p>
                     </div>
                   </div>
-                  <div className="text-center">
-                    <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-                      <BarChart2 className="h-8 w-8 text-purple-600 dark:text-purple-400 mx-auto mb-2" />
-                      <h4 className="font-bold text-purple-900 dark:text-purple-200">Challenge Level</h4>
-                      <p className="text-sm text-purple-700 dark:text-purple-300">Optimal difficulty balance</p>
-                      <p className="text-2xl font-bold text-purple-900 dark:text-purple-200 mt-2">85% match</p>
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{
+                      padding: 'var(--space-4)',
+                      backgroundColor: 'var(--dashboard-subject-science)',
+                      borderRadius: 'var(--radius-lg)'
+                    }}>
+                      <BarChart2 style={{
+                        height: '2rem',
+                        width: '2rem',
+                        color: 'var(--dashboard-subject-science-accent)',
+                        margin: '0 auto var(--space-2)'
+                      }} />
+                      <h4 style={{
+                        fontWeight: 'var(--font-bold)',
+                        color: 'var(--dashboard-subject-science-text)',
+                        margin: 0
+                      }}>Challenge Level</h4>
+                      <p style={{
+                        fontSize: 'var(--text-sm)',
+                        color: 'var(--dashboard-subject-science-accent)',
+                        margin: 0
+                      }}>Optimal difficulty balance</p>
+                      <p style={{
+                        fontSize: 'var(--text-2xl)',
+                        fontWeight: 'var(--font-bold)',
+                        color: 'var(--dashboard-subject-science-text)',
+                        marginTop: 'var(--space-2)',
+                        margin: 0
+                      }}>85% match</p>
                     </div>
                   </div>
                 </div>

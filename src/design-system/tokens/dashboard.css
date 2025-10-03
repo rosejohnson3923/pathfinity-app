@@ -1,0 +1,224 @@
+/**
+ * DASHBOARD-SPECIFIC TOKENS
+ * ==========================
+ * Enhanced design tokens specifically for Teacher/Parent Dashboard
+ * These tokens do NOT affect other pages in the application
+ */
+
+:root {
+  /* =========================
+     DASHBOARD BACKGROUNDS
+     ========================= */
+
+  /* Light Theme - Enhanced contrast and depth */
+  --dashboard-bg-primary-light: #F9FAFB;
+  --dashboard-bg-secondary-light: #F3F4F6;
+  --dashboard-bg-tertiary-light: #E5E7EB;
+  --dashboard-bg-elevated-light: #FFFFFF;
+
+  /* Dark Theme */
+  --dashboard-bg-primary-dark: #111827;
+  --dashboard-bg-secondary-dark: #1F2937;
+  --dashboard-bg-tertiary-dark: #374151;
+  --dashboard-bg-elevated-dark: #1F2937;
+
+  /* Active Theme (default to light) */
+  --dashboard-bg-primary: var(--dashboard-bg-primary-light);
+  --dashboard-bg-secondary: var(--dashboard-bg-secondary-light);
+  --dashboard-bg-tertiary: var(--dashboard-bg-tertiary-light);
+  --dashboard-bg-elevated: var(--dashboard-bg-elevated-light);
+
+  /* =========================
+     DASHBOARD SHADOWS
+     ========================= */
+
+  /* Enhanced shadows for better depth */
+  --dashboard-shadow-sm: 0 2px 4px 0 rgba(0, 0, 0, 0.08), 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+  --dashboard-shadow-md: 0 4px 8px -2px rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.08);
+  --dashboard-shadow-lg: 0 10px 20px -5px rgba(0, 0, 0, 0.15), 0 4px 8px -2px rgba(0, 0, 0, 0.10);
+  --dashboard-shadow-xl: 0 20px 30px -8px rgba(0, 0, 0, 0.18), 0 10px 15px -5px rgba(0, 0, 0, 0.12);
+
+  /* Card-specific shadows */
+  --dashboard-shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
+  --dashboard-shadow-card-hover: 0 8px 20px rgba(0, 0, 0, 0.12), 0 3px 8px rgba(0, 0, 0, 0.08);
+  --dashboard-shadow-portlet: 0 3px 10px rgba(0, 0, 0, 0.10), 0 1px 4px rgba(0, 0, 0, 0.06);
+  --dashboard-shadow-portlet-hover: 0 8px 24px rgba(0, 0, 0, 0.14), 0 4px 12px rgba(0, 0, 0, 0.10);
+
+  /* =========================
+     SUBJECT-SPECIFIC COLORS
+     ========================= */
+
+  /* MATH - Blue Theme */
+  --dashboard-subject-math-bg-light: #EBF5FF;
+  --dashboard-subject-math-border-light: #60A5FA;
+  --dashboard-subject-math-text-light: #1E3A8A;
+  --dashboard-subject-math-accent-light: #2563EB;
+
+  --dashboard-subject-math-bg-dark: #1E3A8A;
+  --dashboard-subject-math-border-dark: #3B82F6;
+  --dashboard-subject-math-text-dark: #DBEAFE;
+  --dashboard-subject-math-accent-dark: #60A5FA;
+
+  /* ELA - Green Theme */
+  --dashboard-subject-ela-bg-light: #ECFDF5;
+  --dashboard-subject-ela-border-light: #34D399;
+  --dashboard-subject-ela-text-light: #065F46;
+  --dashboard-subject-ela-accent-light: #059669;
+
+  --dashboard-subject-ela-bg-dark: #065F46;
+  --dashboard-subject-ela-border-dark: #10B981;
+  --dashboard-subject-ela-text-dark: #D1FAE5;
+  --dashboard-subject-ela-accent-dark: #34D399;
+
+  /* SCIENCE - Purple Theme */
+  --dashboard-subject-science-bg-light: #F5F3FF;
+  --dashboard-subject-science-border-light: #A78BFA;
+  --dashboard-subject-science-text-light: #5B21B6;
+  --dashboard-subject-science-accent-light: #7C3AED;
+
+  --dashboard-subject-science-bg-dark: #5B21B6;
+  --dashboard-subject-science-border-dark: #8B5CF6;
+  --dashboard-subject-science-text-dark: #EDE9FE;
+  --dashboard-subject-science-accent-dark: #A78BFA;
+
+  /* SOCIAL STUDIES - Amber/Orange Theme */
+  --dashboard-subject-social-bg-light: #FEF3C7;
+  --dashboard-subject-social-border-light: #FBBF24;
+  --dashboard-subject-social-text-light: #92400E;
+  --dashboard-subject-social-accent-light: #D97706;
+
+  --dashboard-subject-social-bg-dark: #92400E;
+  --dashboard-subject-social-border-dark: #F59E0B;
+  --dashboard-subject-social-text-dark: #FEF3C7;
+  --dashboard-subject-social-accent-dark: #FBBF24;
+
+  /* Active Theme Subject Colors (default to light) */
+  --dashboard-subject-math: var(--dashboard-subject-math-bg-light);
+  --dashboard-subject-math-border: var(--dashboard-subject-math-border-light);
+  --dashboard-subject-math-text: var(--dashboard-subject-math-text-light);
+  --dashboard-subject-math-accent: var(--dashboard-subject-math-accent-light);
+
+  --dashboard-subject-ela: var(--dashboard-subject-ela-bg-light);
+  --dashboard-subject-ela-border: var(--dashboard-subject-ela-border-light);
+  --dashboard-subject-ela-text: var(--dashboard-subject-ela-text-light);
+  --dashboard-subject-ela-accent: var(--dashboard-subject-ela-accent-light);
+
+  --dashboard-subject-science: var(--dashboard-subject-science-bg-light);
+  --dashboard-subject-science-border: var(--dashboard-subject-science-border-light);
+  --dashboard-subject-science-text: var(--dashboard-subject-science-text-light);
+  --dashboard-subject-science-accent: var(--dashboard-subject-science-accent-light);
+
+  --dashboard-subject-social: var(--dashboard-subject-social-bg-light);
+  --dashboard-subject-social-border: var(--dashboard-subject-social-border-light);
+  --dashboard-subject-social-text: var(--dashboard-subject-social-text-light);
+  --dashboard-subject-social-accent: var(--dashboard-subject-social-accent-light);
+
+  /* =========================
+     WELCOME BANNER
+     ========================= */
+
+  --dashboard-welcome-gradient-light: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+  --dashboard-welcome-gradient-dark: linear-gradient(135deg, #1E40AF 0%, #6D28D9 100%);
+  --dashboard-welcome-gradient: var(--dashboard-welcome-gradient-light);
+
+  /* =========================
+     TYPOGRAPHY
+     ========================= */
+
+  --dashboard-text-primary-light: #111827;
+  --dashboard-text-secondary-light: #6B7280;
+  --dashboard-text-tertiary-light: #9CA3AF;
+
+  --dashboard-text-primary-dark: #F9FAFB;
+  --dashboard-text-secondary-dark: #D1D5DB;
+  --dashboard-text-tertiary-dark: #9CA3AF;
+
+  --dashboard-text-primary: var(--dashboard-text-primary-light);
+  --dashboard-text-secondary: var(--dashboard-text-secondary-light);
+  --dashboard-text-tertiary: var(--dashboard-text-tertiary-light);
+
+  /* =========================
+     BORDERS
+     ========================= */
+
+  --dashboard-border-light: #E5E7EB;
+  --dashboard-border-strong-light: #D1D5DB;
+
+  --dashboard-border-dark: #374151;
+  --dashboard-border-strong-dark: #4B5563;
+
+  --dashboard-border: var(--dashboard-border-light);
+  --dashboard-border-strong: var(--dashboard-border-strong-light);
+
+  /* =========================
+     NAVIGATION TABS
+     ========================= */
+
+  --dashboard-nav-tab-active-light: #3B82F6;
+  --dashboard-nav-tab-inactive-light: #6B7280;
+  --dashboard-nav-tab-hover-light: #1F2937;
+
+  --dashboard-nav-tab-active-dark: #60A5FA;
+  --dashboard-nav-tab-inactive-dark: #9CA3AF;
+  --dashboard-nav-tab-hover-dark: #F3F4F6;
+
+  --dashboard-nav-tab-active: var(--dashboard-nav-tab-active-light);
+  --dashboard-nav-tab-inactive: var(--dashboard-nav-tab-inactive-light);
+  --dashboard-nav-tab-hover: var(--dashboard-nav-tab-hover-light);
+}
+
+/* =========================
+   DARK THEME OVERRIDES
+   ========================= */
+
+[data-theme="dark"] {
+  /* Backgrounds */
+  --dashboard-bg-primary: var(--dashboard-bg-primary-dark);
+  --dashboard-bg-secondary: var(--dashboard-bg-secondary-dark);
+  --dashboard-bg-tertiary: var(--dashboard-bg-tertiary-dark);
+  --dashboard-bg-elevated: var(--dashboard-bg-elevated-dark);
+
+  /* Subject Colors */
+  --dashboard-subject-math: var(--dashboard-subject-math-bg-dark);
+  --dashboard-subject-math-border: var(--dashboard-subject-math-border-dark);
+  --dashboard-subject-math-text: var(--dashboard-subject-math-text-dark);
+  --dashboard-subject-math-accent: var(--dashboard-subject-math-accent-dark);
+
+  --dashboard-subject-ela: var(--dashboard-subject-ela-bg-dark);
+  --dashboard-subject-ela-border: var(--dashboard-subject-ela-border-dark);
+  --dashboard-subject-ela-text: var(--dashboard-subject-ela-text-dark);
+  --dashboard-subject-ela-accent: var(--dashboard-subject-ela-accent-dark);
+
+  --dashboard-subject-science: var(--dashboard-subject-science-bg-dark);
+  --dashboard-subject-science-border: var(--dashboard-subject-science-border-dark);
+  --dashboard-subject-science-text: var(--dashboard-subject-science-text-dark);
+  --dashboard-subject-science-accent: var(--dashboard-subject-science-accent-dark);
+
+  --dashboard-subject-social: var(--dashboard-subject-social-bg-dark);
+  --dashboard-subject-social-border: var(--dashboard-subject-social-border-dark);
+  --dashboard-subject-social-text: var(--dashboard-subject-social-text-dark);
+  --dashboard-subject-social-accent: var(--dashboard-subject-social-accent-dark);
+
+  /* Welcome Banner */
+  --dashboard-welcome-gradient: var(--dashboard-welcome-gradient-dark);
+
+  /* Typography */
+  --dashboard-text-primary: var(--dashboard-text-primary-dark);
+  --dashboard-text-secondary: var(--dashboard-text-secondary-dark);
+  --dashboard-text-tertiary: var(--dashboard-text-tertiary-dark);
+
+  /* Borders */
+  --dashboard-border: var(--dashboard-border-dark);
+  --dashboard-border-strong: var(--dashboard-border-strong-dark);
+
+  /* Navigation Tabs */
+  --dashboard-nav-tab-active: var(--dashboard-nav-tab-active-dark);
+  --dashboard-nav-tab-inactive: var(--dashboard-nav-tab-inactive-dark);
+  --dashboard-nav-tab-hover: var(--dashboard-nav-tab-hover-dark);
+
+  /* Shadows - Darker, more subtle for dark mode */
+  --dashboard-shadow-card: 0 2px 8px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2);
+  --dashboard-shadow-card-hover: 0 8px 20px rgba(0, 0, 0, 0.4), 0 3px 8px rgba(0, 0, 0, 0.3);
+  --dashboard-shadow-portlet: 0 3px 10px rgba(0, 0, 0, 0.35), 0 1px 4px rgba(0, 0, 0, 0.25);
+  --dashboard-shadow-portlet-hover: 0 8px 24px rgba(0, 0, 0, 0.45), 0 4px 12px rgba(0, 0, 0, 0.35);
+}

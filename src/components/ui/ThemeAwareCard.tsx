@@ -17,6 +17,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { LucideIcon } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
+// Design System Imports
+import '../../design-system/tokens/colors.css';
+import '../../design-system/tokens/spacing.css';
+import '../../design-system/tokens/borders.css';
+import '../../design-system/tokens/effects.css';
+import '../../design-system/tokens/typography.css';
+import '../../design-system/tokens/shadows.css';
+
 interface ThemeAwareCardProps {
   children: React.ReactNode;
   container?: 'learn' | 'experience' | 'discover';
@@ -52,53 +60,51 @@ export const ThemeAwareCard: React.FC<ThemeAwareCardProps> = ({
   animateOnHover = true,
   animationDelay = 0
 }) => {
-  // Container-specific gradient classes
+  // Container-specific gradient classes using design tokens
   const containerGradients = useMemo(() => ({
-    learn: 'from-purple-500/10 via-pink-500/10 to-blue-500/10',
-    experience: 'from-green-500/10 via-emerald-500/10 to-teal-500/10',
-    discover: 'from-orange-500/10 via-amber-500/10 to-yellow-500/10'
+    learn: 'var(--color-container-learn)',
+    experience: 'var(--color-container-experience)',
+    discover: 'var(--color-container-discover)'
   }), []);
 
-  // Container-specific border colors
+  // Container-specific border colors using design tokens
   const containerBorders = useMemo(() => ({
-    learn: 'border-purple-500/20 hover:border-purple-500/40',
-    experience: 'border-green-500/20 hover:border-green-500/40',
-    discover: 'border-orange-500/20 hover:border-orange-500/40'
+    learn: 'var(--color-subject-science-border)',
+    experience: 'var(--color-subject-ela-border)',
+    discover: 'var(--color-subject-social-border)'
   }), []);
 
-  // Container-specific shadows
+  // Container-specific shadows using design tokens
   const containerShadows = useMemo(() => ({
-    learn: 'shadow-purple-500/10',
-    experience: 'shadow-green-500/10',
-    discover: 'shadow-orange-500/10'
+    learn: 'var(--shadow-purple)',
+    experience: 'var(--shadow-teal)',
+    discover: 'var(--shadow-pink)'
   }), []);
 
-  // Variant-specific classes
-  const variantClasses = useMemo(() => {
+  // Variant-specific styles using design tokens
+  const getVariantStyles = useMemo(() => {
     switch (variant) {
       case 'glass':
-        return cn(
-          'backdrop-blur-md bg-white/5 dark:bg-black/5',
-          'border border-white/10 dark:border-white/5'
-        );
+        return {
+          backgroundColor: 'rgba(255, 255, 255, 0.05)',
+          backdropFilter: 'blur(12px)',
+          border: '1px solid var(--color-border-subtle)'
+        };
       case 'gradient':
-        return cn(
-          'bg-gradient-to-br',
-          containerGradients[container],
-          'border',
-          containerBorders[container]
-        );
+        return {
+          background: containerGradients[container],
+          border: `1px solid ${containerBorders[container]}`
+        };
       case 'outline':
-        return cn(
-          'bg-transparent',
-          'border-2',
-          containerBorders[container]
-        );
+        return {
+          backgroundColor: 'transparent',
+          border: `2px solid ${containerBorders[container]}`
+        };
       default:
-        return cn(
-          'bg-white dark:bg-gray-900',
-          'border border-gray-200 dark:border-gray-800'
-        );
+        return {
+          backgroundColor: 'var(--color-bg-elevated)',
+          border: '1px solid var(--color-border)'
+        };
     }
   }, [variant, container, containerGradients, containerBorders]);
 
@@ -127,18 +133,18 @@ export const ThemeAwareCard: React.FC<ThemeAwareCardProps> = ({
     } : {}
   };
 
-  // Badge color classes
-  const getBadgeColorClass = () => {
-    if (badgeColor) return badgeColor;
+  // Badge color styles using design tokens
+  const getBadgeStyles = () => {
+    if (badgeColor) return { backgroundColor: badgeColor, color: '#ffffff' };
     switch (container) {
       case 'learn':
-        return 'bg-purple-500 text-white';
+        return { backgroundColor: 'var(--purple-500)', color: '#ffffff' };
       case 'experience':
-        return 'bg-green-500 text-white';
+        return { backgroundColor: 'var(--green-500)', color: '#ffffff' };
       case 'discover':
-        return 'bg-orange-500 text-white';
+        return { backgroundColor: 'var(--amber-500)', color: '#ffffff' };
       default:
-        return 'bg-gray-500 text-white';
+        return { backgroundColor: 'var(--gray-500)', color: '#ffffff' };
     }
   };
 
@@ -146,13 +152,18 @@ export const ThemeAwareCard: React.FC<ThemeAwareCardProps> = ({
     <AnimatePresence>
       <motion.div
         className={cn(
-          'relative rounded-xl overflow-hidden transition-all duration-300',
-          variantClasses,
-          hoverable && 'hover:shadow-xl',
-          hoverable && `hover:${containerShadows[container]}`,
+          'relative overflow-hidden transition-all duration-300',
           clickable && 'cursor-pointer',
           className
         )}
+        style={{
+          borderRadius: 'var(--radius-xl)',
+          boxShadow: hoverable ? 'var(--shadow-card)' : 'none',
+          ...getVariantStyles,
+          ':hover': hoverable ? {
+            boxShadow: containerShadows[container]
+          } : {}
+        }}
         variants={cardVariants}
         initial="initial"
         whileHover="hover"
@@ -163,41 +174,63 @@ export const ThemeAwareCard: React.FC<ThemeAwareCardProps> = ({
       >
         {/* Glass effect overlay for glass variant */}
         {variant === 'glass' && (
-          <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none" />
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: 'linear-gradient(to bottom right, rgba(255, 255, 255, 0.1), transparent)'
+            }}
+          />
         )}
 
         {/* Content container */}
-        <div className="relative z-10 p-6">
+        <div
+          className="relative z-10"
+          style={{ padding: 'var(--space-6)' }}
+        >
           {/* Header section with icon, title, and badge */}
           {(Icon || title || badge) && (
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-start space-x-3">
                 {Icon && (
                   <motion.div
-                    className={cn(
-                      'p-2 rounded-lg',
-                      variant === 'gradient' ? 'bg-white/20' : 'bg-gray-100 dark:bg-gray-800'
-                    )}
+                    style={{
+                      padding: 'var(--space-2)',
+                      borderRadius: 'var(--radius-lg)',
+                      backgroundColor: variant === 'gradient' ? 'rgba(255, 255, 255, 0.2)' : 'var(--color-bg-secondary)'
+                    }}
                     whileHover={{ rotate: 360 }}
                     transition={{ duration: 0.5 }}
                   >
                     <Icon
-                      className={cn(
-                        'w-5 h-5',
-                        iconColor || `text-${container === 'learn' ? 'purple' : container === 'experience' ? 'green' : 'orange'}-500`
-                      )}
+                      style={{
+                        width: '1.25rem',
+                        height: '1.25rem',
+                        color: iconColor || (container === 'learn' ? 'var(--purple-500)' :
+                                            container === 'experience' ? 'var(--green-500)' :
+                                            'var(--amber-500)')
+                      }}
                     />
                   </motion.div>
                 )}
 
                 <div>
                   {title && (
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                    <h3 style={{
+                      fontSize: 'var(--text-lg)',
+                      fontWeight: 'var(--font-semibold)',
+                      color: 'var(--color-text-primary)',
+                      margin: 0
+                    }}>
                       {title}
                     </h3>
                   )}
                   {subtitle && (
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                    <p style={{
+                      fontSize: 'var(--text-sm)',
+                      color: 'var(--color-text-secondary)',
+                      marginTop: 'var(--space-1)',
+                      margin: 0
+                    }}>
                       {subtitle}
                     </p>
                   )}
@@ -206,10 +239,13 @@ export const ThemeAwareCard: React.FC<ThemeAwareCardProps> = ({
 
               {badge && (
                 <motion.span
-                  className={cn(
-                    'px-2 py-1 rounded-full text-xs font-medium',
-                    getBadgeColorClass()
-                  )}
+                  style={{
+                    padding: 'var(--space-1) var(--space-2)',
+                    borderRadius: 'var(--radius-full)',
+                    fontSize: 'var(--text-xs)',
+                    fontWeight: 'var(--font-medium)',
+                    ...getBadgeStyles()
+                  }}
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: animationDelay + 0.2, type: 'spring' }}
@@ -270,26 +306,45 @@ export const ThemeAwareCard: React.FC<ThemeAwareCardProps> = ({
 export const ProgressCard: React.FC<ThemeAwareCardProps & { progress: number }> = ({
   progress,
   ...props
-}) => (
-  <ThemeAwareCard {...props}>
-    <div className="space-y-2">
-      {props.children}
-      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-        <motion.div
-          className={cn(
-            'h-full rounded-full',
-            props.container === 'learn' ? 'bg-purple-500' :
-            props.container === 'experience' ? 'bg-green-500' :
-            'bg-orange-500'
-          )}
-          initial={{ width: 0 }}
-          animate={{ width: `${progress}%` }}
-          transition={{ duration: 1, ease: 'easeOut' }}
-        />
+}) => {
+  const getProgressColor = () => {
+    switch (props.container) {
+      case 'learn':
+        return 'var(--purple-500)';
+      case 'experience':
+        return 'var(--green-500)';
+      case 'discover':
+        return 'var(--amber-500)';
+      default:
+        return 'var(--blue-500)';
+    }
+  };
+
+  return (
+    <ThemeAwareCard {...props}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
+        {props.children}
+        <div style={{
+          width: '100%',
+          backgroundColor: 'var(--color-bg-tertiary)',
+          borderRadius: 'var(--radius-full)',
+          height: 'var(--space-2)'
+        }}>
+          <motion.div
+            style={{
+              height: '100%',
+              borderRadius: 'var(--radius-full)',
+              backgroundColor: getProgressColor()
+            }}
+            initial={{ width: 0 }}
+            animate={{ width: `${progress}%` }}
+            transition={{ duration: 1, ease: 'easeOut' }}
+          />
+        </div>
       </div>
-    </div>
-  </ThemeAwareCard>
-);
+    </ThemeAwareCard>
+  );
+};
 
 export const StatCard: React.FC<ThemeAwareCardProps & {
   value: string | number;
@@ -297,17 +352,21 @@ export const StatCard: React.FC<ThemeAwareCardProps & {
   trend?: 'up' | 'down';
 }> = ({ value, label, trend, ...props }) => (
   <ThemeAwareCard {...props}>
-    <div className="space-y-1">
-      <div className="flex items-baseline space-x-2">
-        <span className="text-2xl font-bold text-gray-900 dark:text-white">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-1)' }}>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 'var(--space-2)' }}>
+        <span style={{
+          fontSize: 'var(--text-2xl)',
+          fontWeight: 'var(--font-bold)',
+          color: 'var(--color-text-primary)'
+        }}>
           {value}
         </span>
         {trend && (
           <motion.span
-            className={cn(
-              'text-sm',
-              trend === 'up' ? 'text-green-500' : 'text-red-500'
-            )}
+            style={{
+              fontSize: 'var(--text-sm)',
+              color: trend === 'up' ? 'var(--green-500)' : 'var(--red-500)'
+            }}
             initial={{ y: trend === 'up' ? 5 : -5, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
           >
@@ -315,7 +374,10 @@ export const StatCard: React.FC<ThemeAwareCardProps & {
           </motion.span>
         )}
       </div>
-      <p className="text-sm text-gray-600 dark:text-gray-400">{label}</p>
+      <p style={{
+        fontSize: 'var(--text-sm)',
+        color: 'var(--color-text-secondary)'
+      }}>{label}</p>
     </div>
   </ThemeAwareCard>
 );

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Header } from '../Header';
 import { useAuthContext } from '../../contexts/AuthContext';
-import { 
-  Plus, 
-  BookOpen, 
-  Target, 
-  Users, 
-  Zap, 
-  ArrowRight, 
+import {
+  Plus,
+  BookOpen,
+  Target,
+  Users,
+  Zap,
+  ArrowRight,
   ArrowLeft,
   Brain,
   Lightbulb,
@@ -17,6 +17,14 @@ import {
   Filter,
   Sparkles
 } from 'lucide-react';
+
+// Design System Imports
+import '../../design-system/tokens/colors.css';
+import '../../design-system/tokens/spacing.css';
+import '../../design-system/tokens/borders.css';
+import '../../design-system/tokens/typography.css';
+import '../../design-system/tokens/shadows.css';
+import '../../design-system/tokens/dashboard.css';
 
 interface Skill {
   id: string;
@@ -609,43 +617,43 @@ export function CustomPathCreator() {
 
   if (currentView === 'create') {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div style={{ minHeight: '100vh', backgroundColor: 'var(--dashboard-bg-primary)' }}>
         <Header showBackButton={true} backButtonDestination="/app/dashboard" />
         
-        <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+        <main style={{ maxWidth: '56rem', margin: '0 auto', padding: 'var(--space-8) var(--space-4)' }}>
+          <div style={{ marginBottom: 'var(--space-8)' }}>
+            <h1 style={{ fontSize: 'var(--text-3xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)', marginBottom: 'var(--space-2)' }}>
               Create Custom Learning Path
             </h1>
-            <p className="text-gray-600 dark:text-gray-400">
+            <p style={{ color: 'var(--dashboard-text-secondary)' }}>
               Design a personalized curriculum for any subject with AI assistance
             </p>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--dashboard-shadow-card)', border: '1px solid var(--dashboard-border)', padding: 'var(--space-6)' }}>
             {/* Path Basic Info */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 'var(--space-6)', marginBottom: 'var(--space-8)' }}>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label style={{ display: 'block', fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)', marginBottom: 'var(--space-2)' }}>
                   Path Title *
                 </label>
                 <input
                   type="text"
                   value={newPath.title || ''}
                   onChange={(e) => setNewPath(prev => ({ ...prev, title: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                  style={{ width: '100%', padding: 'var(--space-2) var(--space-3)', border: '1px solid var(--dashboard-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--dashboard-bg-elevated)', color: 'var(--dashboard-text-primary)' }}
                   placeholder="e.g., Household Finance, Basic Plumbing, Christianity Studies"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label style={{ display: 'block', fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)', marginBottom: 'var(--space-2)' }}>
                   Category *
                 </label>
                 <select
                   value={newPath.category || ''}
                   onChange={(e) => setNewPath(prev => ({ ...prev, category: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                  style={{ width: '100%', padding: 'var(--space-2) var(--space-3)', border: '1px solid var(--dashboard-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--dashboard-bg-elevated)', color: 'var(--dashboard-text-primary)' }}
                 >
                   <option value="">Select a category</option>
                   {predefinedCategories.map(cat => (
@@ -654,27 +662,27 @@ export function CustomPathCreator() {
                 </select>
               </div>
 
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <div style={{ gridColumn: 'span 2' }}>
+                <label style={{ display: 'block', fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)', marginBottom: 'var(--space-2)' }}>
                   Description
                 </label>
                 <textarea
                   value={newPath.description || ''}
                   onChange={(e) => setNewPath(prev => ({ ...prev, description: e.target.value }))}
                   rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                  style={{ width: '100%', padding: 'var(--space-2) var(--space-3)', border: '1px solid var(--dashboard-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--dashboard-bg-elevated)', color: 'var(--dashboard-text-primary)' }}
                   placeholder="Describe what students will learn and achieve in this path"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label style={{ display: 'block', fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)', marginBottom: 'var(--space-2)' }}>
                   Grade Level
                 </label>
                 <select
                   value={newPath.gradeLevel || '6-12'}
                   onChange={(e) => setNewPath(prev => ({ ...prev, gradeLevel: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                  style={{ width: '100%', padding: 'var(--space-2) var(--space-3)', border: '1px solid var(--dashboard-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--dashboard-bg-elevated)', color: 'var(--dashboard-text-primary)' }}
                 >
                   <option value="K-2">Kindergarten - 2nd Grade</option>
                   <option value="3-5">3rd - 5th Grade</option>
@@ -685,32 +693,46 @@ export function CustomPathCreator() {
                 </select>
               </div>
 
-              <div className="flex items-center">
+              <div style={{ display: 'flex', alignItems: 'center' }}>
                 <input
                   type="checkbox"
                   id="isPublic"
                   checked={newPath.isPublic || false}
                   onChange={(e) => setNewPath(prev => ({ ...prev, isPublic: e.target.checked }))}
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  style={{
+                    height: '1rem',
+                    width: '1rem',
+                    accentColor: 'var(--blue-600)',
+                    cursor: 'pointer'
+                  }}
                 />
-                <label htmlFor="isPublic" className="ml-2 block text-sm text-gray-700 dark:text-gray-300">
+                <label
+                  htmlFor="isPublic"
+                  style={{
+                    marginLeft: 'var(--space-2)',
+                    display: 'block',
+                    fontSize: 'var(--text-sm)',
+                    color: 'var(--dashboard-text-primary)',
+                    cursor: 'pointer'
+                  }}
+                >
                   Share with community
                 </label>
               </div>
             </div>
 
             {/* AI Generation */}
-            <div className="mb-8 p-6 bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-lg border border-purple-200 dark:border-purple-700">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center space-x-3">
-                  <div className="p-2 bg-purple-500 rounded-lg">
-                    <Sparkles className="w-5 h-5 text-white" />
+            <div style={{ marginBottom: 'var(--space-8)', padding: 'var(--space-6)', background: 'linear-gradient(to right, #F5F3FF, #EFF6FF)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--purple-200)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-4)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+                  <div style={{ padding: 'var(--space-2)', backgroundColor: 'var(--purple-500)', borderRadius: 'var(--radius-lg)' }}>
+                    <Sparkles style={{ width: '1.25rem', height: '1.25rem', color: 'white' }} />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                    <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)' }}>
                       AI Path Generator
                     </h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>
                       Let AI create a complete learning path with skills and career connections
                     </p>
                   </div>
@@ -718,16 +740,36 @@ export function CustomPathCreator() {
                 <button
                   onClick={handleGenerateWithAI}
                   disabled={!newPath.title || !newPath.category}
-                  className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                  style={{
+                    padding: 'var(--space-2) var(--space-4)',
+                    backgroundColor: 'var(--purple-600)',
+                    color: 'white',
+                    borderRadius: 'var(--radius-lg)',
+                    border: 'none',
+                    cursor: newPath.title && newPath.category ? 'pointer' : 'not-allowed',
+                    opacity: newPath.title && newPath.category ? 1 : 0.5,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'var(--space-2)',
+                    transition: 'background-color 200ms ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (newPath.title && newPath.category) {
+                      e.currentTarget.style.backgroundColor = 'var(--purple-700)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'var(--purple-600)';
+                  }}
                 >
-                  <Brain className="w-4 h-4" />
+                  <Brain style={{ width: '1rem', height: '1rem' }} />
                   <span>Generate Path</span>
                 </button>
               </div>
-              
+
               {newPath.skills && newPath.skills.length > 0 && (
-                <div className="text-sm text-green-700 dark:text-green-400 flex items-center space-x-2">
-                  <CheckCircle className="w-4 h-4" />
+                <div style={{ fontSize: 'var(--text-sm)', color: 'var(--green-700)', display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+                  <CheckCircle style={{ width: '1rem', height: '1rem' }} />
                   <span>Generated {newPath.skills.length} skills • Total: {newPath.totalHours} hours</span>
                 </div>
               )}
@@ -735,40 +777,67 @@ export function CustomPathCreator() {
 
             {/* Generated Skills Preview */}
             {newPath.skills && newPath.skills.length > 0 && (
-              <div className="mb-8">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              <div style={{ marginBottom: 'var(--space-8)' }}>
+                <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)', marginBottom: 'var(--space-4)' }}>
                   Generated Learning Skills
                 </h3>
-                <div className="space-y-4">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
                   {newPath.skills.map((skill, index) => (
-                    <div key={skill.id} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
-                      <div className="flex items-start justify-between mb-2">
+                    <div
+                      key={skill.id}
+                      style={{
+                        border: '1px solid var(--dashboard-border)',
+                        borderRadius: 'var(--radius-lg)',
+                        padding: 'var(--space-4)',
+                        backgroundColor: 'var(--dashboard-bg-elevated)'
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'start', justifyContent: 'space-between', marginBottom: 'var(--space-2)' }}>
                         <div>
-                          <div className="flex items-center space-x-2 mb-1">
-                            <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-medium rounded">
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-1)' }}>
+                            <span style={{
+                              padding: 'var(--space-1) var(--space-2)',
+                              backgroundColor: '#DBEAFE',
+                              color: '#1E40AF',
+                              fontSize: 'var(--text-xs)',
+                              fontWeight: 'var(--font-medium)',
+                              borderRadius: 'var(--radius-sm)'
+                            }}>
                               {skill.code}
                             </span>
-                            <span className={`px-2 py-1 text-xs font-medium rounded ${
-                              skill.difficulty === 'Beginner' ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' :
-                              skill.difficulty === 'Intermediate' ? 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200' :
-                              'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
-                            }`}>
+                            <span style={{
+                              padding: 'var(--space-1) var(--space-2)',
+                              backgroundColor: skill.difficulty === 'Beginner' ? '#D1FAE5' : skill.difficulty === 'Intermediate' ? '#FEF3C7' : '#FEE2E2',
+                              color: skill.difficulty === 'Beginner' ? '#065F46' : skill.difficulty === 'Intermediate' ? '#92400E' : '#991B1B',
+                              fontSize: 'var(--text-xs)',
+                              fontWeight: 'var(--font-medium)',
+                              borderRadius: 'var(--radius-sm)'
+                            }}>
                               {skill.difficulty}
                             </span>
                           </div>
-                          <h4 className="font-medium text-gray-900 dark:text-white">{skill.title}</h4>
-                          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{skill.description}</p>
+                          <h4 style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>{skill.title}</h4>
+                          <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)', marginTop: 'var(--space-1)' }}>{skill.description}</p>
                         </div>
-                        <div className="text-right text-sm">
-                          <div className="text-gray-600 dark:text-gray-400">{skill.estimatedHours}h</div>
+                        <div style={{ textAlign: 'right', fontSize: 'var(--text-sm)' }}>
+                          <div style={{ color: 'var(--dashboard-text-secondary)' }}>{skill.estimatedHours}h</div>
                         </div>
                       </div>
-                      
-                      <div className="mt-3">
-                        <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Career Applications:</div>
-                        <div className="flex flex-wrap gap-1">
+
+                      <div style={{ marginTop: 'var(--space-3)' }}>
+                        <div style={{ fontSize: 'var(--text-xs)', color: 'var(--dashboard-text-tertiary)', marginBottom: 'var(--space-1)' }}>Career Applications:</div>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-1)' }}>
                           {skill.careerApplications.map((career, idx) => (
-                            <span key={idx} className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs rounded">
+                            <span
+                              key={idx}
+                              style={{
+                                padding: 'var(--space-1) var(--space-2)',
+                                backgroundColor: 'var(--dashboard-bg-secondary)',
+                                color: 'var(--dashboard-text-secondary)',
+                                fontSize: 'var(--text-xs)',
+                                borderRadius: 'var(--radius-sm)'
+                              }}
+                            >
                               {career}
                             </span>
                           ))}
@@ -781,24 +850,77 @@ export function CustomPathCreator() {
             )}
 
             {/* Action Buttons */}
-            <div className="flex justify-between">
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <button
                 onClick={() => setCurrentView('browse')}
-                className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center space-x-2"
+                style={{
+                  padding: 'var(--space-2) var(--space-4)',
+                  border: '1px solid var(--dashboard-border-strong)',
+                  color: 'var(--dashboard-text-primary)',
+                  backgroundColor: 'transparent',
+                  borderRadius: 'var(--radius-lg)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 'var(--space-2)',
+                  cursor: 'pointer',
+                  transition: 'background-color 200ms ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'var(--dashboard-bg-secondary)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                }}
               >
-                <ArrowLeft className="w-4 h-4" />
+                <ArrowLeft style={{ width: '1rem', height: '1rem' }} />
                 <span>Back to Browse</span>
               </button>
-              
-              <div className="flex space-x-3">
-                <button className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+
+              <div style={{ display: 'flex', gap: 'var(--space-3)' }}>
+                <button
+                  style={{
+                    padding: 'var(--space-2) var(--space-4)',
+                    border: '1px solid var(--dashboard-border-strong)',
+                    color: 'var(--dashboard-text-primary)',
+                    backgroundColor: 'transparent',
+                    borderRadius: 'var(--radius-lg)',
+                    cursor: 'pointer',
+                    transition: 'background-color 200ms ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = 'var(--dashboard-bg-secondary)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                  }}
+                >
                   Save as Draft
                 </button>
-                <button 
+                <button
                   disabled={!newPath.title || !newPath.category || !newPath.skills?.length}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                  style={{
+                    padding: 'var(--space-2) var(--space-4)',
+                    backgroundColor: 'var(--blue-600)',
+                    color: 'white',
+                    borderRadius: 'var(--radius-lg)',
+                    border: 'none',
+                    cursor: newPath.title && newPath.category && newPath.skills?.length ? 'pointer' : 'not-allowed',
+                    opacity: newPath.title && newPath.category && newPath.skills?.length ? 1 : 0.5,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'var(--space-2)',
+                    transition: 'background-color 200ms ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (newPath.title && newPath.category && newPath.skills?.length) {
+                      e.currentTarget.style.backgroundColor = 'var(--blue-700)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'var(--blue-600)';
+                  }}
                 >
-                  <CheckCircle className="w-4 h-4" />
+                  <CheckCircle style={{ width: '1rem', height: '1rem' }} />
                   <span>Create Path</span>
                 </button>
               </div>
@@ -810,46 +932,63 @@ export function CustomPathCreator() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--dashboard-bg-primary)' }}>
       <Header showBackButton={true} backButtonDestination="/app/dashboard" />
       
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main style={{ maxWidth: '80rem', margin: '0 auto', padding: 'var(--space-8) var(--space-4)' }}>
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-8)' }}>
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            <h1 style={{ fontSize: 'var(--text-3xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)', marginBottom: 'var(--space-2)' }}>
               Custom Learning Paths
             </h1>
-            <p className="text-gray-600 dark:text-gray-400">
+            <p style={{ color: 'var(--dashboard-text-secondary)' }}>
               Create personalized curricula for any subject with AI assistance
             </p>
           </div>
           <button
             onClick={handleCreatePath}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center space-x-2"
+            style={{
+              padding: 'var(--space-2) var(--space-4)',
+              backgroundColor: 'var(--blue-600)',
+              color: 'white',
+              borderRadius: 'var(--radius-lg)',
+              border: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--space-2)',
+              cursor: 'pointer',
+              transition: 'background-color 200ms ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'var(--blue-700)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'var(--blue-600)';
+            }}
           >
-            <Plus className="w-4 h-4" />
+            <Plus style={{ width: '1rem', height: '1rem' }} />
             <span>Create Custom Path</span>
           </button>
         </div>
 
         {/* Search and Filter */}
-        <div className="mb-6 flex flex-col sm:flex-row gap-4">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+        <div style={{ marginBottom: 'var(--space-6)', display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }} data-responsive="sm:flex-row">
+          <div style={{ flex: '1', position: 'relative' }}>
+            <Search style={{ position: 'absolute', left: 'var(--space-3)', top: '50%', transform: 'translateY(-50%)', color: 'var(--dashboard-text-tertiary)', width: '1rem', height: '1rem' }} />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search paths by title, description, or tags..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
+              style={{ width: '100%', paddingLeft: '2.5rem', paddingRight: 'var(--space-4)', paddingTop: 'var(--space-2)', paddingBottom: 'var(--space-2)', border: '1px solid var(--dashboard-border)', borderRadius: 'var(--radius-lg)', backgroundColor: 'var(--dashboard-bg-elevated)', color: 'var(--dashboard-text-primary)' }}
             />
           </div>
           
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
+            style={{ padding: 'var(--space-2) var(--space-3)', border: '1px solid var(--dashboard-border)', borderRadius: 'var(--radius-lg)', backgroundColor: 'var(--dashboard-bg-elevated)', color: 'var(--dashboard-text-primary)' }}
           >
             <option value="all">All Categories</option>
             {predefinedCategories.map(cat => (
@@ -859,7 +998,7 @@ export function CustomPathCreator() {
         </div>
 
         {/* Category Pills */}
-        <div className="mb-8 flex flex-wrap gap-2">
+        <div style={{ marginBottom: 'var(--space-8)', display: 'flex', flexWrap: 'wrap', gap: 'var(--space-2)' }}>
           <button
             onClick={() => setSelectedCategory('all')}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
@@ -887,66 +1026,118 @@ export function CustomPathCreator() {
         </div>
 
         {/* Paths Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 'var(--space-6)' }}>
           {filteredPaths.map(path => (
-            <div key={path.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-shadow">
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex items-center space-x-3">
+            <div
+              key={path.id}
+              style={{
+                backgroundColor: 'var(--dashboard-bg-elevated)',
+                borderRadius: 'var(--radius-lg)',
+                boxShadow: 'var(--dashboard-shadow-sm)',
+                border: '1px solid var(--dashboard-border)',
+                padding: 'var(--space-6)',
+                transition: 'box-shadow 200ms ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = 'var(--dashboard-shadow-md)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = 'var(--dashboard-shadow-sm)';
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'start', justifyContent: 'space-between', marginBottom: 'var(--space-4)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
                   <div className={`p-2 rounded-lg ${predefinedCategories.find(c => c.id === path.category)?.color || 'bg-gray-500'}`}>
-                    <span className="text-white text-lg">
+                    <span style={{ color: 'white', fontSize: 'var(--text-lg)' }}>
                       {predefinedCategories.find(c => c.id === path.category)?.icon || '📚'}
                     </span>
                   </div>
                   <div>
-                    <div className="flex items-center space-x-2 mb-1">
-                      <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-medium rounded">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-1)' }}>
+                      <span style={{
+                        padding: 'var(--space-1) var(--space-2)',
+                        backgroundColor: '#DBEAFE',
+                        color: '#1E40AF',
+                        fontSize: 'var(--text-xs)',
+                        fontWeight: 'var(--font-medium)',
+                        borderRadius: 'var(--radius-sm)'
+                      }}>
                         {path.code}
                       </span>
-                      <span className="text-xs text-gray-500 dark:text-gray-400">{path.gradeLevel}</span>
+                      <span style={{ fontSize: 'var(--text-xs)', color: 'var(--dashboard-text-tertiary)' }}>{path.gradeLevel}</span>
                     </div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white">{path.title}</h3>
+                    <h3 style={{ fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)' }}>{path.title}</h3>
                   </div>
                 </div>
               </div>
-              
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">{path.description}</p>
-              
-              <div className="mb-4">
-                <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 mb-2">
+
+              <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)', marginBottom: 'var(--space-4)' }}>{path.description}</p>
+
+              <div style={{ marginBottom: 'var(--space-4)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-tertiary)', marginBottom: 'var(--space-2)' }}>
                   <span>{path.skills.length} Skills</span>
                   <span>{path.totalHours} Hours</span>
                 </div>
-                <div className="space-y-1">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-1)' }}>
                   {path.skills.slice(0, 2).map(skill => (
-                    <div key={skill.id} className="text-xs text-gray-600 dark:text-gray-400">
+                    <div key={skill.id} style={{ fontSize: 'var(--text-xs)', color: 'var(--dashboard-text-secondary)' }}>
                       {skill.code} {skill.title}
                     </div>
                   ))}
                   {path.skills.length > 2 && (
-                    <div className="text-xs text-blue-600 dark:text-blue-400">
+                    <div style={{ fontSize: 'var(--text-xs)', color: 'var(--blue-600)' }}>
                       +{path.skills.length - 2} more skills
                     </div>
                   )}
                 </div>
               </div>
 
-              <div className="mb-4">
-                <div className="flex flex-wrap gap-1">
+              <div style={{ marginBottom: 'var(--space-4)' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-1)' }}>
                   {path.tags.slice(0, 3).map(tag => (
-                    <span key={tag} className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs rounded">
+                    <span
+                      key={tag}
+                      style={{
+                        padding: 'var(--space-1) var(--space-2)',
+                        backgroundColor: 'var(--dashboard-bg-secondary)',
+                        color: 'var(--dashboard-text-secondary)',
+                        fontSize: 'var(--text-xs)',
+                        borderRadius: 'var(--radius-sm)'
+                      }}
+                    >
                       {tag}
                     </span>
                   ))}
                 </div>
               </div>
 
-              <div className="flex justify-between items-center">
-                <div className="text-xs text-gray-500 dark:text-gray-400">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ fontSize: 'var(--text-xs)', color: 'var(--dashboard-text-tertiary)' }}>
                   by {path.createdBy}
                 </div>
-                <button className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 flex items-center space-x-1">
+                <button
+                  style={{
+                    padding: 'var(--space-1) var(--space-3)',
+                    backgroundColor: 'var(--blue-600)',
+                    color: 'white',
+                    fontSize: 'var(--text-sm)',
+                    borderRadius: 'var(--radius-md)',
+                    border: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'var(--space-1)',
+                    cursor: 'pointer',
+                    transition: 'background-color 200ms ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = 'var(--blue-700)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'var(--blue-600)';
+                  }}
+                >
                   <span>Use Path</span>
-                  <ArrowRight className="w-3 h-3" />
+                  <ArrowRight style={{ width: '0.75rem', height: '0.75rem' }} />
                 </button>
               </div>
             </div>
@@ -954,17 +1145,34 @@ export function CustomPathCreator() {
         </div>
 
         {filteredPaths.length === 0 && (
-          <div className="text-center py-12">
-            <BookOpen className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No paths found</h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
+          <div style={{ textAlign: 'center', padding: 'var(--space-12) 0' }}>
+            <BookOpen style={{ width: '3rem', height: '3rem', color: 'var(--dashboard-text-tertiary)', margin: '0 auto var(--space-4)' }} />
+            <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)', marginBottom: 'var(--space-2)' }}>No paths found</h3>
+            <p style={{ color: 'var(--dashboard-text-secondary)', marginBottom: 'var(--space-4)' }}>
               Try adjusting your search criteria or create a new custom path
             </p>
             <button
               onClick={handleCreatePath}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center space-x-2 mx-auto"
+              style={{
+                padding: 'var(--space-2) var(--space-4)',
+                backgroundColor: 'var(--blue-600)',
+                color: 'white',
+                borderRadius: 'var(--radius-lg)',
+                border: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 'var(--space-2)',
+                cursor: 'pointer',
+                transition: 'background-color 200ms ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = 'var(--blue-700)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'var(--blue-600)';
+              }}
             >
-              <Plus className="w-4 h-4" />
+              <Plus style={{ width: '1rem', height: '1rem' }} />
               <span>Create Custom Path</span>
             </button>
           </div>
