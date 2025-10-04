@@ -1,6 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Check, X } from 'lucide-react';
 import { SubscriptionTier, subscriptionFeatures, subscriptionPlans } from '../../types/subscription';
+import '../../design-system/tokens/colors.css';
+import '../../design-system/tokens/spacing.css';
+import '../../design-system/tokens/borders.css';
+import '../../design-system/tokens/typography.css';
+import '../../design-system/tokens/shadows.css';
+import '../../design-system/tokens/dashboard.css';
 
 interface FeatureComparisonProps {
   currentTier?: SubscriptionTier;
@@ -8,6 +14,49 @@ interface FeatureComparisonProps {
 }
 
 export function FeatureComparison({ currentTier, onSelectPlan }: FeatureComparisonProps) {
+  const [hoveredPlanButton, setHoveredPlanButton] = useState<SubscriptionTier | null>(null);
+
+  // Map subscription tiers to solid colors
+  const getPlanColors = (tier: SubscriptionTier) => {
+    switch (tier) {
+      case 'basic':
+        return {
+          heading: '#22c55e',
+          bg: '#22c55e',
+          bgHover: '#16a34a',
+          lightBg: '#dcfce7',
+          darkText: '#065f46',
+          checkIcon: '#22c55e'
+        };
+      case 'premium':
+        return {
+          heading: '#2563eb',
+          bg: '#2563eb',
+          bgHover: '#1d4ed8',
+          lightBg: '#dbeafe',
+          darkText: '#1e40af',
+          checkIcon: '#2563eb'
+        };
+      case 'enterprise':
+        return {
+          heading: '#9333ea',
+          bg: '#9333ea',
+          bgHover: '#7e22ce',
+          lightBg: '#f3e8ff',
+          darkText: '#6b21a8',
+          checkIcon: '#9333ea'
+        };
+      default:
+        return {
+          heading: '#2563eb',
+          bg: '#2563eb',
+          bgHover: '#1d4ed8',
+          lightBg: '#dbeafe',
+          darkText: '#1e40af',
+          checkIcon: '#2563eb'
+        };
+    }
+  };
   // Group features by category
   const featureCategories = [
     {
@@ -29,72 +78,114 @@ export function FeatureComparison({ currentTier, onSelectPlan }: FeatureComparis
   ];
 
   return (
-    <div className="space-y-8">
-      <div className="grid grid-cols-4 gap-4">
-        <div className="col-span-1"></div>
-        {subscriptionPlans.map((plan) => (
-          <div key={plan.tier} className="col-span-1 text-center">
-            <h3 className={`text-lg font-bold text-${plan.color}-600 dark:text-${plan.color}-400`}>
-              {plan.name}
-            </h3>
-            <p className="mt-2 text-2xl font-bold text-gray-900 dark:text-white">
-              ${plan.price}
-              <span className="text-sm font-normal text-gray-500 dark:text-gray-400">/user/mo</span>
-            </p>
-            {onSelectPlan && (
-              <button
-                onClick={() => onSelectPlan(plan.tier)}
-                disabled={currentTier === plan.tier}
-                className={`mt-4 w-full px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium ${
-                  currentTier === plan.tier
-                    ? 'bg-gray-100 text-gray-400 dark:bg-gray-700 dark:text-gray-500 cursor-not-allowed'
-                    : `text-white bg-${plan.color}-600 hover:bg-${plan.color}-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${plan.color}-500`
-                }`}
-              >
-                {currentTier === plan.tier ? 'Current Plan' : 'Select Plan'}
-              </button>
-            )}
-          </div>
-        ))}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-8)' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 'var(--space-4)' }}>
+        <div style={{ gridColumn: 'span 1' }}></div>
+        {subscriptionPlans.map((plan) => {
+          const colors = getPlanColors(plan.tier);
+          const isHovered = hoveredPlanButton === plan.tier;
+          const isCurrent = currentTier === plan.tier;
+
+          return (
+            <div key={plan.tier} style={{ gridColumn: 'span 1', textAlign: 'center' }}>
+              <h3 style={{
+                fontSize: 'var(--text-lg)',
+                fontWeight: 'var(--font-bold)',
+                color: colors.heading
+              }}>
+                {plan.name}
+              </h3>
+            </div>
+          );
+        })}
       </div>
 
       {/* Feature comparison table */}
-      <div className="mt-8 border-t border-gray-200 dark:border-gray-700 pt-8">
+      <div style={{
+        marginTop: 'var(--space-8)',
+        borderTop: '1px solid var(--dashboard-border-primary)',
+        paddingTop: 'var(--space-8)'
+      }}>
         {featureCategories.map((category) => (
-          <div key={category.name} className="mb-8">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">{category.name}</h3>
-            <div className="border-t border-gray-200 dark:border-gray-700">
+          <div key={category.name} style={{ marginBottom: 'var(--space-8)' }}>
+            <h3 style={{
+              fontSize: 'var(--text-lg)',
+              fontWeight: 'var(--font-medium)',
+              color: 'var(--dashboard-text-primary)',
+              marginBottom: 'var(--space-4)'
+            }}>
+              {category.name}
+            </h3>
+            <div style={{ borderTop: '1px solid var(--dashboard-border-primary)' }}>
               {category.features.map((featureId) => {
                 const feature = subscriptionFeatures.find(f => f.id === featureId);
                 if (!feature) return null;
-                
+
                 return (
-                  <div key={featureId} className="grid grid-cols-4 gap-4 py-4 border-b border-gray-200 dark:border-gray-700">
-                    <div className="col-span-1">
-                      <div className="flex items-center">
-                        <p className="text-sm font-medium text-gray-900 dark:text-white">
+                  <div key={featureId} style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(4, 1fr)',
+                    gap: 'var(--space-4)',
+                    padding: 'var(--space-4) 0',
+                    borderBottom: '1px solid var(--dashboard-border-primary)'
+                  }}>
+                    <div style={{ gridColumn: 'span 1' }}>
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <p style={{
+                          fontSize: 'var(--text-sm)',
+                          fontWeight: 'var(--font-medium)',
+                          color: 'var(--dashboard-text-primary)'
+                        }}>
                           {feature.name}
                           {feature.comingSoon && (
-                            <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300">
+                            <span style={{
+                              marginLeft: 'var(--space-2)',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              padding: 'var(--space-1) var(--space-2)',
+                              borderRadius: 'var(--radius-md)',
+                              fontSize: 'var(--text-xs)',
+                              fontWeight: 'var(--font-medium)',
+                              backgroundColor: '#dbeafe',
+                              color: '#1e40af'
+                            }}>
                               Coming Soon
                             </span>
                           )}
                         </p>
                       </div>
-                      <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                      <p style={{
+                        marginTop: 'var(--space-1)',
+                        fontSize: 'var(--text-xs)',
+                        color: 'var(--dashboard-text-secondary)'
+                      }}>
                         {feature.description}
                       </p>
                     </div>
-                    
+
                     {subscriptionPlans.map((plan) => {
                       const isIncluded = feature.tiers.includes(plan.tier);
-                      
+                      const colors = getPlanColors(plan.tier);
+
                       return (
-                        <div key={plan.tier} className="col-span-1 text-center">
+                        <div key={plan.tier} style={{
+                          gridColumn: 'span 1',
+                          textAlign: 'center'
+                        }}>
                           {isIncluded ? (
-                            <Check className={`mx-auto h-5 w-5 text-${plan.color}-500`} />
+                            <Check style={{
+                              margin: '0 auto',
+                              height: '20px',
+                              width: '20px',
+                              color: colors.checkIcon
+                            }} />
                           ) : (
-                            <X className="mx-auto h-5 w-5 text-gray-400" />
+                            <X style={{
+                              margin: '0 auto',
+                              height: '20px',
+                              width: '20px',
+                              color: '#9ca3af'
+                            }} />
                           )}
                         </div>
                       );

@@ -1,6 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Palette, Monitor, Sun, Moon, Eye, Upload, Layout } from 'lucide-react';
 import { AppearanceSettings } from '../../types/settings';
+import '../../design-system/tokens/colors.css';
+import '../../design-system/tokens/spacing.css';
+import '../../design-system/tokens/borders.css';
+import '../../design-system/tokens/typography.css';
+import '../../design-system/tokens/shadows.css';
+import '../../design-system/tokens/dashboard.css';
 
 interface AppearanceSettingsFormProps {
   settings: AppearanceSettings | null;
@@ -10,6 +16,8 @@ interface AppearanceSettingsFormProps {
 }
 
 export function AppearanceSettingsForm({ settings, onUpdate, errors, disabled }: AppearanceSettingsFormProps) {
+  const [hoveredInput, setHoveredInput] = useState<string | null>(null);
+
   if (!settings) return null;
 
   const themeOptions = [
@@ -25,77 +33,188 @@ export function AppearanceSettingsForm({ settings, onUpdate, errors, disabled }:
     { value: 'reports', label: 'Reports' }
   ];
 
+  const cardStyles: React.CSSProperties = {
+    backgroundColor: 'var(--dashboard-bg-elevated)',
+    borderRadius: 'var(--radius-lg)',
+    border: `1px solid var(--dashboard-border-primary)`,
+    padding: 'var(--space-6)'
+  };
+
+  const sectionHeaderStyles: React.CSSProperties = {
+    fontSize: 'var(--text-lg)',
+    fontWeight: 'var(--font-medium)',
+    color: 'var(--dashboard-text-primary)'
+  };
+
+  const labelStyles: React.CSSProperties = {
+    display: 'block',
+    fontSize: 'var(--text-sm)',
+    fontWeight: 'var(--font-medium)',
+    color: 'var(--dashboard-text-primary)',
+    marginBottom: 'var(--space-1)'
+  };
+
+  const descriptionStyles: React.CSSProperties = {
+    fontSize: 'var(--text-sm)',
+    color: 'var(--dashboard-text-tertiary)'
+  };
+
+  const helperTextStyles: React.CSSProperties = {
+    fontSize: 'var(--text-xs)',
+    color: 'var(--dashboard-text-tertiary)',
+    marginTop: 'var(--space-1)'
+  };
+
+  const getInputStyles = (fieldName: string) => ({
+    width: '100%',
+    padding: 'var(--space-3)',
+    border: `1px solid var(--dashboard-border-primary)`,
+    borderRadius: 'var(--radius-lg)',
+    backgroundColor: disabled ? 'var(--dashboard-bg-secondary)' : 'var(--dashboard-bg-elevated)',
+    color: 'var(--dashboard-text-primary)',
+    fontSize: 'var(--text-sm)',
+    cursor: disabled ? 'not-allowed' : 'text',
+    transition: 'border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out',
+    outline: 'none',
+    opacity: disabled ? 0.5 : 1,
+    ...(hoveredInput === fieldName && !disabled ? { borderColor: 'var(--dashboard-border-hover)' } : {})
+  });
+
+  const renderToggle = (checked: boolean, onChange: () => void, id: string) => (
+    <label htmlFor={id} style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', cursor: disabled ? 'not-allowed' : 'pointer' }}>
+      <input
+        id={id}
+        type="checkbox"
+        checked={checked}
+        onChange={onChange}
+        disabled={disabled}
+        style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', borderWidth: 0 }}
+      />
+      <div style={{
+        width: '44px',
+        height: '24px',
+        backgroundColor: checked ? '#3b82f6' : '#d1d5db',
+        borderRadius: '12px',
+        position: 'relative',
+        transition: 'background-color 0.2s',
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        opacity: disabled ? 0.5 : 1
+      }}>
+        <div style={{
+          position: 'absolute',
+          top: '2px',
+          left: checked ? '22px' : '2px',
+          width: '20px',
+          height: '20px',
+          backgroundColor: 'white',
+          borderRadius: '50%',
+          transition: 'left 0.2s',
+          boxShadow: '0 1px 2px 0 rgb(0 0 0 / 0.05)'
+        }} />
+      </div>
+    </label>
+  );
+
   return (
-    <div className="space-y-8">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-8)' }}>
       {/* Theme Settings */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-        <div className="flex items-center space-x-2 mb-4">
-          <Palette className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white">Theme & Colors</h3>
+      <div style={cardStyles}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-4)' }}>
+          <Palette style={{ height: '20px', width: '20px', color: '#3b82f6' }} />
+          <h3 style={sectionHeaderStyles}>Theme & Colors</h3>
         </div>
-        
-        <div className="space-y-6">
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+            <label style={{ ...labelStyles, marginBottom: 'var(--space-3)' }}>
               Theme Mode
             </label>
-            <div className="grid grid-cols-3 gap-3">
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-3)' }}>
               {themeOptions.map(({ value, label, icon: Icon }) => (
                 <button
                   key={value}
                   onClick={() => onUpdate({ theme: value as 'light' | 'dark' | 'auto' })}
                   disabled={disabled}
-                  className={`p-4 border-2 rounded-lg transition-colors ${
-                    settings.theme === value
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                      : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
-                  } disabled:opacity-50 disabled:cursor-not-allowed`}
+                  style={{
+                    padding: 'var(--space-4)',
+                    border: settings.theme === value ? '2px solid #3b82f6' : '2px solid var(--dashboard-border-primary)',
+                    borderRadius: 'var(--radius-lg)',
+                    backgroundColor: settings.theme === value ? 'rgba(59, 130, 246, 0.1)' : 'transparent',
+                    cursor: disabled ? 'not-allowed' : 'pointer',
+                    opacity: disabled ? 0.5 : 1,
+                    transition: 'all 0.2s',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: 'var(--space-2)'
+                  }}
                 >
-                  <Icon className={`h-6 w-6 mx-auto mb-2 ${
-                    settings.theme === value ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400'
-                  }`} />
-                  <div className={`text-sm font-medium ${
-                    settings.theme === value ? 'text-blue-900 dark:text-blue-100' : 'text-gray-900 dark:text-white'
-                  }`}>
+                  <Icon style={{
+                    height: '24px',
+                    width: '24px',
+                    color: settings.theme === value ? '#3b82f6' : 'var(--dashboard-text-tertiary)'
+                  }} />
+                  <div style={{
+                    fontSize: 'var(--text-sm)',
+                    fontWeight: 'var(--font-medium)',
+                    color: settings.theme === value ? '#3b82f6' : 'var(--dashboard-text-primary)'
+                  }}>
                     {label}
                   </div>
                 </button>
               ))}
             </div>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 'var(--space-6)' }}>
             <div>
-              <label htmlFor="primaryColor" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label htmlFor="primaryColor" style={labelStyles}>
                 Primary Color
               </label>
-              <div className="flex items-center space-x-3">
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
                 <input
                   id="primaryColor"
                   type="color"
                   value={settings.primaryColor}
                   onChange={(e) => onUpdate({ primaryColor: e.target.value })}
                   disabled={disabled}
-                  className="w-12 h-10 border border-gray-300 dark:border-gray-600 rounded-lg disabled:opacity-50"
+                  style={{
+                    width: '48px',
+                    height: '40px',
+                    border: `1px solid var(--dashboard-border-primary)`,
+                    borderRadius: 'var(--radius-lg)',
+                    cursor: disabled ? 'not-allowed' : 'pointer',
+                    opacity: disabled ? 0.5 : 1
+                  }}
                   aria-label="Primary color picker"
                 />
                 <input
                   type="text"
                   value={settings.primaryColor}
                   onChange={(e) => onUpdate({ primaryColor: e.target.value })}
+                  onMouseEnter={() => setHoveredInput('primaryColor')}
+                  onMouseLeave={() => setHoveredInput(null)}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = '#3b82f6';
+                    e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = 'var(--dashboard-border-primary)';
+                    e.target.style.boxShadow = 'none';
+                  }}
                   disabled={disabled}
                   placeholder="#3B82F6"
                   aria-label="Primary color hex code"
-                  className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white disabled:opacity-50"
+                  style={{ ...getInputStyles('primaryColor'), flex: 1 }}
                 />
               </div>
             </div>
-            
+
             <div>
-              <label htmlFor="secondaryColor" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label htmlFor="secondaryColor" style={labelStyles}>
                 Secondary Color
               </label>
-              <div className="flex items-center space-x-3">
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
                 <input
                   id="secondaryColor"
                   type="color"
@@ -103,15 +222,32 @@ export function AppearanceSettingsForm({ settings, onUpdate, errors, disabled }:
                   onChange={(e) => onUpdate({ secondaryColor: e.target.value })}
                   aria-label="Secondary color picker"
                   disabled={disabled}
-                  className="w-12 h-10 border border-gray-300 dark:border-gray-600 rounded-lg disabled:opacity-50"
+                  style={{
+                    width: '48px',
+                    height: '40px',
+                    border: `1px solid var(--dashboard-border-primary)`,
+                    borderRadius: 'var(--radius-lg)',
+                    cursor: disabled ? 'not-allowed' : 'pointer',
+                    opacity: disabled ? 0.5 : 1
+                  }}
                 />
                 <input
                   type="text"
                   value={settings.secondaryColor}
                   onChange={(e) => onUpdate({ secondaryColor: e.target.value })}
+                  onMouseEnter={() => setHoveredInput('secondaryColor')}
+                  onMouseLeave={() => setHoveredInput(null)}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = '#3b82f6';
+                    e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = 'var(--dashboard-border-primary)';
+                    e.target.style.boxShadow = 'none';
+                  }}
                   disabled={disabled}
                   placeholder="#6B7280"
-                  className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white disabled:opacity-50"
+                  style={{ ...getInputStyles('secondaryColor'), flex: 1 }}
                 />
               </div>
             </div>
@@ -120,87 +256,113 @@ export function AppearanceSettingsForm({ settings, onUpdate, errors, disabled }:
       </div>
 
       {/* Branding */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-        <div className="flex items-center space-x-2 mb-4">
-          <Upload className="h-5 w-5 text-green-600 dark:text-green-400" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white">Branding</h3>
+      <div style={cardStyles}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-4)' }}>
+          <Upload style={{ height: '20px', width: '20px', color: '#10b981' }} />
+          <h3 style={sectionHeaderStyles}>Branding</h3>
         </div>
-        
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div>
-              <label htmlFor="displaypathfinitybra" className="text-sm font-medium text-gray-700 dark:text-gray-300">Show Platform Branding
-              </label>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <label htmlFor="displaypathfinitybra" style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Show Platform Branding</label>
+              <p style={descriptionStyles}>
                 Display Pathfinity branding in footer
               </p>
             </div>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input id="displaypathfinitybra"
-                type="checkbox"
-                checked={settings.branding.showBranding}
-                onChange={(e) => onUpdate({
-                  branding: { ...settings.branding, showBranding: e.target.checked }
-                })}
-                disabled={disabled}
-                className="sr-only peer"
-              />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-            </label>
+            {renderToggle(
+              settings.branding.showBranding,
+              () => onUpdate({
+                branding: { ...settings.branding, showBranding: !settings.branding.showBranding }
+              }),
+              'displaypathfinitybra'
+            )}
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'var(--space-6)' }}>
             <div>
-              <label htmlFor="logourl" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Logo URL
-              </label><input id="logourl"
+              <label htmlFor="logourl" style={labelStyles}>Logo URL</label>
+              <input
+                id="logourl"
                 type="url"
                 value={settings.logo || ''}
                 onChange={(e) => onUpdate({ logo: e.target.value })}
+                onMouseEnter={() => setHoveredInput('logo')}
+                onMouseLeave={() => setHoveredInput(null)}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#3b82f6';
+                  e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = 'var(--dashboard-border-primary)';
+                  e.target.style.boxShadow = 'none';
+                }}
                 disabled={disabled}
                 placeholder="https://example.com/logo.png"
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white disabled:opacity-50"
+                style={getInputStyles('logo')}
               />
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              <p style={helperTextStyles}>
                 Recommended size: 200x50 pixels
               </p>
             </div>
-            
+
             <div>
-              <label htmlFor="faviconurl" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Favicon URL
-              </label><input id="faviconurl"
+              <label htmlFor="faviconurl" style={labelStyles}>Favicon URL</label>
+              <input
+                id="faviconurl"
                 type="url"
                 value={settings.favicon || ''}
                 onChange={(e) => onUpdate({ favicon: e.target.value })}
+                onMouseEnter={() => setHoveredInput('favicon')}
+                onMouseLeave={() => setHoveredInput(null)}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#3b82f6';
+                  e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = 'var(--dashboard-border-primary)';
+                  e.target.style.boxShadow = 'none';
+                }}
                 disabled={disabled}
                 placeholder="https://example.com/favicon.ico"
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white disabled:opacity-50"
+                style={getInputStyles('favicon')}
               />
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              <p style={helperTextStyles}>
                 32x32 or 16x16 pixel ICO file
               </p>
             </div>
           </div>
-          
+
           <div>
-            <label htmlFor="htmlcontenttodisplay" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Custom Header HTML
-            </label>
+            <label htmlFor="htmlcontenttodisplay" style={labelStyles}>Custom Header HTML</label>
             <textarea
+              id="htmlcontenttodisplay"
               value={settings.branding.customHeader || ''}
               onChange={(e) => onUpdate({
                 branding: { ...settings.branding, customHeader: e.target.value }
               })}
+              onMouseEnter={() => setHoveredInput('customHeader')}
+              onMouseLeave={() => setHoveredInput(null)}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#3b82f6';
+                e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = 'var(--dashboard-border-primary)';
+                e.target.style.boxShadow = 'none';
+              }}
               disabled={disabled}
               rows={3}
               placeholder="<!-- Custom header content -->"
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white disabled:opacity-50 font-mono text-sm"
+              style={{ ...getInputStyles('customHeader'), fontFamily: 'monospace' }}
             />
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+            <p style={helperTextStyles}>
               HTML content to display in the page header
             </p>
           </div>
-          
+
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label style={labelStyles}>
               Custom Footer HTML
             </label>
             <textarea
@@ -208,12 +370,22 @@ export function AppearanceSettingsForm({ settings, onUpdate, errors, disabled }:
               onChange={(e) => onUpdate({
                 branding: { ...settings.branding, customFooter: e.target.value }
               })}
+              onMouseEnter={() => setHoveredInput('customFooter')}
+              onMouseLeave={() => setHoveredInput(null)}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#3b82f6';
+                e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = 'var(--dashboard-border-primary)';
+                e.target.style.boxShadow = 'none';
+              }}
               disabled={disabled}
               rows={3}
               placeholder="<!-- Custom footer content -->"
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white disabled:opacity-50 font-mono text-sm"
+              style={{ ...getInputStyles('customFooter'), fontFamily: 'monospace' }}
             />
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+            <p style={helperTextStyles}>
               HTML content to display in the page footer
             </p>
           </div>
@@ -221,15 +393,15 @@ export function AppearanceSettingsForm({ settings, onUpdate, errors, disabled }:
       </div>
 
       {/* Dashboard Settings */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-        <div className="flex items-center space-x-2 mb-4">
-          <Layout className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white">Dashboard Layout</h3>
+      <div style={cardStyles}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-4)' }}>
+          <Layout style={{ height: '20px', width: '20px', color: '#8b5cf6' }} />
+          <h3 style={sectionHeaderStyles}>Dashboard Layout</h3>
         </div>
-        
-        <div className="space-y-6">
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label style={labelStyles}>
               Default Dashboard View
             </label>
             <select
@@ -237,64 +409,63 @@ export function AppearanceSettingsForm({ settings, onUpdate, errors, disabled }:
               onChange={(e) => onUpdate({
                 dashboard: { ...settings.dashboard, defaultView: e.target.value as any }
               })}
+              onMouseEnter={() => setHoveredInput('defaultView')}
+              onMouseLeave={() => setHoveredInput(null)}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#3b82f6';
+                e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = 'var(--dashboard-border-primary)';
+                e.target.style.boxShadow = 'none';
+              }}
               disabled={disabled}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white disabled:opacity-50"
+              style={getInputStyles('defaultView')}
             >
               {dashboardViewOptions.map(({ value, label }) => (
                 <option key={value} value={value}>{label}</option>
               ))}
             </select>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="flex items-center justify-between">
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'var(--space-6)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div>
-                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>
                   Show Quick Actions
                 </label>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p style={descriptionStyles}>
                   Display quick action buttons
                 </p>
               </div>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input id="htmlcontenttodisplay"
-                  type="checkbox"
-                  checked={settings.dashboard.showQuickActions}
-                  onChange={(e) => onUpdate({
-                    dashboard: { ...settings.dashboard, showQuickActions: e.target.checked }
-                  })}
-                  disabled={disabled}
-                  className="sr-only peer"
-                />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-              </label>
+              {renderToggle(
+                settings.dashboard.showQuickActions,
+                () => onUpdate({
+                  dashboard: { ...settings.dashboard, showQuickActions: !settings.dashboard.showQuickActions }
+                }),
+                'showQuickActions'
+              )}
             </div>
-            
-            <div className="flex items-center justify-between">
+
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div>
-                <label htmlFor="displayrecentactivit" className="text-sm font-medium text-gray-700 dark:text-gray-300">Show Recent Activity
-                </label>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <label htmlFor="displayrecentactivit" style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Show Recent Activity</label>
+                <p style={descriptionStyles}>
                   Display recent activity feed
                 </p>
               </div>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input id="displayrecentactivit"
-                  type="checkbox"
-                  checked={settings.dashboard.showRecentActivity}
-                  onChange={(e) => onUpdate({
-                    dashboard: { ...settings.dashboard, showRecentActivity: e.target.checked }
-                  })}
-                  disabled={disabled}
-                  className="sr-only peer"
-                />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-              </label>
+              {renderToggle(
+                settings.dashboard.showRecentActivity,
+                () => onUpdate({
+                  dashboard: { ...settings.dashboard, showRecentActivity: !settings.dashboard.showRecentActivity }
+                }),
+                'displayrecentactivit'
+              )}
             </div>
           </div>
-          
+
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label style={labelStyles}>
               Items Per Page
             </label>
             <select
@@ -302,8 +473,18 @@ export function AppearanceSettingsForm({ settings, onUpdate, errors, disabled }:
               onChange={(e) => onUpdate({
                 dashboard: { ...settings.dashboard, itemsPerPage: parseInt(e.target.value) }
               })}
+              onMouseEnter={() => setHoveredInput('itemsPerPage')}
+              onMouseLeave={() => setHoveredInput(null)}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#3b82f6';
+                e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = 'var(--dashboard-border-primary)';
+                e.target.style.boxShadow = 'none';
+              }}
               disabled={disabled}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white disabled:opacity-50"
+              style={getInputStyles('itemsPerPage')}
             >
               <option value="10">10 items</option>
               <option value="25">25 items</option>
@@ -315,30 +496,40 @@ export function AppearanceSettingsForm({ settings, onUpdate, errors, disabled }:
       </div>
 
       {/* Custom CSS */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-        <div className="flex items-center space-x-2 mb-4">
-          <Eye className="h-5 w-5 text-orange-600 dark:text-orange-400" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white">Custom CSS</h3>
+      <div style={cardStyles}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-4)' }}>
+          <Eye style={{ height: '20px', width: '20px', color: '#f97316' }} />
+          <h3 style={sectionHeaderStyles}>Custom CSS</h3>
         </div>
-        
-        <div className="space-y-4">
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label style={labelStyles}>
               Additional Styles
             </label>
             <textarea
               value={settings.customCss || ''}
               onChange={(e) => onUpdate({ customCss: e.target.value })}
+              onMouseEnter={() => setHoveredInput('customCss')}
+              onMouseLeave={() => setHoveredInput(null)}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#3b82f6';
+                e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = 'var(--dashboard-border-primary)';
+                e.target.style.boxShadow = 'none';
+              }}
               disabled={disabled}
               rows={8}
-              placeholder="/* Custom CSS styles */
+              placeholder={`/* Custom CSS styles */
 .custom-button {
   background-color: #3B82F6;
   border-radius: 8px;
-}"
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white disabled:opacity-50 font-mono text-sm"
+}`}
+              style={{ ...getInputStyles('customCss'), fontFamily: 'monospace' }}
             />
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+            <p style={helperTextStyles}>
               Custom CSS will be applied to all pages. Use with caution.
             </p>
           </div>

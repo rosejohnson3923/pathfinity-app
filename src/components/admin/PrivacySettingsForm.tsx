@@ -1,6 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Lock, Shield, Eye, FileText, Clock, CheckCircle2 } from 'lucide-react';
 import { PrivacySettings } from '../../types/settings';
+import '../../design-system/tokens/colors.css';
+import '../../design-system/tokens/spacing.css';
+import '../../design-system/tokens/borders.css';
+import '../../design-system/tokens/typography.css';
+import '../../design-system/tokens/shadows.css';
+import '../../design-system/tokens/dashboard.css';
 
 interface PrivacySettingsFormProps {
   settings: PrivacySettings | null;
@@ -10,26 +16,146 @@ interface PrivacySettingsFormProps {
 }
 
 export function PrivacySettingsForm({ settings, onUpdate, errors, disabled }: PrivacySettingsFormProps) {
+  const [hoveredInput, setHoveredInput] = useState<string | null>(null);
+
   if (!settings) return null;
 
+  const cardStyles: React.CSSProperties = {
+    backgroundColor: 'var(--dashboard-bg-elevated)',
+    borderRadius: 'var(--radius-lg)',
+    border: `1px solid var(--dashboard-border-primary)`,
+    padding: 'var(--space-6)'
+  };
+
+  const sectionHeaderStyles: React.CSSProperties = {
+    fontSize: 'var(--text-lg)',
+    fontWeight: 'var(--font-medium)',
+    color: 'var(--dashboard-text-primary)'
+  };
+
+  const labelStyles: React.CSSProperties = {
+    display: 'block',
+    fontSize: 'var(--text-sm)',
+    fontWeight: 'var(--font-medium)',
+    color: 'var(--dashboard-text-primary)',
+    marginBottom: 'var(--space-1)'
+  };
+
+  const descriptionStyles: React.CSSProperties = {
+    fontSize: 'var(--text-sm)',
+    color: 'var(--dashboard-text-tertiary)'
+  };
+
+  const helperTextStyles: React.CSSProperties = {
+    fontSize: 'var(--text-xs)',
+    color: 'var(--dashboard-text-tertiary)',
+    marginTop: 'var(--space-1)'
+  };
+
+  const getInputStyles = (fieldName: string) => ({
+    width: '100%',
+    padding: 'var(--space-3)',
+    border: `1px solid var(--dashboard-border-primary)`,
+    borderRadius: 'var(--radius-lg)',
+    backgroundColor: disabled ? 'var(--dashboard-bg-secondary)' : 'var(--dashboard-bg-elevated)',
+    color: 'var(--dashboard-text-primary)',
+    fontSize: 'var(--text-sm)',
+    cursor: disabled ? 'not-allowed' : 'text',
+    transition: 'border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out',
+    outline: 'none',
+    opacity: disabled ? 0.5 : 1,
+    ...(hoveredInput === fieldName && !disabled ? { borderColor: 'var(--dashboard-border-hover)' } : {})
+  });
+
+  const renderToggle = (checked: boolean, onChange: () => void, id: string) => (
+    <label htmlFor={id} style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', cursor: disabled ? 'not-allowed' : 'pointer' }}>
+      <input
+        id={id}
+        type="checkbox"
+        checked={checked}
+        onChange={onChange}
+        disabled={disabled}
+        style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', borderWidth: 0 }}
+      />
+      <div style={{
+        width: '44px',
+        height: '24px',
+        backgroundColor: checked ? '#3b82f6' : '#d1d5db',
+        borderRadius: '12px',
+        position: 'relative',
+        transition: 'background-color 0.2s',
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        opacity: disabled ? 0.5 : 1
+      }}>
+        <div style={{
+          position: 'absolute',
+          top: '2px',
+          left: checked ? '22px' : '2px',
+          width: '20px',
+          height: '20px',
+          backgroundColor: 'white',
+          borderRadius: '50%',
+          transition: 'left 0.2s',
+          boxShadow: '0 1px 2px 0 rgb(0 0 0 / 0.05)'
+        }} />
+      </div>
+    </label>
+  );
+
+  const renderComplianceToggle = (checked: boolean, onChange: () => void, id: string) => (
+    <label htmlFor={id} style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', cursor: disabled ? 'not-allowed' : 'pointer' }}>
+      <input
+        id={id}
+        type="checkbox"
+        checked={checked}
+        onChange={onChange}
+        disabled={disabled}
+        style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', borderWidth: 0 }}
+      />
+      <div style={{
+        width: '44px',
+        height: '24px',
+        backgroundColor: checked ? '#10b981' : '#d1d5db',
+        borderRadius: '12px',
+        position: 'relative',
+        transition: 'background-color 0.2s',
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        opacity: disabled ? 0.5 : 1
+      }}>
+        <div style={{
+          position: 'absolute',
+          top: '2px',
+          left: checked ? '22px' : '2px',
+          width: '20px',
+          height: '20px',
+          backgroundColor: 'white',
+          borderRadius: '50%',
+          transition: 'left 0.2s',
+          boxShadow: '0 1px 2px 0 rgb(0 0 0 / 0.05)'
+        }} />
+      </div>
+    </label>
+  );
+
   return (
-    <div className="space-y-8">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-8)' }}>
       {/* Data Retention */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-        <div className="flex items-center space-x-2 mb-4">
-          <Clock className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white">Data Retention</h3>
+      <div style={cardStyles}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-4)' }}>
+          <Clock style={{ height: '20px', width: '20px', color: '#3b82f6' }} />
+          <h3 style={sectionHeaderStyles}>Data Retention</h3>
         </div>
-        
-        <div className="space-y-4">
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
+          <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)', marginBottom: 'var(--space-2)' }}>
             Configure how long different types of data are retained before automatic deletion.
           </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 'var(--space-6)' }}>
             <div>
-              <label htmlFor="userdataretentionday" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">User Data Retention (days)
-              </label><input id="userdataretentionday"
+              <label htmlFor="userdataretentionday" style={labelStyles}>User Data Retention (days)</label>
+              <input
+                id="userdataretentionday"
                 type="number"
                 value={settings.dataRetention.userDataDays}
                 onChange={(e) => onUpdate({
@@ -38,19 +164,30 @@ export function PrivacySettingsForm({ settings, onUpdate, errors, disabled }: Pr
                     userDataDays: parseInt(e.target.value)
                   }
                 })}
+                onMouseEnter={() => setHoveredInput('userDataDays')}
+                onMouseLeave={() => setHoveredInput(null)}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#3b82f6';
+                  e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = 'var(--dashboard-border-primary)';
+                  e.target.style.boxShadow = 'none';
+                }}
                 disabled={disabled}
                 min="30"
-                max="2555" // ~7 years
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white disabled:opacity-50"
+                max="2555"
+                style={getInputStyles('userDataDays')}
               />
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              <p style={helperTextStyles}>
                 Student records, assessments, and personal data
               </p>
             </div>
-            
+
             <div>
-              <label htmlFor="logdataretentiondays" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Log Data Retention (days)
-              </label><input id="logdataretentiondays"
+              <label htmlFor="logdataretentiondays" style={labelStyles}>Log Data Retention (days)</label>
+              <input
+                id="logdataretentiondays"
                 type="number"
                 value={settings.dataRetention.logDataDays}
                 onChange={(e) => onUpdate({
@@ -59,19 +196,30 @@ export function PrivacySettingsForm({ settings, onUpdate, errors, disabled }: Pr
                     logDataDays: parseInt(e.target.value)
                   }
                 })}
+                onMouseEnter={() => setHoveredInput('logDataDays')}
+                onMouseLeave={() => setHoveredInput(null)}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#3b82f6';
+                  e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = 'var(--dashboard-border-primary)';
+                  e.target.style.boxShadow = 'none';
+                }}
                 disabled={disabled}
                 min="7"
                 max="2555"
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white disabled:opacity-50"
+                style={getInputStyles('logDataDays')}
               />
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              <p style={helperTextStyles}>
                 System logs, audit trails, and activity logs
               </p>
             </div>
-            
+
             <div>
-              <label htmlFor="backupdataretentiond" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Backup Data Retention (days)
-              </label><input id="backupdataretentiond"
+              <label htmlFor="backupdataretentiond" style={labelStyles}>Backup Data Retention (days)</label>
+              <input
+                id="backupdataretentiond"
                 type="number"
                 value={settings.dataRetention.backupDataDays}
                 onChange={(e) => onUpdate({
@@ -80,19 +228,30 @@ export function PrivacySettingsForm({ settings, onUpdate, errors, disabled }: Pr
                     backupDataDays: parseInt(e.target.value)
                   }
                 })}
+                onMouseEnter={() => setHoveredInput('backupDataDays')}
+                onMouseLeave={() => setHoveredInput(null)}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#3b82f6';
+                  e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = 'var(--dashboard-border-primary)';
+                  e.target.style.boxShadow = 'none';
+                }}
                 disabled={disabled}
                 min="30"
                 max="2555"
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white disabled:opacity-50"
+                style={getInputStyles('backupDataDays')}
               />
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              <p style={helperTextStyles}>
                 Database backups and archived data
               </p>
             </div>
-            
+
             <div>
-              <label htmlFor="inactiveuserdatadays" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Inactive User Data (days)
-              </label><input id="inactiveuserdatadays"
+              <label htmlFor="inactiveuserdatadays" style={labelStyles}>Inactive User Data (days)</label>
+              <input
+                id="inactiveuserdatadays"
                 type="number"
                 value={settings.dataRetention.inactiveUserDays}
                 onChange={(e) => onUpdate({
@@ -101,12 +260,22 @@ export function PrivacySettingsForm({ settings, onUpdate, errors, disabled }: Pr
                     inactiveUserDays: parseInt(e.target.value)
                   }
                 })}
+                onMouseEnter={() => setHoveredInput('inactiveUserDays')}
+                onMouseLeave={() => setHoveredInput(null)}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#3b82f6';
+                  e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = 'var(--dashboard-border-primary)';
+                  e.target.style.boxShadow = 'none';
+                }}
                 disabled={disabled}
                 min="90"
-                max="1095" // 3 years
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white disabled:opacity-50"
+                max="1095"
+                style={getInputStyles('inactiveUserDays')}
               />
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              <p style={helperTextStyles}>
                 Data for users who haven't logged in
               </p>
             </div>
@@ -115,219 +284,205 @@ export function PrivacySettingsForm({ settings, onUpdate, errors, disabled }: Pr
       </div>
 
       {/* Privacy Controls */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-        <div className="flex items-center space-x-2 mb-4">
-          <Eye className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white">Privacy Controls</h3>
+      <div style={cardStyles}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-4)' }}>
+          <Eye style={{ height: '20px', width: '20px', color: '#8b5cf6' }} />
+          <h3 style={sectionHeaderStyles}>Privacy Controls</h3>
         </div>
-        
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div>
-              <label htmlFor="collectanonymizedusa" className="text-sm font-medium text-gray-700 dark:text-gray-300">Allow Analytics Collection
-              </label>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <label htmlFor="collectanonymizedusa" style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Allow Analytics Collection</label>
+              <p style={descriptionStyles}>
                 Collect anonymized usage analytics to improve the platform
               </p>
             </div>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input id="collectanonymizedusa"
-                type="checkbox"
-                checked={settings.privacy.allowAnalytics}
-                onChange={(e) => onUpdate({
-                  privacy: { ...settings.privacy, allowAnalytics: e.target.checked }
-                })}
-                disabled={disabled}
-                className="sr-only peer"
-              />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-            </label>
+            {renderToggle(
+              settings.privacy.allowAnalytics,
+              () => onUpdate({
+                privacy: { ...settings.privacy, allowAnalytics: !settings.privacy.allowAnalytics }
+              }),
+              'collectanonymizedusa'
+            )}
           </div>
-          
-          <div className="flex items-center justify-between">
+
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div>
-              <label htmlFor="enablecookiesforenha" className="text-sm font-medium text-gray-700 dark:text-gray-300">Allow Cookies
-              </label>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <label htmlFor="enablecookiesforenha" style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Allow Cookies</label>
+              <p style={descriptionStyles}>
                 Enable cookies for enhanced user experience and preferences
               </p>
             </div>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input id="enablecookiesforenha"
-                type="checkbox"
-                checked={settings.privacy.allowCookies}
-                onChange={(e) => onUpdate({
-                  privacy: { ...settings.privacy, allowCookies: e.target.checked }
-                })}
-                disabled={disabled}
-                className="sr-only peer"
-              />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-            </label>
+            {renderToggle(
+              settings.privacy.allowCookies,
+              () => onUpdate({
+                privacy: { ...settings.privacy, allowCookies: !settings.privacy.allowCookies }
+              }),
+              'enablecookiesforenha'
+            )}
           </div>
-          
-          <div className="flex items-center justify-between">
+
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div>
-              <label htmlFor="shareaggregatedusage" className="text-sm font-medium text-gray-700 dark:text-gray-300">Share Usage Data
-              </label>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <label htmlFor="shareaggregatedusage" style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Share Usage Data</label>
+              <p style={descriptionStyles}>
                 Share aggregated usage statistics with Pathfinity for product improvement
               </p>
             </div>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input id="shareaggregatedusage"
-                type="checkbox"
-                checked={settings.privacy.shareUsageData}
-                onChange={(e) => onUpdate({
-                  privacy: { ...settings.privacy, shareUsageData: e.target.checked }
-                })}
-                disabled={disabled}
-                className="sr-only peer"
-              />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-            </label>
+            {renderToggle(
+              settings.privacy.shareUsageData,
+              () => onUpdate({
+                privacy: { ...settings.privacy, shareUsageData: !settings.privacy.shareUsageData }
+              }),
+              'shareaggregatedusage'
+            )}
           </div>
-          
-          <div className="flex items-center justify-between">
+
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div>
-              <label htmlFor="enableintegrationswi" className="text-sm font-medium text-gray-700 dark:text-gray-300">Allow Third-Party Integrations
-              </label>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <label htmlFor="enableintegrationswi" style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Allow Third-Party Integrations</label>
+              <p style={descriptionStyles}>
                 Enable integrations with external educational tools and services
               </p>
             </div>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input id="enableintegrationswi"
-                type="checkbox"
-                checked={settings.privacy.allowThirdPartyIntegrations}
-                onChange={(e) => onUpdate({
-                  privacy: { ...settings.privacy, allowThirdPartyIntegrations: e.target.checked }
-                })}
-                disabled={disabled}
-                className="sr-only peer"
-              />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-            </label>
+            {renderToggle(
+              settings.privacy.allowThirdPartyIntegrations,
+              () => onUpdate({
+                privacy: { ...settings.privacy, allowThirdPartyIntegrations: !settings.privacy.allowThirdPartyIntegrations }
+              }),
+              'enableintegrationswi'
+            )}
           </div>
         </div>
       </div>
 
       {/* Compliance */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-        <div className="flex items-center space-x-2 mb-4">
-          <Shield className="h-5 w-5 text-green-600 dark:text-green-400" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white">Compliance & Legal</h3>
+      <div style={cardStyles}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-4)' }}>
+          <Shield style={{ height: '20px', width: '20px', color: '#10b981' }} />
+          <h3 style={sectionHeaderStyles}>Compliance & Legal</h3>
         </div>
-        
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="flex items-center justify-between">
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'var(--space-6)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div>
-                <label htmlFor="ferpacompliant" className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center space-x-2"><span>FERPA Compliant</span>
+                <label htmlFor="ferpacompliant" style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)', display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+                  <span>FERPA Compliant</span>
                   {settings.compliance.ferpaCompliant && (
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    <CheckCircle2 style={{ height: '16px', width: '16px', color: '#10b981' }} />
                   )}
                 </label>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
+                <p style={{ fontSize: 'var(--text-xs)', color: 'var(--dashboard-text-tertiary)' }}>
                   Educational records privacy
                 </p>
               </div>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input id="ferpacompliant"
-                  type="checkbox"
-                  checked={settings.compliance.ferpaCompliant}
-                  onChange={(e) => onUpdate({
-                    compliance: { ...settings.compliance, ferpaCompliant: e.target.checked }
-                  })}
-                  disabled={disabled}
-                  className="sr-only peer"
-                />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
-              </label>
+              {renderComplianceToggle(
+                settings.compliance.ferpaCompliant,
+                () => onUpdate({
+                  compliance: { ...settings.compliance, ferpaCompliant: !settings.compliance.ferpaCompliant }
+                }),
+                'ferpacompliant'
+              )}
             </div>
-            
-            <div className="flex items-center justify-between">
+
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div>
-                <label htmlFor="coppacompliant" className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center space-x-2"><span>COPPA Compliant</span>
+                <label htmlFor="coppacompliant" style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)', display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+                  <span>COPPA Compliant</span>
                   {settings.compliance.coppaCompliant && (
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    <CheckCircle2 style={{ height: '16px', width: '16px', color: '#10b981' }} />
                   )}
                 </label>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
+                <p style={{ fontSize: 'var(--text-xs)', color: 'var(--dashboard-text-tertiary)' }}>
                   Children's online privacy
                 </p>
               </div>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input id="coppacompliant"
-                  type="checkbox"
-                  checked={settings.compliance.coppaCompliant}
-                  onChange={(e) => onUpdate({
-                    compliance: { ...settings.compliance, coppaCompliant: e.target.checked }
-                  })}
-                  disabled={disabled}
-                  className="sr-only peer"
-                />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
-              </label>
+              {renderComplianceToggle(
+                settings.compliance.coppaCompliant,
+                () => onUpdate({
+                  compliance: { ...settings.compliance, coppaCompliant: !settings.compliance.coppaCompliant }
+                }),
+                'coppacompliant'
+              )}
             </div>
-            
-            <div className="flex items-center justify-between">
+
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div>
-                <label htmlFor="gdprcompliant" className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center space-x-2"><span>GDPR Compliant</span>
+                <label htmlFor="gdprcompliant" style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)', display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+                  <span>GDPR Compliant</span>
                   {settings.compliance.gdprCompliant && (
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    <CheckCircle2 style={{ height: '16px', width: '16px', color: '#10b981' }} />
                   )}
                 </label>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
+                <p style={{ fontSize: 'var(--text-xs)', color: 'var(--dashboard-text-tertiary)' }}>
                   European data protection
                 </p>
               </div>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input id="gdprcompliant"
-                  type="checkbox"
-                  checked={settings.compliance.gdprCompliant}
-                  onChange={(e) => onUpdate({
-                    compliance: { ...settings.compliance, gdprCompliant: e.target.checked }
-                  })}
-                  disabled={disabled}
-                  className="sr-only peer"
-                />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
-              </label>
+              {renderComplianceToggle(
+                settings.compliance.gdprCompliant,
+                () => onUpdate({
+                  compliance: { ...settings.compliance, gdprCompliant: !settings.compliance.gdprCompliant }
+                }),
+                'gdprcompliant'
+              )}
             </div>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'var(--space-6)' }}>
             <div>
-              <label htmlFor="privacynoticeurl" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Privacy Notice URL
-              </label><input id="privacynoticeurl"
+              <label htmlFor="privacynoticeurl" style={labelStyles}>Privacy Notice URL</label>
+              <input
+                id="privacynoticeurl"
                 type="url"
                 value={settings.compliance.privacyNoticeUrl || ''}
                 onChange={(e) => onUpdate({
                   compliance: { ...settings.compliance, privacyNoticeUrl: e.target.value }
                 })}
+                onMouseEnter={() => setHoveredInput('privacyNoticeUrl')}
+                onMouseLeave={() => setHoveredInput(null)}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#3b82f6';
+                  e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = 'var(--dashboard-border-primary)';
+                  e.target.style.boxShadow = 'none';
+                }}
                 disabled={disabled}
                 placeholder="https://school.edu/privacy"
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white disabled:opacity-50"
+                style={getInputStyles('privacyNoticeUrl')}
               />
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              <p style={helperTextStyles}>
                 Link to your privacy policy document
               </p>
             </div>
-            
+
             <div>
-              <label htmlFor="termsofserviceurl" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Terms of Service URL
-              </label><input id="termsofserviceurl"
+              <label htmlFor="termsofserviceurl" style={labelStyles}>Terms of Service URL</label>
+              <input
+                id="termsofserviceurl"
                 type="url"
                 value={settings.compliance.termsOfServiceUrl || ''}
                 onChange={(e) => onUpdate({
                   compliance: { ...settings.compliance, termsOfServiceUrl: e.target.value }
                 })}
+                onMouseEnter={() => setHoveredInput('termsOfServiceUrl')}
+                onMouseLeave={() => setHoveredInput(null)}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#3b82f6';
+                  e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = 'var(--dashboard-border-primary)';
+                  e.target.style.boxShadow = 'none';
+                }}
                 disabled={disabled}
                 placeholder="https://school.edu/terms"
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white disabled:opacity-50"
+                style={getInputStyles('termsOfServiceUrl')}
               />
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              <p style={helperTextStyles}>
                 Link to your terms of service document
               </p>
             </div>
@@ -336,14 +491,24 @@ export function PrivacySettingsForm({ settings, onUpdate, errors, disabled }: Pr
       </div>
 
       {/* Privacy Notice */}
-      <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
-        <div className="flex items-start space-x-3">
-          <FileText className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5" />
+      <div style={{
+        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+        border: '1px solid rgba(59, 130, 246, 0.3)',
+        borderRadius: 'var(--radius-lg)',
+        padding: 'var(--space-6)'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--space-3)' }}>
+          <FileText style={{ height: '20px', width: '20px', color: '#3b82f6', marginTop: '2px', flexShrink: 0 }} />
           <div>
-            <h4 className="text-sm font-medium text-blue-900 dark:text-blue-100 mb-2">
+            <h4 style={{
+              fontSize: 'var(--text-sm)',
+              fontWeight: 'var(--font-medium)',
+              color: 'var(--dashboard-text-primary)',
+              marginBottom: 'var(--space-2)'
+            }}>
               Privacy & Compliance Information
             </h4>
-            <div className="text-sm text-blue-800 dark:text-blue-200 space-y-2">
+            <div style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-primary)', display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
               <p>
                 • <strong>FERPA:</strong> Protects student educational records and gives parents/students rights over their records
               </p>
@@ -353,8 +518,12 @@ export function PrivacySettingsForm({ settings, onUpdate, errors, disabled }: Pr
               <p>
                 • <strong>GDPR:</strong> Provides data protection rights for individuals in the European Union
               </p>
-              <p className="mt-3 pt-2 border-t border-blue-200 dark:border-blue-700">
-                <strong>Note:</strong> Enabling compliance features activates additional data protection measures, 
+              <p style={{
+                marginTop: 'var(--space-1)',
+                paddingTop: 'var(--space-2)',
+                borderTop: '1px solid rgba(59, 130, 246, 0.2)'
+              }}>
+                <strong>Note:</strong> Enabling compliance features activates additional data protection measures,
                 consent workflows, and audit logging. Consult with your legal team before making changes.
               </p>
             </div>

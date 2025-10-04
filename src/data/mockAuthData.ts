@@ -236,7 +236,7 @@ export const mockUsers = [
   // Parent - Sarah Davis (Alex's Mom - Public School Parent)
   {
     id: '16eb6e8c-eb5b-433f-9ed0-f9599c2c7c17',
-    email: 'sarah.davis@sandview.plainviewisd.edu',
+    email: 'sarah.davis@family.pathfinity.edu',
     password: 'password123',
     full_name: 'Sarah Davis',
     role: 'parent',
@@ -252,7 +252,7 @@ export const mockUsers = [
   // Parent - Mike Brown (Sam's Dad - Public School Parent)
   {
     id: '17eb6e8c-eb5b-433f-9ed0-f9599c2c7c18',
-    email: 'mike.brown@sandview.plainviewisd.edu',
+    email: 'mike.brown@family.pathfinity.edu',
     password: 'password123',
     full_name: 'Mike Brown',
     role: 'parent',

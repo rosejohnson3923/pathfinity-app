@@ -127,35 +127,25 @@ export function Header({
       // Stop all speech immediately when logging out
       companionVoiceoverService.stopCurrent();
       voiceManagerService.stopSpeaking();
-      
+
       console.log('🔍 Header logout triggered');
       console.log('🔍 User object on logout:', user);
       console.log('🔍 Header logout - User:', user?.email);
-      
-      // Check if user is a demo user and redirect accordingly BEFORE signing out
-      const isDemoUserCheck = user?.email && [
-        'alex.davis@sandview.plainviewisd.edu',
-        'sam.brown@sandview.plainviewisd.edu',
-        'jordan.smith@oceanview.plainviewisd.edu',
-        'taylor.johnson@cityview.plainviewisd.edu',
-        'jenna.grain@sandview.plainviewisd.edu',
-        'brenda.sea@oceanview.plainviewisd.edu',
-        'john.land@cityview.plainviewisd.edu',
-        'lisa.johnson@cityview.plainviewisd.edu',
-        'principal@plainviewisd.edu',
-        'superintendent@plainviewisd.edu',
-        'sarah.davis@family.pathfinity.edu',
-        'mike.brown@family.pathfinity.edu'
-      ].includes(user.email.toLowerCase());
-      
-      const redirectPath = isDemoUserCheck ? '/demo' : '/';
-      
-      console.log('🔄 Header redirecting to:', redirectPath, 'using navigate()');
-      // Navigate FIRST before signing out to avoid race condition
-      navigate(redirectPath, { replace: true });
-      
-      // Then sign out
+
+      // Get the appropriate redirect path based on user type
+      const redirectPath = getLogoutRedirectPath(user);
+
+      console.log('🔄 Header redirecting to:', redirectPath);
+
+      // Sign out first
       await signOut();
+
+      // Then redirect - use window.location.href for external URLs
+      if (redirectPath.startsWith('http')) {
+        window.location.href = redirectPath;
+      } else {
+        navigate(redirectPath, { replace: true });
+      }
     } catch (error) {
       console.error('Error signing out:', error);
     }

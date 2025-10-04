@@ -72,10 +72,18 @@ export function isDemoUser(user: User | null | undefined): boolean {
 /**
  * Gets the appropriate logout redirect path for a user
  * @param user - User object
- * @returns string - redirect path ('/demo' for demo users, '/login' for regular users)
+ * @returns string - redirect path ('https://pathfinity.ai' for demo users in production, '/login' for regular users or localhost)
  */
 export function getLogoutRedirectPath(user: User | null | undefined): string {
-  return isDemoUser(user) ? '/demo' : '/login';
+  const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+  // If on localhost, always redirect to /login
+  if (isLocalhost) {
+    return '/login';
+  }
+
+  // In production, demo users go to pathfinity.ai, regular users to /login
+  return isDemoUser(user) ? 'https://pathfinity.ai' : '/login';
 }
 
 /**

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { 
+import {
   Users,
   UserPlus,
   Search,
@@ -20,6 +20,12 @@ import {
   XCircle,
   AlertTriangle
 } from 'lucide-react';
+import '../../design-system/tokens/colors.css';
+import '../../design-system/tokens/spacing.css';
+import '../../design-system/tokens/borders.css';
+import '../../design-system/tokens/typography.css';
+import '../../design-system/tokens/shadows.css';
+import '../../design-system/tokens/dashboard.css';
 
 interface StaffMember {
   id: string;
@@ -164,6 +170,16 @@ export function PrincipalUserManagementPanel() {
   const [isLoading, setIsLoading] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
 
+  // Hover state management
+  const [hoveredRefreshBtn, setHoveredRefreshBtn] = useState(false);
+  const [hoveredAddBtn, setHoveredAddBtn] = useState(false);
+  const [hoveredDeptCard, setHoveredDeptCard] = useState<string | null>(null);
+  const [hoveredFilterBtn, setHoveredFilterBtn] = useState(false);
+  const [hoveredExportBtn, setHoveredExportBtn] = useState(false);
+  const [hoveredTableHeader, setHoveredTableHeader] = useState<string | null>(null);
+  const [hoveredTableRow, setHoveredTableRow] = useState<string | null>(null);
+  const [hoveredActionBtn, setHoveredActionBtn] = useState<string | null>(null);
+
   const filteredStaff = staff.filter(member => {
     const matchesSearch = member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          member.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -256,23 +272,69 @@ export function PrincipalUserManagementPanel() {
   };
 
   return (
-    <div className="space-y-6">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Staff Management</h2>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">Manage teachers, counselors, and support staff</p>
+          <h2 style={{
+            fontSize: 'var(--text-2xl)',
+            fontWeight: 'var(--font-bold)',
+            color: 'var(--dashboard-text-primary)',
+            lineHeight: 'var(--leading-tight)'
+          }}>
+            Staff Management
+          </h2>
+          <p style={{
+            color: 'var(--dashboard-text-secondary)',
+            marginTop: 'var(--space-1)',
+            fontSize: 'var(--text-sm)'
+          }}>
+            Manage teachers, counselors, and support staff
+          </p>
         </div>
-        <div className="flex gap-3">
+        <div style={{ display: 'flex', gap: 'var(--space-3)' }}>
           <button
             onClick={handleRefresh}
             disabled={isLoading}
-            className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 text-gray-700 dark:text-gray-200"
+            onMouseEnter={() => setHoveredRefreshBtn(true)}
+            onMouseLeave={() => setHoveredRefreshBtn(false)}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--space-2)',
+              padding: 'var(--space-2) var(--space-4)',
+              border: `1px solid var(--dashboard-border-primary)`,
+              borderRadius: 'var(--radius-lg)',
+              backgroundColor: hoveredRefreshBtn ? 'var(--dashboard-bg-hover)' : 'transparent',
+              color: 'var(--dashboard-text-primary)',
+              cursor: isLoading ? 'not-allowed' : 'pointer',
+              opacity: isLoading ? 0.5 : 1,
+              fontSize: 'var(--text-sm)',
+              fontWeight: 'var(--font-medium)',
+              transition: 'background-color 150ms ease'
+            }}
           >
             <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
             Refresh
           </button>
-          <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+          <button
+            onMouseEnter={() => setHoveredAddBtn(true)}
+            onMouseLeave={() => setHoveredAddBtn(false)}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--space-2)',
+              padding: 'var(--space-2) var(--space-4)',
+              backgroundColor: hoveredAddBtn ? '#2563eb' : '#3b82f6',
+              color: 'white',
+              borderRadius: 'var(--radius-lg)',
+              border: 'none',
+              cursor: 'pointer',
+              fontSize: 'var(--text-sm)',
+              fontWeight: 'var(--font-medium)',
+              transition: 'background-color 150ms ease'
+            }}
+          >
             <UserPlus className="w-4 h-4" />
             Add Staff Member
           </button>
@@ -280,43 +342,144 @@ export function PrincipalUserManagementPanel() {
       </div>
 
       {/* Department Overview Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+        gap: 'var(--space-4)'
+      }}>
         {departments.map((dept) => (
-          <div key={dept.id} className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
-            <div className="flex items-center justify-between mb-2">
-              <BookOpen className="w-5 h-5 text-blue-600" />
-              <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{dept.staff_count}</span>
+          <div
+            key={dept.id}
+            onMouseEnter={() => setHoveredDeptCard(dept.id)}
+            onMouseLeave={() => setHoveredDeptCard(null)}
+            style={{
+              backgroundColor: 'var(--dashboard-bg-elevated)',
+              padding: 'var(--space-4)',
+              borderRadius: 'var(--radius-lg)',
+              border: `1px solid var(--dashboard-border-primary)`,
+              cursor: 'pointer',
+              transition: 'transform 150ms ease, box-shadow 150ms ease',
+              transform: hoveredDeptCard === dept.id ? 'translateY(-2px)' : 'none',
+              boxShadow: hoveredDeptCard === dept.id ? 'var(--shadow-md)' : 'none'
+            }}
+          >
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: 'var(--space-2)'
+            }}>
+              <BookOpen className="w-5 h-5" style={{ color: '#3b82f6' }} />
+              <span style={{
+                fontSize: 'var(--text-sm)',
+                fontWeight: 'var(--font-medium)',
+                color: 'var(--dashboard-text-secondary)'
+              }}>
+                {dept.staff_count}
+              </span>
             </div>
-            <h3 className="font-medium text-gray-900 dark:text-white text-sm mb-1">{dept.name}</h3>
-            <p className="text-xs text-gray-500 dark:text-gray-400">Head: {dept.head}</p>
+            <h3 style={{
+              fontWeight: 'var(--font-medium)',
+              color: 'var(--dashboard-text-primary)',
+              fontSize: 'var(--text-sm)',
+              marginBottom: 'var(--space-1)'
+            }}>
+              {dept.name}
+            </h3>
+            <p style={{
+              fontSize: 'var(--text-xs)',
+              color: 'var(--dashboard-text-tertiary)'
+            }}>
+              Head: {dept.head}
+            </p>
           </div>
         ))}
       </div>
 
       {/* Search and Filters */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-        <div className="flex flex-col sm:flex-row gap-4">
-          <div className="flex-1">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+      <div style={{
+        backgroundColor: 'var(--dashboard-bg-elevated)',
+        borderRadius: 'var(--radius-lg)',
+        border: `1px solid var(--dashboard-border-primary)`,
+        padding: 'var(--space-6)'
+      }}>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 'var(--space-4)'
+        }}>
+          <div style={{ flex: 1 }}>
+            <div style={{ position: 'relative' }}>
+              <Search
+                className="h-4 w-4"
+                style={{
+                  position: 'absolute',
+                  left: 'var(--space-3)',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  color: 'var(--dashboard-text-tertiary)'
+                }}
+              />
               <input
                 type="text"
                 placeholder="Search staff by name, email, or department..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+                style={{
+                  paddingLeft: 'calc(var(--space-10))',
+                  width: '100%',
+                  padding: 'var(--space-2) var(--space-3)',
+                  border: `1px solid var(--dashboard-border-primary)`,
+                  borderRadius: 'var(--radius-lg)',
+                  outline: 'none',
+                  backgroundColor: 'var(--dashboard-bg-elevated)',
+                  color: 'var(--dashboard-text-primary)',
+                  fontSize: 'var(--text-sm)'
+                }}
               />
             </div>
           </div>
-          <div className="flex gap-2">
+          <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200"
+              onMouseEnter={() => setHoveredFilterBtn(true)}
+              onMouseLeave={() => setHoveredFilterBtn(false)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 'var(--space-2)',
+                padding: 'var(--space-2) var(--space-4)',
+                border: `1px solid var(--dashboard-border-primary)`,
+                borderRadius: 'var(--radius-lg)',
+                backgroundColor: hoveredFilterBtn ? 'var(--dashboard-bg-hover)' : 'transparent',
+                color: 'var(--dashboard-text-primary)',
+                cursor: 'pointer',
+                fontSize: 'var(--text-sm)',
+                fontWeight: 'var(--font-medium)',
+                transition: 'background-color 150ms ease'
+              }}
             >
               <Filter className="w-4 h-4" />
               Filters
             </button>
-            <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200">
+            <button
+              onMouseEnter={() => setHoveredExportBtn(true)}
+              onMouseLeave={() => setHoveredExportBtn(false)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 'var(--space-2)',
+                padding: 'var(--space-2) var(--space-4)',
+                border: `1px solid var(--dashboard-border-primary)`,
+                borderRadius: 'var(--radius-lg)',
+                backgroundColor: hoveredExportBtn ? 'var(--dashboard-bg-hover)' : 'transparent',
+                color: 'var(--dashboard-text-primary)',
+                cursor: 'pointer',
+                fontSize: 'var(--text-sm)',
+                fontWeight: 'var(--font-medium)',
+                transition: 'background-color 150ms ease'
+              }}
+            >
               <Download className="w-4 h-4" />
               Export
             </button>
@@ -325,13 +488,37 @@ export function PrincipalUserManagementPanel() {
 
         {/* Filter Panel */}
         {showFilters && (
-          <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div style={{
+            marginTop: 'var(--space-4)',
+            paddingTop: 'var(--space-4)',
+            borderTop: `1px solid var(--dashboard-border-primary)`,
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: 'var(--space-4)'
+          }}>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Department</label>
+              <label style={{
+                display: 'block',
+                fontSize: 'var(--text-sm)',
+                fontWeight: 'var(--font-medium)',
+                color: 'var(--dashboard-text-primary)',
+                marginBottom: 'var(--space-1)'
+              }}>
+                Department
+              </label>
               <select
                 value={selectedDepartment}
                 onChange={(e) => setSelectedDepartment(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                style={{
+                  width: '100%',
+                  padding: 'var(--space-2) var(--space-3)',
+                  border: `1px solid var(--dashboard-border-primary)`,
+                  borderRadius: 'var(--radius-lg)',
+                  outline: 'none',
+                  backgroundColor: 'var(--dashboard-bg-elevated)',
+                  color: 'var(--dashboard-text-primary)',
+                  fontSize: 'var(--text-sm)'
+                }}
               >
                 <option value="all">All Departments</option>
                 {departments.map(dept => (
@@ -340,11 +527,28 @@ export function PrincipalUserManagementPanel() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Role</label>
+              <label style={{
+                display: 'block',
+                fontSize: 'var(--text-sm)',
+                fontWeight: 'var(--font-medium)',
+                color: 'var(--dashboard-text-primary)',
+                marginBottom: 'var(--space-1)'
+              }}>
+                Role
+              </label>
               <select
                 value={selectedRole}
                 onChange={(e) => setSelectedRole(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                style={{
+                  width: '100%',
+                  padding: 'var(--space-2) var(--space-3)',
+                  border: `1px solid var(--dashboard-border-primary)`,
+                  borderRadius: 'var(--radius-lg)',
+                  outline: 'none',
+                  backgroundColor: 'var(--dashboard-bg-elevated)',
+                  color: 'var(--dashboard-text-primary)',
+                  fontSize: 'var(--text-sm)'
+                }}
               >
                 <option value="all">All Roles</option>
                 <option value="teacher">Teachers</option>
@@ -355,11 +559,28 @@ export function PrincipalUserManagementPanel() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
+              <label style={{
+                display: 'block',
+                fontSize: 'var(--text-sm)',
+                fontWeight: 'var(--font-medium)',
+                color: 'var(--dashboard-text-primary)',
+                marginBottom: 'var(--space-1)'
+              }}>
+                Status
+              </label>
               <select
                 value={selectedStatus}
                 onChange={(e) => setSelectedStatus(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                style={{
+                  width: '100%',
+                  padding: 'var(--space-2) var(--space-3)',
+                  border: `1px solid var(--dashboard-border-primary)`,
+                  borderRadius: 'var(--radius-lg)',
+                  outline: 'none',
+                  backgroundColor: 'var(--dashboard-bg-elevated)',
+                  color: 'var(--dashboard-text-primary)',
+                  fontSize: 'var(--text-sm)'
+                }}
               >
                 <option value="all">All Statuses</option>
                 <option value="active">Active</option>
@@ -372,151 +593,394 @@ export function PrincipalUserManagementPanel() {
       </div>
 
       {/* Staff Table */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+      <div style={{
+        backgroundColor: 'var(--dashboard-bg-elevated)',
+        borderRadius: 'var(--radius-lg)',
+        border: `1px solid var(--dashboard-border-primary)`,
+        overflow: 'hidden'
+      }}>
+        <div style={{
+          padding: 'var(--space-4) var(--space-6)',
+          borderBottom: `1px solid var(--dashboard-border-primary)`
+        }}>
+          <h3 style={{
+            fontSize: 'var(--text-lg)',
+            fontWeight: 'var(--font-semibold)',
+            color: 'var(--dashboard-text-primary)'
+          }}>
             Staff Directory ({sortedStaff.length} members)
           </h3>
         </div>
-        
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50 dark:bg-gray-700">
+
+        <div style={{ overflowX: 'auto' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead style={{ backgroundColor: 'var(--dashboard-bg-secondary)' }}>
               <tr>
-                <th 
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600"
+                <th
                   onClick={() => handleSort('name')}
+                  onMouseEnter={() => setHoveredTableHeader('name')}
+                  onMouseLeave={() => setHoveredTableHeader(null)}
+                  style={{
+                    padding: 'var(--space-3) var(--space-6)',
+                    textAlign: 'left',
+                    fontSize: 'var(--text-xs)',
+                    fontWeight: 'var(--font-medium)',
+                    color: 'var(--dashboard-text-tertiary)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em',
+                    cursor: 'pointer',
+                    backgroundColor: hoveredTableHeader === 'name' ? 'var(--dashboard-bg-hover)' : 'transparent',
+                    transition: 'background-color 150ms ease'
+                  }}
                 >
                   Staff Member
                 </th>
-                <th 
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600"
+                <th
                   onClick={() => handleSort('role')}
+                  onMouseEnter={() => setHoveredTableHeader('role')}
+                  onMouseLeave={() => setHoveredTableHeader(null)}
+                  style={{
+                    padding: 'var(--space-3) var(--space-6)',
+                    textAlign: 'left',
+                    fontSize: 'var(--text-xs)',
+                    fontWeight: 'var(--font-medium)',
+                    color: 'var(--dashboard-text-tertiary)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em',
+                    cursor: 'pointer',
+                    backgroundColor: hoveredTableHeader === 'role' ? 'var(--dashboard-bg-hover)' : 'transparent',
+                    transition: 'background-color 150ms ease'
+                  }}
                 >
                   Role & Department
                 </th>
-                <th 
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600"
+                <th
                   onClick={() => handleSort('students_assigned')}
+                  onMouseEnter={() => setHoveredTableHeader('students')}
+                  onMouseLeave={() => setHoveredTableHeader(null)}
+                  style={{
+                    padding: 'var(--space-3) var(--space-6)',
+                    textAlign: 'left',
+                    fontSize: 'var(--text-xs)',
+                    fontWeight: 'var(--font-medium)',
+                    color: 'var(--dashboard-text-tertiary)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em',
+                    cursor: 'pointer',
+                    backgroundColor: hoveredTableHeader === 'students' ? 'var(--dashboard-bg-hover)' : 'transparent',
+                    transition: 'background-color 150ms ease'
+                  }}
                 >
                   Students/Classes
                 </th>
-                <th 
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600"
+                <th
                   onClick={() => handleSort('performance_rating')}
+                  onMouseEnter={() => setHoveredTableHeader('performance')}
+                  onMouseLeave={() => setHoveredTableHeader(null)}
+                  style={{
+                    padding: 'var(--space-3) var(--space-6)',
+                    textAlign: 'left',
+                    fontSize: 'var(--text-xs)',
+                    fontWeight: 'var(--font-medium)',
+                    color: 'var(--dashboard-text-tertiary)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em',
+                    cursor: 'pointer',
+                    backgroundColor: hoveredTableHeader === 'performance' ? 'var(--dashboard-bg-hover)' : 'transparent',
+                    transition: 'background-color 150ms ease'
+                  }}
                 >
                   Performance
                 </th>
-                <th 
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600"
+                <th
                   onClick={() => handleSort('hireDate')}
+                  onMouseEnter={() => setHoveredTableHeader('hireDate')}
+                  onMouseLeave={() => setHoveredTableHeader(null)}
+                  style={{
+                    padding: 'var(--space-3) var(--space-6)',
+                    textAlign: 'left',
+                    fontSize: 'var(--text-xs)',
+                    fontWeight: 'var(--font-medium)',
+                    color: 'var(--dashboard-text-tertiary)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em',
+                    cursor: 'pointer',
+                    backgroundColor: hoveredTableHeader === 'hireDate' ? 'var(--dashboard-bg-hover)' : 'transparent',
+                    transition: 'background-color 150ms ease'
+                  }}
                 >
                   Hire Date
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th style={{
+                  padding: 'var(--space-3) var(--space-6)',
+                  textAlign: 'left',
+                  fontSize: 'var(--text-xs)',
+                  fontWeight: 'var(--font-medium)',
+                  color: 'var(--dashboard-text-tertiary)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em'
+                }}>
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th style={{
+                  padding: 'var(--space-3) var(--space-6)',
+                  textAlign: 'left',
+                  fontSize: 'var(--text-xs)',
+                  fontWeight: 'var(--font-medium)',
+                  color: 'var(--dashboard-text-tertiary)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em'
+                }}>
                   Last Login
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th style={{
+                  padding: 'var(--space-3) var(--space-6)',
+                  textAlign: 'left',
+                  fontSize: 'var(--text-xs)',
+                  fontWeight: 'var(--font-medium)',
+                  color: 'var(--dashboard-text-tertiary)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em'
+                }}>
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            <tbody>
               {sortedStaff.map((member) => (
-                <tr key={member.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0 h-10 w-10">
-                        <div className="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
-                          <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
+                <tr
+                  key={member.id}
+                  onMouseEnter={() => setHoveredTableRow(member.id)}
+                  onMouseLeave={() => setHoveredTableRow(null)}
+                  style={{
+                    backgroundColor: hoveredTableRow === member.id ? 'var(--dashboard-bg-hover)' : 'var(--dashboard-bg-elevated)',
+                    borderBottom: `1px solid var(--dashboard-border-primary)`,
+                    transition: 'background-color 150ms ease'
+                  }}
+                >
+                  <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap' }}>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <div style={{ flexShrink: 0, width: '40px', height: '40px' }}>
+                        <div style={{
+                          width: '40px',
+                          height: '40px',
+                          borderRadius: '50%',
+                          backgroundColor: '#dbeafe',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}>
+                          <span style={{
+                            fontSize: 'var(--text-sm)',
+                            fontWeight: 'var(--font-medium)',
+                            color: '#1d4ed8'
+                          }}>
                             {member.name.split(' ').map(n => n[0]).join('')}
                           </span>
                         </div>
                       </div>
-                      <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900 dark:text-white">{member.name}</div>
-                        <div className="text-sm text-gray-500 dark:text-gray-400">{member.email}</div>
+                      <div style={{ marginLeft: 'var(--space-4)' }}>
+                        <div style={{
+                          fontSize: 'var(--text-sm)',
+                          fontWeight: 'var(--font-medium)',
+                          color: 'var(--dashboard-text-primary)'
+                        }}>
+                          {member.name}
+                        </div>
+                        <div style={{
+                          fontSize: 'var(--text-sm)',
+                          color: 'var(--dashboard-text-tertiary)'
+                        }}>
+                          {member.email}
+                        </div>
                         {member.phone && (
-                          <div className="text-xs text-gray-400">{member.phone}</div>
+                          <div style={{
+                            fontSize: 'var(--text-xs)',
+                            color: 'var(--dashboard-text-tertiary)'
+                          }}>
+                            {member.phone}
+                          </div>
                         )}
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center gap-2 mb-1">
+                  <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap' }}>
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 'var(--space-2)',
+                      marginBottom: 'var(--space-1)'
+                    }}>
                       {getRoleIcon(member.role)}
-                      <span className="text-sm font-medium text-gray-900 dark:text-white capitalize">
+                      <span style={{
+                        fontSize: 'var(--text-sm)',
+                        fontWeight: 'var(--font-medium)',
+                        color: 'var(--dashboard-text-primary)',
+                        textTransform: 'capitalize'
+                      }}>
                         {member.role.replace('_', ' ')}
                       </span>
                     </div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">{member.department}</div>
+                    <div style={{
+                      fontSize: 'var(--text-sm)',
+                      color: 'var(--dashboard-text-tertiary)'
+                    }}>
+                      {member.department}
+                    </div>
                     {member.subjects && member.subjects.length > 0 && (
-                      <div className="text-xs text-gray-400 mt-1">
+                      <div style={{
+                        fontSize: 'var(--text-xs)',
+                        color: 'var(--dashboard-text-tertiary)',
+                        marginTop: 'var(--space-1)'
+                      }}>
                         {member.subjects.join(', ')}
                       </div>
                     )}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900 dark:text-white">
+                  <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap' }}>
+                    <div style={{
+                      fontSize: 'var(--text-sm)',
+                      color: 'var(--dashboard-text-primary)'
+                    }}>
                       {member.students_assigned > 0 && (
-                        <div className="flex items-center gap-1 mb-1">
-                          <Users className="w-4 h-4 text-gray-400" />
+                        <div style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 'var(--space-1)',
+                          marginBottom: 'var(--space-1)'
+                        }}>
+                          <Users className="w-4 h-4" style={{ color: 'var(--dashboard-text-tertiary)' }} />
                           <span>{member.students_assigned} students</span>
                         </div>
                       )}
                       {member.classes_taught > 0 && (
-                        <div className="flex items-center gap-1">
-                          <BookOpen className="w-4 h-4 text-gray-400" />
+                        <div style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 'var(--space-1)'
+                        }}>
+                          <BookOpen className="w-4 h-4" style={{ color: 'var(--dashboard-text-tertiary)' }} />
                           <span>{member.classes_taught} classes</span>
                         </div>
                       )}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center gap-2">
-                      <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                      <span className="text-sm font-medium text-gray-900 dark:text-white">
+                  <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap' }}>
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 'var(--space-2)'
+                    }}>
+                      <Star className="w-4 h-4" style={{ color: '#facc15', fill: '#facc15' }} />
+                      <span style={{
+                        fontSize: 'var(--text-sm)',
+                        fontWeight: 'var(--font-medium)',
+                        color: 'var(--dashboard-text-primary)'
+                      }}>
                         {member.performance_rating.toFixed(1)}
                       </span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                  <td style={{
+                    padding: 'var(--space-4) var(--space-6)',
+                    whiteSpace: 'nowrap',
+                    fontSize: 'var(--text-sm)',
+                    color: 'var(--dashboard-text-primary)'
+                  }}>
                     {formatDate(member.hireDate)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center gap-2">
+                  <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap' }}>
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 'var(--space-2)'
+                    }}>
                       {getStatusIcon(member.status)}
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        member.status === 'active' 
-                          ? 'bg-green-100 text-green-800'
+                      <span style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        padding: 'var(--space-1) var(--space-2)',
+                        borderRadius: 'var(--radius-full)',
+                        fontSize: 'var(--text-xs)',
+                        fontWeight: 'var(--font-medium)',
+                        backgroundColor: member.status === 'active'
+                          ? '#22c55e'
                           : member.status === 'on_leave'
-                          ? 'bg-yellow-100 text-yellow-800'
-                          : 'bg-red-100 text-red-800'
-                      }`}>
+                          ? '#eab308'
+                          : '#6b7280',
+                        color: 'white'
+                      }}>
                         {member.status.replace('_', ' ')}
                       </span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center gap-1">
-                      <Clock className="w-4 h-4 text-gray-400" />
-                      <span className="text-sm text-gray-600 dark:text-gray-400">
+                  <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap' }}>
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 'var(--space-1)'
+                    }}>
+                      <Clock className="w-4 h-4" style={{ color: 'var(--dashboard-text-tertiary)' }} />
+                      <span style={{
+                        fontSize: 'var(--text-sm)',
+                        color: 'var(--dashboard-text-secondary)'
+                      }}>
                         {formatLastLogin(member.last_login)}
                       </span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <div className="flex items-center gap-2">
-                      <button className="text-blue-600 hover:text-blue-800 p-1">
+                  <td style={{
+                    padding: 'var(--space-4) var(--space-6)',
+                    whiteSpace: 'nowrap',
+                    textAlign: 'right',
+                    fontSize: 'var(--text-sm)',
+                    fontWeight: 'var(--font-medium)'
+                  }}>
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 'var(--space-2)'
+                    }}>
+                      <button
+                        onMouseEnter={() => setHoveredActionBtn(`${member.id}-mail`)}
+                        onMouseLeave={() => setHoveredActionBtn(null)}
+                        style={{
+                          color: hoveredActionBtn === `${member.id}-mail` ? '#1d4ed8' : '#3b82f6',
+                          padding: 'var(--space-1)',
+                          border: 'none',
+                          background: 'none',
+                          cursor: 'pointer',
+                          transition: 'color 150ms ease'
+                        }}
+                      >
                         <Mail className="w-4 h-4" />
                       </button>
-                      <button className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 p-1">
+                      <button
+                        onMouseEnter={() => setHoveredActionBtn(`${member.id}-edit`)}
+                        onMouseLeave={() => setHoveredActionBtn(null)}
+                        style={{
+                          color: hoveredActionBtn === `${member.id}-edit` ? 'var(--dashboard-text-primary)' : 'var(--dashboard-text-secondary)',
+                          padding: 'var(--space-1)',
+                          border: 'none',
+                          background: 'none',
+                          cursor: 'pointer',
+                          transition: 'color 150ms ease'
+                        }}
+                      >
                         <Edit className="w-4 h-4" />
                       </button>
-                      <button className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 p-1">
+                      <button
+                        onMouseEnter={() => setHoveredActionBtn(`${member.id}-more`)}
+                        onMouseLeave={() => setHoveredActionBtn(null)}
+                        style={{
+                          color: hoveredActionBtn === `${member.id}-more` ? 'var(--dashboard-text-primary)' : 'var(--dashboard-text-secondary)',
+                          padding: 'var(--space-1)',
+                          border: 'none',
+                          background: 'none',
+                          cursor: 'pointer',
+                          transition: 'color 150ms ease'
+                        }}
+                      >
                         <MoreVertical className="w-4 h-4" />
                       </button>
                     </div>
@@ -529,10 +993,30 @@ export function PrincipalUserManagementPanel() {
 
         {/* Empty State */}
         {sortedStaff.length === 0 && (
-          <div className="text-center py-12">
-            <Users className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">No staff members found</h3>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          <div style={{
+            textAlign: 'center',
+            padding: 'var(--space-12) 0'
+          }}>
+            <Users
+              className="h-12 w-12"
+              style={{
+                margin: '0 auto',
+                color: 'var(--dashboard-text-tertiary)'
+              }}
+            />
+            <h3 style={{
+              marginTop: 'var(--space-2)',
+              fontSize: 'var(--text-sm)',
+              fontWeight: 'var(--font-medium)',
+              color: 'var(--dashboard-text-primary)'
+            }}>
+              No staff members found
+            </h3>
+            <p style={{
+              marginTop: 'var(--space-1)',
+              fontSize: 'var(--text-sm)',
+              color: 'var(--dashboard-text-tertiary)'
+            }}>
               Try adjusting your search criteria or filters.
             </p>
           </div>

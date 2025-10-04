@@ -41,6 +41,7 @@ export function DashboardRouter() {
     case 'student':
       return <StudentDashboard />;
     case 'educator':
+    case 'parent':
       return <TeacherDashboard />;
     case 'school_admin':
     case 'district_admin':

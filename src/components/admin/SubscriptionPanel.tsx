@@ -146,6 +146,11 @@ export function SubscriptionPanel() {
   const [subscription] = useState<SubscriptionData>(mockSubscriptionData);
   const [activeSection, setActiveSection] = useState('overview');
   const [isLoading, setIsLoading] = useState(false);
+  const [isRefreshHovered, setIsRefreshHovered] = useState(false);
+  const [isExportHovered, setIsExportHovered] = useState(false);
+  const [hoveredInvoiceRow, setHoveredInvoiceRow] = useState<string | null>(null);
+  const [hoveredFeatureIndex, setHoveredFeatureIndex] = useState<number | null>(null);
+  const [hoveredViewButton, setHoveredViewButton] = useState<string | null>(null);
 
   const getTabStyle = (isActive: boolean) => ({
     padding: 'var(--space-4) var(--space-1)',
@@ -181,26 +186,26 @@ export function SubscriptionPanel() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'active':
-        return <CheckCircle className="w-5 h-5 text-green-600" />;
+        return <CheckCircle className="w-5 h-5" style={{ color: '#22c55e' }} />;
       case 'cancelled':
-        return <XCircle className="w-5 h-5 text-red-600" />;
+        return <XCircle className="w-5 h-5" style={{ color: '#ef4444' }} />;
       case 'past_due':
-        return <AlertCircle className="w-5 h-5 text-yellow-600" />;
+        return <AlertCircle className="w-5 h-5" style={{ color: '#eab308' }} />;
       case 'trial':
-        return <Clock className="w-5 h-5 text-blue-600" />;
+        return <AlertCircle className="w-5 h-5" style={{ color: '#2563eb' }} />;
       default:
-        return <AlertCircle className="w-5 h-5 text-gray-600" />;
+        return <AlertCircle className="w-5 h-5" style={{ color: '#6b7280' }} />;
     }
   };
 
   const getTierIcon = (tier: string) => {
     switch (tier) {
       case 'enterprise':
-        return <Crown className="w-6 h-6 text-purple-600" />;
+        return <Crown className="w-6 h-6" style={{ color: '#9333ea' }} />;
       case 'premium':
-        return <Star className="w-6 h-6 text-blue-600" />;
+        return <Star className="w-6 h-6" style={{ color: '#2563eb' }} />;
       default:
-        return <Zap className="w-6 h-6 text-green-600" />;
+        return <Zap className="w-6 h-6" style={{ color: '#22c55e' }} />;
     }
   };
 
@@ -209,9 +214,9 @@ export function SubscriptionPanel() {
   };
 
   const getUsageColor = (percentage: number) => {
-    if (percentage >= 90) return 'bg-red-500';
-    if (percentage >= 75) return 'bg-yellow-500';
-    return 'bg-green-500';
+    if (percentage >= 90) return '#ef4444';
+    if (percentage >= 75) return '#eab308';
+    return '#22c55e';
   };
 
   const handleRefresh = async () => {
@@ -233,6 +238,8 @@ export function SubscriptionPanel() {
           <button
             onClick={handleRefresh}
             disabled={isLoading}
+            onMouseEnter={() => setIsRefreshHovered(true)}
+            onMouseLeave={() => setIsRefreshHovered(false)}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -240,10 +247,11 @@ export function SubscriptionPanel() {
               padding: 'var(--space-2) var(--space-4)',
               border: '1px solid var(--dashboard-border-primary)',
               borderRadius: 'var(--radius-lg)',
-              backgroundColor: 'transparent',
+              backgroundColor: isRefreshHovered && !isLoading ? 'var(--dashboard-bg-hover)' : 'transparent',
               color: 'var(--dashboard-text-primary)',
-              cursor: 'pointer',
-              opacity: isLoading ? 0.5 : 1
+              cursor: isLoading ? 'not-allowed' : 'pointer',
+              opacity: isLoading ? 0.5 : 1,
+              transition: 'background-color 200ms'
             }}
           >
             <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
@@ -280,43 +288,59 @@ export function SubscriptionPanel() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="bg-blue-50 p-4 rounded-lg">
-            <div className="flex items-center gap-2 mb-2">
-              <DollarSign className="w-5 h-5 text-blue-600" />
-              <span className="text-sm font-medium text-blue-900">Annual Cost</span>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--space-6)' }}>
+          <div style={{
+            backgroundColor: '#dbeafe',
+            padding: 'var(--space-4)',
+            borderRadius: 'var(--radius-lg)'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-2)' }}>
+              <DollarSign className="w-5 h-5" style={{ color: '#2563eb' }} />
+              <span style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: '#1e40af' }}>Annual Cost</span>
             </div>
-            <p className="text-2xl font-bold text-blue-900">
+            <p style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: '#1e40af' }}>
               {formatCurrency(subscription.amount, subscription.currency)}
             </p>
           </div>
 
-          <div className="bg-green-50 p-4 rounded-lg">
-            <div className="flex items-center gap-2 mb-2">
-              <Calendar className="w-5 h-5 text-green-600" />
-              <span className="text-sm font-medium text-green-900">Next Billing</span>
+          <div style={{
+            backgroundColor: '#dcfce7',
+            padding: 'var(--space-4)',
+            borderRadius: 'var(--radius-lg)'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-2)' }}>
+              <Calendar className="w-5 h-5" style={{ color: '#22c55e' }} />
+              <span style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: '#065f46' }}>Next Billing</span>
             </div>
-            <p className="text-lg font-semibold text-green-900">
+            <p style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: '#065f46' }}>
               {formatDate(subscription.nextBillingDate)}
             </p>
           </div>
 
-          <div className="bg-purple-50 p-4 rounded-lg">
-            <div className="flex items-center gap-2 mb-2">
-              <Users className="w-5 h-5 text-purple-600" />
-              <span className="text-sm font-medium text-purple-900">User Usage</span>
+          <div style={{
+            backgroundColor: '#f3e8ff',
+            padding: 'var(--space-4)',
+            borderRadius: 'var(--radius-lg)'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-2)' }}>
+              <Users className="w-5 h-5" style={{ color: '#9333ea' }} />
+              <span style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: '#581c87' }}>User Usage</span>
             </div>
-            <p className="text-lg font-semibold text-purple-900">
+            <p style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: '#581c87' }}>
               {subscription.usage.users.current.toLocaleString()} / {subscription.usage.users.limit.toLocaleString()}
             </p>
           </div>
 
-          <div className="bg-orange-50 p-4 rounded-lg">
-            <div className="flex items-center gap-2 mb-2">
-              <Database className="w-5 h-5 text-orange-600" />
-              <span className="text-sm font-medium text-orange-900">Storage Used</span>
+          <div style={{
+            backgroundColor: '#fed7aa',
+            padding: 'var(--space-4)',
+            borderRadius: 'var(--radius-lg)'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-2)' }}>
+              <Database className="w-5 h-5" style={{ color: '#f97316' }} />
+              <span style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: '#7c2d12' }}>Storage Used</span>
             </div>
-            <p className="text-lg font-semibold text-orange-900">
+            <p style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: '#7c2d12' }}>
               {subscription.usage.storage.used} GB / {subscription.usage.storage.limit} GB
             </p>
           </div>
@@ -346,7 +370,7 @@ export function SubscriptionPanel() {
 
       {/* Content Sections */}
       {activeSection === 'overview' && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'var(--space-6)' }}>
           {/* Payment Method */}
           <div style={{
             backgroundColor: 'var(--dashboard-bg-elevated)',
@@ -360,15 +384,23 @@ export function SubscriptionPanel() {
               color: 'var(--dashboard-text-primary)',
               marginBottom: 'var(--space-4)'
             }}>Payment Method</h3>
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-8 bg-blue-600 rounded flex items-center justify-center">
-                <CreditCard className="w-6 h-6 text-white" />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-4)' }}>
+              <div style={{
+                width: '48px',
+                height: '32px',
+                backgroundColor: '#2563eb',
+                borderRadius: 'var(--radius-md)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <CreditCard className="w-6 h-6" style={{ color: '#ffffff' }} />
               </div>
               <div>
-                <p className="font-medium text-gray-900">
+                <p style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>
                   {subscription.paymentMethod.brand} •••• {subscription.paymentMethod.last4}
                 </p>
-                <p className="text-sm text-gray-600">
+                <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>
                   Expires {subscription.paymentMethod.expiryMonth}/{subscription.paymentMethod.expiryYear}
                 </p>
               </div>
@@ -405,7 +437,7 @@ export function SubscriptionPanel() {
       {activeSection === 'usage' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
           {/* Usage Metrics */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 'var(--space-6)' }}>
             <div style={{
               backgroundColor: 'var(--dashboard-bg-elevated)',
               borderRadius: 'var(--radius-lg)',
@@ -414,55 +446,80 @@ export function SubscriptionPanel() {
             }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-4)' }}>
                 <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)' }}>Users</h3>
-                <Users className="w-6 h-6 text-blue-600" />
+                <Users className="w-6 h-6" style={{ color: '#2563eb' }} />
               </div>
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">{subscription.usage.users.current.toLocaleString()} of {subscription.usage.users.limit.toLocaleString()}</span>
-                  <span className="font-medium">{Math.round(getUsagePercentage(subscription.usage.users.current, subscription.usage.users.limit))}%</span>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--text-sm)' }}>
+                  <span style={{ color: 'var(--dashboard-text-secondary)' }}>{subscription.usage.users.current.toLocaleString()} of {subscription.usage.users.limit.toLocaleString()}</span>
+                  <span style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>{Math.round(getUsagePercentage(subscription.usage.users.current, subscription.usage.users.limit))}%</span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div 
-                    className={`h-2 rounded-full ${getUsageColor(getUsagePercentage(subscription.usage.users.current, subscription.usage.users.limit))}`}
-                    style={{ width: `${getUsagePercentage(subscription.usage.users.current, subscription.usage.users.limit)}%` }}
+                <div style={{ width: '100%', backgroundColor: '#d1d5db', borderRadius: '9999px', height: '8px' }}>
+                  <div
+                    style={{
+                      height: '8px',
+                      borderRadius: '9999px',
+                      backgroundColor: getUsageColor(getUsagePercentage(subscription.usage.users.current, subscription.usage.users.limit)),
+                      width: `${getUsagePercentage(subscription.usage.users.current, subscription.usage.users.limit)}%`,
+                      transition: 'width 300ms ease'
+                    }}
                   />
                 </div>
               </div>
             </div>
 
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-900">Storage</h3>
-                <Database className="w-6 h-6 text-green-600" />
+            <div style={{
+              backgroundColor: 'var(--dashboard-bg-elevated)',
+              borderRadius: 'var(--radius-lg)',
+              border: '1px solid var(--dashboard-border-primary)',
+              padding: 'var(--space-6)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-4)' }}>
+                <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)' }}>Storage</h3>
+                <Database className="w-6 h-6" style={{ color: '#22c55e' }} />
               </div>
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">{subscription.usage.storage.used} GB of {subscription.usage.storage.limit} GB</span>
-                  <span className="font-medium">{Math.round(getUsagePercentage(subscription.usage.storage.used, subscription.usage.storage.limit))}%</span>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--text-sm)' }}>
+                  <span style={{ color: 'var(--dashboard-text-secondary)' }}>{subscription.usage.storage.used} GB of {subscription.usage.storage.limit} GB</span>
+                  <span style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>{Math.round(getUsagePercentage(subscription.usage.storage.used, subscription.usage.storage.limit))}%</span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div 
-                    className={`h-2 rounded-full ${getUsageColor(getUsagePercentage(subscription.usage.storage.used, subscription.usage.storage.limit))}`}
-                    style={{ width: `${getUsagePercentage(subscription.usage.storage.used, subscription.usage.storage.limit)}%` }}
+                <div style={{ width: '100%', backgroundColor: '#d1d5db', borderRadius: '9999px', height: '8px' }}>
+                  <div
+                    style={{
+                      height: '8px',
+                      borderRadius: '9999px',
+                      backgroundColor: getUsageColor(getUsagePercentage(subscription.usage.storage.used, subscription.usage.storage.limit)),
+                      width: `${getUsagePercentage(subscription.usage.storage.used, subscription.usage.storage.limit)}%`,
+                      transition: 'width 300ms ease'
+                    }}
                   />
                 </div>
               </div>
             </div>
 
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-900">API Calls</h3>
-                <Server className="w-6 h-6 text-purple-600" />
+            <div style={{
+              backgroundColor: 'var(--dashboard-bg-elevated)',
+              borderRadius: 'var(--radius-lg)',
+              border: '1px solid var(--dashboard-border-primary)',
+              padding: 'var(--space-6)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-4)' }}>
+                <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)' }}>API Calls</h3>
+                <Server className="w-6 h-6" style={{ color: '#9333ea' }} />
               </div>
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">{subscription.usage.apiCalls.used.toLocaleString()} of {subscription.usage.apiCalls.limit.toLocaleString()}</span>
-                  <span className="font-medium">{Math.round(getUsagePercentage(subscription.usage.apiCalls.used, subscription.usage.apiCalls.limit))}%</span>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--text-sm)' }}>
+                  <span style={{ color: 'var(--dashboard-text-secondary)' }}>{subscription.usage.apiCalls.used.toLocaleString()} of {subscription.usage.apiCalls.limit.toLocaleString()}</span>
+                  <span style={{ fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>{Math.round(getUsagePercentage(subscription.usage.apiCalls.used, subscription.usage.apiCalls.limit))}%</span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div 
-                    className={`h-2 rounded-full ${getUsageColor(getUsagePercentage(subscription.usage.apiCalls.used, subscription.usage.apiCalls.limit))}`}
-                    style={{ width: `${getUsagePercentage(subscription.usage.apiCalls.used, subscription.usage.apiCalls.limit)}%` }}
+                <div style={{ width: '100%', backgroundColor: '#d1d5db', borderRadius: '9999px', height: '8px' }}>
+                  <div
+                    style={{
+                      height: '8px',
+                      borderRadius: '9999px',
+                      backgroundColor: getUsageColor(getUsagePercentage(subscription.usage.apiCalls.used, subscription.usage.apiCalls.limit)),
+                      width: `${getUsagePercentage(subscription.usage.apiCalls.used, subscription.usage.apiCalls.limit)}%`,
+                      transition: 'width 300ms ease'
+                    }}
                   />
                 </div>
               </div>
@@ -485,61 +542,142 @@ export function SubscriptionPanel() {
             alignItems: 'center'
           }}>
             <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-semibold)', color: 'var(--dashboard-text-primary)' }}>Billing History</h3>
-            <button className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+            <button
+              onMouseEnter={() => setIsExportHovered(true)}
+              onMouseLeave={() => setIsExportHovered(false)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 'var(--space-2)',
+                padding: 'var(--space-2) var(--space-4)',
+                fontSize: 'var(--text-sm)',
+                backgroundColor: isExportHovered ? '#1d4ed8' : '#2563eb',
+                color: '#ffffff',
+                borderRadius: 'var(--radius-lg)',
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'background-color 200ms'
+              }}
+            >
               <Download className="w-4 h-4" />
               Export All
             </button>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50">
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%' }}>
+              <thead style={{ backgroundColor: 'var(--dashboard-bg-secondary)' }}>
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th style={{
+                    padding: 'var(--space-3) var(--space-6)',
+                    textAlign: 'left',
+                    fontSize: 'var(--text-xs)',
+                    fontWeight: 'var(--font-medium)',
+                    color: 'var(--dashboard-text-secondary)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em'
+                  }}>
                     Invoice
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th style={{
+                    padding: 'var(--space-3) var(--space-6)',
+                    textAlign: 'left',
+                    fontSize: 'var(--text-xs)',
+                    fontWeight: 'var(--font-medium)',
+                    color: 'var(--dashboard-text-secondary)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em'
+                  }}>
                     Date
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th style={{
+                    padding: 'var(--space-3) var(--space-6)',
+                    textAlign: 'left',
+                    fontSize: 'var(--text-xs)',
+                    fontWeight: 'var(--font-medium)',
+                    color: 'var(--dashboard-text-secondary)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em'
+                  }}>
                     Amount
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th style={{
+                    padding: 'var(--space-3) var(--space-6)',
+                    textAlign: 'left',
+                    fontSize: 'var(--text-xs)',
+                    fontWeight: 'var(--font-medium)',
+                    color: 'var(--dashboard-text-secondary)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em'
+                  }}>
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th style={{
+                    padding: 'var(--space-3) var(--space-6)',
+                    textAlign: 'left',
+                    fontSize: 'var(--text-xs)',
+                    fontWeight: 'var(--font-medium)',
+                    color: 'var(--dashboard-text-secondary)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em'
+                  }}>
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody style={{ backgroundColor: 'var(--dashboard-bg-elevated)' }}>
                 {subscription.billingHistory.map((invoice) => (
-                  <tr key={invoice.id}>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                  <tr
+                    key={invoice.id}
+                    onMouseEnter={() => setHoveredInvoiceRow(invoice.id)}
+                    onMouseLeave={() => setHoveredInvoiceRow(null)}
+                    style={{
+                      backgroundColor: hoveredInvoiceRow === invoice.id ? 'var(--dashboard-bg-hover)' : 'transparent',
+                      borderTop: '1px solid var(--dashboard-border-primary)',
+                      transition: 'background-color 200ms'
+                    }}
+                  >
+                    <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap' }}>
                       <div>
-                        <div className="text-sm font-medium text-gray-900">{invoice.id}</div>
-                        <div className="text-sm text-gray-500">{invoice.description}</div>
+                        <div style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>{invoice.id}</div>
+                        <div style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>{invoice.description}</div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap', fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-primary)' }}>
                       {formatDate(invoice.date)}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap', fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-primary)' }}>
                       {formatCurrency(invoice.amount, subscription.currency)}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        invoice.status === 'paid' 
-                          ? 'bg-green-100 text-green-800'
-                          : invoice.status === 'pending'
-                          ? 'bg-yellow-100 text-yellow-800'
-                          : 'bg-red-100 text-red-800'
-                      }`}>
+                    <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap' }}>
+                      <span style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        padding: 'var(--space-1) 10px',
+                        borderRadius: '9999px',
+                        fontSize: 'var(--text-xs)',
+                        fontWeight: 'var(--font-medium)',
+                        backgroundColor: invoice.status === 'paid' ? '#dcfce7' : invoice.status === 'pending' ? '#fef3c7' : '#fee2e2',
+                        color: invoice.status === 'paid' ? '#065f46' : invoice.status === 'pending' ? '#854d0e' : '#991b1b'
+                      }}>
                         {invoice.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap', fontSize: 'var(--text-sm)' }}>
                       {invoice.invoiceUrl && (
-                        <button className="flex items-center gap-1 text-blue-600 hover:text-blue-800">
+                        <button
+                          onMouseEnter={() => setHoveredViewButton(invoice.id)}
+                          onMouseLeave={() => setHoveredViewButton(null)}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 'var(--space-1)',
+                            color: hoveredViewButton === invoice.id ? '#1d4ed8' : '#2563eb',
+                            backgroundColor: 'transparent',
+                            border: 'none',
+                            cursor: 'pointer',
+                            transition: 'color 200ms'
+                          }}
+                        >
                           <ExternalLink className="w-4 h-4" />
                           View
                         </button>
@@ -566,21 +704,38 @@ export function SubscriptionPanel() {
             color: 'var(--dashboard-text-primary)',
             marginBottom: 'var(--space-6)'
           }}>Plan Features</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'var(--space-4)' }}>
             {subscription.features.map((feature, index) => (
-              <div key={index} className="flex items-center justify-between p-3 rounded-lg border border-gray-100">
-                <div className="flex items-center gap-3">
+              <div
+                key={index}
+                onMouseEnter={() => setHoveredFeatureIndex(index)}
+                onMouseLeave={() => setHoveredFeatureIndex(null)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: 'var(--space-3)',
+                  borderRadius: 'var(--radius-lg)',
+                  border: '1px solid var(--dashboard-border-primary)',
+                  backgroundColor: hoveredFeatureIndex === index ? 'var(--dashboard-bg-hover)' : 'transparent',
+                  transition: 'background-color 200ms'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
                   {feature.included ? (
-                    <CheckCircle className="w-5 h-5 text-green-600" />
+                    <CheckCircle className="w-5 h-5" style={{ color: '#22c55e' }} />
                   ) : (
-                    <XCircle className="w-5 h-5 text-gray-400" />
+                    <XCircle className="w-5 h-5" style={{ color: '#9ca3af' }} />
                   )}
-                  <span className={`font-medium ${feature.included ? 'text-gray-900' : 'text-gray-500'}`}>
+                  <span style={{
+                    fontWeight: 'var(--font-medium)',
+                    color: feature.included ? 'var(--dashboard-text-primary)' : 'var(--dashboard-text-secondary)'
+                  }}>
                     {feature.name}
                   </span>
                 </div>
                 {feature.limit && (
-                  <span className="text-sm text-gray-600">
+                  <span style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>
                     {feature.used?.toLocaleString() || 0} / {feature.limit.toLocaleString()}
                   </span>
                 )}

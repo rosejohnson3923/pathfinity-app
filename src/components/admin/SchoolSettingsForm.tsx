@@ -1,6 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Building2, Mail, Phone, MapPin, Clock, Globe, Calendar } from 'lucide-react';
 import { SchoolSettings, TIMEZONE_OPTIONS, STATE_OPTIONS, GRADE_LEVEL_OPTIONS } from '../../types/settings';
+import '../../design-system/tokens/colors.css';
+import '../../design-system/tokens/spacing.css';
+import '../../design-system/tokens/borders.css';
+import '../../design-system/tokens/typography.css';
+import '../../design-system/tokens/shadows.css';
+import '../../design-system/tokens/dashboard.css';
 
 interface SchoolSettingsFormProps {
   settings: SchoolSettings;
@@ -10,6 +16,8 @@ interface SchoolSettingsFormProps {
 }
 
 export function SchoolSettingsForm({ settings, onUpdate, errors = {}, disabled = false }: SchoolSettingsFormProps) {
+  const [hoveredInput, setHoveredInput] = useState<string | null>(null);
+
   const handleInputChange = (field: keyof SchoolSettings, value: any) => {
     onUpdate({ [field]: value });
   };
@@ -28,203 +36,306 @@ export function SchoolSettingsForm({ settings, onUpdate, errors = {}, disabled =
     const updatedGrades = checked
       ? [...settings.gradeLevels, grade]
       : settings.gradeLevels.filter(g => g !== grade);
-    
+
     onUpdate({ gradeLevels: updatedGrades });
   };
 
+  const getInputStyles = (fieldName: string, hasError: boolean) => ({
+    width: '100%',
+    padding: 'var(--space-3)',
+    border: hasError ? '1px solid #ef4444' : '1px solid var(--dashboard-border-primary)',
+    borderRadius: 'var(--radius-lg)',
+    backgroundColor: disabled ? 'var(--dashboard-bg-secondary)' : 'var(--dashboard-bg-elevated)',
+    color: 'var(--dashboard-text-primary)',
+    fontSize: 'var(--text-sm)',
+    cursor: disabled ? 'not-allowed' : 'text',
+    transition: 'border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out',
+    outline: 'none',
+    ...(hoveredInput === fieldName && !disabled && !hasError ? { borderColor: 'var(--dashboard-border-hover)' } : {})
+  });
+
+  const labelStyles: React.CSSProperties = {
+    display: 'block',
+    fontSize: 'var(--text-sm)',
+    fontWeight: 'var(--font-medium)',
+    color: 'var(--dashboard-text-primary)',
+    marginBottom: 'var(--space-2)'
+  };
+
+  const sectionHeaderStyles: React.CSSProperties = {
+    fontSize: 'var(--text-lg)',
+    fontWeight: 'var(--font-medium)',
+    color: 'var(--dashboard-text-primary)'
+  };
+
+  const iconStyles: React.CSSProperties = {
+    color: '#3b82f6'
+  };
+
+  const helperTextStyles: React.CSSProperties = {
+    color: '#ef4444',
+    fontSize: 'var(--text-sm)',
+    marginTop: 'var(--space-1)'
+  };
+
   return (
-    <div className="space-y-8">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-8)' }}>
       {/* Basic Information */}
-      <div className="space-y-6">
-        <div className="flex items-center space-x-2">
-          <Building2 className="h-5 w-5 text-blue-600" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+          <Building2 style={{ ...iconStyles, height: '20px', width: '20px' }} />
+          <h3 style={sectionHeaderStyles}>
             Basic Information
           </h3>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'var(--space-6)' }}>
           <div>
-            <label htmlFor="schoolname" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">School Name *
-            </label><input id="schoolname"
+            <label htmlFor="schoolname" style={labelStyles}>School Name *</label>
+            <input
+              id="schoolname"
               type="text"
               value={settings.name}
               onChange={(e) => handleInputChange('name', e.target.value)}
+              onMouseEnter={() => setHoveredInput('name')}
+              onMouseLeave={() => setHoveredInput(null)}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#3b82f6';
+                e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = errors.name ? '#ef4444' : 'var(--dashboard-border-primary)';
+                e.target.style.boxShadow = 'none';
+              }}
               disabled={disabled}
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white ${
-                errors.name 
-                  ? 'border-red-300 dark:border-red-600' 
-                  : 'border-gray-300 dark:border-gray-600'
-              } ${disabled ? 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed' : ''}`}
+              style={getInputStyles('name', !!errors.name)}
               placeholder="Enter school name"
             />
             {errors.name && (
-              <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+              <p style={helperTextStyles}>{errors.name}</p>
             )}
           </div>
 
           <div>
-            <label htmlFor="district" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">District *
-            </label><input id="district"
+            <label htmlFor="district" style={labelStyles}>District *</label>
+            <input
+              id="district"
               type="text"
               value={settings.district}
               onChange={(e) => handleInputChange('district', e.target.value)}
+              onMouseEnter={() => setHoveredInput('district')}
+              onMouseLeave={() => setHoveredInput(null)}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#3b82f6';
+                e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = errors.district ? '#ef4444' : 'var(--dashboard-border-primary)';
+                e.target.style.boxShadow = 'none';
+              }}
               disabled={disabled}
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white ${
-                errors.district 
-                  ? 'border-red-300 dark:border-red-600' 
-                  : 'border-gray-300 dark:border-gray-600'
-              } ${disabled ? 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed' : ''}`}
+              style={getInputStyles('district', !!errors.district)}
               placeholder="Enter district name"
             />
             {errors.district && (
-              <p className="text-red-500 text-sm mt-1">{errors.district}</p>
+              <p style={helperTextStyles}>{errors.district}</p>
             )}
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          <label style={labelStyles}>
             Description
           </label>
           <textarea
             value={settings.description || ''}
             onChange={(e) => handleInputChange('description', e.target.value)}
+            onMouseEnter={() => setHoveredInput('description')}
+            onMouseLeave={() => setHoveredInput(null)}
+            onFocus={(e) => {
+              e.target.style.borderColor = '#3b82f6';
+              e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = 'var(--dashboard-border-primary)';
+              e.target.style.boxShadow = 'none';
+            }}
             disabled={disabled}
             rows={3}
-            className={`w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white ${
-              disabled ? 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed' : ''
-            }`}
+            style={getInputStyles('description', false)}
             placeholder="Enter school description"
           />
         </div>
       </div>
 
       {/* Contact Information */}
-      <div className="space-y-6">
-        <div className="flex items-center space-x-2">
-          <Mail className="h-5 w-5 text-blue-600" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+          <Mail style={{ ...iconStyles, height: '20px', width: '20px' }} />
+          <h3 style={sectionHeaderStyles}>
             Contact Information
           </h3>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'var(--space-6)' }}>
           <div>
-            <label htmlFor="emailaddress" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email Address *
-            </label><input id="emailaddress"
+            <label htmlFor="emailaddress" style={labelStyles}>Email Address *</label>
+            <input
+              id="emailaddress"
               type="email"
               value={settings.email}
               onChange={(e) => handleInputChange('email', e.target.value)}
+              onMouseEnter={() => setHoveredInput('email')}
+              onMouseLeave={() => setHoveredInput(null)}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#3b82f6';
+                e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = errors.email ? '#ef4444' : 'var(--dashboard-border-primary)';
+                e.target.style.boxShadow = 'none';
+              }}
               disabled={disabled}
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white ${
-                errors.email 
-                  ? 'border-red-300 dark:border-red-600' 
-                  : 'border-gray-300 dark:border-gray-600'
-              } ${disabled ? 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed' : ''}`}
+              style={getInputStyles('email', !!errors.email)}
               placeholder="Enter email address"
             />
             {errors.email && (
-              <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+              <p style={helperTextStyles}>{errors.email}</p>
             )}
           </div>
 
           <div>
-            <label htmlFor="phonenumber" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Phone Number *
-            </label><input id="phonenumber"
+            <label htmlFor="phonenumber" style={labelStyles}>Phone Number *</label>
+            <input
+              id="phonenumber"
               type="tel"
               value={settings.phone}
               onChange={(e) => handleInputChange('phone', e.target.value)}
+              onMouseEnter={() => setHoveredInput('phone')}
+              onMouseLeave={() => setHoveredInput(null)}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#3b82f6';
+                e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = errors.phone ? '#ef4444' : 'var(--dashboard-border-primary)';
+                e.target.style.boxShadow = 'none';
+              }}
               disabled={disabled}
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white ${
-                errors.phone 
-                  ? 'border-red-300 dark:border-red-600' 
-                  : 'border-gray-300 dark:border-gray-600'
-              } ${disabled ? 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed' : ''}`}
+              style={getInputStyles('phone', !!errors.phone)}
               placeholder="Enter phone number"
             />
             {errors.phone && (
-              <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
+              <p style={helperTextStyles}>{errors.phone}</p>
             )}
           </div>
         </div>
 
         <div>
-          <label htmlFor="website" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Website
-          </label><input id="website"
+          <label htmlFor="website" style={labelStyles}>Website</label>
+          <input
+            id="website"
             type="url"
             value={settings.website || ''}
             onChange={(e) => handleInputChange('website', e.target.value)}
+            onMouseEnter={() => setHoveredInput('website')}
+            onMouseLeave={() => setHoveredInput(null)}
+            onFocus={(e) => {
+              e.target.style.borderColor = '#3b82f6';
+              e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = 'var(--dashboard-border-primary)';
+              e.target.style.boxShadow = 'none';
+            }}
             disabled={disabled}
-            className={`w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white ${
-              disabled ? 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed' : ''
-            }`}
+            style={getInputStyles('website', false)}
             placeholder="https://example.com"
           />
         </div>
       </div>
 
       {/* Address */}
-      <div className="space-y-6">
-        <div className="flex items-center space-x-2">
-          <MapPin className="h-5 w-5 text-blue-600" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+          <MapPin style={{ ...iconStyles, height: '20px', width: '20px' }} />
+          <h3 style={sectionHeaderStyles}>
             Address
           </h3>
         </div>
 
         <div>
-          <label htmlFor="streetaddress" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Street Address *
-          </label><input id="streetaddress"
+          <label htmlFor="streetaddress" style={labelStyles}>Street Address *</label>
+          <input
+            id="streetaddress"
             type="text"
             value={settings.address}
             onChange={(e) => handleInputChange('address', e.target.value)}
+            onMouseEnter={() => setHoveredInput('address')}
+            onMouseLeave={() => setHoveredInput(null)}
+            onFocus={(e) => {
+              e.target.style.borderColor = '#3b82f6';
+              e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = errors.address ? '#ef4444' : 'var(--dashboard-border-primary)';
+              e.target.style.boxShadow = 'none';
+            }}
             disabled={disabled}
-            className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white ${
-              errors.address 
-                ? 'border-red-300 dark:border-red-600' 
-                : 'border-gray-300 dark:border-gray-600'
-            } ${disabled ? 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed' : ''}`}
+            style={getInputStyles('address', !!errors.address)}
             placeholder="Enter street address"
           />
           {errors.address && (
-            <p className="text-red-500 text-sm mt-1">{errors.address}</p>
+            <p style={helperTextStyles}>{errors.address}</p>
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--space-6)' }}>
           <div>
-            <label htmlFor="city" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">City *
-            </label><input id="city"
+            <label htmlFor="city" style={labelStyles}>City *</label>
+            <input
+              id="city"
               type="text"
               value={settings.city}
               onChange={(e) => handleInputChange('city', e.target.value)}
+              onMouseEnter={() => setHoveredInput('city')}
+              onMouseLeave={() => setHoveredInput(null)}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#3b82f6';
+                e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = errors.city ? '#ef4444' : 'var(--dashboard-border-primary)';
+                e.target.style.boxShadow = 'none';
+              }}
               disabled={disabled}
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white ${
-                errors.city 
-                  ? 'border-red-300 dark:border-red-600' 
-                  : 'border-gray-300 dark:border-gray-600'
-              } ${disabled ? 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed' : ''}`}
+              style={getInputStyles('city', !!errors.city)}
               placeholder="Enter city"
             />
             {errors.city && (
-              <p className="text-red-500 text-sm mt-1">{errors.city}</p>
+              <p style={helperTextStyles}>{errors.city}</p>
             )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label style={labelStyles}>
               State *
             </label>
             <select
               value={settings.state}
               onChange={(e) => handleInputChange('state', e.target.value)}
+              onMouseEnter={() => setHoveredInput('state')}
+              onMouseLeave={() => setHoveredInput(null)}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#3b82f6';
+                e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = errors.state ? '#ef4444' : 'var(--dashboard-border-primary)';
+                e.target.style.boxShadow = 'none';
+              }}
               disabled={disabled}
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white ${
-                errors.state 
-                  ? 'border-red-300 dark:border-red-600' 
-                  : 'border-gray-300 dark:border-gray-600'
-              } ${disabled ? 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed' : ''}`}
+              style={getInputStyles('state', !!errors.state)}
             >
               <option value="">Select state</option>
               {STATE_OPTIONS.map((state) => (
@@ -232,54 +343,67 @@ export function SchoolSettingsForm({ settings, onUpdate, errors = {}, disabled =
               ))}
             </select>
             {errors.state && (
-              <p className="text-red-500 text-sm mt-1">{errors.state}</p>
+              <p style={helperTextStyles}>{errors.state}</p>
             )}
           </div>
 
           <div>
-            <label htmlFor="zipcode" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">ZIP Code *
-            </label><input id="zipcode"
+            <label htmlFor="zipcode" style={labelStyles}>ZIP Code *</label>
+            <input
+              id="zipcode"
               type="text"
               value={settings.zipCode}
               onChange={(e) => handleInputChange('zipCode', e.target.value)}
+              onMouseEnter={() => setHoveredInput('zipCode')}
+              onMouseLeave={() => setHoveredInput(null)}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#3b82f6';
+                e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = errors.zipCode ? '#ef4444' : 'var(--dashboard-border-primary)';
+                e.target.style.boxShadow = 'none';
+              }}
               disabled={disabled}
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white ${
-                errors.zipCode 
-                  ? 'border-red-300 dark:border-red-600' 
-                  : 'border-gray-300 dark:border-gray-600'
-              } ${disabled ? 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed' : ''}`}
+              style={getInputStyles('zipCode', !!errors.zipCode)}
               placeholder="Enter ZIP code"
             />
             {errors.zipCode && (
-              <p className="text-red-500 text-sm mt-1">{errors.zipCode}</p>
+              <p style={helperTextStyles}>{errors.zipCode}</p>
             )}
           </div>
         </div>
       </div>
 
       {/* Regional Settings */}
-      <div className="space-y-6">
-        <div className="flex items-center space-x-2">
-          <Globe className="h-5 w-5 text-blue-600" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+          <Globe style={{ ...iconStyles, height: '20px', width: '20px' }} />
+          <h3 style={sectionHeaderStyles}>
             Regional Settings
           </h3>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'var(--space-6)' }}>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label style={labelStyles}>
               Timezone *
             </label>
             <select
               value={settings.timezone}
               onChange={(e) => handleInputChange('timezone', e.target.value)}
+              onMouseEnter={() => setHoveredInput('timezone')}
+              onMouseLeave={() => setHoveredInput(null)}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#3b82f6';
+                e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = errors.timezone ? '#ef4444' : 'var(--dashboard-border-primary)';
+                e.target.style.boxShadow = 'none';
+              }}
               disabled={disabled}
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white ${
-                errors.timezone 
-                  ? 'border-red-300 dark:border-red-600' 
-                  : 'border-gray-300 dark:border-gray-600'
-              } ${disabled ? 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed' : ''}`}
+              style={getInputStyles('timezone', !!errors.timezone)}
             >
               <option value="">Select timezone</option>
               {TIMEZONE_OPTIONS.map((tz) => (
@@ -287,21 +411,29 @@ export function SchoolSettingsForm({ settings, onUpdate, errors = {}, disabled =
               ))}
             </select>
             {errors.timezone && (
-              <p className="text-red-500 text-sm mt-1">{errors.timezone}</p>
+              <p style={helperTextStyles}>{errors.timezone}</p>
             )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label style={labelStyles}>
               Locale
             </label>
             <select
               value={settings.locale}
               onChange={(e) => handleInputChange('locale', e.target.value)}
+              onMouseEnter={() => setHoveredInput('locale')}
+              onMouseLeave={() => setHoveredInput(null)}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#3b82f6';
+                e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = 'var(--dashboard-border-primary)';
+                e.target.style.boxShadow = 'none';
+              }}
               disabled={disabled}
-              className={`w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white ${
-                disabled ? 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed' : ''
-              }`}
+              style={getInputStyles('locale', false)}
             >
               <option value="en-US">English (US)</option>
               <option value="en-GB">English (UK)</option>
@@ -314,63 +446,86 @@ export function SchoolSettingsForm({ settings, onUpdate, errors = {}, disabled =
       </div>
 
       {/* Academic Year */}
-      <div className="space-y-6">
-        <div className="flex items-center space-x-2">
-          <Calendar className="h-5 w-5 text-blue-600" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+          <Calendar style={{ ...iconStyles, height: '20px', width: '20px' }} />
+          <h3 style={sectionHeaderStyles}>
             Academic Year
           </h3>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'var(--space-6)' }}>
           <div>
-            <label htmlFor="startdate" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Start Date
-            </label><input id="startdate"
+            <label htmlFor="startdate" style={labelStyles}>Start Date</label>
+            <input
+              id="startdate"
               type="date"
               value={settings.academicYear.startDate}
               onChange={(e) => handleNestedChange('academicYear', 'startDate', e.target.value)}
+              onMouseEnter={() => setHoveredInput('startDate')}
+              onMouseLeave={() => setHoveredInput(null)}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#3b82f6';
+                e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = 'var(--dashboard-border-primary)';
+                e.target.style.boxShadow = 'none';
+              }}
               disabled={disabled}
-              className={`w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white ${
-                disabled ? 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed' : ''
-              }`}
+              style={getInputStyles('startDate', false)}
             />
           </div>
 
           <div>
-            <label htmlFor="enddate" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">End Date
-            </label><input id="enddate"
+            <label htmlFor="enddate" style={labelStyles}>End Date</label>
+            <input
+              id="enddate"
               type="date"
               value={settings.academicYear.endDate}
               onChange={(e) => handleNestedChange('academicYear', 'endDate', e.target.value)}
+              onMouseEnter={() => setHoveredInput('endDate')}
+              onMouseLeave={() => setHoveredInput(null)}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#3b82f6';
+                e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = 'var(--dashboard-border-primary)';
+                e.target.style.boxShadow = 'none';
+              }}
               disabled={disabled}
-              className={`w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white ${
-                disabled ? 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed' : ''
-              }`}
+              style={getInputStyles('endDate', false)}
             />
           </div>
         </div>
       </div>
 
       {/* Grade Levels */}
-      <div className="space-y-6">
-        <div className="flex items-center space-x-2">
-          <Clock className="h-5 w-5 text-blue-600" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+          <Clock style={{ ...iconStyles, height: '20px', width: '20px' }} />
+          <h3 style={sectionHeaderStyles}>
             Grade Levels Offered
           </h3>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 'var(--space-4)' }}>
           {GRADE_LEVEL_OPTIONS.map((grade) => (
-            <label key={grade} className="flex items-center space-x-2">
+            <label key={grade} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', cursor: disabled ? 'not-allowed' : 'pointer' }}>
               <input
                 type="checkbox"
                 checked={settings.gradeLevels.includes(grade)}
                 onChange={(e) => handleGradeLevelsChange(grade, e.target.checked)}
                 disabled={disabled}
-                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700"
+                style={{
+                  width: '16px',
+                  height: '16px',
+                  accentColor: '#3b82f6',
+                  cursor: disabled ? 'not-allowed' : 'pointer'
+                }}
               />
-              <span className="text-sm text-gray-700 dark:text-gray-300">{grade}</span>
+              <span style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-primary)' }}>{grade}</span>
             </label>
           ))}
         </div>
