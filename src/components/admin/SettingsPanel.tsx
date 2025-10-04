@@ -8,6 +8,12 @@ import { SystemSettingsForm } from './SystemSettingsForm';
 import { AppearanceSettingsForm } from './AppearanceSettingsForm';
 import { PrivacySettingsForm } from './PrivacySettingsForm';
 import { AdminOnly } from '../auth/PermissionGate';
+import '../../design-system/tokens/colors.css';
+import '../../design-system/tokens/spacing.css';
+import '../../design-system/tokens/borders.css';
+import '../../design-system/tokens/typography.css';
+import '../../design-system/tokens/shadows.css';
+import '../../design-system/tokens/dashboard.css';
 
 interface SettingsPanelProps {
   className?: string;
@@ -24,6 +30,9 @@ const SETTINGS_TABS = [
 export function SettingsPanel({ className = '' }: SettingsPanelProps) {
   const [activeTab, setActiveTab] = useState<SettingsSection>('school');
   const [saveMessage, setSaveMessage] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [hoveredTab, setHoveredTab] = useState<string | null>(null);
+  const [isResetHovered, setIsResetHovered] = useState(false);
+  const [isSaveHovered, setIsSaveHovered] = useState(false);
   
   const {
     schoolSettings,
@@ -121,9 +130,30 @@ export function SettingsPanel({ className = '' }: SettingsPanelProps) {
 
   if (loading) {
     return (
-      <div className={`bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 ${className}`}>
-        <div className="flex items-center justify-center h-96">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div
+        className={className}
+        style={{
+          background: 'var(--dashboard-bg-elevated)',
+          borderRadius: 'var(--radius-lg)',
+          boxShadow: 'var(--dashboard-shadow-sm)',
+          border: '1px solid var(--dashboard-border-primary)'
+        }}
+      >
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '24rem'
+        }}>
+          <div
+            className="animate-spin"
+            style={{
+              borderRadius: '9999px',
+              height: '3rem',
+              width: '3rem',
+              borderBottom: '2px solid #2563eb'
+            }}
+          />
         </div>
       </div>
     );
@@ -131,59 +161,154 @@ export function SettingsPanel({ className = '' }: SettingsPanelProps) {
 
   return (
     <AdminOnly fallback={
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-8">
-        <div className="text-center">
-          <Lock className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+      <div style={{
+        background: 'var(--dashboard-bg-elevated)',
+        borderRadius: 'var(--radius-lg)',
+        boxShadow: 'var(--dashboard-shadow-sm)',
+        border: '1px solid var(--dashboard-border-primary)',
+        padding: 'var(--space-8)'
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <Lock
+            style={{
+              height: '4rem',
+              width: '4rem',
+              color: '#9ca3af',
+              margin: '0 auto var(--space-4)'
+            }}
+          />
+          <h3 style={{
+            fontSize: 'var(--text-lg)',
+            fontWeight: 'var(--font-medium)',
+            color: 'var(--dashboard-text-primary)',
+            marginBottom: 'var(--space-2)'
+          }}>
             Admin Access Required
           </h3>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p style={{
+            color: 'var(--dashboard-text-secondary)',
+            fontSize: 'var(--text-sm)'
+          }}>
             You need administrator privileges to access system settings.
           </p>
         </div>
       </div>
     }>
-      <div className={`bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 ${className}`}>
+      <div
+        className={className}
+        style={{
+          background: 'var(--dashboard-bg-elevated)',
+          borderRadius: 'var(--radius-lg)',
+          boxShadow: 'var(--dashboard-shadow-sm)',
+          border: '1px solid var(--dashboard-border-primary)'
+        }}
+      >
         {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-                <Settings className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+        <div style={{
+          padding: 'var(--space-4) var(--space-6)',
+          borderBottom: '1px solid var(--dashboard-border-primary)'
+        }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+          }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--space-3)'
+            }}>
+              <div style={{
+                padding: 'var(--space-2)',
+                background: '#dbeafe',
+                borderRadius: 'var(--radius-md)'
+              }}>
+                <Settings style={{
+                  height: '1.5rem',
+                  width: '1.5rem',
+                  color: '#2563eb'
+                }} />
               </div>
               <div>
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                <h2 style={{
+                  fontSize: 'var(--text-xl)',
+                  fontWeight: 'var(--font-semibold)',
+                  color: 'var(--dashboard-text-primary)'
+                }}>
                   System Settings
                 </h2>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p style={{
+                  fontSize: 'var(--text-sm)',
+                  color: 'var(--dashboard-text-secondary)'
+                }}>
                   Configure platform settings and preferences
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center space-x-3">
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--space-3)'
+            }}>
               <button
                 onClick={handleReset}
                 disabled={saving}
-                className="px-4 py-2 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center space-x-2"
+                onMouseEnter={() => setIsResetHovered(true)}
+                onMouseLeave={() => setIsResetHovered(false)}
+                style={{
+                  padding: 'var(--space-2) var(--space-4)',
+                  color: 'var(--dashboard-text-primary)',
+                  border: '1px solid var(--dashboard-border-primary)',
+                  borderRadius: 'var(--radius-md)',
+                  background: isResetHovered ? 'var(--dashboard-bg-secondary)' : 'transparent',
+                  opacity: saving ? 0.5 : 1,
+                  cursor: saving ? 'not-allowed' : 'pointer',
+                  transition: 'all 0.2s',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 'var(--space-2)'
+                }}
               >
-                <RotateCcw className="h-4 w-4" />
+                <RotateCcw style={{ height: '1rem', width: '1rem' }} />
                 <span>Reset</span>
               </button>
-              
+
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center space-x-2"
+                onMouseEnter={() => setIsSaveHovered(true)}
+                onMouseLeave={() => setIsSaveHovered(false)}
+                style={{
+                  padding: 'var(--space-2) var(--space-6)',
+                  background: isSaveHovered && !saving ? '#1d4ed8' : '#2563eb',
+                  color: 'white',
+                  borderRadius: 'var(--radius-md)',
+                  opacity: saving ? 0.5 : 1,
+                  cursor: saving ? 'not-allowed' : 'pointer',
+                  transition: 'all 0.2s',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 'var(--space-2)',
+                  border: 'none'
+                }}
               >
                 {saving ? (
                   <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    <div
+                      className="animate-spin"
+                      style={{
+                        borderRadius: '9999px',
+                        height: '1rem',
+                        width: '1rem',
+                        borderBottom: '2px solid white'
+                      }}
+                    />
                     <span>Saving...</span>
                   </>
                 ) : (
                   <>
-                    <Save className="h-4 w-4" />
+                    <Save style={{ height: '1rem', width: '1rem' }} />
                     <span>Save All</span>
                   </>
                 )}
@@ -193,41 +318,72 @@ export function SettingsPanel({ className = '' }: SettingsPanelProps) {
 
           {/* Save Message */}
           {saveMessage && (
-            <div className={`mt-4 p-3 rounded-lg flex items-center space-x-2 ${
-              saveMessage.type === 'success' 
-                ? 'bg-green-50 dark:bg-green-900/30 text-green-800 dark:text-green-200' 
-                : 'bg-red-50 dark:bg-red-900/30 text-red-800 dark:text-red-200'
-            }`}>
+            <div style={{
+              marginTop: 'var(--space-4)',
+              padding: 'var(--space-3)',
+              borderRadius: 'var(--radius-md)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--space-2)',
+              background: saveMessage.type === 'success' ? '#f0fdf4' : '#fef2f2',
+              color: saveMessage.type === 'success' ? '#166534' : '#991b1b'
+            }}>
               {saveMessage.type === 'success' ? (
-                <CheckCircle className="h-5 w-5" />
+                <CheckCircle style={{ height: '1.25rem', width: '1.25rem' }} />
               ) : (
-                <AlertTriangle className="h-5 w-5" />
+                <AlertTriangle style={{ height: '1.25rem', width: '1.25rem' }} />
               )}
-              <span className="text-sm font-medium">{saveMessage.message}</span>
+              <span style={{
+                fontSize: 'var(--text-sm)',
+                fontWeight: 'var(--font-medium)'
+              }}>
+                {saveMessage.message}
+              </span>
             </div>
           )}
         </div>
 
         {/* Tab Navigation */}
-        <div className="border-b border-gray-200 dark:border-gray-700">
-          <nav className="flex space-x-8 px-6" aria-label="Settings sections">
+        <div style={{
+          borderBottom: '1px solid var(--dashboard-border-primary)'
+        }}>
+          <nav
+            style={{
+              display: 'flex',
+              gap: 'var(--space-8)',
+              padding: '0 var(--space-6)'
+            }}
+            aria-label="Settings sections"
+          >
             {SETTINGS_TABS.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
-              
+              const isHovered = hoveredTab === tab.id;
+
               return (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                    isActive
-                      ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-200'
-                  }`}
+                  onMouseEnter={() => setHoveredTab(tab.id)}
+                  onMouseLeave={() => setHoveredTab(null)}
+                  style={{
+                    padding: 'var(--space-4) var(--space-1)',
+                    borderBottom: isActive ? '2px solid #2563eb' : isHovered ? '2px solid var(--dashboard-border-primary)' : '2px solid transparent',
+                    fontWeight: 'var(--font-medium)',
+                    fontSize: 'var(--text-sm)',
+                    transition: 'all 0.2s',
+                    color: isActive ? '#2563eb' : isHovered ? 'var(--dashboard-text-primary)' : 'var(--dashboard-text-secondary)',
+                    background: 'transparent',
+                    cursor: 'pointer'
+                  }}
                   aria-current={isActive ? 'page' : undefined}
                 >
-                  <div className="flex items-center space-x-2">
-                    <Icon className="h-4 w-4" />
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'var(--space-2)'
+                  }}>
+                    <Icon style={{ height: '1rem', width: '1rem' }} />
                     <span>{tab.label}</span>
                   </div>
                 </button>
@@ -237,14 +393,22 @@ export function SettingsPanel({ className = '' }: SettingsPanelProps) {
         </div>
 
         {/* Tab Description */}
-        <div className="px-6 py-4 bg-gray-50 dark:bg-gray-900/50">
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+        <div style={{
+          padding: 'var(--space-4) var(--space-6)',
+          background: 'var(--dashboard-bg-secondary)'
+        }}>
+          <p style={{
+            fontSize: 'var(--text-sm)',
+            color: 'var(--dashboard-text-secondary)'
+          }}>
             {SETTINGS_TABS.find(tab => tab.id === activeTab)?.description}
           </p>
         </div>
 
         {/* Settings Form */}
-        <div className="px-6 py-8">
+        <div style={{
+          padding: 'var(--space-8) var(--space-6)'
+        }}>
           {renderSettingsForm()}
         </div>
       </div>
