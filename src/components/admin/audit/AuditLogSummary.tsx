@@ -2,6 +2,12 @@ import React from 'react';
 import { TrendingUp, Users, AlertTriangle, Activity, Shield, Clock, BarChart3, PieChart } from 'lucide-react';
 import { AuditLogSummary as AuditLogSummaryType, AUDIT_SEVERITY_COLORS, AUDIT_CATEGORY_COLORS } from '../../../types/auditLog';
 import { SimpleChart } from '../analytics/SimpleChart';
+import '../../../design-system/tokens/colors.css';
+import '../../../design-system/tokens/spacing.css';
+import '../../../design-system/tokens/borders.css';
+import '../../../design-system/tokens/typography.css';
+import '../../../design-system/tokens/shadows.css';
+import '../../../design-system/tokens/dashboard.css';
 
 interface AuditLogSummaryProps {
   summary: AuditLogSummaryType;
@@ -36,56 +42,104 @@ export function AuditLogSummary({ summary }: AuditLogSummaryProps) {
     <div className="space-y-6">
       {/* Overview Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+        <div style={{
+          backgroundColor: 'var(--dashboard-bg-elevated)',
+          borderRadius: 'var(--radius-xl)',
+          boxShadow: 'var(--dashboard-shadow-card)',
+          padding: 'var(--space-6)'
+        }}>
           <div className="flex items-center">
-            <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-              <Activity className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+            <div className="p-3 bg-blue-100 rounded-lg">
+              <Activity className="h-6 w-6 text-blue-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm text-gray-500 dark:text-gray-400">Total Events</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+              <p style={{
+                fontSize: 'var(--text-sm)',
+                color: 'var(--dashboard-text-secondary)'
+              }}>Total Events</p>
+              <p style={{
+                fontSize: 'var(--text-2xl)',
+                fontWeight: 'var(--font-bold)',
+                color: 'var(--dashboard-text-primary)'
+              }}>
                 {summary.totalEntries.toLocaleString()}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+        <div style={{
+          backgroundColor: 'var(--dashboard-bg-elevated)',
+          borderRadius: 'var(--radius-xl)',
+          boxShadow: 'var(--dashboard-shadow-card)',
+          padding: 'var(--space-6)'
+        }}>
           <div className="flex items-center">
-            <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-lg">
-              <TrendingUp className="h-6 w-6 text-green-600 dark:text-green-400" />
+            <div className="p-3 bg-green-100 rounded-lg">
+              <TrendingUp className="h-6 w-6 text-green-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm text-gray-500 dark:text-gray-400">Success Rate</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+              <p style={{
+                fontSize: 'var(--text-sm)',
+                color: 'var(--dashboard-text-secondary)'
+              }}>Success Rate</p>
+              <p style={{
+                fontSize: 'var(--text-2xl)',
+                fontWeight: 'var(--font-bold)',
+                color: 'var(--dashboard-text-primary)'
+              }}>
                 {Math.round((summary.outcomeBreakdown.success / summary.totalEntries) * 100)}%
               </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+        <div style={{
+          backgroundColor: 'var(--dashboard-bg-elevated)',
+          borderRadius: 'var(--radius-xl)',
+          boxShadow: 'var(--dashboard-shadow-card)',
+          padding: 'var(--space-6)'
+        }}>
           <div className="flex items-center">
-            <div className="p-3 bg-red-100 dark:bg-red-900/30 rounded-lg">
-              <AlertTriangle className="h-6 w-6 text-red-600 dark:text-red-400" />
+            <div className="p-3 bg-red-100 rounded-lg">
+              <AlertTriangle className="h-6 w-6 text-red-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm text-gray-500 dark:text-gray-400">Security Alerts</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+              <p style={{
+                fontSize: 'var(--text-sm)',
+                color: 'var(--dashboard-text-secondary)'
+              }}>Security Alerts</p>
+              <p style={{
+                fontSize: 'var(--text-2xl)',
+                fontWeight: 'var(--font-bold)',
+                color: 'var(--dashboard-text-primary)'
+              }}>
                 {summary.securityAlerts.length}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+        <div style={{
+          backgroundColor: 'var(--dashboard-bg-elevated)',
+          borderRadius: 'var(--radius-xl)',
+          boxShadow: 'var(--dashboard-shadow-card)',
+          padding: 'var(--space-6)'
+        }}>
           <div className="flex items-center">
-            <div className="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
-              <Users className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+            <div className="p-3 bg-purple-100 rounded-lg">
+              <Users className="h-6 w-6 text-purple-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm text-gray-500 dark:text-gray-400">Active Users</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+              <p style={{
+                fontSize: 'var(--text-sm)',
+                color: 'var(--dashboard-text-secondary)'
+              }}>Active Users</p>
+              <p style={{
+                fontSize: 'var(--text-2xl)',
+                fontWeight: 'var(--font-bold)',
+                color: 'var(--dashboard-text-primary)'
+              }}>
                 {summary.topActors.length}
               </p>
             </div>
@@ -95,11 +149,22 @@ export function AuditLogSummary({ summary }: AuditLogSummaryProps) {
 
       {/* Security Alerts */}
       {summary.securityAlerts.length > 0 && (
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow">
-          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+        <div style={{
+          backgroundColor: 'var(--dashboard-bg-elevated)',
+          borderRadius: 'var(--radius-xl)',
+          boxShadow: 'var(--dashboard-shadow-card)'
+        }}>
+          <div style={{
+            padding: 'var(--space-6)',
+            borderBottom: '1px solid var(--dashboard-border-primary)'
+          }}>
             <div className="flex items-center space-x-2">
-              <Shield className="h-5 w-5 text-red-600 dark:text-red-400" />
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white">Security Alerts</h3>
+              <Shield className="h-5 w-5 text-red-600" />
+              <h3 style={{
+                fontSize: 'var(--text-lg)',
+                fontWeight: 'var(--font-medium)',
+                color: 'var(--dashboard-text-primary)'
+              }}>Security Alerts</h3>
             </div>
           </div>
           <div className="p-6">
@@ -123,19 +188,34 @@ export function AuditLogSummary({ summary }: AuditLogSummaryProps) {
                 };
 
                 return (
-                  <div key={index} className="flex items-center justify-between p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                  <div key={index} style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: 'var(--space-4)',
+                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                    border: '1px solid rgba(239, 68, 68, 0.3)',
+                    borderRadius: 'var(--radius-lg)'
+                  }}>
                     <div className="flex items-center space-x-3">
                       <span className="text-2xl">{getSeverityIcon(alert.severity)}</span>
                       <div>
-                        <h4 className="font-medium text-red-900 dark:text-red-200">
+                        <h4 style={{ fontWeight: 'var(--font-medium)', color: '#7f1d1d' }}>
                           {getAlertTitle(alert.type)}
                         </h4>
-                        <p className="text-sm text-red-700 dark:text-red-300">
+                        <p style={{ fontSize: 'var(--text-sm)', color: '#991b1b' }}>
                           {alert.count} occurrence{alert.count !== 1 ? 's' : ''} • Last: {new Date(alert.lastOccurrence).toLocaleString()}
                         </p>
                       </div>
                     </div>
-                    <span className={`px-2 py-1 text-xs font-semibold rounded-full ${AUDIT_SEVERITY_COLORS[alert.severity]}`}>
+                    <span style={{
+                      display: 'inline-flex',
+                      padding: 'var(--space-1) var(--space-2)',
+                      fontSize: 'var(--text-xs)',
+                      fontWeight: 'var(--font-semibold)',
+                      borderRadius: 'var(--radius-full)',
+                      ...AUDIT_SEVERITY_COLORS[alert.severity]
+                    }}>
                       {alert.severity.toUpperCase()}
                     </span>
                   </div>
@@ -149,18 +229,29 @@ export function AuditLogSummary({ summary }: AuditLogSummaryProps) {
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Activity Trend */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow">
-          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+        <div style={{
+          backgroundColor: 'var(--dashboard-bg-elevated)',
+          borderRadius: 'var(--radius-xl)',
+          boxShadow: 'var(--dashboard-shadow-card)'
+        }}>
+          <div style={{
+            padding: 'var(--space-6)',
+            borderBottom: '1px solid var(--dashboard-border-primary)'
+          }}>
             <div className="flex items-center space-x-2">
-              <TrendingUp className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white">Activity Trend (7 Days)</h3>
+              <TrendingUp className="h-5 w-5 text-blue-600" />
+              <h3 style={{
+                fontSize: 'var(--text-lg)',
+                fontWeight: 'var(--font-medium)',
+                color: 'var(--dashboard-text-primary)'
+              }}>Activity Trend (7 Days)</h3>
             </div>
           </div>
           <div className="p-6">
             <SimpleChart
               type="line"
               data={{
-                labels: summary.activityTrend.map(item => 
+                labels: summary.activityTrend.map(item =>
                   new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
                 ),
                 datasets: [{
@@ -177,24 +268,35 @@ export function AuditLogSummary({ summary }: AuditLogSummaryProps) {
         </div>
 
         {/* Severity Breakdown */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow">
-          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+        <div style={{
+          backgroundColor: 'var(--dashboard-bg-elevated)',
+          borderRadius: 'var(--radius-xl)',
+          boxShadow: 'var(--dashboard-shadow-card)'
+        }}>
+          <div style={{
+            padding: 'var(--space-6)',
+            borderBottom: '1px solid var(--dashboard-border-primary)'
+          }}>
             <div className="flex items-center space-x-2">
-              <BarChart3 className="h-5 w-5 text-orange-600 dark:text-orange-400" />
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white">Severity Distribution</h3>
+              <BarChart3 className="h-5 w-5 text-orange-600" />
+              <h3 style={{
+                fontSize: 'var(--text-lg)',
+                fontWeight: 'var(--font-medium)',
+                color: 'var(--dashboard-text-primary)'
+              }}>Severity Distribution</h3>
             </div>
           </div>
           <div className="p-6">
             <SimpleChart
               type="doughnut"
               data={{
-                labels: Object.keys(summary.severityBreakdown).map(severity => 
+                labels: Object.keys(summary.severityBreakdown).map(severity =>
                   severity.charAt(0).toUpperCase() + severity.slice(1)
                 ),
                 datasets: [{
                   label: 'Severity',
                   data: Object.values(summary.severityBreakdown),
-                  backgroundColor: Object.keys(summary.severityBreakdown).map(severity => 
+                  backgroundColor: Object.keys(summary.severityBreakdown).map(severity =>
                     getSeverityColor(severity)
                   )
                 }]
@@ -206,24 +308,35 @@ export function AuditLogSummary({ summary }: AuditLogSummaryProps) {
       </div>
 
       {/* Category Breakdown */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow">
-        <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+      <div style={{
+        backgroundColor: 'var(--dashboard-bg-elevated)',
+        borderRadius: 'var(--radius-xl)',
+        boxShadow: 'var(--dashboard-shadow-card)'
+      }}>
+        <div style={{
+          padding: 'var(--space-6)',
+          borderBottom: '1px solid var(--dashboard-border-primary)'
+        }}>
           <div className="flex items-center space-x-2">
-            <PieChart className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white">Event Categories</h3>
+            <PieChart className="h-5 w-5 text-purple-600" />
+            <h3 style={{
+              fontSize: 'var(--text-lg)',
+              fontWeight: 'var(--font-medium)',
+              color: 'var(--dashboard-text-primary)'
+            }}>Event Categories</h3>
           </div>
         </div>
         <div className="p-6">
           <SimpleChart
             type="bar"
             data={{
-              labels: Object.keys(summary.categoryBreakdown).map(category => 
+              labels: Object.keys(summary.categoryBreakdown).map(category =>
                 category.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
               ),
               datasets: [{
                 label: 'Events',
                 data: Object.values(summary.categoryBreakdown),
-                backgroundColor: Object.keys(summary.categoryBreakdown).map(category => 
+                backgroundColor: Object.keys(summary.categoryBreakdown).map(category =>
                   getCategoryColor(category)
                 )
               }]
@@ -236,29 +349,51 @@ export function AuditLogSummary({ summary }: AuditLogSummaryProps) {
       {/* Top Actions and Actors */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Top Actions */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow">
-          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white">Most Frequent Actions</h3>
+        <div style={{
+          backgroundColor: 'var(--dashboard-bg-elevated)',
+          borderRadius: 'var(--radius-xl)',
+          boxShadow: 'var(--dashboard-shadow-card)'
+        }}>
+          <div style={{
+            padding: 'var(--space-6)',
+            borderBottom: '1px solid var(--dashboard-border-primary)'
+          }}>
+            <h3 style={{
+              fontSize: 'var(--text-lg)',
+              fontWeight: 'var(--font-medium)',
+              color: 'var(--dashboard-text-primary)'
+            }}>Most Frequent Actions</h3>
           </div>
           <div className="p-6">
             <div className="space-y-4">
               {summary.topActions.map((action, index) => (
                 <div key={action.action} className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <span className="flex items-center justify-center w-6 h-6 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full text-sm font-semibold">
+                    <span className="flex items-center justify-center w-6 h-6 bg-blue-100 text-blue-600 rounded-full text-sm font-semibold">
                       {index + 1}
                     </span>
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-white">
+                      <p style={{
+                        fontWeight: 'var(--font-medium)',
+                        color: 'var(--dashboard-text-primary)'
+                      }}>
                         {action.action.replace(/[_:]/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
                       </p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                      <p style={{
+                        fontSize: 'var(--text-sm)',
+                        color: 'var(--dashboard-text-secondary)'
+                      }}>
                         {action.count} events ({action.percentage}%)
                       </p>
                     </div>
                   </div>
-                  <div className="w-16 bg-gray-200 dark:bg-gray-600 rounded-full h-2">
-                    <div 
+                  <div style={{
+                    width: '4rem',
+                    backgroundColor: 'var(--dashboard-bg-secondary)',
+                    borderRadius: 'var(--radius-full)',
+                    height: '0.5rem'
+                  }}>
+                    <div
                       className="bg-blue-600 h-2 rounded-full"
                       style={{ width: `${action.percentage}%` }}
                     />
@@ -270,32 +405,55 @@ export function AuditLogSummary({ summary }: AuditLogSummaryProps) {
         </div>
 
         {/* Top Actors */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow">
-          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white">Most Active Users</h3>
+        <div style={{
+          backgroundColor: 'var(--dashboard-bg-elevated)',
+          borderRadius: 'var(--radius-xl)',
+          boxShadow: 'var(--dashboard-shadow-card)'
+        }}>
+          <div style={{
+            padding: 'var(--space-6)',
+            borderBottom: '1px solid var(--dashboard-border-primary)'
+          }}>
+            <h3 style={{
+              fontSize: 'var(--text-lg)',
+              fontWeight: 'var(--font-medium)',
+              color: 'var(--dashboard-text-primary)'
+            }}>Most Active Users</h3>
           </div>
           <div className="p-6">
             <div className="space-y-4">
               {summary.topActors.map((actor, index) => (
                 <div key={actor.actorId} className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <span className="flex items-center justify-center w-6 h-6 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-full text-sm font-semibold">
+                    <span className="flex items-center justify-center w-6 h-6 bg-green-100 text-green-600 rounded-full text-sm font-semibold">
                       {index + 1}
                     </span>
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-white">
+                      <p style={{
+                        fontWeight: 'var(--font-medium)',
+                        color: 'var(--dashboard-text-primary)'
+                      }}>
                         {actor.actorName}
                       </p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                      <p style={{
+                        fontSize: 'var(--text-sm)',
+                        color: 'var(--dashboard-text-secondary)'
+                      }}>
                         {actor.actorEmail}
                       </p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="font-medium text-gray-900 dark:text-white">
+                    <p style={{
+                      fontWeight: 'var(--font-medium)',
+                      color: 'var(--dashboard-text-primary)'
+                    }}>
                       {actor.actionCount} actions
                     </p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                    <p style={{
+                      fontSize: 'var(--text-sm)',
+                      color: 'var(--dashboard-text-secondary)'
+                    }}>
                       Last: {new Date(actor.lastActivity).toLocaleDateString()}
                     </p>
                   </div>
@@ -307,13 +465,24 @@ export function AuditLogSummary({ summary }: AuditLogSummaryProps) {
       </div>
 
       {/* Time Range Info */}
-      <div className="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-6">
-        <div className="flex items-center justify-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
+      <div style={{
+        backgroundColor: 'var(--dashboard-bg-secondary)',
+        borderRadius: 'var(--radius-xl)',
+        padding: 'var(--space-6)'
+      }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 'var(--space-4)',
+          fontSize: 'var(--text-sm)',
+          color: 'var(--dashboard-text-secondary)'
+        }}>
           <div className="flex items-center space-x-2">
             <Clock className="h-4 w-4" />
             <span>Report Period:</span>
           </div>
-          <span className="font-medium">
+          <span style={{ fontWeight: 'var(--font-medium)' }}>
             {new Date(summary.timeRange.start).toLocaleDateString()} - {new Date(summary.timeRange.end).toLocaleDateString()}
           </span>
           <span>•</span>

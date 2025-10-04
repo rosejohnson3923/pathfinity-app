@@ -57,10 +57,51 @@ import '../../design-system/tokens/typography.css';
 import '../../design-system/tokens/shadows.css';
 import '../../design-system/tokens/dashboard.css';
 
+// Stat Card Component with hover effects
+interface StatCardProps {
+  icon: React.ComponentType<{ style?: React.CSSProperties; className?: string }>;
+  iconBgColor: string;
+  iconColor: string;
+  label: string;
+  value: string;
+}
+
+function StatCard({ icon: Icon, iconBgColor, iconColor, label, value }: StatCardProps) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <div
+      style={{
+        backgroundColor: 'var(--dashboard-bg-elevated)',
+        borderRadius: 'var(--radius-xl)',
+        boxShadow: isHovered ? 'var(--dashboard-shadow-card-hover)' : 'var(--dashboard-shadow-card)',
+        padding: 'var(--space-6)',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 'var(--space-4)',
+        transition: 'box-shadow 200ms ease, transform 200ms ease',
+        transform: isHovered ? 'translateY(-2px)' : 'translateY(0)',
+        cursor: 'pointer'
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div style={{ padding: 'var(--space-3)', backgroundColor: iconBgColor, borderRadius: 'var(--radius-lg)' }}>
+        <Icon style={{ height: '1.5rem', width: '1.5rem', color: iconColor }} />
+      </div>
+      <div>
+        <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-tertiary)' }}>{label}</p>
+        <p style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)' }}>{value}</p>
+      </div>
+    </div>
+  );
+}
+
 export function AdminDashboard() {
   const { user, tenant } = useAuthContext();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
+  const [isActivityCardHovered, setIsActivityCardHovered] = useState(false);
 
   // Tab button style helper
   const getTabButtonStyle = (tabName: string) => ({
@@ -554,42 +595,34 @@ export function AdminDashboard() {
             <>
               {/* Stats Cards */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 'var(--space-6)' }}>
-                <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-xl)', boxShadow: 'var(--dashboard-shadow-card)', padding: 'var(--space-6)', display: 'flex', alignItems: 'center', gap: 'var(--space-4)' }}>
-                  <div style={{ padding: 'var(--space-3)', backgroundColor: '#DBEAFE', borderRadius: 'var(--radius-lg)' }}>
-                    <Users style={{ height: '1.5rem', width: '1.5rem', color: '#2563EB' }} />
-                  </div>
-                  <div>
-                    <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-tertiary)' }}>Total Users</p>
-                    <p style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)' }}>1,248</p>
-                  </div>
-                </div>
-                <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-xl)', boxShadow: 'var(--dashboard-shadow-card)', padding: 'var(--space-6)', display: 'flex', alignItems: 'center', gap: 'var(--space-4)' }}>
-                  <div style={{ padding: 'var(--space-3)', backgroundColor: '#D1FAE5', borderRadius: 'var(--radius-lg)' }}>
-                    <UserCheck style={{ height: '1.5rem', width: '1.5rem', color: '#059669' }} />
-                  </div>
-                  <div>
-                    <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-tertiary)' }}>Active Users</p>
-                    <p style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)' }}>1,156</p>
-                  </div>
-                </div>
-                <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-xl)', boxShadow: 'var(--dashboard-shadow-card)', padding: 'var(--space-6)', display: 'flex', alignItems: 'center', gap: 'var(--space-4)' }}>
-                  <div style={{ padding: 'var(--space-3)', backgroundColor: '#F3E8FF', borderRadius: 'var(--radius-lg)' }}>
-                    <Database style={{ height: '1.5rem', width: '1.5rem', color: '#7C3AED' }} />
-                  </div>
-                  <div>
-                    <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-tertiary)' }}>Storage Used</p>
-                    <p style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)' }}>24.5 GB</p>
-                  </div>
-                </div>
-                <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-xl)', boxShadow: 'var(--dashboard-shadow-card)', padding: 'var(--space-6)', display: 'flex', alignItems: 'center', gap: 'var(--space-4)' }}>
-                  <div style={{ padding: 'var(--space-3)', backgroundColor: '#FEF3C7', borderRadius: 'var(--radius-lg)' }}>
-                    <Clock style={{ height: '1.5rem', width: '1.5rem', color: '#D97706' }} />
-                  </div>
-                  <div>
-                    <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-tertiary)' }}>Uptime</p>
-                    <p style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)' }}>99.9%</p>
-                  </div>
-                </div>
+                <StatCard
+                  icon={Users}
+                  iconBgColor="#DBEAFE"
+                  iconColor="#2563EB"
+                  label="Total Users"
+                  value="1,248"
+                />
+                <StatCard
+                  icon={UserCheck}
+                  iconBgColor="#D1FAE5"
+                  iconColor="#059669"
+                  label="Active Users"
+                  value="1,156"
+                />
+                <StatCard
+                  icon={Database}
+                  iconBgColor="#F3E8FF"
+                  iconColor="#7C3AED"
+                  label="Storage Used"
+                  value="24.5 GB"
+                />
+                <StatCard
+                  icon={Clock}
+                  iconBgColor="#FEF3C7"
+                  iconColor="#D97706"
+                  label="Uptime"
+                  value="99.9%"
+                />
               </div>
 
               {/* Subscription Info Component */}
@@ -602,7 +635,17 @@ export function AdminDashboard() {
               />
 
               {/* Recent Activity */}
-              <div style={{ backgroundColor: 'var(--dashboard-bg-elevated)', borderRadius: 'var(--radius-xl)', boxShadow: 'var(--dashboard-shadow-card)' }}>
+              <div
+                style={{
+                  backgroundColor: 'var(--dashboard-bg-elevated)',
+                  borderRadius: 'var(--radius-xl)',
+                  boxShadow: isActivityCardHovered ? 'var(--dashboard-shadow-card-hover)' : 'var(--dashboard-shadow-card)',
+                  transition: 'box-shadow 200ms ease, transform 200ms ease',
+                  transform: isActivityCardHovered ? 'translateY(-2px)' : 'translateY(0)'
+                }}
+                onMouseEnter={() => setIsActivityCardHovered(true)}
+                onMouseLeave={() => setIsActivityCardHovered(false)}
+              >
                 <div style={{ padding: 'var(--space-6)', borderBottom: '1px solid var(--dashboard-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Recent System Activity</h3>
                   <button style={{ fontSize: 'var(--text-sm)', color: 'var(--blue-600)', cursor: 'pointer' }}>

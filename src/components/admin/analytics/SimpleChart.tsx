@@ -1,5 +1,11 @@
 import React, { useMemo } from 'react';
 import { ChartData } from '../../../types/analytics';
+import '../../../design-system/tokens/colors.css';
+import '../../../design-system/tokens/spacing.css';
+import '../../../design-system/tokens/borders.css';
+import '../../../design-system/tokens/typography.css';
+import '../../../design-system/tokens/shadows.css';
+import '../../../design-system/tokens/dashboard.css';
 
 interface SimpleChartProps {
   data: ChartData;
@@ -194,17 +200,30 @@ export function SimpleChart({ data, type, height = 300, className = '' }: Simple
   };
 
   return (
-    <div className={`bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 w-full !max-w-none ${className}`} style={{ maxWidth: 'none', width: '100%' }}>
+    <div
+      className={`w-full !max-w-none ${className}`}
+      style={{
+        backgroundColor: 'var(--dashboard-bg-elevated)',
+        borderRadius: 'var(--radius-xl)',
+        border: '1px solid var(--dashboard-border-primary)',
+        padding: 'var(--space-6)',
+        maxWidth: 'none',
+        width: '100%'
+      }}
+    >
       {data.datasets && data.datasets.length > 0 && (
-        <div className="mb-4">
+        <div style={{ marginBottom: 'var(--space-4)' }}>
           <div className="flex flex-wrap gap-4">
             {data.datasets.map((dataset, index) => (
               <div key={index} className="flex items-center space-x-2">
-                <div 
+                <div
                   className="w-3 h-3 rounded-full"
                   style={{ backgroundColor: dataset.borderColor || dataset.backgroundColor }}
                 />
-                <span className="text-sm text-gray-600 dark:text-gray-400">
+                <span style={{
+                  fontSize: 'var(--text-sm)',
+                  color: 'var(--dashboard-text-secondary)'
+                }}>
                   {dataset.label}
                 </span>
               </div>
@@ -212,28 +231,30 @@ export function SimpleChart({ data, type, height = 300, className = '' }: Simple
           </div>
         </div>
       )}
-      
+
       <div className="relative w-full overflow-hidden" style={{ minHeight: (type === 'line' || type === 'bar') ? `${height + 50}px` : `${height}px`, maxWidth: 'none' }}>
         {renderChart()}
-        
+
         {/* X-axis labels for line and bar charts */}
         {(type === 'line' || type === 'bar') && (
-          <div className="relative mt-4" style={{ height: '40px' }}>
+          <div className="relative" style={{ marginTop: 'var(--space-4)', height: '40px' }}>
             {data.labels.map((label, index) => {
               const chartWidth = 90;
               const chartStartX = 5;
               const labelX = chartStartX + (index / (data.labels.length - 1)) * chartWidth;
-              
+
               return (
-                <div 
-                  key={index} 
-                  className="absolute text-xs text-gray-500 dark:text-gray-400"
+                <div
+                  key={index}
+                  className="absolute"
                   style={{
                     left: `${labelX}%`,
                     transform: 'translateX(-50%) rotate(-45deg)',
                     transformOrigin: 'center top',
                     whiteSpace: 'nowrap',
-                    top: '0px'
+                    top: '0px',
+                    fontSize: 'var(--text-xs)',
+                    color: 'var(--dashboard-text-tertiary)'
                   }}
                 >
                   {label}
@@ -242,23 +263,26 @@ export function SimpleChart({ data, type, height = 300, className = '' }: Simple
             })}
           </div>
         )}
-        
+
         {/* Legend for doughnut chart */}
         {type === 'doughnut' && (
-          <div className="mt-4 grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-2" style={{ marginTop: 'var(--space-4)' }}>
             {data.labels.map((label, index) => {
               const dataset = data.datasets[0];
-              const color = Array.isArray(dataset.backgroundColor) 
+              const color = Array.isArray(dataset.backgroundColor)
                 ? dataset.backgroundColor[index % dataset.backgroundColor.length]
                 : dataset.backgroundColor || '#3b82f6';
-              
+
               return (
                 <div key={index} className="flex items-center space-x-2">
-                  <div 
+                  <div
                     className="w-3 h-3 rounded-full"
                     style={{ backgroundColor: color }}
                   />
-                  <span className="text-sm text-gray-600 dark:text-gray-400 truncate">
+                  <span className="truncate" style={{
+                    fontSize: 'var(--text-sm)',
+                    color: 'var(--dashboard-text-secondary)'
+                  }}>
                     {label}
                   </span>
                 </div>

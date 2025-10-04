@@ -14,6 +14,273 @@ import '../../../design-system/tokens/typography.css';
 import '../../../design-system/tokens/shadows.css';
 import '../../../design-system/tokens/dashboard.css';
 
+function FilterButton({ showFilters, onClick }: { showFilters: boolean; onClick: () => void }) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        padding: 'var(--space-2) var(--space-4)',
+        border: '1px solid var(--dashboard-border-primary)',
+        borderRadius: 'var(--radius-lg)',
+        backgroundColor: showFilters
+          ? 'rgba(59, 130, 246, 0.1)'
+          : isHovered
+            ? 'var(--dashboard-bg-hover)'
+            : 'transparent',
+        color: showFilters ? '#2563eb' : 'var(--dashboard-text-primary)',
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 'var(--space-2)',
+        transition: 'background-color 200ms, color 200ms'
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <Filter className="h-4 w-4" />
+      <span>Filters</span>
+    </button>
+  );
+}
+
+function QuickDateButton({ onClick }: { onClick: () => void }) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        padding: 'var(--space-2) var(--space-4)',
+        border: '1px solid var(--dashboard-border-primary)',
+        borderRadius: 'var(--radius-lg)',
+        backgroundColor: isHovered ? 'var(--dashboard-bg-hover)' : 'transparent',
+        color: 'var(--dashboard-text-primary)',
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 'var(--space-2)',
+        transition: 'background-color 200ms'
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <Calendar className="h-4 w-4" />
+      <span>Last 7 Days</span>
+    </button>
+  );
+}
+
+function ModalHeader({ selectedEntry, onClose }: { selectedEntry: AuditLogEntry; onClose: () => void }) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      padding: 'var(--space-6)',
+      borderBottom: '1px solid var(--dashboard-border-primary)'
+    }}>
+      <div>
+        <h2 style={{
+          fontSize: 'var(--text-xl)',
+          fontWeight: 'var(--font-semibold)',
+          color: 'var(--dashboard-text-primary)'
+        }}>
+          Audit Log Details
+        </h2>
+        <p style={{
+          fontSize: 'var(--text-sm)',
+          color: 'var(--dashboard-text-secondary)'
+        }}>
+          Entry ID: {selectedEntry.id}
+        </p>
+      </div>
+      <button
+        onClick={onClose}
+        style={{
+          color: isHovered ? 'var(--dashboard-text-secondary)' : 'var(--dashboard-text-tertiary)',
+          cursor: 'pointer',
+          border: 'none',
+          backgroundColor: 'transparent',
+          padding: '0',
+          transition: 'color 200ms'
+        }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        <X className="h-6 w-6" />
+      </button>
+    </div>
+  );
+}
+
+function ModalContent({ selectedEntry }: { selectedEntry: AuditLogEntry }) {
+  const getCategoryBadgeStyle = (category: string) => {
+    if (category === 'security') return { backgroundColor: '#fee2e2', color: '#991b1b' };
+    if (category === 'authentication') return { backgroundColor: '#dbeafe', color: '#1e40af' };
+    return { backgroundColor: '#f3f4f6', color: '#1f2937' };
+  };
+
+  const getSeverityBadgeStyle = (severity: string) => {
+    if (severity === 'critical') return { backgroundColor: '#fee2e2', color: '#991b1b' };
+    if (severity === 'high') return { backgroundColor: '#fed7aa', color: '#9a3412' };
+    if (severity === 'medium') return { backgroundColor: '#fef3c7', color: '#92400e' };
+    return { backgroundColor: '#f3f4f6', color: '#1f2937' };
+  };
+
+  const getOutcomeBadgeStyle = (outcome: string) => {
+    if (outcome === 'success') return { backgroundColor: '#d1fae5', color: '#065f46' };
+    if (outcome === 'failure') return { backgroundColor: '#fee2e2', color: '#991b1b' };
+    return { backgroundColor: '#fef3c7', color: '#92400e' };
+  };
+
+  return (
+    <div style={{ padding: 'var(--space-6)', display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="space-y-4">
+          <div>
+            <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)', marginBottom: 'var(--space-1)' }}>Action</h3>
+            <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-primary)' }}>{selectedEntry.action}</p>
+          </div>
+
+          <div>
+            <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)', marginBottom: 'var(--space-1)' }}>Timestamp</h3>
+            <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-primary)' }}>
+              {new Date(selectedEntry.timestamp).toLocaleString()}
+            </p>
+          </div>
+
+          <div>
+            <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)', marginBottom: 'var(--space-1)' }}>Category</h3>
+            <span style={{
+              display: 'inline-flex',
+              padding: 'var(--space-1) var(--space-2)',
+              fontSize: 'var(--text-xs)',
+              fontWeight: 'var(--font-semibold)',
+              borderRadius: 'var(--radius-full)',
+              ...getCategoryBadgeStyle(selectedEntry.category)
+            }}>
+              {selectedEntry.category}
+            </span>
+          </div>
+
+          <div>
+            <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)', marginBottom: 'var(--space-1)' }}>Severity</h3>
+            <span style={{
+              display: 'inline-flex',
+              padding: 'var(--space-1) var(--space-2)',
+              fontSize: 'var(--text-xs)',
+              fontWeight: 'var(--font-semibold)',
+              borderRadius: 'var(--radius-full)',
+              ...getSeverityBadgeStyle(selectedEntry.severity)
+            }}>
+              {selectedEntry.severity}
+            </span>
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <div>
+            <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)', marginBottom: 'var(--space-1)' }}>Actor</h3>
+            <div style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-primary)' }}>
+              <p>{selectedEntry.actor.name}</p>
+              <p style={{ color: 'var(--dashboard-text-secondary)' }}>{selectedEntry.actor.email}</p>
+              <p style={{ color: 'var(--dashboard-text-secondary)' }}>IP: {selectedEntry.actor.ipAddress}</p>
+            </div>
+          </div>
+
+          {selectedEntry.target && (
+            <div>
+              <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)', marginBottom: 'var(--space-1)' }}>Target</h3>
+              <div style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-primary)' }}>
+                <p>{selectedEntry.target.name}</p>
+                {selectedEntry.target.email && (
+                  <p style={{ color: 'var(--dashboard-text-secondary)' }}>{selectedEntry.target.email}</p>
+                )}
+                <p style={{ color: 'var(--dashboard-text-secondary)' }}>Type: {selectedEntry.target.type}</p>
+              </div>
+            </div>
+          )}
+
+          <div>
+            <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)', marginBottom: 'var(--space-1)' }}>Outcome</h3>
+            <span style={{
+              display: 'inline-flex',
+              padding: 'var(--space-1) var(--space-2)',
+              fontSize: 'var(--text-xs)',
+              fontWeight: 'var(--font-semibold)',
+              borderRadius: 'var(--radius-full)',
+              ...getOutcomeBadgeStyle(selectedEntry.outcome)
+            }}>
+              {selectedEntry.outcome}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)', marginBottom: 'var(--space-2)' }}>Description</h3>
+        <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-primary)' }}>{selectedEntry.details.description}</p>
+      </div>
+
+      {selectedEntry.details.changes && (
+        <div>
+          <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)', marginBottom: 'var(--space-2)' }}>Changes</h3>
+          <div style={{ backgroundColor: 'var(--dashboard-bg-secondary)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-3)' }}>
+            <pre style={{ fontSize: 'var(--text-xs)', color: 'var(--dashboard-text-primary)', overflowX: 'auto' }}>
+              {JSON.stringify(selectedEntry.details.changes, null, 2)}
+            </pre>
+          </div>
+        </div>
+      )}
+
+      {selectedEntry.details.metadata && (
+        <div>
+          <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-secondary)', marginBottom: 'var(--space-2)' }}>Metadata</h3>
+          <div style={{ backgroundColor: 'var(--dashboard-bg-secondary)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-3)' }}>
+            <pre style={{ fontSize: 'var(--text-xs)', color: 'var(--dashboard-text-primary)', overflowX: 'auto' }}>
+              {JSON.stringify(selectedEntry.details.metadata, null, 2)}
+            </pre>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ModalFooter({ onClose }: { onClose: () => void }) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <div style={{
+      display: 'flex',
+      justifyContent: 'flex-end',
+      padding: 'var(--space-6)',
+      borderTop: '1px solid var(--dashboard-border-primary)'
+    }}>
+      <button
+        onClick={onClose}
+        style={{
+          padding: 'var(--space-2) var(--space-4)',
+          color: 'var(--dashboard-text-primary)',
+          border: '1px solid var(--dashboard-border-primary)',
+          borderRadius: 'var(--radius-lg)',
+          backgroundColor: isHovered ? 'var(--dashboard-bg-hover)' : 'transparent',
+          cursor: 'pointer',
+          transition: 'background-color 200ms'
+        }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        Close
+      </button>
+    </div>
+  );
+}
+
 export function AuditLogPanel() {
   const {
     auditLogs,
@@ -78,9 +345,9 @@ export function AuditLogPanel() {
       permission="audit:view"
       fallback={
         <div className="text-center py-12">
-          <Shield className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white">Access Restricted</h3>
-          <p className="text-gray-500 dark:text-gray-400">You don't have permission to view audit logs.</p>
+          <Shield style={{ color: 'var(--dashboard-text-tertiary)' }} className="h-16 w-16 mx-auto mb-4" />
+          <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Access Restricted</h3>
+          <p style={{ color: 'var(--dashboard-text-secondary)' }}>You don't have permission to view audit logs.</p>
         </div>
       }
     >
@@ -131,12 +398,12 @@ export function AuditLogPanel() {
             <div style={{
               backgroundColor: 'var(--dashboard-bg-elevated)',
               borderRadius: 'var(--radius-xl)',
-              boxShadow: 'var(--shadow-sm)',
+              boxShadow: 'var(--dashboard-shadow-card)',
               padding: 'var(--space-6)'
             }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-                  <Activity className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                <div className="p-3 bg-blue-100 rounded-lg">
+                  <Activity className="h-6 w-6 text-blue-600" />
                 </div>
                 <div style={{ marginLeft: 'var(--space-4)' }}>
                   <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Total Events</p>
@@ -144,41 +411,56 @@ export function AuditLogPanel() {
                 </div>
               </div>
             </div>
-            
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
-              <div className="flex items-center">
-                <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-lg">
-                  <TrendingUp className="h-6 w-6 text-green-600 dark:text-green-400" />
+
+            <div style={{
+              backgroundColor: 'var(--dashboard-bg-elevated)',
+              borderRadius: 'var(--radius-xl)',
+              boxShadow: 'var(--dashboard-shadow-card)',
+              padding: 'var(--space-6)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="p-3 bg-green-100 rounded-lg">
+                  <TrendingUp className="h-6 w-6 text-green-600" />
                 </div>
-                <div className="ml-4">
-                  <p className="text-sm text-gray-500 dark:text-gray-400">Success Rate</p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                <div style={{ marginLeft: 'var(--space-4)' }}>
+                  <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Success Rate</p>
+                  <p style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)' }}>
                     {Math.round((summary.outcomeBreakdown.success / summary.totalEntries) * 100)}%
                   </p>
                 </div>
               </div>
             </div>
-            
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
-              <div className="flex items-center">
-                <div className="p-3 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg">
-                  <AlertTriangle className="h-6 w-6 text-yellow-600 dark:text-yellow-400" />
+
+            <div style={{
+              backgroundColor: 'var(--dashboard-bg-elevated)',
+              borderRadius: 'var(--radius-xl)',
+              boxShadow: 'var(--dashboard-shadow-card)',
+              padding: 'var(--space-6)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="p-3 bg-yellow-100 rounded-lg">
+                  <AlertTriangle className="h-6 w-6 text-yellow-600" />
                 </div>
-                <div className="ml-4">
-                  <p className="text-sm text-gray-500 dark:text-gray-400">Security Alerts</p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">{summary.securityAlerts.length}</p>
+                <div style={{ marginLeft: 'var(--space-4)' }}>
+                  <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Security Alerts</p>
+                  <p style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)' }}>{summary.securityAlerts.length}</p>
                 </div>
               </div>
             </div>
-            
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
-              <div className="flex items-center">
-                <div className="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
-                  <Users className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+
+            <div style={{
+              backgroundColor: 'var(--dashboard-bg-elevated)',
+              borderRadius: 'var(--radius-xl)',
+              boxShadow: 'var(--dashboard-shadow-card)',
+              padding: 'var(--space-6)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="p-3 bg-purple-100 rounded-lg">
+                  <Users className="h-6 w-6 text-purple-600" />
                 </div>
-                <div className="ml-4">
-                  <p className="text-sm text-gray-500 dark:text-gray-400">Active Users</p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">{summary.topActors.length}</p>
+                <div style={{ marginLeft: 'var(--space-4)' }}>
+                  <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>Active Users</p>
+                  <p style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--font-bold)', color: 'var(--dashboard-text-primary)' }}>{summary.topActors.length}</p>
                 </div>
               </div>
             </div>
@@ -210,35 +492,37 @@ export function AuditLogPanel() {
             <div style={{
               backgroundColor: 'var(--dashboard-bg-elevated)',
               borderRadius: 'var(--radius-xl)',
-              boxShadow: 'var(--shadow-sm)',
+              boxShadow: 'var(--dashboard-shadow-card)',
               padding: 'var(--space-6)'
             }}>
               <div className="flex flex-col sm:flex-row gap-4">
                 <div className="flex-1">
                   <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Search style={{ color: 'var(--dashboard-text-tertiary)' }} className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4" />
                     <input
                       type="text"
                       placeholder="Search audit logs by action, user, or description..."
                       value={searchQuery}
                       onChange={handleSearchChange}
-                      className="pl-10 w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                      style={{
+                        paddingLeft: 'var(--space-10)',
+                        width: '100%',
+                        padding: 'var(--space-2) var(--space-3)',
+                        border: '1px solid var(--dashboard-border-primary)',
+                        borderRadius: 'var(--radius-lg)',
+                        backgroundColor: 'var(--dashboard-bg-secondary)',
+                        color: 'var(--dashboard-text-primary)',
+                        outline: 'none'
+                      }}
                     />
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <button
+                  <FilterButton
+                    showFilters={showFilters}
                     onClick={() => setShowFilters(!showFilters)}
-                    className={`px-4 py-2 border rounded-lg flex items-center space-x-2 transition-colors ${
-                      showFilters
-                        ? 'bg-blue-50 border-blue-200 text-blue-700 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-300'
-                        : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700'
-                    }`}
-                  >
-                    <Filter className="h-4 w-4" />
-                    <span>Filters</span>
-                  </button>
-                  <button
+                  />
+                  <QuickDateButton
                     onClick={() => {
                       const today = new Date();
                       const oneWeekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -249,17 +533,17 @@ export function AuditLogPanel() {
                         }
                       });
                     }}
-                    className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center space-x-2"
-                  >
-                    <Calendar className="h-4 w-4" />
-                    <span>Last 7 Days</span>
-                  </button>
+                  />
                 </div>
               </div>
 
               {/* Filters Panel */}
               {showFilters && (
-                <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                <div style={{
+                  marginTop: 'var(--space-6)',
+                  paddingTop: 'var(--space-6)',
+                  borderTop: '1px solid var(--dashboard-border-primary)'
+                }}>
                   <AuditLogFilters
                     filters={searchParams.filters || {}}
                     onFiltersChange={applyFilters}
@@ -274,10 +558,15 @@ export function AuditLogPanel() {
 
             {/* Error Message */}
             {error && (
-              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+              <div style={{
+                backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                border: '1px solid rgba(239, 68, 68, 0.3)',
+                borderRadius: 'var(--radius-lg)',
+                padding: 'var(--space-4)'
+              }}>
                 <div className="flex items-center space-x-2">
-                  <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400" />
-                  <p className="text-red-800 dark:text-red-200">{error}</p>
+                  <AlertTriangle className="h-5 w-5 text-red-600" />
+                  <p style={{ color: '#991b1b' }}>{error}</p>
                 </div>
               </div>
             )}
@@ -315,138 +604,26 @@ export function AuditLogPanel() {
         {/* Entry Details Modal */}
         {selectedEntry && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+            <div style={{
+              backgroundColor: 'var(--dashboard-bg-elevated)',
+              borderRadius: 'var(--radius-xl)',
+              boxShadow: 'var(--shadow-xl)',
+              width: '100%',
+              maxWidth: '56rem',
+              maxHeight: '90vh',
+              overflowY: 'auto'
+            }}>
               {/* Modal Header */}
-              <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-                <div>
-                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                    Audit Log Details
-                  </h2>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Entry ID: {selectedEntry.id}
-                  </p>
-                </div>
-                <button
-                  onClick={() => setSelectedEntry(null)}
-                  className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
-                >
-                  <X className="h-6 w-6" />
-                </button>
-              </div>
+              <ModalHeader
+                selectedEntry={selectedEntry}
+                onClose={() => setSelectedEntry(null)}
+              />
 
               {/* Modal Content */}
-              <div className="p-6 space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-4">
-                    <div>
-                      <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Action</h3>
-                      <p className="text-sm text-gray-900 dark:text-white">{selectedEntry.action}</p>
-                    </div>
-                    
-                    <div>
-                      <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Timestamp</h3>
-                      <p className="text-sm text-gray-900 dark:text-white">
-                        {new Date(selectedEntry.timestamp).toLocaleString()}
-                      </p>
-                    </div>
-                    
-                    <div>
-                      <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Category</h3>
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                        selectedEntry.category === 'security' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' :
-                        selectedEntry.category === 'authentication' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300' :
-                        'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300'
-                      }`}>
-                        {selectedEntry.category}
-                      </span>
-                    </div>
-                    
-                    <div>
-                      <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Severity</h3>
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                        selectedEntry.severity === 'critical' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' :
-                        selectedEntry.severity === 'high' ? 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300' :
-                        selectedEntry.severity === 'medium' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300' :
-                        'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300'
-                      }`}>
-                        {selectedEntry.severity}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    <div>
-                      <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Actor</h3>
-                      <div className="text-sm text-gray-900 dark:text-white">
-                        <p>{selectedEntry.actor.name}</p>
-                        <p className="text-gray-600 dark:text-gray-400">{selectedEntry.actor.email}</p>
-                        <p className="text-gray-600 dark:text-gray-400">IP: {selectedEntry.actor.ipAddress}</p>
-                      </div>
-                    </div>
-                    
-                    {selectedEntry.target && (
-                      <div>
-                        <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Target</h3>
-                        <div className="text-sm text-gray-900 dark:text-white">
-                          <p>{selectedEntry.target.name}</p>
-                          {selectedEntry.target.email && (
-                            <p className="text-gray-600 dark:text-gray-400">{selectedEntry.target.email}</p>
-                          )}
-                          <p className="text-gray-600 dark:text-gray-400">Type: {selectedEntry.target.type}</p>
-                        </div>
-                      </div>
-                    )}
-                    
-                    <div>
-                      <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Outcome</h3>
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                        selectedEntry.outcome === 'success' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' :
-                        selectedEntry.outcome === 'failure' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' :
-                        'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300'
-                      }`}>
-                        {selectedEntry.outcome}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Description</h3>
-                  <p className="text-sm text-gray-900 dark:text-white">{selectedEntry.details.description}</p>
-                </div>
-                
-                {selectedEntry.details.changes && (
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Changes</h3>
-                    <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-3">
-                      <pre className="text-xs text-gray-900 dark:text-white overflow-x-auto">
-                        {JSON.stringify(selectedEntry.details.changes, null, 2)}
-                      </pre>
-                    </div>
-                  </div>
-                )}
-                
-                {selectedEntry.details.metadata && (
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Metadata</h3>
-                    <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-3">
-                      <pre className="text-xs text-gray-900 dark:text-white overflow-x-auto">
-                        {JSON.stringify(selectedEntry.details.metadata, null, 2)}
-                      </pre>
-                    </div>
-                  </div>
-                )}
-              </div>
+              <ModalContent selectedEntry={selectedEntry} />
 
               {/* Modal Footer */}
-              <div className="flex justify-end p-6 border-t border-gray-200 dark:border-gray-700">
-                <button
-                  onClick={() => setSelectedEntry(null)}
-                  className="px-4 py-2 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                >
-                  Close
-                </button>
-              </div>
+              <ModalFooter onClose={() => setSelectedEntry(null)} />
             </div>
           </div>
         )}

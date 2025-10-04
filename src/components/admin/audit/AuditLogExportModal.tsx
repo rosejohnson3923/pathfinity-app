@@ -5,6 +5,12 @@ import {
   AuditLogFilters,
   AuditLogEntry
 } from '../../../types/auditLog';
+import '../../../design-system/tokens/colors.css';
+import '../../../design-system/tokens/spacing.css';
+import '../../../design-system/tokens/borders.css';
+import '../../../design-system/tokens/typography.css';
+import '../../../design-system/tokens/shadows.css';
+import '../../../design-system/tokens/dashboard.css';
 
 interface AuditLogExportModalProps {
   isOpen: boolean;
@@ -62,10 +68,14 @@ export function AuditLogExportModal({
       end: new Date().toISOString()
     }
   });
-  
+
   const [selectedFieldGroup, setSelectedFieldGroup] = useState<keyof typeof FIELD_GROUPS>('detailed');
   const [isExporting, setIsExporting] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
+  const [hoveredFormat, setHoveredFormat] = useState<string | null>(null);
+  const [hoveredFieldGroup, setHoveredFieldGroup] = useState<string | null>(null);
+  const [hoveredQuickDate, setHoveredQuickDate] = useState<string | null>(null);
+  const [hoveredButton, setHoveredButton] = useState<string | null>(null);
 
   if (!isOpen) return null;
 
@@ -145,39 +155,89 @@ export function AuditLogExportModal({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+      <div style={{
+        backgroundColor: 'var(--dashboard-bg-elevated)',
+        borderRadius: 'var(--radius-xl)',
+        boxShadow: 'var(--shadow-xl)',
+        width: '100%',
+        maxWidth: '42rem',
+        maxHeight: '90vh',
+        overflowY: 'auto'
+      }}>
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: 'var(--space-6)',
+          borderBottom: '1px solid var(--dashboard-border-primary)'
+        }}>
           <div className="flex items-center space-x-3">
-            <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-              <Download className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+            <div className="p-2 bg-blue-100 rounded-lg">
+              <Download className="h-6 w-6 text-blue-600" />
             </div>
             <div>
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+              <h2 style={{
+                fontSize: 'var(--text-xl)',
+                fontWeight: 'var(--font-semibold)',
+                color: 'var(--dashboard-text-primary)'
+              }}>
                 Export Audit Logs
               </h2>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p style={{
+                fontSize: 'var(--text-sm)',
+                color: 'var(--dashboard-text-secondary)'
+              }}>
                 {totalEntries.toLocaleString()} total entries available
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
+            style={{
+              color: 'var(--dashboard-text-tertiary)',
+              cursor: 'pointer',
+              border: 'none',
+              backgroundColor: 'transparent',
+              padding: '0'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.color = 'var(--dashboard-text-secondary)'}
+            onMouseLeave={(e) => e.currentTarget.style.color = 'var(--dashboard-text-tertiary)'}
           >
             <X className="h-6 w-6" />
           </button>
         </div>
 
         {/* Content */}
-        <div className="p-6 space-y-6">
+        <div style={{ padding: 'var(--space-6)', display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
           {/* Export Format */}
           <div>
-            <label htmlFor="inputp29fej" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Export Format
+            <label htmlFor="inputp29fej" style={{
+              display: 'block',
+              fontSize: 'var(--text-sm)',
+              fontWeight: 'var(--font-medium)',
+              color: 'var(--dashboard-text-primary)',
+              marginBottom: 'var(--space-3)'
+            }}>Export Format
             </label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {EXPORT_FORMATS.map(format => (
-                <label key={format.value} className="flex items-start space-x-3 p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
+                <label
+                  key={format.value}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: 'var(--space-3)',
+                    padding: 'var(--space-3)',
+                    border: '1px solid var(--dashboard-border-primary)',
+                    borderRadius: 'var(--radius-lg)',
+                    backgroundColor: hoveredFormat === format.value ? 'var(--dashboard-bg-hover)' : 'transparent',
+                    cursor: 'pointer',
+                    transition: 'background-color 200ms'
+                  }}
+                  onMouseEnter={() => setHoveredFormat(format.value)}
+                  onMouseLeave={() => setHoveredFormat(null)}
+                >
                   <input id="inputp29fej"
                     type="radio"
                     name="format"
@@ -187,10 +247,16 @@ export function AuditLogExportModal({
                     className="mt-1"
                   />
                   <div>
-                    <div className="font-medium text-gray-900 dark:text-white">
+                    <div style={{
+                      fontWeight: 'var(--font-medium)',
+                      color: 'var(--dashboard-text-primary)'
+                    }}>
                       {format.label}
                     </div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                    <div style={{
+                      fontSize: 'var(--text-sm)',
+                      color: 'var(--dashboard-text-secondary)'
+                    }}>
                       {format.description}
                     </div>
                   </div>
@@ -201,24 +267,58 @@ export function AuditLogExportModal({
 
           {/* Date Range */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+            <label style={{
+              display: 'block',
+              fontSize: 'var(--text-sm)',
+              fontWeight: 'var(--font-medium)',
+              color: 'var(--dashboard-text-primary)',
+              marginBottom: 'var(--space-3)'
+            }}>
               Date Range
             </label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="from" className="block text-xs text-gray-500 dark:text-gray-400 mb-1">From</label><input id="from"
+                <label htmlFor="from" style={{
+                  display: 'block',
+                  fontSize: 'var(--text-xs)',
+                  color: 'var(--dashboard-text-tertiary)',
+                  marginBottom: 'var(--space-1)'
+                }}>From</label>
+                <input id="from"
                   type="datetime-local"
                   value={exportOptions.dateRange.start.slice(0, 16)}
                   onChange={(e) => handleDateRangeChange('start', new Date(e.target.value).toISOString())}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                  style={{
+                    width: '100%',
+                    padding: 'var(--space-2) var(--space-3)',
+                    border: '1px solid var(--dashboard-border-primary)',
+                    borderRadius: 'var(--radius-lg)',
+                    backgroundColor: 'var(--dashboard-bg-secondary)',
+                    color: 'var(--dashboard-text-primary)',
+                    outline: 'none'
+                  }}
                 />
               </div>
               <div>
-                <label htmlFor="to" className="block text-xs text-gray-500 dark:text-gray-400 mb-1">To</label><input id="to"
+                <label htmlFor="to" style={{
+                  display: 'block',
+                  fontSize: 'var(--text-xs)',
+                  color: 'var(--dashboard-text-tertiary)',
+                  marginBottom: 'var(--space-1)'
+                }}>To</label>
+                <input id="to"
                   type="datetime-local"
                   value={exportOptions.dateRange.end.slice(0, 16)}
                   onChange={(e) => handleDateRangeChange('end', new Date(e.target.value).toISOString())}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                  style={{
+                    width: '100%',
+                    padding: 'var(--space-2) var(--space-3)',
+                    border: '1px solid var(--dashboard-border-primary)',
+                    borderRadius: 'var(--radius-lg)',
+                    backgroundColor: 'var(--dashboard-bg-secondary)',
+                    color: 'var(--dashboard-text-primary)',
+                    outline: 'none'
+                  }}
                 />
               </div>
             </div>
@@ -243,7 +343,18 @@ export function AuditLogExportModal({
                       }
                     }));
                   }}
-                  className="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                  style={{
+                    padding: 'var(--space-1) var(--space-3)',
+                    fontSize: 'var(--text-sm)',
+                    backgroundColor: hoveredQuickDate === label ? 'var(--dashboard-bg-hover)' : 'var(--dashboard-bg-secondary)',
+                    color: 'var(--dashboard-text-primary)',
+                    borderRadius: 'var(--radius-lg)',
+                    border: 'none',
+                    cursor: 'pointer',
+                    transition: 'background-color 200ms'
+                  }}
+                  onMouseEnter={() => setHoveredQuickDate(label)}
+                  onMouseLeave={() => setHoveredQuickDate(null)}
                 >
                   {label}
                 </button>
@@ -253,11 +364,32 @@ export function AuditLogExportModal({
 
           {/* Field Groups */}
           <div>
-            <label htmlFor="input8lq3e" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Data Fields
+            <label htmlFor="input8lq3e" style={{
+              display: 'block',
+              fontSize: 'var(--text-sm)',
+              fontWeight: 'var(--font-medium)',
+              color: 'var(--dashboard-text-primary)',
+              marginBottom: 'var(--space-3)'
+            }}>Data Fields
             </label>
-            <div className="space-y-3">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
               {Object.entries(FIELD_GROUPS).map(([key, group]) => (
-                <label key={key} className="flex items-start space-x-3 p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
+                <label
+                  key={key}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: 'var(--space-3)',
+                    padding: 'var(--space-3)',
+                    border: '1px solid var(--dashboard-border-primary)',
+                    borderRadius: 'var(--radius-lg)',
+                    backgroundColor: hoveredFieldGroup === key ? 'var(--dashboard-bg-hover)' : 'transparent',
+                    cursor: 'pointer',
+                    transition: 'background-color 200ms'
+                  }}
+                  onMouseEnter={() => setHoveredFieldGroup(key)}
+                  onMouseLeave={() => setHoveredFieldGroup(null)}
+                >
                   <input id="input8lq3e"
                     type="radio"
                     name="fieldGroup"
@@ -267,10 +399,16 @@ export function AuditLogExportModal({
                     className="mt-1"
                   />
                   <div>
-                    <div className="font-medium text-gray-900 dark:text-white">
+                    <div style={{
+                      fontWeight: 'var(--font-medium)',
+                      color: 'var(--dashboard-text-primary)'
+                    }}>
                       {group.label}
                     </div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                    <div style={{
+                      fontSize: 'var(--text-sm)',
+                      color: 'var(--dashboard-text-secondary)'
+                    }}>
                       {group.description} ({group.fields.length} fields)
                     </div>
                   </div>
@@ -281,9 +419,15 @@ export function AuditLogExportModal({
 
           {/* Options */}
           <div>
-            <label htmlFor="input4oatlf" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Export Options
+            <label htmlFor="input4oatlf" style={{
+              display: 'block',
+              fontSize: 'var(--text-sm)',
+              fontWeight: 'var(--font-medium)',
+              color: 'var(--dashboard-text-primary)',
+              marginBottom: 'var(--space-3)'
+            }}>Export Options
             </label>
-            <div className="space-y-3">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
               <label className="flex items-center">
                 <input id="input4oatlf"
                   type="checkbox"
@@ -292,29 +436,45 @@ export function AuditLogExportModal({
                   className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-2"
                 />
                 <div>
-                  <span className="text-sm text-gray-700 dark:text-gray-300">Include metadata</span>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Session IDs, user agents, and additional context</p>
+                  <span style={{
+                    fontSize: 'var(--text-sm)',
+                    color: 'var(--dashboard-text-primary)'
+                  }}>Include metadata</span>
+                  <p style={{
+                    fontSize: 'var(--text-xs)',
+                    color: 'var(--dashboard-text-tertiary)'
+                  }}>Session IDs, user agents, and additional context</p>
                 </div>
               </label>
-              
-              <label htmlFor="inputscar2" className="flex items-center"><input id="inputscar2"
+
+              <label htmlFor="inputscar2" className="flex items-center">
+                <input id="inputscar2"
                   type="checkbox"
                   checked={exportOptions.includeSensitive}
                   onChange={(e) => setExportOptions(prev => ({ ...prev, includeSensitive: e.target.checked }))}
                   className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-2"
                 />
                 <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-700 dark:text-gray-300">Include sensitive data</span>
-                  <Shield className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
+                  <span style={{
+                    fontSize: 'var(--text-sm)',
+                    color: 'var(--dashboard-text-primary)'
+                  }}>Include sensitive data</span>
+                  <Shield className="h-4 w-4 text-yellow-600" />
                 </div>
               </label>
-              
+
               {exportOptions.includeSensitive && (
-                <div className="ml-6 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+                <div style={{
+                  marginLeft: 'var(--space-6)',
+                  padding: 'var(--space-3)',
+                  backgroundColor: 'rgba(234, 179, 8, 0.1)',
+                  border: '1px solid rgba(234, 179, 8, 0.3)',
+                  borderRadius: 'var(--radius-lg)'
+                }}>
                   <div className="flex items-start space-x-2">
-                    <AlertTriangle className="h-4 w-4 text-yellow-600 dark:text-yellow-400 mt-0.5" />
-                    <div className="text-sm text-yellow-800 dark:text-yellow-200">
-                      <p className="font-medium">Sensitive Data Warning</p>
+                    <AlertTriangle className="h-4 w-4 text-yellow-600 mt-0.5" />
+                    <div style={{ fontSize: 'var(--text-sm)', color: '#854d0e' }}>
+                      <p style={{ fontWeight: 'var(--font-medium)' }}>Sensitive Data Warning</p>
                       <p>This export will include sensitive information. Ensure proper data handling and storage procedures.</p>
                     </div>
                   </div>
@@ -324,9 +484,23 @@ export function AuditLogExportModal({
           </div>
 
           {/* Export Preview */}
-          <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4">
-            <h4 className="font-medium text-gray-900 dark:text-white mb-2">Export Preview</h4>
-            <div className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+          <div style={{
+            backgroundColor: 'var(--dashboard-bg-secondary)',
+            borderRadius: 'var(--radius-lg)',
+            padding: 'var(--space-4)'
+          }}>
+            <h4 style={{
+              fontWeight: 'var(--font-medium)',
+              color: 'var(--dashboard-text-primary)',
+              marginBottom: 'var(--space-2)'
+            }}>Export Preview</h4>
+            <div style={{
+              fontSize: 'var(--text-sm)',
+              color: 'var(--dashboard-text-secondary)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 'var(--space-1)'
+            }}>
               <div>Format: {EXPORT_FORMATS.find(f => f.value === exportOptions.format)?.label}</div>
               <div>Fields: {exportOptions.fields.length} selected</div>
               <div>Estimated size: {estimatedFileSize()}</div>
@@ -336,14 +510,24 @@ export function AuditLogExportModal({
 
           {/* Errors */}
           {errors.length > 0 && (
-            <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+            <div style={{
+              padding: 'var(--space-4)',
+              backgroundColor: 'rgba(239, 68, 68, 0.1)',
+              border: '1px solid rgba(239, 68, 68, 0.3)',
+              borderRadius: 'var(--radius-lg)'
+            }}>
               <div className="flex items-start space-x-2">
-                <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400 mt-0.5" />
+                <AlertTriangle className="h-5 w-5 text-red-600 mt-0.5" />
                 <div>
-                  <h4 className="text-sm font-medium text-red-900 dark:text-red-200 mb-1">
+                  <h4 style={{
+                    fontSize: 'var(--text-sm)',
+                    fontWeight: 'var(--font-medium)',
+                    color: '#7f1d1d',
+                    marginBottom: 'var(--space-1)'
+                  }}>
                     Please fix the following errors:
                   </h4>
-                  <ul className="text-sm text-red-800 dark:text-red-300 space-y-1">
+                  <ul style={{ fontSize: 'var(--text-sm)', color: '#991b1b' }} className="space-y-1">
                     {errors.map((error, index) => (
                       <li key={index}>• {error}</li>
                     ))}
@@ -355,11 +539,28 @@ export function AuditLogExportModal({
         </div>
 
         {/* Footer */}
-        <div className="flex justify-end space-x-3 p-6 border-t border-gray-200 dark:border-gray-700">
+        <div style={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          gap: 'var(--space-3)',
+          padding: 'var(--space-6)',
+          borderTop: '1px solid var(--dashboard-border-primary)'
+        }}>
           <button
             onClick={onClose}
             disabled={isExporting}
-            className="px-4 py-2 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            style={{
+              padding: 'var(--space-2) var(--space-4)',
+              color: 'var(--dashboard-text-primary)',
+              border: '1px solid var(--dashboard-border-primary)',
+              borderRadius: 'var(--radius-lg)',
+              backgroundColor: hoveredButton === 'cancel' ? 'var(--dashboard-bg-hover)' : 'transparent',
+              opacity: isExporting ? 0.5 : 1,
+              cursor: isExporting ? 'not-allowed' : 'pointer',
+              transition: 'background-color 200ms'
+            }}
+            onMouseEnter={() => !isExporting && setHoveredButton('cancel')}
+            onMouseLeave={() => setHoveredButton(null)}
           >
             Cancel
           </button>

@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import { Filter, X, ChevronDown } from 'lucide-react';
 import { UserFilters as UserFiltersType, UserRole, UserStatus } from '../../types/user';
+import '../../design-system/tokens/colors.css';
+import '../../design-system/tokens/spacing.css';
+import '../../design-system/tokens/borders.css';
+import '../../design-system/tokens/typography.css';
+import '../../design-system/tokens/shadows.css';
+import '../../design-system/tokens/dashboard.css';
 
 interface UserFiltersProps {
   filters: UserFiltersType;
@@ -34,6 +40,10 @@ const SUBJECT_OPTIONS = [
 
 export function UserFilters({ filters, onFiltersChange, onClearFilters }: UserFiltersProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [filterButtonHover, setFilterButtonHover] = useState(false);
+  const [closeButtonHover, setCloseButtonHover] = useState(false);
+  const [clearAllHover, setClearAllHover] = useState(false);
+  const [applyFiltersHover, setApplyFiltersHover] = useState(false);
 
   const hasActiveFilters = Object.values(filters).some(value => value !== undefined && value !== '');
   const activeFilterCount = Object.values(filters).filter(value => value !== undefined && value !== '').length;
@@ -49,48 +59,123 @@ export function UserFilters({ filters, onFiltersChange, onClearFilters }: UserFi
   };
 
   return (
-    <div className="relative">
+    <div style={{ position: 'relative' }}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`px-4 py-2 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center space-x-2 transition-colors ${
-          hasActiveFilters 
-            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300' 
-            : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200'
-        }`}
+        onMouseEnter={() => setFilterButtonHover(true)}
+        onMouseLeave={() => setFilterButtonHover(false)}
+        style={{
+          padding: 'var(--space-2) var(--space-4)',
+          border: `1px solid ${hasActiveFilters ? '#3b82f6' : 'var(--dashboard-border-primary)'}`,
+          borderRadius: 'var(--radius-lg)',
+          background: hasActiveFilters
+            ? '#dbeafe'
+            : (filterButtonHover ? 'var(--dashboard-bg-hover)' : 'transparent'),
+          color: hasActiveFilters ? '#1e40af' : 'var(--dashboard-text-primary)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 'var(--space-2)',
+          cursor: 'pointer',
+          transition: 'all 0.2s ease'
+        }}
       >
-        <Filter className="h-4 w-4" />
+        <Filter style={{ height: '16px', width: '16px' }} />
         <span>Filters</span>
         {activeFilterCount > 0 && (
-          <span className="bg-blue-600 text-white text-xs rounded-full px-2 py-0.5 min-w-[20px] h-5 flex items-center justify-center">
+          <span style={{
+            background: '#2563eb',
+            color: '#ffffff',
+            fontSize: 'var(--text-xs)',
+            borderRadius: '9999px',
+            padding: '2px 8px',
+            minWidth: '20px',
+            height: '20px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
             {activeFilterCount}
           </span>
         )}
-        <ChevronDown className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown style={{
+          height: '16px',
+          width: '16px',
+          transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+          transition: 'transform 0.2s ease'
+        }} />
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-[28rem] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-10">
-          <div className="p-4">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white">Filter Users</h3>
+        <div style={{
+          position: 'absolute',
+          top: '100%',
+          left: '0',
+          marginTop: 'var(--space-2)',
+          width: '28rem',
+          background: 'var(--dashboard-bg-elevated)',
+          border: '1px solid var(--dashboard-border-primary)',
+          borderRadius: 'var(--radius-lg)',
+          boxShadow: 'var(--shadow-lg)',
+          zIndex: 10
+        }}>
+          <div style={{ padding: 'var(--space-4)' }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: 'var(--space-4)'
+            }}>
+              <h3 style={{
+                fontSize: 'var(--text-lg)',
+                fontWeight: '500',
+                color: 'var(--dashboard-text-primary)'
+              }}>
+                Filter Users
+              </h3>
               <button
                 onClick={() => setIsOpen(false)}
-                className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
+                onMouseEnter={() => setCloseButtonHover(true)}
+                onMouseLeave={() => setCloseButtonHover(false)}
+                style={{
+                  color: closeButtonHover ? 'var(--dashboard-text-primary)' : 'var(--dashboard-text-secondary)',
+                  background: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: '0',
+                  display: 'flex',
+                  alignItems: 'center',
+                  transition: 'color 0.2s ease'
+                }}
               >
-                <X className="h-5 w-5" />
+                <X style={{ height: '20px', width: '20px' }} />
               </button>
             </div>
 
-            <div className="space-y-4">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
               {/* Role Filter */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label style={{
+                  display: 'block',
+                  fontSize: 'var(--text-sm)',
+                  fontWeight: '500',
+                  color: 'var(--dashboard-text-secondary)',
+                  marginBottom: 'var(--space-2)'
+                }}>
                   Role
                 </label>
                 <select
                   value={filters.role || ''}
                   onChange={(e) => handleFilterChange('role', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                  style={{
+                    width: '100%',
+                    padding: 'var(--space-2) var(--space-3)',
+                    border: '1px solid var(--dashboard-border-primary)',
+                    borderRadius: 'var(--radius-lg)',
+                    background: 'var(--dashboard-bg-secondary)',
+                    color: 'var(--dashboard-text-primary)',
+                    fontSize: 'var(--text-sm)',
+                    outline: 'none'
+                  }}
                 >
                   <option value="">All Roles</option>
                   {ROLE_OPTIONS.map((option) => (
@@ -103,13 +188,28 @@ export function UserFilters({ filters, onFiltersChange, onClearFilters }: UserFi
 
               {/* Status Filter */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label style={{
+                  display: 'block',
+                  fontSize: 'var(--text-sm)',
+                  fontWeight: '500',
+                  color: 'var(--dashboard-text-secondary)',
+                  marginBottom: 'var(--space-2)'
+                }}>
                   Status
                 </label>
                 <select
                   value={filters.status || ''}
                   onChange={(e) => handleFilterChange('status', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                  style={{
+                    width: '100%',
+                    padding: 'var(--space-2) var(--space-3)',
+                    border: '1px solid var(--dashboard-border-primary)',
+                    borderRadius: 'var(--radius-lg)',
+                    background: 'var(--dashboard-bg-secondary)',
+                    color: 'var(--dashboard-text-primary)',
+                    fontSize: 'var(--text-sm)',
+                    outline: 'none'
+                  }}
                 >
                   <option value="">All Statuses</option>
                   {STATUS_OPTIONS.map((option) => (
@@ -122,13 +222,28 @@ export function UserFilters({ filters, onFiltersChange, onClearFilters }: UserFi
 
               {/* Grade Filter (for students) */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label style={{
+                  display: 'block',
+                  fontSize: 'var(--text-sm)',
+                  fontWeight: '500',
+                  color: 'var(--dashboard-text-secondary)',
+                  marginBottom: 'var(--space-2)'
+                }}>
                   Grade Level
                 </label>
                 <select
                   value={filters.grade || ''}
                   onChange={(e) => handleFilterChange('grade', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                  style={{
+                    width: '100%',
+                    padding: 'var(--space-2) var(--space-3)',
+                    border: '1px solid var(--dashboard-border-primary)',
+                    borderRadius: 'var(--radius-lg)',
+                    background: 'var(--dashboard-bg-secondary)',
+                    color: 'var(--dashboard-text-primary)',
+                    fontSize: 'var(--text-sm)',
+                    outline: 'none'
+                  }}
                 >
                   <option value="">All Grades</option>
                   {GRADE_OPTIONS.map((grade) => (
@@ -141,13 +256,28 @@ export function UserFilters({ filters, onFiltersChange, onClearFilters }: UserFi
 
               {/* Subject Filter (for teachers) */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label style={{
+                  display: 'block',
+                  fontSize: 'var(--text-sm)',
+                  fontWeight: '500',
+                  color: 'var(--dashboard-text-secondary)',
+                  marginBottom: 'var(--space-2)'
+                }}>
                   Subject
                 </label>
                 <select
                   value={filters.subject || ''}
                   onChange={(e) => handleFilterChange('subject', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                  style={{
+                    width: '100%',
+                    padding: 'var(--space-2) var(--space-3)',
+                    border: '1px solid var(--dashboard-border-primary)',
+                    borderRadius: 'var(--radius-lg)',
+                    background: 'var(--dashboard-bg-secondary)',
+                    color: 'var(--dashboard-text-primary)',
+                    fontSize: 'var(--text-sm)',
+                    outline: 'none'
+                  }}
                 >
                   <option value="">All Subjects</option>
                   {SUBJECT_OPTIONS.map((subject) => (
@@ -160,17 +290,47 @@ export function UserFilters({ filters, onFiltersChange, onClearFilters }: UserFi
             </div>
 
             {/* Action Buttons */}
-            <div className="flex justify-between pt-4 mt-4 border-t border-gray-200 dark:border-gray-700">
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              paddingTop: 'var(--space-4)',
+              marginTop: 'var(--space-4)',
+              borderTop: '1px solid var(--dashboard-border-primary)'
+            }}>
               <button
                 onClick={onClearFilters}
+                onMouseEnter={() => setClearAllHover(true)}
+                onMouseLeave={() => setClearAllHover(false)}
                 disabled={!hasActiveFilters}
-                className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{
+                  padding: 'var(--space-2) var(--space-3)',
+                  fontSize: 'var(--text-sm)',
+                  color: clearAllHover && hasActiveFilters
+                    ? 'var(--dashboard-text-primary)'
+                    : 'var(--dashboard-text-secondary)',
+                  background: 'transparent',
+                  border: 'none',
+                  cursor: hasActiveFilters ? 'pointer' : 'not-allowed',
+                  opacity: hasActiveFilters ? 1 : 0.5,
+                  transition: 'color 0.2s ease'
+                }}
               >
                 Clear All
               </button>
               <button
                 onClick={() => setIsOpen(false)}
-                className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
+                onMouseEnter={() => setApplyFiltersHover(true)}
+                onMouseLeave={() => setApplyFiltersHover(false)}
+                style={{
+                  padding: 'var(--space-2) var(--space-4)',
+                  background: applyFiltersHover ? '#1d4ed8' : '#2563eb',
+                  color: '#ffffff',
+                  fontSize: 'var(--text-sm)',
+                  borderRadius: 'var(--radius-lg)',
+                  border: 'none',
+                  cursor: 'pointer',
+                  transition: 'background 0.2s ease'
+                }}
               >
                 Apply Filters
               </button>

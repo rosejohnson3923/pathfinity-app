@@ -7,6 +7,12 @@ import {
   AuditCategory,
   AUDIT_ACTION_DEFINITIONS
 } from '../../../types/auditLog';
+import '../../../design-system/tokens/colors.css';
+import '../../../design-system/tokens/spacing.css';
+import '../../../design-system/tokens/borders.css';
+import '../../../design-system/tokens/typography.css';
+import '../../../design-system/tokens/shadows.css';
+import '../../../design-system/tokens/dashboard.css';
 
 interface AuditLogFiltersProps {
   filters: AuditLogFiltersType;
@@ -28,12 +34,66 @@ const CATEGORY_OPTIONS: AuditCategory[] = [
 
 const OUTCOME_OPTIONS = ['success', 'failure', 'partial'] as const;
 
+function SeverityBadge({ severity }: { severity: AuditSeverity }) {
+  const getBadgeStyle = () => {
+    switch (severity) {
+      case 'critical':
+        return { backgroundColor: '#fee2e2', color: '#991b1b' };
+      case 'high':
+        return { backgroundColor: '#fed7aa', color: '#9a3412' };
+      case 'medium':
+        return { backgroundColor: '#fef3c7', color: '#92400e' };
+      default:
+        return { backgroundColor: '#f3f4f6', color: '#1f2937' };
+    }
+  };
+
+  return (
+    <span style={{
+      fontSize: 'var(--text-sm)',
+      textTransform: 'capitalize',
+      padding: 'var(--space-1) var(--space-2)',
+      borderRadius: 'var(--radius-full)',
+      ...getBadgeStyle()
+    }}>
+      {severity}
+    </span>
+  );
+}
+
+function OutcomeBadge({ outcome }: { outcome: typeof OUTCOME_OPTIONS[number] }) {
+  const getBadgeStyle = () => {
+    switch (outcome) {
+      case 'success':
+        return { backgroundColor: '#d1fae5', color: '#065f46' };
+      case 'failure':
+        return { backgroundColor: '#fee2e2', color: '#991b1b' };
+      default:
+        return { backgroundColor: '#fef3c7', color: '#92400e' };
+    }
+  };
+
+  return (
+    <span style={{
+      fontSize: 'var(--text-sm)',
+      textTransform: 'capitalize',
+      padding: 'var(--space-1) var(--space-2)',
+      borderRadius: 'var(--radius-full)',
+      ...getBadgeStyle()
+    }}>
+      {outcome}
+    </span>
+  );
+}
+
 export function AuditLogFilters({
   filters,
   onFiltersChange,
   onClearFilters
 }: AuditLogFiltersProps) {
   const [localFilters, setLocalFilters] = useState<AuditLogFiltersType>(filters);
+  const [hoveredQuickDate, setHoveredQuickDate] = useState<string | null>(null);
+  const [hoveredClearButton, setHoveredClearButton] = useState(false);
 
   useEffect(() => {
     setLocalFilters(filters);
@@ -83,16 +143,32 @@ export function AuditLogFilters({
   });
 
   return (
-    <div className="space-y-6">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <Filter className="h-5 w-5 text-gray-400" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white">Advanced Filters</h3>
+          <Filter style={{ color: 'var(--dashboard-text-tertiary)' }} className="h-5 w-5" />
+          <h3 style={{
+            fontSize: 'var(--text-lg)',
+            fontWeight: 'var(--font-medium)',
+            color: 'var(--dashboard-text-primary)'
+          }}>Advanced Filters</h3>
         </div>
         {hasActiveFilters && (
           <button
             onClick={onClearFilters}
-            className="text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 flex items-center space-x-1"
+            style={{
+              fontSize: 'var(--text-sm)',
+              color: hoveredClearButton ? '#b91c1c' : '#dc2626',
+              border: 'none',
+              backgroundColor: 'transparent',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--space-1)',
+              transition: 'color 200ms'
+            }}
+            onMouseEnter={() => setHoveredClearButton(true)}
+            onMouseLeave={() => setHoveredClearButton(false)}
           >
             <X className="h-4 w-4" />
             <span>Clear All</span>
@@ -103,28 +179,61 @@ export function AuditLogFilters({
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Date Range */}
         <div className="space-y-3">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label style={{
+            display: 'block',
+            fontSize: 'var(--text-sm)',
+            fontWeight: 'var(--font-medium)',
+            color: 'var(--dashboard-text-primary)'
+          }}>
             Date Range
           </label>
           <div className="space-y-2">
             <div>
-              <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">From</label>
+              <label style={{
+                display: 'block',
+                fontSize: 'var(--text-xs)',
+                color: 'var(--dashboard-text-tertiary)',
+                marginBottom: 'var(--space-1)'
+              }}>From</label>
               <input
                 type="datetime-local"
-                value={localFilters.dateRange?.start ? 
+                value={localFilters.dateRange?.start ?
                   new Date(localFilters.dateRange.start).toISOString().slice(0, 16) : ''}
                 onChange={(e) => handleDateRangeChange('start', e.target.value ? new Date(e.target.value).toISOString() : '')}
-                className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                style={{
+                  width: '100%',
+                  padding: 'var(--space-2) var(--space-3)',
+                  fontSize: 'var(--text-sm)',
+                  border: '1px solid var(--dashboard-border-primary)',
+                  borderRadius: 'var(--radius-lg)',
+                  backgroundColor: 'var(--dashboard-bg-secondary)',
+                  color: 'var(--dashboard-text-primary)',
+                  outline: 'none'
+                }}
               />
             </div>
             <div>
-              <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">To</label>
+              <label style={{
+                display: 'block',
+                fontSize: 'var(--text-xs)',
+                color: 'var(--dashboard-text-tertiary)',
+                marginBottom: 'var(--space-1)'
+              }}>To</label>
               <input
                 type="datetime-local"
-                value={localFilters.dateRange?.end ? 
+                value={localFilters.dateRange?.end ?
                   new Date(localFilters.dateRange.end).toISOString().slice(0, 16) : ''}
                 onChange={(e) => handleDateRangeChange('end', e.target.value ? new Date(e.target.value).toISOString() : '')}
-                className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                style={{
+                  width: '100%',
+                  padding: 'var(--space-2) var(--space-3)',
+                  fontSize: 'var(--text-sm)',
+                  border: '1px solid var(--dashboard-border-primary)',
+                  borderRadius: 'var(--radius-lg)',
+                  backgroundColor: 'var(--dashboard-bg-secondary)',
+                  color: 'var(--dashboard-text-primary)',
+                  outline: 'none'
+                }}
               />
             </div>
           </div>
@@ -132,7 +241,12 @@ export function AuditLogFilters({
 
         {/* Categories */}
         <div className="space-y-3">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label style={{
+            display: 'block',
+            fontSize: 'var(--text-sm)',
+            fontWeight: 'var(--font-medium)',
+            color: 'var(--dashboard-text-primary)'
+          }}>
             Categories
           </label>
           <div className="space-y-2 max-h-40 overflow-y-auto">
@@ -144,7 +258,11 @@ export function AuditLogFilters({
                   onChange={(e) => handleArrayFilterChange('categories', category, e.target.checked)}
                   className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-2"
                 />
-                <span className="text-sm text-gray-700 dark:text-gray-300 capitalize">
+                <span style={{
+                  fontSize: 'var(--text-sm)',
+                  color: 'var(--dashboard-text-primary)',
+                  textTransform: 'capitalize'
+                }}>
                   {category.replace('_', ' ')}
                 </span>
               </label>
@@ -154,7 +272,12 @@ export function AuditLogFilters({
 
         {/* Severities */}
         <div className="space-y-3">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label style={{
+            display: 'block',
+            fontSize: 'var(--text-sm)',
+            fontWeight: 'var(--font-medium)',
+            color: 'var(--dashboard-text-primary)'
+          }}>
             Severity Levels
           </label>
           <div className="space-y-2">
@@ -166,14 +289,7 @@ export function AuditLogFilters({
                   onChange={(e) => handleArrayFilterChange('severities', severity, e.target.checked)}
                   className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-2"
                 />
-                <span className={`text-sm capitalize px-2 py-1 rounded-full ${
-                  severity === 'critical' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' :
-                  severity === 'high' ? 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300' :
-                  severity === 'medium' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300' :
-                  'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300'
-                }`}>
-                  {severity}
-                </span>
+                <SeverityBadge severity={severity} />
               </label>
             ))}
           </div>
@@ -181,7 +297,12 @@ export function AuditLogFilters({
 
         {/* Outcomes */}
         <div className="space-y-3">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label style={{
+            display: 'block',
+            fontSize: 'var(--text-sm)',
+            fontWeight: 'var(--font-medium)',
+            color: 'var(--dashboard-text-primary)'
+          }}>
             Outcomes
           </label>
           <div className="space-y-2">
@@ -193,13 +314,7 @@ export function AuditLogFilters({
                   onChange={(e) => handleArrayFilterChange('outcomes', outcome, e.target.checked)}
                   className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-2"
                 />
-                <span className={`text-sm capitalize px-2 py-1 rounded-full ${
-                  outcome === 'success' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' :
-                  outcome === 'failure' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' :
-                  'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300'
-                }`}>
-                  {outcome}
-                </span>
+                <OutcomeBadge outcome={outcome} />
               </label>
             ))}
           </div>
@@ -207,7 +322,12 @@ export function AuditLogFilters({
 
         {/* IP Addresses */}
         <div className="space-y-3">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label style={{
+            display: 'block',
+            fontSize: 'var(--text-sm)',
+            fontWeight: 'var(--font-medium)',
+            color: 'var(--dashboard-text-primary)'
+          }}>
             IP Addresses
           </label>
           <textarea
@@ -217,17 +337,34 @@ export function AuditLogFilters({
               handleFilterChange('ipAddresses', ips.length > 0 ? ips : undefined);
             }}
             placeholder="192.168.1.100\n10.0.0.45"
-            className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+            style={{
+              width: '100%',
+              padding: 'var(--space-2) var(--space-3)',
+              fontSize: 'var(--text-sm)',
+              border: '1px solid var(--dashboard-border-primary)',
+              borderRadius: 'var(--radius-lg)',
+              backgroundColor: 'var(--dashboard-bg-secondary)',
+              color: 'var(--dashboard-text-primary)',
+              outline: 'none'
+            }}
             rows={3}
           />
-          <p className="text-xs text-gray-500 dark:text-gray-400">
+          <p style={{
+            fontSize: 'var(--text-xs)',
+            color: 'var(--dashboard-text-tertiary)'
+          }}>
             Enter one IP address per line
           </p>
         </div>
 
         {/* Actor Emails */}
         <div className="space-y-3">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label style={{
+            display: 'block',
+            fontSize: 'var(--text-sm)',
+            fontWeight: 'var(--font-medium)',
+            color: 'var(--dashboard-text-primary)'
+          }}>
             Actor Emails
           </label>
           <textarea
@@ -237,10 +374,22 @@ export function AuditLogFilters({
               handleFilterChange('actors', actors.length > 0 ? actors : undefined);
             }}
             placeholder="admin@example.com\nuser@example.com"
-            className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+            style={{
+              width: '100%',
+              padding: 'var(--space-2) var(--space-3)',
+              fontSize: 'var(--text-sm)',
+              border: '1px solid var(--dashboard-border-primary)',
+              borderRadius: 'var(--radius-lg)',
+              backgroundColor: 'var(--dashboard-bg-secondary)',
+              color: 'var(--dashboard-text-primary)',
+              outline: 'none'
+            }}
             rows={3}
           />
-          <p className="text-xs text-gray-500 dark:text-gray-400">
+          <p style={{
+            fontSize: 'var(--text-xs)',
+            color: 'var(--dashboard-text-tertiary)'
+          }}>
             Enter one email address per line
           </p>
         </div>
@@ -249,13 +398,23 @@ export function AuditLogFilters({
       {/* Actions by Category */}
       {localFilters.categories && localFilters.categories.length > 0 && (
         <div className="space-y-3">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label style={{
+            display: 'block',
+            fontSize: 'var(--text-sm)',
+            fontWeight: 'var(--font-medium)',
+            color: 'var(--dashboard-text-primary)'
+          }}>
             Specific Actions
           </label>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {localFilters.categories.map(category => (
               <div key={category} className="space-y-2">
-                <h4 className="text-sm font-medium text-gray-600 dark:text-gray-400 capitalize">
+                <h4 style={{
+                  fontSize: 'var(--text-sm)',
+                  fontWeight: 'var(--font-medium)',
+                  color: 'var(--dashboard-text-secondary)',
+                  textTransform: 'capitalize'
+                }}>
                   {category.replace('_', ' ')}
                 </h4>
                 <div className="space-y-1 pl-2">
@@ -267,7 +426,10 @@ export function AuditLogFilters({
                         onChange={(e) => handleArrayFilterChange('actions', action, e.target.checked)}
                         className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-2"
                       />
-                      <span className="text-xs text-gray-600 dark:text-gray-400">
+                      <span style={{
+                        fontSize: 'var(--text-xs)',
+                        color: 'var(--dashboard-text-secondary)'
+                      }}>
                         {AUDIT_ACTION_DEFINITIONS[action]?.label || action}
                       </span>
                     </label>
@@ -281,7 +443,12 @@ export function AuditLogFilters({
 
       {/* Quick Date Filters */}
       <div className="space-y-3">
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+        <label style={{
+          display: 'block',
+          fontSize: 'var(--text-sm)',
+          fontWeight: 'var(--font-medium)',
+          color: 'var(--dashboard-text-primary)'
+        }}>
           Quick Date Filters
         </label>
         <div className="flex flex-wrap gap-2">
@@ -302,7 +469,18 @@ export function AuditLogFilters({
                   end: end.toISOString()
                 });
               }}
-              className="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+              style={{
+                padding: 'var(--space-1) var(--space-3)',
+                fontSize: 'var(--text-sm)',
+                backgroundColor: hoveredQuickDate === label ? 'var(--dashboard-bg-hover)' : 'var(--dashboard-bg-secondary)',
+                color: 'var(--dashboard-text-primary)',
+                borderRadius: 'var(--radius-lg)',
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'background-color 200ms'
+              }}
+              onMouseEnter={() => setHoveredQuickDate(label)}
+              onMouseLeave={() => setHoveredQuickDate(null)}
             >
               {label}
             </button>

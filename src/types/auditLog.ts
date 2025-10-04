@@ -550,22 +550,22 @@ export const AUDIT_ACTION_DEFINITIONS: Record<AuditAction, {
   }
 };
 
-export const AUDIT_SEVERITY_COLORS: Record<AuditSeverity, string> = {
-  low: 'text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-800',
-  medium: 'text-blue-600 bg-blue-100 dark:text-blue-300 dark:bg-blue-900/30',
-  high: 'text-orange-600 bg-orange-100 dark:text-orange-300 dark:bg-orange-900/30',
-  critical: 'text-red-600 bg-red-100 dark:text-red-300 dark:bg-red-900/30'
+export const AUDIT_SEVERITY_COLORS: Record<AuditSeverity, { backgroundColor: string; color: string }> = {
+  low: { backgroundColor: '#f3f4f6', color: '#4b5563' },
+  medium: { backgroundColor: '#dbeafe', color: '#1d4ed8' },
+  high: { backgroundColor: '#fed7aa', color: '#c2410c' },
+  critical: { backgroundColor: '#fee2e2', color: '#991b1b' }
 };
 
-export const AUDIT_CATEGORY_COLORS: Record<AuditCategory, string> = {
-  authentication: 'text-blue-600 bg-blue-100 dark:text-blue-300 dark:bg-blue-900/30',
-  authorization: 'text-purple-600 bg-purple-100 dark:text-purple-300 dark:bg-purple-900/30',
-  user_management: 'text-green-600 bg-green-100 dark:text-green-300 dark:bg-green-900/30',
-  content_management: 'text-indigo-600 bg-indigo-100 dark:text-indigo-300 dark:bg-indigo-900/30',
-  system_admin: 'text-red-600 bg-red-100 dark:text-red-300 dark:bg-red-900/30',
-  security: 'text-yellow-600 bg-yellow-100 dark:text-yellow-300 dark:bg-yellow-900/30',
-  data_handling: 'text-pink-600 bg-pink-100 dark:text-pink-300 dark:bg-pink-900/30',
-  integrations: 'text-teal-600 bg-teal-100 dark:text-teal-300 dark:bg-teal-900/30'
+export const AUDIT_CATEGORY_COLORS: Record<AuditCategory, { backgroundColor: string; color: string }> = {
+  authentication: { backgroundColor: '#dbeafe', color: '#1d4ed8' },
+  authorization: { backgroundColor: '#e9d5ff', color: '#7c3aed' },
+  user_management: { backgroundColor: '#d1fae5', color: '#065f46' },
+  content_management: { backgroundColor: '#e0e7ff', color: '#4338ca' },
+  system_admin: { backgroundColor: '#fee2e2', color: '#991b1b' },
+  security: { backgroundColor: '#fef3c7', color: '#92400e' },
+  data_handling: { backgroundColor: '#fce7f3', color: '#9f1239' },
+  integrations: { backgroundColor: '#ccfbf1', color: '#115e59' }
 };
 
 // Utility functions

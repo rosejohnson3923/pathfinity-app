@@ -4,6 +4,12 @@ import { SubscriptionBadge } from './SubscriptionBadge';
 import { FeatureList } from './FeatureAvailability';
 import { UpgradeModal } from './UpgradeModal';
 import { ArrowRight, Users, Database, Calendar } from 'lucide-react';
+import '../../design-system/tokens/colors.css';
+import '../../design-system/tokens/spacing.css';
+import '../../design-system/tokens/borders.css';
+import '../../design-system/tokens/typography.css';
+import '../../design-system/tokens/shadows.css';
+import '../../design-system/tokens/dashboard.css';
 
 interface SubscriptionInfoProps {
   tier: SubscriptionTier;
@@ -42,78 +48,169 @@ export function SubscriptionInfo({
   };
   
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow">
-      <div className="px-6 py-5 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-        <h3 className="text-lg font-medium text-gray-900 dark:text-white">Subscription Information</h3>
+    <div style={{
+      backgroundColor: 'var(--dashboard-bg-elevated)',
+      borderRadius: 'var(--radius-xl)',
+      boxShadow: 'var(--shadow-sm)'
+    }}>
+      <div style={{
+        padding: 'var(--space-5) var(--space-6)',
+        borderBottom: '1px solid var(--dashboard-border-primary)',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+      }}>
+        <h3 style={{
+          fontSize: 'var(--text-lg)',
+          fontWeight: 'var(--font-medium)',
+          color: 'var(--dashboard-text-primary)'
+        }}>Subscription Information</h3>
         {tier !== 'enterprise' && (
           <button
             onClick={handleUpgradeClick}
-            className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium flex items-center"
+            style={{
+              fontSize: 'var(--text-sm)',
+              color: '#2563EB',
+              fontWeight: 'var(--font-medium)',
+              display: 'flex',
+              alignItems: 'center',
+              backgroundColor: 'transparent',
+              border: 'none',
+              cursor: 'pointer'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.color = '#1D4ED8'}
+            onMouseLeave={(e) => e.currentTarget.style.color = '#2563EB'}
           >
             Upgrade Plan
-            <ArrowRight className="ml-1 h-4 w-4" />
+            <ArrowRight style={{ marginLeft: 'var(--space-1)', width: '1rem', height: '1rem' }} />
           </button>
         )}
       </div>
-      <div className="p-6">
+      <div style={{ padding: 'var(--space-6)' }}>
         <div className="flex flex-col md:flex-row md:items-center md:justify-between">
           <div className="mb-4 md:mb-0">
-            <p className="text-sm text-gray-500 dark:text-gray-400">Current Plan</p>
-            <div className="flex items-center mt-1">
-              <p className="text-xl font-bold text-gray-900 dark:text-white capitalize mr-2">{plan.name}</p>
+            <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-tertiary)' }}>Current Plan</p>
+            <div style={{ display: 'flex', alignItems: 'center', marginTop: 'var(--space-1)' }}>
+              <p style={{
+                fontSize: 'var(--text-xl)',
+                fontWeight: 'var(--font-bold)',
+                color: 'var(--dashboard-text-primary)',
+                textTransform: 'capitalize',
+                marginRight: 'var(--space-2)'
+              }}>{plan.name}</p>
               <SubscriptionBadge tier={tier} />
             </div>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{plan.description}</p>
+            <p style={{
+              fontSize: 'var(--text-sm)',
+              color: 'var(--dashboard-text-secondary)',
+              marginTop: 'var(--space-1)'
+            }}>{plan.description}</p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 flex items-center">
-                <Users className="h-4 w-4 mr-1" />
+              <p style={{
+                fontSize: 'var(--text-sm)',
+                color: 'var(--dashboard-text-tertiary)',
+                display: 'flex',
+                alignItems: 'center'
+              }}>
+                <Users style={{ width: '1rem', height: '1rem', marginRight: 'var(--space-1)' }} />
                 Users
               </p>
-              <p className="text-lg font-semibold text-gray-900 dark:text-white">
+              <p style={{
+                fontSize: 'var(--text-lg)',
+                fontWeight: 'var(--font-semibold)',
+                color: 'var(--dashboard-text-primary)'
+              }}>
                 {usersCount.toLocaleString()} / {plan.maxUsers.toLocaleString()}
               </p>
-              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-1">
-                <div 
-                  className={`h-2 rounded-full ${
-                    usersPercentage > 90 ? 'bg-red-600' : 'bg-blue-600'
-                  }`} 
-                  style={{ width: `${usersPercentage}%` }}
+              <div style={{
+                width: '100%',
+                backgroundColor: 'var(--dashboard-border-primary)',
+                borderRadius: '9999px',
+                height: '0.5rem',
+                marginTop: 'var(--space-1)'
+              }}>
+                <div
+                  style={{
+                    height: '0.5rem',
+                    borderRadius: '9999px',
+                    backgroundColor: usersPercentage > 90 ? '#DC2626' : '#2563EB',
+                    width: `${usersPercentage}%`
+                  }}
                 ></div>
               </div>
             </div>
             <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 flex items-center">
-                <Database className="h-4 w-4 mr-1" />
+              <p style={{
+                fontSize: 'var(--text-sm)',
+                color: 'var(--dashboard-text-tertiary)',
+                display: 'flex',
+                alignItems: 'center'
+              }}>
+                <Database style={{ width: '1rem', height: '1rem', marginRight: 'var(--space-1)' }} />
                 Storage
               </p>
-              <p className="text-lg font-semibold text-gray-900 dark:text-white">
+              <p style={{
+                fontSize: 'var(--text-lg)',
+                fontWeight: 'var(--font-semibold)',
+                color: 'var(--dashboard-text-primary)'
+              }}>
                 {storageUsed} GB / {plan.maxStorage} GB
               </p>
-              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-1">
-                <div 
-                  className={`h-2 rounded-full ${
-                    storagePercentage > 90 ? 'bg-red-600' : 'bg-blue-600'
-                  }`} 
-                  style={{ width: `${storagePercentage}%` }}
+              <div style={{
+                width: '100%',
+                backgroundColor: 'var(--dashboard-border-primary)',
+                borderRadius: '9999px',
+                height: '0.5rem',
+                marginTop: 'var(--space-1)'
+              }}>
+                <div
+                  style={{
+                    height: '0.5rem',
+                    borderRadius: '9999px',
+                    backgroundColor: storagePercentage > 90 ? '#DC2626' : '#2563EB',
+                    width: `${storagePercentage}%`
+                  }}
                 ></div>
               </div>
             </div>
             <div className="col-span-2 md:col-span-1">
-              <p className="text-sm text-gray-500 dark:text-gray-400 flex items-center">
-                <Calendar className="h-4 w-4 mr-1" />
+              <p style={{
+                fontSize: 'var(--text-sm)',
+                color: 'var(--dashboard-text-tertiary)',
+                display: 'flex',
+                alignItems: 'center'
+              }}>
+                <Calendar style={{ width: '1rem', height: '1rem', marginRight: 'var(--space-1)' }} />
                 Renewal Date
               </p>
-              <p className="text-lg font-semibold text-gray-900 dark:text-white">{renewalDate}</p>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Auto-renewal enabled</p>
+              <p style={{
+                fontSize: 'var(--text-lg)',
+                fontWeight: 'var(--font-semibold)',
+                color: 'var(--dashboard-text-primary)'
+              }}>{renewalDate}</p>
+              <p style={{
+                fontSize: 'var(--text-xs)',
+                color: 'var(--dashboard-text-tertiary)',
+                marginTop: 'var(--space-1)'
+              }}>Auto-renewal enabled</p>
             </div>
           </div>
         </div>
-        
-        <div className="mt-6">
-          <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Included Features:</p>
-          <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
+
+        <div style={{ marginTop: 'var(--space-6)' }}>
+          <p style={{
+            fontSize: 'var(--text-sm)',
+            fontWeight: 'var(--font-medium)',
+            color: 'var(--dashboard-text-secondary)',
+            marginBottom: 'var(--space-3)'
+          }}>Included Features:</p>
+          <div style={{
+            backgroundColor: 'var(--dashboard-bg-secondary)',
+            borderRadius: 'var(--radius-lg)',
+            padding: 'var(--space-4)'
+          }}>
             <FeatureList tier={tier} compact={true} />
           </div>
         </div>

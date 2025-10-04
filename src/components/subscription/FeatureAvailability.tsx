@@ -1,6 +1,12 @@
 import React from 'react';
 import { Check, X, AlertCircle } from 'lucide-react';
 import { SubscriptionTier, isFeatureAvailable, subscriptionFeatures } from '../../types/subscription';
+import '../../design-system/tokens/colors.css';
+import '../../design-system/tokens/spacing.css';
+import '../../design-system/tokens/borders.css';
+import '../../design-system/tokens/typography.css';
+import '../../design-system/tokens/shadows.css';
+import '../../design-system/tokens/dashboard.css';
 
 interface FeatureAvailabilityProps {
   featureId: string;
@@ -25,28 +31,55 @@ export function FeatureAvailability({
   // Find the lowest tier that has this feature
   const requiredTier = feature?.tiers[0] || 'premium';
 
+  const [isHovered, setIsHovered] = React.useState(false);
+
   return (
-    <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4 mb-4">
+    <div style={{
+      backgroundColor: 'rgba(251, 191, 36, 0.1)',
+      border: '1px solid rgba(251, 191, 36, 0.3)',
+      borderRadius: 'var(--radius-lg)',
+      padding: 'var(--space-4)',
+      marginBottom: 'var(--space-4)'
+    }}>
       <div className="flex items-start">
         <div className="flex-shrink-0">
           <AlertCircle className="h-5 w-5 text-amber-500" aria-hidden="true" />
         </div>
-        <div className="ml-3">
-          <h3 className="text-sm font-medium text-amber-800 dark:text-amber-300">
+        <div style={{ marginLeft: 'var(--space-3)' }}>
+          <h3 style={{
+            fontSize: 'var(--text-sm)',
+            fontWeight: 'var(--font-medium)',
+            color: '#92400e'
+          }}>
             {feature?.name || 'Premium Feature'}
           </h3>
-          <div className="mt-2 text-sm text-amber-700 dark:text-amber-400">
+          <div style={{ marginTop: 'var(--space-2)', fontSize: 'var(--text-sm)', color: '#b45309' }}>
             <p>
               This feature is not available on your current subscription plan.
               {` Upgrade to ${requiredTier.charAt(0).toUpperCase() + requiredTier.slice(1)} or higher to access this feature.`}
             </p>
           </div>
           {showUpgrade && onUpgrade && (
-            <div className="mt-4">
+            <div style={{ marginTop: 'var(--space-4)' }}>
               <button
                 type="button"
                 onClick={onUpgrade}
-                className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  padding: 'var(--space-2) var(--space-3)',
+                  border: 'none',
+                  fontSize: 'var(--text-sm)',
+                  fontWeight: 'var(--font-medium)',
+                  borderRadius: 'var(--radius-md)',
+                  boxShadow: 'var(--shadow-sm)',
+                  color: '#FFFFFF',
+                  backgroundColor: isHovered ? '#b45309' : '#d97706',
+                  cursor: 'pointer',
+                  transition: 'background-color 200ms'
+                }}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
               >
                 Upgrade Subscription
               </button>
@@ -86,11 +119,28 @@ export function FeatureList({
         return (
           <li key={feature.id} className="flex items-center">
             {available ? (
-              <Check className={`${compact ? 'h-4 w-4' : 'h-5 w-5'} text-green-500 mr-2 flex-shrink-0`} />
+              <Check
+                className={`${compact ? 'h-4 w-4' : 'h-5 w-5'} flex-shrink-0`}
+                style={{
+                  color: '#10b981',
+                  marginRight: 'var(--space-2)'
+                }}
+              />
             ) : (
-              <X className={`${compact ? 'h-4 w-4' : 'h-5 w-5'} text-gray-400 mr-2 flex-shrink-0`} />
+              <X
+                className={`${compact ? 'h-4 w-4' : 'h-5 w-5'} flex-shrink-0`}
+                style={{
+                  color: 'var(--dashboard-text-tertiary)',
+                  marginRight: 'var(--space-2)'
+                }}
+              />
             )}
-            <span className={`${compact ? 'text-sm' : 'text-base'} ${available ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}`}>
+            <span
+              style={{
+                fontSize: compact ? 'var(--text-sm)' : 'var(--text-base)',
+                color: available ? 'var(--dashboard-text-primary)' : 'var(--dashboard-text-tertiary)'
+              }}
+            >
               {feature.name}
             </span>
           </li>

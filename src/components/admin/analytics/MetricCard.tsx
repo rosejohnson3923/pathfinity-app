@@ -1,6 +1,12 @@
 import React from 'react';
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import { MetricCard as MetricCardType, formatMetricValue } from '../../../types/analytics';
+import '../../../design-system/tokens/colors.css';
+import '../../../design-system/tokens/spacing.css';
+import '../../../design-system/tokens/borders.css';
+import '../../../design-system/tokens/typography.css';
+import '../../../design-system/tokens/shadows.css';
+import '../../../design-system/tokens/dashboard.css';
 
 interface MetricCardProps {
   metric: MetricCardType;
@@ -87,37 +93,68 @@ const getTrendColor = (trend: 'up' | 'down' | 'neutral') => {
 
 export function MetricCard({ metric, className = '' }: MetricCardProps) {
   const colors = getColorClasses(metric.color);
-  const formattedValue = typeof metric.value === 'string' 
-    ? metric.value 
+  const formattedValue = typeof metric.value === 'string'
+    ? metric.value
     : formatMetricValue(metric.value, metric.format);
+  const [isHovered, setIsHovered] = React.useState(false);
 
   return (
-    <div className={`bg-white dark:bg-gray-800 rounded-xl border ${colors.border} p-6 transition-all hover:shadow-md ${className}`}>
+    <div
+      className={className}
+      style={{
+        backgroundColor: 'var(--dashboard-bg-elevated)',
+        borderRadius: 'var(--radius-xl)',
+        border: `1px solid var(--dashboard-border-primary)`,
+        padding: 'var(--space-6)',
+        transition: 'box-shadow 0.2s',
+        boxShadow: isHovered ? 'var(--dashboard-shadow-card-hover)' : 'var(--dashboard-shadow-card)'
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <div className="flex items-center justify-between">
-        <div className="flex-1">
-          <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">
+        <div style={{ flex: 1 }}>
+          <p style={{
+            fontSize: 'var(--text-sm)',
+            fontWeight: 'var(--font-medium)',
+            color: 'var(--dashboard-text-secondary)',
+            marginBottom: 'var(--space-1)'
+          }}>
             {metric.title}
           </p>
-          <p className={`text-2xl font-bold ${colors.text}`}>
+          <p style={{
+            fontSize: 'var(--text-2xl)',
+            fontWeight: 'var(--font-bold)',
+            color: 'var(--dashboard-text-primary)'
+          }}>
             {formattedValue}
           </p>
-          
+
           {metric.change && (
-            <div className="flex items-center space-x-1 mt-2">
+            <div className="flex items-center space-x-1" style={{ marginTop: 'var(--space-2)' }}>
               {getTrendIcon(metric.change.trend)}
-              <span className={`text-sm font-medium ${getTrendColor(metric.change.trend)}`}>
+              <span className={`${getTrendColor(metric.change.trend)}`} style={{
+                fontSize: 'var(--text-sm)',
+                fontWeight: 'var(--font-medium)'
+              }}>
                 {formatMetricValue(metric.change.value, 'percentage')}
               </span>
-              <span className="text-sm text-gray-500 dark:text-gray-400">
+              <span style={{
+                fontSize: 'var(--text-sm)',
+                color: 'var(--dashboard-text-tertiary)'
+              }}>
                 {metric.change.period}
               </span>
             </div>
           )}
         </div>
-        
+
         {metric.icon && (
-          <div className={`p-3 ${colors.bg} rounded-lg`}>
-            <div className={`h-6 w-6 ${colors.icon}`}>
+          <div className={colors.bg} style={{
+            padding: 'var(--space-3)',
+            borderRadius: 'var(--radius-lg)'
+          }}>
+            <div className={colors.icon} style={{ height: '1.5rem', width: '1.5rem' }}>
               {/* Icon would be rendered here based on metric.icon */}
               <div className="w-full h-full bg-current opacity-20 rounded"></div>
             </div>

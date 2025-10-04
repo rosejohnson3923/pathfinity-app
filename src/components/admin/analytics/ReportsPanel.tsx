@@ -55,6 +55,62 @@ const EXPORT_FORMATS: { value: ReportFormat; label: string }[] = [
   { value: 'json', label: 'JSON Data' }
 ];
 
+function RefreshButton({ onClick, loading }: { onClick: () => void; loading: boolean }) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <button
+      onClick={onClick}
+      disabled={loading}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      style={{
+        padding: 'var(--space-2) var(--space-4)',
+        color: 'var(--dashboard-text-primary)',
+        border: '1px solid var(--dashboard-border-primary)',
+        borderRadius: 'var(--radius-lg)',
+        backgroundColor: isHovered && !loading ? 'var(--dashboard-bg-hover)' : 'transparent',
+        opacity: loading ? 0.5 : 1,
+        cursor: loading ? 'not-allowed' : 'pointer',
+        transition: 'background-color 200ms',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 'var(--space-2)'
+      }}
+    >
+      <RefreshCw style={{ height: '1rem', width: '1rem' }} className={loading ? 'animate-spin' : ''} />
+      <span>Refresh</span>
+    </button>
+  );
+}
+
+function ExportButton({ onClick }: { onClick: () => void }) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      style={{
+        padding: 'var(--space-2) var(--space-4)',
+        backgroundColor: isHovered ? '#1d4ed8' : '#2563eb',
+        color: '#ffffff',
+        borderRadius: 'var(--radius-lg)',
+        border: 'none',
+        cursor: 'pointer',
+        transition: 'background-color 200ms',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 'var(--space-2)'
+      }}
+    >
+      <Download style={{ height: '1rem', width: '1rem' }} />
+      <span>Export</span>
+    </button>
+  );
+}
+
 export function ReportsPanel({ className = '' }: ReportsPanelProps) {
   const [activeTab, setActiveTab] = useState<ReportType>('overview');
   const [showExportModal, setShowExportModal] = useState(false);
@@ -131,19 +187,41 @@ export function ReportsPanel({ className = '' }: ReportsPanelProps) {
 
         {/* Charts Row */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 w-full">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">User Growth</h3>
-            <SimpleChart 
-              data={getUserChartData()[0]} 
-              type="line" 
+          <div style={{
+            backgroundColor: 'var(--dashboard-bg-elevated)',
+            borderRadius: 'var(--radius-xl)',
+            border: '1px solid var(--dashboard-border-primary)',
+            padding: 'var(--space-6)',
+            width: '100%'
+          }}>
+            <h3 style={{
+              fontSize: 'var(--text-lg)',
+              fontWeight: 'var(--font-medium)',
+              color: 'var(--dashboard-text-primary)',
+              marginBottom: 'var(--space-4)'
+            }}>User Growth</h3>
+            <SimpleChart
+              data={getUserChartData()[0]}
+              type="line"
               height={250}
             />
           </div>
-          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 w-full">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Content Distribution</h3>
-            <SimpleChart 
-              data={getUserChartData()[1]} 
-              type="doughnut" 
+          <div style={{
+            backgroundColor: 'var(--dashboard-bg-elevated)',
+            borderRadius: 'var(--radius-xl)',
+            border: '1px solid var(--dashboard-border-primary)',
+            padding: 'var(--space-6)',
+            width: '100%'
+          }}>
+            <h3 style={{
+              fontSize: 'var(--text-lg)',
+              fontWeight: 'var(--font-medium)',
+              color: 'var(--dashboard-text-primary)',
+              marginBottom: 'var(--space-4)'
+            }}>Content Distribution</h3>
+            <SimpleChart
+              data={getUserChartData()[1]}
+              type="doughnut"
               height={250}
             />
           </div>
@@ -157,16 +235,33 @@ export function ReportsPanel({ className = '' }: ReportsPanelProps) {
         </div>
 
         {/* Recent Activity Summary */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Quick Insights</h3>
+        <div style={{
+          backgroundColor: 'var(--dashboard-bg-elevated)',
+          borderRadius: 'var(--radius-xl)',
+          border: '1px solid var(--dashboard-border-primary)',
+          padding: 'var(--space-6)'
+        }}>
+          <h3 style={{
+            fontSize: 'var(--text-lg)',
+            fontWeight: 'var(--font-medium)',
+            color: 'var(--dashboard-text-primary)',
+            marginBottom: 'var(--space-4)'
+          }}>Quick Insights</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="flex items-start space-x-3">
               <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
                 <TrendingUp className="h-5 w-5 text-blue-600 dark:text-blue-400" />
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-900 dark:text-white">User Growth</p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">78 new users this month, 8.3% growth rate</p>
+                <p style={{
+                  fontSize: 'var(--text-sm)',
+                  fontWeight: 'var(--font-medium)',
+                  color: 'var(--dashboard-text-primary)'
+                }}>User Growth</p>
+                <p style={{
+                  fontSize: 'var(--text-sm)',
+                  color: 'var(--dashboard-text-secondary)'
+                }}>78 new users this month, 8.3% growth rate</p>
               </div>
             </div>
             <div className="flex items-start space-x-3">
@@ -174,8 +269,15 @@ export function ReportsPanel({ className = '' }: ReportsPanelProps) {
                 <Eye className="h-5 w-5 text-green-600 dark:text-green-400" />
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-900 dark:text-white">Top Content</p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">"Introduction to Algebra" - 1,247 views</p>
+                <p style={{
+                  fontSize: 'var(--text-sm)',
+                  fontWeight: 'var(--font-medium)',
+                  color: 'var(--dashboard-text-primary)'
+                }}>Top Content</p>
+                <p style={{
+                  fontSize: 'var(--text-sm)',
+                  color: 'var(--dashboard-text-secondary)'
+                }}>"Introduction to Algebra" - 1,247 views</p>
               </div>
             </div>
             <div className="flex items-start space-x-3">
@@ -183,8 +285,15 @@ export function ReportsPanel({ className = '' }: ReportsPanelProps) {
                 <Clock className="h-5 w-5 text-purple-600 dark:text-purple-400" />
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-900 dark:text-white">Avg Session</p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">30m 47s average session duration</p>
+                <p style={{
+                  fontSize: 'var(--text-sm)',
+                  fontWeight: 'var(--font-medium)',
+                  color: 'var(--dashboard-text-primary)'
+                }}>Avg Session</p>
+                <p style={{
+                  fontSize: 'var(--text-sm)',
+                  color: 'var(--dashboard-text-secondary)'
+                }}>30m 47s average session duration</p>
               </div>
             </div>
           </div>
@@ -198,20 +307,42 @@ export function ReportsPanel({ className = '' }: ReportsPanelProps) {
     const charts = getUserChartData();
 
     return (
-      <div className="space-y-8">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-8)' }}>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {metrics.map((metric, index) => (
             <MetricCard key={index} metric={metric} />
           ))}
         </div>
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 w-full">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Registration Trend</h3>
+          <div style={{
+            backgroundColor: 'var(--dashboard-bg-elevated)',
+            borderRadius: 'var(--radius-xl)',
+            border: '1px solid var(--dashboard-border-primary)',
+            padding: 'var(--space-6)',
+            width: '100%'
+          }}>
+            <h3 style={{
+              fontSize: 'var(--text-lg)',
+              fontWeight: 'var(--font-medium)',
+              color: 'var(--dashboard-text-primary)',
+              marginBottom: 'var(--space-4)'
+            }}>Registration Trend</h3>
             <SimpleChart data={charts[0]} type="line" height={300} />
           </div>
-          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 w-full">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Users by Role</h3>
+          <div style={{
+            backgroundColor: 'var(--dashboard-bg-elevated)',
+            borderRadius: 'var(--radius-xl)',
+            border: '1px solid var(--dashboard-border-primary)',
+            padding: 'var(--space-6)',
+            width: '100%'
+          }}>
+            <h3 style={{
+              fontSize: 'var(--text-lg)',
+              fontWeight: 'var(--font-medium)',
+              color: 'var(--dashboard-text-primary)',
+              marginBottom: 'var(--space-4)'
+            }}>Users by Role</h3>
             <SimpleChart data={charts[1]} type="doughnut" height={300} />
           </div>
         </div>
@@ -224,41 +355,94 @@ export function ReportsPanel({ className = '' }: ReportsPanelProps) {
     const charts = getContentChartData();
 
     return (
-      <div className="space-y-8">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-8)' }}>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {metrics.map((metric, index) => (
             <MetricCard key={index} metric={metric} />
           ))}
         </div>
-        
+
         <div className="grid grid-cols-1 gap-6">
-          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 w-full">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Content Creation Trend</h3>
+          <div style={{
+            backgroundColor: 'var(--dashboard-bg-elevated)',
+            borderRadius: 'var(--radius-xl)',
+            border: '1px solid var(--dashboard-border-primary)',
+            padding: 'var(--space-6)',
+            width: '100%'
+          }}>
+            <h3 style={{
+              fontSize: 'var(--text-lg)',
+              fontWeight: 'var(--font-medium)',
+              color: 'var(--dashboard-text-primary)',
+              marginBottom: 'var(--space-4)'
+            }}>Content Creation Trend</h3>
             <SimpleChart data={charts[0]} type="line" height={300} />
           </div>
         </div>
 
         {/* Popular Content Table */}
         {reportData && (
-          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Most Popular Content</h3>
+          <div style={{
+            backgroundColor: 'var(--dashboard-bg-elevated)',
+            borderRadius: 'var(--radius-xl)',
+            border: '1px solid var(--dashboard-border-primary)',
+            padding: 'var(--space-6)'
+          }}>
+            <h3 style={{
+              fontSize: 'var(--text-lg)',
+              fontWeight: 'var(--font-medium)',
+              color: 'var(--dashboard-text-primary)',
+              marginBottom: 'var(--space-4)'
+            }}>Most Popular Content</h3>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-gray-200 dark:border-gray-700">
-                    <th className="text-left py-3 px-4 font-medium text-gray-900 dark:text-white">Title</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-900 dark:text-white">Views</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-900 dark:text-white">Engagement</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-900 dark:text-white">Last Viewed</th>
+                  <tr style={{ borderBottom: '1px solid var(--dashboard-border-primary)' }}>
+                    <th style={{
+                      textAlign: 'left',
+                      padding: 'var(--space-3) var(--space-4)',
+                      fontWeight: 'var(--font-medium)',
+                      color: 'var(--dashboard-text-primary)'
+                    }}>Title</th>
+                    <th style={{
+                      textAlign: 'left',
+                      padding: 'var(--space-3) var(--space-4)',
+                      fontWeight: 'var(--font-medium)',
+                      color: 'var(--dashboard-text-primary)'
+                    }}>Views</th>
+                    <th style={{
+                      textAlign: 'left',
+                      padding: 'var(--space-3) var(--space-4)',
+                      fontWeight: 'var(--font-medium)',
+                      color: 'var(--dashboard-text-primary)'
+                    }}>Engagement</th>
+                    <th style={{
+                      textAlign: 'left',
+                      padding: 'var(--space-3) var(--space-4)',
+                      fontWeight: 'var(--font-medium)',
+                      color: 'var(--dashboard-text-primary)'
+                    }}>Last Viewed</th>
                   </tr>
                 </thead>
                 <tbody>
                   {reportData.content.popularContent.map((item) => (
-                    <tr key={item.id} className="border-b border-gray-100 dark:border-gray-700">
-                      <td className="py-3 px-4 text-gray-900 dark:text-white">{item.title}</td>
-                      <td className="py-3 px-4 text-gray-600 dark:text-gray-400">{item.views.toLocaleString()}</td>
-                      <td className="py-3 px-4 text-gray-600 dark:text-gray-400">{item.engagement}%</td>
-                      <td className="py-3 px-4 text-gray-600 dark:text-gray-400">
+                    <tr key={item.id} style={{ borderBottom: '1px solid var(--dashboard-border-primary)' }}>
+                      <td style={{
+                        padding: 'var(--space-3) var(--space-4)',
+                        color: 'var(--dashboard-text-primary)'
+                      }}>{item.title}</td>
+                      <td style={{
+                        padding: 'var(--space-3) var(--space-4)',
+                        color: 'var(--dashboard-text-secondary)'
+                      }}>{item.views.toLocaleString()}</td>
+                      <td style={{
+                        padding: 'var(--space-3) var(--space-4)',
+                        color: 'var(--dashboard-text-secondary)'
+                      }}>{item.engagement}%</td>
+                      <td style={{
+                        padding: 'var(--space-3) var(--space-4)',
+                        color: 'var(--dashboard-text-secondary)'
+                      }}>
                         {new Date(item.lastViewed).toLocaleDateString()}
                       </td>
                     </tr>
@@ -277,16 +461,27 @@ export function ReportsPanel({ className = '' }: ReportsPanelProps) {
     const charts = getEngagementChartData();
 
     return (
-      <div className="space-y-8">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-8)' }}>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {metrics.map((metric, index) => (
             <MetricCard key={index} metric={metric} />
           ))}
         </div>
-        
+
         <div className="grid grid-cols-1 gap-6">
-          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 w-full">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Daily Sessions</h3>
+          <div style={{
+            backgroundColor: 'var(--dashboard-bg-elevated)',
+            borderRadius: 'var(--radius-xl)',
+            border: '1px solid var(--dashboard-border-primary)',
+            padding: 'var(--space-6)',
+            width: '100%'
+          }}>
+            <h3 style={{
+              fontSize: 'var(--text-lg)',
+              fontWeight: 'var(--font-medium)',
+              color: 'var(--dashboard-text-primary)',
+              marginBottom: 'var(--space-4)'
+            }}>Daily Sessions</h3>
             <SimpleChart data={charts[0]} type="line" height={300} />
           </div>
         </div>
@@ -299,16 +494,27 @@ export function ReportsPanel({ className = '' }: ReportsPanelProps) {
     const charts = getPerformanceChartData();
 
     return (
-      <div className="space-y-8">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-8)' }}>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {metrics.map((metric, index) => (
             <MetricCard key={index} metric={metric} />
           ))}
         </div>
-        
+
         <div className="grid grid-cols-1 gap-6">
-          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 w-full">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Response Time Trend</h3>
+          <div style={{
+            backgroundColor: 'var(--dashboard-bg-elevated)',
+            borderRadius: 'var(--radius-xl)',
+            border: '1px solid var(--dashboard-border-primary)',
+            padding: 'var(--space-6)',
+            width: '100%'
+          }}>
+            <h3 style={{
+              fontSize: 'var(--text-lg)',
+              fontWeight: 'var(--font-medium)',
+              color: 'var(--dashboard-text-primary)',
+              marginBottom: 'var(--space-4)'
+            }}>Response Time Trend</h3>
             <SimpleChart data={charts[0]} type="line" height={300} />
           </div>
         </div>
@@ -338,7 +544,7 @@ export function ReportsPanel({ className = '' }: ReportsPanelProps) {
       <div className={className} style={{
         backgroundColor: 'var(--dashboard-bg-elevated)',
         borderRadius: 'var(--radius-xl)',
-        boxShadow: 'var(--shadow-sm)',
+        boxShadow: 'var(--dashboard-shadow-card)',
         border: '1px solid var(--dashboard-border-primary)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '24rem' }}>
@@ -353,7 +559,7 @@ export function ReportsPanel({ className = '' }: ReportsPanelProps) {
       <div style={{
         backgroundColor: 'var(--dashboard-bg-elevated)',
         borderRadius: 'var(--radius-xl)',
-        boxShadow: 'var(--shadow-sm)',
+        boxShadow: 'var(--dashboard-shadow-card)',
         border: '1px solid var(--dashboard-border-primary)',
         padding: 'var(--space-8)'
       }}>
@@ -371,7 +577,7 @@ export function ReportsPanel({ className = '' }: ReportsPanelProps) {
       <div className={className} style={{
         backgroundColor: 'var(--dashboard-bg-elevated)',
         borderRadius: 'var(--radius-xl)',
-        boxShadow: 'var(--shadow-sm)',
+        boxShadow: 'var(--dashboard-shadow-card)',
         border: '1px solid var(--dashboard-border-primary)'
       }}>
         {/* Header */}
@@ -397,11 +603,19 @@ export function ReportsPanel({ className = '' }: ReportsPanelProps) {
             <div className="flex items-center space-x-3">
               {/* Date Range Selector */}
               <div className="flex items-center space-x-2">
-                <Calendar className="h-4 w-4 text-gray-500" />
+                <Calendar className="h-4 w-4" style={{ color: 'var(--dashboard-text-tertiary)' }} />
                 <select
                   value={dateRange}
                   onChange={(e) => setDateRange(e.target.value as DateRange)}
-                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white text-sm"
+                  style={{
+                    padding: 'var(--space-2) var(--space-3)',
+                    border: '1px solid var(--dashboard-border-primary)',
+                    borderRadius: 'var(--radius-lg)',
+                    backgroundColor: 'var(--dashboard-bg-elevated)',
+                    color: 'var(--dashboard-text-primary)',
+                    fontSize: 'var(--text-sm)'
+                  }}
+                  className="focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   {DATE_RANGES.map((range) => (
                     <option key={range.value} value={range.value}>
@@ -436,22 +650,9 @@ export function ReportsPanel({ className = '' }: ReportsPanelProps) {
                 </div>
               )}
 
-              <button
-                onClick={refreshData}
-                disabled={loading}
-                className="px-4 py-2 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center space-x-2"
-              >
-                <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-                <span>Refresh</span>
-              </button>
+              <RefreshButton onClick={refreshData} loading={loading} />
 
-              <button
-                onClick={() => setShowExportModal(true)}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
-              >
-                <Download className="h-4 w-4" />
-                <span>Export</span>
-              </button>
+              <ExportButton onClick={() => setShowExportModal(true)} />
             </div>
           </div>
 
@@ -490,8 +691,14 @@ export function ReportsPanel({ className = '' }: ReportsPanelProps) {
         </div>
 
         {/* Tab Description */}
-        <div className="px-6 py-4 bg-gray-50 dark:bg-gray-900/50">
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+        <div style={{
+          padding: 'var(--space-4) var(--space-6)',
+          backgroundColor: 'var(--dashboard-bg-secondary)'
+        }}>
+          <p style={{
+            fontSize: 'var(--text-sm)',
+            color: 'var(--dashboard-text-secondary)'
+          }}>
             {REPORT_TABS.find(tab => tab.id === activeTab)?.description}
           </p>
         </div>

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { 
-  Edit, 
-  Trash2, 
-  Eye, 
-  Share2, 
-  Download, 
-  Clock, 
-  Users, 
+import {
+  Edit,
+  Trash2,
+  Eye,
+  Share2,
+  Download,
+  Clock,
+  Users,
   Star,
   MoreVertical,
   Calendar,
@@ -17,6 +17,12 @@ import {
   Archive
 } from 'lucide-react';
 import { ContentItem, ContentSearchParams } from '../../../types/content';
+import '../../../design-system/tokens/colors.css';
+import '../../../design-system/tokens/spacing.css';
+import '../../../design-system/tokens/borders.css';
+import '../../../design-system/tokens/typography.css';
+import '../../../design-system/tokens/shadows.css';
+import '../../../design-system/tokens/dashboard.css';
 
 interface ContentGridProps {
   content: ContentItem[];
@@ -101,20 +107,95 @@ export function ContentGrid({
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {[...Array(6)].map((_, index) => (
-          <div key={index} className="bg-white dark:bg-gray-800 rounded-xl shadow p-6 animate-pulse">
-            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-4"></div>
-            <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
-            <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-2/3 mb-4"></div>
+          <div
+            key={index}
+            className="animate-pulse"
+            style={{
+              background: 'var(--dashboard-bg-elevated)',
+              borderRadius: 'var(--border-radius-lg)',
+              boxShadow: 'var(--dashboard-shadow-card)',
+              padding: 'var(--spacing-6)'
+            }}
+          >
+            <div
+              className="mb-4"
+              style={{
+                height: '16px',
+                background: 'var(--dashboard-bg-secondary)',
+                borderRadius: 'var(--border-radius-md)',
+                width: '75%'
+              }}
+            ></div>
+            <div
+              className="mb-2"
+              style={{
+                height: '12px',
+                background: 'var(--dashboard-bg-secondary)',
+                borderRadius: 'var(--border-radius-md)',
+                width: '100%'
+              }}
+            ></div>
+            <div
+              className="mb-4"
+              style={{
+                height: '12px',
+                background: 'var(--dashboard-bg-secondary)',
+                borderRadius: 'var(--border-radius-md)',
+                width: '66.67%'
+              }}
+            ></div>
             <div className="flex space-x-2 mb-4">
-              <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded-full w-16"></div>
-              <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded-full w-20"></div>
+              <div
+                style={{
+                  height: '24px',
+                  background: 'var(--dashboard-bg-secondary)',
+                  borderRadius: 'var(--border-radius-full)',
+                  width: '64px'
+                }}
+              ></div>
+              <div
+                style={{
+                  height: '24px',
+                  background: 'var(--dashboard-bg-secondary)',
+                  borderRadius: 'var(--border-radius-full)',
+                  width: '80px'
+                }}
+              ></div>
             </div>
             <div className="flex justify-between items-center">
-              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
+              <div
+                style={{
+                  height: '16px',
+                  background: 'var(--dashboard-bg-secondary)',
+                  borderRadius: 'var(--border-radius-md)',
+                  width: '96px'
+                }}
+              ></div>
               <div className="flex space-x-2">
-                <div className="h-8 w-8 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                <div className="h-8 w-8 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                <div className="h-8 w-8 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                <div
+                  style={{
+                    height: '32px',
+                    width: '32px',
+                    background: 'var(--dashboard-bg-secondary)',
+                    borderRadius: 'var(--border-radius-md)'
+                  }}
+                ></div>
+                <div
+                  style={{
+                    height: '32px',
+                    width: '32px',
+                    background: 'var(--dashboard-bg-secondary)',
+                    borderRadius: 'var(--border-radius-md)'
+                  }}
+                ></div>
+                <div
+                  style={{
+                    height: '32px',
+                    width: '32px',
+                    background: 'var(--dashboard-bg-secondary)',
+                    borderRadius: 'var(--border-radius-md)'
+                  }}
+                ></div>
               </div>
             </div>
           </div>
@@ -126,202 +207,516 @@ export function ContentGrid({
   if (content.length === 0) {
     return (
       <div className="text-center py-12">
-        <BookOpen className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No content found</h3>
-        <p className="text-gray-500 dark:text-gray-400">Try adjusting your search or filters</p>
+        <BookOpen
+          className="h-16 w-16 mx-auto mb-4"
+          style={{ color: 'var(--dashboard-text-tertiary)' }}
+        />
+        <h3
+          className="mb-2"
+          style={{
+            fontSize: 'var(--font-size-lg)',
+            fontWeight: 'var(--font-weight-medium)',
+            color: 'var(--dashboard-text-primary)'
+          }}
+        >
+          No content found
+        </h3>
+        <p style={{ color: 'var(--dashboard-text-secondary)' }}>
+          Try adjusting your search or filters
+        </p>
       </div>
     );
   }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {content.map((item) => (
-        <div key={item.id} className="bg-white dark:bg-gray-800 rounded-xl shadow hover:shadow-lg transition-shadow duration-200">
-          {/* Content Header */}
-          <div className="p-6">
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex items-center space-x-2 flex-1 min-w-0">
-                <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg flex-shrink-0">
-                  {getContentTypeIcon(item.type)}
+      {content.map((item) => {
+        const [isHovered, setIsHovered] = useState(false);
+        const [isMoreButtonHovered, setIsMoreButtonHovered] = useState(false);
+
+        return (
+          <div
+            key={item.id}
+            style={{
+              background: 'var(--dashboard-bg-elevated)',
+              borderRadius: 'var(--border-radius-xl)',
+              boxShadow: isHovered ? 'var(--shadow-lg)' : 'var(--shadow-md)',
+              transition: 'box-shadow 200ms'
+            }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
+            {/* Content Header */}
+            <div style={{ padding: 'var(--spacing-6)' }}>
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex items-center space-x-2 flex-1 min-w-0">
+                  <div
+                    className="flex-shrink-0"
+                    style={{
+                      padding: 'var(--spacing-2)',
+                      background: 'var(--dashboard-bg-secondary)',
+                      borderRadius: 'var(--border-radius-lg)'
+                    }}
+                  >
+                    {getContentTypeIcon(item.type)}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3
+                      className="truncate"
+                      style={{
+                        fontSize: 'var(--font-size-lg)',
+                        fontWeight: 'var(--font-weight-semibold)',
+                        color: 'var(--dashboard-text-primary)'
+                      }}
+                      title={item.title}
+                    >
+                      {item.title}
+                    </h3>
+                    <p
+                      className="truncate"
+                      style={{
+                        fontSize: 'var(--font-size-sm)',
+                        color: 'var(--dashboard-text-secondary)'
+                      }}
+                    >
+                      {item.subject}
+                    </p>
+                  </div>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white truncate" title={item.title}>
-                    {item.title}
-                  </h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
-                    {item.subject}
-                  </p>
-                </div>
-              </div>
-              <div className="relative flex-shrink-0">
-                <button 
-                  className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                  onClick={() => setExpandedTitle(expandedTitle === item.id ? null : item.id)}
-                  title="Show full title"
-                >
-                  <MoreVertical className="h-4 w-4 text-gray-400" />
-                </button>
-                
-                {/* Full Title Dropdown */}
-                {expandedTitle === item.id && (
-                  <>
-                    {/* Backdrop */}
-                    <div 
-                      className="fixed inset-0 z-10" 
-                      onClick={() => setExpandedTitle(null)}
+                <div className="relative flex-shrink-0">
+                  <button
+                    style={{
+                      padding: 'var(--spacing-1)',
+                      borderRadius: 'var(--border-radius-lg)',
+                      background: isMoreButtonHovered ? 'var(--dashboard-bg-hover)' : 'transparent',
+                      transition: 'background 150ms',
+                      border: 'none',
+                      cursor: 'pointer'
+                    }}
+                    onClick={() => setExpandedTitle(expandedTitle === item.id ? null : item.id)}
+                    onMouseEnter={() => setIsMoreButtonHovered(true)}
+                    onMouseLeave={() => setIsMoreButtonHovered(false)}
+                    title="Show full title"
+                  >
+                    <MoreVertical
+                      className="h-4 w-4"
+                      style={{ color: 'var(--dashboard-text-tertiary)' }}
                     />
-                    {/* Dropdown */}
-                    <div className="absolute right-0 top-8 z-20 w-80 max-w-sm bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-3">
-                      <div className="flex items-start space-x-2">
-                        <div className="p-1 bg-blue-50 dark:bg-blue-900/20 rounded flex-shrink-0">
-                          {getContentTypeIcon(item.type)}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h4 className="text-sm font-semibold text-gray-900 dark:text-white break-words">
-                            {item.title}
-                          </h4>
-                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                            {item.subject}
-                          </p>
+                  </button>
+
+                  {/* Full Title Dropdown */}
+                  {expandedTitle === item.id && (
+                    <>
+                      {/* Backdrop */}
+                      <div
+                        className="fixed inset-0 z-10"
+                        onClick={() => setExpandedTitle(null)}
+                      />
+                      {/* Dropdown */}
+                      <div
+                        className="absolute right-0 top-8 z-20 w-80 max-w-sm"
+                        style={{
+                          background: 'var(--dashboard-bg-elevated)',
+                          borderRadius: 'var(--border-radius-lg)',
+                          boxShadow: 'var(--shadow-lg)',
+                          border: '1px solid var(--dashboard-border-primary)',
+                          padding: 'var(--spacing-3)'
+                        }}
+                      >
+                        <div className="flex items-start space-x-2">
+                          <div
+                            className="flex-shrink-0"
+                            style={{
+                              padding: 'var(--spacing-1)',
+                              background: 'var(--dashboard-bg-secondary)',
+                              borderRadius: 'var(--border-radius-md)'
+                            }}
+                          >
+                            {getContentTypeIcon(item.type)}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4
+                              style={{
+                                fontSize: 'var(--font-size-sm)',
+                                fontWeight: 'var(--font-weight-semibold)',
+                                color: 'var(--dashboard-text-primary)',
+                                wordBreak: 'break-word'
+                              }}
+                            >
+                              {item.title}
+                            </h4>
+                            <p
+                              className="mt-1"
+                              style={{
+                                fontSize: 'var(--font-size-xs)',
+                                color: 'var(--dashboard-text-secondary)'
+                              }}
+                            >
+                              {item.subject}
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              <p
+                className="mb-4 line-clamp-2"
+                style={{
+                  fontSize: 'var(--font-size-sm)',
+                  color: 'var(--dashboard-text-secondary)'
+                }}
+              >
+                {item.description}
+              </p>
+
+              {/* Status, Difficulty, and Grade Levels */}
+              <div className="flex flex-wrap gap-2" style={{ marginBottom: 'var(--space-4)' }}>
+                <span
+                  className="inline-flex"
+                  style={{
+                    padding: 'var(--space-1) var(--space-2)',
+                    fontSize: 'var(--text-xs)',
+                    fontWeight: 'var(--font-weight-semibold)',
+                    borderRadius: 'var(--radius-full)',
+                    backgroundColor: item.status === 'published' ? '#d1fae5' : '#f3f4f6',
+                    color: item.status === 'published' ? '#065f46' : '#4b5563'
+                  }}
+                >
+                  {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+                </span>
+                <span
+                  className="inline-flex"
+                  style={{
+                    padding: 'var(--space-1) var(--space-2)',
+                    fontSize: 'var(--text-xs)',
+                    fontWeight: 'var(--font-weight-semibold)',
+                    borderRadius: 'var(--radius-full)',
+                    backgroundColor:
+                      item.difficulty === 'beginner' ? '#dbeafe' :
+                      item.difficulty === 'intermediate' ? '#fed7aa' :
+                      '#fee2e2',
+                    color:
+                      item.difficulty === 'beginner' ? '#1e40af' :
+                      item.difficulty === 'intermediate' ? '#9a3412' :
+                      '#991b1b'
+                  }}
+                >
+                  {item.difficulty.charAt(0).toUpperCase() + item.difficulty.slice(1)}
+                </span>
+                {item.gradeLevel.length > 0 && (
+                  <span
+                    className="inline-flex"
+                    style={{
+                      padding: 'var(--space-1) var(--space-2)',
+                      fontSize: 'var(--text-xs)',
+                      fontWeight: 'var(--font-weight-semibold)',
+                      borderRadius: 'var(--radius-full)',
+                      backgroundColor: '#f3e8ff',
+                      color: '#6b21a8'
+                    }}
+                  >
+                    {item.gradeLevel[0]}
+                  </span>
                 )}
-              </div>
-            </div>
-
-            <p className="text-sm text-gray-600 dark:text-gray-300 mb-4 line-clamp-2">
-              {item.description}
-            </p>
-
-            {/* Tags and Status */}
-            <div className="flex flex-wrap gap-2 mb-4">
-              <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(item.status)}`}>
-                {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
-              </span>
-              <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getDifficultyColor(item.difficulty)}`}>
-                {item.difficulty.charAt(0).toUpperCase() + item.difficulty.slice(1)}
-              </span>
-              {item.gradeLevel.slice(0, 2).map((grade) => (
-                <span key={grade} className="inline-flex px-2 py-1 text-xs bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200 rounded-full">
-                  {grade}
-                </span>
-              ))}
-              {item.gradeLevel.length > 2 && (
-                <span className="inline-flex px-2 py-1 text-xs bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200 rounded-full">
-                  +{item.gradeLevel.length - 2} more
-                </span>
-              )}
-            </div>
-
-            {/* Content Info */}
-            <div className="flex items-center text-xs text-gray-500 dark:text-gray-400 space-x-4 mb-4">
-              <div className="flex items-center space-x-1">
-                <Eye className="h-3 w-3" />
-                <span>{item.viewCount}</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <Star className="h-3 w-3" />
-                <span>{item.favoriteCount}</span>
-              </div>
-              {item.duration && (
-                <div className="flex items-center space-x-1">
-                  <Clock className="h-3 w-3" />
-                  <span>{item.duration}min</span>
-                </div>
-              )}
-              {item.fileSize && (
-                <div className="flex items-center space-x-1">
-                  <Download className="h-3 w-3" />
-                  <span>{formatFileSize(item.fileSize)}</span>
-                </div>
-              )}
-            </div>
-
-            {/* Author and Date */}
-            <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 mb-4">
-              <div className="flex items-center space-x-2">
-                <div className="w-6 h-6 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center">
-                  <span className="text-xs font-medium">
-                    {item.author.name.split(' ').map(n => n[0]).join('')}
-                  </span>
-                </div>
-                <span>{item.author.name}</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <Calendar className="h-3 w-3" />
-                <span>{formatDate(item.updatedAt)}</span>
-              </div>
-            </div>
-
-            {/* Tags */}
-            {item.tags.length > 0 && (
-              <div className="flex flex-wrap gap-1 mb-4">
-                {item.tags.slice(0, 3).map((tag) => (
-                  <span key={tag} className="inline-flex px-2 py-1 text-xs bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300 rounded">
-                    #{tag}
-                  </span>
-                ))}
-                {item.tags.length > 3 && (
-                  <span className="inline-flex px-2 py-1 text-xs bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300 rounded">
-                    +{item.tags.length - 3}
+                {item.gradeLevel.length > 1 && (
+                  <span
+                    className="inline-flex"
+                    style={{
+                      padding: 'var(--space-1) var(--space-2)',
+                      fontSize: 'var(--text-xs)',
+                      fontWeight: 'var(--font-weight-semibold)',
+                      borderRadius: 'var(--radius-full)',
+                      backgroundColor: '#f3e8ff',
+                      color: '#6b21a8'
+                    }}
+                  >
+                    +{item.gradeLevel.length - 1} more
                   </span>
                 )}
               </div>
-            )}
-          </div>
 
-          {/* Action Buttons */}
-          <div className="px-6 py-3 bg-gray-50 dark:bg-gray-700/50 rounded-b-xl">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                {item.isShared && (
-                  <div className="flex items-center space-x-1 text-xs text-green-600 dark:text-green-400">
-                    <Share2 className="h-3 w-3" />
-                    <span>Shared</span>
+              {/* Stats Grid */}
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: 'var(--space-3)',
+                  paddingBottom: 'var(--space-4)',
+                  marginBottom: 'var(--space-4)',
+                  borderBottom: '1px solid var(--dashboard-border-primary)'
+                }}
+              >
+                <div className="flex items-center space-x-1">
+                  <Eye
+                    className="h-3 w-3"
+                    style={{ color: 'var(--dashboard-text-tertiary)' }}
+                  />
+                  <span
+                    style={{
+                      fontSize: 'var(--text-xs)',
+                      color: 'var(--dashboard-text-tertiary)'
+                    }}
+                  >
+                    {item.viewCount} views
+                  </span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <Star
+                    className="h-3 w-3"
+                    style={{ color: 'var(--dashboard-text-tertiary)' }}
+                  />
+                  <span
+                    style={{
+                      fontSize: 'var(--text-xs)',
+                      color: 'var(--dashboard-text-tertiary)'
+                    }}
+                  >
+                    {item.favoriteCount} favorites
+                  </span>
+                </div>
+                {item.duration && (
+                  <div className="flex items-center space-x-1">
+                    <Clock
+                      className="h-3 w-3"
+                      style={{ color: 'var(--dashboard-text-tertiary)' }}
+                    />
+                    <span
+                      style={{
+                        fontSize: 'var(--text-xs)',
+                        color: 'var(--dashboard-text-tertiary)'
+                      }}
+                    >
+                      {item.duration} min
+                    </span>
+                  </div>
+                )}
+                {item.fileSize && (
+                  <div className="flex items-center space-x-1">
+                    <Download
+                      className="h-3 w-3"
+                      style={{ color: 'var(--dashboard-text-tertiary)' }}
+                    />
+                    <span
+                      style={{
+                        fontSize: 'var(--text-xs)',
+                        color: 'var(--dashboard-text-tertiary)'
+                      }}
+                    >
+                      {formatFileSize(item.fileSize)}
+                    </span>
                   </div>
                 )}
               </div>
-              
-              <div className="flex items-center space-x-1">
-                <button
-                  onClick={() => onViewContent(item)}
-                  className="p-2 text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 hover:bg-white dark:hover:bg-gray-600 rounded-lg transition-colors"
-                  title="View content"
-                >
-                  <Eye className="h-4 w-4" />
-                </button>
-                <button
-                  onClick={() => onEditContent(item)}
-                  className="p-2 text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 hover:bg-white dark:hover:bg-gray-600 rounded-lg transition-colors"
-                  title="Edit content"
-                >
-                  <Edit className="h-4 w-4" />
-                </button>
-                <button
-                  onClick={() => onToggleStatus(item.id, item.status === 'published' ? 'draft' : 'published')}
-                  className={`p-2 hover:bg-white dark:hover:bg-gray-600 rounded-lg transition-colors ${
-                    item.status === 'published' 
-                      ? 'text-gray-600 hover:text-orange-600 dark:text-gray-400 dark:hover:text-orange-400'
-                      : 'text-gray-600 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-400'
-                  }`}
-                  title={item.status === 'published' ? 'Unpublish' : 'Publish'}
-                >
-                  {item.status === 'published' ? <Archive className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-                </button>
-                <button
-                  onClick={() => onDeleteContent(item.id)}
-                  className="p-2 text-gray-600 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 hover:bg-white dark:hover:bg-gray-600 rounded-lg transition-colors"
-                  title="Delete content"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </button>
+
+              {/* Author and Date */}
+              <div
+                className="flex items-center justify-between"
+                style={{
+                  marginBottom: 'var(--space-4)',
+                  fontSize: 'var(--text-xs)',
+                  color: 'var(--dashboard-text-tertiary)'
+                }}
+              >
+                <div className="flex items-center space-x-2">
+                  <div
+                    className="flex items-center justify-center"
+                    style={{
+                      width: '24px',
+                      height: '24px',
+                      background: 'var(--dashboard-bg-secondary)',
+                      borderRadius: 'var(--radius-full)'
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: 'var(--text-xs)',
+                        fontWeight: 'var(--font-weight-medium)'
+                      }}
+                    >
+                      {item.author.name.split(' ').map(n => n[0]).join('')}
+                    </span>
+                  </div>
+                  <span>{item.author.name}</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <Calendar className="h-3 w-3" />
+                  <span>{formatDate(item.updatedAt)}</span>
+                </div>
+              </div>
+
+              {/* Tags */}
+              {item.tags.length > 0 && (
+                <div className="flex flex-wrap gap-1">
+                  {item.tags.slice(0, 3).map((tag) => (
+                    <span
+                      key={tag}
+                      className="inline-flex"
+                      style={{
+                        padding: 'var(--space-1) var(--space-2)',
+                        fontSize: 'var(--text-xs)',
+                        background: 'var(--dashboard-bg-secondary)',
+                        color: 'var(--dashboard-text-secondary)',
+                        borderRadius: 'var(--radius-md)'
+                      }}
+                    >
+                      #{tag}
+                    </span>
+                  ))}
+                  {item.tags.length > 3 && (
+                    <span
+                      className="inline-flex"
+                      style={{
+                        padding: 'var(--space-1) var(--space-2)',
+                        fontSize: 'var(--text-xs)',
+                        background: 'var(--dashboard-bg-secondary)',
+                        color: 'var(--dashboard-text-secondary)',
+                        borderRadius: 'var(--radius-md)'
+                      }}
+                    >
+                      +{item.tags.length - 3}
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Action Buttons */}
+            <div
+              style={{
+                padding: 'var(--spacing-3) var(--spacing-6)',
+                background: 'var(--dashboard-bg-secondary)',
+                borderBottomLeftRadius: 'var(--border-radius-xl)',
+                borderBottomRightRadius: 'var(--border-radius-xl)'
+              }}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  {item.isShared && (
+                    <div
+                      className="flex items-center space-x-1"
+                      style={{
+                        fontSize: 'var(--font-size-xs)',
+                        color: 'var(--color-success-600)'
+                      }}
+                    >
+                      <Share2 className="h-3 w-3" />
+                      <span>Shared</span>
+                    </div>
+                  )}
+                </div>
+
+                <ActionButtons
+                  item={item}
+                  onViewContent={onViewContent}
+                  onEditContent={onEditContent}
+                  onToggleStatus={onToggleStatus}
+                  onDeleteContent={onDeleteContent}
+                />
               </div>
             </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
+    </div>
+  );
+}
+
+// Action Buttons Component with hover states
+function ActionButtons({
+  item,
+  onViewContent,
+  onEditContent,
+  onToggleStatus,
+  onDeleteContent
+}: {
+  item: ContentItem;
+  onViewContent: (item: ContentItem) => void;
+  onEditContent: (item: ContentItem) => void;
+  onToggleStatus: (id: string, status: 'published' | 'draft' | 'archived') => void;
+  onDeleteContent: (id: string) => void;
+}) {
+  const [viewHovered, setViewHovered] = useState(false);
+  const [editHovered, setEditHovered] = useState(false);
+  const [toggleHovered, setToggleHovered] = useState(false);
+  const [deleteHovered, setDeleteHovered] = useState(false);
+
+  return (
+    <div className="flex items-center space-x-1">
+      <button
+        onClick={() => onViewContent(item)}
+        onMouseEnter={() => setViewHovered(true)}
+        onMouseLeave={() => setViewHovered(false)}
+        style={{
+          padding: 'var(--spacing-2)',
+          color: viewHovered ? 'var(--color-primary-600)' : 'var(--dashboard-text-secondary)',
+          background: viewHovered ? 'var(--dashboard-bg-elevated)' : 'transparent',
+          borderRadius: 'var(--border-radius-lg)',
+          transition: 'all 150ms',
+          border: 'none',
+          cursor: 'pointer'
+        }}
+        title="View content"
+      >
+        <Eye className="h-4 w-4" />
+      </button>
+      <button
+        onClick={() => onEditContent(item)}
+        onMouseEnter={() => setEditHovered(true)}
+        onMouseLeave={() => setEditHovered(false)}
+        style={{
+          padding: 'var(--spacing-2)',
+          color: editHovered ? 'var(--color-primary-600)' : 'var(--dashboard-text-secondary)',
+          background: editHovered ? 'var(--dashboard-bg-elevated)' : 'transparent',
+          borderRadius: 'var(--border-radius-lg)',
+          transition: 'all 150ms',
+          border: 'none',
+          cursor: 'pointer'
+        }}
+        title="Edit content"
+      >
+        <Edit className="h-4 w-4" />
+      </button>
+      <button
+        onClick={() => onToggleStatus(item.id, item.status === 'published' ? 'draft' : 'published')}
+        onMouseEnter={() => setToggleHovered(true)}
+        onMouseLeave={() => setToggleHovered(false)}
+        style={{
+          padding: 'var(--spacing-2)',
+          color: toggleHovered
+            ? item.status === 'published'
+              ? 'var(--color-warning-600)'
+              : 'var(--color-success-600)'
+            : 'var(--dashboard-text-secondary)',
+          background: toggleHovered ? 'var(--dashboard-bg-elevated)' : 'transparent',
+          borderRadius: 'var(--border-radius-lg)',
+          transition: 'all 150ms',
+          border: 'none',
+          cursor: 'pointer'
+        }}
+        title={item.status === 'published' ? 'Unpublish' : 'Publish'}
+      >
+        {item.status === 'published' ? <Archive className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+      </button>
+      <button
+        onClick={() => onDeleteContent(item.id)}
+        onMouseEnter={() => setDeleteHovered(true)}
+        onMouseLeave={() => setDeleteHovered(false)}
+        style={{
+          padding: 'var(--spacing-2)',
+          color: deleteHovered ? 'var(--color-error-600)' : 'var(--dashboard-text-secondary)',
+          background: deleteHovered ? 'var(--dashboard-bg-elevated)' : 'transparent',
+          borderRadius: 'var(--border-radius-lg)',
+          transition: 'all 150ms',
+          border: 'none',
+          cursor: 'pointer'
+        }}
+        title="Delete content"
+      >
+        <Trash2 className="h-4 w-4" />
+      </button>
     </div>
   );
 }

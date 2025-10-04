@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ChevronUp, ChevronDown, Eye, Clock, User, Shield, AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
 import {
   AuditLogEntry,
@@ -9,6 +9,12 @@ import {
   AUDIT_CATEGORY_COLORS
 } from '../../../types/auditLog';
 import { UserPagination } from '../UserPagination';
+import '../../../design-system/tokens/colors.css';
+import '../../../design-system/tokens/spacing.css';
+import '../../../design-system/tokens/borders.css';
+import '../../../design-system/tokens/typography.css';
+import '../../../design-system/tokens/shadows.css';
+import '../../../design-system/tokens/dashboard.css';
 
 interface AuditLogTableProps {
   auditLogs: AuditLogEntry[];
@@ -32,6 +38,30 @@ const SORTABLE_COLUMNS = [
 
 type SortableColumn = typeof SORTABLE_COLUMNS[number]['key'];
 
+function ViewDetailsButton({ onClick }: { onClick: () => void }) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        color: '#2563eb',
+        padding: 'var(--space-1)',
+        backgroundColor: isHovered ? 'rgba(59, 130, 246, 0.1)' : 'transparent',
+        borderRadius: 'var(--radius-md)',
+        border: 'none',
+        cursor: 'pointer',
+        transition: 'background-color 200ms'
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      title="View details"
+    >
+      <Eye className="h-4 w-4" />
+    </button>
+  );
+}
+
 export function AuditLogTable({
   auditLogs,
   searchParams,
@@ -43,10 +73,12 @@ export function AuditLogTable({
   onItemsPerPageChange,
   onViewDetails
 }: AuditLogTableProps) {
+  const [hoveredRow, setHoveredRow] = useState<string | null>(null);
+
   const handleSort = (column: SortableColumn) => {
     const currentSort = searchParams.sortBy;
     const currentOrder = searchParams.sortOrder || 'desc';
-    
+
     let newOrder: 'asc' | 'desc' = 'desc';
     if (currentSort === column && currentOrder === 'desc') {
       newOrder = 'asc';
@@ -62,26 +94,26 @@ export function AuditLogTable({
   const getOutcomeIcon = (outcome: string) => {
     switch (outcome) {
       case 'success':
-        return <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />;
+        return <CheckCircle className="h-4 w-4 text-green-600" />;
       case 'failure':
-        return <XCircle className="h-4 w-4 text-red-600 dark:text-red-400" />;
+        return <XCircle className="h-4 w-4 text-red-600" />;
       case 'partial':
-        return <AlertTriangle className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />;
+        return <AlertTriangle className="h-4 w-4 text-yellow-600" />;
       default:
-        return <Clock className="h-4 w-4 text-gray-600 dark:text-gray-400" />;
+        return <Clock style={{ color: 'var(--dashboard-text-tertiary)' }} className="h-4 w-4" />;
     }
   };
 
   const getOutcomeColor = (outcome: string) => {
     switch (outcome) {
       case 'success':
-        return 'text-green-600 bg-green-100 dark:text-green-300 dark:bg-green-900/30';
+        return { backgroundColor: '#d1fae5', color: '#065f46' };
       case 'failure':
-        return 'text-red-600 bg-red-100 dark:text-red-300 dark:bg-red-900/30';
+        return { backgroundColor: '#fee2e2', color: '#991b1b' };
       case 'partial':
-        return 'text-yellow-600 bg-yellow-100 dark:text-yellow-300 dark:bg-yellow-900/30';
+        return { backgroundColor: '#fef3c7', color: '#92400e' };
       default:
-        return 'text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-900/30';
+        return { backgroundColor: '#f3f4f6', color: '#4b5563' };
     }
   };
 
@@ -93,23 +125,35 @@ export function AuditLogTable({
   const SortButton = ({ column, label }: { column: SortableColumn; label: string }) => {
     const isActive = searchParams.sortBy === column;
     const isDesc = searchParams.sortOrder === 'desc';
+    const [isHovered, setIsHovered] = useState(false);
 
     return (
       <button
         onClick={() => handleSort(column)}
-        className="flex items-center space-x-1 text-left font-medium text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-100"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 'var(--space-1)',
+          textAlign: 'left',
+          fontWeight: 'var(--font-medium)',
+          color: isHovered ? 'var(--dashboard-text-primary)' : 'var(--dashboard-text-secondary)',
+          border: 'none',
+          backgroundColor: 'transparent',
+          cursor: 'pointer',
+          transition: 'color 200ms'
+        }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
       >
         <span>{label}</span>
         <div className="flex flex-col">
-          <ChevronUp 
-            className={`h-3 w-3 ${
-              isActive && !isDesc ? 'text-blue-600 dark:text-blue-400' : 'text-gray-300'
-            }`} 
+          <ChevronUp
+            style={{ color: isActive && !isDesc ? '#2563eb' : '#d1d5db' }}
+            className="h-3 w-3"
           />
-          <ChevronDown 
-            className={`h-3 w-3 -mt-1 ${
-              isActive && isDesc ? 'text-blue-600 dark:text-blue-400' : 'text-gray-300'
-            }`} 
+          <ChevronDown
+            style={{ color: isActive && isDesc ? '#2563eb' : '#d1d5db' }}
+            className="h-3 w-3 -mt-1"
           />
         </div>
       </button>
@@ -118,10 +162,18 @@ export function AuditLogTable({
 
   if (loading) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow overflow-hidden">
+      <div style={{
+        backgroundColor: 'var(--dashboard-bg-elevated)',
+        borderRadius: 'var(--radius-xl)',
+        boxShadow: 'var(--dashboard-shadow-card)',
+        overflow: 'hidden'
+      }}>
         <div className="p-8 text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="text-gray-500 dark:text-gray-400 mt-4">Loading audit logs...</p>
+          <p style={{
+            color: 'var(--dashboard-text-secondary)',
+            marginTop: 'var(--space-4)'
+          }}>Loading audit logs...</p>
         </div>
       </div>
     );
@@ -129,11 +181,22 @@ export function AuditLogTable({
 
   if (auditLogs.length === 0) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow overflow-hidden">
+      <div style={{
+        backgroundColor: 'var(--dashboard-bg-elevated)',
+        borderRadius: 'var(--radius-xl)',
+        boxShadow: 'var(--dashboard-shadow-card)',
+        overflow: 'hidden'
+      }}>
         <div className="p-8 text-center">
-          <Shield className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white">No audit logs found</h3>
-          <p className="text-gray-500 dark:text-gray-400">Try adjusting your search or filters</p>
+          <Shield style={{ color: 'var(--dashboard-text-tertiary)' }} className="h-12 w-12 mx-auto mb-4" />
+          <h3 style={{
+            fontSize: 'var(--text-lg)',
+            fontWeight: 'var(--font-medium)',
+            color: 'var(--dashboard-text-primary)'
+          }}>No audit logs found</h3>
+          <p style={{
+            color: 'var(--dashboard-text-secondary)'
+          }}>Try adjusting your search or filters</p>
         </div>
       </div>
     );
@@ -141,12 +204,28 @@ export function AuditLogTable({
 
   return (
     <div className="space-y-6">
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow overflow-hidden">
-        <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+      <div style={{
+        backgroundColor: 'var(--dashboard-bg-elevated)',
+        borderRadius: 'var(--radius-xl)',
+        boxShadow: 'var(--dashboard-shadow-card)',
+        overflow: 'hidden'
+      }}>
+        <div style={{
+          padding: 'var(--space-6)',
+          borderBottom: '1px solid var(--dashboard-border-primary)'
+        }}>
           <div className="flex justify-between items-center">
             <div>
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white">Audit Trail</h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+              <h3 style={{
+                fontSize: 'var(--text-lg)',
+                fontWeight: 'var(--font-medium)',
+                color: 'var(--dashboard-text-primary)'
+              }}>Audit Trail</h3>
+              <p style={{
+                fontSize: 'var(--text-sm)',
+                color: 'var(--dashboard-text-secondary)',
+                marginTop: 'var(--space-1)'
+              }}>
                 {totalEntries.toLocaleString()} entr{totalEntries !== 1 ? 'ies' : 'y'} found
               </p>
             </div>
@@ -155,7 +234,7 @@ export function AuditLogTable({
 
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50 dark:bg-gray-700">
+            <thead style={{ backgroundColor: 'var(--dashboard-bg-secondary)' }}>
               <tr>
                 <th className="px-6 py-3 text-left text-xs uppercase tracking-wider">
                   <SortButton column="timestamp" label="Timestamp" />
@@ -183,75 +262,133 @@ export function AuditLogTable({
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            <tbody style={{ backgroundColor: 'var(--dashboard-bg-elevated)' }}>
               {auditLogs.map((entry) => (
-                <tr key={entry.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                <tr
+                  key={entry.id}
+                  style={{
+                    backgroundColor: hoveredRow === entry.id ? 'var(--dashboard-bg-hover)' : 'transparent',
+                    borderBottom: '1px solid var(--dashboard-border-primary)',
+                    transition: 'background-color 200ms'
+                  }}
+                  onMouseEnter={() => setHoveredRow(entry.id)}
+                  onMouseLeave={() => setHoveredRow(null)}
+                >
+                  <td className="px-6 py-4 whitespace-nowrap" style={{
+                    fontSize: 'var(--text-sm)',
+                    color: 'var(--dashboard-text-primary)'
+                  }}>
                     <div className="flex items-center space-x-2">
-                      <Clock className="h-4 w-4 text-gray-400" />
+                      <Clock style={{ color: 'var(--dashboard-text-tertiary)' }} className="h-4 w-4" />
                       <div>
                         <div>{formatAuditTimestamp(entry.timestamp)}</div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400">
+                        <div style={{
+                          fontSize: 'var(--text-xs)',
+                          color: 'var(--dashboard-text-secondary)'
+                        }}>
                           {new Date(entry.timestamp).toLocaleDateString()}
                         </div>
                       </div>
                     </div>
                   </td>
-                  
+
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900 dark:text-white">
+                    <div style={{
+                      fontSize: 'var(--text-sm)',
+                      fontWeight: 'var(--font-medium)',
+                      color: 'var(--dashboard-text-primary)'
+                    }}>
                       {getAuditActionLabel(entry.action)}
                     </div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400">
+                    <div style={{
+                      fontSize: 'var(--text-xs)',
+                      color: 'var(--dashboard-text-secondary)'
+                    }}>
                       {entry.action}
                     </div>
                   </td>
-                  
+
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center space-x-2">
-                      <User className="h-4 w-4 text-gray-400" />
+                      <User style={{ color: 'var(--dashboard-text-tertiary)' }} className="h-4 w-4" />
                       <div>
-                        <div className="text-sm font-medium text-gray-900 dark:text-white">
+                        <div style={{
+                          fontSize: 'var(--text-sm)',
+                          fontWeight: 'var(--font-medium)',
+                          color: 'var(--dashboard-text-primary)'
+                        }}>
                           {entry.actor.name}
                         </div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400">
+                        <div style={{
+                          fontSize: 'var(--text-xs)',
+                          color: 'var(--dashboard-text-secondary)'
+                        }}>
                           {entry.actor.email}
                         </div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400">
+                        <div style={{
+                          fontSize: 'var(--text-xs)',
+                          color: 'var(--dashboard-text-secondary)'
+                        }}>
                           {entry.actor.ipAddress}
                         </div>
                       </div>
                     </div>
                   </td>
-                  
+
                   <td className="px-6 py-4 whitespace-nowrap">
                     {entry.target ? (
-                      <div className="text-sm">
-                        <div className="font-medium text-gray-900 dark:text-white">
+                      <div style={{ fontSize: 'var(--text-sm)' }}>
+                        <div style={{
+                          fontWeight: 'var(--font-medium)',
+                          color: 'var(--dashboard-text-primary)'
+                        }}>
                           {entry.target.name}
                         </div>
                         {entry.target.email && (
-                          <div className="text-xs text-gray-500 dark:text-gray-400">
+                          <div style={{
+                            fontSize: 'var(--text-xs)',
+                            color: 'var(--dashboard-text-secondary)'
+                          }}>
                             {entry.target.email}
                           </div>
                         )}
-                        <div className="text-xs text-gray-500 dark:text-gray-400">
+                        <div style={{
+                          fontSize: 'var(--text-xs)',
+                          color: 'var(--dashboard-text-secondary)'
+                        }}>
                           {entry.target.type}
                         </div>
                       </div>
                     ) : (
-                      <span className="text-sm text-gray-500 dark:text-gray-400">-</span>
+                      <span style={{
+                        fontSize: 'var(--text-sm)',
+                        color: 'var(--dashboard-text-secondary)'
+                      }}>-</span>
                     )}
                   </td>
                   
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${AUDIT_CATEGORY_COLORS[entry.category]}`}>
+                    <span style={{
+                      display: 'inline-flex',
+                      padding: 'var(--space-1) var(--space-2)',
+                      fontSize: 'var(--text-xs)',
+                      fontWeight: 'var(--font-semibold)',
+                      borderRadius: 'var(--radius-full)',
+                      ...AUDIT_CATEGORY_COLORS[entry.category]
+                    }}>
                       {entry.category.replace('_', ' ')}
                     </span>
                   </td>
-                  
+
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${AUDIT_SEVERITY_COLORS[entry.severity]}`}>
+                    <span style={{
+                      display: 'inline-flex',
+                      padding: 'var(--space-1) var(--space-2)',
+                      fontSize: 'var(--text-xs)',
+                      fontWeight: 'var(--font-semibold)',
+                      borderRadius: 'var(--radius-full)',
+                      ...AUDIT_SEVERITY_COLORS[entry.severity]
+                    }}>
                       {entry.severity.toUpperCase()}
                     </span>
                   </td>
@@ -259,20 +396,21 @@ export function AuditLogTable({
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center space-x-2">
                       {getOutcomeIcon(entry.outcome)}
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getOutcomeColor(entry.outcome)}`}>
+                      <span style={{
+                        display: 'inline-flex',
+                        padding: 'var(--space-1) var(--space-2)',
+                        fontSize: 'var(--text-xs)',
+                        fontWeight: 'var(--font-semibold)',
+                        borderRadius: 'var(--radius-full)',
+                        ...getOutcomeColor(entry.outcome)
+                      }}>
                         {entry.outcome}
                       </span>
                     </div>
                   </td>
                   
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button
-                      onClick={() => onViewDetails(entry)}
-                      className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 p-1 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded"
-                      title="View details"
-                    >
-                      <Eye className="h-4 w-4" />
-                    </button>
+                    <ViewDetailsButton onClick={() => onViewDetails(entry)} />
                   </td>
                 </tr>
               ))}

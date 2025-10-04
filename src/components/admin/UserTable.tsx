@@ -2,6 +2,12 @@ import React, { useState } from 'react';
 import { Edit, Trash2, UserCheck, UserX, Mail, Phone, ChevronUp, ChevronDown, MoreHorizontal, CheckSquare, Square } from 'lucide-react';
 import { User, UserSearchParams } from '../../types/user';
 import { BulkOperation } from '../../types/bulkOperations';
+import '../../design-system/tokens/colors.css';
+import '../../design-system/tokens/spacing.css';
+import '../../design-system/tokens/borders.css';
+import '../../design-system/tokens/typography.css';
+import '../../design-system/tokens/shadows.css';
+import '../../design-system/tokens/dashboard.css';
 
 interface UserTableProps {
   users: User[];
@@ -134,23 +140,42 @@ export function UserTable({
   const SortButton = ({ column, label }: { column: SortableColumn; label: string }) => {
     const isActive = searchParams.sortBy === column;
     const isAsc = searchParams.sortOrder === 'asc';
+    const [isHovered, setIsHovered] = useState(false);
 
     return (
       <button
         onClick={() => handleSort(column)}
-        className="flex items-center space-x-1 text-left font-medium text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-100"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 'var(--space-1)',
+          textAlign: 'left',
+          fontWeight: 'var(--font-medium)',
+          color: isHovered ? 'var(--dashboard-text-primary)' : 'var(--dashboard-text-secondary)',
+          backgroundColor: 'transparent',
+          border: 'none',
+          cursor: 'pointer',
+          padding: 0
+        }}
       >
         <span>{label}</span>
-        <div className="flex flex-col">
-          <ChevronUp 
-            className={`h-3 w-3 ${
-              isActive && isAsc ? 'text-blue-600 dark:text-blue-400' : 'text-gray-300'
-            }`} 
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <ChevronUp
+            style={{
+              height: '0.75rem',
+              width: '0.75rem',
+              color: isActive && isAsc ? '#2563EB' : 'var(--dashboard-border-secondary)'
+            }}
           />
-          <ChevronDown 
-            className={`h-3 w-3 -mt-1 ${
-              isActive && !isAsc ? 'text-blue-600 dark:text-blue-400' : 'text-gray-300'
-            }`} 
+          <ChevronDown
+            style={{
+              height: '0.75rem',
+              width: '0.75rem',
+              marginTop: '-0.25rem',
+              color: isActive && !isAsc ? '#2563EB' : 'var(--dashboard-border-secondary)'
+            }}
           />
         </div>
       </button>
@@ -159,10 +184,15 @@ export function UserTable({
 
   if (loading) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow overflow-hidden">
-        <div className="p-8 text-center">
+      <div style={{
+        backgroundColor: 'var(--dashboard-bg-elevated)',
+        borderRadius: 'var(--radius-xl)',
+        boxShadow: 'var(--dashboard-shadow-card)',
+        overflow: 'hidden'
+      }}>
+        <div style={{ padding: 'var(--space-8)', textAlign: 'center' }}>
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="text-gray-500 dark:text-gray-400 mt-4">Loading users...</p>
+          <p style={{ color: 'var(--dashboard-text-secondary)', marginTop: 'var(--space-4)' }}>Loading users...</p>
         </div>
       </div>
     );
@@ -170,84 +200,185 @@ export function UserTable({
 
   if (users.length === 0) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow overflow-hidden">
-        <div className="p-8 text-center">
-          <UserCheck className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white">No users found</h3>
-          <p className="text-gray-500 dark:text-gray-400">Try adjusting your search or filters</p>
+      <div style={{
+        backgroundColor: 'var(--dashboard-bg-elevated)',
+        borderRadius: 'var(--radius-xl)',
+        boxShadow: 'var(--dashboard-shadow-card)',
+        overflow: 'hidden'
+      }}>
+        <div style={{ padding: 'var(--space-8)', textAlign: 'center' }}>
+          <UserCheck style={{ height: '3rem', width: '3rem', color: 'var(--dashboard-text-tertiary)', margin: '0 auto var(--space-4)' }} />
+          <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>No users found</h3>
+          <p style={{ color: 'var(--dashboard-text-secondary)' }}>Try adjusting your search or filters</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow overflow-hidden">
-      <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+    <div style={{
+      backgroundColor: 'var(--dashboard-bg-elevated)',
+      borderRadius: 'var(--radius-xl)',
+      boxShadow: 'var(--dashboard-shadow-card)',
+      overflow: 'hidden'
+    }}>
+      <div style={{
+        padding: 'var(--space-6)',
+        borderBottom: '1px solid var(--dashboard-border-primary)'
+      }}>
         <div className="flex justify-between items-center">
           <div>
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white">Users</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            <h3 style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>Users</h3>
+            <p style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)', marginTop: 'var(--space-1)' }}>
               {users.length} user{users.length !== 1 ? 's' : ''} found
             </p>
           </div>
           
           {selectedUsers.size > 0 && onBulkOperation && (
             <div className="flex items-center space-x-3">
-              <span className="text-sm text-gray-600 dark:text-gray-400">
+              <span style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>
                 {selectedUsers.size} user{selectedUsers.size !== 1 ? 's' : ''} selected
               </span>
-              
-              <div className="relative">
+
+              <div style={{ position: 'relative' }}>
                 <button
                   onClick={() => setShowBulkActions(!showBulkActions)}
-                  className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center space-x-2"
+                  style={{
+                    padding: 'var(--space-2) var(--space-4)',
+                    fontSize: 'var(--text-sm)',
+                    backgroundColor: '#2563EB',
+                    color: '#FFFFFF',
+                    borderRadius: 'var(--radius-lg)',
+                    border: 'none',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'var(--space-2)'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#1D4ED8'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#2563EB'}
                 >
                   <span>Bulk Actions</span>
-                  <ChevronDown className="h-4 w-4" />
+                  <ChevronDown style={{ height: '1rem', width: '1rem' }} />
                 </button>
                 
                 {showBulkActions && (
                   <>
-                    <div 
-                      className="fixed inset-0 z-10" 
+                    <div
+                      style={{ position: 'fixed', inset: 0, zIndex: 10 }}
                       onClick={() => setShowBulkActions(false)}
                     />
-                    <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-20">
-                      <div className="py-1">
+                    <div style={{
+                      position: 'absolute',
+                      right: 0,
+                      marginTop: 'var(--space-2)',
+                      width: '12rem',
+                      backgroundColor: 'var(--dashboard-bg-elevated)',
+                      borderRadius: 'var(--radius-lg)',
+                      boxShadow: 'var(--shadow-lg)',
+                      border: '1px solid var(--dashboard-border-primary)',
+                      zIndex: 20
+                    }}>
+                      <div style={{ padding: 'var(--space-1) 0' }}>
                         <button
                           onClick={() => handleBulkOperation('suspend')}
-                          className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 w-full text-left"
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            padding: 'var(--space-2) var(--space-4)',
+                            fontSize: 'var(--text-sm)',
+                            color: 'var(--dashboard-text-primary)',
+                            width: '100%',
+                            textAlign: 'left',
+                            backgroundColor: 'transparent',
+                            border: 'none',
+                            cursor: 'pointer'
+                          }}
+                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--dashboard-bg-hover)'}
+                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                         >
-                          <UserX className="h-4 w-4 mr-2" />
+                          <UserX style={{ height: '1rem', width: '1rem', marginRight: 'var(--space-2)' }} />
                           Suspend Users
                         </button>
                         <button
                           onClick={() => handleBulkOperation('activate')}
-                          className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 w-full text-left"
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            padding: 'var(--space-2) var(--space-4)',
+                            fontSize: 'var(--text-sm)',
+                            color: 'var(--dashboard-text-primary)',
+                            width: '100%',
+                            textAlign: 'left',
+                            backgroundColor: 'transparent',
+                            border: 'none',
+                            cursor: 'pointer'
+                          }}
+                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--dashboard-bg-hover)'}
+                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                         >
-                          <UserCheck className="h-4 w-4 mr-2" />
+                          <UserCheck style={{ height: '1rem', width: '1rem', marginRight: 'var(--space-2)' }} />
                           Activate Users
                         </button>
                         <button
                           onClick={() => handleBulkOperation('changeRole')}
-                          className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 w-full text-left"
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            padding: 'var(--space-2) var(--space-4)',
+                            fontSize: 'var(--text-sm)',
+                            color: 'var(--dashboard-text-primary)',
+                            width: '100%',
+                            textAlign: 'left',
+                            backgroundColor: 'transparent',
+                            border: 'none',
+                            cursor: 'pointer'
+                          }}
+                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--dashboard-bg-hover)'}
+                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                         >
-                          <Edit className="h-4 w-4 mr-2" />
+                          <Edit style={{ height: '1rem', width: '1rem', marginRight: 'var(--space-2)' }} />
                           Change Role
                         </button>
                         <button
                           onClick={() => handleBulkOperation('export')}
-                          className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 w-full text-left"
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            padding: 'var(--space-2) var(--space-4)',
+                            fontSize: 'var(--text-sm)',
+                            color: 'var(--dashboard-text-primary)',
+                            width: '100%',
+                            textAlign: 'left',
+                            backgroundColor: 'transparent',
+                            border: 'none',
+                            cursor: 'pointer'
+                          }}
+                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--dashboard-bg-hover)'}
+                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                         >
-                          <Mail className="h-4 w-4 mr-2" />
+                          <Mail style={{ height: '1rem', width: '1rem', marginRight: 'var(--space-2)' }} />
                           Export Selected
                         </button>
-                        <div className="border-t border-gray-200 dark:border-gray-600"></div>
+                        <div style={{ borderTop: '1px solid var(--dashboard-border-secondary)' }}></div>
                         <button
                           onClick={() => handleBulkOperation('delete')}
-                          className="flex items-center px-4 py-2 text-sm text-red-700 dark:text-red-300 hover:bg-gray-100 dark:hover:bg-gray-700 w-full text-left"
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            padding: 'var(--space-2) var(--space-4)',
+                            fontSize: 'var(--text-sm)',
+                            color: '#DC2626',
+                            width: '100%',
+                            textAlign: 'left',
+                            backgroundColor: 'transparent',
+                            border: 'none',
+                            cursor: 'pointer'
+                          }}
+                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--dashboard-bg-hover)'}
+                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                         >
-                          <Trash2 className="h-4 w-4 mr-2" />
+                          <Trash2 style={{ height: '1rem', width: '1rem', marginRight: 'var(--space-2)' }} />
                           Delete Users
                         </button>
                       </div>
@@ -255,10 +386,19 @@ export function UserTable({
                   </>
                 )}
               </div>
-              
+
               <button
                 onClick={() => setSelectedUsers(new Set())}
-                className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+                style={{
+                  padding: 'var(--space-2) var(--space-3)',
+                  fontSize: 'var(--text-sm)',
+                  color: 'var(--dashboard-text-secondary)',
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.color = 'var(--dashboard-text-primary)'}
+                onMouseLeave={(e) => e.currentTarget.style.color = 'var(--dashboard-text-secondary)'}
               >
                 Clear Selection
               </button>
@@ -267,11 +407,11 @@ export function UserTable({
         </div>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead className="bg-gray-50 dark:bg-gray-700">
+      <div style={{ overflowX: 'auto' }}>
+        <table style={{ width: '100%' }}>
+          <thead style={{ backgroundColor: 'var(--dashboard-bg-secondary)' }}>
             <tr>
-              <th className="px-6 py-3 text-left">
+              <th style={{ padding: 'var(--space-3) var(--space-6)', textAlign: 'left' }}>
                 <input
                   type="checkbox"
                   checked={selectedUsers.size === users.length && users.length > 0}
@@ -279,104 +419,154 @@ export function UserTable({
                   className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                 />
               </th>
-              <th className="px-6 py-3 text-left text-xs uppercase tracking-wider">
+              <th style={{ padding: 'var(--space-3) var(--space-6)', textAlign: 'left', fontSize: 'var(--text-xs)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                 <SortButton column="name" label="User" />
               </th>
-              <th className="px-6 py-3 text-left text-xs uppercase tracking-wider">
-                <SortButton column="role" label="Role" /> 
+              <th style={{ padding: 'var(--space-3) var(--space-6)', textAlign: 'left', fontSize: 'var(--text-xs)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                <SortButton column="role" label="Role" />
               </th>
-              <th className="px-6 py-3 text-left text-xs uppercase tracking-wider">
+              <th style={{ padding: 'var(--space-3) var(--space-6)', textAlign: 'left', fontSize: 'var(--text-xs)', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--dashboard-text-secondary)', fontWeight: 'var(--font-medium)' }}>
                 Grade/Subject
               </th>
-              <th className="px-6 py-3 text-left text-xs uppercase tracking-wider">
+              <th style={{ padding: 'var(--space-3) var(--space-6)', textAlign: 'left', fontSize: 'var(--text-xs)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                 <SortButton column="lastActive" label="Last Active" />
               </th>
-              <th className="px-6 py-3 text-left text-xs uppercase tracking-wider">
+              <th style={{ padding: 'var(--space-3) var(--space-6)', textAlign: 'left', fontSize: 'var(--text-xs)', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--dashboard-text-secondary)', fontWeight: 'var(--font-medium)' }}>
                 Status
               </th>
-              <th className="px-6 py-3 text-right text-xs uppercase tracking-wider">
+              <th style={{ padding: 'var(--space-3) var(--space-6)', textAlign: 'right', fontSize: 'var(--text-xs)', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--dashboard-text-secondary)', fontWeight: 'var(--font-medium)' }}>
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-            {users.map((user) => (
-              <tr key={user.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                <td className="px-6 py-4">
-                  <input
-                    type="checkbox"
-                    checked={selectedUsers.has(user.id)}
-                    onChange={(e) => handleSelectUser(user.id, e.target.checked)}
-                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                  />
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex items-center">
-                    <img 
-                      className="h-10 w-10 rounded-full" 
-                      src={user.avatar || `https://ui-avatars.com/api/?name=${user.firstName}+${user.lastName}&background=random`}
-                      alt={`${user.firstName} ${user.lastName}`}
+          <tbody style={{ backgroundColor: 'var(--dashboard-bg-elevated)' }}>
+            {users.map((user) => {
+              const [isRowHovered, setIsRowHovered] = useState(false);
+              return (
+                <tr
+                  key={user.id}
+                  onMouseEnter={() => setIsRowHovered(true)}
+                  onMouseLeave={() => setIsRowHovered(false)}
+                  style={{
+                    backgroundColor: isRowHovered ? 'var(--dashboard-bg-hover)' : 'transparent',
+                    borderTop: '1px solid var(--dashboard-border-primary)'
+                  }}
+                >
+                  <td style={{ padding: 'var(--space-4) var(--space-6)' }}>
+                    <input
+                      type="checkbox"
+                      checked={selectedUsers.has(user.id)}
+                      onChange={(e) => handleSelectUser(user.id, e.target.checked)}
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                     />
-                    <div className="ml-4">
-                      <div className="text-sm font-medium text-gray-900 dark:text-white">
+                  </td>
+                  <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap' }}>
+                    <div>
+                      <div style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)', color: 'var(--dashboard-text-primary)' }}>
                         {user.firstName} {user.lastName}
                       </div>
-                      <div className="text-sm text-gray-500 dark:text-gray-400 flex items-center">
-                        <Mail className="h-3 w-3 mr-1" />
+                      <div className="flex items-center" style={{ fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>
+                        <Mail style={{ height: '0.75rem', width: '0.75rem', marginRight: 'var(--space-1)' }} />
                         {user.email}
                       </div>
                     </div>
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getRoleColor(user.role)}`}>
-                    {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                  {user.role === 'student' && user.grade ? user.grade : 
-                   user.role === 'teacher' && user.subject ? user.subject :
-                   user.department || '-'}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                  {formatLastActive(user.lastActive)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(user.status)}`}>
-                    {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <div className="flex items-center justify-end space-x-2">
-                    <button
-                      onClick={() => onEditUser(user)}
-                      className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 p-1 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded"
-                      title="Edit user"
-                    >
-                      <Edit className="h-4 w-4" />
-                    </button>
-                    <button
-                      onClick={() => onToggleUserStatus(user.id, user.status === 'active' ? 'suspended' : 'active')}
-                      className={`p-1 rounded ${
-                        user.status === 'active' 
-                          ? 'text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20'
-                          : 'text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 hover:bg-green-50 dark:hover:bg-green-900/20'
-                      }`}
-                      title={user.status === 'active' ? 'Suspend user' : 'Activate user'}
-                    >
-                      {user.status === 'active' ? <UserX className="h-4 w-4" /> : <UserCheck className="h-4 w-4" />}
-                    </button>
-                    <button
-                      onClick={() => onDeleteUser(user.id)}
-                      className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 p-1 hover:bg-red-50 dark:hover:bg-red-900/20 rounded"
-                      title="Delete user"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
+                  </td>
+                  <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap' }}>
+                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getRoleColor(user.role)}`}>
+                      {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+                    </span>
+                  </td>
+                  <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap', fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-primary)' }}>
+                    {user.role === 'student' && user.grade ? user.grade :
+                     user.role === 'teacher' && user.subject ? user.subject :
+                     user.department || '-'}
+                  </td>
+                  <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap', fontSize: 'var(--text-sm)', color: 'var(--dashboard-text-secondary)' }}>
+                    {formatLastActive(user.lastActive)}
+                  </td>
+                  <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap' }}>
+                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(user.status)}`}>
+                      {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
+                    </span>
+                  </td>
+                  <td style={{ padding: 'var(--space-4) var(--space-6)', whiteSpace: 'nowrap', textAlign: 'right' }}>
+                    <div className="flex items-center justify-end space-x-2">
+                      <button
+                        onClick={() => onEditUser(user)}
+                        style={{
+                          color: '#2563EB',
+                          padding: 'var(--space-1)',
+                          borderRadius: 'var(--radius-md)',
+                          backgroundColor: 'transparent',
+                          border: 'none',
+                          cursor: 'pointer'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.color = '#1D4ED8';
+                          e.currentTarget.style.backgroundColor = 'rgba(37, 99, 235, 0.1)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.color = '#2563EB';
+                          e.currentTarget.style.backgroundColor = 'transparent';
+                        }}
+                        title="Edit user"
+                      >
+                        <Edit style={{ height: '1rem', width: '1rem' }} />
+                      </button>
+                      <button
+                        onClick={() => onToggleUserStatus(user.id, user.status === 'active' ? 'suspended' : 'active')}
+                        style={{
+                          color: user.status === 'active' ? '#DC2626' : '#16A34A',
+                          padding: 'var(--space-1)',
+                          borderRadius: 'var(--radius-md)',
+                          backgroundColor: 'transparent',
+                          border: 'none',
+                          cursor: 'pointer'
+                        }}
+                        onMouseEnter={(e) => {
+                          if (user.status === 'active') {
+                            e.currentTarget.style.color = '#B91C1C';
+                            e.currentTarget.style.backgroundColor = 'rgba(220, 38, 38, 0.1)';
+                          } else {
+                            e.currentTarget.style.color = '#15803D';
+                            e.currentTarget.style.backgroundColor = 'rgba(22, 163, 74, 0.1)';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.color = user.status === 'active' ? '#DC2626' : '#16A34A';
+                          e.currentTarget.style.backgroundColor = 'transparent';
+                        }}
+                        title={user.status === 'active' ? 'Suspend user' : 'Activate user'}
+                      >
+                        {user.status === 'active' ? <UserX style={{ height: '1rem', width: '1rem' }} /> : <UserCheck style={{ height: '1rem', width: '1rem' }} />}
+                      </button>
+                      <button
+                        onClick={() => onDeleteUser(user.id)}
+                        style={{
+                          color: '#DC2626',
+                          padding: 'var(--space-1)',
+                          borderRadius: 'var(--radius-md)',
+                          backgroundColor: 'transparent',
+                          border: 'none',
+                          cursor: 'pointer'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.color = '#B91C1C';
+                          e.currentTarget.style.backgroundColor = 'rgba(220, 38, 38, 0.1)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.color = '#DC2626';
+                          e.currentTarget.style.backgroundColor = 'transparent';
+                        }}
+                        title="Delete user"
+                      >
+                        <Trash2 style={{ height: '1rem', width: '1rem' }} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
