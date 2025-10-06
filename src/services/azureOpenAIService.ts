@@ -6,6 +6,7 @@
 
 import { OpenAI } from 'openai';
 import { azureKeyVaultConfig } from './azureKeyVaultConfig';
+import { safeJSONParse } from '../utils/jsonSanitizer';
 
 // Azure AI Foundry Configuration - Will be loaded from Key Vault
 let AZURE_CONFIG = {
@@ -325,7 +326,7 @@ Return valid JSON with the content structure.`;
         response_format: { type: 'json_object' }
       });
 
-      return JSON.parse(response.choices[0]?.message?.content || '{}');
+      return safeJSONParse(response.choices[0]?.message?.content || '{}', {});
       
     } catch (error) {
       console.error('Personalized content generation error:', error);
@@ -372,7 +373,7 @@ Return JSON with questions array containing question_text, type, options, correc
           response_format: { type: 'json_object' }
         });
 
-        const batch = JSON.parse(response.choices[0]?.message?.content || '{"questions": []}');
+        const batch = safeJSONParse(response.choices[0]?.message?.content || '{"questions": []}', { questions: [] });
         questions.push(...(batch.questions || []));
         
         await this.delay(300); // Small delay between batches
@@ -416,7 +417,7 @@ Return detailed JSON with actionable teacher recommendations.`;
         response_format: { type: 'json_object' }
       });
 
-      return JSON.parse(response.choices[0]?.message?.content || '{}');
+      return safeJSONParse(response.choices[0]?.message?.content || '{}', {});
       
     } catch (error) {
       console.error('Teacher insights generation error:', error);

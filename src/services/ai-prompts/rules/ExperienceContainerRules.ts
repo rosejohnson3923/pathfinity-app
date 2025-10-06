@@ -197,20 +197,29 @@ export function getExperienceTaskInstructions(
 ): string {
   return `
 ========================================
-YOUR TASK - CREATE CAREER SCENARIOS
+YOUR TASK - CREATE NARRATIVE WORKPLACE SCENARIOS
 ========================================
-Let ${studentName} experience being a ${career} using this skill.
-Create hands-on activities that simulate real ${career} tasks.
-Encourage creativity and problem-solving.
+🎯 PRIMARY OBJECTIVE: Continue the storyline from the LEARN container
 
-Create realistic workplace scenarios where ${studentName} can:
-• Experience what it's like to be a ${career}
-• Make decisions that ${career}s face daily
-• Learn how ${career}s use ${skillName} in their work
-• Practice professional decision-making
+${studentName} just learned "${skillName}" in the LEARN container.
+Now create NARRATIVE WORKPLACE SCENARIOS that show how ${studentName} uses this newly learned skill to make good workday decisions as a ${career}.
 
-DO NOT create counting exercises or math problems!
-Instead, create story-based scenarios with realistic choices.
+CRITICAL REQUIREMENTS:
+✓ NARRATIVE FORMAT: Tell a story about ${studentName}'s workday as a ${career}
+✓ SKILL APPLICATION: Show how the newly learned skill (${skillName}) helps make professional decisions
+✓ WORKDAY DECISIONS: Each scenario is a realistic workplace situation requiring decision-making
+✓ STORY CONTINUITY: Continue the narrative established in the Master Narrative
+✓ REALISTIC CHOICES: Options represent authentic professional actions a ${career} would take
+
+Create realistic workplace scenarios where ${studentName}:
+• Experiences a typical workday situation as a ${career}
+• Faces a decision that ${career}s encounter in real work
+• Uses the newly learned skill (${skillName}) to make the right choice
+• Sees the outcome of making good professional decisions
+
+TONE: Narrative storytelling that immerses ${studentName} in the ${career} workplace
+FORMAT: Story-based scenarios with realistic decision choices
+FOCUS: How newly learned skills help make good workday decisions
 
 Language must be appropriate for grade ${gradeLevel}.
 `;
@@ -223,29 +232,42 @@ export function getExperienceResponseFormat(requirements: any): string {
 RESPONSE FORMAT FOR EXPERIENCE (JSON)
 ========================================
 {
-  "title": "Engaging scenario title with career context",
-  "introduction": "Set the scene - describe the work situation",
-  "challenges": [
-    // Create ${requirements.practiceCount} realistic career scenarios
-    {
-      "scenario": "A specific situation this professional faces",
-      "question": "What would you do?",
-      "options": [
-        "First realistic action",
-        "Second realistic action",
-        "Third realistic action",
-        "Fourth realistic action"
-      ],
-      "correct_answer": 0, // Index of best option (0-3)
-      "explanation": "Why this is the best professional choice",
-      "outcome": "What happens when you choose correctly",
-      "learning_point": "Key professional insight gained"
-    }
-  ],
-  "conclusion": "Wrap up the experience and celebrate learning"
+  "title": "A Day in the Life: [Career] Uses [Skill]",
+  "scenario": "NARRATIVE INTRODUCTION: Tell the story of the workday. Set the scene. Describe what's happening at work. Make it feel like a real professional situation.",
+  "scenario_summary": "Brief summary of the workday story",
+  "character_context": "Establish the professional role and connection to the newly learned skill",
+  "career_introduction": "How this career uses the newly learned skill in their work",
+  "real_world_connections": [],
+  "interactive_simulation": {
+    "setup": "NARRATIVE SETUP: Describe arriving at work, the workplace environment, and what needs to be done today. Connect to the Master Narrative.",
+    "challenges": [
+      // Create ${requirements.practiceCount} NARRATIVE workplace decision scenarios
+      {
+        "description": "NARRATIVE CHALLENGE: Tell the story of this workplace situation. What's happening? What decision needs to be made? How does the newly learned skill help?",
+        "challenge_summary": "Brief summary of the workplace decision",
+        "options": [
+          "I would [realistic professional action using the skill]",
+          "I would [another realistic professional action]",
+          "I would [third realistic professional action]",
+          "I would [fourth realistic professional action]"
+        ],
+        "correct_choice": 0, // Index of best professional decision (0-3)
+        "hint": "Think about how the skill you just learned helps make this decision...",
+        "outcome": "NARRATIVE OUTCOME: What happens as a result of making this good decision. Tell the story.",
+        "learning_point": "How the newly learned skill helped make the right workday decision"
+      }
+    ],
+    "conclusion": "NARRATIVE CONCLUSION: Wrap up the workday story. Celebrate using the newly learned skill professionally."
+  }
 }
 
-IMPORTANT: Create workplace scenarios, NOT counting or math problems!
+CRITICAL REQUIREMENTS:
+✓ NARRATIVE FORMAT: Each challenge tells a story about a workday situation
+✓ SKILL CONNECTION: Every challenge shows how the newly learned skill helps make decisions
+✓ REALISTIC WORKPLACE: Authentic situations the career faces in real work
+✓ STORY CONTINUITY: Connect to the Master Narrative established in LEARN
+✓ PROFESSIONAL DECISIONS: Options are realistic actions professionals take
+✓ NO ACADEMIC EXERCISES: This is workplace storytelling, not practice problems
 `;
 }
 
@@ -279,26 +301,33 @@ export function getExperienceQualityChecklist(): string {
 FINAL QUALITY CHECK - EXPERIENCE
 ========================================
 Before generating, verify:
-✓ ALL scenarios are workplace situations, NOT counting exercises
-✓ Each scenario shows how the career uses skills professionally
-✓ Options represent realistic professional choices
+✓ NARRATIVE FORMAT: Each scenario tells a workday story with realistic workplace situations
+✓ SKILL CONNECTION: Every scenario shows how the NEWLY LEARNED SKILL helps make workday decisions
+✓ WORKDAY DECISIONS: Authentic professional situations requiring decision-making
+✓ STORY CONTINUITY: Connects to Master Narrative established in LEARN container
+✓ Options represent realistic professional actions the career would take
 ✓ Language is grade-appropriate and engaging
-✓ Scenarios tell a story and create immersion
-✓ correct_answer is an index (0-3)
-✓ Each scenario has outcome and learning_point
-✓ NO math problems or counting tasks
-✓ Focus on decision-making and problem-solving
+✓ Scenarios create narrative immersion in the workplace
+✓ correct_answer is an index (0-3) representing the best professional decision
+✓ Each scenario has NARRATIVE OUTCOME showing result of good decision
+✓ Each scenario has learning_point connecting skill to professional success
+✓ NO academic exercises, counting tasks, or practice problems
+✓ Focus on narrative storytelling and workplace decision-making
+✓ Shows HOW the newly learned skill makes professionals successful
 `;
 }
 
 // Get EXPERIENCE-specific reminders
 export function getExperienceReminders(careerName: string, grade: string): string {
   return `Remember:
-1. Focus on creating engaging career scenarios, NOT counting or math problems
-2. Create situational challenges that show how ${careerName}s work
-3. Use age-appropriate language for grade ${grade}
-4. Make scenarios relatable and story-based
-5. Options should be realistic actions a ${careerName} might take`;
+1. NARRATIVE STORYTELLING: Tell the story of a ${careerName}'s workday - NOT academic exercises
+2. NEWLY LEARNED SKILLS: Show how the skill just learned in LEARN helps make good workday decisions
+3. WORKDAY DECISIONS: Create realistic workplace situations requiring professional judgment
+4. STORY CONTINUITY: Connect to the Master Narrative established in the LEARN container
+5. Use age-appropriate language for grade ${grade} while maintaining professional context
+6. Make scenarios immersive and story-based with narrative outcomes
+7. Options should be realistic professional actions a ${careerName} would take
+8. Focus on HOW the newly learned skill leads to professional success`;
 }
 
 // EXPERIENCE-specific overrides for universal rules

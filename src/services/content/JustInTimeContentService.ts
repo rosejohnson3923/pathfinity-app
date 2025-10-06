@@ -52,6 +52,7 @@ export interface JITContentRequest {
     careerDescription?: string;
     // Narrative context from MasterNarrative
     narrativeContext?: {
+      // Existing basic fields
       setting?: string;
       context?: string;
       narrative?: string;
@@ -59,6 +60,84 @@ export interface JITContentRequest {
       throughLine?: string;
       companion?: any;
       subjectContext?: any;
+
+      // NEW: Enrichment Layer 1 - Progress Milestones
+      milestones?: {
+        firstAchievement: string;
+        midwayMastery: string;
+        finalVictory: string;
+        bonusChallenge?: string;
+      };
+
+      // NEW: Enrichment Layer 2 - Immersive Elements
+      immersiveElements?: {
+        soundscape: string;
+        interactiveTools: string[];
+        rewardVisuals: string[];
+        celebrationMoments: string[];
+      };
+
+      // NEW: Enrichment Layer 3 - Real-World Applications
+      realWorldApplications?: {
+        [subject: string]: {
+          immediate: string;
+          nearFuture: string;
+          longTerm: string;
+          careerConnection: string;
+        };
+      };
+
+      // NEW: Enrichment Layer 4 - Parent Value Propositions
+      parentValue?: {
+        realWorldConnection: string;
+        futureReadiness: string;
+        engagementPromise: string;
+        differentiator: string;
+      };
+
+      // NEW: Enrichment Layer 5 - Quality Markers
+      qualityMarkers?: {
+        commonCoreAligned: boolean;
+        stateStandardsMet: boolean;
+        stemIntegrated: boolean;
+        socialEmotionalLearning: boolean;
+        assessmentRigor: string;
+        progressTracking: string;
+      };
+
+      // NEW: Enrichment Layer 8 - Personalization Examples
+      personalizationExamples?: {
+        withStudentName: string[];
+        withInterests: string[];
+        withProgress: string[];
+        withLearningStyle: string[];
+      };
+
+      // NEW: Enrichment Layer 9 - Companion Interactions
+      companionInteractions?: {
+        greetings: string[];
+        encouragement: string[];
+        hints: string[];
+        celebrations: string[];
+        transitions: string[];
+      };
+
+      // NEW: Enrichment Layer 6 - Parent Insights
+      parentInsights?: {
+        adaptiveNature: string;
+        noFailureMode: string;
+        masteryTracking: string;
+        dailyReports: string;
+        weeklyProgress: string;
+      };
+
+      // NEW: Enrichment Layer 7 - Guarantees
+      guarantees?: {
+        engagement: string;
+        learning: string;
+        satisfaction: string;
+        support: string;
+      };
     };
   };
 }

@@ -100,7 +100,8 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     marginVertical: 20,
     position: 'relative',
-    overflow: 'hidden'
+    overflow: 'hidden',
+    wrap: false  // Keep career badge together
   },
   careerBadgeAccent: {
     position: 'absolute',
@@ -152,7 +153,8 @@ const styles = StyleSheet.create({
     borderLeftWidth: 5,
     boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)',
     position: 'relative',
-    overflow: 'hidden'
+    overflow: 'hidden',
+    wrap: false  // Prevent breaking across pages
   },
   mathCard: {
     borderLeftColor: colors.subjects.math,
@@ -182,7 +184,8 @@ const styles = StyleSheet.create({
     borderColor: colors.gray[200],
     borderLeftWidth: 4,
     borderLeftColor: colors.primary,
-    position: 'relative'
+    position: 'relative',
+    wrap: false  // Prevent breaking across pages
   },
   challengeTitle: {
     ...typography.small,
@@ -207,7 +210,8 @@ const styles = StyleSheet.create({
     borderLeftColor: colors.primary,
     borderWidth: 1,
     borderColor: '#BFDBFE',
-    position: 'relative'
+    position: 'relative',
+    wrap: false  // Keep parent guide together
   },
   parentTitle: {
     ...typography.h4,
@@ -310,6 +314,58 @@ export const UnifiedLessonPlanPDF = ({ lessonPlan }: { lessonPlan: any }) => {
     });
   };
 
+  // Strip emojis from text for PDF rendering (Helvetica font doesn't support emojis)
+  const stripEmojis = (text: string) => {
+    if (!text) return text;
+    // Comprehensive emoji removal including compound emojis with ZWJ (Zero Width Joiner)
+    // This covers all emoji ranges, symbols, and special characters Helvetica can't render
+    return text
+      .replace(/[\u{1F000}-\u{1F9FF}]/gu, '') // All emojis
+      .replace(/[\u{2600}-\u{26FF}]/gu, '')   // Miscellaneous symbols
+      .replace(/[\u{2700}-\u{27BF}]/gu, '')   // Dingbats
+      .replace(/[\u{FE00}-\u{FE0F}]/gu, '')   // Variation selectors
+      .replace(/[\u{200D}]/gu, '')            // Zero width joiner
+      .replace(/[\u{20E3}]/gu, '')            // Combining enclosing keycap
+      .replace(/[\u{E0020}-\u{E007F}]/gu, '') // Tags
+      .replace(/[\u{1F1E0}-\u{1F1FF}]/gu, '') // Regional indicators (flags)
+      .trim();
+  };
+
+  // Convert shape emoji symbols to text descriptions for PDF rendering
+  // For non-shape emojis, strip them entirely
+  const convertShapeEmojiToText = (option: string) => {
+    if (!option) return option;
+
+    // Map common shape emojis to text descriptions
+    const shapeMap: { [key: string]: string } = {
+      '⭕': 'Circle',
+      '🔴': 'Circle',
+      '🟠': 'Circle',
+      '🟢': 'Circle',
+      '🔵': 'Circle',
+      '⬜': 'Square',
+      '◻️': 'Square',
+      '◼️': 'Square',
+      '🟦': 'Square',
+      '🔺': 'Triangle',
+      '🔻': 'Triangle',
+      '▲': 'Triangle',
+      '▼': 'Triangle',
+      '▬': 'Rectangle',
+      '▭': 'Rectangle',
+      '🟩': 'Rectangle',
+      '🟨': 'Rectangle'
+    };
+
+    // If it's a recognized shape emoji, convert to text
+    if (shapeMap[option]) {
+      return shapeMap[option];
+    }
+
+    // Otherwise, strip all emojis (for scenario emojis like cooking, firefighter, etc.)
+    return stripEmojis(option);
+  };
+
   return (
     <Document>
       {/* Page 1: Daily Overview & Career Introduction */}
@@ -358,11 +414,115 @@ export const UnifiedLessonPlanPDF = ({ lessonPlan }: { lessonPlan: any }) => {
           <Text style={styles.sectionTitle}>Learning Story</Text>
           <Text style={styles.sectionContent}>
             {lessonPlan.content.masterNarrative?.intro ||
-             `${lessonPlan.student.name} becomes a Junior ${lessonPlan.career.careerName} Helper!
-             They'll use all their skills - math, reading, science, and social studies - to help in the
-             ${lessonPlan.career.careerName}'s workplace.`}
+             `${lessonPlan.student.name} becomes a ${lessonPlan.career.careerName} Helper! They'll use all their skills - math, reading, science, and social studies - to help in the ${lessonPlan.career.careerName}'s workplace.`}
           </Text>
         </View>
+
+        {/* ENRICHMENT: Milestones Section */}
+        {lessonPlan.content?.enrichment?.milestones && (
+          <View style={{
+            backgroundColor: '#FEF3C7',
+            padding: 16,
+            borderRadius: 12,
+            marginTop: 16,
+            borderLeftWidth: 5,
+            borderLeftColor: '#F59E0B',
+            borderWidth: 1,
+            borderColor: '#FDE68A'
+          }}>
+            <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#78350F', marginBottom: 10 }}>
+              Learning Milestones
+            </Text>
+            <View style={{ gap: 8 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+                <Text style={{ fontSize: 10, color: '#92400E', fontWeight: 'bold', marginRight: 6 }}>
+                  First Achievement:
+                </Text>
+                <Text style={{ fontSize: 10, color: '#92400E', flex: 1 }}>
+                  {lessonPlan.content.enrichment.milestones.firstAchievement}
+                </Text>
+              </View>
+              <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+                <Text style={{ fontSize: 10, color: '#92400E', fontWeight: 'bold', marginRight: 6 }}>
+                  Midway Mastery:
+                </Text>
+                <Text style={{ fontSize: 10, color: '#92400E', flex: 1 }}>
+                  {lessonPlan.content.enrichment.milestones.midwayMastery}
+                </Text>
+              </View>
+              <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+                <Text style={{ fontSize: 10, color: '#92400E', fontWeight: 'bold', marginRight: 6 }}>
+                  Final Victory:
+                </Text>
+                <Text style={{ fontSize: 10, color: '#92400E', flex: 1 }}>
+                  {lessonPlan.content.enrichment.milestones.finalVictory}
+                </Text>
+              </View>
+              {lessonPlan.content.enrichment.milestones.bonusChallenge && (
+                <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+                  <Text style={{ fontSize: 10, color: '#92400E', fontWeight: 'bold', marginRight: 6 }}>
+                    Bonus Challenge:
+                  </Text>
+                  <Text style={{ fontSize: 10, color: '#92400E', flex: 1 }}>
+                    {lessonPlan.content.enrichment.milestones.bonusChallenge}
+                  </Text>
+                </View>
+              )}
+            </View>
+          </View>
+        )}
+
+        {/* ENRICHMENT: Parent Value Section */}
+        {lessonPlan.content?.enrichment?.parentValue && (
+          <View style={{
+            backgroundColor: '#F3E8FF',
+            padding: 16,
+            borderRadius: 12,
+            marginTop: 16,
+            borderLeftWidth: 5,
+            borderLeftColor: '#A855F7',
+            borderWidth: 1,
+            borderColor: '#E9D5FF'
+          }}>
+            <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#581C87', marginBottom: 10 }}>
+              Why This Matters
+            </Text>
+            <View style={{ gap: 8 }}>
+              <View>
+                <Text style={{ fontSize: 9, color: '#6B21A8', fontWeight: 'bold', marginBottom: 2 }}>
+                  Real-World Connection:
+                </Text>
+                <Text style={{ fontSize: 9, color: '#6B21A8' }}>
+                  {lessonPlan.content.enrichment.parentValue.realWorldConnection}
+                </Text>
+              </View>
+              <View>
+                <Text style={{ fontSize: 9, color: '#6B21A8', fontWeight: 'bold', marginBottom: 2 }}>
+                  Future Readiness:
+                </Text>
+                <Text style={{ fontSize: 9, color: '#6B21A8' }}>
+                  {lessonPlan.content.enrichment.parentValue.futureReadiness}
+                </Text>
+              </View>
+              <View>
+                <Text style={{ fontSize: 9, color: '#6B21A8', fontWeight: 'bold', marginBottom: 2 }}>
+                  Engagement Promise:
+                </Text>
+                <Text style={{ fontSize: 9, color: '#6B21A8' }}>
+                  {lessonPlan.content.enrichment.parentValue.engagementPromise}
+                </Text>
+              </View>
+              <View>
+                <Text style={{ fontSize: 9, color: '#6B21A8', fontWeight: 'bold', marginBottom: 2 }}>
+                  What Makes Us Different:
+                </Text>
+                <Text style={{ fontSize: 9, color: '#6B21A8' }}>
+                  {lessonPlan.content.enrichment.parentValue.differentiator}
+                </Text>
+              </View>
+            </View>
+          </View>
+        )}
 
         {/* Learning Goals Grid */}
         <View style={styles.infoGrid}>
@@ -443,43 +603,163 @@ export const UnifiedLessonPlanPDF = ({ lessonPlan }: { lessonPlan: any }) => {
               </View>
             )}
 
-            {/* Show Math activities grouped by role */}
-            {lessonPlan.content.subjectContents.Math.challenges.map((roleGroup, roleIdx) =>
-              roleGroup.isRoleGroup ? (
-                <View key={roleIdx} style={{ marginBottom: 12 }}>
-                  {/* Role Header */}
-                  <View style={{ backgroundColor: colors.gray[100], padding: 12, borderRadius: 8, marginBottom: 8 }}>
-                    <Text style={{...typography.small, fontWeight: 'bold', color: colors.gray[900] }}>
-                      {roleGroup.roleName}
+            {/* Instructional Video */}
+            {lessonPlan.content.subjectContents.Math.video && (
+              <View style={{
+                marginBottom: 12,
+                backgroundColor: '#FEF3C7',
+                padding: 12,
+                borderRadius: 8,
+                borderLeft: '4px solid #F59E0B',
+                wrap: false
+              }}>
+                <Text style={{ fontSize: 10, fontWeight: 'bold', color: '#92400E', marginBottom: 6 }}>
+                  Instructional Video
+                </Text>
+                {lessonPlan.content.subjectContents.Math.video.videoUrl ? (
+                  <>
+                    <Text style={{ fontSize: 9, color: '#78350F', marginBottom: 3 }}>
+                      <Text style={{ fontWeight: 'bold' }}>Title:</Text> {stripEmojis(lessonPlan.content.subjectContents.Math.video.title)}
                     </Text>
-                  </View>
-
-                  {/* Role Activities */}
-                  {roleGroup.activities && roleGroup.activities.map((activity, actIdx) => (
-                    <View key={actIdx} style={[styles.challengeBox, { marginLeft: 16, marginBottom: 8 }]}>
-                      <Text style={styles.challengeContent}>
-                        {activity}
+                    {lessonPlan.content.subjectContents.Math.video.channelTitle && (
+                      <Text style={{ fontSize: 8, color: '#92400E', marginBottom: 3 }}>
+                        <Text style={{ fontWeight: 'bold' }}>Channel:</Text> {lessonPlan.content.subjectContents.Math.video.channelTitle}
                       </Text>
+                    )}
+                    {lessonPlan.content.subjectContents.Math.video.duration && (
+                      <Text style={{ fontSize: 8, color: '#92400E', marginBottom: 3 }}>
+                        <Text style={{ fontWeight: 'bold' }}>Duration:</Text> {Math.floor(lessonPlan.content.subjectContents.Math.video.duration / 60)}min {lessonPlan.content.subjectContents.Math.video.duration % 60}sec
+                      </Text>
+                    )}
+                    <Text style={{ fontSize: 8, color: '#78350F', marginTop: 4, fontStyle: 'italic' }}>
+                      Your child will watch this educational video to learn the concept before practicing.
+                    </Text>
+                  </>
+                ) : (
+                  <Text style={{ fontSize: 9, color: '#92400E', fontStyle: 'italic' }}>
+                    {lessonPlan.content.subjectContents.Math.video.fallbackMessage || 'Video content will be provided during the lesson'}
+                  </Text>
+                )}
+              </View>
+            )}
 
-                      {roleGroup.hint && actIdx === 0 && (
-                        <Text style={{ fontSize: 8, color: '#6B7280', fontStyle: 'italic', marginTop: 3 }}>
-                          Hint: {roleGroup.hint}
+            {/* Practice Questions (QuestionTypes) */}
+            {lessonPlan.content.subjectContents.Math.practiceQuestions && lessonPlan.content.subjectContents.Math.practiceQuestions.length > 0 && (
+              <View style={{ marginBottom: 12 }}>
+                <Text style={{ fontSize: 10, fontWeight: 'bold', color: colors.gray[800], marginBottom: 8 }}>
+                  Practice Questions
+                </Text>
+                {lessonPlan.content.subjectContents.Math.practiceQuestions.map((question, idx) => (
+                  <View key={idx} style={[styles.challengeBox, { marginBottom: 8 }]}>
+                    <Text style={{ fontSize: 9, fontWeight: 'bold', color: colors.gray[900], marginBottom: 4 }}>
+                      Question {idx + 1} ({question.type})
+                    </Text>
+                    <Text style={{ fontSize: 9, color: colors.gray[700], marginBottom: 4 }}>
+                      {stripEmojis(question.question)}
+                    </Text>
+                    {(() => {
+                      // For counting questions without options, generate numeric options dynamically
+                      if (question.type === 'counting' && (!question.options || question.options.length === 0)) {
+                        const correctAnswer = typeof question.correct_answer === 'number' ? question.correct_answer : parseInt(question.correct_answer) || 3;
+                        // Generate 4 sequential options starting from correct_answer - 1 (or 1 if that's too low)
+                        const startNum = Math.max(1, correctAnswer - 1);
+                        const generatedOptions = [startNum, startNum + 1, startNum + 2, startNum + 3];
+
+                        return (
+                          <View style={{ marginLeft: 8, marginTop: 4 }}>
+                            {generatedOptions.map((num, optIdx) => (
+                              <Text key={optIdx} style={{ fontSize: 8, color: colors.gray[600], marginBottom: 2 }}>
+                                {String.fromCharCode(65 + optIdx)}) {num}
+                              </Text>
+                            ))}
+                          </View>
+                        );
+                      }
+
+                      // For regular questions with options array
+                      if (question.options && question.options.length > 0) {
+                        return (
+                          <View style={{ marginLeft: 8, marginTop: 4 }}>
+                            {question.options.map((option, optIdx) => (
+                              <Text key={optIdx} style={{ fontSize: 8, color: colors.gray[600], marginBottom: 2 }}>
+                                {String.fromCharCode(65 + optIdx)}) {convertShapeEmojiToText(option)}
+                              </Text>
+                            ))}
+                          </View>
+                        );
+                      }
+
+                      return null;
+                    })()}
+                    {question.hint && (
+                      <Text style={{ fontSize: 8, color: '#6B7280', fontStyle: 'italic', marginTop: 3 }}>
+                        Hint: {stripEmojis(question.hint)}
+                      </Text>
+                    )}
+                  </View>
+                ))}
+              </View>
+            )}
+
+            {/* Assessment Question */}
+            {lessonPlan.content.subjectContents.Math.assessmentQuestion && (
+              <View style={{ marginBottom: 12 }}>
+                <Text style={{ fontSize: 10, fontWeight: 'bold', color: colors.gray[800], marginBottom: 8 }}>
+                  Assessment
+                </Text>
+                <View style={[styles.challengeBox, { borderLeftColor: colors.warning, borderLeftWidth: 4 }]}>
+                  <Text style={{ fontSize: 9, fontWeight: 'bold', color: colors.gray[900], marginBottom: 4 }}>
+                    Assessment Question ({lessonPlan.content.subjectContents.Math.assessmentQuestion.type})
+                  </Text>
+                  <Text style={{ fontSize: 9, color: colors.gray[700], marginBottom: 4 }}>
+                    {stripEmojis(lessonPlan.content.subjectContents.Math.assessmentQuestion.question)}
+                  </Text>
+                  {lessonPlan.content.subjectContents.Math.assessmentQuestion.options && lessonPlan.content.subjectContents.Math.assessmentQuestion.options.length > 0 && (
+                    <View style={{ marginLeft: 8, marginTop: 4 }}>
+                      {lessonPlan.content.subjectContents.Math.assessmentQuestion.options.map((option, optIdx) => (
+                        <Text key={optIdx} style={{ fontSize: 8, color: colors.gray[600], marginBottom: 2 }}>
+                          {String.fromCharCode(65 + optIdx)}) {convertShapeEmojiToText(option)}
                         </Text>
-                      )}
+                      ))}
                     </View>
-                  ))}
+                  )}
                 </View>
-              ) : (
-                // Fallback for non-role-grouped challenges
-                <View key={roleIdx} style={styles.challengeBox}>
-                  <Text style={styles.challengeTitle}>
-                    {roleGroup.challenge_summary || `Activity ${roleIdx + 1}`}
+              </View>
+            )}
+
+            {/* ENRICHMENT: Real-World Applications for Math */}
+            {lessonPlan.content?.enrichment?.realWorldApplications?.math && (
+              <View style={{
+                backgroundColor: '#ECFDF5',
+                padding: 12,
+                borderRadius: 8,
+                marginTop: 12,
+                borderLeftWidth: 4,
+                borderLeftColor: '#10B981',
+                borderWidth: 1,
+                borderColor: '#A7F3D0'
+              }}>
+                <Text style={{ fontSize: 11, fontWeight: 'bold', color: '#065F46', marginBottom: 6 }}>
+                  How {lessonPlan.career.careerName}s Use Math Skills
+                </Text>
+                <View style={{ gap: 4 }}>
+                  <Text style={{ fontSize: 9, color: '#047857' }}>
+                    <Text style={{ fontWeight: 'bold' }}>Now: </Text>
+                    {lessonPlan.content.enrichment.realWorldApplications.math.immediate}
                   </Text>
-                  <Text style={styles.challengeContent}>
-                    {roleGroup.description || roleGroup.question || 'Math challenge involving counting and numbers'}
+                  <Text style={{ fontSize: 9, color: '#047857' }}>
+                    <Text style={{ fontWeight: 'bold' }}>Soon: </Text>
+                    {lessonPlan.content.enrichment.realWorldApplications.math.nearFuture}
+                  </Text>
+                  <Text style={{ fontSize: 9, color: '#047857' }}>
+                    <Text style={{ fontWeight: 'bold' }}>Future: </Text>
+                    {lessonPlan.content.enrichment.realWorldApplications.math.longTerm}
+                  </Text>
+                  <Text style={{ fontSize: 9, color: '#047857', fontStyle: 'italic', marginTop: 3, paddingTop: 3, borderTopWidth: 1, borderTopColor: '#A7F3D0' }}>
+                    {lessonPlan.content.enrichment.realWorldApplications.math.careerConnection}
                   </Text>
                 </View>
-              )
+              </View>
             )}
           </View>
         )}
@@ -507,44 +787,164 @@ export const UnifiedLessonPlanPDF = ({ lessonPlan }: { lessonPlan: any }) => {
               </View>
             )}
 
-            {/* Show ELA activities grouped by role */}
-            {lessonPlan.content.subjectContents.ELA.challenges.map((roleGroup, roleIdx) => (
-              roleGroup.isRoleGroup ? (
-                <View key={roleIdx} style={{ marginBottom: 12 }}>
-                  {/* Role Header */}
-                  <View style={{ backgroundColor: colors.gray[100], padding: 12, borderRadius: 8, marginBottom: 8 }}>
-                    <Text style={{...typography.small, fontWeight: 'bold', color: colors.gray[900] }}>
-                      {roleGroup.roleName}
+            {/* Instructional Video */}
+            {lessonPlan.content.subjectContents.ELA.video && (
+              <View style={{
+                marginBottom: 12,
+                backgroundColor: '#FEF3C7',
+                padding: 12,
+                borderRadius: 8,
+                borderLeft: '4px solid #F59E0B',
+                wrap: false
+              }}>
+                <Text style={{ fontSize: 10, fontWeight: 'bold', color: '#92400E', marginBottom: 6 }}>
+                  Instructional Video
+                </Text>
+                {lessonPlan.content.subjectContents.ELA.video.videoUrl ? (
+                  <>
+                    <Text style={{ fontSize: 9, color: '#78350F', marginBottom: 3 }}>
+                      <Text style={{ fontWeight: 'bold' }}>Title:</Text> {stripEmojis(lessonPlan.content.subjectContents.ELA.video.title)}
                     </Text>
-                  </View>
-
-                  {/* Role Activities */}
-                  {roleGroup.activities && roleGroup.activities.map((activity, actIdx) => (
-                    <View key={actIdx} style={[styles.challengeBox, { marginLeft: 16, marginBottom: 8 }]}>
-                      <Text style={styles.challengeContent}>
-                        {activity}
+                    {lessonPlan.content.subjectContents.ELA.video.channelTitle && (
+                      <Text style={{ fontSize: 8, color: '#92400E', marginBottom: 3 }}>
+                        <Text style={{ fontWeight: 'bold' }}>Channel:</Text> {lessonPlan.content.subjectContents.ELA.video.channelTitle}
                       </Text>
+                    )}
+                    {lessonPlan.content.subjectContents.ELA.video.duration && (
+                      <Text style={{ fontSize: 8, color: '#92400E', marginBottom: 3 }}>
+                        <Text style={{ fontWeight: 'bold' }}>Duration:</Text> {Math.floor(lessonPlan.content.subjectContents.ELA.video.duration / 60)}min {lessonPlan.content.subjectContents.ELA.video.duration % 60}sec
+                      </Text>
+                    )}
+                    <Text style={{ fontSize: 8, color: '#78350F', marginTop: 4, fontStyle: 'italic' }}>
+                      Your child will watch this educational video to learn the concept before practicing.
+                    </Text>
+                  </>
+                ) : (
+                  <Text style={{ fontSize: 9, color: '#92400E', fontStyle: 'italic' }}>
+                    {lessonPlan.content.subjectContents.ELA.video.fallbackMessage || 'Video content will be provided during the lesson'}
+                  </Text>
+                )}
+              </View>
+            )}
 
-                      {roleGroup.hint && actIdx === 0 && (
-                        <Text style={{ fontSize: 8, color: '#6B7280', fontStyle: 'italic', marginTop: 3 }}>
-                          Hint: {roleGroup.hint}
+            {/* Practice Questions (QuestionTypes) */}
+            {lessonPlan.content.subjectContents.ELA.practiceQuestions && lessonPlan.content.subjectContents.ELA.practiceQuestions.length > 0 && (
+              <View style={{ marginBottom: 12 }}>
+                <Text style={{ fontSize: 10, fontWeight: 'bold', color: colors.gray[800], marginBottom: 8 }}>
+                  Practice Questions
+                </Text>
+                {lessonPlan.content.subjectContents.ELA.practiceQuestions.map((question, idx) => (
+                  <View key={idx} style={[styles.challengeBox, { marginBottom: 8 }]}>
+                    <Text style={{ fontSize: 9, fontWeight: 'bold', color: colors.gray[900], marginBottom: 4 }}>
+                      Question {idx + 1} ({question.type})
+                    </Text>
+                    <Text style={{ fontSize: 9, color: colors.gray[700], marginBottom: 4 }}>
+                      {stripEmojis(question.question)}
+                    </Text>
+                    {(() => {
+                      // For counting questions without options, generate numeric options dynamically
+                      if (question.type === 'counting' && (!question.options || question.options.length === 0)) {
+                        const correctAnswer = typeof question.correct_answer === 'number' ? question.correct_answer : parseInt(question.correct_answer) || 3;
+                        // Generate 4 sequential options starting from correct_answer - 1 (or 1 if that's too low)
+                        const startNum = Math.max(1, correctAnswer - 1);
+                        const generatedOptions = [startNum, startNum + 1, startNum + 2, startNum + 3];
+
+                        return (
+                          <View style={{ marginLeft: 8, marginTop: 4 }}>
+                            {generatedOptions.map((num, optIdx) => (
+                              <Text key={optIdx} style={{ fontSize: 8, color: colors.gray[600], marginBottom: 2 }}>
+                                {String.fromCharCode(65 + optIdx)}) {num}
+                              </Text>
+                            ))}
+                          </View>
+                        );
+                      }
+
+                      // For regular questions with options array
+                      if (question.options && question.options.length > 0) {
+                        return (
+                          <View style={{ marginLeft: 8, marginTop: 4 }}>
+                            {question.options.map((option, optIdx) => (
+                              <Text key={optIdx} style={{ fontSize: 8, color: colors.gray[600], marginBottom: 2 }}>
+                                {String.fromCharCode(65 + optIdx)}) {convertShapeEmojiToText(option)}
+                              </Text>
+                            ))}
+                          </View>
+                        );
+                      }
+
+                      return null;
+                    })()}
+                    {question.hint && (
+                      <Text style={{ fontSize: 8, color: '#6B7280', fontStyle: 'italic', marginTop: 3 }}>
+                        Hint: {stripEmojis(question.hint)}
+                      </Text>
+                    )}
+                  </View>
+                ))}
+              </View>
+            )}
+
+            {/* Assessment Question */}
+            {lessonPlan.content.subjectContents.ELA.assessmentQuestion && (
+              <View style={{ marginBottom: 12 }}>
+                <Text style={{ fontSize: 10, fontWeight: 'bold', color: colors.gray[800], marginBottom: 8 }}>
+                  Assessment
+                </Text>
+                <View style={[styles.challengeBox, { borderLeftColor: colors.warning, borderLeftWidth: 4 }]}>
+                  <Text style={{ fontSize: 9, fontWeight: 'bold', color: colors.gray[900], marginBottom: 4 }}>
+                    Assessment Question ({lessonPlan.content.subjectContents.ELA.assessmentQuestion.type})
+                  </Text>
+                  <Text style={{ fontSize: 9, color: colors.gray[700], marginBottom: 4 }}>
+                    {stripEmojis(lessonPlan.content.subjectContents.ELA.assessmentQuestion.question)}
+                  </Text>
+                  {lessonPlan.content.subjectContents.ELA.assessmentQuestion.options && lessonPlan.content.subjectContents.ELA.assessmentQuestion.options.length > 0 && (
+                    <View style={{ marginLeft: 8, marginTop: 4 }}>
+                      {lessonPlan.content.subjectContents.ELA.assessmentQuestion.options.map((option, optIdx) => (
+                        <Text key={optIdx} style={{ fontSize: 8, color: colors.gray[600], marginBottom: 2 }}>
+                          {String.fromCharCode(65 + optIdx)}) {convertShapeEmojiToText(option)}
                         </Text>
-                      )}
+                      ))}
                     </View>
-                  ))}
+                  )}
                 </View>
-              ) : (
-                // Fallback for non-role-grouped challenges
-                <View key={roleIdx} style={styles.challengeBox}>
-                  <Text style={styles.challengeTitle}>
-                    {roleGroup.challenge_summary || `Activity ${roleIdx + 1}`}
+              </View>
+            )}
+
+            {/* ENRICHMENT: Real-World Applications for ELA */}
+            {lessonPlan.content?.enrichment?.realWorldApplications?.ela && (
+              <View style={{
+                backgroundColor: '#ECFDF5',
+                padding: 12,
+                borderRadius: 8,
+                marginTop: 12,
+                borderLeftWidth: 4,
+                borderLeftColor: '#10B981',
+                borderWidth: 1,
+                borderColor: '#A7F3D0'
+              }}>
+                <Text style={{ fontSize: 11, fontWeight: 'bold', color: '#065F46', marginBottom: 6 }}>
+                  How {lessonPlan.career.careerName}s Use Reading & Writing Skills
+                </Text>
+                <View style={{ gap: 4 }}>
+                  <Text style={{ fontSize: 9, color: '#047857' }}>
+                    <Text style={{ fontWeight: 'bold' }}>Now: </Text>
+                    {lessonPlan.content.enrichment.realWorldApplications.ela.immediate}
                   </Text>
-                  <Text style={styles.challengeContent}>
-                    {roleGroup.description || roleGroup.question || 'Language arts challenge with letters and words'}
+                  <Text style={{ fontSize: 9, color: '#047857' }}>
+                    <Text style={{ fontWeight: 'bold' }}>Soon: </Text>
+                    {lessonPlan.content.enrichment.realWorldApplications.ela.nearFuture}
+                  </Text>
+                  <Text style={{ fontSize: 9, color: '#047857' }}>
+                    <Text style={{ fontWeight: 'bold' }}>Future: </Text>
+                    {lessonPlan.content.enrichment.realWorldApplications.ela.longTerm}
+                  </Text>
+                  <Text style={{ fontSize: 9, color: '#047857', fontStyle: 'italic', marginTop: 3, paddingTop: 3, borderTopWidth: 1, borderTopColor: '#A7F3D0' }}>
+                    {lessonPlan.content.enrichment.realWorldApplications.ela.careerConnection}
                   </Text>
                 </View>
-              )
-            ))}
+              </View>
+            )}
           </View>
         )}
 
@@ -592,44 +992,164 @@ export const UnifiedLessonPlanPDF = ({ lessonPlan }: { lessonPlan: any }) => {
               </View>
             )}
 
-            {/* Show Science activities grouped by role */}
-            {lessonPlan.content.subjectContents.Science.challenges.map((roleGroup, roleIdx) => (
-              roleGroup.isRoleGroup ? (
-                <View key={roleIdx} style={{ marginBottom: 12 }}>
-                  {/* Role Header */}
-                  <View style={{ backgroundColor: colors.gray[100], padding: 12, borderRadius: 8, marginBottom: 8 }}>
-                    <Text style={{...typography.small, fontWeight: 'bold', color: colors.gray[900] }}>
-                      {roleGroup.roleName}
+            {/* Instructional Video */}
+            {lessonPlan.content.subjectContents.Science.video && (
+              <View style={{
+                marginBottom: 12,
+                backgroundColor: '#FEF3C7',
+                padding: 12,
+                borderRadius: 8,
+                borderLeft: '4px solid #F59E0B',
+                wrap: false
+              }}>
+                <Text style={{ fontSize: 10, fontWeight: 'bold', color: '#92400E', marginBottom: 6 }}>
+                  Instructional Video
+                </Text>
+                {lessonPlan.content.subjectContents.Science.video.videoUrl ? (
+                  <>
+                    <Text style={{ fontSize: 9, color: '#78350F', marginBottom: 3 }}>
+                      <Text style={{ fontWeight: 'bold' }}>Title:</Text> {stripEmojis(lessonPlan.content.subjectContents.Science.video.title)}
                     </Text>
-                  </View>
-
-                  {/* Role Activities */}
-                  {roleGroup.activities && roleGroup.activities.map((activity, actIdx) => (
-                    <View key={actIdx} style={[styles.challengeBox, { marginLeft: 16, marginBottom: 8 }]}>
-                      <Text style={styles.challengeContent}>
-                        {activity}
+                    {lessonPlan.content.subjectContents.Science.video.channelTitle && (
+                      <Text style={{ fontSize: 8, color: '#92400E', marginBottom: 3 }}>
+                        <Text style={{ fontWeight: 'bold' }}>Channel:</Text> {lessonPlan.content.subjectContents.Science.video.channelTitle}
                       </Text>
+                    )}
+                    {lessonPlan.content.subjectContents.Science.video.duration && (
+                      <Text style={{ fontSize: 8, color: '#92400E', marginBottom: 3 }}>
+                        <Text style={{ fontWeight: 'bold' }}>Duration:</Text> {Math.floor(lessonPlan.content.subjectContents.Science.video.duration / 60)}min {lessonPlan.content.subjectContents.Science.video.duration % 60}sec
+                      </Text>
+                    )}
+                    <Text style={{ fontSize: 8, color: '#78350F', marginTop: 4, fontStyle: 'italic' }}>
+                      Your child will watch this educational video to learn the concept before practicing.
+                    </Text>
+                  </>
+                ) : (
+                  <Text style={{ fontSize: 9, color: '#92400E', fontStyle: 'italic' }}>
+                    {lessonPlan.content.subjectContents.Science.video.fallbackMessage || 'Video content will be provided during the lesson'}
+                  </Text>
+                )}
+              </View>
+            )}
 
-                      {roleGroup.hint && actIdx === 0 && (
-                        <Text style={{ fontSize: 8, color: '#6B7280', fontStyle: 'italic', marginTop: 3 }}>
-                          Hint: {roleGroup.hint}
+            {/* Practice Questions (QuestionTypes) */}
+            {lessonPlan.content.subjectContents.Science.practiceQuestions && lessonPlan.content.subjectContents.Science.practiceQuestions.length > 0 && (
+              <View style={{ marginBottom: 12 }}>
+                <Text style={{ fontSize: 10, fontWeight: 'bold', color: colors.gray[800], marginBottom: 8 }}>
+                  Practice Questions
+                </Text>
+                {lessonPlan.content.subjectContents.Science.practiceQuestions.map((question, idx) => (
+                  <View key={idx} style={[styles.challengeBox, { marginBottom: 8 }]}>
+                    <Text style={{ fontSize: 9, fontWeight: 'bold', color: colors.gray[900], marginBottom: 4 }}>
+                      Question {idx + 1} ({question.type})
+                    </Text>
+                    <Text style={{ fontSize: 9, color: colors.gray[700], marginBottom: 4 }}>
+                      {stripEmojis(question.question)}
+                    </Text>
+                    {(() => {
+                      // For counting questions without options, generate numeric options dynamically
+                      if (question.type === 'counting' && (!question.options || question.options.length === 0)) {
+                        const correctAnswer = typeof question.correct_answer === 'number' ? question.correct_answer : parseInt(question.correct_answer) || 3;
+                        // Generate 4 sequential options starting from correct_answer - 1 (or 1 if that's too low)
+                        const startNum = Math.max(1, correctAnswer - 1);
+                        const generatedOptions = [startNum, startNum + 1, startNum + 2, startNum + 3];
+
+                        return (
+                          <View style={{ marginLeft: 8, marginTop: 4 }}>
+                            {generatedOptions.map((num, optIdx) => (
+                              <Text key={optIdx} style={{ fontSize: 8, color: colors.gray[600], marginBottom: 2 }}>
+                                {String.fromCharCode(65 + optIdx)}) {num}
+                              </Text>
+                            ))}
+                          </View>
+                        );
+                      }
+
+                      // For regular questions with options array
+                      if (question.options && question.options.length > 0) {
+                        return (
+                          <View style={{ marginLeft: 8, marginTop: 4 }}>
+                            {question.options.map((option, optIdx) => (
+                              <Text key={optIdx} style={{ fontSize: 8, color: colors.gray[600], marginBottom: 2 }}>
+                                {String.fromCharCode(65 + optIdx)}) {convertShapeEmojiToText(option)}
+                              </Text>
+                            ))}
+                          </View>
+                        );
+                      }
+
+                      return null;
+                    })()}
+                    {question.hint && (
+                      <Text style={{ fontSize: 8, color: '#6B7280', fontStyle: 'italic', marginTop: 3 }}>
+                        Hint: {stripEmojis(question.hint)}
+                      </Text>
+                    )}
+                  </View>
+                ))}
+              </View>
+            )}
+
+            {/* Assessment Question */}
+            {lessonPlan.content.subjectContents.Science.assessmentQuestion && (
+              <View style={{ marginBottom: 12 }}>
+                <Text style={{ fontSize: 10, fontWeight: 'bold', color: colors.gray[800], marginBottom: 8 }}>
+                  Assessment
+                </Text>
+                <View style={[styles.challengeBox, { borderLeftColor: colors.warning, borderLeftWidth: 4 }]}>
+                  <Text style={{ fontSize: 9, fontWeight: 'bold', color: colors.gray[900], marginBottom: 4 }}>
+                    Assessment Question ({lessonPlan.content.subjectContents.Science.assessmentQuestion.type})
+                  </Text>
+                  <Text style={{ fontSize: 9, color: colors.gray[700], marginBottom: 4 }}>
+                    {stripEmojis(lessonPlan.content.subjectContents.Science.assessmentQuestion.question)}
+                  </Text>
+                  {lessonPlan.content.subjectContents.Science.assessmentQuestion.options && lessonPlan.content.subjectContents.Science.assessmentQuestion.options.length > 0 && (
+                    <View style={{ marginLeft: 8, marginTop: 4 }}>
+                      {lessonPlan.content.subjectContents.Science.assessmentQuestion.options.map((option, optIdx) => (
+                        <Text key={optIdx} style={{ fontSize: 8, color: colors.gray[600], marginBottom: 2 }}>
+                          {String.fromCharCode(65 + optIdx)}) {convertShapeEmojiToText(option)}
                         </Text>
-                      )}
+                      ))}
                     </View>
-                  ))}
+                  )}
                 </View>
-              ) : (
-                // Fallback for non-role-grouped challenges
-                <View key={roleIdx} style={styles.challengeBox}>
-                  <Text style={styles.challengeTitle}>
-                    {roleGroup.challenge_summary || `Activity ${roleIdx + 1}`}
+              </View>
+            )}
+
+            {/* ENRICHMENT: Real-World Applications for Science */}
+            {lessonPlan.content?.enrichment?.realWorldApplications?.science && (
+              <View style={{
+                backgroundColor: '#ECFDF5',
+                padding: 12,
+                borderRadius: 8,
+                marginTop: 12,
+                borderLeftWidth: 4,
+                borderLeftColor: '#10B981',
+                borderWidth: 1,
+                borderColor: '#A7F3D0'
+              }}>
+                <Text style={{ fontSize: 11, fontWeight: 'bold', color: '#065F46', marginBottom: 6 }}>
+                  How {lessonPlan.career.careerName}s Use Science Skills
+                </Text>
+                <View style={{ gap: 4 }}>
+                  <Text style={{ fontSize: 9, color: '#047857' }}>
+                    <Text style={{ fontWeight: 'bold' }}>Now: </Text>
+                    {lessonPlan.content.enrichment.realWorldApplications.science.immediate}
                   </Text>
-                  <Text style={styles.challengeContent}>
-                    {roleGroup.description || roleGroup.question || 'Science exploration with shapes and patterns'}
+                  <Text style={{ fontSize: 9, color: '#047857' }}>
+                    <Text style={{ fontWeight: 'bold' }}>Soon: </Text>
+                    {lessonPlan.content.enrichment.realWorldApplications.science.nearFuture}
+                  </Text>
+                  <Text style={{ fontSize: 9, color: '#047857' }}>
+                    <Text style={{ fontWeight: 'bold' }}>Future: </Text>
+                    {lessonPlan.content.enrichment.realWorldApplications.science.longTerm}
+                  </Text>
+                  <Text style={{ fontSize: 9, color: '#047857', fontStyle: 'italic', marginTop: 3, paddingTop: 3, borderTopWidth: 1, borderTopColor: '#A7F3D0' }}>
+                    {lessonPlan.content.enrichment.realWorldApplications.science.careerConnection}
                   </Text>
                 </View>
-              )
-            ))}
+              </View>
+            )}
           </View>
         )}
 
@@ -656,44 +1176,164 @@ export const UnifiedLessonPlanPDF = ({ lessonPlan }: { lessonPlan: any }) => {
               </View>
             )}
 
-            {/* Show Social Studies activities grouped by role */}
-            {lessonPlan.content.subjectContents['Social Studies'].challenges.map((roleGroup, roleIdx) => (
-              roleGroup.isRoleGroup ? (
-                <View key={roleIdx} style={{ marginBottom: 12 }}>
-                  {/* Role Header */}
-                  <View style={{ backgroundColor: colors.gray[100], padding: 12, borderRadius: 8, marginBottom: 8 }}>
-                    <Text style={{...typography.small, fontWeight: 'bold', color: colors.gray[900] }}>
-                      {roleGroup.roleName}
+            {/* Instructional Video */}
+            {lessonPlan.content.subjectContents['Social Studies'].video && (
+              <View style={{
+                marginBottom: 12,
+                backgroundColor: '#FEF3C7',
+                padding: 12,
+                borderRadius: 8,
+                borderLeft: '4px solid #F59E0B',
+                wrap: false
+              }}>
+                <Text style={{ fontSize: 10, fontWeight: 'bold', color: '#92400E', marginBottom: 6 }}>
+                  Instructional Video
+                </Text>
+                {lessonPlan.content.subjectContents['Social Studies'].video.videoUrl ? (
+                  <>
+                    <Text style={{ fontSize: 9, color: '#78350F', marginBottom: 3 }}>
+                      <Text style={{ fontWeight: 'bold' }}>Title:</Text> {stripEmojis(lessonPlan.content.subjectContents['Social Studies'].video.title)}
                     </Text>
-                  </View>
-
-                  {/* Role Activities */}
-                  {roleGroup.activities && roleGroup.activities.map((activity, actIdx) => (
-                    <View key={actIdx} style={[styles.challengeBox, { marginLeft: 16, marginBottom: 8 }]}>
-                      <Text style={styles.challengeContent}>
-                        {activity}
+                    {lessonPlan.content.subjectContents['Social Studies'].video.channelTitle && (
+                      <Text style={{ fontSize: 8, color: '#92400E', marginBottom: 3 }}>
+                        <Text style={{ fontWeight: 'bold' }}>Channel:</Text> {lessonPlan.content.subjectContents['Social Studies'].video.channelTitle}
                       </Text>
+                    )}
+                    {lessonPlan.content.subjectContents['Social Studies'].video.duration && (
+                      <Text style={{ fontSize: 8, color: '#92400E', marginBottom: 3 }}>
+                        <Text style={{ fontWeight: 'bold' }}>Duration:</Text> {Math.floor(lessonPlan.content.subjectContents['Social Studies'].video.duration / 60)}min {lessonPlan.content.subjectContents['Social Studies'].video.duration % 60}sec
+                      </Text>
+                    )}
+                    <Text style={{ fontSize: 8, color: '#78350F', marginTop: 4, fontStyle: 'italic' }}>
+                      Your child will watch this educational video to learn the concept before practicing.
+                    </Text>
+                  </>
+                ) : (
+                  <Text style={{ fontSize: 9, color: '#92400E', fontStyle: 'italic' }}>
+                    {lessonPlan.content.subjectContents['Social Studies'].video.fallbackMessage || 'Video content will be provided during the lesson'}
+                  </Text>
+                )}
+              </View>
+            )}
 
-                      {roleGroup.hint && actIdx === 0 && (
-                        <Text style={{ fontSize: 8, color: '#6B7280', fontStyle: 'italic', marginTop: 3 }}>
-                          Hint: {roleGroup.hint}
+            {/* Practice Questions (QuestionTypes) */}
+            {lessonPlan.content.subjectContents['Social Studies'].practiceQuestions && lessonPlan.content.subjectContents['Social Studies'].practiceQuestions.length > 0 && (
+              <View style={{ marginBottom: 12 }}>
+                <Text style={{ fontSize: 10, fontWeight: 'bold', color: colors.gray[800], marginBottom: 8 }}>
+                  Practice Questions
+                </Text>
+                {lessonPlan.content.subjectContents['Social Studies'].practiceQuestions.map((question, idx) => (
+                  <View key={idx} style={[styles.challengeBox, { marginBottom: 8 }]}>
+                    <Text style={{ fontSize: 9, fontWeight: 'bold', color: colors.gray[900], marginBottom: 4 }}>
+                      Question {idx + 1} ({question.type})
+                    </Text>
+                    <Text style={{ fontSize: 9, color: colors.gray[700], marginBottom: 4 }}>
+                      {stripEmojis(question.question)}
+                    </Text>
+                    {(() => {
+                      // For counting questions without options, generate numeric options dynamically
+                      if (question.type === 'counting' && (!question.options || question.options.length === 0)) {
+                        const correctAnswer = typeof question.correct_answer === 'number' ? question.correct_answer : parseInt(question.correct_answer) || 3;
+                        // Generate 4 sequential options starting from correct_answer - 1 (or 1 if that's too low)
+                        const startNum = Math.max(1, correctAnswer - 1);
+                        const generatedOptions = [startNum, startNum + 1, startNum + 2, startNum + 3];
+
+                        return (
+                          <View style={{ marginLeft: 8, marginTop: 4 }}>
+                            {generatedOptions.map((num, optIdx) => (
+                              <Text key={optIdx} style={{ fontSize: 8, color: colors.gray[600], marginBottom: 2 }}>
+                                {String.fromCharCode(65 + optIdx)}) {num}
+                              </Text>
+                            ))}
+                          </View>
+                        );
+                      }
+
+                      // For regular questions with options array
+                      if (question.options && question.options.length > 0) {
+                        return (
+                          <View style={{ marginLeft: 8, marginTop: 4 }}>
+                            {question.options.map((option, optIdx) => (
+                              <Text key={optIdx} style={{ fontSize: 8, color: colors.gray[600], marginBottom: 2 }}>
+                                {String.fromCharCode(65 + optIdx)}) {convertShapeEmojiToText(option)}
+                              </Text>
+                            ))}
+                          </View>
+                        );
+                      }
+
+                      return null;
+                    })()}
+                    {question.hint && (
+                      <Text style={{ fontSize: 8, color: '#6B7280', fontStyle: 'italic', marginTop: 3 }}>
+                        Hint: {stripEmojis(question.hint)}
+                      </Text>
+                    )}
+                  </View>
+                ))}
+              </View>
+            )}
+
+            {/* Assessment Question */}
+            {lessonPlan.content.subjectContents['Social Studies'].assessmentQuestion && (
+              <View style={{ marginBottom: 12 }}>
+                <Text style={{ fontSize: 10, fontWeight: 'bold', color: colors.gray[800], marginBottom: 8 }}>
+                  Assessment
+                </Text>
+                <View style={[styles.challengeBox, { borderLeftColor: colors.warning, borderLeftWidth: 4 }]}>
+                  <Text style={{ fontSize: 9, fontWeight: 'bold', color: colors.gray[900], marginBottom: 4 }}>
+                    Assessment Question ({lessonPlan.content.subjectContents['Social Studies'].assessmentQuestion.type})
+                  </Text>
+                  <Text style={{ fontSize: 9, color: colors.gray[700], marginBottom: 4 }}>
+                    {stripEmojis(lessonPlan.content.subjectContents['Social Studies'].assessmentQuestion.question)}
+                  </Text>
+                  {lessonPlan.content.subjectContents['Social Studies'].assessmentQuestion.options && lessonPlan.content.subjectContents['Social Studies'].assessmentQuestion.options.length > 0 && (
+                    <View style={{ marginLeft: 8, marginTop: 4 }}>
+                      {lessonPlan.content.subjectContents['Social Studies'].assessmentQuestion.options.map((option, optIdx) => (
+                        <Text key={optIdx} style={{ fontSize: 8, color: colors.gray[600], marginBottom: 2 }}>
+                          {String.fromCharCode(65 + optIdx)}) {convertShapeEmojiToText(option)}
                         </Text>
-                      )}
+                      ))}
                     </View>
-                  ))}
+                  )}
                 </View>
-              ) : (
-                // Fallback for non-role-grouped challenges
-                <View key={roleIdx} style={styles.challengeBox}>
-                  <Text style={styles.challengeTitle}>
-                    {roleGroup.challenge_summary || `Activity ${roleIdx + 1}`}
+              </View>
+            )}
+
+            {/* ENRICHMENT: Real-World Applications for Social Studies */}
+            {lessonPlan.content?.enrichment?.realWorldApplications?.socialstudies && (
+              <View style={{
+                backgroundColor: '#ECFDF5',
+                padding: 12,
+                borderRadius: 8,
+                marginTop: 12,
+                borderLeftWidth: 4,
+                borderLeftColor: '#10B981',
+                borderWidth: 1,
+                borderColor: '#A7F3D0'
+              }}>
+                <Text style={{ fontSize: 11, fontWeight: 'bold', color: '#065F46', marginBottom: 6 }}>
+                  How {lessonPlan.career.careerName}s Use Social Studies Skills
+                </Text>
+                <View style={{ gap: 4 }}>
+                  <Text style={{ fontSize: 9, color: '#047857' }}>
+                    <Text style={{ fontWeight: 'bold' }}>Now: </Text>
+                    {lessonPlan.content.enrichment.realWorldApplications.socialstudies.immediate}
                   </Text>
-                  <Text style={styles.challengeContent}>
-                    {roleGroup.description || roleGroup.question || 'Community and social skills practice'}
+                  <Text style={{ fontSize: 9, color: '#047857' }}>
+                    <Text style={{ fontWeight: 'bold' }}>Soon: </Text>
+                    {lessonPlan.content.enrichment.realWorldApplications.socialstudies.nearFuture}
+                  </Text>
+                  <Text style={{ fontSize: 9, color: '#047857' }}>
+                    <Text style={{ fontWeight: 'bold' }}>Future: </Text>
+                    {lessonPlan.content.enrichment.realWorldApplications.socialstudies.longTerm}
+                  </Text>
+                  <Text style={{ fontSize: 9, color: '#047857', fontStyle: 'italic', marginTop: 3, paddingTop: 3, borderTopWidth: 1, borderTopColor: '#A7F3D0' }}>
+                    {lessonPlan.content.enrichment.realWorldApplications.socialstudies.careerConnection}
                   </Text>
                 </View>
-              )
-            ))}
+              </View>
+            )}
           </View>
         )}
 
@@ -746,59 +1386,328 @@ export const UnifiedLessonPlanPDF = ({ lessonPlan }: { lessonPlan: any }) => {
       <Page size="A4" style={styles.page}>
         <Text style={styles.title}>Extension Activities & Resources</Text>
 
-        {/* Discover Challenges Section */}
+        {/* Experience Scenarios Section - PREMIUM DESIGN */}
         <View style={styles.section}>
-          <View style={styles.sectionTitle}>
-            <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#1F2937' }}>Discover Challenges</Text>
+          {/* Premium Section Header */}
+          <View style={{
+            backgroundColor: '#6366F1',
+            padding: 12,
+            borderRadius: 8,
+            marginBottom: 12,
+            wrap: false  // Keep section header together
+          }}>
+            <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#FFFFFF', marginBottom: 3 }}>
+              EXPERIENCE: Real-World Roleplay
+            </Text>
+            <Text style={{ fontSize: 9, color: '#E0E7FF' }}>
+              Use newly learned skills in narrative workplace scenarios • Make workday decisions
+            </Text>
           </View>
 
-          <View style={{ backgroundColor: '#FEF3C7', padding: 10, borderRadius: 6, marginBottom: 8 }}>
-            <Text style={{ fontSize: 11, fontWeight: 'bold', color: '#78350F', marginBottom: 4 }}>
-              {lessonPlan.career.careerName} Explorer
-            </Text>
-            <Text style={{ fontSize: 9, color: '#92400E' }}>
-              Visit a virtual {lessonPlan.career.careerName} location and find 3 ways that {lessonPlan.career.careerName}s use
-              the skills you learned today. Draw or write about what you discovered!
-            </Text>
-          </View>
+          {/* Story Title & Context */}
+          {lessonPlan.content.subjectContents.Math?.interactive_simulation?.experience?.aiSourceContent?.title && (
+            <View style={{
+              backgroundColor: '#EEF2FF',
+              padding: 10,
+              borderRadius: 6,
+              marginBottom: 8,
+              borderLeft: '4px solid #818CF8',
+              wrap: false  // Keep story context together
+            }}>
+              <Text style={{ fontSize: 12, fontWeight: 'bold', color: '#3730A3', marginBottom: 3 }}>
+                {lessonPlan.content.subjectContents.Math.interactive_simulation.experience.aiSourceContent.title}
+              </Text>
+              {lessonPlan.content.subjectContents.Math?.interactive_simulation?.experience?.aiSourceContent?.scenario && (
+                <Text style={{ fontSize: 9, color: '#4C1D95', lineHeight: 1.4 }}>
+                  {lessonPlan.content.subjectContents.Math.interactive_simulation.experience.aiSourceContent.scenario}
+                </Text>
+              )}
+            </View>
+          )}
 
-          <View style={{ backgroundColor: '#FEF3C7', padding: 10, borderRadius: 6 }}>
-            <Text style={{ fontSize: 11, fontWeight: 'bold', color: '#78350F', marginBottom: 4 }}>
-              Community Helper Hunt
-            </Text>
-            <Text style={{ fontSize: 9, color: '#92400E' }}>
-              Look for {lessonPlan.career.careerName}s in your community this week. When you see one,
-              think about how they might be using today's skills in their work.
-            </Text>
-          </View>
+          {/* Setting the Scene */}
+          {lessonPlan.content.subjectContents.Math?.interactive_simulation?.experience?.instructions && (
+            <View style={{
+              backgroundColor: '#F5F3FF',
+              padding: 10,
+              borderRadius: 6,
+              marginBottom: 12,
+              borderLeft: '3px solid #A78BFA',
+              wrap: false  // Keep mission together
+            }}>
+              <Text style={{ fontSize: 8, fontWeight: 'bold', color: '#5B21B6', marginBottom: 3, textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                YOUR MISSION
+              </Text>
+              <Text style={{ fontSize: 9, color: '#6B21A8', lineHeight: 1.3 }}>
+                {lessonPlan.content.subjectContents.Math.interactive_simulation.experience.instructions}
+              </Text>
+            </View>
+          )}
+
+          {/* Interactive Challenges - Premium Cards */}
+          {lessonPlan.content.subjectContents.Math?.experienceScenarios?.map((scenario: any, idx: number) => (
+            <View key={idx} style={{
+              backgroundColor: '#FFFFFF',
+              padding: 12,
+              borderRadius: 8,
+              marginBottom: 10,
+              border: '2px solid #C7D2FE',
+              boxShadow: '0 2px 4px rgba(99, 102, 241, 0.1)',
+              wrap: false  // Keep challenge card together
+            }}>
+              {/* Challenge Header */}
+              <View style={{
+                backgroundColor: '#E0E7FF',
+                padding: 8,
+                borderRadius: 6,
+                marginBottom: 8
+              }}>
+                <Text style={{ fontSize: 11, fontWeight: 'bold', color: '#312E81' }}>
+                  Challenge {idx + 1}: {scenario.challenge_summary || 'Make Your Decision'}
+                </Text>
+              </View>
+
+              {/* Scenario Question */}
+              <Text style={{ fontSize: 10, color: '#1E1B4B', marginBottom: 8, lineHeight: 1.4 }}>
+                {stripEmojis(scenario.description || scenario.question)}
+              </Text>
+
+              {/* Decision Options */}
+              {scenario.options && scenario.options.length > 0 && (
+                <View style={{ marginBottom: 8 }}>
+                  <Text style={{ fontSize: 8, fontWeight: 'bold', color: '#4338CA', marginBottom: 4, textTransform: 'uppercase', letterSpacing: 0.3 }}>
+                    Choose Your Action:
+                  </Text>
+                  {scenario.options.map((option: string, optIdx: number) => (
+                    <View key={optIdx} style={{
+                      backgroundColor: optIdx === scenario.correct_choice ? '#DBEAFE' : '#F3F4F6',
+                      padding: 6,
+                      borderRadius: 4,
+                      marginBottom: 3,
+                      borderLeft: optIdx === scenario.correct_choice ? '3px solid #3B82F6' : '3px solid #D1D5DB'
+                    }}>
+                      <Text style={{ fontSize: 9, color: '#374151' }}>
+                        {String.fromCharCode(65 + optIdx)}) {convertShapeEmojiToText(option)}
+                      </Text>
+                    </View>
+                  ))}
+                </View>
+              )}
+
+              {/* Hint */}
+              {scenario.hint && (
+                <View style={{ backgroundColor: '#FEF3C7', padding: 6, borderRadius: 4, marginBottom: 6 }}>
+                  <Text style={{ fontSize: 8, color: '#92400E' }}>
+                    <Text style={{ fontWeight: 'bold' }}>Hint:</Text> {stripEmojis(scenario.hint)}
+                  </Text>
+                </View>
+              )}
+
+              {/* Outcome & Learning */}
+              <View style={{ borderTop: '1px solid #E5E7EB', paddingTop: 6, marginTop: 4 }}>
+                {scenario.outcome && (
+                  <Text style={{ fontSize: 8, color: '#059669', marginBottom: 3, lineHeight: 1.3 }}>
+                    <Text style={{ fontWeight: 'bold' }}>Outcome:</Text> {stripEmojis(scenario.outcome)}
+                  </Text>
+                )}
+                {scenario.learning_point && (
+                  <Text style={{ fontSize: 8, color: '#7C3AED', fontWeight: 'bold', lineHeight: 1.3 }}>
+                    <Text style={{ fontWeight: 'normal' }}>Key Learning:</Text> {stripEmojis(scenario.learning_point)}
+                  </Text>
+                )}
+              </View>
+            </View>
+          ))}
+
+          {/* Fallback if no scenarios generated */}
+          {(!lessonPlan.content.subjectContents.Math?.experienceScenarios || lessonPlan.content.subjectContents.Math.experienceScenarios.length === 0) && (
+            <>
+              <View style={{ backgroundColor: '#E0E7FF', padding: 10, borderRadius: 6, marginBottom: 8 }}>
+                <Text style={{ fontSize: 11, fontWeight: 'bold', color: '#312E81', marginBottom: 4 }}>
+                  A Day as a {lessonPlan.career.careerName}
+                </Text>
+                <Text style={{ fontSize: 9, color: '#4C1D95' }}>
+                  Imagine you're a {lessonPlan.career.careerName} today! You need to use all the skills you learned
+                  to help your customers. Let's practice by organizing your workspace and helping
+                  three customers with their needs.
+                </Text>
+              </View>
+
+              <View style={{ backgroundColor: '#E0E7FF', padding: 10, borderRadius: 6 }}>
+                <Text style={{ fontSize: 11, fontWeight: 'bold', color: '#312E81', marginBottom: 4 }}>
+                  {lessonPlan.career.careerName}'s Problem Solving
+                </Text>
+                <Text style={{ fontSize: 9, color: '#4C1D95' }}>
+                  Oh no! A {lessonPlan.career.careerName} has a challenge that needs your help. Can you solve it?
+                  Work through the problem step by step using what you've learned.
+                </Text>
+              </View>
+            </>
+          )}
         </View>
 
-        {/* Experience Scenarios Section */}
+        {/* Discover Challenges Section - PREMIUM DESIGN */}
         <View style={styles.section}>
-          <View style={styles.sectionTitle}>
-            <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#1F2937' }}>Experience Scenarios</Text>
+          {/* Premium Section Header */}
+          <View style={{
+            backgroundColor: '#F59E0B',
+            padding: 12,
+            borderRadius: 8,
+            marginBottom: 12,
+            wrap: false  // Keep section header together
+          }}>
+            <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#FFFFFF', marginBottom: 3 }}>
+              DISCOVER: Curiosity-Driven Exploration
+            </Text>
+            <Text style={{ fontSize: 9, color: '#FEF3C7' }}>
+              Discover surprising ways careers use newly learned skills • Spark wonder and curiosity
+            </Text>
           </View>
 
-          <View style={{ backgroundColor: '#E0E7FF', padding: 10, borderRadius: 6, marginBottom: 8 }}>
-            <Text style={{ fontSize: 11, fontWeight: 'bold', color: '#312E81', marginBottom: 4 }}>
-              A Day as a {lessonPlan.career.careerName}
-            </Text>
-            <Text style={{ fontSize: 9, color: '#4C1D95' }}>
-              Imagine you're a {lessonPlan.career.careerName} today! You need to use all the skills you learned
-              to help your customers. Let's practice by organizing your workspace and helping
-              three customers with their needs.
-            </Text>
-          </View>
+          {/* Field Trip Title & Theme */}
+          {lessonPlan.content.subjectContents.Math?.interactive_simulation?.discover?.aiSourceContent?.title && (
+            <View style={{
+              backgroundColor: '#FFFBEB',
+              padding: 10,
+              borderRadius: 6,
+              marginBottom: 8,
+              borderLeft: '4px solid #FBBF24',
+              wrap: false  // Keep field trip title together
+            }}>
+              <Text style={{ fontSize: 12, fontWeight: 'bold', color: '#92400E', marginBottom: 3 }}>
+                {lessonPlan.content.subjectContents.Math.interactive_simulation.discover.aiSourceContent.title}
+              </Text>
+              {lessonPlan.content.subjectContents.Math?.interactive_simulation?.discover?.aiSourceContent?.exploration_theme && (
+                <Text style={{ fontSize: 9, color: '#B45309', lineHeight: 1.4, fontStyle: 'italic' }}>
+                  {lessonPlan.content.subjectContents.Math.interactive_simulation.discover.aiSourceContent.exploration_theme}
+                </Text>
+              )}
+            </View>
+          )}
 
-          <View style={{ backgroundColor: '#E0E7FF', padding: 10, borderRadius: 6 }}>
-            <Text style={{ fontSize: 11, fontWeight: 'bold', color: '#312E81', marginBottom: 4 }}>
-              {lessonPlan.career.careerName}'s Problem Solving
-            </Text>
-            <Text style={{ fontSize: 9, color: '#4C1D95' }}>
-              Oh no! A {lessonPlan.career.careerName} has a challenge that needs your help. Can you solve it?
-              Work through the problem step by step using what you've learned.
-            </Text>
-          </View>
+          {/* Welcome Message */}
+          {lessonPlan.content.subjectContents.Math?.interactive_simulation?.discover?.aiSourceContent?.greeting && (
+            <View style={{
+              backgroundColor: '#FEF3C7',
+              padding: 10,
+              borderRadius: 6,
+              marginBottom: 12,
+              borderLeft: '3px solid #F59E0B',
+              wrap: false  // Keep welcome message together
+            }}>
+              <Text style={{ fontSize: 8, fontWeight: 'bold', color: '#78350F', marginBottom: 3, textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                WELCOME EXPLORER
+              </Text>
+              <Text style={{ fontSize: 9, color: '#92400E', lineHeight: 1.3 }}>
+                {lessonPlan.content.subjectContents.Math.interactive_simulation.discover.aiSourceContent.greeting}
+              </Text>
+            </View>
+          )}
+
+          {/* Discovery Stations - 4 Subject-Specific Hands-On Activities */}
+          {lessonPlan.content.subjectContents.Math?.interactive_simulation?.discover?.aiSourceContent?.discovery_paths &&
+           lessonPlan.content.subjectContents.Math.interactive_simulation.discover.aiSourceContent.discovery_paths.map((station: any, idx: number) => (
+            <View key={idx} style={{
+              backgroundColor: '#FFFFFF',
+              padding: 12,
+              borderRadius: 8,
+              marginBottom: 10,
+              border: '2px solid #FCD34D',
+              boxShadow: '0 2px 4px rgba(245, 158, 11, 0.1)',
+              wrap: false  // Keep discovery station together
+            }}>
+              {/* Station Header with Subject Badge */}
+              <View style={{
+                backgroundColor: '#FEF3C7',
+                padding: 8,
+                borderRadius: 6,
+                marginBottom: 8
+              }}>
+                {station.subject && (
+                  <Text style={{ fontSize: 7, fontWeight: 'bold', color: '#92400E', marginBottom: 2, textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                    {station.subject} Discovery Station
+                  </Text>
+                )}
+                <Text style={{ fontSize: 11, fontWeight: 'bold', color: '#78350F' }}>
+                  {stripEmojis(station.title)}
+                </Text>
+              </View>
+
+              {/* Station Description */}
+              <Text style={{ fontSize: 9, color: '#92400E', marginBottom: 8, lineHeight: 1.4 }}>
+                {stripEmojis(station.description)}
+              </Text>
+
+              {/* Activity with Question */}
+              {station.activities && station.activities.length > 0 && station.activities.map((activity: any, actIdx: number) => (
+                <View key={actIdx}>
+                  {/* Activity Description */}
+                  <View style={{
+                    backgroundColor: '#FFFBEB',
+                    padding: 8,
+                    borderRadius: 4,
+                    borderLeft: '3px solid #F59E0B',
+                    marginBottom: 8
+                  }}>
+                    <Text style={{ fontSize: 8, fontWeight: 'bold', color: '#B45309', marginBottom: 2, textTransform: 'uppercase', letterSpacing: 0.3 }}>
+                      Activity:
+                    </Text>
+                    <Text style={{ fontSize: 8, color: '#92400E', lineHeight: 1.3 }}>
+                      {stripEmojis(activity.description || activity.title)}
+                    </Text>
+                  </View>
+
+                  {/* Question */}
+                  {activity.question && (
+                    <Text style={{ fontSize: 10, fontWeight: 'bold', color: '#78350F', marginBottom: 8, lineHeight: 1.4 }}>
+                      {stripEmojis(activity.question)}
+                    </Text>
+                  )}
+
+                  {/* Answer Options */}
+                  {activity.options && activity.options.length > 0 && (
+                    <View style={{ marginBottom: 8 }}>
+                      <Text style={{ fontSize: 8, fontWeight: 'bold', color: '#B45309', marginBottom: 4, textTransform: 'uppercase', letterSpacing: 0.3 }}>
+                        Choose Your Answer:
+                      </Text>
+                      {activity.options.map((option: string, optIdx: number) => (
+                        <View key={optIdx} style={{
+                          backgroundColor: '#FEF3C7',
+                          padding: 6,
+                          borderRadius: 4,
+                          marginBottom: 3,
+                          borderLeft: '3px solid #FBBF24'
+                        }}>
+                          <Text style={{ fontSize: 9, color: '#92400E' }}>
+                            {String.fromCharCode(65 + optIdx)}) {convertShapeEmojiToText(option)}
+                          </Text>
+                        </View>
+                      ))}
+                    </View>
+                  )}
+
+                  {/* Hint & Explanation */}
+                  <View style={{ borderTop: '1px solid #FEF3C7', paddingTop: 6, marginTop: 4 }}>
+                    {activity.hint && (
+                      <Text style={{ fontSize: 8, color: '#D97706', marginBottom: 4, lineHeight: 1.3 }}>
+                        <Text style={{ fontWeight: 'bold' }}>Hint:</Text> {stripEmojis(activity.hint)}
+                      </Text>
+                    )}
+                    {activity.explanation && (
+                      <View style={{ backgroundColor: '#ECFDF5', padding: 8, borderRadius: 6, borderLeft: '4px solid #10B981' }}>
+                        <Text style={{ fontSize: 7, fontWeight: 'bold', color: '#065F46', marginBottom: 2, textTransform: 'uppercase', letterSpacing: 0.3 }}>
+                          How {lessonPlan.career.careerName}s Use This Skill
+                        </Text>
+                        <Text style={{ fontSize: 8, color: '#047857', lineHeight: 1.4 }}>
+                          {stripEmojis(activity.explanation)}
+                        </Text>
+                      </View>
+                    )}
+                  </View>
+                </View>
+              ))}
+            </View>
+          ))}
         </View>
 
         {/* Alternative Career Options */}
@@ -896,6 +1805,52 @@ export const UnifiedLessonPlanPDF = ({ lessonPlan }: { lessonPlan: any }) => {
             ✓ Apply curriculum skills in real-world contexts
           </Text>
         </View>
+
+        {/* ENRICHMENT: Quality Markers Section */}
+        {lessonPlan.content?.enrichment?.qualityMarkers && (
+          <View style={{
+            backgroundColor: '#EFF6FF',
+            padding: 15,
+            borderRadius: 8,
+            marginTop: 15,
+            borderLeftWidth: 5,
+            borderLeftColor: '#3B82F6',
+            borderWidth: 1,
+            borderColor: '#BFDBFE'
+          }}>
+            <Text style={{ fontSize: 12, fontWeight: 'bold', color: '#1E3A8A', marginBottom: 10 }}>
+              Quality Assurance & Standards
+            </Text>
+            <View style={{ gap: 5 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={{ fontSize: 9, color: '#1E40AF', marginRight: 3 }}>✓</Text>
+                <Text style={{ fontSize: 9, color: '#1E40AF' }}>Common Core Aligned</Text>
+              </View>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={{ fontSize: 9, color: '#1E40AF', marginRight: 3 }}>✓</Text>
+                <Text style={{ fontSize: 9, color: '#1E40AF' }}>State Standards Met</Text>
+              </View>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={{ fontSize: 9, color: '#1E40AF', marginRight: 3 }}>✓</Text>
+                <Text style={{ fontSize: 9, color: '#1E40AF' }}>STEM Integrated</Text>
+              </View>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={{ fontSize: 9, color: '#1E40AF', marginRight: 3 }}>✓</Text>
+                <Text style={{ fontSize: 9, color: '#1E40AF' }}>Social-Emotional Learning</Text>
+              </View>
+            </View>
+            <View style={{ marginTop: 8, paddingTop: 8, borderTopWidth: 1, borderTopColor: '#BFDBFE' }}>
+              <Text style={{ fontSize: 9, color: '#1E40AF', marginBottom: 4 }}>
+                <Text style={{ fontWeight: 'bold' }}>Assessment: </Text>
+                {lessonPlan.content.enrichment.qualityMarkers.assessmentRigor}
+              </Text>
+              <Text style={{ fontSize: 9, color: '#1E40AF' }}>
+                <Text style={{ fontWeight: 'bold' }}>Progress: </Text>
+                {lessonPlan.content.enrichment.qualityMarkers.progressTracking}
+              </Text>
+            </View>
+          </View>
+        )}
 
         {/* Subscription Info */}
         <View style={{ marginTop: 15, padding: 10, backgroundColor: '#F9FAFB', borderRadius: 8 }}>

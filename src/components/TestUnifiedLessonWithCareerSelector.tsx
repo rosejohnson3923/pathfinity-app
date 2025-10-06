@@ -294,17 +294,83 @@ export const TestUnifiedLessonWithCareerSelector: React.FC = () => {
     setError(null);
 
     try {
-      console.log('🚀 Generating tier-specific lesson for:', selectedCareer, 'Tier:', selectedTier);
+      console.log('🚀 Generating REAL-TIME enriched lesson for:', selectedCareer, 'Tier:', selectedTier);
+      console.log('📋 Student ID:', selectedStudent);
+      console.log('🎯 Career Family:', currentStudent.career_family);
 
-      // Generate tier-specific demonstration lesson content
-      const demoLesson = await generateDemonstrationLesson(selectedCareer, selectedTier, currentStudent);
+      // ✅ CALL REAL ORCHESTRATOR for enriched content generation
+      const result = await lessonOrchestrator.generateDailyLessons(
+        selectedStudent,  // Use the student key (e.g., 'sam_k', 'alex_1')
+        currentStudent.career_family  // Use career family (e.g., 'chef', 'doctor')
+      );
 
-      console.log('✅ Generated demonstration lesson:', demoLesson);
-      setUnifiedLesson(demoLesson);
+      console.log('✅ Generated ENRICHED lesson from orchestrator:', result);
+
+      // Extract the unified lesson from orchestrator response
+      const enrichedLesson = result.unifiedLesson || result;
+
+      // Transform orchestrator structure to UI-compatible format
+      const subjectContents = enrichedLesson.content?.subjectContents || {};
+      const subjects = Object.keys(subjectContents).map(subjectKey => {
+        const content = subjectContents[subjectKey];
+        const curriculumInfo = enrichedLesson.curriculum?.subjects?.find(
+          (s: any) => s.subject.toLowerCase() === subjectKey.toLowerCase()
+        );
+
+        // Extract practice questions from LEARN container (QuestionTypes)
+        // Note: Test page intentionally shows ONLY LEARN content (per user request)
+        // Experience & Discover are included in PDF but not shown online
+        let liveActivities: string[] = [];
+        if (content.practiceQuestions && Array.isArray(content.practiceQuestions)) {
+          liveActivities = content.practiceQuestions.map((question: any) => {
+            // Transform QuestionData to displayable activity string
+            return question.question || 'Practice question';
+          });
+        }
+
+        console.log(`📊 ${subjectKey} - Practice questions from orchestrator:`, liveActivities);
+
+        return {
+          subject: subjectKey.charAt(0).toUpperCase() + subjectKey.slice(1).replace('_', ' '),
+          skill: {
+            objective: curriculumInfo?.skillObjective || content.skill?.objective || content.skill || 'Learning objectives',
+            careerConnection: content.careerConnection || getCareerConnection(subjectKey, selectedCareer, selectedTier, currentStudent.grade)
+          },
+          activities: liveActivities.length > 0 ? liveActivities : ['Activity content being generated...'],
+          assessmentLevel: content.assessmentLevel || getAssessmentLevel(selectedTier),
+          interactivity: content.interactivity || getInteractivityLevel(selectedTier),
+          setup: content.setup,
+          challenges: content.challenges
+        };
+      });
+
+      // Add tier and UI-specific metadata
+      const lessonWithTier = {
+        ...enrichedLesson,
+        career: {
+          ...enrichedLesson.career,
+          careerName: enrichedLesson.career?.careerName || selectedCareer.name,
+          icon: enrichedLesson.career?.icon || selectedCareer.emoji,
+          tier: selectedTier
+        },
+        student: {
+          ...enrichedLesson.student,
+          name: enrichedLesson.student?.name || currentStudent.name,
+          grade: enrichedLesson.student?.gradeLevel || currentStudent.grade,
+          companion: currentStudent.companion
+        },
+        subjects: subjects,
+        tierFeatures: getTierSpecificFeatures(selectedTier),
+        estimatedDuration: getTierDuration(selectedTier),
+        lessonSummary: enrichedLesson.content?.masterNarrative?.cohesiveStory?.throughLine || generateTierSpecificSummary(currentStudent, selectedCareer, selectedTier)
+      };
+
+      console.log('🎨 Transformed lesson for UI:', lessonWithTier);
+      setUnifiedLesson(lessonWithTier);
 
     } catch (err) {
-      console.error('❌ Error generating demonstration lesson:', err);
-      setError(err instanceof Error ? err.message : 'Failed to generate demonstration lesson');
+      console.error('❌ Error generating enriched lesson:', err);
+      setError(err instanceof Error ? err.message : 'Failed to generate enriched lesson');
     } finally {
       setLoading(false);
     }

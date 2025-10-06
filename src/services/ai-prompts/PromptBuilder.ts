@@ -84,6 +84,7 @@ export interface PromptContext {
   };
   // Narrative context from MasterNarrative
   narrativeContext?: {
+    // Existing basic fields
     setting?: string;
     context?: string;
     narrative?: string;
@@ -91,6 +92,84 @@ export interface PromptContext {
     throughLine?: string;
     companion?: any;
     subjectContext?: any;
+
+    // NEW: Enrichment Layer 1 - Progress Milestones
+    milestones?: {
+      firstAchievement: string;
+      midwayMastery: string;
+      finalVictory: string;
+      bonusChallenge?: string;
+    };
+
+    // NEW: Enrichment Layer 2 - Immersive Elements
+    immersiveElements?: {
+      soundscape: string;
+      interactiveTools: string[];
+      rewardVisuals: string[];
+      celebrationMoments: string[];
+    };
+
+    // NEW: Enrichment Layer 3 - Real-World Applications
+    realWorldApplications?: {
+      [subject: string]: {
+        immediate: string;
+        nearFuture: string;
+        longTerm: string;
+        careerConnection: string;
+      };
+    };
+
+    // NEW: Enrichment Layer 4 - Parent Value Propositions
+    parentValue?: {
+      realWorldConnection: string;
+      futureReadiness: string;
+      engagementPromise: string;
+      differentiator: string;
+    };
+
+    // NEW: Enrichment Layer 5 - Quality Markers
+    qualityMarkers?: {
+      commonCoreAligned: boolean;
+      stateStandardsMet: boolean;
+      stemIntegrated: boolean;
+      socialEmotionalLearning: boolean;
+      assessmentRigor: string;
+      progressTracking: string;
+    };
+
+    // NEW: Enrichment Layer 8 - Personalization Examples
+    personalizationExamples?: {
+      withStudentName: string[];
+      withInterests: string[];
+      withProgress: string[];
+      withLearningStyle: string[];
+    };
+
+    // NEW: Enrichment Layer 9 - Companion Interactions
+    companionInteractions?: {
+      greetings: string[];
+      encouragement: string[];
+      hints: string[];
+      celebrations: string[];
+      transitions: string[];
+    };
+
+    // NEW: Enrichment Layer 6 - Parent Insights
+    parentInsights?: {
+      adaptiveNature: string;
+      noFailureMode: string;
+      masteryTracking: string;
+      dailyReports: string;
+      weeklyProgress: string;
+    };
+
+    // NEW: Enrichment Layer 7 - Guarantees
+    guarantees?: {
+      engagement: string;
+      learning: string;
+      satisfaction: string;
+      support: string;
+    };
   };
 }
 
@@ -144,18 +223,79 @@ If you generate ANY Math content for this ELA lesson, the entire response will b
 ========================================
 NARRATIVE CONTEXT - MAINTAIN CONTINUITY
 ========================================
-${context.narrativeContext.setting ? `Setting: ${context.narrativeContext.setting}` : ''}
-${context.narrativeContext.narrative ? `Story: ${context.narrativeContext.narrative}` : ''}
-${context.narrativeContext.mission ? `Mission: ${context.narrativeContext.mission}` : ''}
-${context.narrativeContext.throughLine ? `Career Connection: ${context.narrativeContext.throughLine}` : ''}
-${context.narrativeContext.context ? `Context: ${context.narrativeContext.context}` : ''}
+
+📍 SETTING & STORY
+Setting: ${context.narrativeContext.setting || 'Not specified'}
+Story: ${context.narrativeContext.narrative || 'Generic career exploration'}
+Mission: ${context.narrativeContext.mission || 'Learn and apply skills'}
+Career Connection: ${context.narrativeContext.throughLine || 'Professional skill application'}
+Context: ${context.narrativeContext.context || 'Career-based learning'}
+
 ${context.narrativeContext.companion ? `
-Companion: ${context.narrativeContext.companion.name || 'AI Assistant'}
-Personality: ${context.narrativeContext.companion.personality || ''}
-Teaching Style: ${context.narrativeContext.companion.teachingStyle || ''}
+👥 COMPANION INTEGRATION
+Name: ${context.narrativeContext.companion.name}
+Personality: ${context.narrativeContext.companion.personality || 'Helpful and encouraging'}
+Teaching Style: ${context.narrativeContext.companion.teachingStyle || 'Adaptive'}
+${context.narrativeContext.companion.catchphrase ? `Catchphrase: "${context.narrativeContext.companion.catchphrase}"` : ''}
+${context.narrativeContext.companionInteractions ? `
+Sample Greetings: ${context.narrativeContext.companionInteractions.greetings?.slice(0, 2).join('; ') || 'Not provided'}
+Sample Encouragement: ${context.narrativeContext.companionInteractions.encouragement?.slice(0, 2).join('; ') || 'Not provided'}
+Sample Hints: ${context.narrativeContext.companionInteractions.hints?.slice(0, 2).join('; ') || 'Not provided'}
+Sample Celebrations: ${context.narrativeContext.companionInteractions.celebrations?.slice(0, 2).join('; ') || 'Not provided'}
+Transition Phrases: ${context.narrativeContext.companionInteractions.transitions?.slice(0, 2).join('; ') || 'Not provided'}
+
+INSTRUCTION: USE THESE COMPANION SAMPLES to maintain consistent voice throughout content!
+` : ''}
 ` : ''}
 
-CRITICAL: All content must align with this narrative context!
+${context.narrativeContext.milestones ? `
+🎯 PROGRESS MILESTONES - Reference in Content
+First Achievement: ${context.narrativeContext.milestones.firstAchievement}
+Midway Mastery: ${context.narrativeContext.milestones.midwayMastery}
+Final Victory: ${context.narrativeContext.milestones.finalVictory}
+${context.narrativeContext.milestones.bonusChallenge ? `Bonus Challenge: ${context.narrativeContext.milestones.bonusChallenge}` : ''}
+
+INSTRUCTION: Reference these milestones in encouragement and feedback to show progress!
+` : ''}
+
+${context.narrativeContext.immersiveElements ? `
+🎨 IMMERSIVE ELEMENTS - Use in Descriptions
+Soundscape: ${context.narrativeContext.immersiveElements.soundscape}
+Interactive Tools: ${context.narrativeContext.immersiveElements.interactiveTools?.join(', ') || 'Not specified'}
+Reward Visuals: ${context.narrativeContext.immersiveElements.rewardVisuals?.join(', ') || 'Not specified'}
+Celebration Moments: ${context.narrativeContext.immersiveElements.celebrationMoments?.join(', ') || 'Not specified'}
+
+INSTRUCTION: Weave these elements into scenarios and feedback to enhance immersion!
+` : ''}
+
+${context.narrativeContext.realWorldApplications?.[context.subject] ? `
+🌍 REAL-WORLD APPLICATIONS - ${context.subject.toUpperCase()}
+Now (Immediate): ${context.narrativeContext.realWorldApplications[context.subject].immediate}
+Soon (Near Future): ${context.narrativeContext.realWorldApplications[context.subject].nearFuture}
+Future (Long-term): ${context.narrativeContext.realWorldApplications[context.subject].longTerm}
+Career Connection: ${context.narrativeContext.realWorldApplications[context.subject].careerConnection}
+
+INSTRUCTION: Reference these applications in learning explanations to show relevance!
+` : ''}
+
+${context.narrativeContext.personalizationExamples ? `
+🎯 PERSONALIZATION STYLE - Match This Tone
+With Student Name: ${context.narrativeContext.personalizationExamples.withStudentName?.[0] || 'Not provided'}
+With Interests: ${context.narrativeContext.personalizationExamples.withInterests?.[0] || 'Not provided'}
+With Progress: ${context.narrativeContext.personalizationExamples.withProgress?.[0] || 'Not provided'}
+With Learning Style: ${context.narrativeContext.personalizationExamples.withLearningStyle?.[0] || 'Not provided'}
+
+INSTRUCTION: Use similar personalization patterns in your content!
+` : ''}
+
+CRITICAL REQUIREMENTS:
+✓ All content MUST align with this narrative context
+✓ Use companion's voice consistently
+✓ Reference milestones for motivation
+✓ Include immersive elements in descriptions
+✓ Connect to real-world applications
+✓ Maintain personalization tone
+
 ========================================
 ` : '';
 

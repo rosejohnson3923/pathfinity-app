@@ -13,6 +13,7 @@ import { dataCaptureServiceV2 } from './DataCaptureServiceV2';
 import { FillBlankGeneratorService } from './FillBlankGeneratorService';
 import { promptBuilder, PromptContext } from './ai-prompts/PromptBuilder';
 import { getGradeCategory } from './ai-prompts/rules/UniversalSubjectRules';
+import { safeJSONParse } from '../utils/jsonSanitizer';
 
 // ================================================================
 // TYPE DEFINITIONS
@@ -175,7 +176,7 @@ export class AILearningJourneyService {
 
     // Use MasterNarrative context if available, otherwise create generic
     const newContext = narrativeContext ? {
-      // Rich context from MasterNarrative
+      // Existing basic fields
       scenario: narrativeContext.narrative || `helping in a ${career?.name || 'professional'} environment`,
       character: career ? `a ${career.name}` : 'a professional',
       setting: narrativeContext.setting || this.getCareerSetting(career?.name),
@@ -184,6 +185,18 @@ export class AILearningJourneyService {
       mission: narrativeContext.mission,
       companion: narrativeContext.companion,
       subjectContext: narrativeContext.subjectContext,
+
+      // NEW: Enrichment fields (pass through from MasterNarrative)
+      milestones: narrativeContext.milestones,
+      immersiveElements: narrativeContext.immersiveElements,
+      realWorldApplications: narrativeContext.realWorldApplications,
+      parentValue: narrativeContext.parentValue,
+      qualityMarkers: narrativeContext.qualityMarkers,
+      personalizationExamples: narrativeContext.personalizationExamples,
+      companionInteractions: narrativeContext.companionInteractions,
+      parentInsights: narrativeContext.parentInsights,
+      guarantees: narrativeContext.guarantees,
+
       timestamp: new Date()
     } : {
       // Fallback generic context
@@ -196,7 +209,27 @@ export class AILearningJourneyService {
     };
 
     this.storylineContext.set(skillKey, newContext);
-    console.log(narrativeContext ? '🎯 Using MasterNarrative context:' : '📖 Created generic context:', newContext);
+    const hasEnrichment = narrativeContext && (
+      narrativeContext.milestones ||
+      narrativeContext.immersiveElements ||
+      narrativeContext.realWorldApplications ||
+      narrativeContext.companionInteractions
+    );
+    console.log(
+      hasEnrichment ? '🎯 Using ENRICHED MasterNarrative context:' :
+      narrativeContext ? '🎯 Using basic MasterNarrative context:' :
+      '📖 Created generic context:',
+      {
+        ...newContext,
+        enrichmentLayers: hasEnrichment ? {
+          milestones: !!narrativeContext.milestones,
+          immersiveElements: !!narrativeContext.immersiveElements,
+          realWorldApplications: !!narrativeContext.realWorldApplications,
+          companionInteractions: !!narrativeContext.companionInteractions,
+          personalizationExamples: !!narrativeContext.personalizationExamples
+        } : 'none'
+      }
+    );
     return newContext;
   }
 
@@ -756,7 +789,8 @@ Return ONLY these fields:
         }
       );
 
-      const content = JSON.parse(response);
+      // Parse response with automatic sanitization fallback
+      const content = safeJSONParse(response);
       console.log('✅ Generated adaptive instruction successfully');
       
       return {
@@ -1139,7 +1173,8 @@ FINAL CHECK before returning JSON:
         { temperature: 0.8, maxTokens: 3500, jsonMode: true }
       );
 
-      const content = JSON.parse(response);
+      // Parse response with automatic sanitization fallback
+      const content = safeJSONParse(response);
 
       // Ensure we have exactly the expected number of challenges
       if (content.interactive_simulation?.challenges) {
@@ -1323,7 +1358,9 @@ Generate the complete JSON response with ALL required fields.`;
         { temperature: 0.8, maxTokens: 3500, jsonMode: true }
       );
 
-      const content = JSON.parse(response);
+      // Parse response with automatic sanitization fallback
+      const content = safeJSONParse(response);
+
       console.log(`✅ Generated AI Discover content for ${skill.skill_number}`, {
         title: content.title,
         exploration_theme: content.exploration_theme?.substring(0, 100),

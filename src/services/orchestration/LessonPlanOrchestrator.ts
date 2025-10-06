@@ -9,6 +9,7 @@ import { JustInTimeContentService } from '../content/JustInTimeContentService';
 import { lessonArchive } from '../storage/LessonArchiveService';
 import { generateUnifiedLessonPDF } from '../pdf/UnifiedLessonPlanPDFGenerator';
 import { supabase } from '../../lib/supabase';
+import { youTubeService } from '../content-providers/YouTubeService';
 
 interface Student {
   id: string;
@@ -117,77 +118,190 @@ export class LessonPlanOrchestrator {
     allSkills: CurriculumSkill[],
     templateType: string
   ): Promise<any> {
-    // Generate ONE master narrative for the entire day
-    const masterNarrative = await this.narrativeGenerator.generateMasterNarrative({
+    // Generate ONE ENRICHED master narrative for the entire day (Demo quality)
+    const masterNarrative = await this.narrativeGenerator.generateEnhancedNarrative({
       studentName: student.name,
       gradeLevel: student.gradeLevel,
       career: career.career_name,
+      companion: { name: 'Sage', personality: 'Wise and thoughtful' }, // Default companion
       subjects: ['math', 'ela', 'science', 'socialStudies']
     });
 
-    // Generate JIT content for each subject (with reduced examples)
+    // Generate JIT content for each subject
+    // CRITICAL: Generate SEPARATE content for LEARN (QuestionTypes), EXPERIENCE (scenarios), and DISCOVER (challenges)
     const subjectContents: any = {};
 
     for (const skill of allSkills) {
-      const jitContent = await this.jitService.generateContainerContent({
+      console.log(`\n🎯 Generating content for ${skill.subject}...`);
+
+      // Build shared context for all containers
+      const sharedContext = {
+        skill: {
+          name: skill.objective,
+          skill_name: skill.objective,
+          skill_number: skill.standardCode
+        },
+        student: {
+          id: student.id,
+          name: student.name,
+          grade_level: student.gradeLevel
+        },
+        career: career.career_name,
+        careerDescription: career.description
+      };
+
+      // 1. LEARN Container: Generate Practice Questions (QuestionTypes for practice and assessment)
+      console.log(`  📚 Generating LEARN content (QuestionTypes)...`);
+      const learnContent = await this.jitService.generateContainerContent({
+        userId: student.id,
+        container: 'learn',
+        containerType: 'learn',
+        subject: skill.subject as any,
+        context: {
+          ...sharedContext,
+          narrativeContext: masterNarrative.settingProgression?.learn ? {
+            setting: masterNarrative.settingProgression.learn.location,
+            context: masterNarrative.settingProgression.learn.context,
+            narrative: masterNarrative.settingProgression.learn.narrative,
+            mission: masterNarrative.cohesiveStory?.mission,
+            throughLine: masterNarrative.cohesiveStory?.throughLine,
+            companion: masterNarrative.companionIntegration,
+            // ENRICHMENT: Pass enrichment fields to JIT/AI services
+            milestones: masterNarrative.milestones,
+            immersiveElements: masterNarrative.immersiveElements,
+            realWorldApplications: masterNarrative.realWorldApplications,
+            personalizationExamples: masterNarrative.personalizationExamples,
+            companionInteractions: masterNarrative.companionInteractions
+          } : undefined
+        },
+        timeConstraint: 10
+      });
+
+      // 2. EXPERIENCE Container: Generate Roleplay Scenarios
+      console.log(`  🎭 Generating EXPERIENCE content (scenarios)...`);
+      const experienceContent = await this.jitService.generateContainerContent({
         userId: student.id,
         container: 'experience',
         containerType: 'experience',
         subject: skill.subject as any,
         context: {
-          skill: {
-            name: skill.objective,
-            skill_name: skill.objective,
-            skill_number: skill.standardCode
-          },
-          student: {
-            id: student.id,
-            name: student.name,
-            grade_level: student.gradeLevel
-          },
-          career: career.career_name,
-          careerDescription: career.description,
+          ...sharedContext,
           narrativeContext: masterNarrative.settingProgression?.experience ? {
             setting: masterNarrative.settingProgression.experience.location,
             context: masterNarrative.settingProgression.experience.context,
             narrative: masterNarrative.settingProgression.experience.narrative,
             mission: masterNarrative.cohesiveStory?.mission,
             throughLine: masterNarrative.cohesiveStory?.throughLine,
-            companion: masterNarrative.companionIntegration
+            companion: masterNarrative.companionIntegration,
+            // ENRICHMENT: Pass enrichment fields to JIT/AI services
+            milestones: masterNarrative.milestones,
+            immersiveElements: masterNarrative.immersiveElements,
+            realWorldApplications: masterNarrative.realWorldApplications,
+            personalizationExamples: masterNarrative.personalizationExamples,
+            companionInteractions: masterNarrative.companionInteractions
           } : undefined
         },
         timeConstraint: 10
       });
 
-      // Store only 2 examples per subject (not 4)
-      // Use the MAPPED questions that have the full description field preserved
-      let challenges = [];
-      let setup = '';
+      // 3. DISCOVER Container: Generate Exploration Challenges
+      console.log(`  🔍 Generating DISCOVER content (challenges)...`);
+      const discoverContent = await this.jitService.generateContainerContent({
+        userId: student.id,
+        container: 'discover',
+        containerType: 'discover',
+        subject: skill.subject as any,
+        context: {
+          ...sharedContext,
+          narrativeContext: masterNarrative.settingProgression?.discover ? {
+            setting: masterNarrative.settingProgression.discover.location,
+            context: masterNarrative.settingProgression.discover.context,
+            narrative: masterNarrative.settingProgression.discover.narrative,
+            mission: masterNarrative.cohesiveStory?.mission,
+            throughLine: masterNarrative.cohesiveStory?.throughLine,
+            companion: masterNarrative.companionIntegration,
+            // ENRICHMENT: Pass enrichment fields to JIT/AI services
+            milestones: masterNarrative.milestones,
+            immersiveElements: masterNarrative.immersiveElements,
+            realWorldApplications: masterNarrative.realWorldApplications,
+            personalizationExamples: masterNarrative.personalizationExamples,
+            companionInteractions: masterNarrative.companionInteractions
+          } : undefined
+        },
+        timeConstraint: 10
+      });
 
-      // Use the questions array which has been properly mapped with description field
-      if (jitContent.questions && jitContent.questions.length > 0) {
-        challenges = jitContent.questions.slice(0, 2);
-        setup = jitContent.instructions || jitContent.scenario || '';
+      // Extract QuestionTypes from LEARN content (5 practice + 1 assessment)
+      const practiceQuestions = learnContent.questions?.slice(0, 5) || [];
+      const assessmentQuestion = learnContent.questions?.[5] || null;
 
-        // Debug: Log the challenge structure
-        console.log(`📝 ${skill.subject} challenges structure:`,
-          challenges.map(c => ({
-            hasDescription: !!c.description,
-            descriptionPreview: c.description?.substring(0, 50) + '...',
-            hasQuestion: !!c.question,
-            hasSummary: !!c.challenge_summary
-          }))
+      console.log(`  ✅ LEARN: ${practiceQuestions.length} practice questions, ${assessmentQuestion ? '1' : '0'} assessment`);
+      console.log(`     Practice question types:`, practiceQuestions.map(q => q.type));
+
+      // Extract scenarios from EXPERIENCE content (2 scenarios)
+      const experienceScenarios = experienceContent.questions?.slice(0, 2) || [];
+      console.log(`  ✅ EXPERIENCE: ${experienceScenarios.length} scenarios`);
+
+      // Extract challenges from DISCOVER content (2 challenges)
+      const discoverChallenges = discoverContent.questions?.slice(0, 2) || [];
+      console.log(`  ✅ DISCOVER: ${discoverChallenges.length} challenges`);
+
+      // 4. Fetch Instructional Video from YouTube
+      console.log(`  📹 Fetching instructional video for ${skill.subject}...`);
+      let videoData = null;
+      try {
+        const searchResult = await youTubeService.searchEducationalVideos(
+          student.gradeLevel,
+          skill.subject,
+          skill.objective
         );
+
+        if (searchResult.videos && searchResult.videos.length > 0) {
+          const video = searchResult.videos[0]; // Get top result
+          videoData = {
+            title: video.title,
+            videoUrl: video.embedUrl,
+            videoId: video.id,
+            duration: video.duration,
+            thumbnailUrl: video.thumbnailUrl,
+            channelTitle: video.channelTitle
+          };
+          console.log(`  ✅ VIDEO: Found "${video.title}" (${Math.floor(video.duration / 60)}min ${video.duration % 60}sec)`);
+        } else {
+          console.warn(`  ⚠️ VIDEO: No videos found for ${skill.subject} - ${skill.objective}`);
+        }
+      } catch (error) {
+        console.error(`  ❌ VIDEO: Failed to fetch for ${skill.subject}:`, error);
       }
 
-      // Also preserve the raw interactive_simulation for reference
-      const interactiveSimulation = jitContent.interactive_simulation;
-
+      // Store structured content for PDF generator
       subjectContents[skill.subject] = {
         skill: skill,
-        setup: setup,
-        challenges: challenges,
-        interactive_simulation: interactiveSimulation  // Keep the full raw data for reference
+        setup: learnContent.instructions || learnContent.scenario || '',
+
+        // LEARN Container: QuestionTypes for practice and assessment
+        practiceQuestions: practiceQuestions,
+        assessmentQuestion: assessmentQuestion,
+
+        // Instructional Video
+        video: videoData || {
+          title: `${skill.subject}: ${skill.objective}`,
+          videoUrl: null,
+          fallbackMessage: 'No video available for this lesson'
+        },
+
+        // EXPERIENCE Container: Roleplay scenarios
+        experienceScenarios: experienceScenarios,
+
+        // DISCOVER Container: Exploration challenges
+        discoverChallenges: discoverChallenges,
+
+        // Keep raw data for reference/debugging
+        interactive_simulation: {
+          learn: learnContent,
+          experience: experienceContent,
+          discover: discoverContent
+        }
       };
     }
 
@@ -223,7 +337,19 @@ export class LessonPlanOrchestrator {
       // Content structure expected by PDF generator
       content: {
         masterNarrative: masterNarrative,
-        subjectContents: subjectContents
+        subjectContents: subjectContents,
+        // ENRICHMENT: Include enrichment for UI/PDF display
+        enrichment: {
+          parentValue: masterNarrative.parentValue,
+          milestones: masterNarrative.milestones,
+          immersiveElements: masterNarrative.immersiveElements,
+          qualityMarkers: masterNarrative.qualityMarkers,
+          realWorldApplications: masterNarrative.realWorldApplications,
+          personalizationExamples: masterNarrative.personalizationExamples,
+          companionInteractions: masterNarrative.companionInteractions,
+          parentInsights: masterNarrative.parentInsights,
+          guarantees: masterNarrative.guarantees
+        }
       },
 
       subscription: {
@@ -253,11 +379,12 @@ export class LessonPlanOrchestrator {
     skill: CurriculumSkill,
     templateType: string
   ): Promise<StandardizedLessonPlan> {
-    // Generate master narrative
-    const masterNarrative = await this.narrativeGenerator.generateMasterNarrative({
+    // Generate ENRICHED master narrative (Demo quality)
+    const masterNarrative = await this.narrativeGenerator.generateEnhancedNarrative({
       studentName: student.name,
       gradeLevel: student.gradeLevel,
       career: career.career_name,
+      companion: { name: 'Sage', personality: 'Wise and thoughtful' }, // Default companion
       subjects: ['math', 'ela', 'science', 'socialStudies']
     });
 
@@ -280,14 +407,20 @@ export class LessonPlanOrchestrator {
         },
         career: career.career_name,
         careerDescription: career.description,
-        // Pass narrative context from MasterNarrative to JIT
+        // Pass narrative context from MasterNarrative to JIT (including enrichment)
         narrativeContext: masterNarrative.settingProgression?.experience ? {
           setting: masterNarrative.settingProgression.experience.location,
           context: masterNarrative.settingProgression.experience.context,
           narrative: masterNarrative.settingProgression.experience.narrative,
           mission: masterNarrative.cohesiveStory?.mission,
           throughLine: masterNarrative.cohesiveStory?.throughLine,
-          companion: masterNarrative.companionIntegration
+          companion: masterNarrative.companionIntegration,
+          // ENRICHMENT: Pass enrichment fields to JIT/AI services
+          milestones: masterNarrative.milestones,
+          immersiveElements: masterNarrative.immersiveElements,
+          realWorldApplications: masterNarrative.realWorldApplications,
+          personalizationExamples: masterNarrative.personalizationExamples,
+          companionInteractions: masterNarrative.companionInteractions
         } : undefined
       }
     });
