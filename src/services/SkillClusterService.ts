@@ -116,9 +116,8 @@ export class SkillClusterService {
     if (this.skillCache.has(cacheKey)) {
       return this.skillCache.get(cacheKey)!;
     }
-    
+
     // FETCH FROM DATABASE instead of hardcoded data
-    console.log(`[DB] Fetching skills from database for Grade ${gradeLevel}, ${mappedSubject}`);
     const dbSkills = await staticDataService.getSkills(gradeLevel, mappedSubject);
     
     if (!dbSkills || dbSkills.length === 0) {
@@ -179,11 +178,10 @@ export class SkillClusterService {
       totalSkills: learnableSkills.length,
       masteryThreshold: Math.ceil(learnableSkills.length * 0.8) // 80% mastery to progress
     };
-    
+
     // Cache the cluster
     this.skillCache.set(cacheKey, cluster);
-    console.log(`[DB] Loaded cluster ${categoryPrefix} with ${learnableSkills.length} skills from database`);
-    
+
     return cluster;
   }
   
@@ -198,24 +196,18 @@ export class SkillClusterService {
   ): SkillCluster | null {
     const mappedSubject = this.mapSubjectForGrade(subject, gradeLevel);
     const cacheKey = `${gradeLevel}-${mappedSubject}-${categoryPrefix}`;
-    
+
     // Check cache first - if skills were preloaded, they'll be here
     if (this.skillCache.has(cacheKey)) {
       const cluster = this.skillCache.get(cacheKey)!;
-      console.log(`[DB] Using cached cluster for ${subject} ${categoryPrefix} with ${cluster.skills.length} skills`);
       return cluster;
     }
-    
+
     // Trigger async load for future use
-    this.loadClusterAsync(gradeLevel, subject, categoryPrefix).then(cluster => {
-      if (cluster) {
-        console.log(`[DB] Async cluster loaded for ${subject} ${categoryPrefix}`);
-      }
-    });
-    
+    this.loadClusterAsync(gradeLevel, subject, categoryPrefix);
+
     // Return a minimal cluster for immediate use
     // This will be replaced by the database version once loaded
-    console.log(`[DB] Creating temporary cluster for ${subject} ${categoryPrefix} - will load from DB async`);
     return {
       categoryId: `${categoryPrefix}.0`,
       categoryName: `${subject} Skills - ${categoryPrefix}`,
@@ -283,7 +275,6 @@ export class SkillClusterService {
   public getAvailableClusters(gradeLevel: string, subject: string): string[] {
     // For now, return a default set of clusters
     // The async version will provide the real data
-    console.log(`[DB] getAvailableClusters called synchronously - returning default clusters`);
     return ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
   }
   
@@ -327,15 +318,11 @@ export class SkillClusterService {
    * This ensures skills are available before components render
    */
   public async preloadSkills(gradeLevel: string, subject: string): Promise<void> {
-    console.log(`[DB] Preloading skills for Grade ${gradeLevel} ${subject}`);
-    
     // Load the first cluster (A) which will cache skills
     const cluster = await this.loadClusterAsync(gradeLevel, subject, 'A');
-    
-    if (cluster) {
-      console.log(`[DB] Preloaded ${cluster.skills.length} skills for ${subject}`);
-    } else {
-      console.log(`[DB] No skills to preload for ${subject} Grade ${gradeLevel}`);
+
+    if (!cluster) {
+      console.warn(`[DB] No skills to preload for ${subject} Grade ${gradeLevel}`);
     }
   }
   
@@ -527,7 +514,6 @@ export class SkillClusterService {
    */
   public getSkillsByCluster(gradeLevel: string, subject: string): Map<string, Skill[]> {
     // Return empty map for now, async version will provide real data
-    console.log(`[DB] getSkillsByCluster called synchronously - returning empty map`);
     return new Map<string, Skill[]>();
   }
 }

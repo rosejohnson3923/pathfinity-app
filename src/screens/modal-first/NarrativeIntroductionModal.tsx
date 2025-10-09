@@ -9,6 +9,79 @@ import { ProgressHeader } from '../../components/navigation/ProgressHeader';
 import { azureAudioService } from '../../services/azureAudioService';
 import styles from './NarrativeIntroductionModal.module.css';
 
+// Generate subject-specific career connection intro
+const getSubjectCareerIntro = (subject: string, career: string, skillName: string, firstName: string, isFirstSubject: boolean): string => {
+  const xpReminder = isFirstSubject
+    ? " Remember, you'll earn XP points for everything you do!"
+    : "";
+
+  switch (subject.toLowerCase()) {
+    case 'math':
+      return `${isFirstSubject ? 'Alright' : 'Great job!'} ${firstName}! ${isFirstSubject ? "Let's start with Math!" : "Now for Math!"} As a ${career}, you use math every single day! Today, you'll learn ${skillName}. This skill helps ${career}s ${getCareerMathConnection(career)}.${xpReminder} Click Begin Your Adventure when you're ready!`;
+
+    case 'ela':
+      return `Awesome work, ${firstName}! Now let's learn ELA - that's reading and writing! As a ${career}, you need to ${getCareerELAConnection(career)}. Today, you'll learn ${skillName}. This helps you understand important information!${xpReminder} Click Begin Your Adventure!`;
+
+    case 'science':
+      return `You're doing amazing, ${firstName}! Time for Science! Every ${career} uses science to ${getCareerScienceConnection(career)}. Today, you'll learn ${skillName}. This helps you discover how things work!${xpReminder} Click Begin Your Adventure!`;
+
+    case 'social studies':
+      return `Almost done, ${firstName}! Last subject - Social Studies! As a ${career}, you need to ${getCareerSocialStudiesConnection(career)}. Today, you'll learn ${skillName}. This helps you understand people and the world!${xpReminder} Click Begin Your Adventure!`;
+
+    default:
+      return `Hi ${firstName}! Today you'll learn ${skillName} as a ${career}!${xpReminder} Click Begin Your Adventure!`;
+  }
+};
+
+// Career-specific connections for each subject
+const getCareerMathConnection = (career: string): string => {
+  const connections: Record<string, string> = {
+    'Scientist': 'measure experiments and analyze data',
+    'Doctor': 'calculate medicine doses and track patient vitals',
+    'Engineer': 'design buildings and calculate measurements',
+    'Teacher': 'plan lessons and track student progress',
+    'Chef': 'measure ingredients and calculate cooking times',
+    'default': 'solve problems and make important decisions'
+  };
+  return connections[career] || connections.default;
+};
+
+const getCareerELAConnection = (career: string): string => {
+  const connections: Record<string, string> = {
+    'Scientist': 'read research papers and write about discoveries',
+    'Doctor': 'read patient charts and write medical notes',
+    'Engineer': 'read blueprints and write project reports',
+    'Teacher': 'read books and write lesson plans',
+    'Chef': 'read recipes and write new menu ideas',
+    'default': 'read information and communicate clearly'
+  };
+  return connections[career] || connections.default;
+};
+
+const getCareerScienceConnection = (career: string): string => {
+  const connections: Record<string, string> = {
+    'Scientist': 'conduct experiments and make discoveries',
+    'Doctor': 'understand how the body works and heal patients',
+    'Engineer': 'understand materials and how things work',
+    'Teacher': 'explain how the world works to students',
+    'Chef': 'understand how ingredients change when cooked',
+    'default': 'understand how things work'
+  };
+  return connections[career] || connections.default;
+};
+
+const getCareerSocialStudiesConnection = (career: string): string => {
+  const connections: Record<string, string> = {
+    'Scientist': 'understand the history of discoveries and work with people worldwide',
+    'Doctor': 'understand different cultures and care for diverse patients',
+    'Engineer': 'work with teams and understand community needs',
+    'Teacher': 'teach students about history and different cultures',
+    'Chef': 'learn about foods from different countries and cultures',
+    'default': 'work with people and understand communities'
+  };
+  return connections[career] || connections.default;
+};
+
 // Age-appropriate gamification messaging
 const getGamificationContent = (gradeLevel: string) => {
   const grade = gradeLevel.toUpperCase();
@@ -144,11 +217,6 @@ export const NarrativeIntroductionModal: React.FC<NarrativeIntroductionModalProp
   const [isAnimating, setIsAnimating] = useState(false);
   const audioPlayedRef = useRef(false);
 
-  // Progress tracking
-  const completedCount = completedContainers.size;
-  const isFirstContainer = completedCount === 0;
-  const isLastContainer = completedCount === 2;
-
   // Get age-appropriate content
   const gamificationContent = getGamificationContent(gradeLevel);
 
@@ -171,12 +239,17 @@ export const NarrativeIntroductionModal: React.FC<NarrativeIntroductionModalProp
     }
     audioPlayedRef.current = true;
 
-    // Build the narration text based on the container
+    // Build the narration text based on the container, subject, and skill
     let narrationText = '';
     const firstName = studentName.split(' ')[0] || studentName;
+    const subject = skill?.subject || '';
+    const skillName = skill?.skill_name || skill?.name || 'new concepts';
+    const isFirstSubject = completedContainers.size === 0;
 
     if (container === 'LEARN') {
-      narrationText = `Alright ${firstName}, let's start with the Learn Foundations container! This is where we'll master the core ${career} concepts together. You'll watch videos, practice skills, and build your knowledge. Remember, you'll earn XP points for everything you do! Click the Begin Your Adventure button when you're ready to begin this exciting journey!`;
+      // Subject-specific career connection for Learn container
+      narrationText = getSubjectCareerIntro(subject, career, skillName, firstName, isFirstSubject);
+      console.log(`🎤 NarrativeIntroduction: Subject-specific intro for ${subject} - ${skillName} (first: ${isFirstSubject})`);
     } else if (container === 'EXPERIENCE') {
       narrationText = `Great job completing Learn Foundations, ${firstName}! Now it's time for hands-on practice in the Experience container. Here you'll apply your ${career} skills through real-world simulations and projects. This is where the fun really begins! Click Begin Your Adventure to dive into your practical ${career} experience!`;
     } else if (container === 'DISCOVER') {
@@ -186,7 +259,7 @@ export const NarrativeIntroductionModal: React.FC<NarrativeIntroductionModalProp
     console.log('🎤 NarrativeIntroduction: Playing companion narration for', container, 'with', companion);
 
     // Play the narration using the companion's voice
-    const scriptId = container === 'LEARN' ? 'learn.intro' :
+    const scriptId = container === 'LEARN' ? `learn.${subject.toLowerCase()}.intro` :
                     container === 'EXPERIENCE' ? 'experience.intro' :
                     'discover.intro';
 
@@ -194,7 +267,9 @@ export const NarrativeIntroductionModal: React.FC<NarrativeIntroductionModalProp
       scriptId: scriptId,
       variables: {
         firstName: firstName,
-        careerName: career
+        careerName: career,
+        subject: subject,
+        skillName: skillName
       },
       emotion: 'friendly',
       style: 'cheerful'
@@ -204,7 +279,7 @@ export const NarrativeIntroductionModal: React.FC<NarrativeIntroductionModalProp
     return () => {
       azureAudioService.stop();
     };
-  }, [container, companion, studentName, career]);
+  }, [container, companion, studentName, career, skill, completedContainers]);
 
   const handleContinue = () => {
     setIsAnimating(true);
@@ -219,10 +294,10 @@ export const NarrativeIntroductionModal: React.FC<NarrativeIntroductionModalProp
         {/* Top Info Bar (Header) */}
         <div className={styles.topInfo}>
           <p className={styles.topInfoText}>
-            🎮 Starting {container} Container •
-            🤖 AI Companion: <span className={styles.topInfoHighlight}>{companionName}</span> •
-            🎯 Career: <span className={styles.topInfoHighlight}>{career}</span> •
-            ⚡ Powered by PathIQ™
+            📚 Subject: <span className={styles.topInfoHighlight}>{skill?.subject || container}</span> •
+            🎯 Skill: <span className={styles.topInfoHighlight}>{skill?.skill_name || skill?.name || 'Learning'}</span> •
+            🤖 {companionName} •
+            💼 {career}
           </p>
         </div>
 
@@ -238,9 +313,11 @@ export const NarrativeIntroductionModal: React.FC<NarrativeIntroductionModalProp
                   {container === 'DISCOVER' && <Compass className={styles.headerIcon} />}
                 </div>
                 <div>
-                  <p className={styles.headerSubtitle}>Your Learning Journey</p>
+                  <p className={styles.headerSubtitle}>
+                    {skill?.subject ? `${skill.subject} - ${container}` : `Your Learning Journey`}
+                  </p>
                   <h1 className={styles.headerTitle}>
-                    Ready to {container.charAt(0) + container.slice(1).toLowerCase()}
+                    {skill?.skill_name || skill?.name || `Ready to ${container.charAt(0) + container.slice(1).toLowerCase()}`}
                   </h1>
                 </div>
               </div>
@@ -284,37 +361,12 @@ export const NarrativeIntroductionModal: React.FC<NarrativeIntroductionModalProp
 
               <div className={styles.welcomeText}>
                 <h2 className={styles.welcomeHeading}>
-                  {isFirstContainer ? `Hi ${studentName}! 👋` :
-                   isLastContainer ? `Amazing progress, ${studentName}! 🌟` :
-                   `Welcome back, ${studentName}! 🚀`}
+                  Hi {studentName}! Let's Learn {skill?.subject || 'Math'}! 👋
                 </h2>
 
                 <p className={styles.welcomeMessage}>
-                  {companionName} here!
-                  {isFirstContainer ? ` Your journey as a future ${career} begins now!` :
-                   isLastContainer ? ` You're ready for your final challenge!` :
-                   ` Let's continue your ${career} journey!`}
+                  {companionName} here! Today you'll learn "{skill?.skill_name || skill?.name}" as a {career}!
                 </p>
-
-                {/* Progress Bar */}
-                {completedCount > 0 && (
-                  <div className={styles.progressBar}>
-                    <p className={styles.progressTitle}>
-                      🎉 Containers Completed: {completedCount}/3
-                    </p>
-                    <div className={styles.progressBadges}>
-                      {completedContainers.has('LEARN') && (
-                        <span className={styles.progressBadge}>✓ Learn</span>
-                      )}
-                      {completedContainers.has('EXPERIENCE') && (
-                        <span className={styles.progressBadge}>✓ Experience</span>
-                      )}
-                      {completedContainers.has('DISCOVER') && (
-                        <span className={styles.progressBadge}>✓ Discover</span>
-                      )}
-                    </div>
-                  </div>
-                )}
 
                 {/* PathIQ and XP System Introduction */}
                 <div className={styles.marketingSection}>
@@ -324,7 +376,7 @@ export const NarrativeIntroductionModal: React.FC<NarrativeIntroductionModalProp
               </div>
             </div>
 
-            {/* XP System Tutorial */}
+            {/* XP System Tutorial - Always show */}
             <div className={styles.containerGrid}>
               <h3 className={styles.containerGridTitle}>{gamificationContent.earnTitle}</h3>
               <div className={styles.containers}>
@@ -389,11 +441,7 @@ export const NarrativeIntroductionModal: React.FC<NarrativeIntroductionModalProp
                 disabled={isAnimating}
                 className={styles.actionButton}
               >
-                <span>
-                  {isFirstContainer ? 'Begin Your Adventure' :
-                   isLastContainer ? 'Complete Your Journey' :
-                   'Continue Your Adventure'}
-                </span>
+                <span>Begin Your Adventure</span>
                 <ChevronRight className={styles.actionIcon} />
               </button>
             </div>

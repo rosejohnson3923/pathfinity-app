@@ -431,8 +431,6 @@ class PathIQService {
    * Uses multipliers to control how many careers per category are shown
    */
   private getCareersForGrade(grade: string): any[] {
-    console.log(`📚 getCareersForGrade called for grade: ${grade}`);
-    console.trace('Call stack for getCareersForGrade');
     const gradeLevelNum = grade === 'K' ? 0 : parseInt(grade);
     const multiplier = this.CAREER_PROGRESSION_CONFIG.GRADE_MULTIPLIERS[grade] || 2;
     const baseCount = this.CAREER_PROGRESSION_CONFIG.BASE_CAREERS_PER_CATEGORY;
@@ -440,7 +438,6 @@ class PathIQService {
 
     // Get available categories for this grade
     const availableCategories = this.CAREER_PROGRESSION_CONFIG.GRADE_CATEGORIES[grade] || ['helpers', 'safety', 'health'];
-    console.log(`  Categories config for grade ${grade}:`, availableCategories);
 
     // Get all careers using the correct progressive system
     // Use getAllCareersForGrade which properly combines career pools
@@ -456,15 +453,11 @@ class PathIQService {
       allCareersPool = [...uniqueKindergartenCareers, ...allCareersPool];
     }
 
-    console.log(`  Grade ${grade} total pool size: ${allCareersPool.length} careers`);
-    console.log(`  Available careers:`, allCareersPool.map(c => c.name).join(', '));
-
     // For "More Careers" (passion careers), return ALL grade-appropriate careers
     // Don't filter by category limits - that's only for the 3 recommended careers
     // This ensures students can see ALL careers available for their grade level
 
     // Return the complete pool without filtering
-    console.log(`  ✅ Returning all ${allCareersPool.length} careers for grade ${grade}`);
     return allCareersPool;
   }
   
@@ -523,9 +516,6 @@ class PathIQService {
     gradeLevel: string,
     interests?: string[]
   ): any {
-    console.log(`🎯 PathIQ: Getting 3 careers for grade ${gradeLevel}`);
-    console.log(`📊 Total careers available: ${appropriateCareers.length}`);
-    
     // Group careers by category
     const careersByCategory = new Map<string, any[]>();
     appropriateCareers.forEach(career => {
@@ -537,35 +527,29 @@ class PathIQService {
 
     // Get available categories
     const availableCategories = Array.from(careersByCategory.keys());
-    console.log(`📂 Available categories (${availableCategories.length}):`, availableCategories);
-    
+
     // Shuffle categories to get random selection
     const shuffledCategories = [...availableCategories].sort(() => Math.random() - 0.5);
-    
+
     // Select 3 random categories (or fewer if less than 3 available)
     const selectedCategories = shuffledCategories.slice(0, Math.min(3, shuffledCategories.length));
-    console.log(`✅ Selected categories:`, selectedCategories);
-    
+
     // Pick one career from each selected category
     const recommended: CareerRating[] = [];
     selectedCategories.forEach(category => {
       const careersInCategory = careersByCategory.get(category) || [];
-      console.log(`  📁 Category "${category}" has ${careersInCategory.length} careers`);
       if (careersInCategory.length > 0) {
         // Calculate ratings for careers in this category
-        const ratedCareers = careersInCategory.map(career => 
+        const ratedCareers = careersInCategory.map(career =>
           this.calculateCareerRating(career, profile, gradeLevel, interests)
         );
-        
+
         // Sort by score and pick the best one from this category
         ratedCareers.sort((a, b) => b.score - a.score);
         const selectedCareer = ratedCareers[0];
-        console.log(`  ➡️ Selected: ${selectedCareer.name} (score: ${selectedCareer.score})`);
         recommended.push(selectedCareer);
       }
     });
-    
-    console.log(`🎲 Final recommended careers: ${recommended.map(c => c.name).join(', ')}`);
     
     // Calculate ratings for all careers for passion selection
     const allCareers = appropriateCareers.map(career => 

@@ -55,12 +55,14 @@ interface BentoDiscoverCardProps {
       description: string;
     };
     introduction: {
+      title?: string;
       welcome: string;
       companionMessage: string;
       howToUse: string;
     };
     scenarios: Array<{
       subject?: string;
+      stationTitle?: string;
       description: string;
       question?: string;
       context?: string;
@@ -68,6 +70,22 @@ interface BentoDiscoverCardProps {
       correct_choice: number;
       outcome?: string;
       explanation?: string;
+      // PHASE 1: Rubric fields to display
+      activity?: {
+        type?: string;
+        description?: string;
+        prompt?: string;
+        supportingData?: string;
+      };
+      deliverable?: {
+        type?: string;
+        description?: string;
+        assessmentCriteria?: string[];
+      };
+      practiceSupport?: {
+        scaffoldingLevel?: string;
+        resourcesProvided?: string[];
+      };
     }>;
   };
   gradeLevel: string;
@@ -125,6 +143,10 @@ export const BentoDiscoverCardV2: React.FC<BentoDiscoverCardProps> = ({
 
   // Get scenarios with subject labels if not provided
   const scenarios = challengeData?.scenarios || [];
+  console.log('🔍 [BentoDiscoverCardV2] challengeData.scenarios received:', scenarios);
+  console.log('🔍 [BentoDiscoverCardV2] First scenario structure:', scenarios[0] ? Object.keys(scenarios[0]) : 'No scenarios');
+  console.log('🔍 [BentoDiscoverCardV2] First scenario activity:', scenarios[0]?.activity);
+  console.log('🔍 [BentoDiscoverCardV2] First scenario stationTitle:', scenarios[0]?.stationTitle);
   const enhancedScenarios = scenarios.map((scenario, index) => ({
     ...scenario,
     subject: scenario.subject || SUBJECTS[index] || 'Discovery'
@@ -204,11 +226,11 @@ export const BentoDiscoverCardV2: React.FC<BentoDiscoverCardProps> = ({
           </div>
           <div className={styles.welcomeContent}>
             <h1 className={styles.welcomeTitle}>
-              {career?.name} {studentName} - Field Trip Time! {careerEvent.emoji}
+              {challengeData?.introduction?.title || `${career?.name} ${studentName} - Field Trip Time! ${careerEvent.emoji}`}
             </h1>
             <p className={styles.welcomeMessage}>
-              Did you know that you can use your NEW skills in surprising ways?
-              Today, {companion?.name} is taking you on a special field trip!
+              {challengeData?.introduction?.welcome ||
+               `Did you know that you can use your NEW skills in surprising ways? Today, ${companion?.name} is taking you on a special field trip!`}
             </p>
           </div>
         </div>
@@ -225,8 +247,8 @@ export const BentoDiscoverCardV2: React.FC<BentoDiscoverCardProps> = ({
               Today's Event: {careerEvent.event}
             </h2>
             <p className={styles.storyDescription}>
-              Let's explore how {career?.name} {studentName} uses skills at the {careerEvent.event}!
-              You'll discover amazing connections between what you're learning and real-world events.
+              {challengeData?.introduction?.howToUse ||
+               `Let's explore how ${career?.name} ${studentName} uses skills at the ${careerEvent.event}! You'll discover amazing connections between what you're learning and real-world events.`}
             </p>
           </div>
         </div>
@@ -260,12 +282,16 @@ export const BentoDiscoverCardV2: React.FC<BentoDiscoverCardProps> = ({
             Your Discovery Mission
           </h2>
           <div className={styles.missionList}>
-            <ul className={styles.challengeList}>
-              <li>Join {career?.name} {studentName} at the {careerEvent.event}</li>
-              <li>Discover how {skill?.name} appears in Math, ELA, Science & Social Studies</li>
-              <li>Answer questions to unlock new insights</li>
-              <li>Earn XP for each discovery you make!</li>
-            </ul>
+            {challengeData?.introduction?.companionMessage ? (
+              <p className={styles.challengeDescription}>{challengeData.introduction.companionMessage}</p>
+            ) : (
+              <ul className={styles.challengeList}>
+                <li>Join {career?.name} {studentName} at the {careerEvent.event}</li>
+                <li>Discover how {skill?.name} appears in Math, ELA, Science & Social Studies</li>
+                <li>Answer questions to unlock new insights</li>
+                <li>Earn XP for each discovery you make!</li>
+              </ul>
+            )}
             <div className={styles.scenarioIndicator}>
               <div className={styles.scenarioDots}>
                 {SUBJECTS.map((_, i) => (
@@ -323,34 +349,70 @@ export const BentoDiscoverCardV2: React.FC<BentoDiscoverCardProps> = ({
 
         {/* Horizontal Tiles Row */}
         <div className={styles.scenarioTilesRow}>
-          {/* Field Trip Event Context */}
+          {/* Field Trip Event Context - TILE 1 */}
           <div className={styles.eventContextTile}>
             <div className={styles.eventHeader}>
               <span className={styles.eventIcon}>{careerEvent.emoji}</span>
               <h3 className={styles.eventTitle}>Field Trip: {careerEvent.event}</h3>
             </div>
-            <p className={styles.eventDescription}>
-              {currentScenario.context ||
-               `You're at the ${careerEvent.event} discovering how ${career?.name}s use ${currentScenario.subject || skill?.name} in amazing ways!`}
-            </p>
+
+            {/* PHASE 1: Show activity.description */}
+            {currentScenario.activity?.description && (
+              <div className={styles.activityDescription}>
+                <strong>What You'll Investigate:</strong>
+                <p>{currentScenario.activity.description}</p>
+              </div>
+            )}
+
+            {/* PHASE 1: Show activity.supportingData */}
+            {currentScenario.activity?.supportingData && (
+              <div className={styles.supportingData}>
+                <strong>Resources Available:</strong>
+                <p>{currentScenario.activity.supportingData}</p>
+              </div>
+            )}
+
+            {/* Fallback to existing context */}
+            {!currentScenario.activity?.description && !currentScenario.activity?.supportingData && (
+              <p className={styles.eventDescription}>
+                {currentScenario.context ||
+                 currentScenario.careerContext ||
+                 `At the ${careerEvent.event}, you'll discover how ${career?.name}s use ${currentScenario.subject || skill?.name}!`}
+              </p>
+            )}
           </div>
 
-          {/* Discovery Question */}
+          {/* Discovery Question - TILE 2 */}
           <div className={styles.questionTile}>
             <div className={styles.questionHeader}>
               <span className={`${styles.scenarioBadge} ${styles[scenarioType]}`}>
                 {scenarioType === 'explore' ? '🔍 Explore' :
                  scenarioType === 'practice' ? '✨ Practice' : '🏆 Challenge'}
               </span>
-              {currentScenario.title && (
-                <span className={styles.questionTitle}>{currentScenario.title}</span>
+              {/* PHASE 1: Show stationTitle */}
+              {(currentScenario.stationTitle || currentScenario.title) && (
+                <span className={styles.questionTitle}>
+                  {currentScenario.stationTitle || currentScenario.title}
+                </span>
               )}
             </div>
+
+            {/* PHASE 1: Show activity.prompt */}
+            {currentScenario.activity?.prompt && (
+              <div className={styles.activityPrompt}>
+                <strong>Instructions:</strong>
+                <p>{currentScenario.activity.prompt}</p>
+              </div>
+            )}
+
+            {/* Question text */}
             <h3 className={styles.questionText}>
               {currentScenario.description || currentScenario.question || 'Discovery Challenge'}
             </h3>
           </div>
         </div>
+
+        {/* REMOVED: deliverable and practiceSupport fields - not important to users */}
 
         {/* Options */}
         <div className={styles.optionsGrid}>
@@ -488,7 +550,7 @@ export const BentoDiscoverCardV2: React.FC<BentoDiscoverCardProps> = ({
           }}
           className={completionStyles.continueButton}
         >
-          Continue Journey →
+          Complete Journey →
         </button>
       </div>
     </div>

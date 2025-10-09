@@ -60,6 +60,8 @@ interface MultiSubjectContainerV2Props {
   onComplete: () => void;
   onBack?: () => void;
   theme?: string;
+  rubricSessionId?: string; // For rubric-based content generation
+  waitingForRubrics?: boolean; // True if rubrics are still initializing
 }
 
 interface SubjectProgress {
@@ -88,7 +90,9 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
   selectedCareer,
   onComplete,
   onBack,
-  theme = 'light'
+  theme = 'light',
+  rubricSessionId,
+  waitingForRubrics = false
 }) => {
   // Apply width management category for content containers
   usePageCategory('content');
@@ -133,17 +137,7 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
       }
     }
   }, []);
-  
-  console.log('🎭 MultiSubjectContainerV2-UNIFIED Debug:', {
-    selectedCareer,
-    careerName: selectedCareer?.name,
-    selectedCharacter,
-    studentGrade: student.grade_level,
-    studentId: student.id,
-    originalContainerType: containerType,
-    activeContainerType
-  });
-  
+
   // Rules Engine Hooks
   const learnRules = useLearnRules();
   const experienceRules = useExperienceRules();
@@ -257,31 +251,25 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
   useEffect(() => {
     // Preload skills for current subject FIRST
     const preloadAndInitialize = async () => {
-      console.log(`[DB] Preloading skills for ${currentSubject}...`);
       await skillClusterService.preloadSkills(student.grade_level, currentSubject);
 
       // After skills are loaded, initialize/reinitialize the journey
-      console.log(`[DB] Skills loaded, initializing journey...`);
 
       // Clear existing journey to force reload with new skills
       const existingJourney = adaptiveJourneyOrchestrator.getJourney(student.id);
       if (existingJourney) {
-        console.log('Clearing existing journey to reload with database skills');
         // Force reinitialize to pick up the loaded skills
         adaptiveJourneyOrchestrator.clearJourney(student.id);
       }
 
       // Initialize journey (this will now use the preloaded skills)
-      console.log('Initializing adaptive journey with preloaded skills');
       await adaptiveJourneyOrchestrator.initializeJourney(student.id, student.grade_level);
 
       setSkillsLoaded(true);
-      console.log(`[DB] Journey initialized with database skills`);
     };
 
     // Show initial loading screen for fun facts on first mount
     if (currentSubjectIndex === 0 && showInitialLoading) {
-      console.log('🎵 Showing initial loading screen for fun facts...');
 
       // Wait 3 seconds before loading skills to allow fun facts to play
       setTimeout(() => {
@@ -305,13 +293,13 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
   useEffect(() => {
     if (masterNarrative) {
       console.log('✅ Using Master Narrative from context');
-      console.warn('🔊 AUDIO: Master Narrative available from context', {
+      console.log('🔊 AUDIO: Master Narrative available from context', {
         hasNarrative: !!masterNarrative,
         companionId: companionId,
         narrativeKeys: Object.keys(masterNarrative)
       });
     } else if (!narrativeLoading) {
-      console.warn('⚠️ No Master Narrative available from context');
+      console.log('ℹ️ Master Narrative not yet generated (will be created after career/companion selection)');
     }
   }, [masterNarrative, narrativeLoading, companionId]);
   
@@ -351,14 +339,6 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
   };
   
   const handleSubjectComplete = async () => {
-    console.log(`📊 handleSubjectComplete called:`, {
-      currentSubject,
-      currentSubjectIndex,
-      totalSubjects: subjects.length,
-      activeContainerType,
-      isLastSubject: currentSubjectIndex >= subjects.length - 1
-    });
-    console.log(`✅ Completed ${currentSubject}`);
     
     // Record completion in adaptive journey
     // TODO: Implement recordSubjectCompletion in ContinuousJourneyIntegration
@@ -382,8 +362,6 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
     
     // Check if all subjects completed
     if (currentSubjectIndex >= subjects.length - 1) {
-      console.log('🎉 All subjects completed!');
-      
       // Completion message removed - was causing display issues
       // Complete the container
       setTimeout(() => {
@@ -392,22 +370,28 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
     } else {
       // Transition to next subject
       const nextSubject = subjects[currentSubjectIndex + 1];
-      
+
       setTransition({
         isTransitioning: true,
         message: `Great job with ${currentSubject}!`,
         nextSubject: nextSubject.name,
         animation: 'fadeIn'
       });
-      
+
       // Wait for transition animation (this is when fun facts play!)
       setTimeout(() => {
+        console.log(`⏱️ [MULTISUBJECT] Transition complete, setting new subject:`, {
+          newSubject: nextSubject.name,
+          newIndex: currentSubjectIndex + 1,
+          settingSkillsLoaded: false
+        });
         setCurrentSubjectIndex(currentSubjectIndex + 1);
         setSkillsLoaded(false); // Reset skills loaded state for new subject
         setTransition({
           isTransitioning: false,
           message: ''
         });
+        console.log(`✅ [MULTISUBJECT] Subject transition complete, should now render ${nextSubject.name}`);
       }, 4000); // Give enough time for fun facts to play
     }
   };
@@ -556,9 +540,13 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
       masterNarrative: masterNarrative,
       narrativeLoading: narrativeLoading,
       // Use companion ID from context (set when narrative was generated)
-      companionId: companionId || selectedCharacter?.toLowerCase() || 'finn'
+      companionId: companionId || selectedCharacter?.toLowerCase() || 'finn',
+      // Pass rubric session ID for rubric-based content generation
+      rubricSessionId: rubricSessionId,
+      // Pass waiting for rubrics flag
+      waitingForRubrics: waitingForRubrics
     };
-    
+
     // Use activeContainerType instead of containerType for dev mode override
     switch (activeContainerType) {
       case 'LEARN':
@@ -570,6 +558,7 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
       case 'DISCOVER':
         return <AIDiscoverContainerV2 {...commonProps} />;
       default:
+        console.log(`⚠️ [MULTISUBJECT] Unknown container type, defaulting to LEARN`);
         return <AILearnContainerV2 {...commonProps} />;
     }
   };

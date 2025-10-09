@@ -14,7 +14,7 @@
   height: 80px;
   background: var(--bg-primary);
   border-bottom: 1px solid var(--border-color);
-  z-index: 100; /* High z-index to stay above all content but below modals */
+  z-index: 10001; /* Must be above modals (which use 9999-10000) to allow theme toggle */
   display: flex;
   align-items: center;
   padding: 0 var(--space-6);

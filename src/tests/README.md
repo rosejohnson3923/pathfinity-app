@@ -1,51 +1,29 @@
-# AI Content Generation Tests
+# Rubric System Integration Tests
 
-This directory contains test files for the AI-powered educational content generation system.
+Comprehensive test suite for the rubric-based architecture (Phases 1-6).
 
-## 🔑 API Key Setup
+## Overview
 
-**IMPORTANT**: Never commit your actual OpenAI API key to Git!
+Tests all components of the rubric system:
+- **Phase 1**: Foundation (MasterNarrativeGenerator, DataRubricTemplateService, Validation)
+- **Phase 2**: Azure Storage (RubricStorageService, caching)
+- **Phase 3**: JIT Content Generation (RubricBasedJITService)
+- **Phase 4**: Cross-Device Sessions (SessionStateService)
+- **Phase 5**: Adaptive Content (AdaptiveContentService)
+- **End-to-End**: Full integration from narrative to adaptive content
 
-### Setup Instructions:
+## Running Tests
 
-1. **Get your OpenAI API key** from https://platform.openai.com/api-keys
-2. **Update .env.local** with your actual key:
-   ```
-   OPENAI_API_KEY=your_actual_openai_api_key_here
-   ```
-3. **For testing individual files**, replace `YOUR_OPENAI_API_KEY_HERE` with your actual key temporarily
-
-### Test Files:
-
-- **openai-test.ts** - Full OpenAI integration test with error handling
-- **quick-api-test.ts** - Simple API connection test using fetch
-- **educational-content-test.js** - Educational content generation test for Alex (Kindergarten)
-- **finn-maestro-test.ts** - Complete Finn Maestro Agent system test
-
-### Running Tests:
+### Run All Tests
 
 ```bash
-# Test basic API connection
-node src/tests/quick-api-test.ts
-
-# Test educational content generation
-node src/tests/educational-content-test.js
-
-# Test complete Finn Maestro system
-npm run test:finn-maestro
+npm run test:rubrics
 ```
 
-## 🔒 Security Notes:
+**Total: 18 tests across 6 test suites**
 
-- ✅ API keys should only be in `.env.local` (already in `.gitignore`)
-- ❌ Never commit API keys to test files
-- ✅ Use placeholder values in committed test files
-- ✅ Regenerate your API key if accidentally committed
+## Expected Output
 
-## 📋 Test Results:
+All tests should pass with green checkmarks. Total duration: ~60-90 seconds.
 
-All tests have been verified working with:
-- ✅ Basic API connection
-- ✅ Educational content generation for all grade levels
-- ✅ Multi-grade content validation (3rd, 7th, 10th grade)
-- ✅ Complete learning journey orchestration
+See full documentation in rubricSystemTests.ts for details.

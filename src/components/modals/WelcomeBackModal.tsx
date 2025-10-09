@@ -213,35 +213,8 @@ export const WelcomeBackModal: React.FC<WelcomeBackModalProps> = ({
       const companionName = session.companion?.name || session.companion_name || 'Pat';
       const careerName = session.career?.name || session.career?.title || session.career_name || 'Explorer';
 
-      // Debug: Check what's in the session
-      console.log('🔍 Session companion data:', {
-        companion: session.companion,
-        companion_id: session.companion_id,
-        companion_name: session.companion_name,
-        companionFromSession: session.companion?.name,
-        companionIdFromSession: session.companion?.id,
-        resolvedCompanionId: companionId,
-        fullSession: session
-      });
-
       // Use the companion ID from session (already computed at component level)
       const narratorCompanionId = companionId;
-
-      console.log('🎯 Using companion for narration:', {
-        companionId: narratorCompanionId,
-        sessionCompanionId: session.companion_id,
-        companionName
-      });
-
-      // Play the narration with the companion's voice
-      console.log('🎤 WelcomeBack narration:', {
-        scriptKey,
-        companionId,
-        gradeLevel,
-        firstName,
-        companionName,
-        careerName
-      });
 
       // Get the script text from scriptRegistry
       const scriptTemplate = SCRIPT_IDS[scriptKey as keyof typeof SCRIPT_IDS];
@@ -256,8 +229,6 @@ export const WelcomeBackModal: React.FC<WelcomeBackModalProps> = ({
         .replace(/{companionName}/g, companionName)
         .replace(/{careerName}/g, careerName);
 
-      console.log('📝 Formatted narration text:', narrationText);
-
       // Play the formatted narration text
       azureAudioService.playText(narrationText, narratorCompanionId, {
         scriptId: scriptKey,
@@ -269,11 +240,9 @@ export const WelcomeBackModal: React.FC<WelcomeBackModalProps> = ({
         emotion: 'friendly',
         style: 'cheerful',
         onStart: () => {
-          console.log('🔊 WelcomeBack narration started');
           setIsAudioPlaying(true);
         },
         onEnd: () => {
-          console.log('🔊 WelcomeBack narration completed');
           setIsAudioPlaying(false);
           setNarrationComplete(true);
 
@@ -770,7 +739,6 @@ export const WelcomeBackModal: React.FC<WelcomeBackModalProps> = ({
                       // Stop any playing narration
                       azureAudioService.stop();
                       setIsAudioPlaying(false);
-                      console.log('📊 Narration interrupted at Continue button');
                       onContinue();
                     }}
                     className="relative w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg overflow-hidden group"
@@ -800,24 +768,14 @@ export const WelcomeBackModal: React.FC<WelcomeBackModalProps> = ({
                   {canSwitchCareer && (
                     <motion.button
                       onClick={() => {
-                        console.log('🎯 Start New Adventure button clicked in WelcomeBackModal');
-
                         // Stop any playing narration
                         azureAudioService.stop();
                         setIsAudioPlaying(false);
-                        console.log('📊 Narration interrupted at Start New Adventure');
 
                         // Track skip behavior
                         const skipKey = `narration_skip_welcomeback_${user?.id}`;
                         const skipCount = parseInt(localStorage.getItem(skipKey) || '0');
                         localStorage.setItem(skipKey, String(skipCount + 1));
-
-                        console.log('📊 Button state:', {
-                          canSwitchCareer,
-                          onChooseNew: typeof onChooseNew,
-                          hasFunction: !!onChooseNew,
-                          skipCount: skipCount + 1
-                        });
 
                         if (onChooseNew) {
                           onChooseNew();

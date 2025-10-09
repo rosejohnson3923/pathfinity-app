@@ -28,6 +28,18 @@
 
 import { MultiModelService } from '../ai-models/MultiModelService';
 import { getLanguageConstraintsOnly } from '../ai-prompts/rules/UniversalContentRules';
+import type {
+  EnrichedMasterNarrative,
+  NarrativeArc,
+  CompanionVoice,
+  CareerNarrative,
+  SubjectNarrative,
+  Subject,
+  ContainerTransitions,
+  ThematicElements,
+  CompanionId
+} from '../../types/MasterNarrativeTypes';
+import type { StoryRubric } from '../../types/RubricTypes';
 
 /**
  * Enhanced Master Narrative Interface - Best-in-Class Quality
@@ -147,6 +159,8 @@ export interface MasterNarrativeParams {
     personality: string; // Wise, Balanced, Adventurous, or Energetic
   };
   subjects: string[];  // Always ['math', 'ela', 'science', 'socialStudies']
+  sessionId?: string;  // Optional session ID to use instead of generated narrativeId
+  userId?: string;     // Optional user ID
   currentDate?: Date;  // For contextual greeting
 }
 
@@ -1496,6 +1510,217 @@ IMPORTANT:
 
       // Generated narrative for career
     }
+  }
+
+  // ========================================================================
+  // RUBRIC-BASED ENRICHED NARRATIVE METHODS (Phase 1.2)
+  // ========================================================================
+
+  /**
+   * Generate Narrative Arc
+   * Creates the story backbone: premise → mission → stakes → resolution
+   */
+  private generateNarrativeArc(baseNarrative: MasterNarrative, params: MasterNarrativeParams): NarrativeArc {
+    const { career, studentName } = params;
+    const careerLower = career.toLowerCase();
+
+    return {
+      premise: `${studentName} is learning to become a ${career}`,
+      mission: baseNarrative.missionBriefing.challenge,
+      stakes: `Success depends on mastering the skills needed to be a great ${careerLower}`,
+      resolution: `${studentName} has demonstrated the skills needed to excel as a ${career}`
+    };
+  }
+
+  /**
+   * Generate Companion Voice
+   * Defines how the AI companion speaks, teaches, and encourages
+   */
+  private generateCompanionVoice(baseNarrative: MasterNarrative, companion: { name: string; personality: string }): CompanionVoice {
+    const companionData = baseNarrative.companionIntegration;
+
+    return {
+      companionId: companion.name.toLowerCase() as CompanionId,
+      greetingStyle: companionData.greetingStyle,
+      teachingVoice: companionData.teachingStyle,
+      encouragementStyle: companionData.encouragementStyle,
+      transitionPhrasing: companionData.transitionPhrases?.[0] || `${companion.name} guides you to the next step...`
+    };
+  }
+
+  /**
+   * Generate Career Narrative
+   * Defines the career context and workplace settings
+   */
+  private generateCareerNarrative(baseNarrative: MasterNarrative, career: string, studentName: string): CareerNarrative {
+    const settings = baseNarrative.settingProgression;
+
+    return {
+      careerIdentity: `${studentName} is a ${career} in training`,
+      workplaceSettings: {
+        LEARN: settings.learn.location,
+        EXPERIENCE: settings.experience.location,
+        DISCOVER: settings.discover.location
+      },
+      professionalRole: baseNarrative.character.role,
+      careerGoal: baseNarrative.cohesiveStory.mission
+    };
+  }
+
+  /**
+   * Generate Subject Narratives
+   * Defines how each subject connects to the career
+   */
+  private generateSubjectNarratives(baseNarrative: MasterNarrative, career: string): Record<Subject, SubjectNarrative> {
+    const subjects = baseNarrative.subjectContextsAligned;
+
+    return {
+      'Math': {
+        careerStoryline: subjects.math.learn,
+        narrativeBridge: `Math skills help ${career.toLowerCase()}s ${this.getCareerMathUse(career)}`,
+        motivationalContext: 'Numbers and counting are essential tools in this career'
+      },
+      'ELA': {
+        careerStoryline: subjects.ela.learn,
+        narrativeBridge: `Reading and writing help ${career.toLowerCase()}s ${this.getCareerELAUse(career)}`,
+        motivationalContext: 'Communication skills make professionals more effective'
+      },
+      'Science': {
+        careerStoryline: subjects.science.learn,
+        narrativeBridge: `Science helps ${career.toLowerCase()}s ${this.getCareerScienceUse(career)}`,
+        motivationalContext: 'Understanding how things work leads to better problem solving'
+      },
+      'Social Studies': {
+        careerStoryline: subjects.socialStudies.learn,
+        narrativeBridge: `${career}s serve communities by ${this.getCareerSocialUse(career)}`,
+        motivationalContext: 'Working together and helping others is at the heart of this career'
+      }
+    };
+  }
+
+  /**
+   * Generate Container Transitions
+   * Smooth narrative transitions between containers
+   */
+  private generateContainerTransitions(companion: { name: string; personality: string }, career: string): ContainerTransitions {
+    return {
+      toLEARN: `${companion.name} says: "Let's start your ${career.toLowerCase()} training in the learning area..."`,
+      toEXPERIENCE: `${companion.name} says: "Now that you've learned the basics, let's apply them in a real ${career.toLowerCase()} situation..."`,
+      toDISCOVER: `${companion.name} says: "For this final challenge, you'll need to use ALL your ${career.toLowerCase()} skills..."`,
+      conclusion: `${companion.name} says: "You've shown you have what it takes to be a great ${career}!"`
+    };
+  }
+
+  /**
+   * Generate Thematic Elements
+   * Consistent tone, vocabulary, and metaphors throughout the story
+   */
+  private generateThematicElements(baseNarrative: MasterNarrative, career: string): ThematicElements {
+    const careerData = this.getCareerMockData(career);
+
+    return {
+      tone: careerData.personality,
+      vocabulary: careerData.equipment,
+      metaphors: [
+        `Like ${careerData.learnActivity}`,
+        `Building your ${career.toLowerCase()} skills`,
+        `Growing as a professional`
+      ],
+      culturalContext: `Grade-appropriate ${career.toLowerCase()} experiences`
+    };
+  }
+
+  /**
+   * 🎯 MAIN METHOD: Generate Enriched Master Narrative (Rubric-Based)
+   * Creates EnrichedMasterNarrative for rubric/JIT architecture
+   *
+   * @param params - Master narrative parameters
+   * @returns EnrichedMasterNarrative with complete story context
+   */
+  async generateEnrichedMasterNarrative(
+    params: MasterNarrativeParams
+  ): Promise<EnrichedMasterNarrative> {
+    console.log('🎯 Generating Enriched Master Narrative (Rubric-Based Architecture)');
+
+    // Step 1: Generate base narrative
+    const baseNarrative = await this.generateMasterNarrative(params);
+    console.log('✅ Base narrative generated');
+
+    // Step 2: Generate narrative components
+    const narrativeArc = this.generateNarrativeArc(baseNarrative, params);
+    const companionVoice = this.generateCompanionVoice(baseNarrative, params.companion);
+    const careerNarrative = this.generateCareerNarrative(baseNarrative, params.career, params.studentName);
+    const subjectNarratives = this.generateSubjectNarratives(baseNarrative, params.career);
+    const containerTransitions = this.generateContainerTransitions(params.companion, params.career);
+    const thematicElements = this.generateThematicElements(baseNarrative, params.career);
+
+    console.log('✅ Narrative components generated');
+
+    // Step 3: Construct EnrichedMasterNarrative
+    const enrichedNarrative: EnrichedMasterNarrative = {
+      // Session metadata
+      sessionId: params.sessionId || baseNarrative.narrativeId,
+      userId: params.userId || params.studentName,
+      createdAt: new Date().toISOString(),
+
+      // User selections
+      career: params.career,
+      companion: params.companion.name.toLowerCase() as CompanionId,
+      gradeLevel: params.gradeLevel,
+
+      // Core narrative structure
+      masterNarrative: {
+        greeting: baseNarrative.missionBriefing.greeting,
+        introduction: baseNarrative.missionBriefing.situation,
+        mission: baseNarrative.missionBriefing.challenge,
+        narrativeArc,
+        companionVoice,
+        careerNarrative,
+        subjectNarratives,
+        containerTransitions,
+        thematicElements
+      },
+
+      // Version tracking
+      version: '1.0.0',
+      generatedBy: 'MasterNarrativeGenerator.generateEnrichedMasterNarrative'
+    };
+
+    console.log('🎉 Enriched Master Narrative complete!');
+
+    return enrichedNarrative;
+  }
+
+  /**
+   * Derive Story Rubric from Enriched Master Narrative
+   * Extracts immutable story context for JIT consumption
+   *
+   * @param enrichedNarrative - The enriched master narrative
+   * @returns StoryRubric for JIT service consumption
+   */
+  deriveStoryRubric(
+    enrichedNarrative: EnrichedMasterNarrative
+  ): StoryRubric {
+    console.log('📋 Deriving Story Rubric from Enriched Master Narrative');
+
+    const storyRubric: StoryRubric = {
+      sessionId: enrichedNarrative.sessionId,
+      sourceFile: `master-narratives/${enrichedNarrative.sessionId}.json`,
+
+      storyContext: {
+        narrativeArc: enrichedNarrative.masterNarrative.narrativeArc,
+        companionVoice: enrichedNarrative.masterNarrative.companionVoice,
+        careerNarrative: enrichedNarrative.masterNarrative.careerNarrative,
+        subjectNarratives: enrichedNarrative.masterNarrative.subjectNarratives,
+        containerTransitions: enrichedNarrative.masterNarrative.containerTransitions
+      },
+
+      usage: 'Immutable story context passed to all JIT calls for consistent narrative'
+    };
+
+    console.log('✅ Story Rubric derived');
+
+    return storyRubric;
   }
 }
 

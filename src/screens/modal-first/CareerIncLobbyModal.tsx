@@ -103,14 +103,6 @@ export const CareerIncLobbyModal: React.FC<CareerIncLobbyModalProps> = ({
   onContainerReturn,
   userId = 'default'
 }) => {
-  console.log('🏢 CareerIncLobbyModal MOUNTED', {
-    selectedCareer,
-    selectedCompanion,
-    theme,
-    userId,
-    timestamp: Date.now()
-  });
-
   // Helper to get companion display name from ID
   const getCompanionDisplayName = (companionId: string | undefined): string => {
     if (!companionId) return 'Your Companion';

@@ -29,7 +29,11 @@ export class AzureStorageService {
     microLearn: 'micro-content-learn',
     microExperience: 'micro-content-experience',
     microDiscover: 'micro-content-discover',
-    metrics: 'content-metrics'
+    metrics: 'content-metrics',
+    // Rubric containers (dedicated)
+    enrichedNarratives: 'enriched-narratives',
+    storyRubrics: 'story-rubrics',
+    dataRubrics: 'data-rubrics'
   };
 
   constructor(connectionString?: string) {
@@ -421,6 +425,71 @@ export class AzureStorageService {
       console.log(`📊 Metrics saved: ${blobName}`);
     } catch (error) {
       console.error('Failed to save metrics:', error);
+    }
+  }
+
+  /**
+   * Generic method to upload JSON to a dedicated container
+   * Used for rubric storage
+   */
+  async uploadJSON(
+    containerType: keyof typeof this.containerNames,
+    blobPath: string,
+    data: any,
+    metadata?: Record<string, string>
+  ): Promise<{ url: string; blobName: string }> {
+    try {
+      const containerClient = await this.getContainerClient(containerType);
+      const blockBlobClient = containerClient.getBlockBlobClient(blobPath);
+
+      const content = JSON.stringify(data, null, 2);
+      const buffer = Buffer.from(content);
+
+      await blockBlobClient.upload(buffer, buffer.length, {
+        blobHTTPHeaders: {
+          blobContentType: 'application/json',
+          blobCacheControl: 'public, max-age=2592000' // Cache for 30 days
+        },
+        metadata: {
+          ...metadata,
+          createdAt: new Date().toISOString()
+        }
+      });
+
+      const url = blockBlobClient.url;
+      console.log(`✅ JSON uploaded to ${this.containerNames[containerType]}: ${blobPath}`);
+      console.log(`   Size: ${(buffer.length / 1024).toFixed(2)} KB`);
+      return { url, blobName: blobPath };
+    } catch (error) {
+      console.error(`❌ JSON upload failed to ${containerType}:`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Generic method to retrieve JSON from a container
+   * Used for rubric retrieval
+   */
+  async getJSON(
+    containerType: keyof typeof this.containerNames,
+    blobPath: string
+  ): Promise<any | null> {
+    try {
+      const containerClient = await this.getContainerClient(containerType);
+      const blobClient = containerClient.getBlobClient(blobPath);
+
+      const downloadResponse = await blobClient.download();
+      const content = await this.streamToBuffer(downloadResponse.readableStreamBody!);
+
+      console.log(`✅ JSON retrieved from ${this.containerNames[containerType]}: ${blobPath}`);
+      return JSON.parse(content.toString());
+    } catch (error) {
+      if ((error as any)?.statusCode === 404) {
+        console.log(`⚠️ JSON not found in ${containerType}: ${blobPath}`);
+        return null;
+      }
+      console.error(`❌ JSON retrieval failed from ${containerType}:`, error);
+      return null;
     }
   }
 

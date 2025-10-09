@@ -1,0 +1,226 @@
+{
+  "sessionId": "session-d472ea4d-4174-432f-a273-ea213f2ebae4-1760030164174",
+  "container": "DISCOVER",
+  "subject": "Math",
+  "skill": {
+    "id": "K.Math.A.1",
+    "name": "Basic Math",
+    "subject": "Math",
+    "skillNumber": "A.1",
+    "description": "Basic Math",
+    "gradeLevel": "K"
+  },
+  "storyContext": {
+    "narrativeSetup": "sage says: \"For this final challenge, you'll need to use ALL your athlete skills...\"",
+    "careerContext": "Math skills help athletes calculations and measurements in their daily work",
+    "workplaceSetting": "Sports Park for Athletes",
+    "companionVoice": "Spark shows examples and explains with pictures."
+  },
+  "dataRequirements": {
+    "containerType": "DISCOVER",
+    "unifiedScenario": {
+      "required": true,
+      "structure": {
+        "title": "string",
+        "narrativeSetup": "string",
+        "challenge": "string",
+        "careerConnection": "string"
+      }
+    },
+    "discoveryStations": {
+      "count": 4,
+      "structure": {
+        "subject": "Subject",
+        "stationTitle": "string",
+        "question": "string",
+        "options": "string[]",
+        "correct_answer": "number",
+        "explanation": "string",
+        "hint": "string",
+        "activity": {
+          "type": "string",
+          "description": "string",
+          "prompt": "string",
+          "supportingData": "string"
+        }
+      }
+    }
+  },
+  "jitPrompt": {
+    "systemPrompt": "You are an expert educational content generator for the DISCOVER container.\n\nYour role is to create engaging, age-appropriate content that:\n1. Teaches Math skills through career-based narratives\n2. Maintains story consistency with the narrative arc\n3. Uses the companion's teaching voice: \"Spark shows examples and explains with pictures.\"\n4. Sets activities in the workplace: \"Sports Park for Athletes\"\n5. Connects learning to career context: \"Math skills help athletes calculations and measurements in their daily work\"\n\nGenerate content that matches the exact data structure requirements provided.\nEnsure all questions, hints, and explanations align with each other (intra-rubric consistency).",
+    "userPrompt": "Generate DISCOVER container content for Math.\n\nSKILL TO TEACH:\n- Skill: Basic Math (K.Math.A.1)\n- Description: Basic Math\n- Grade Level: K\n\nNARRATIVE CONTEXT:\nsage says: \"For this final challenge, you'll need to use ALL your athlete skills...\"\n\nCAREER CONNECTION:\nMath skills help athletes calculations and measurements in their daily work\n\nCOMPANION VOICE:\nSpark shows examples and explains with pictures.\n\nWORKPLACE SETTING:\nSports Park for Athletes\n\nSTUDENT NAME: d472ea4d-4174-432f-a273-ea213f2ebae4\nCAREER: Athlete\nCOMPANION: sage\n\nGENERATE:\n1. Create unified scenario that ties all subjects together\n2. Create 4 discovery stations (one per subject: Math, ELA, Science, Social Studies)\n\nReturn ONLY valid JSON in this EXACT structure (no markdown, no code blocks).\nReplace placeholders with actual discovery content:\n{\n  \"unifiedScenario\": {\n    \"title\": \"Real scenario title connecting all subjects\",\n    \"narrativeSetup\": \"Engaging story that ties Math, ELA, Science, and Social Studies together\",\n    \"challenge\": \"The main challenge students will solve across all stations\",\n    \"careerConnection\": \"How this relates to the career and real-world application\"\n  },\n  \"discoveryStations\": [\n    {\n      \"subject\": \"Math\",\n      \"stationTitle\": \"Math Station Name\",\n      \"question\": \"The actual quiz question students will answer\",\n      \"options\": [\"Option A\", \"Option B\", \"Option C\", \"Option D\"],\n      \"correct_answer\": 0,\n      \"explanation\": \"Why this answer is correct and how it relates to the career\",\n      \"hint\": \"Helpful hint if student needs guidance\",\n      \"activity\": {\n        \"type\": \"investigation\",\n        \"description\": \"Context about what students are discovering\",\n        \"prompt\": \"Instructions for approaching this discovery\",\n        \"supportingData\": \"Visual aids, data, or resources provided\"\n      },\n      \"deliverable\": {\n        \"type\": \"solution\",\n        \"description\": \"What the student will create/present\",\n        \"assessmentCriteria\": [\"Criterion 1\", \"Criterion 2\", \"Criterion 3\"]\n      },\n      \"practiceSupport\": {\n        \"scaffoldingLevel\": \"medium\",\n        \"resourcesProvided\": [\"Resource 1\", \"Resource 2\"]\n      }\n    },\n    {\n      \"subject\": \"ELA\",\n      \"stationTitle\": \"ELA Station Name\",\n      \"question\": \"The actual quiz question students will answer\",\n      \"options\": [\"Option A\", \"Option B\", \"Option C\", \"Option D\"],\n      \"correct_answer\": 1,\n      \"explanation\": \"Why this answer is correct and how it relates to the career\",\n      \"hint\": \"Helpful hint if student needs guidance\",\n      \"activity\": {\n        \"type\": \"creation\",\n        \"description\": \"Context about what students are discovering\",\n        \"prompt\": \"Instructions for approaching this discovery\",\n        \"supportingData\": \"Visual aids, data, or resources provided\"\n      },\n      \"deliverable\": {\n        \"type\": \"document\",\n        \"description\": \"what to create\",\n        \"assessmentCriteria\": [\"criterion1\", \"criterion2\", \"criterion3\"]\n      },\n      \"practiceSupport\": {\n        \"scaffoldingLevel\": \"medium\",\n        \"resourcesProvided\": [\"resource1\", \"resource2\"]\n      }\n    },\n    {\n      \"subject\": \"Science\",\n      \"stationTitle\": \"Science Station Name\",\n      \"question\": \"The actual quiz question students will answer\",\n      \"options\": [\"Option A\", \"Option B\", \"Option C\", \"Option D\"],\n      \"correct_answer\": 2,\n      \"explanation\": \"Why this answer is correct and how it relates to the career\",\n      \"hint\": \"Helpful hint if student needs guidance\",\n      \"activity\": {\n        \"type\": \"exploration\",\n        \"description\": \"Context about what students are discovering\",\n        \"prompt\": \"Instructions for approaching this discovery\",\n        \"supportingData\": \"Visual aids, data, or resources provided\"\n      },\n      \"deliverable\": {\n        \"type\": \"presentation\",\n        \"description\": \"what to present\",\n        \"assessmentCriteria\": [\"criterion1\", \"criterion2\", \"criterion3\"]\n      },\n      \"practiceSupport\": {\n        \"scaffoldingLevel\": \"medium\",\n        \"resourcesProvided\": [\"resource1\", \"resource2\"]\n      }\n    },\n    {\n      \"subject\": \"Social Studies\",\n      \"stationTitle\": \"Social Studies Station Name\",\n      \"question\": \"The actual quiz question students will answer\",\n      \"options\": [\"Option A\", \"Option B\", \"Option C\", \"Option D\"],\n      \"correct_answer\": 3,\n      \"explanation\": \"Why this answer is correct and how it relates to the career\",\n      \"hint\": \"Helpful hint if student needs guidance\",\n      \"activity\": {\n        \"type\": \"analysis\",\n        \"description\": \"Context about what students are discovering\",\n        \"prompt\": \"Instructions for approaching this discovery\",\n        \"supportingData\": \"Visual aids, data, or resources provided\"\n      },\n      \"deliverable\": {\n        \"type\": \"artifact\",\n        \"description\": \"what to create\",\n        \"assessmentCriteria\": [\"criterion1\", \"criterion2\", \"criterion3\"]\n      },\n      \"practiceSupport\": {\n        \"scaffoldingLevel\": \"medium\",\n        \"resourcesProvided\": [\"resource1\", \"resource2\"]\n      }\n    }\n  ]\n}\n\nIMPORTANT: Provide unified scenario and exactly 4 discoveryStations (one per subject) with actual content.",
+    "variables": {
+      "container": "DISCOVER",
+      "subject": "Math",
+      "skillId": "K.Math.A.1",
+      "skillName": "Basic Math",
+      "skillDescription": "Basic Math",
+      "gradeLevel": "K",
+      "studentName": "d472ea4d-4174-432f-a273-ea213f2ebae4",
+      "career": "Athlete",
+      "companion": "sage",
+      "sessionId": "session-d472ea4d-4174-432f-a273-ea213f2ebae4-1760030164174"
+    }
+  },
+  "adaptationData": {
+    "performanceFromPreviousContainer": null,
+    "adaptationRules": null,
+    "lastUpdated": null
+  },
+  "generatedContent": {
+    "unifiedScenario": {
+      "title": "Athlete's Ultimate Challenge: Mastering the Sports Park",
+      "narrativeSetup": "You’ve been invited to the Sports Park for Athletes to compete in the ultimate challenge! Each discovery station represents skills athletes need every day. Sage, your companion, will guide you as you solve problems to complete tasks that real athletes face. Are you ready to score big?",
+      "challenge": "Use your math, reading, science, and social studies skills to prepare for the final championship event at the Sports Park!",
+      "careerConnection": "Athletes use math for accurate measurements, reading for understanding rules, science for improving performance, and social studies for teamwork strategies based on cultural understanding."
+    },
+    "discoveryStations": [
+      {
+        "subject": "Math",
+        "stationTitle": "Measuring the Sports Track",
+        "question": "The running track is 100 meters long. If an athlete runs it 3 times, how far has the athlete run?",
+        "options": [
+          "100 meters",
+          "200 meters",
+          "300 meters",
+          "400 meters"
+        ],
+        "correct_answer": 2,
+        "explanation": "The correct answer is 300 meters because multiplying 100 meters by 3 (laps) gives the total distance. Math helps athletes measure distances accurately during training and competitions.",
+        "hint": "Multiply the length of the track by the number of laps.",
+        "activity": {
+          "type": "investigation",
+          "description": "Discover how athletes measure distances for training and competitions.",
+          "prompt": "Use the provided running track dimensions and calculate how far athletes run for different lap counts.",
+          "supportingData": "Visual of a labeled track with lap count examples."
+        },
+        "deliverable": {
+          "type": "solution",
+          "description": "Create a chart showing distances for different lap counts.",
+          "assessmentCriteria": [
+            "Accurate calculations",
+            "Clear chart layout",
+            "Proper use of multiplication"
+          ]
+        },
+        "practiceSupport": {
+          "scaffoldingLevel": "medium",
+          "resourcesProvided": [
+            "Multiplication examples",
+            "Track diagram"
+          ]
+        }
+      },
+      {
+        "subject": "ELA",
+        "stationTitle": "Understanding the Game Rules",
+        "question": "Which sentence explains why athletes must follow game rules?",
+        "options": [
+          "Rules keep the game fair.",
+          "Rules make training harder.",
+          "Rules are optional.",
+          "Rules change every game."
+        ],
+        "correct_answer": 0,
+        "explanation": "Rules keep the game fair and ensure everyone plays by the same standards, which is essential for all athletes.",
+        "hint": "Think about how rules help in competitions.",
+        "activity": {
+          "type": "creation",
+          "description": "Learn how athletes understand and apply rules to their games.",
+          "prompt": "Read a short passage about sports rules and summarize why rules are important.",
+          "supportingData": "Passage describing the importance of rules in sports."
+        },
+        "deliverable": {
+          "type": "document",
+          "description": "Write a short explanation of why rules matter in sports.",
+          "assessmentCriteria": [
+            "Clear summary",
+            "Examples from the text",
+            "Proper sentence structure"
+          ]
+        },
+        "practiceSupport": {
+          "scaffoldingLevel": "medium",
+          "resourcesProvided": [
+            "Sample sports rules",
+            "Guidelines for summarizing"
+          ]
+        }
+      },
+      {
+        "subject": "Science",
+        "stationTitle": "Athlete Nutrition and Energy",
+        "question": "Which food type gives athletes quick energy for a sprint?",
+        "options": [
+          "Proteins",
+          "Carbohydrates",
+          "Fats",
+          "Vitamins"
+        ],
+        "correct_answer": 1,
+        "explanation": "Carbohydrates provide quick energy, which is essential for athletes during high-intensity activities like sprints.",
+        "hint": "Think about what athletes eat before a race to gain energy quickly.",
+        "activity": {
+          "type": "exploration",
+          "description": "Discover how different food types impact athletic performance.",
+          "prompt": "Match foods to their energy functions and decide what an athlete should eat before a sprint.",
+          "supportingData": "Pictures of different food types and their nutritional benefits."
+        },
+        "deliverable": {
+          "type": "presentation",
+          "description": "Present a meal plan for an athlete preparing for a sprint.",
+          "assessmentCriteria": [
+            "Appropriate food choices",
+            "Explanation of energy benefits",
+            "Clear presentation format"
+          ]
+        },
+        "practiceSupport": {
+          "scaffoldingLevel": "medium",
+          "resourcesProvided": [
+            "Food energy chart",
+            "Examples of athlete meal plans"
+          ]
+        }
+      },
+      {
+        "subject": "Social Studies",
+        "stationTitle": "Teamwork Across Cultures",
+        "question": "Why is understanding different cultures important for teamwork?",
+        "options": [
+          "It improves communication.",
+          "It adds competition.",
+          "It makes games harder.",
+          "It is unnecessary."
+        ],
+        "correct_answer": 0,
+        "explanation": "Understanding different cultures improves communication and collaboration, which helps athletes work better in teams during international events.",
+        "hint": "Think about how athletes from different countries work together.",
+        "activity": {
+          "type": "analysis",
+          "description": "Explore how cultural understanding improves teamwork in sports.",
+          "prompt": "Analyze a scenario in which athletes from different cultures work together and identify how cultural differences impact the team.",
+          "supportingData": "Story of an international sports team with diverse members."
+        },
+        "deliverable": {
+          "type": "artifact",
+          "description": "Create a teamwork strategy that considers cultural differences.",
+          "assessmentCriteria": [
+            "Recognition of cultural factors",
+            "Effective teamwork strategies",
+            "Clear communication methods"
+          ]
+        },
+        "practiceSupport": {
+          "scaffoldingLevel": "medium",
+          "resourcesProvided": [
+            "Cultural awareness examples",
+            "Teamwork strategies guide"
+          ]
+        }
+      }
+    ]
+  },
+  "completedAt": "2025-10-09T17:23:33.789Z",
+  "performance": null
+}

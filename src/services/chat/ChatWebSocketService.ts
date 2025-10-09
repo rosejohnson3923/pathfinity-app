@@ -23,6 +23,8 @@ class ChatWebSocketService {
    */
   async connect(): Promise<void> {
     return new Promise((resolve, reject) => {
+      let isResolved = false;
+
       try {
         // Get WebSocket URL from environment or use default
         const wsUrl = import.meta.env.VITE_WS_URL || 'ws://localhost:3002';
@@ -43,6 +45,7 @@ class ChatWebSocketService {
           // Send any queued messages
           this.flushMessageQueue();
 
+          isResolved = true;
           resolve();
         };
 
@@ -61,17 +64,26 @@ class ChatWebSocketService {
           console.log('❌ Chat WebSocket disconnected');
           this.notifyStatusChange('disconnected');
           this.attemptReconnect();
+
+          // Reject promise if connection never opened
+          if (!isResolved) {
+            isResolved = true;
+            reject(new Error('WebSocket connection closed before opening'));
+          }
         };
 
         // Connection error
         this.ws.onerror = (error) => {
-          console.error('WebSocket error:', error);
-          reject(error);
+          console.log('[WebSocket] Connection error (expected if server not running)');
+          // Don't reject here - let onclose handle it
+          // This prevents the error event from becoming an unhandled promise rejection
         };
 
       } catch (error) {
         console.error('Failed to create WebSocket connection:', error);
-        reject(error);
+        if (!isResolved) {
+          reject(error);
+        }
       }
     });
   }
@@ -122,7 +134,10 @@ class ChatWebSocketService {
     console.log(`Attempting reconnect in ${delay}ms (attempt ${this.reconnectAttempts})`);
 
     this.reconnectTimeout = setTimeout(() => {
-      this.connect();
+      this.connect().catch((error) => {
+        // Silently handle reconnection failures - they're expected when server is down
+        console.log('[WebSocket] Reconnection failed, will retry or fallback to API mode');
+      });
     }, delay);
   }
 

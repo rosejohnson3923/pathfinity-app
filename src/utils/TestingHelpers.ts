@@ -98,7 +98,9 @@ export class TestingHelpers {
         }
       };
 
-      console.log(`
+      // Only show banner in DEV mode and if explicitly requested
+      if (import.meta.env.DEV && localStorage.getItem('showTestingBanner') === 'true') {
+        console.log(`
 ╔════════════════════════════════════════════════╗
 ║     Question Type Testing Commands Ready      ║
 ╠════════════════════════════════════════════════╣
@@ -116,6 +118,7 @@ export class TestingHelpers {
 ║ Question Tracker: window.questionTypeTracker  ║
 ╚════════════════════════════════════════════════╝
       `);
+      }
     }
   }
 }

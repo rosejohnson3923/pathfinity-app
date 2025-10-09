@@ -380,15 +380,6 @@ class QuestionTypeValidator {
     if (this.validationLog.length > 100) {
       this.validationLog.shift();
     }
-    
-    // Log to console in development
-    if (process.env.NODE_ENV === 'development') {
-      console.log('📋 Question Validation:', {
-        original: original.type,
-        corrected: corrected.type,
-        issues
-      });
-    }
   }
 
   /**

@@ -786,7 +786,112 @@ export class JustInTimeContentService {
       career: career?.name,
       subject: subject
     });
-    
+
+    // ====================================================================
+    // RUBRIC-BASED GENERATION CHECK (NEW)
+    // ====================================================================
+    // Check if we have a rubric session ID (from RubricJourneyIntegration)
+    const rubricSessionId = (context as any)?.rubricSessionId;
+
+    if (rubricSessionId) {
+      console.log('🎯 [JIT] Using RUBRIC-BASED content generation', {
+        rubricSessionId,
+        containerType,
+        subject
+      });
+
+      try {
+        const { RubricBasedJITService } = await import('./RubricBasedJITService');
+        const rubricJIT = RubricBasedJITService.getInstance();
+
+        // Normalize subject case to match rubric storage format
+        // Rubrics are stored with proper case: 'Math', 'ELA', 'Science', 'Social Studies'
+        const normalizedSubject = this.normalizeSubjectCase(subject);
+
+        // Generate content for specific subject using rubric
+        const rubricResult = await rubricJIT.generateContentFromRubric({
+          sessionId: rubricSessionId,
+          container: containerType.toUpperCase() as any,
+          subject: normalizedSubject,
+          userId: student.user_id || student.id,
+          forceRegenerate: false
+        });
+
+        if (rubricResult?.content) {
+          console.log('✅ [JIT] Rubric-based content generated successfully');
+          console.log('🔍 [JIT] Rubric content structure:', {
+            hasPractice: !!rubricResult.content.practice,
+            practiceCount: rubricResult.content.practice?.length,
+            hasAssessment: !!rubricResult.content.assessment,
+            assessmentIsArray: Array.isArray(rubricResult.content.assessment)
+          });
+
+          // Convert rubric content to AIContent format
+          let aiContent: any;
+          switch (containerType) {
+            case 'learn':
+              aiContent = {
+                // These fields are not used by container but required by interface
+                title: `Learning ${skill.skill_name}`,
+                greeting: `Hi ${student.display_name || 'there'}!`,
+                concept: skill.skill_description || `Let's learn ${skill.skill_name}`,
+                examples: [],
+                // These are actually used by the container
+                practice: rubricResult.content.practice || [],
+                assessment: rubricResult.content.assessment || {}
+              };
+              break;
+            case 'experience':
+              aiContent = rubricResult.content;
+              break;
+            case 'discover':
+              // DISCOVER container expects raw rubric content with unifiedScenario and discoveryStations
+              // Don't convert - pass through directly
+              console.log('🎯 [JIT] Returning DISCOVER rubric content directly:', {
+                hasUnifiedScenario: !!rubricResult.content.unifiedScenario,
+                hasDiscoveryStations: !!rubricResult.content.discoveryStations,
+                stationCount: rubricResult.content.discoveryStations?.length
+              });
+
+              return {
+                container: request.container || 'discover-container',
+                subject: subject,
+                questions: [], // Not used by DISCOVER container
+                instructions: '', // Not used by DISCOVER container
+                estimatedTime: 15,
+                difficulty: 'medium',
+                careerContext: request.context?.career || '',
+                skillFocus: request.context?.skill?.skill_name || '',
+                metadata: {
+                  generatedAt: new Date(rubricResult.generatedAt),
+                  generationTime: rubricResult.generationTime,
+                  cacheHit: false,
+                  adaptationsApplied: [],
+                  consistencyScore: 1.0,
+                  source: 'ai' as const
+                },
+                // Store full rubric content as aiSourceContent for DISCOVER container to use
+                aiSourceContent: rubricResult.content
+              };
+            default:
+              throw new Error(`Unknown container type: ${containerType}`);
+          }
+
+          // Convert and return rubric-based content (for LEARN/EXPERIENCE only)
+          return this.convertAIContentToGeneratedFormat(aiContent, request, containerType, subject);
+        } else {
+          console.warn('⚠️ [JIT] Rubric content empty, falling back to legacy system');
+        }
+
+      } catch (error) {
+        console.error('❌ [JIT] Rubric generation failed, falling back to legacy:', error);
+        // Fall through to legacy generation
+      }
+    }
+
+    // ====================================================================
+    // LEGACY AI GENERATION (FALLBACK)
+    // ====================================================================
     // Generate AI content based on container type
     let aiContent: any;
     switch (containerType) {
@@ -802,7 +907,19 @@ export class JustInTimeContentService {
       default:
         throw new Error(`Unknown container type: ${containerType}`);
     }
-    
+
+    console.log('🔍 [JIT] Legacy AIContent structure:', {
+      containerType,
+      hasTitle: !!aiContent?.title,
+      hasGreeting: !!aiContent?.greeting,
+      hasPractice: !!aiContent?.practice,
+      practiceCount: aiContent?.practice?.length,
+      firstPractice: aiContent?.practice?.[0],
+      hasDiscoveryPaths: !!aiContent?.discovery_paths,
+      discoveryPathsCount: aiContent?.discovery_paths?.length,
+      fullStructurePreview: JSON.stringify(aiContent).substring(0, 500)
+    });
+
     // Convert AI content to GeneratedContent format
     return this.convertAIContentToGeneratedFormat(aiContent, request, containerType, subject);
   }
@@ -1606,17 +1723,45 @@ export class JustInTimeContentService {
           item.cache.timestamp = new Date(item.cache.timestamp);
           item.cache.expiresAt = new Date(item.cache.expiresAt);
           item.cache.lastAccessed = new Date(item.cache.lastAccessed);
-          
+
           if (!this.isCacheExpired(item.cache)) {
             this.sessionCache.set(item.key, item.cache);
           }
         });
-        
+
         console.log('[JIT] Restored', this.sessionCache.size, 'cache entries');
       }
     } catch (error) {
       console.error('[JIT] Failed to restore cache:', error);
     }
+  }
+
+  /**
+   * Normalize subject case to match rubric storage format
+   * Rubrics are stored with proper case: 'Math', 'ELA', 'Science', 'Social Studies'
+   * But database/skills may use lowercase: 'math', 'ela', 'science', 'social studies'
+   */
+  private normalizeSubjectCase(subject: string): string {
+    const subjectMap: Record<string, string> = {
+      'math': 'Math',
+      'ela': 'ELA',
+      'science': 'Science',
+      'social studies': 'Social Studies',
+      'socialstudies': 'Social Studies',
+      // Already normalized (pass through)
+      'Math': 'Math',
+      'ELA': 'ELA',
+      'Science': 'Science',
+      'Social Studies': 'Social Studies'
+    };
+
+    const normalized = subjectMap[subject.toLowerCase()];
+    if (!normalized) {
+      console.warn(`[JIT] Unknown subject '${subject}', defaulting to capitalized version`);
+      return subject.charAt(0).toUpperCase() + subject.slice(1).toLowerCase();
+    }
+
+    return normalized;
   }
 }
 

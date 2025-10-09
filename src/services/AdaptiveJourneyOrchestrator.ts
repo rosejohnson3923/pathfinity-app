@@ -99,9 +99,11 @@ export class AdaptiveJourneyOrchestrator {
     const subjects = ['Math', 'ELA', 'Science', 'Social Studies'];
     const activeSkillClusters: LearningJourney['activeSkillClusters'] = {};
     
+    // FIXED: Load clusters asynchronously to ensure skills are loaded from database
     for (const subject of subjects) {
-      const diagnosticCluster = skillClusterService.getDiagnosticCluster(gradeLevel, subject);
-      if (diagnosticCluster) {
+      const diagnosticCluster = await skillClusterService.loadClusterAsync(gradeLevel, subject, 'A');
+      if (diagnosticCluster && diagnosticCluster.skills.length > 0) {
+        console.log(`✅ Loaded ${subject} cluster with ${diagnosticCluster.skills.length} skills`);
         activeSkillClusters[subject] = {
           clusterId: diagnosticCluster.categoryId,
           cluster: diagnosticCluster,
@@ -114,6 +116,8 @@ export class AdaptiveJourneyOrchestrator {
           },
           nextClusterReady: false
         };
+      } else {
+        console.warn(`⚠️ Failed to load ${subject} cluster for grade ${gradeLevel}`);
       }
     }
     

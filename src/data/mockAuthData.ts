@@ -373,10 +373,10 @@ export const mockUserProfiles = mockUsers.map(user => {
 
 // Helper function to find user by email
 export const findUserByEmail = (email: string) => {
-  console.log('🔍 findUserByEmail called with:', email);
-  console.log('🔍 Available emails:', mockUsers.map(u => u.email));
   const result = mockUsers.find(user => user.email.toLowerCase() === email.toLowerCase());
-  console.log('🔍 findUserByEmail result:', result ? `Found: ${result.full_name}` : 'NOT FOUND');
+  if (!result) {
+    console.warn('User not found for email:', email);
+  }
   return result;
 };
 

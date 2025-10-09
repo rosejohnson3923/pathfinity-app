@@ -57,11 +57,9 @@ export abstract class BaseRulesEngine<T extends RuleContext = RuleContext> {
 
     // Call child class initialization
     this.registerRules();
-    
+
     this.isInitialized = true;
     this.emitEvent(RuleEngineEvent.ENGINE_STARTED, { engineId: this.config.id });
-    
-    console.log(`🚀 ${this.config.name} initialized successfully`);
   }
 
   /**

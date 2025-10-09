@@ -97,6 +97,8 @@ interface AIExperienceContainerV2Props {
   userId?: string;
   totalSubjects?: number; // Total number of subjects in the journey
   currentSubjectIndex?: number; // Which subject we're currently on
+  // Rubric Session ID for rubric-based content generation
+  rubricSessionId?: string;
   // Master Narrative for audio narration
   masterNarrative?: any;
   narrativeLoading?: boolean;
@@ -177,7 +179,12 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
       onBack();
     }
   };
-  
+
+  // Testing shortcut - skip directly to Discover container
+  const handleSkipToDiscover = () => {
+    onComplete(true); // Pass true to move to next container
+  };
+
   // ================================================================
   // STATE MANAGEMENT
   // ================================================================
@@ -262,7 +269,6 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
     const playPhaseAudio = async () => {
       // Removed companionAudioService calls - audio is now handled by azureAudioService
       // in parent components or directly when needed
-      console.log(`🎵 Phase ${phase} - audio handled by azureAudioService`);
     };
 
     playPhaseAudio();
@@ -1072,7 +1078,7 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
         currentCareer={selectedCareer?.name || "Exploring"}
         showGamification={true}
         masterNarrative={masterNarrative}
-        currentSubject={subject as 'math' | 'ela' | 'science' | 'socialStudies'}
+        currentSubject={skill.subject as 'math' | 'ela' | 'science' | 'socialStudies'}
         companionId={companionId}
         enableNarration={true}
         isFirstLoad={phase === 'loading' && !content}
@@ -1103,6 +1109,30 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
             avatarUrl={currentCharacter?.avatar_url}
             onStart={() => setShowCareerContext(false)}
           />
+
+          {/* DEV ONLY: Skip to Discover button */}
+          {import.meta.env.DEV && (
+            <button
+              onClick={handleSkipToDiscover}
+              style={{
+                position: 'fixed',
+                top: '80px',
+                right: '20px',
+                padding: '10px 20px',
+                backgroundColor: '#48bb78',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                fontSize: '14px',
+                fontWeight: 'bold',
+                cursor: 'pointer',
+                zIndex: 9999,
+                boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
+              }}
+            >
+              🔍 Skip to Discover
+            </button>
+          )}
         </div>
       );
     }
@@ -1130,8 +1160,31 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
             hideOnLoading={true}
             isLoading={phase === 'loading'}
           />
-          
-          
+
+          {/* DEV ONLY: Skip to Discover button */}
+          {import.meta.env.DEV && (
+            <button
+              onClick={handleSkipToDiscover}
+              style={{
+                position: 'fixed',
+                top: '80px',
+                right: '20px',
+                padding: '10px 20px',
+                backgroundColor: '#48bb78',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                fontSize: '14px',
+                fontWeight: 'bold',
+                cursor: 'pointer',
+                zIndex: 9999,
+                boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
+              }}
+            >
+              🔍 Skip to Discover
+            </button>
+          )}
+
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'auto' }}>
           {/* Dynamic component selection based on feature flag */}
           {(() => {
@@ -1259,6 +1312,31 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
           hideOnLoading={true}
           isLoading={isLoading}
         />
+
+        {/* DEV ONLY: Skip to Discover button */}
+        {import.meta.env.DEV && (
+          <button
+            onClick={handleSkipToDiscover}
+            style={{
+              position: 'fixed',
+              top: '80px',
+              right: '20px',
+              padding: '10px 20px',
+              backgroundColor: '#48bb78',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              fontSize: '14px',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              zIndex: 9999,
+              boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
+            }}
+          >
+            🔍 Skip to Discover
+          </button>
+        )}
+
         <div className={`${lessonStyles.lessonPhase} ${onBack ? lessonStyles.withHeader : ''}`}>
           <header className="phase-header">
             <h1>{content.title}</h1>

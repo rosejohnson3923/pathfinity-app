@@ -90,6 +90,12 @@ interface AIDiscoverContainerV2Props {
   onBack?: () => void;
   userId?: string;
   onLoadingChange?: (loading: boolean) => void;
+  // Rubric Session ID for rubric-based content generation
+  rubricSessionId?: string;
+  // Master Narrative for context
+  masterNarrative?: any;
+  narrativeLoading?: boolean;
+  companionId?: string;
 }
 
 type DiscoverPhase = 'loading' | 'exploration_intro' | 'discovery_paths' | 'activities' | 'reflection' | 'complete';
@@ -107,7 +113,11 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
   onNext,
   onBack,
   userId,
-  onLoadingChange
+  onLoadingChange,
+  rubricSessionId,
+  masterNarrative,
+  narrativeLoading,
+  companionId
 }) => {
   const theme = useTheme();
   
@@ -204,43 +214,21 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
   const studentKey = student ? `${student.id}-${student.name}` : null;
 
   useEffect(() => {
-    console.log('🔍 Discover useEffect triggered:', {
-      renderCount: renderCount.current,
-      hasSkill: !!skill,
-      hasStudent: !!student,
-      skillKey,
-      studentKey,
-      phase,
-      hasContent: !!content,
-      isGenerating: isGenerating.current
-    });
-
     // Prevent duplicate calls
     if (!skill || !student || phase !== 'loading' || content || isGenerating.current) {
-      console.log('⚠️ Skipping generateContent:', {
-        noSkill: !skill,
-        noStudent: !student,
-        notLoading: phase !== 'loading',
-        hasContent: !!content,
-        alreadyGenerating: isGenerating.current
-      });
       return;
     }
     generateContent();
   }, [skillKey, studentKey]); // Use stable keys to prevent unnecessary re-renders
 
   const generateContent = async () => {
-    console.log('📢 generateContent called');
-
     // Prevent concurrent generation
     if (isGenerating.current) {
-      console.log('🔒 Already generating content, skipping duplicate call');
       return;
     }
 
     // Double-check to prevent race conditions
     if (phase !== 'loading' || content) {
-      console.log('⚠️ Skipping duplicate content generation - already loading or loaded');
       return;
     }
 
@@ -249,7 +237,6 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
     const startTime = performance.now();
 
     try {
-      console.log('🚀 Starting content generation...');
       // STEP 1: Initialize Daily Context (V2-JIT)
       const dailyContext = dailyContextManager.getCurrentContext() || 
         await dailyContextManager.createDailyContext({
@@ -280,6 +267,8 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
           },
           career: selectedCareer,
           careerDescription: `${selectedCareer} professional`,
+          // RUBRIC SESSION ID - Enables rubric-based content generation
+          rubricSessionId: rubricSessionId,
           // ADD NARRATIVE CONTEXT for Discover Container (Challenge generation)
           narrativeContext: masterNarrative ? {
             // Discover-specific setting and narrative
@@ -300,26 +289,33 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
         },
         timeConstraint: 15 // minutes
       };
-      
-      console.log('⚡ Checking JIT cache for Discover Content:', jitRequest);
 
       // Try to get content from JIT cache first
       let generatedContent;
       try {
         const jitContent = await jitService.generateContainerContent(jitRequest);
 
-        // Use JIT content if available
-        if (jitContent && jitContent.content) {
-          console.log('✅ Using cached JIT content');
+        // DISCOVER container: Check for aiSourceContent (rubric-based content)
+        if (jitContent && jitContent.aiSourceContent) {
+          console.log('✅ [DISCOVER] Using rubric-based content from JIT aiSourceContent:', {
+            hasUnifiedScenario: !!jitContent.aiSourceContent.unifiedScenario,
+            hasDiscoveryStations: !!jitContent.aiSourceContent.discoveryStations,
+            stationCount: jitContent.aiSourceContent.discoveryStations?.length
+          });
+          generatedContent = jitContent.aiSourceContent;
+        }
+        // Fallback: Use JIT content if available (legacy format)
+        else if (jitContent && jitContent.content) {
+          console.log('⚠️ [DISCOVER] Using legacy content from JIT content field');
           generatedContent = jitContent.content;
         }
       } catch (jitError) {
-        console.log('⚠️ JIT cache miss or error:', jitError);
+        console.error('❌ [DISCOVER] JIT error:', jitError);
+        // JIT cache miss - will generate fresh content
       }
 
       // Only make AI call if JIT didn't provide content
       if (!generatedContent) {
-        console.log('🤖 Making fresh AI call since JIT cache was empty');
         generatedContent = await aiLearningJourneyService.generateDiscoverContent(
           skill,
           student,
@@ -426,11 +422,35 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
       }
 
     } catch (error) {
-      console.error('❌ Failed to generate AI Discover content:', error);
+      console.error('❌ [DISCOVER] Failed to generate content:', error);
+
+      // Set error state to prevent re-render loop
+      setPhase('complete');
+      setContent({
+        introduction: {
+          hook: "Let's explore together!",
+          connection: `We'll discover more about ${skill?.skill_name || 'this topic'}.`,
+          objective: "Ready to learn?"
+        },
+        discovery_paths: [
+          {
+            title: "Exploration Path",
+            description: "Let's explore this topic together",
+            icon: "🔍",
+            difficulty: "beginner",
+            duration: 15,
+            activities: []
+          }
+        ],
+        reflection: {
+          prompts: ["What did you learn?"],
+          connections: []
+        }
+      } as any);
+
       isGenerating.current = false; // Reset flag on error
     } finally {
       isGenerating.current = false; // Always reset flag
-      console.log('✅ Content generation completed');
     }
   };
 
@@ -664,7 +684,7 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
         // Process final rewards
         completionResults.forEach(result => {
           if (result.ruleId === 'generate_portfolio' && result.data) {
-            console.log('Portfolio generated:', result.data);
+            // Portfolio data available in result.data
           }
         });
         
@@ -975,29 +995,96 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
                 description: skill?.description || 'Exploring new concepts'
               },
               introduction: {
-                welcome: content?.exploration_theme || 'Welcome to Discovery!',
-                companionMessage: `Let's explore ${skill?.skill_name || 'new concepts'} together!`,
-                howToUse: 'Click on options to discover new connections'
+                title: content?.unifiedScenario?.title || `Discover ${skill?.skill_name || 'New Skills'} in Action!`,
+                welcome: content?.unifiedScenario?.narrativeSetup || content?.exploration_theme || 'Welcome to Discovery!',
+                companionMessage: content?.unifiedScenario?.challenge || `Let's explore ${skill?.skill_name || 'new concepts'} together!`,
+                howToUse: content?.unifiedScenario?.careerConnection || 'Click on options to discover new connections'
               },
-              scenarios: content?.practice?.map((item: any) => ({
-                description: item.question,
-                visual: item.visual,
-                careerContext: `How ${selectedCareer?.name || 'Explorer'}s use this`,
-                options: item.options || [],
-                correct_choice: typeof item.correct_answer === 'number' ? item.correct_answer : 0,
-                outcome: item.explanation,
-                learning_point: item.practiceSupport?.teachingMoment?.conceptExplanation || item.explanation,
-                hint: item.hint,
-                title: item.question,
-                context: item.practiceSupport?.preQuestionContext
-              })) || []
+              scenarios: (() => {
+                console.log('🔍 [DEBUG] Raw content object:', content);
+                console.log('🔍 [DEBUG] content.discoveryStations:', content?.discoveryStations);
+                console.log('🔍 [DEBUG] content.unifiedScenario:', content?.unifiedScenario);
+                console.log('🔍 [DEBUG] content.discovery_paths:', content?.discovery_paths);
+
+                // FIRST: Handle discoveryStations (from RUBRIC content) - PHASE 1 MAPPING
+                if (content?.discoveryStations && Array.isArray(content.discoveryStations)) {
+                  console.log('🎯 [PHASE 1] ✅ Using RUBRIC discoveryStations:', content.discoveryStations);
+                  console.log('🎯 [PHASE 1] Sample station fields:', Object.keys(content.discoveryStations[0] || {}));
+                  return content.discoveryStations.map((station: any, index: number) => ({
+                    subject: station.subject || SUBJECTS[index] || 'Discovery',
+                    stationTitle: station.stationTitle || station.title,
+                    description: station.question || station.description || station.challenge || 'Discovery challenge',
+                    question: station.question,
+                    visual: station.visual && station.visual.trim() !== '' ? station.visual : undefined,
+                    careerContext: station.career_connection || station.careerContext,
+                    context: station.context || station.scenario_context || station.setting,
+                    options: station.options || [],
+                    correct_choice: typeof station.correct_answer === 'number' ? station.correct_answer : 0,
+                    outcome: station.outcome || station.explanation || station.learning_outcome,
+                    explanation: station.explanation,
+                    learning_point: station.learning_point || station.discovery_insight || station.key_learning,
+                    hint: station.hint,
+                    title: station.title || `${station.subject || SUBJECTS[index]} Discovery`,
+                    // PHASE 1: Map ALL rubric fields
+                    activity: station.activity,
+                    deliverable: station.deliverable,
+                    practiceSupport: station.practiceSupport
+                  }));
+                }
+
+                // SECOND: Handle discovery_paths (from AI DISCOVER content)
+                if (content?.discovery_paths && Array.isArray(content.discovery_paths)) {
+                  const scenarios: any[] = [];
+                  content.discovery_paths.forEach((path: any) => {
+                    if (path.activities && Array.isArray(path.activities)) {
+                      path.activities.forEach((activity: any) => {
+                        scenarios.push({
+                          subject: path.title || 'Discovery',
+                          description: activity.description || activity.title,
+                          question: activity.question,
+                          context: activity.interactive_element,
+                          options: activity.options || [],
+                          correct_choice: typeof activity.correct_answer === 'number' ? activity.correct_answer : 0,
+                          outcome: activity.explanation,
+                          explanation: activity.explanation,
+                          learning_point: activity.learning_objective,
+                          hint: activity.hint,
+                          title: activity.title
+                        });
+                      });
+                    }
+                  });
+                  return scenarios;
+                }
+
+                // Fallback to practice format (from LEARN content)
+                if (content?.practice && Array.isArray(content.practice)) {
+                  return content.practice.map((item: any, index: number) => ({
+                    subject: item.subject || skill?.subject || SUBJECTS[index] || 'Discovery',
+                    description: item.question || item.description || 'Discovery challenge',
+                    question: item.question,
+                    visual: item.visual && item.visual.trim() !== '' ? item.visual : undefined,
+                    careerContext: item.career_connection || item.careerContext || `Discover how ${selectedCareer?.name || 'professionals'} use ${skill?.skill_name}!`,
+                    context: item.context || item.scenario_context || undefined,
+                    options: item.options || [],
+                    correct_choice: typeof item.correct_answer === 'number' ? item.correct_answer : 0,
+                    outcome: item.outcome || item.explanation,
+                    explanation: item.explanation,
+                    learning_point: item.learning_point || item.discovery_insight || item.explanation,
+                    hint: item.hint,
+                    title: item.title || `Discovery ${index + 1}`
+                  }));
+                }
+
+                return [];
+              })()
             }}
             gradeLevel={student.grade_level}
             studentName={student.display_name}
             userId={student.id}
             onChallengeComplete={handleDiscoveryPathsComplete}
             onScenarioComplete={(index, wasCorrect) => {
-              console.log(`Discovery ${index + 1} completed:`, wasCorrect);
+              // Track completion
             }}
             onBack={onBack}
           />

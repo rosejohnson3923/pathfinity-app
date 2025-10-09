@@ -86,7 +86,7 @@ export const ProgressHeader: React.FC<ProgressHeaderProps> = ({
   const navigate = useNavigate();
   const location = useLocation();
   const { signOut } = useAuthContext();
-  const { theme } = useTheme();
+  const theme = useTheme(); // useTheme returns Theme directly, not an object
   const [isThemeChanging, setIsThemeChanging] = useState(false);
 
   // Don't show header during loading if hideOnLoading is true
@@ -116,12 +116,33 @@ export const ProgressHeader: React.FC<ProgressHeaderProps> = ({
   };
 
   const handleThemeToggle = () => {
-    if (!showThemeToggle || !isInDashboard) return;
-    
+    console.log('🎨 [ProgressHeader] Theme toggle clicked!', {
+      showThemeToggle,
+      isInDashboard,
+      currentTheme: theme,
+      location: location.pathname,
+      timestamp: Date.now()
+    });
+
+    if (!showThemeToggle) {
+      console.warn('🎨 [ProgressHeader] Theme toggle blocked: showThemeToggle is false');
+      return;
+    }
+
+    if (!isInDashboard) {
+      console.warn('🎨 [ProgressHeader] Theme toggle blocked: not in dashboard', {
+        path: location.pathname,
+        isInDashboard
+      });
+      return;
+    }
+
     setIsThemeChanging(true);
     const newTheme = theme === 'dark' ? 'light' : 'dark';
+    console.log('🎨 [ProgressHeader] Calling themeService.setTheme:', { newTheme, currentTheme: theme });
     themeService.setTheme(newTheme, 'ProgressHeader');
-    
+    console.log('🎨 [ProgressHeader] Theme service called successfully');
+
     setTimeout(() => setIsThemeChanging(false), 300);
   };
 

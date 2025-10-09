@@ -659,10 +659,15 @@ export class AIContentConverter {
     // Extract reading passage if present
     const passage = assessment.passage || assessment.context || this.extractPassageFromQuestion(assessment.question);
 
+    // Clean up question text - remove embedded answer options if present
+    let questionText = String(assessment.content || assessment.question || '');
+    // Remove pattern like "A: option, B: option, C: option, D: option" from question
+    questionText = questionText.replace(/\s*[A-Z]:\s*[^,]+(?:,\s*[A-Z]:\s*[^,]+)*/g, '').trim();
+
     return {
       id: this.generateQuestionId('assessment'),
       type: 'multiple_choice',
-      content: String(assessment.content || assessment.question || ''),
+      content: questionText,
       passage: passage, // Add the reading passage
       topic: skillInfo.skill_name,
       subject: skillInfo.subject,

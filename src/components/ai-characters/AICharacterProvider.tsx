@@ -70,8 +70,6 @@ const AICharacterProviderBase: React.FC<AICharacterProviderProps> = ({
   studentGrade = 'K',
   studentSubject = 'Math'
 }) => {
-  console.log('🚀 AICharacterProvider initialized with grade:', studentGrade, 'subject:', studentSubject);
-  
   const [currentCharacter, setCurrentCharacter] = useState<AICharacter | null>(null);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isGeneratingResponse, setIsGeneratingResponse] = useState(false);
@@ -164,16 +162,13 @@ const AICharacterProviderBase: React.FC<AICharacterProviderProps> = ({
             specialties: ['counting', 'shapes']
           }
         ];
-        console.log('🔍 Loading characters from PATHFINITY_CHARACTERS:', characters);
-        console.log('🔍 Characters count:', characters?.length || 0);
-        console.log('🔍 First character:', characters?.[0]);
-        
+
         // Fallback if characters are undefined
         if (!characters || characters.length === 0) {
           console.error('❌ PATHFINITY_CHARACTERS is undefined or empty!');
           throw new Error('Characters not loaded');
         }
-        
+
         setAvailableCharacters(characters);
 
         // Set default or recommended character
@@ -189,8 +184,6 @@ const AICharacterProviderBase: React.FC<AICharacterProviderProps> = ({
         }
 
         setCurrentCharacter(selectedCharacter);
-
-        console.log(`🤖 AI Character Provider initialized with ${selectedCharacter?.name} for Grade ${studentGrade} ${studentSubject}`);
         
       } catch (error) {
         console.error('❌ Failed to initialize AI characters:', error);

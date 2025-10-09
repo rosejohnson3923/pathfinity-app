@@ -57,11 +57,18 @@ class ThemeService {
   private applyTheme(theme: Theme): void {
     // Apply to document root for CSS variables
     document.documentElement.setAttribute('data-theme', theme);
-    
-    // Also apply class for backwards compatibility
+
+    // Apply Tailwind dark class for dark mode support
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+
+    // Also apply theme class for backwards compatibility
     document.documentElement.classList.remove('theme-light', 'theme-dark');
     document.documentElement.classList.add(`theme-${theme}`);
-    
+
     // Apply to body for any legacy styles
     document.body.setAttribute('data-theme', theme);
   }
@@ -79,26 +86,37 @@ class ThemeService {
    * @param source - Component setting the theme (for logging)
    */
   setTheme(theme: Theme, source: string = 'unknown'): void {
+    console.log('🎨 [ThemeService] setTheme called:', {
+      requestedTheme: theme,
+      currentTheme: this.currentTheme,
+      source,
+      listenerCount: this.listeners.size,
+      timestamp: Date.now()
+    });
+
     // Only allow theme changes from authorized sources
-    const authorizedSources = ['ReturnSelectModal', 'StudentDashboard', 'SettingsModal', 'ThemeContext', 'system'];
-    
+    const authorizedSources = ['ReturnSelectModal', 'StudentDashboard', 'SettingsModal', 'ThemeContext', 'ProgressHeader', 'system'];
+
     if (!authorizedSources.includes(source)) {
-      console.warn(`Theme change attempted from unauthorized source: ${source}`);
+      console.warn(`🎨 [ThemeService] Theme change BLOCKED - unauthorized source: ${source}`);
       return;
     }
 
     if (theme === this.currentTheme) {
+      console.log(`🎨 [ThemeService] Theme change skipped - already ${theme}`);
       return;
     }
 
+    console.log(`🎨 [ThemeService] Applying theme change: ${this.currentTheme} → ${theme}`);
     this.currentTheme = theme;
     this.saveTheme(theme);
     this.applyTheme(theme);
-    
+
     // Notify all listeners
+    console.log(`🎨 [ThemeService] Notifying ${this.listeners.size} listeners...`);
     this.listeners.forEach(listener => listener(theme));
-    
-    console.log(`Theme changed to ${theme} by ${source}`);
+
+    console.log(`🎨 [ThemeService] ✅ Theme successfully changed to ${theme} by ${source}`);
   }
 
   /**

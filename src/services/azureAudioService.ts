@@ -150,15 +150,6 @@ export class AzureAudioService {
                            'K';
     const gradeLevel = options?.gradeLevel || storedGradeLevel;
 
-    console.warn('🔊 AZURE TTS: playText called with:', {
-      text: text?.substring(0, 100),
-      textLength: text?.length,
-      companion,
-      gradeLevel,
-      scriptId: options?.scriptId || 'unknown',
-      apiUrl: this.apiUrl
-    });
-
     if (!text) {
       console.error('🔊 AZURE TTS: No text provided');
       options?.onEnd?.();
@@ -170,7 +161,6 @@ export class AzureAudioService {
 
     try {
       const ssml = this.generateSSML(text, companion, gradeLevel);
-      console.log('🔊 AZURE TTS: Generating audio with SSML for grade:', gradeLevel);
 
       // Call API server to generate audio
       const response = await fetch(`${this.apiUrl}/tts/generate`, {
@@ -195,25 +185,16 @@ export class AzureAudioService {
       const audioBlob = await response.blob();
       const audioUrl = URL.createObjectURL(audioBlob);
 
-      console.log('🔊 AZURE TTS: Audio generated successfully!', {
-        size: audioBlob.size,
-        type: audioBlob.type,
-        companion,
-        voice: this.voiceMap[companion.toLowerCase()] || 'en-US-DavisNeural'
-      });
-
       // Create and play audio element
       this.currentAudio = new Audio(audioUrl);
       this.currentAudio.volume = options?.volume ?? 0.8;
 
       this.currentAudio.onloadeddata = () => {
-        console.log('🔊 AZURE TTS: Audio loaded, starting playback');
         this.isSpeaking = true;
         options?.onStart?.();
       };
 
       this.currentAudio.onended = () => {
-        console.log('🔊 AZURE TTS: Audio playback ended');
         this.isSpeaking = false;
         URL.revokeObjectURL(audioUrl);
         this.currentAudio = null;

@@ -87,6 +87,8 @@
 .modalContainer {
   max-width: 80rem;
   width: 100%;
+  margin-bottom: var(--space-8);
+  min-height: fit-content;
 }
 
 /* Top Info Bar (Header) */
@@ -116,9 +118,10 @@
   background: var(--color-bg-elevated);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-2xl);
-  overflow: hidden;
+  overflow: visible;
   transform: translateY(0);
   transition: var(--transition-all);
+  min-height: fit-content;
   animation: slideInLeft 0.6s ease-out;
 }
 

@@ -108,17 +108,13 @@ const clearAuthData = (): void => {
 
 // Helper to get current user from localStorage
 export const getCurrentUser = (): AuthUser | null => {
-  console.log('🔥 getCurrentUser called - URL:', window.location.href);
-
   // Check for demo mode override first - clear existing auth if switching demo users
   const urlParams = new URLSearchParams(window.location.search);
   const isDemoMode = urlParams.get('demo') === 'true';
   const demoUser = urlParams.get('user');
 
-  console.log('🔥 Demo check - isDemoMode:', isDemoMode, 'demoUser:', demoUser);
-
   if (isDemoMode && demoUser) {
-    console.log('🔄 Demo mode detected in getCurrentUser - clearing existing auth for demo user:', demoUser);
+    console.log('🔄 Demo mode detected - switching to demo user:', demoUser);
     // Clear existing auth storage
     localStorage.removeItem(USER_KEY);
     localStorage.removeItem(SELECTED_TENANT_KEY);
@@ -369,27 +365,19 @@ export const signUpWithEmailPassword = async (
 // Sign Out
 export const signOut = async (): Promise<{ error: Error | null }> => {
   try {
-    console.log('🔴 DEBUG: authService signOut() called');
-
     // Clear console at the start of sign out
     if (typeof console.clear === 'function') {
       console.clear();
-      console.log('🔄 Signing out and clearing session...');
+      console.log('🔄 Signing out...');
     }
 
-    console.log('🔴 DEBUG: Starting 100ms delay simulation');
     // Reduced delay for demo
     await new Promise(resolve => setTimeout(resolve, 100));
-    console.log('🔴 DEBUG: 100ms delay completed');
-
-    console.log('🔴 DEBUG: Calling clearAuthData()');
     clearAuthData();
-    console.log('🔴 DEBUG: clearAuthData() completed');
 
-    console.log('🔴 DEBUG: authService signOut() returning success');
     return { error: null };
   } catch (error) {
-    console.error('🔴 DEBUG: Sign out error:', error);
+    console.error('Sign out error:', error);
     return { error: error as Error };
   }
 };

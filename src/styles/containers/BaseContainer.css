@@ -46,6 +46,18 @@
   position: relative;
 }
 
+/* Remove constraints when showing full-screen modals (narrative phase) */
+.phase-narrative {
+  overflow: hidden;
+}
+
+.phase-narrative .container-content {
+  padding: 0;
+  max-width: none;
+  overflow: visible;
+  height: 100vh;
+}
+
 /* ============================================
    CONTAINER BACKGROUNDS
    ============================================ */

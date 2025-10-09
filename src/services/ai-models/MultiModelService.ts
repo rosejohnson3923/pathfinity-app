@@ -67,10 +67,15 @@ export class MultiModelService {
       ...config
     };
 
-    // Initialize Azure Key Vault client
-    const vaultUrl = getEnvVar('AZURE_KEY_VAULT_URL', 'https://pathfinity-kv-2823.vault.azure.net/');
-    const credential = new DefaultAzureCredential();
-    this.secretClient = new SecretClient(vaultUrl, credential);
+    // Initialize Azure Key Vault client (only in Node.js environment)
+    if (typeof window === 'undefined') {
+      const vaultUrl = getEnvVar('AZURE_KEY_VAULT_URL', 'https://pathfinity-kv-2823.vault.azure.net/');
+      const credential = new DefaultAzureCredential();
+      this.secretClient = new SecretClient(vaultUrl, credential);
+    } else {
+      // Browser environment - Key Vault not available
+      this.secretClient = null as any;
+    }
 
     // Initialize metrics collector
     this.metricsCollector = new MetricsCollector();

@@ -133,30 +133,34 @@
 }
 
 .welcomeContent {
+  flex: 1;
   display: flex;
-  align-items: center;
-  gap: var(--space-5);
+  flex-direction: column;
+  gap: var(--space-3);
 }
 
 .companionAvatar {
-  width: 80px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
+  background: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 3px solid white;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  flex-shrink: 0;
   animation: pulse 2s ease-in-out infinite;
+  overflow: hidden;
 }
 
 .companionAvatar img,
 .companionImage {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;  /* Changed from 'cover' to 'contain' to prevent distortion */
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);  /* Add subtle background for better appearance */
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 0;
+  background: transparent;
 }
 
 .welcomeText {
@@ -439,7 +443,18 @@
 }
 
 .challengeList li {
-  margin-bottom: var(--space-1);
+  margin-bottom: var(--space-2);
+}
+
+.challengeDescription {
+  font-size: var(--text-lg);
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+  padding: var(--space-4);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  border-left: 4px solid rgba(255, 255, 255, 0.3);
 }
 
 .scenarioIndicator {
@@ -623,8 +638,14 @@
 }
 
 .questionTitle {
-  font-size: var(--text-base);
-  color: var(--gray-600);
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  color: var(--purple-600);
+  margin: 0;
+}
+
+[data-theme="dark"] .questionTitle {
+  color: var(--purple-400);
 }
 
 .learningPoint {
@@ -644,6 +665,8 @@
 
 .scenarioContainer {
   width: 100%;
+  max-height: calc(100vh - 100px);  /* Limit height to viewport */
+  overflow-y: auto;  /* Enable vertical scrolling */
   padding: var(--space-6);
   background: var(--color-surface);
   border-radius: var(--radius-xl);
@@ -677,13 +700,57 @@
   border: 2px solid var(--purple-200);
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-4);
   box-shadow: var(--shadow-md);
 }
 
 [data-theme="dark"] .eventContextTile {
   background: linear-gradient(135deg, var(--purple-900), var(--blue-900));
   border-color: var(--purple-700);
+}
+
+/* Activity Description Sections */
+.activityDescription,
+.supportingData,
+.activityPrompt {
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.5);
+  border-left: 4px solid var(--purple-500);
+}
+
+[data-theme="dark"] .activityDescription,
+[data-theme="dark"] .supportingData,
+[data-theme="dark"] .activityPrompt {
+  background: rgba(255, 255, 255, 0.05);
+  border-left-color: var(--purple-400);
+}
+
+.activityDescription strong,
+.supportingData strong,
+.activityPrompt strong {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+  color: var(--purple-700);
+  margin-bottom: var(--space-2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+[data-theme="dark"] .activityDescription strong,
+[data-theme="dark"] .supportingData strong,
+[data-theme="dark"] .activityPrompt strong {
+  color: var(--purple-300);
+}
+
+.activityDescription p,
+.supportingData p,
+.activityPrompt p {
+  margin: 0;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+  font-size: var(--text-base);
 }
 
 .eventHeader {
@@ -836,9 +903,58 @@
 /* Action Buttons */
 .actionButtons {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   gap: var(--space-4);
   margin-top: var(--space-6);
+}
+
+.submitButton,
+.continueButton {
+  padding: var(--space-4) var(--space-8);
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  border-radius: var(--radius-lg);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-md);
+  min-width: 200px;
+}
+
+.submitButton {
+  background: linear-gradient(135deg, var(--purple-600), var(--purple-500));
+  color: white;
+}
+
+.submitButton:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--purple-700), var(--purple-600));
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.submitButton:disabled,
+.submitDisabled {
+  background: var(--gray-300);
+  color: var(--gray-500);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+[data-theme="dark"] .submitButton:disabled,
+[data-theme="dark"] .submitDisabled {
+  background: var(--gray-700);
+  color: var(--gray-500);
+}
+
+.continueButton {
+  background: linear-gradient(135deg, var(--green-600), var(--green-500));
+  color: white;
+}
+
+.continueButton:hover {
+  background: linear-gradient(135deg, var(--green-700), var(--green-600));
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
 }
 
 /* Progress Bar with Setup - Full width top */

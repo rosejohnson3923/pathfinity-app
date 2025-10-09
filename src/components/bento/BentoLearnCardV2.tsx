@@ -19,7 +19,7 @@ interface BentoLearnCardV2Props {
     type: string;
     text: string;
     image?: string;
-    options?: string[];
+    options?: (string | { text?: string; description?: string; image?: string; id?: string })[];
     correctAnswer?: string | string[];
     hint?: string;
     xpReward?: number;
@@ -441,9 +441,11 @@ export const BentoLearnCardV2: React.FC<BentoLearnCardV2Props> = ({
               );
             }
 
-            // Extract and analyze option text
+            // Extract and analyze option text - handle string, {text}, {description}, {image, description}
             const optionTexts = question.options.map(opt =>
-              typeof opt === 'string' ? opt : (opt?.text || String(opt))
+              typeof opt === 'string'
+                ? opt
+                : (typeof opt?.text === 'string' ? opt.text : opt?.description || String(opt))
             );
 
             // Content analysis
@@ -547,7 +549,10 @@ export const BentoLearnCardV2: React.FC<BentoLearnCardV2Props> = ({
               <div className={containerClasses}>
                 {question.options.slice(0, 4).map((option, index) => {
                   const optionLabels = ['A', 'B', 'C', 'D'];
-                  const optionText = typeof option === 'string' ? option : (option?.text || String(option));
+                  // Handle various option formats: string, {text}, {description}, {image, description}
+                  const optionText = typeof option === 'string'
+                    ? option
+                    : (typeof option?.text === 'string' ? option.text : option?.description || String(option));
                   const optionId = typeof option === 'string' ? `opt-${index}` : (option?.id || `opt-${index}`);
 
                   const buttonClasses = [

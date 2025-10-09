@@ -19,6 +19,17 @@ const cacheRoutes = require('./routes/cache');
 const healthRoutes = require('./routes/health');
 const sessionRoutes = require('./routes/sessions');
 
+let rubricRoutes;
+try {
+  console.log('📦 Loading rubrics module...');
+  rubricRoutes = require('./routes/rubrics');
+  console.log('✅ Rubrics module loaded successfully');
+} catch (error) {
+  console.error('❌ Failed to load rubrics module:', error);
+  console.error('   Stack:', error.stack);
+  rubricRoutes = require('express').Router();
+}
+
 // Import chat routes with WebSocket
 let chatRoutes, setupWebSocketServer;
 try {
@@ -81,6 +92,10 @@ app.use('/api/health', healthRoutes);
 app.use('/api/cache', cacheRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/sessions', sessionRoutes);
+
+console.log('📋 Registering rubrics routes at /api/rubrics...');
+app.use('/api/rubrics', rubricRoutes);
+console.log('✅ All routes registered');
 
 // Error handling
 app.use((err, req, res, next) => {

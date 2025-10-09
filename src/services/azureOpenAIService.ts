@@ -538,7 +538,7 @@ Return JSON with content array containing all required fields for the ${contentT
     // DETAILED LOGGING: Azure OpenAI API call
     console.group(`🌐 Azure OpenAI API Call - ${modelKey}`);
     console.log('🔑 Model:', modelKey);
-    console.log('📝 User Prompt:', prompt);
+    console.log('📝 User Prompt (first 300 chars):', prompt.substring(0, 300) + (prompt.length > 300 ? '...' : ''));
     console.log('📏 User Prompt Length:', prompt.length, 'characters');
     console.log('🤖 System Prompt:', systemPrompt?.substring(0, 200) || 'None');
     console.log('⚙️ Options:', { temperature, maxTokens, jsonMode });

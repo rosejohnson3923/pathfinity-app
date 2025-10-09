@@ -20,6 +20,17 @@ const ttsRoutes = require('./routes/tts');
 const { router: chatRoutes, setupWebSocketServer } = require('./routes/chat');
 const sessionRoutes = require('./routes/sessions');
 
+let rubricRoutes;
+try {
+  console.log('📦 Loading rubrics module...');
+  rubricRoutes = require('./routes/rubrics');
+  console.log('✅ Rubrics module loaded successfully');
+} catch (error) {
+  console.error('❌ Failed to load rubrics module:', error);
+  console.error('   Stack:', error.stack);
+  rubricRoutes = require('express').Router();
+}
+
 const app = express();
 const PORT = process.env.PORT || 3002;
 
@@ -45,6 +56,10 @@ app.use('/api/cache', cacheRoutes);
 app.use('/api/tts', ttsRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/sessions', sessionRoutes);
+
+console.log('📋 Registering rubrics routes at /api/rubrics...');
+app.use('/api/rubrics', rubricRoutes);
+console.log('✅ All routes registered');
 
 // Error handling
 app.use((err, req, res, next) => {

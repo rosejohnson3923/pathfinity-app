@@ -77,6 +77,7 @@ import { ProgressHeader } from '../navigation/ProgressHeader';
 import { CompanionChatBox } from '../learning-support/CompanionChatBox';
 import { VisualRenderer } from './VisualRenderer';
 import { EnhancedLoadingScreen } from './EnhancedLoadingScreen';
+import { NarrativeIntroductionModal } from '../../screens/modal-first/NarrativeIntroductionModal';
 // import { XPDisplay } from '../gamification/XPDisplay'; // Removed - XP now shown in dock
 import { useTheme } from '../../hooks/useTheme';
 import { SettingsModal } from '../../screens/modal-first/sub-modals/SettingsModal';
@@ -122,9 +123,13 @@ interface AILearnContainerV2Props {
   narrativeLoading?: boolean;
   // Companion ID for audio narration
   companionId?: string;
+  // Rubric Session ID for rubric-based content generation
+  rubricSessionId?: string;
+  // True if rubrics are still initializing (wait before generating content)
+  waitingForRubrics?: boolean;
 }
 
-type LearningPhase = 'loading' | 'instruction' | 'practice' | 'assessment' | 'complete';
+type LearningPhase = 'loading' | 'narrative' | 'instruction' | 'practice' | 'assessment' | 'complete';
 
 // ================================================================
 // AI LEARN CONTAINER V2-UNIFIED COMPONENT
@@ -138,6 +143,8 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   onComplete,
   onNext,
   onBack,
+  rubricSessionId,
+  waitingForRubrics = false,
   onLoadingChange,
   masterNarrative,
   narrativeLoading,
@@ -146,23 +153,6 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   // FEATURE FLAG: Enable Narrative-First Architecture with video instruction
   const USE_NARRATIVE_ENHANCED = localStorage.getItem('pathfinity_use_narrative_enhanced') === 'true' ||
                                  import.meta.env.VITE_USE_NARRATIVE_ENHANCED === 'true';
-
-  // CRITICAL DEBUG - Component Mount
-  console.error('🚨🚨🚨 AILearnContainerV2UNIFIED MOUNTED/RENDERED', {
-    timestamp: new Date().toISOString(),
-    skill: skill?.id,
-    student: student?.id,
-    phase: 'initial',
-    narrativeEnhanced: USE_NARRATIVE_ENHANCED,
-    stackTrace: new Error().stack?.split('\n').slice(1, 5)
-  });
-
-  useEffect(() => {
-    console.error('🚨🚨🚨 AILearnContainerV2UNIFIED useEffect - Component Did Mount');
-    return () => {
-      console.error('🚨🚨🚨 AILearnContainerV2UNIFIED useEffect - Component Will Unmount');
-    };
-  }, []);
 
   // Initialize JIT Services
   const jitService = getJustInTimeContentService();
@@ -179,15 +169,6 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   
   // State Management
   const [phase, setPhase] = useState<LearningPhase>('loading');
-
-  // Debug phase changes
-  useEffect(() => {
-    console.error('🎯🎯 PHASE CHANGED:', {
-      newPhase: phase,
-      timestamp: new Date().toISOString(),
-      stack: new Error().stack?.split('\n').slice(1, 4)
-    });
-  }, [phase]);
   const [content, setContent] = useState<AILearnContent | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
@@ -206,17 +187,6 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   const [narrativeContent, setNarrativeContent] = useState<any>(null);
   const [learnMicroContent, setLearnMicroContent] = useState<any>(null);
 
-  // Debug logging for state changes - MUST be after state declarations
-  useEffect(() => {
-    console.error('🔍🔍 Assessment State Changed:', {
-      assessmentAnswer,
-      assessmentAnswerSet,
-      showAssessmentResult,
-      phase,
-      hasContent: !!content?.assessment,
-      timestamp: new Date().toISOString()
-    });
-  }, [assessmentAnswer, assessmentAnswerSet, showAssessmentResult, phase]);
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const [currentPracticeQuestion, setCurrentPracticeQuestion] = useState(0); // Track current question
   const [isAudioEnabled, setIsAudioEnabled] = useState(false);
@@ -236,18 +206,6 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   // This prevents the 10-second re-renders that were causing videos to restart
   const pauseBackgroundUpdates = phase === 'instruction' || phase === 'practice' || phase === 'assessment';
 
-  // Debug logging for background update control
-  useEffect(() => {
-    console.log('🔄 Background Updates Control:', {
-      phase,
-      pauseBackgroundUpdates,
-      reason: pauseBackgroundUpdates ?
-        'Paused - Active learning session' :
-        'Active - Not in practice/assessment',
-      timestamp: new Date().toISOString()
-    });
-  }, [phase, pauseBackgroundUpdates]);
-
   const { features, awardXP, profile } = usePathIQGamification(
     student?.id || 'default',
     student?.grade_level,
@@ -259,7 +217,16 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   const practiceStartTime = useRef<number>(Date.now());
   const assessmentStartTime = useRef<number>(Date.now());
   const interactionCount = useRef<number>(0);
-  
+
+  // Track which subjects have been introduced via NarrativeIntroductionModal
+  const [completedSubjectIntros, setCompletedSubjectIntros] = useState<Set<string>>(new Set());
+
+  // Reset completedSubjectIntros when subject changes so each subject shows full intro
+  useEffect(() => {
+    setCompletedSubjectIntros(new Set());
+    console.log(`🔄 Subject changed to ${skill?.subject}, resetting completed intros`);
+  }, [skill?.subject]);
+
   // Character and Career
   // Fix: Convert selectedCharacter (name) to id for proper lookup
   // Handle both string names and undefined values
@@ -275,13 +242,6 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
 
   // Initialize companion audio service
   useEffect(() => {
-    console.warn('🔊 AUDIO DEBUG - Learn Container:', {
-      masterNarrative: !!masterNarrative,
-      narrativeLoading,
-      companionId,
-      gradeLevel: student.grade_level
-    });
-
     // Removed redundant companionAudioService preloading - we use azureAudioService now
     // companionAudioService is no longer needed since we switched to azureAudioService
 
@@ -293,20 +253,6 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
 
   // Play audio based on phase changes
   useEffect(() => {
-    console.warn('🔊 VOICE DEBUG - Phase change:', {
-      phase,
-      hasMasterNarrative: !!masterNarrative,
-      narrativeLoading,
-      willPlayAudio: !(!masterNarrative || narrativeLoading),
-      narrativeContent: masterNarrative ? {
-        hasGreeting: !!masterNarrative.greeting,
-        hasIntro: !!masterNarrative.introduction,
-        hasMission: !!masterNarrative.careerContext?.mission,
-        greeting: masterNarrative.greeting?.substring(0, 50),
-        intro: masterNarrative.introduction?.substring(0, 50)
-      } : null
-    });
-
     if (!masterNarrative || narrativeLoading) return;
 
     const playPhaseAudio = async () => {
@@ -367,7 +313,7 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
     if (contentGeneratedRef.current || hasGeneratedContent) {
       return;
     }
-    
+
     // Initialize session container tracking
     if (student?.id && skill?.id) {
       sessionStateManager.trackContainerProgression(
@@ -441,6 +387,8 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
             },
             career: selectedCareer || { name: career },
             careerDescription: `${career} professional`,
+            // RUBRIC SESSION ID - Enables rubric-based content generation
+            rubricSessionId: rubricSessionId,
             // NARRATIVE CONTEXT for Learn Container
             // Instruction/Video: Uses subject|skill combo (e.g., "Math|Count to 3") - NO narrative
             // Practice/Assessment: Uses narrative context for career-integrated questions
@@ -673,13 +621,13 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
           });
         }
 
-        console.log('🎉 Content ready - will transition to instruction phase after loading screen');
+        console.log('🎉 Content ready - will transition to narrative phase after loading screen');
 
         // Add a minimum display time for loading screen to allow fun facts to play
         // This ensures users can hear the fun fact narration
         setTimeout(() => {
-          console.log('🎉 SETTING INITIAL PHASE TO INSTRUCTION');
-          setPhase('instruction');
+          console.log('🎉 SETTING INITIAL PHASE TO NARRATIVE');
+          setPhase('narrative');
         }, 5000); // Give 5 seconds for fun fact narration
         
         // Get initial companion message
@@ -735,15 +683,13 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
           const minTimeReached = elapsedTime >= minLoadingTime;
           const audioPlaying = azureAudioService.speaking;
 
-          console.log('⏱️ Loading timing check:', {
-            elapsedTime,
-            minTimeReached,
-            audioPlaying,
-            willComplete: minTimeReached && !audioPlaying
-          });
-
           if (minTimeReached && !audioPlaying) {
             // Both conditions met: minimum time passed and audio finished
+            console.log('✅ Loading complete:', {
+              elapsedTime,
+              minTimeReached,
+              audioPlaying
+            });
             setIsLoading(false);
           } else if (!minTimeReached) {
             // Still need to wait for minimum time
@@ -767,22 +713,12 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   
   // Auto-submit effect for true_false and multiple_choice questions
   useEffect(() => {
-    console.error('🚨🚨 AUTO-SUBMIT CHECK:', {
-      assessmentAnswerSet,
-      showAssessmentResult,
-      hasAssessment: !!content?.assessment,
-      assessmentAnswer,
-      phase,
-      timestamp: new Date().toISOString()
-    });
-
     // Only auto-submit if:
     // 1. We have an answer (use flag to handle false values properly)
     // 2. We haven't shown results yet
     // 3. We have content
     // 4. The question type supports auto-submit
     if (assessmentAnswerSet && !showAssessmentResult && content?.assessment) {
-      console.error('⚠️⚠️ AUTO-SUBMIT CONDITIONS MET!');
       // Convert the assessment to get the question type
       const questionObj = aiContentConverter.convertAssessment(
         content.assessment,
@@ -793,25 +729,8 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
           skill_number: skill.id
         }
       );
-      
-      if (questionObj) {
-        console.error('📊📊 Question Object Details:', {
-          type: questionObj.type,
-          content: questionObj.content,
-          options: questionObj.options,
-          correctAnswer: questionObj.correctAnswer,
-          hasOptions: !!questionObj.options,
-          optionsLength: questionObj.options?.length
-        });
-      }
 
       if (questionObj && (questionObj.type === 'multiple_choice' || questionObj.type === 'true_false')) {
-        console.error('⚡⚡⚡ AUTO-SUBMIT TRIGGERED for', questionObj.type, ':', {
-          answer: assessmentAnswer,
-          answerType: typeof assessmentAnswer,
-          correctAnswer: questionObj.correctAnswer,
-          correctAnswerType: typeof questionObj.correctAnswer
-        });
         
         // Use a small delay to ensure state is fully updated
         const timer = setTimeout(() => {
@@ -1274,32 +1193,58 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
       {/* Test Audio Button for debugging */}
       <TestAudioButton />
 
-      {/* Comprehensive Progress Header */}
-      <ProgressHeader
-        containerType="LEARN"
-        skill={skill?.skill_name}
-        subject={skill?.subject}
-        progress={
-          phase === 'instruction' ? 33 :
-          phase === 'practice' ? 66 :
-          phase === 'assessment' ? 90 :
-          phase === 'complete' ? 100 : 0
-        }
-        currentPhase={
-          phase === 'instruction' ? 'Learning' :
-          phase === 'practice' ? 'Practice' :
-          phase === 'assessment' ? 'Assessment' :
-          'Complete'
-        }
-        totalPhases={3}
-        showBackButton={true}
-        onBack={onBack}
-        showThemeToggle={false}
-        showSkipButton={import.meta.env.DEV}
-        onSkip={() => handlePhaseTransition()}
-        hideOnLoading={false}
-        onSettingsClick={() => setShowSettings(true)}
-      />
+      {/* Comprehensive Progress Header - Hidden during narrative phase */}
+      {phase !== 'narrative' && phase !== 'loading' && (
+        <ProgressHeader
+          containerType="LEARN"
+          skill={skill?.skill_name}
+          subject={skill?.subject}
+          progress={
+            phase === 'instruction' ? 33 :
+            phase === 'practice' ? 66 :
+            phase === 'assessment' ? 90 :
+            phase === 'complete' ? 100 : 0
+          }
+          currentPhase={
+            phase === 'instruction' ? 'Learning' :
+            phase === 'practice' ? 'Practice' :
+            phase === 'assessment' ? 'Assessment' :
+            'Complete'
+          }
+          totalPhases={3}
+          showBackButton={true}
+          onBack={onBack}
+          showThemeToggle={false}
+          showSkipButton={import.meta.env.DEV}
+          onSkip={() => handlePhaseTransition()}
+          hideOnLoading={false}
+          onSettingsClick={() => setShowSettings(true)}
+        />
+      )}
+
+      {/* DEV ONLY: Skip to Experience button */}
+      {import.meta.env.DEV && (
+        <button
+          onClick={handleSkipToExperience}
+          style={{
+            position: 'fixed',
+            top: '80px',
+            right: '20px',
+            padding: '10px 20px',
+            backgroundColor: '#ff6b6b',
+            color: 'white',
+            border: 'none',
+            borderRadius: '8px',
+            fontSize: '14px',
+            fontWeight: 'bold',
+            cursor: 'pointer',
+            zIndex: 9999,
+            boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
+          }}
+        >
+          🚀 Skip to Experience
+        </button>
+      )}
 
       {/* Companion Audio Controls - Removed as we use azureAudioService now */}
 
@@ -1324,7 +1269,32 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
             isFirstLoad={!content}  // Simplified - true when content hasn't loaded yet
           />
         )}
-        
+
+        {/* Narrative Phase - "Begin Your Adventure" Screen */}
+        {phase === 'narrative' && (
+          <NarrativeIntroductionModal
+            studentName={student?.display_name || student?.name || 'Student'}
+            gradeLevel={student?.grade_level || 'K'}
+            career={selectedCareer?.name || 'Professional'}
+            companion={companionId}
+            container="LEARN"
+            completedContainers={completedSubjectIntros}
+            skill={skill}
+            theme={theme}
+            onContinue={() => {
+              console.log('🎉 User clicked "Begin Your Adventure" - transitioning to instruction');
+
+              // Mark this subject as introduced
+              if (skill?.subject) {
+                setCompletedSubjectIntros(prev => new Set([...prev, skill.subject]));
+                console.log(`✅ Marked ${skill.subject} intro as completed`);
+              }
+
+              setPhase('instruction');
+            }}
+          />
+        )}
+
         {/* Instruction Phase - Using InstructionalVideoComponent */}
         {phase === 'instruction' && (
           <InstructionalVideoComponent

@@ -18,8 +18,6 @@ export function Login() {
   // Set page category for proper width management
   usePageCategory('auth');
 
-  console.log('🚀 LOGIN COMPONENT MOUNTING - Component is rendering!');
-  
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -83,14 +81,8 @@ export function Login() {
     const isDemoMode = searchParams.get('demo') === 'true';
     const demoUser = searchParams.get('user');
 
-    console.log('🔍 Login useEffect - searchParams:', searchParams.toString());
-    console.log('🔍 Login useEffect - isDemoMode:', isDemoMode, 'demoUser:', demoUser);
-    console.log('🔍 Available demo users:', Object.keys(demoUsers));
-    console.log('🔍 Does demoUser exist in demoUsers?', demoUser && demoUsers[demoUser as keyof typeof demoUsers]);
-
     if (isDemoMode && demoUser && demoUsers[demoUser as keyof typeof demoUsers]) {
       // Clear any existing auth state when switching to a different demo user
-      console.log('🧹 Clearing existing auth state for demo user switch');
       localStorage.removeItem('pathfinity_auth_token');
       localStorage.removeItem('pathfinity_user');
       localStorage.removeItem('pathfinity_tenant');
@@ -99,18 +91,12 @@ export function Login() {
       sessionStorage.removeItem('pathfinity_tenant');
 
       const user = demoUsers[demoUser as keyof typeof demoUsers];
-      console.log('🎯 Auto-populating credentials for:', user.name);
+      console.log('🎯 Demo mode: Auto-populating credentials for', user.name);
       setEmail(user.email);
       setPassword(user.password);
 
       // Set demo mode flag in localStorage for TenantSelector timeout detection
       localStorage.setItem('demo_mode', 'true');
-      console.log('🎯 Demo mode flag set in localStorage');
-    } else {
-      console.log('🚫 Not auto-populating - conditions not met');
-      console.log('🚫 isDemoMode:', isDemoMode);
-      console.log('🚫 demoUser:', demoUser);
-      console.log('🚫 user exists:', demoUser && demoUsers[demoUser as keyof typeof demoUsers]);
     }
   }, [searchParams]);
 
