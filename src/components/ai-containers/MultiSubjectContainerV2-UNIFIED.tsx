@@ -9,6 +9,9 @@ import { AILearnContainerV2UNIFIED as AILearnContainerV2 } from './AILearnContai
 import { AIExperienceContainerV2UNIFIED as AIExperienceContainerV2 } from './AIExperienceContainerV2-UNIFIED';
 import { AIDiscoverContainerV2UNIFIED as AIDiscoverContainerV2 } from './AIDiscoverContainerV2-UNIFIED';
 import { EnhancedLoadingScreen } from './EnhancedLoadingScreen';
+import { CelebrationScreen } from '../celebration/CelebrationScreen';
+import { SummaryCelebrationScreen } from '../celebration/SummaryCelebrationScreen';
+import { JourneyCelebrationScreen } from '../celebration/JourneyCelebrationScreen';
 import { TwoPanelModal } from '../modals/TwoPanelModal';
 import { useAuth } from '../../hooks/useAuth';
 import { useStudentProfile } from '../../hooks/useStudentProfile';
@@ -70,6 +73,7 @@ interface SubjectProgress {
   score?: number;
   timeSpent?: number;
   attempts?: number;
+  xpEarned?: number;
 }
 
 interface TransitionState {
@@ -77,6 +81,8 @@ interface TransitionState {
   message: string;
   nextSubject?: string;
   animation?: string;
+  previousSubjectXP?: number;
+  previousSubjectName?: string;
 }
 
 // ============================================================================
@@ -158,6 +164,8 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
   const [skillsLoaded, setSkillsLoaded] = useState(false);
   const [isChildContainerLoading, setIsChildContainerLoading] = useState(true);
   const [showInitialLoading, setShowInitialLoading] = useState(true);
+  const [lastCompletedSubjectXP, setLastCompletedSubjectXP] = useState<number>(0);
+  const [showSummaryCelebration, setShowSummaryCelebration] = useState(false);
 
   // Get Master Narrative from context - already generated at dashboard level
   const { masterNarrative, narrativeLoading, companionId } = useNarrative();
@@ -316,30 +324,82 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
   const renderTransition = () => {
     if (!transition.isTransitioning) return null;
 
-    // Use EnhancedLoadingScreen for transitions to enable fun facts narration
+    console.log('🎊 RENDERING CELEBRATION SCREEN:', {
+      message: transition.message,
+      previousSubjectXP: transition.previousSubjectXP,
+      previousSubjectName: transition.previousSubjectName
+    });
+
+    // GLASSMORPHISM CELEBRATION SCREEN - Distinct visual break from loading screens
     return (
-      <EnhancedLoadingScreen
-        phase="practice"
-        skillName={transition.nextSubject || `${currentSubject} Skills`}
+      <CelebrationScreen
+        subjectName={transition.previousSubjectName || currentSubject}
+        xpEarned={transition.previousSubjectXP || 0}
         studentName={student?.display_name || student?.name || 'Student'}
-        customMessage={transition.message || `Loading ${transition.nextSubject}...`}
-        containerType={activeContainerType.toLowerCase() as 'learn' | 'experience' | 'discover'}
-        currentCareer={selectedCareer?.name}
-        showGamification={true}
-        masterNarrative={masterNarrative}
-        currentSubject={transition.nextSubject ?
-          (transition.nextSubject === 'Social Studies' ? 'socialStudies' : transition.nextSubject.toLowerCase()) as 'math' | 'ela' | 'science' | 'socialStudies' :
-          (currentSubject === 'Social Studies' ? 'socialStudies' : currentSubject.toLowerCase()) as 'math' | 'ela' | 'science' | 'socialStudies'
-        }
-        companionId={companionId || selectedCharacter?.toLowerCase() || 'finn'}
-        enableNarration={true}
-        isFirstLoad={false}
       />
     );
   };
-  
-  const handleSubjectComplete = async () => {
-    
+
+  const renderSummaryCelebration = () => {
+    if (!showSummaryCelebration) return null;
+
+    // Calculate total XP across all subjects
+    const totalXP = subjectProgress.reduce((sum, subject) => sum + (subject.xpEarned || 0), 0);
+
+    // Format subject summaries for celebration screen
+    const subjectSummaries = subjectProgress.map(progress => ({
+      name: progress.subject,
+      xpEarned: progress.xpEarned || 0,
+      completed: progress.completed
+    }));
+
+    console.log('🎊 RENDERING SUMMARY CELEBRATION:', {
+      containerType: activeContainerType,
+      totalXP,
+      subjects: subjectSummaries
+    });
+
+    // Show appropriate celebration based on container type
+    if (activeContainerType === 'DISCOVER') {
+      // Journey complete - ultimate celebration
+      return (
+        <JourneyCelebrationScreen
+          subjects={subjectSummaries}
+          totalXP={totalXP}
+          studentName={student?.display_name || student?.name || 'Student'}
+          careerName={selectedCareer?.name}
+          onComplete={() => {
+            console.log('🎉 Journey celebration complete, returning to Career Hub');
+            onComplete();
+          }}
+        />
+      );
+    } else {
+      // LEARN or EXPERIENCE complete - show summary
+      return (
+        <SummaryCelebrationScreen
+          containerType={activeContainerType}
+          subjects={subjectSummaries}
+          totalXP={totalXP}
+          studentName={student?.display_name || student?.name || 'Student'}
+          onComplete={() => {
+            console.log(`🎉 ${activeContainerType} celebration complete, returning to Career Hub`);
+            onComplete();
+          }}
+        />
+      );
+    }
+  };
+
+  const handleSubjectComplete = async (xpEarned?: number) => {
+
+    console.log(`✅ Subject complete: ${currentSubject}, XP earned: ${xpEarned || 0}`);
+
+    // Store the XP from the completed subject
+    if (xpEarned && xpEarned > 0) {
+      setLastCompletedSubjectXP(xpEarned);
+    }
+
     // Record completion in adaptive journey
     // TODO: Implement recordSubjectCompletion in ContinuousJourneyIntegration
     // await continuousJourneyIntegration.recordSubjectCompletion(
@@ -351,53 +411,77 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
     //     skillsMastered: 1  // Simplified for now
     //   }
     // );
-    
-    // Update progress
+
+    // Update progress with XP earned
     const newProgress = [...subjectProgress, {
       subject: currentSubject,
       completed: true,
-      timeSpent: Date.now() - sessionStartTime
+      timeSpent: Date.now() - sessionStartTime,
+      xpEarned: xpEarned || 0
     }];
     setSubjectProgress(newProgress);
-    
+
     // Check if all subjects completed
     if (currentSubjectIndex >= subjects.length - 1) {
-      // Completion message removed - was causing display issues
-      // Complete the container
-      setTimeout(() => {
-        onComplete();
-      }, 2000);
+      // All subjects complete - show summary celebration screen
+      console.log('🎊 All subjects complete, showing summary celebration');
+      setShowSummaryCelebration(true);
     } else {
       // Transition to next subject
       const nextSubject = subjects[currentSubjectIndex + 1];
 
-      setTransition({
-        isTransitioning: true,
-        message: `Great job with ${currentSubject}!`,
-        nextSubject: nextSubject.name,
-        animation: 'fadeIn'
-      });
-
-      // Wait for transition animation (this is when fun facts play!)
-      setTimeout(() => {
-        console.log(`⏱️ [MULTISUBJECT] Transition complete, setting new subject:`, {
-          newSubject: nextSubject.name,
-          newIndex: currentSubjectIndex + 1,
-          settingSkillsLoaded: false
-        });
+      // For DISCOVER, skip celebration screens between scenarios
+      // (Each DISCOVER scenario contains all subjects, not one subject per scenario)
+      if (activeContainerType === 'DISCOVER') {
+        console.log(`🔄 [DISCOVER] Moving to next scenario without celebration`);
         setCurrentSubjectIndex(currentSubjectIndex + 1);
-        setSkillsLoaded(false); // Reset skills loaded state for new subject
+        setSkillsLoaded(false); // Reset skills loaded state for new scenario
+      } else {
+        // For LEARN and EXPERIENCE, show subject completion celebration
         setTransition({
-          isTransitioning: false,
-          message: ''
+          isTransitioning: true,
+          message: `Great job with ${currentSubject}!`,
+          nextSubject: nextSubject.name,
+          animation: 'fadeIn',
+          previousSubjectXP: xpEarned,
+          previousSubjectName: currentSubject
         });
-        console.log(`✅ [MULTISUBJECT] Subject transition complete, should now render ${nextSubject.name}`);
-      }, 4000); // Give enough time for fun facts to play
+
+        // Wait for celebration screen (4 seconds - allows user to read results)
+        setTimeout(() => {
+          console.log(`⏱️ [MULTISUBJECT] Transition complete, setting new subject:`, {
+            newSubject: nextSubject.name,
+            newIndex: currentSubjectIndex + 1,
+            settingSkillsLoaded: false
+          });
+          setCurrentSubjectIndex(currentSubjectIndex + 1);
+          setSkillsLoaded(false); // Reset skills loaded state for new subject
+          setTransition({
+            isTransitioning: false,
+            message: ''
+          });
+          console.log(`✅ [MULTISUBJECT] Subject transition complete, should now render ${nextSubject.name}`);
+        }, 4000); // 4-second celebration, then move to content generation
+      }
     }
   };
   
   // Render appropriate container based on type
   const renderContainer = () => {
+    console.log('🔍 [MULTISUBJECT] renderContainer called:', {
+      isTransitioning: transition.isTransitioning,
+      showSummaryCelebration,
+      showInitialLoading,
+      currentSubjectIndex,
+      skillsLoaded,
+      currentSubject
+    });
+
+    // Check for summary celebration first (all subjects complete)
+    if (showSummaryCelebration) {
+      return renderSummaryCelebration();
+    }
+
     if (transition.isTransitioning) {
       return renderTransition();
     }
@@ -517,15 +601,16 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
           setSkillsLoaded(false); // Force reload skills for Math
           setActiveContainerType('DISCOVER');
         }
-      : () => {
+      : (xpEarned?: number) => {
           console.log('📍 onNext called - moving to next subject via handleSubjectComplete');
           console.log('Debug info:', {
             activeContainerType,
             currentSubjectIndex,
             totalSubjects: subjects.length,
-            isLastSubject: currentSubjectIndex >= subjects.length - 1
+            isLastSubject: currentSubjectIndex >= subjects.length - 1,
+            xpEarned
           });
-          handleSubjectComplete();
+          handleSubjectComplete(xpEarned);
         }, // For other cases, move to next subject
       onBack,
       selectedCharacter,
@@ -544,7 +629,10 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
       // Pass rubric session ID for rubric-based content generation
       rubricSessionId: rubricSessionId,
       // Pass waiting for rubrics flag
-      waitingForRubrics: waitingForRubrics
+      waitingForRubrics: waitingForRubrics,
+      // Pass previous subject XP for PathIQ sidebar celebration
+      previousSubjectXP: lastCompletedSubjectXP,
+      previousSubjectName: currentSubjectIndex > 0 ? subjects[currentSubjectIndex - 1].name : undefined
     };
 
     // Use activeContainerType instead of containerType for dev mode override

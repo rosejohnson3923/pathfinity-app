@@ -65,6 +65,11 @@ import { getConsistencyValidator } from '../../services/content/ConsistencyValid
 import { continuousJourneyIntegration } from '../../services/ContinuousJourneyIntegration';
 import { adaptiveJourneyOrchestrator } from '../../services/AdaptiveJourneyOrchestrator';
 
+// Journey Tracking & Persistence
+import { journeyTrackingService } from '../../services/tracking/JourneyTrackingService';
+import { pathiqPersistenceService } from '../../services/persistence/PathIQPersistenceService';
+import { journeySummaryService } from '../../services/persistence/JourneySummaryService';
+
 // UI Components
 import { usePathIQGamification, getXPRewardForAction } from '../../hooks/usePathIQGamification';
 import { useModeContext } from '../../contexts/ModeContext';
@@ -95,6 +100,10 @@ import {
 import '../../styles/containers/BaseContainer.css';
 import '../../styles/containers/LearnContainer.css';
 import styles from './AILearnContainerV2.module.css';
+
+// Global content generation lock - persists across component mounts
+// Key: `${studentId}_${skillId}`, Value: true if generating/generated
+const contentGenerationLock = new Map<string, boolean>();
 
 // Temporary imports until full migration to unified module
 import questionStyles from '../../styles/shared/components/QuestionCard.module.css';
@@ -127,6 +136,9 @@ interface AILearnContainerV2Props {
   rubricSessionId?: string;
   // True if rubrics are still initializing (wait before generating content)
   waitingForRubrics?: boolean;
+  // XP earned from previous subject (for celebration in PathIQ sidebar)
+  previousSubjectXP?: number;
+  previousSubjectName?: string;
 }
 
 type LearningPhase = 'loading' | 'narrative' | 'instruction' | 'practice' | 'assessment' | 'complete';
@@ -148,7 +160,9 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   onLoadingChange,
   masterNarrative,
   narrativeLoading,
-  companionId = sessionStorage.getItem('selectedCompanion') || 'pat'
+  companionId = sessionStorage.getItem('selectedCompanion') || 'pat',
+  previousSubjectXP,
+  previousSubjectName
 }) => {
   // FEATURE FLAG: Enable Narrative-First Architecture with video instruction
   const USE_NARRATIVE_ENHANCED = localStorage.getItem('pathfinity_use_narrative_enhanced') === 'true' ||
@@ -172,6 +186,11 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   const [content, setContent] = useState<AILearnContent | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
+
+  // Journey Tracking - Generate unique session ID for this journey
+  const [trackingSessionId] = useState(() =>
+    rubricSessionId || `session-${student?.id || 'unknown'}-${Date.now()}`
+  );
   
   const [error, setError] = useState<string | null>(null);
   const [practiceAnswers, setPracticeAnswers] = useState<Record<number, any>>({});
@@ -217,6 +236,7 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   const practiceStartTime = useRef<number>(Date.now());
   const assessmentStartTime = useRef<number>(Date.now());
   const interactionCount = useRef<number>(0);
+  const narrativeTransitionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Track which subjects have been introduced via NarrativeIntroductionModal
   const [completedSubjectIntros, setCompletedSubjectIntros] = useState<Set<string>>(new Set());
@@ -224,8 +244,29 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   // Reset completedSubjectIntros when subject changes so each subject shows full intro
   useEffect(() => {
     setCompletedSubjectIntros(new Set());
-    console.log(`🔄 Subject changed to ${skill?.subject}, resetting completed intros`);
+
+    // Reset local ref flag but DON'T clear global lock
+    // The global lock persists across component remounts to prevent double generation
+    contentGeneratedRef.current = false;
+
+    // Clear any pending narrative transition timeout
+    if (narrativeTransitionTimeoutRef.current) {
+      clearTimeout(narrativeTransitionTimeoutRef.current);
+      narrativeTransitionTimeoutRef.current = null;
+    }
+
+    console.log(`🔄 Subject changed to ${skill?.subject}, resetting completed intros (NOT clearing global lock)`);
   }, [skill?.subject]);
+
+  // Cleanup: Clear narrative transition timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (narrativeTransitionTimeoutRef.current) {
+        clearTimeout(narrativeTransitionTimeoutRef.current);
+        narrativeTransitionTimeoutRef.current = null;
+      }
+    };
+  }, []);
 
   // Character and Career
   // Fix: Convert selectedCharacter (name) to id for proper lookup
@@ -322,6 +363,47 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
         'learn',
         skill?.subject || 'math'
       );
+
+      // Normalize subject to match database constraint
+      const normalizeSubject = (subject: string | undefined): 'Math' | 'ELA' | 'Science' | 'Social Studies' => {
+        if (!subject) return 'Math';
+        const normalized = subject.toLowerCase();
+        if (normalized.includes('math')) return 'Math';
+        if (normalized.includes('ela') || normalized.includes('english') || normalized.includes('reading')) return 'ELA';
+        if (normalized.includes('science')) return 'Science';
+        if (normalized.includes('social')) return 'Social Studies';
+        return 'Math'; // fallback
+      };
+
+      // Start journey tracking service
+      const sessionParams = {
+        sessionId: trackingSessionId,
+        container: 'LEARN' as const,
+        subject: normalizeSubject(skill?.subject as string),
+        skillId: skill.id,
+        skillName: skill.name || skill.description || 'Unknown Skill',
+        gradeLevel: student.grade_level || 'K',
+        userId: student.id
+      };
+
+      console.log('🚀 Starting LEARN session:', {
+        trackingSessionId,
+        skillSubject: skill?.subject,
+        normalizedSubject: sessionParams.subject,
+        skillId: skill.id,
+        skillName: skill.name,
+        timestamp: new Date().toISOString()
+      });
+
+      journeyTrackingService.startSession(sessionParams).then(result => {
+        if (result.success) {
+          console.log('✅ Journey tracking started for LEARN container');
+        } else {
+          console.warn('⚠️ Failed to start journey tracking:', result.error);
+        }
+      }).catch(err => {
+        console.error('❌ Journey tracking error:', err);
+      });
     }
     
     // Initialize PreGeneration cache warming when entering Learn container
@@ -338,12 +420,40 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
     
     const generateContent = async () => {
 
+      // Prevent double execution in React StrictMode or component remounts
+      // Use global Map that persists across component mounts
+      const lockKey = `${student?.id}_${skill?.id}`;
+
+      if (contentGenerationLock.has(lockKey) || contentGeneratedRef.current) {
+        console.log('⚠️ Content already generated, skipping duplicate generation', {
+          skillId: skill?.id,
+          subject: skill?.subject,
+          globalLock: contentGenerationLock.has(lockKey),
+          refFlag: contentGeneratedRef.current
+        });
+        return;
+      }
+
+      console.log('🎬 Starting content generation:', {
+        skillId: skill?.id,
+        subject: skill?.subject,
+        lockKey,
+        contentGeneratedFlag: contentGeneratedRef.current
+      });
+
+      // Mark as generating immediately to prevent concurrent calls
+      // Use global lock that persists across component remounts
+      contentGenerationLock.set(lockKey, true);
+      contentGeneratedRef.current = true;
+
       // Check if this container has already been completed
       const completionKey = `learn-${skill?.id}-${student?.id}`;
       const isCompleted = sessionStateManager.isContainerCompleted(student?.id, completionKey);
 
       if (isCompleted) {
         console.log('⚠️ Learn container already completed, skipping content generation:', completionKey);
+        contentGeneratedRef.current = false; // Reset flag if skipping
+        contentGenerationLock.delete(lockKey); // Reset global lock too
         return;
       }
 
@@ -623,11 +733,17 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
 
         console.log('🎉 Content ready - will transition to narrative phase after loading screen');
 
+        // Clear any existing narrative transition timeout
+        if (narrativeTransitionTimeoutRef.current) {
+          clearTimeout(narrativeTransitionTimeoutRef.current);
+        }
+
         // Add a minimum display time for loading screen to allow fun facts to play
         // This ensures users can hear the fun fact narration
-        setTimeout(() => {
+        narrativeTransitionTimeoutRef.current = setTimeout(() => {
           console.log('🎉 SETTING INITIAL PHASE TO NARRATIVE');
           setPhase('narrative');
+          narrativeTransitionTimeoutRef.current = null;
         }, 5000); // Give 5 seconds for fun fact narration
         
         // Get initial companion message
@@ -662,6 +778,11 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
       } catch (err) {
         console.error('Content generation error:', err);
         setError('Failed to generate learning content. Please try again.');
+
+        // Reset flags on error to allow retry
+        contentGeneratedRef.current = false;
+        const lockKey = `${student?.id}_${skill?.id}`;
+        contentGenerationLock.delete(lockKey);
 
         // Even if there's an error, transition to instruction phase with fallback content
         // This prevents the user from being stuck on a blank loading screen
@@ -703,42 +824,28 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
         // Start checking for completion
         checkLoadingComplete();
 
-        // Mark content as generated to prevent re-generation
-        contentGeneratedRef.current = true;
+        // Note: contentGeneratedRef.current is already set to true at the start of generateContent()
       }
     };
     
     generateContent();
   }, [student?.id, skill?.id, characterId, selectedCareer?.id, sessionKey, hasGeneratedContent]); // Use IDs to prevent re-renders from object changes
   
-  // Auto-submit effect for true_false and multiple_choice questions
+  // Auto-submit effect for ALL assessment question types
   useEffect(() => {
     // Only auto-submit if:
     // 1. We have an answer (use flag to handle false values properly)
     // 2. We haven't shown results yet
     // 3. We have content
-    // 4. The question type supports auto-submit
     if (assessmentAnswerSet && !showAssessmentResult && content?.assessment) {
-      // Convert the assessment to get the question type
-      const questionObj = aiContentConverter.convertAssessment(
-        content.assessment,
-        {
-          subject: skill.subject,
-          grade: student.grade_level || 'K',
-          skill_name: skill.name,
-          skill_number: skill.id
-        }
-      );
+      console.log('🔄 Auto-submit effect triggered for assessment');
 
-      if (questionObj && (questionObj.type === 'multiple_choice' || questionObj.type === 'true_false')) {
-        
-        // Use a small delay to ensure state is fully updated
-        const timer = setTimeout(() => {
-          handleAssessmentSubmit();
-        }, 50);
-        
-        return () => clearTimeout(timer);
-      }
+      // Use a small delay to ensure state is fully updated
+      const timer = setTimeout(() => {
+        handleAssessmentSubmit();
+      }, 50);
+
+      return () => clearTimeout(timer);
     }
   }, [assessmentAnswerSet, assessmentAnswer]); // Depend on both flag and answer
   
@@ -747,18 +854,26 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   // ================================================================
   
   const handlePracticeAnswer = async (questionIndex: number, answer: any) => {
-    
+
+    console.log('🎯 handlePracticeAnswer called:', {
+      questionIndex,
+      answer,
+      subject: skill?.subject,
+      trackingSessionId,
+      timestamp: new Date().toISOString()
+    });
+
     if (!content) return;
-    
+
     // Use ONLY the converted question - no raw data access
     const convertedQuestion = convertedPracticeQuestions[questionIndex];
-    
+
     if (!convertedQuestion) {
       console.error('❌ No converted question found for index:', questionIndex);
       return;
     }
-    
-    
+
+
     setPracticeAnswers(prev => ({ ...prev, [questionIndex]: answer }));
     
     // SINGLE VALIDATION PATH - Use ONLY the QuestionValidator
@@ -807,6 +922,36 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
     } else {
       console.warn('⚠️ Cannot track performance - skill or skill.id is missing');
     }
+
+    // Record question attempt in journey tracking
+    const timeSpent = Math.round((Date.now() - questionStartTime) / 1000); // seconds
+
+    console.log('📝 Recording question attempt:', {
+      trackingSessionId,
+      container: 'LEARN',
+      subject: skill?.subject,
+      questionId: convertedQuestion.id || `practice-${questionIndex}`,
+      isCorrect: enhancedResult.isCorrect
+    });
+
+    journeyTrackingService.recordQuestionAttempt(
+      trackingSessionId,
+      'LEARN',
+      {
+        questionId: convertedQuestion.id || `practice-${questionIndex}`,
+        questionText: convertedQuestion.question || convertedQuestion.content || 'Question',
+        studentAnswer: String(answer),
+        correctAnswer: String(convertedQuestion.correctAnswer || ''),
+        isCorrect: enhancedResult.isCorrect,
+        attemptNumber: interactionCount.current + 1,
+        timeSpent: timeSpent,
+        hintsUsed: hintUsed[questionIndex] ? 1 : 0,
+        questionType: 'practice'
+      }
+    ).catch(err => console.error('❌ Failed to record question attempt:', err));
+
+    // Reset question timer for next question
+    setQuestionStartTime(Date.now());
     
     // Get companion reaction based on result
     const triggerType = validationResult.isCorrect ? 'correct_answer' : 'incorrect_answer';
@@ -823,17 +968,31 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
     
     setCompanionMessage(companionResponse.message);
     setCompanionEmotion(companionResponse.emotion);
-    
-    // Award XP if correct and gamification enabled
-    if (validationResult.isCorrect && features.showXP && !xpAwarded[`practice_${questionIndex}`]) {
+
+    // Track XP in journey session (always, regardless of UI features)
+    if (validationResult.isCorrect && !xpAwarded[`practice_${questionIndex}`]) {
       const xpAmount = await gamificationRules.calculateXP('practice_correct', {
         studentId: student.id,
         level: profile?.level || 1,
         streak: profile?.streakDays || 0,
         firstTry: interactionCount.current === 0
       });
-      
-      awardXP(xpAmount, 'Practice question answered correctly');
+
+      console.log(`💰 Awarding ${xpAmount} XP (practice) - both to journey session AND PathIQ UI`);
+
+      // Award to journey tracking for database persistence
+      journeyTrackingService.awardSessionXP(
+        trackingSessionId,
+        'LEARN',
+        xpAmount
+      ).catch(err => console.error('Failed to award session XP:', err));
+
+      // Award to PathIQ UI for real-time feedback (if gamification is enabled)
+      if (features.showXP) {
+        awardXP(xpAmount, 'Practice question answered correctly');
+      }
+
+      // Mark as awarded to prevent duplicate tracking
       setXpAwarded(prev => ({ ...prev, [`practice_${questionIndex}`]: true }));
     }
     
@@ -911,26 +1070,63 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
       questionObj,
       assessmentAnswer
     );
-    
+
     // For backwards compatibility with rules engine format
     const isCorrect = validationResult.isCorrect;
-    
-    
+
+
     const responseTime = Date.now() - questionStartTime;
     setShowAssessmentResult(true);
     setAssessmentIsCorrect(isCorrect);
-    
-    // Award XP for assessment
+
+    // Record assessment question attempt in journey tracking
+    const timeSpent = Math.round(responseTime / 1000); // convert to seconds
+
+    console.log('📝 Recording ASSESSMENT attempt:', {
+      trackingSessionId,
+      container: 'LEARN',
+      subject: skill?.subject,
+      questionId: questionObj.id || 'assessment',
+      isCorrect: isCorrect
+    });
+
+    journeyTrackingService.recordQuestionAttempt(
+      trackingSessionId,
+      'LEARN',
+      {
+        questionId: questionObj.id || 'assessment',
+        questionText: questionObj.question || questionObj.content || 'Assessment Question',
+        studentAnswer: String(assessmentAnswer),
+        correctAnswer: String(questionObj.correctAnswer || ''),
+        isCorrect: isCorrect,
+        attemptNumber: 1,
+        timeSpent: timeSpent,
+        hintsUsed: 0,
+        questionType: 'assessment'
+      }
+    ).catch(err => console.error('❌ Failed to record assessment attempt:', err));
+
+    // Track XP in journey session (always, regardless of UI features)
+    const xpAmount = await gamificationRules.calculateXP(
+      validationResult.isCorrect ? 'assessment_correct' : 'assessment_attempt',
+      {
+        studentId: student.id,
+        level: profile?.level || 1,
+        responseTime
+      }
+    );
+
+    console.log(`💰 Awarding ${xpAmount} XP (assessment) - both to journey session AND PathIQ UI`);
+
+    // Award to journey tracking for database persistence
+    journeyTrackingService.awardSessionXP(
+      trackingSessionId,
+      'LEARN',
+      xpAmount
+    ).catch(err => console.error('Failed to award assessment XP:', err));
+
+    // Award to PathIQ UI for real-time feedback (if gamification is enabled)
     if (features.showXP) {
-      const xpAmount = await gamificationRules.calculateXP(
-        validationResult.isCorrect ? 'assessment_correct' : 'assessment_attempt',
-        {
-          studentId: student.id,
-          level: profile?.level || 1,
-          responseTime
-        }
-      );
-      
       awardXP(xpAmount, 'Assessment completed');
     }
     
@@ -972,11 +1168,12 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   const handleAssessmentContinue = async () => {
     // Transition to complete phase when user clicks Continue after assessment
     setPhase('complete');
-    
+
     // UNIFIED: Update Adaptive Journey (NEW)
     await updateJourneyProgress();
-    
-    onComplete(assessmentIsCorrect);
+
+    // Use handleComplete to ensure tracking and XP award
+    await handleComplete();
   };
   
   const handleStartPractice = () => {
@@ -1022,11 +1219,108 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
   const handleComplete = async () => {
     const allPracticeCorrect = Object.values(practiceResults).every(r => r);
     const overallSuccess = allPracticeCorrect && assessmentIsCorrect;
-    
+
     // UNIFIED: Process skill completion in adaptive journey
     await processSkillCompletion(overallSuccess);
-    
-    onComplete(overallSuccess);
+
+    // Variable to store XP earned for passing to parent
+    let completedSessionXP: number | undefined;
+
+    // Complete journey tracking session
+    try {
+      console.log('💾 Completing LEARN session tracking...');
+      const result = await journeyTrackingService.completeSession(
+        trackingSessionId,
+        'LEARN'
+      );
+
+      if (result.success) {
+        console.log('✅ LEARN session completed and saved');
+
+        // Get the completed session data from the result (not from activeSessions since it's been deleted)
+        const sessionData = result.data;
+
+        if (sessionData) {
+          console.log('📊 Session data retrieved:', {
+            xpEarned: sessionData.xpEarned,
+            questionsAttempted: sessionData.questionsAttempted,
+            questionsCorrect: sessionData.questionsCorrect
+          });
+
+          // Store XP for passing to parent
+          completedSessionXP = sessionData.xpEarned;
+
+          // Normalize subject to match database constraint
+          const normalizeSubject = (subject: string | undefined): 'Math' | 'ELA' | 'Science' | 'Social Studies' => {
+            if (!subject) return 'Math';
+            const normalized = subject.toLowerCase();
+            if (normalized.includes('math')) return 'Math';
+            if (normalized.includes('ela') || normalized.includes('english') || normalized.includes('reading')) return 'ELA';
+            if (normalized.includes('science')) return 'Science';
+            if (normalized.includes('social')) return 'Social Studies';
+            return 'Math'; // fallback
+          };
+
+          // Persist XP to database (UI was already updated in real-time during questions)
+          // This writes the accumulated session XP to Supabase pathiq_profiles and xp_transactions
+          const xpResult = await pathiqPersistenceService.awardXP({
+            userId: student.id,
+            amount: sessionData.xpEarned || 50, // Use tracked XP from journey session
+            reason: `Completed ${skill?.name || 'skill'} in LEARN container`,
+            category: 'learning',
+            sessionId: trackingSessionId,
+            container: 'LEARN',
+            subject: normalizeSubject(skill?.subject as string),
+            skillId: skill?.id
+          });
+
+          if (xpResult.success) {
+            console.log(`⭐ PathIQ XP awarded: +${xpResult.amountAwarded}`);
+
+            if (xpResult.levelUps && xpResult.levelUps > 0) {
+              console.log(`🎉 LEVEL UP! Now level ${xpResult.newLevel}!`);
+              // TODO: Show level up animation
+            }
+          }
+
+          // Update journey summary with LEARN progress
+          try {
+            const progress = await journeySummaryService.buildContainerProgress(
+              trackingSessionId,
+              'LEARN'
+            );
+
+            if (progress) {
+              await journeySummaryService.updateContainerProgress(
+                trackingSessionId,
+                'LEARN',
+                progress
+              );
+              console.log('✅ LEARN progress updated in journey summary');
+            }
+          } catch (summaryError) {
+            console.error('Failed to update journey summary:', summaryError);
+          }
+        } else {
+          console.warn('⚠️ No session data returned from completeSession');
+        }
+      } else {
+        console.warn('⚠️ Failed to complete session:', result.error);
+      }
+    } catch (error) {
+      console.error('❌ Error completing session:', error);
+    }
+
+    // Clear global content generation lock for this skill
+    // Allows regeneration if user returns to this skill later
+    const lockKey = `${student?.id}_${skill?.id}`;
+    contentGenerationLock.delete(lockKey);
+    console.log(`🔓 Cleared global lock for completed skill: ${lockKey}`);
+
+    // Pass XP earned to parent (MultiSubjectContainer) if available
+    // If XP was successfully retrieved, pass it; otherwise pass boolean success
+    console.log(`🎯 Calling onComplete with XP: ${completedSessionXP}`);
+    onComplete(completedSessionXP || overallSuccess);
   };
   
   // Testing shortcut - skip directly to Experience container
@@ -1118,6 +1412,9 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
         companionId={companionId}
         enableNarration={true}
         isFirstLoad={true}  // Always true for initial loading
+        previousSubjectXP={previousSubjectXP}
+        previousSubjectName={previousSubjectName}
+        showXPSummary={false}  // No XP summary during content generation, only in sidebar
       />
     );
   }
@@ -1267,6 +1564,9 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
             companionId={companionId}
             enableNarration={true}
             isFirstLoad={!content}  // Simplified - true when content hasn't loaded yet
+            previousSubjectXP={previousSubjectXP}
+            previousSubjectName={previousSubjectName}
+            showXPSummary={false}  // No XP summary during content generation, only in sidebar
           />
         )}
 
@@ -1283,6 +1583,13 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
             theme={theme}
             onContinue={() => {
               console.log('🎉 User clicked "Begin Your Adventure" - transitioning to instruction');
+
+              // Clear the narrative transition timeout to prevent phase reset
+              if (narrativeTransitionTimeoutRef.current) {
+                clearTimeout(narrativeTransitionTimeoutRef.current);
+                narrativeTransitionTimeoutRef.current = null;
+                console.log('✅ Cleared narrative transition timeout');
+              }
 
               // Mark this subject as introduced
               if (skill?.subject) {
@@ -1420,6 +1727,36 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
                     timestamp: new Date().toISOString()
                   });
 
+                  // Safely extract visual content - only actual images/emojis, NOT answer text
+                  const getVisualContent = (questionObj: any) => {
+                    // Priority 1: Media URL (actual image)
+                    if (questionObj.media?.url) return questionObj.media.url;
+
+                    // Priority 2: Explicit image field
+                    if (questionObj.image && typeof questionObj.image === 'string') {
+                      // Only use if it's a URL or short emoji/icon (not answer text)
+                      if (questionObj.image.includes('http') || questionObj.image.length < 50) {
+                        return questionObj.image;
+                      }
+                    }
+
+                    // Priority 3: Visual content (but NOT if it looks like answer text)
+                    const visual = questionObj.visual?.content || questionObj.visual;
+                    if (visual && typeof visual === 'string') {
+                      // Reject if it contains answer-like text patterns
+                      const looksLikeAnswer = visual.toLowerCase().includes('a group of') ||
+                                             visual.toLowerCase().includes('the answer') ||
+                                             visual.toLowerCase().includes('is a') ||
+                                             visual.toLowerCase().includes('is the') ||
+                                             visual.length > 100;
+                      if (!looksLikeAnswer) {
+                        return visual;
+                      }
+                    }
+
+                    return undefined;
+                  };
+
                   return (
                     <BentoLearnCardV2
                       question={{
@@ -1427,7 +1764,7 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
                         number: idx + 1,
                         type: questionObj.type,
                         text: questionObj.content || questionObj.question || questionObj.statement || 'Question text missing',
-                        image: questionObj.media?.url || questionObj.image || questionObj.visual?.content || questionObj.visual || questionObj.visualElements?.description,
+                        image: getVisualContent(questionObj),
                         options: getOptionsForQuestionType(questionObj),
                         correctAnswer: getCorrectAnswerForQuestionType(questionObj),
                         hint: questionObj.hint || questionObj.hints?.[0] || "Think about the problem carefully",
@@ -1605,6 +1942,28 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
                 //   type: questionObj.type
                 // });
                 
+                // Safely extract visual content - only actual images/emojis, NOT answer text
+                const getVisualContent = (questionObj: any) => {
+                  // Priority 1: Media URL (actual image)
+                  if (questionObj.media?.url) return questionObj.media.url;
+
+                  // Priority 2: Visual content (but NOT if it looks like answer text)
+                  const visual = questionObj.visual;
+                  if (visual && typeof visual === 'string') {
+                    // Reject if it contains answer-like text patterns or is too long
+                    const looksLikeAnswer = visual.toLowerCase().includes('a group of') ||
+                                           visual.toLowerCase().includes('the answer') ||
+                                           visual.toLowerCase().includes('is a') ||
+                                           visual.toLowerCase().includes('is the') ||
+                                           visual.length > 100;
+                    if (!looksLikeAnswer) {
+                      return visual;
+                    }
+                  }
+
+                  return undefined;
+                };
+
                 // Use BentoLearnCardV2 for consistent styling with practice
                 return (
                   <BentoLearnCardV2
@@ -1615,7 +1974,7 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
                       type: questionObj.type,
                       options: questionObj.options || [],
                       correctAnswer: questionObj.correct_answer || questionObj.correctAnswer || '',
-                      image: questionObj.media?.url || questionObj.visual || questionObj.visualElements?.description,
+                      image: getVisualContent(questionObj),
                       hint: questionObj.hint,
                       xpReward: 20
                     }}
@@ -1629,11 +1988,10 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
                       });
                       setAssessmentAnswer(answer);
                       setAssessmentAnswerSet(true);
-                      handleAssessmentSubmit();
+                      // Don't call handleAssessmentSubmit() directly - let the auto-submit useEffect handle it
+                      // This prevents race condition where state hasn't updated yet
                     }}
-                    onNextQuestion={() => {
-                      setPhase('complete');
-                    }}
+                    onNextQuestion={handleAssessmentContinue}
                     progress={{
                       current: 1,
                       total: 1,

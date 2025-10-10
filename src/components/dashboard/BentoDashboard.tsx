@@ -11,6 +11,7 @@ import { supabase } from '../../lib/supabase';
 import { careerProgressionSystem } from '../../rules-engine/career/CareerProgressionSystem';
 import { BentoTile } from '../shared/BentoTile';
 import { ThemeMode, GradeLevel } from '../../styles/visualHierarchy';
+import { useLeaderboard } from '../../hooks/useLeaderboard';
 
 interface CareerProgress {
   careerId: string;
@@ -52,7 +53,52 @@ export const BentoDashboard: React.FC<BentoDashboardProps> = ({
   const [weeklyProgress, setWeeklyProgress] = useState(0);
   const [achievements, setAchievements] = useState<any[]>([]);
   const [careerProgress, setCareerProgress] = useState<CareerProgress | null>(null);
-  
+
+  // Feature flag for real leaderboard data
+  // Toggle VITE_USE_REAL_LEADERBOARD in .env to switch between mock and real data
+  // false = mock data (default, safe for testing)
+  // true = real data from Supabase PathIQ profiles
+  const useRealLeaderboard = import.meta.env.VITE_USE_REAL_LEADERBOARD === 'true';
+
+  // Log leaderboard mode for debugging
+  useEffect(() => {
+    console.log(`🏆 Leaderboard Mode: ${useRealLeaderboard ? 'REAL DATA' : 'MOCK DATA'}`);
+  }, [useRealLeaderboard]);
+
+  // Fetch real leaderboard data (only when feature flag is enabled)
+  const { data: realLeaderboardData, loading: leaderboardLoading, currentUserPosition } = useLeaderboard({
+    gradeLevel: gradeLevel,
+    limit: 5
+  });
+
+  // Mock leaderboard data for testing/gradual rollout
+  const mockLeaderboardData = {
+    players: [
+      { userId: 'mock-1', rank: 1, displayName: 'Swift Explorer #1', xp: 1250, level: 5, streakDays: 7, isCurrentUser: false },
+      { userId: profile?.id || 'current', rank: 2, displayName: 'You', xp: animateValue.xp || 980, level: animateValue.level || 4, streakDays: animateValue.streak || 3, isCurrentUser: true },
+      { userId: 'mock-3', rank: 3, displayName: 'Bright Scholar #3', xp: 920, level: 4, streakDays: 5, isCurrentUser: false },
+      { userId: 'mock-4', rank: 4, displayName: 'Clever Thinker #4', xp: 850, level: 4, streakDays: 2, isCurrentUser: false },
+      { userId: 'mock-5', rank: 5, displayName: 'Bold Achiever #5', xp: 780, level: 3, streakDays: 4, isCurrentUser: false }
+    ],
+    totalPlayers: 25,
+    currentUserRank: 2,
+    currentUserXP: animateValue.xp || 980,
+    lastUpdated: new Date().toISOString(),
+    gradeLevel: gradeLevel,
+    tenantId: 'mock-tenant'
+  };
+
+  const mockUserPosition = {
+    rank: 2,
+    xp: animateValue.xp || 980,
+    level: animateValue.level || 4,
+    percentile: 92
+  };
+
+  // Use real or mock data based on feature flag
+  const leaderboardData = useRealLeaderboard ? realLeaderboardData : mockLeaderboardData;
+  const userPosition = useRealLeaderboard ? currentUserPosition : mockUserPosition;
+
   // Determine grade category for age-appropriate UI
   const getGradeCategory = (grade: string): 'elementary' | 'middle' | 'high' => {
     const gradeNum = grade === 'K' ? 0 : parseInt(grade);
@@ -880,33 +926,40 @@ export const BentoDashboard: React.FC<BentoDashboardProps> = ({
           >
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginTop: '8px' }}>
               <div style={{ textAlign: 'center' }}>
-                <span style={{ 
-                  fontSize: '1.75rem', 
-                  fontWeight: 'bold', 
-                  color: '#667eea' 
+                <span style={{
+                  fontSize: '1.75rem',
+                  fontWeight: 'bold',
+                  color: '#667eea'
                 }}>
-                  #{profile?.classRank || 5}
+                  #{userPosition?.rank || profile?.classRank || '—'}
                 </span>
                 <p style={{ fontSize: '11px', opacity: 0.7 }}>Your Rank</p>
               </div>
               <div>
-                <div style={{ fontSize: '11px', marginBottom: '4px' }}>
-                  <span>🥇 Alex M.</span> 
-                  <span style={{ float: 'right' }}>1,250 XP</span>
-                </div>
-                <div style={{ 
-                  fontSize: '11px', 
-                  marginBottom: '4px', 
-                  fontWeight: 'bold', 
-                  color: '#667eea' 
-                }}>
-                  <span>🥈 You</span> 
-                  <span style={{ float: 'right' }}>{animateValue.xp || 0} XP</span>
-                </div>
-                <div style={{ fontSize: '11px' }}>
-                  <span>🥉 Sam K.</span> 
-                  <span style={{ float: 'right' }}>980 XP</span>
-                </div>
+                {useRealLeaderboard && leaderboardLoading ? (
+                  <div style={{ fontSize: '11px', opacity: 0.7 }}>Loading...</div>
+                ) : leaderboardData?.players && leaderboardData.players.length > 0 ? (
+                  <>
+                    {leaderboardData.players.slice(0, 3).map((player, index) => (
+                      <div
+                        key={player.userId}
+                        style={{
+                          fontSize: '11px',
+                          marginBottom: '4px',
+                          fontWeight: player.isCurrentUser ? 'bold' : 'normal',
+                          color: player.isCurrentUser ? '#667eea' : 'inherit'
+                        }}
+                      >
+                        <span>
+                          {index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉'} {player.isCurrentUser ? 'You' : player.displayName}
+                        </span>
+                        <span style={{ float: 'right' }}>{player.xp} XP</span>
+                      </div>
+                    ))}
+                  </>
+                ) : (
+                  <div style={{ fontSize: '11px', opacity: 0.7 }}>No leaderboard data yet</div>
+                )}
               </div>
             </div>
           </BentoTile>
@@ -1185,18 +1238,31 @@ export const BentoDashboard: React.FC<BentoDashboardProps> = ({
       <div className={`${styles.bentoTile} ${styles.bentoTileSmall}`} style={{ gridArea: 'social' }}>
         <h4 className={styles.tileTitle}>Leaderboard</h4>
         <div style={{ fontSize: '12px', marginTop: '8px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-            <span>🥇 Sarah M.</span>
-            <span>2,450</span>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px', fontWeight: 'bold', color: 'var(--color-primary)' }}>
-            <span>🥈 You</span>
-            <span>{animateValue.xp || 2380}</span>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span>🥉 Alex D.</span>
-            <span>2,320</span>
-          </div>
+          {useRealLeaderboard && leaderboardLoading ? (
+            <div style={{ opacity: 0.7 }}>Loading...</div>
+          ) : leaderboardData?.players && leaderboardData.players.length > 0 ? (
+            <>
+              {leaderboardData.players.slice(0, 3).map((player, index) => (
+                <div
+                  key={player.userId}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    marginBottom: '4px',
+                    fontWeight: player.isCurrentUser ? 'bold' : 'normal',
+                    color: player.isCurrentUser ? 'var(--color-primary)' : 'inherit'
+                  }}
+                >
+                  <span>
+                    {index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉'} {player.isCurrentUser ? 'You' : player.displayName}
+                  </span>
+                  <span>{player.xp}</span>
+                </div>
+              ))}
+            </>
+          ) : (
+            <div style={{ opacity: 0.7 }}>No leaderboard data yet</div>
+          )}
         </div>
       </div>
       </div>

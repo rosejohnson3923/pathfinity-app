@@ -585,9 +585,9 @@ export const InstructionalVideoComponent: React.FC<InstructionalVideoComponentPr
                       >
                         <div className={styles.videoCardContent}>
                           <div className={styles.videoThumbnail}>
-                            {video.thumbnail && (
+                            {video.thumbnailUrl && (
                               <img
-                                src={video.thumbnail}
+                                src={video.thumbnailUrl}
                                 alt={video.title}
                                 className={styles.thumbnailImage}
                               />

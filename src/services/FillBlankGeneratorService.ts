@@ -597,9 +597,16 @@ export class FillBlankGeneratorService {
     let sourceText = aiQuestion.question || aiQuestion.statement || aiQuestion.content || '';
     
     // Check if the question is incomplete or problematic
-    const isIncomplete = sourceText.includes('…') || 
-                        sourceText.endsWith(' a ') || 
+    const isIncomplete = sourceText.includes('…') ||
+                        sourceText.includes('...') ||
+                        sourceText.endsWith(' a ') ||
                         sourceText.endsWith(' the ') ||
+                        sourceText.endsWith(' a...') ||
+                        sourceText.endsWith(' the...') ||
+                        sourceText.endsWith(' an...') ||
+                        sourceText.endsWith(' in the...') ||
+                        sourceText.endsWith(' of the...') ||
+                        sourceText.endsWith(' to the...') ||
                         /What['']s the _____\?$/i.test(sourceText) ||
                         /What is the _____\?$/i.test(sourceText) ||
                         /The answer is _____/i.test(sourceText);
@@ -664,29 +671,79 @@ export class FillBlankGeneratorService {
         // Look for the complete sentence in the explanation
         const completeMatch = aiQuestion.explanation.match(/(?:answer|correct response) is[:\s]+['"]?([^'"\s,.]+)['"]?/i);
         if (completeMatch && completeMatch[1]) {
+          // Try to complete the sentence with the extracted answer
+          let completedQuestion = sourceText.replace(/\.\.\.$/,'').trim();
+          if (!completedQuestion.includes('_____')) {
+            completedQuestion = completedQuestion + ' _____.';
+          }
+
           return {
             ...aiQuestion,
-            question: sourceText.includes('_____') ? sourceText : sourceText + '_____.',
+            question: completedQuestion,
             correct_answer: completeMatch[1],
-            template: (sourceText.includes('_____') ? sourceText : sourceText + '_____.').replace('_____', '{{blank_0}}'),
+            template: completedQuestion.replace('_____', '{{blank_0}}'),
             blanks: [{
               id: 'blank_0',
               correctAnswers: this.generateAnswerVariations(completeMatch[1])
             }]
           };
         }
+
+        // Try to find a complete sentence in the explanation
+        const sentences = aiQuestion.explanation.match(/[^.!?]+[.!?]/g) || [];
+        for (const sentence of sentences) {
+          // Look for sentences that could be converted to fill_blank
+          if (sentence.length > 20 && sentence.length < 200 && !sentence.toLowerCase().includes('correct') && !sentence.toLowerCase().includes('answer')) {
+            console.log('🔄 Attempting to use explanation sentence:', sentence.trim());
+            const generated = this.generateFillBlank(sentence.trim(), aiQuestion.hint, gradeLevel);
+            if (generated.correct_answer && generated.correct_answer !== 'answer') {
+              return {
+                ...aiQuestion,
+                question: generated.question,
+                correct_answer: generated.correct_answer,
+                template: generated.template,
+                blanks: generated.blanks
+              };
+            }
+          }
+        }
       }
-      
-      // Generate a fallback question - better to have a working question than a broken one
-      const fallbackAnswer = 'patient'; // Common medical term for ELA/surgeon context
+
+      // Try to extract from topic or hints to create a meaningful fallback
+      const topic = aiQuestion.topic?.toLowerCase() || '';
+      const hint = aiQuestion.hints?.[0]?.toLowerCase() || '';
+      let fallbackQuestion = '';
+      let fallbackAnswer = '';
+
+      // Generate contextual fallback based on available information
+      if (sourceText.toLowerCase().includes('doctor') || sourceText.toLowerCase().includes('surgeon')) {
+        fallbackQuestion = "Doctors work with others in the _____.";
+        fallbackAnswer = 'hospital';
+      } else if (sourceText.toLowerCase().includes('teacher')) {
+        fallbackQuestion = "Teachers work with students in the _____.";
+        fallbackAnswer = 'classroom';
+      } else if (sourceText.toLowerCase().includes('community')) {
+        fallbackQuestion = "A community is a group of people who live and work _____.";
+        fallbackAnswer = 'together';
+      } else if (topic.includes('math') || topic.includes('add') || topic.includes('number')) {
+        fallbackQuestion = "The sum of 2 + 2 is _____.";
+        fallbackAnswer = '4';
+      } else {
+        // Generic fallback
+        fallbackQuestion = "The correct answer is _____.";
+        fallbackAnswer = 'here';
+      }
+
+      console.warn('⚠️ Using fallback fill_blank question:', fallbackQuestion);
+
       return {
         ...aiQuestion,
-        question: "A surgeon carefully reviews a patient's _____ before surgery.",
+        question: fallbackQuestion,
         correct_answer: fallbackAnswer,
-        template: "A surgeon carefully reviews a patient's {{blank_0}} before surgery.",
+        template: fallbackQuestion.replace('_____', '{{blank_0}}'),
         blanks: [{
           id: 'blank_0',
-          correctAnswers: [fallbackAnswer, 'records', 'history', 'chart']
+          correctAnswers: this.generateAnswerVariations(fallbackAnswer)
         }]
       };
     }
@@ -742,9 +799,22 @@ export class FillBlankGeneratorService {
    * Generate answer options including the correct answer and distractors
    * @param correctAnswer The correct answer for the blank
    * @param context Optional context to generate better distractors
+   * @param providedOptions Optional array of options from AI (if available)
    * @returns Array of 4 answer options (including the correct answer)
    */
-  generateOptions(correctAnswer: string, context?: string): string[] {
+  generateOptions(correctAnswer: string, context?: string, providedOptions?: string[]): string[] {
+    // If AI provided options, use them (they should be contextually appropriate)
+    if (providedOptions && Array.isArray(providedOptions) && providedOptions.length >= 4) {
+      console.log('✅ Using AI-provided options for fill_blank:', providedOptions);
+      return providedOptions.slice(0, 4);
+    }
+
+    if (providedOptions && providedOptions.length > 0 && providedOptions.length < 4) {
+      console.warn('⚠️ AI provided incomplete options array, generating additional distractors');
+    } else {
+      console.warn('⚠️ No AI-provided options, generating generic distractors (this may result in poor question quality)');
+    }
+
     const options = new Set<string>();
     options.add(correctAnswer);
     

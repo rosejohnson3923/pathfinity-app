@@ -17,6 +17,7 @@ export interface EnrichedMasterNarrative {
   // Session metadata
   sessionId: string;
   userId: string;
+  studentName: string;  // Student's display name (not UUID)
   createdAt: string;
 
   // User selections

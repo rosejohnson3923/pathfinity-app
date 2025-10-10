@@ -8,7 +8,8 @@
 /* Container Styles */
 .gamificationSidebar {
   position: relative;
-  height: 100vh;
+  height: calc(100vh - 80px); /* Account for ProgressHeader height (80px) */
+  margin-top: 80px; /* Push sidebar below ProgressHeader */
   width: 320px;
   min-width: 320px;
   flex-shrink: 0; /* Prevent sidebar from shrinking */
@@ -33,6 +34,8 @@
 .gamificationSidebarCollapsed {
   width: 60px;
   min-width: 60px;
+  height: calc(100vh - 80px); /* Maintain header spacing when collapsed */
+  margin-top: 80px;
 }
 
 .gamificationSidebarLeft.gamificationSidebarCollapsed {
@@ -75,7 +78,7 @@
 /* Header Section */
 .header {
   padding: var(--spacing-4);
-  padding-top: calc(var(--spacing-4) + 40px); /* Account for toggle button height + spacing */
+  padding-top: calc(var(--spacing-2) + 36px); /* Account for toggle button height + minimal spacing */
   padding-right: var(--spacing-6); /* Extra padding to avoid any potential overlap */
   background: var(--bg-secondary);
   border-bottom: 1px solid var(--border-color);
@@ -105,6 +108,80 @@
   font-size: var(--text-lg);
   font-weight: var(--font-bold);
   color: var(--text-primary);
+}
+
+/* Celebration Banner */
+.celebrationBanner {
+  margin: var(--spacing-3) 0;
+  padding: var(--spacing-3);
+  background: linear-gradient(135deg, var(--color-success) 0%, var(--color-primary) 100%);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: slideInDown 0.5s var(--easing-out);
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.celebrationContent {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+.celebrationIcon {
+  font-size: 2rem;
+  animation: bounce 1s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.celebrationText {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.celebrationTitle {
+  font-size: var(--text-base);
+  font-weight: var(--font-bold);
+  color: var(--color-white);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.celebrationXP {
+  font-size: var(--text-lg);
+  font-weight: var(--font-extrabold);
+  color: var(--color-white);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.05);
+  }
 }
 
 /* User Stats */

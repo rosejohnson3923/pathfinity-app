@@ -850,13 +850,16 @@ export class AIContentConverter {
       grade_level: gradeLevel,
       correct_answer: processedQuestion.correct_answer,
       template: processedQuestion.template,
-      blanks: processedQuestion.blanks
+      blanks: processedQuestion.blanks,
+      ai_provided_options: assessment.options ? assessment.options : 'none'
     });
-    
+
     // Generate options for fill_blank (convert to multiple choice format)
+    // Pass AI-provided options if available
     const options = fillBlankGenerator.generateOptions(
       processedQuestion.correct_answer,
-      skillInfo.subject
+      skillInfo.subject,
+      assessment.options  // Pass options from AI if provided
     );
     
     return {

@@ -29,6 +29,11 @@ import { aiLearningJourneyService, AIDiscoverContent, StudentProfile, LearningSk
 import { unifiedLearningAnalyticsService } from '../../services/unifiedLearningAnalyticsService';
 import { voiceManagerService } from '../../services/voiceManagerService';
 
+// Journey Tracking & Persistence
+import { journeyTrackingService } from '../../services/tracking/JourneyTrackingService';
+import { pathiqPersistenceService } from '../../services/persistence/PathIQPersistenceService';
+import { journeySummaryService } from '../../services/persistence/JourneySummaryService';
+
 // V2-JIT Features - Performance & Caching
 import { Question, BaseQuestion } from '../../services/content/QuestionTypes';
 import { questionValidator, ValidationResult } from '../../services/content/QuestionValidator';
@@ -85,7 +90,7 @@ interface AIDiscoverContainerV2Props {
   skill: LearningSkill;
   selectedCharacter?: string;
   selectedCareer?: any;
-  onComplete: (success: boolean) => void;
+  onComplete: (xpEarned?: number) => void;
   onNext?: () => void;
   onBack?: () => void;
   userId?: string;
@@ -172,6 +177,12 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
   const [reflectionAnswers, setReflectionAnswers] = useState<Record<number, string>>({});
   const [allActivitiesComplete, setAllActivitiesComplete] = useState(false);
   const [sessionId] = useState(`discover-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`);
+
+  // Journey Tracking - Use rubric session ID if available, otherwise generate unique ID
+  const [trackingSessionId] = useState(() =>
+    rubricSessionId || `session-${student?.id || 'unknown'}-${Date.now()}`
+  );
+
   const [currentHint, setCurrentHint] = useState<string | null>(null);
   const [companionMessage, setCompanionMessage] = useState<{ text: string; emotion: string } | null>(null);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -394,7 +405,37 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
       if (explorationPath && selectedCareer) {
         generatedContent.careerTheme = explorationPath.careerActivities;
       }
-      
+
+      // Normalize subject to match database constraint
+      const normalizeSubject = (subject: string | undefined): 'Math' | 'ELA' | 'Science' | 'Social Studies' => {
+        if (!subject) return 'Science'; // DISCOVER defaults to Science
+        const normalized = subject.toLowerCase();
+        if (normalized.includes('math')) return 'Math';
+        if (normalized.includes('ela') || normalized.includes('english') || normalized.includes('reading')) return 'ELA';
+        if (normalized.includes('science')) return 'Science';
+        if (normalized.includes('social')) return 'Social Studies';
+        return 'Science'; // fallback for DISCOVER
+      };
+
+      // Start journey tracking service for DISCOVER container
+      journeyTrackingService.startSession({
+        sessionId: trackingSessionId,
+        container: 'DISCOVER',
+        subject: normalizeSubject(skill?.subject as string),
+        skillId: skill.skill_number || skill.id,
+        skillName: skill.skill_name || skill.name || 'Unknown Skill',
+        gradeLevel: student.grade_level || 'K',
+        userId: student.id
+      }).then(result => {
+        if (result.success) {
+          console.log('📊 Journey tracking started for DISCOVER container');
+        } else {
+          console.warn('⚠️ Failed to start journey tracking:', result.error);
+        }
+      }).catch(err => {
+        console.error('❌ Journey tracking error:', err);
+      });
+
       setContent(generatedContent);
       
       // Check if we should show career context card
@@ -589,8 +630,8 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
       }
     });
 
-    setPhase('complete');
-    onComplete(true);
+    // Complete and let MultiSubjectContainer show JourneyCelebrationScreen
+    handleDiscoverComplete();
   };
 
   const handlePathSelection = async (pathIndex: number) => {
@@ -641,13 +682,29 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
 
   const handleActivityComplete = async (activityIndex: number) => {
     setCompletedActivities(prev => ({ ...prev, [activityIndex]: true }));
-    
+
     // Track discovery
     if (content && selectedPath !== null) {
       const activity = content.discovery_paths[selectedPath].activities[activityIndex];
-      trackCuriosity('discovery_made', { 
-        discovery: `Completed ${activity.type}: ${activity.title}` 
+      trackCuriosity('discovery_made', {
+        discovery: `Completed ${activity.type}: ${activity.title}`
       });
+
+      // Record activity completion in journey tracking
+      journeyTrackingService.recordQuestionAttempt(
+        trackingSessionId,
+        'DISCOVER',
+        {
+          questionId: `activity-${activityIndex}`,
+          questionText: activity.title || 'Discovery Activity',
+          studentAnswer: 'completed',
+          correctAnswer: 'completed',
+          isCorrect: true, // Activities are exploration-based, so completion = success
+          attemptNumber: 1,
+          timeSpent: 60, // Approximate - DISCOVER tracks overall exploration time
+          hintsUsed: 0
+        }
+      ).catch(err => console.error('Failed to record activity completion:', err));
     }
     
     // Check if all activities are complete
@@ -716,6 +773,88 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
     });
   };
 
+  // Handle container completion with tracking
+  const handleDiscoverComplete = async () => {
+    let totalXPEarned = 0;
+
+    try {
+      console.log('💾 Completing DISCOVER session tracking...');
+      const result = await journeyTrackingService.completeSession(
+        trackingSessionId,
+        'DISCOVER'
+      );
+
+      if (result.success) {
+        console.log('✅ DISCOVER session completed and saved');
+
+        // Get the completed session data to calculate XP
+        const sessionData = journeyTrackingService.getActiveSession(trackingSessionId, 'DISCOVER');
+
+        if (sessionData) {
+          // Normalize subject to match database constraint
+          const normalizeSubject = (subject: string | undefined): 'Math' | 'ELA' | 'Science' | 'Social Studies' => {
+            if (!subject) return 'Science';
+            const normalized = subject.toLowerCase();
+            if (normalized.includes('math')) return 'Math';
+            if (normalized.includes('ela') || normalized.includes('english') || normalized.includes('reading')) return 'ELA';
+            if (normalized.includes('science')) return 'Science';
+            if (normalized.includes('social')) return 'Social Studies';
+            return 'Science'; // fallback
+          };
+
+          // Award XP to PathIQ profile
+          const xpResult = await pathiqPersistenceService.awardXP({
+            userId: student.id,
+            amount: sessionData.xpEarned || 50, // Use tracked XP or fallback
+            reason: `Completed ${skill?.skill_name || 'exploration'} in DISCOVER container`,
+            category: 'learning',
+            sessionId: trackingSessionId,
+            container: 'DISCOVER',
+            subject: normalizeSubject(skill?.subject as string),
+            skillId: skill?.skill_number || skill?.id
+          });
+
+          if (xpResult.success) {
+            totalXPEarned = xpResult.amountAwarded;
+            console.log(`⭐ PathIQ XP awarded: +${totalXPEarned}`);
+
+            if (xpResult.levelUps && xpResult.levelUps > 0) {
+              console.log(`🎉 LEVEL UP! Now level ${xpResult.newLevel}!`);
+              // TODO: Show level up animation
+            }
+          }
+
+          // Update journey summary with DISCOVER progress
+          try {
+            const progress = await journeySummaryService.buildContainerProgress(
+              trackingSessionId,
+              'DISCOVER'
+            );
+
+            if (progress) {
+              await journeySummaryService.updateContainerProgress(
+                trackingSessionId,
+                'DISCOVER',
+                progress
+              );
+              console.log('✅ DISCOVER progress updated in journey summary');
+            }
+          } catch (summaryError) {
+            console.error('Failed to update journey summary:', summaryError);
+          }
+        }
+      } else {
+        console.warn('⚠️ Failed to complete session:', result.error);
+      }
+    } catch (error) {
+      console.error('❌ Error completing session:', error);
+    }
+
+    // Call the original onComplete callback with XP earned
+    console.log(`🎯 Calling onComplete with XP: ${totalXPEarned}`);
+    onComplete(totalXPEarned);
+  };
+
   const handleReflectionAnswer = (questionIndex: number, answer: string) => {
     setReflectionAnswers(prev => ({ ...prev, [questionIndex]: answer }));
     
@@ -731,8 +870,8 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
       
       if (allAnswered) {
         setTimeout(() => {
-          setPhase('complete');
-          onComplete(true);
+          // Complete and let MultiSubjectContainer show JourneyCelebrationScreen
+          handleDiscoverComplete();
         }, 2000);
       }
     }
@@ -1083,6 +1222,7 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
             studentName={student.display_name}
             userId={student.id}
             onChallengeComplete={handleDiscoveryPathsComplete}
+            onComplete={handleDiscoverComplete}
             onScenarioComplete={(index, wasCorrect) => {
               // Track completion
             }}
@@ -1389,92 +1529,7 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
     );
   }
 
-  // ================================================================
-  // COMPLETION PHASE
-  // ================================================================
-
-  if (phase === 'complete') {
-    return (
-      <div className="ai-discover-container">
-        {/* Comprehensive Progress Header */}
-        <ProgressHeader
-          containerType="DISCOVER"
-          title="Discovery Complete"
-          career={career}
-          skill={skill?.skill_name}
-          subject={skill?.subject}
-          progress={100}
-          currentPhase="Completed"
-          totalPhases={5}
-          showBackButton={true}
-          backPath="/app/dashboard"
-          showThemeToggle={false}
-          hideOnLoading={true}
-          isLoading={loading}
-        />
-        <div className={`completion-phase ${onBack ? 'with-header' : ''}`}>
-          <header className="completion-header">
-            <h1>🏆 Discovery Journey Complete!</h1>
-            <p>You're an amazing explorer, {student.display_name}!</p>
-          </header>
-
-          <div className="completion-summary">
-            <div className="discovery-achievements">
-              <h2>🔍 Your Discovery Achievements:</h2>
-              <ul>
-                <li>Explored {skill.skill_name} from multiple angles</li>
-                <li>Asked {questionsAsked.current} curious questions</li>
-                <li>Made {discoveries.length} important discoveries</li>
-                <li>Created {connections.length} meaningful connections</li>
-                <li>Showed {curiosityLevel} level curiosity!</li>
-              </ul>
-            </div>
-            
-            {/* Display all earned rewards */}
-            {rewards.length > 0 && (
-              <div className="rewards-showcase">
-                <h2>✨ Rewards Earned:</h2>
-                <div className="rewards-grid">
-                  {rewards.map((reward, index) => (
-                    <div key={index} className="reward-item">
-                      {reward.type === 'unlock' && `🔓 ${reward.value}`}
-                      {reward.type === 'badge' && `🎖️ ${reward.value}`}
-                      {reward.type === 'resource' && `📚 ${reward.value}`}
-                      {reward.type === 'points' && `⭐ ${reward.value} XP`}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-            
-            <div className="discovery-portfolio">
-              <h2>📂 Your Discovery Portfolio</h2>
-              <p>All your discoveries have been saved to review anytime!</p>
-              <ul>
-                {discoveries.slice(0, 3).map((discovery, index) => (
-                  <li key={index}>{discovery}</li>
-                ))}
-                {discoveries.length > 3 && (
-                  <li>...and {discoveries.length - 3} more discoveries!</li>
-                )}
-              </ul>
-            </div>
-          </div>
-
-          <div className="completion-actions">
-            {onNext && (
-              <button
-                onClick={handleNavNext}
-                className="next-journey-button"
-              >
-                Continue Learning Journey 🚀
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // Note: Completion phase removed - MultiSubjectContainer now shows JourneyCelebrationScreen
 
   return null;
 };
@@ -1485,7 +1540,7 @@ export const AIDiscoverContainerV2UNIFIED: React.FC<AIDiscoverContainerV2Props> 
 
 const inlineStyles = `
 .ai-discover-container {
-  max-width: 900px;
+  /* Width now controlled by DiscoverContainer.css - matches ExperienceContainer */
   margin: 0 auto;
   padding: 2rem;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;

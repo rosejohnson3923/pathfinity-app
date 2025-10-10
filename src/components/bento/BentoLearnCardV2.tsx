@@ -176,16 +176,19 @@ export const BentoLearnCardV2: React.FC<BentoLearnCardV2Props> = ({
       setShowFeedback(true);
       console.error('📤📤 BentoLearnCardV2 - Calling onAnswerSubmit with:', selectedAnswer);
       onAnswerSubmit(selectedAnswer);
-      
-      // Award XP for correct answer
+
+      // Show XP animation (XP is awarded by the container, not here)
+      // This prevents duplicate XP awards between UI and journey tracking
       if (selectedAnswer === question.correctAnswer && userId) {
         const xp = question.xpReward || 10;
-        pathIQGamification.awardXP(userId, xp, 'Correct answer', 'learning');
         setXpEarned(prev => prev + xp);
         setShowXPAnimation(true);
         setTimeout(() => {
           setShowXPAnimation(false);
         }, 3000);
+
+        // Note: Actual XP award happens in container via journey tracking
+        // This is just for visual feedback
       }
     }
   };
@@ -514,6 +517,47 @@ export const BentoLearnCardV2: React.FC<BentoLearnCardV2Props> = ({
               longestOption,
               variance: longestOption - Math.min(...optionLengths)
             });
+
+            // Validate multiple choice questions for multiple correct answers
+            if (question.type === 'multiple_choice' && question.text && question.correctAnswer) {
+              const questionLower = question.text.toLowerCase();
+
+              // Check for letter recognition questions
+              if (questionLower.includes('uppercase') || questionLower.includes('lowercase') ||
+                  questionLower.includes('capital letter') || questionLower.includes('letter')) {
+
+                let correctCount = 0;
+                const correctOptions: string[] = [];
+
+                if (questionLower.includes('uppercase') || questionLower.includes('capital')) {
+                  // Count uppercase letters in options
+                  optionTexts.forEach((opt, idx) => {
+                    const singleChar = opt.trim().replace(/['"]/g, '');
+                    if (singleChar.length === 1 && singleChar === singleChar.toUpperCase() && /[A-Z]/.test(singleChar)) {
+                      correctCount++;
+                      correctOptions.push(`[${idx}] "${opt}"`);
+                    }
+                  });
+                } else if (questionLower.includes('lowercase')) {
+                  // Count lowercase letters in options
+                  optionTexts.forEach((opt, idx) => {
+                    const singleChar = opt.trim().replace(/['"]/g, '');
+                    if (singleChar.length === 1 && singleChar === singleChar.toLowerCase() && /[a-z]/.test(singleChar)) {
+                      correctCount++;
+                      correctOptions.push(`[${idx}] "${opt}"`);
+                    }
+                  });
+                }
+
+                if (correctCount > 1) {
+                  console.error('⚠️ CONTENT VALIDATION ERROR: This question has ' + correctCount + ' possible correct answers!');
+                  console.error('   Question:', question.text);
+                  console.error('   Matching options:', correctOptions);
+                  console.error('   This violates multiple choice rules (should have exactly ONE correct answer)');
+                }
+              }
+            }
+
             console.log('🔍 Content Type Detection:', {
               hasArrays,
               allNumeric,

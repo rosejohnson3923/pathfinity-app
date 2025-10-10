@@ -26,6 +26,10 @@ interface EnhancedLoadingScreenProps {
   companionId?: string;
   enableNarration?: boolean;
   isFirstLoad?: boolean;
+  // XP summary from previous subject
+  previousSubjectXP?: number;
+  previousSubjectName?: string;
+  showXPSummary?: boolean;
 }
 
 export const EnhancedLoadingScreen: React.FC<EnhancedLoadingScreenProps> = ({
@@ -40,7 +44,10 @@ export const EnhancedLoadingScreen: React.FC<EnhancedLoadingScreenProps> = ({
   currentSubject = 'math',
   companionId = sessionStorage.getItem('selectedCompanion') || 'pat',
   enableNarration = true,
-  isFirstLoad = false
+  isFirstLoad = false,
+  previousSubjectXP,
+  previousSubjectName,
+  showXPSummary = false
 }) => {
   // Loading screen initialized with narration support
   const { user } = useAuth();
@@ -240,7 +247,25 @@ export const EnhancedLoadingScreen: React.FC<EnhancedLoadingScreenProps> = ({
           {customMessage || getPhaseMessage()}
           <span className={styles.dots}>{dots}</span>
         </h2>
-        
+
+        {/* XP Summary from Previous Subject */}
+        {showXPSummary && previousSubjectXP !== undefined && previousSubjectXP > 0 && (
+          <div className={styles.xpSummaryCard}>
+            <div className={styles.xpSummaryContent}>
+              <div className={styles.xpSummaryHeader}>
+                <span className={styles.xpSummaryIcon}>🎉</span>
+                <span className={styles.xpSummaryLabel}>
+                  {previousSubjectName} Complete!
+                </span>
+              </div>
+              <div className={styles.xpSummaryPoints}>
+                <span className={styles.xpAmount}>+{previousSubjectXP}</span>
+                <span className={styles.xpLabel}>XP Earned</span>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Progress Bar */}
         <div className={styles.loadingProgressContainer}>
           <div className={styles.loadingProgressBar}>
@@ -289,6 +314,8 @@ export const EnhancedLoadingScreen: React.FC<EnhancedLoadingScreenProps> = ({
         userId={user?.id || 'default'}
         gradeLevel={profile?.grade_level || (user as any)?.grade_level || 'K'}
         modalTitle={`Loading ${containerType === 'learn' ? 'Learn' : containerType === 'experience' ? 'Experience' : 'Discover'} Container`}
+        recentXPEarned={previousSubjectXP}
+        recentXPSource={previousSubjectName}
       >
         {loadingContent}
       </TwoPanelModal>

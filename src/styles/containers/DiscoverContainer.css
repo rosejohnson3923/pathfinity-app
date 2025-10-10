@@ -22,7 +22,9 @@
   background: var(--bg-gradient-discover);
   min-height: 100vh;
   position: relative;
-  overflow: hidden;
+  overflow: auto;
+  width: 100%;
+  max-width: 100%;
 }
 
 /* Light theme specific */
@@ -149,7 +151,7 @@
    EXPLORATION INTRO PHASE
    ============================================ */
 .exploration-intro-phase {
-  max-width: 1200px;
+  max-width: var(--width-content-max);
   margin: 0 auto;
   padding: 2rem;
 }

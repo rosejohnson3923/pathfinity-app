@@ -1661,6 +1661,7 @@ IMPORTANT:
       // Session metadata
       sessionId: params.sessionId || baseNarrative.narrativeId,
       userId: params.userId || params.studentName,
+      studentName: params.studentName,
       createdAt: new Date().toISOString(),
 
       // User selections

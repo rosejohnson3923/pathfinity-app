@@ -13,6 +13,8 @@ interface GamificationSidebarProps {
   gradeLevel?: string;
   isCollapsed?: boolean;
   onToggleCollapse?: () => void;
+  recentXPEarned?: number;
+  recentXPSource?: string;
 }
 
 interface LiveActivity {
@@ -42,11 +44,13 @@ export const GamificationSidebar: React.FC<GamificationSidebarProps> = ({
   userId,
   gradeLevel,
   isCollapsed = false,
-  onToggleCollapse
+  onToggleCollapse,
+  recentXPEarned,
+  recentXPSource
 }) => {
   // Get user profile from PathIQ Gamification Service
   const userProfile = pathIQGamification.getUserProfile(userId);
-  
+
   const [userStats, setUserStats] = useState<UserStats>({
     xp: userProfile.xp,
     level: userProfile.level,
@@ -57,8 +61,11 @@ export const GamificationSidebar: React.FC<GamificationSidebarProps> = ({
     streak: userProfile.streak
   });
 
+  // Immediately add recent XP to display (before next service update)
+  const displayXP = userStats.xp + (recentXPEarned || 0);
+  const displayTodayXP = userStats.todayXp + (recentXPEarned || 0);
+
   const [liveActivities, setLiveActivities] = useState<LiveActivity[]>([]);
-  const [skillComparison, setSkillComparison] = useState<any>(null);
   const [careerTrends, setCareerTrends] = useState<any[]>([]);
   const [motivationalMessage, setMotivationalMessage] = useState('');
   const [pathIQInsights, setPathIQInsights] = useState<string[]>([]);
@@ -198,23 +205,6 @@ export const GamificationSidebar: React.FC<GamificationSidebarProps> = ({
     return () => clearInterval(interval);
   }, [gradeLevel]);
 
-  // Update skill comparison when current skill changes
-  useEffect(() => {
-    if (currentSkill) {
-      // Mock data for how others are doing on the same skill
-      setSkillComparison({
-        skill: currentSkill,
-        yourScore: 85,
-        classAverage: 78,
-        topScore: 98,
-        attemptsAverage: 2.3,
-        yourAttempts: 2,
-        mastered: 67, // percentage who mastered
-        struggling: 12 // percentage struggling
-      });
-    }
-  }, [currentSkill]);
-
   // Get grade-appropriate career trends from leaderboard service
   useEffect(() => {
     // Get grade-appropriate trending careers from leaderboard service
@@ -260,7 +250,7 @@ export const GamificationSidebar: React.FC<GamificationSidebarProps> = ({
     return () => window.removeEventListener('pathiq-event', handlePathIQEvent as EventListener);
   }, [userId]);
 
-  const xpProgress = (userStats.xp / userStats.nextLevelXp) * 100;
+  const xpProgress = (displayXP / userStats.nextLevelXp) * 100;
 
   if (isCollapsed) {
     return (
@@ -285,55 +275,42 @@ export const GamificationSidebar: React.FC<GamificationSidebarProps> = ({
           <h3>PathIQ Gaming</h3>
           <span className={styles.pathIQBadge}>Level {userStats.level}</span>
         </div>
-        
+
+        {/* Recent XP Celebration Banner */}
+        {recentXPEarned !== undefined && recentXPEarned > 0 && (
+          <div className={styles.celebrationBanner}>
+            <div className={styles.celebrationContent}>
+              <span className={styles.celebrationIcon}>🎉</span>
+              <div className={styles.celebrationText}>
+                <span className={styles.celebrationTitle}>{recentXPSource} Complete!</span>
+                <span className={styles.celebrationXP}>+{recentXPEarned} XP Earned</span>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className={styles.userStats}>
           <div className={styles.statItem}>
-            <span className={styles.statValue}>{userStats.xp}</span>
-            <span className={styles.statLabel}>XP</span>
+            <span className={styles.statValue}>{displayXP}</span>
+            <span className={styles.statLabel}>Total XP</span>
           </div>
           <div className={styles.statItem}>
             <span className={styles.statValue}>{userStats.streak}</span>
             <span className={styles.statLabel}>Day Streak</span>
           </div>
         </div>
-        
+
         <div className={styles.progressSection}>
           <div className={styles.progressText}>
-            <span>{userStats.xp} / {userStats.nextLevelXp} XP</span>
-            <span>+{userStats.todayXp} today</span>
+            <span>{displayXP} / {userStats.nextLevelXp} XP</span>
+            <span>+{displayTodayXP} today</span>
           </div>
           <div className={styles.progressBar}>
             <div className={styles.progressFill} style={{ width: `${xpProgress}%` }} />
           </div>
         </div>
-        
+
       </div>
-
-
-      {/* Current Skill Comparison */}
-      {skillComparison && (
-        <div className={styles.skillComparison}>
-          <h3 className={styles.sectionTitle}>📊 How You Compare</h3>
-          <div className={styles.comparisonBars}>
-            <div className={styles.comparisonItem}>
-              <span className={styles.comparisonLabel}>You</span>
-              <div className={styles.comparisonBar}>
-                <div className={`${styles.comparisonFill} ${styles.comparisonFillYou}`} style={{ width: `${skillComparison.yourScore}%` }}>
-                  <span className={styles.comparisonValue}>{skillComparison.yourScore}%</span>
-                </div>
-              </div>
-            </div>
-            <div className={styles.comparisonItem}>
-              <span className={styles.comparisonLabel}>Class</span>
-              <div className={styles.comparisonBar}>
-                <div className={`${styles.comparisonFill} ${styles.comparisonFillAverage}`} style={{ width: `${skillComparison.classAverage}%` }}>
-                  <span className={styles.comparisonValue}>{skillComparison.classAverage}%</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Career Trends */}
       {careerTrends.length > 0 && (

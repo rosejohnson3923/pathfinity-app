@@ -44,6 +44,11 @@ import { getSessionStateManager } from '../../services/content/SessionStateManag
 import { continuousJourneyIntegration } from '../../services/ContinuousJourneyIntegration';
 import { adaptiveJourneyOrchestrator } from '../../services/AdaptiveJourneyOrchestrator';
 
+// Journey Tracking & Persistence
+import { journeyTrackingService } from '../../services/tracking/JourneyTrackingService';
+import { pathiqPersistenceService } from '../../services/persistence/PathIQPersistenceService';
+import { journeySummaryService } from '../../services/persistence/JourneySummaryService';
+
 // UI Components
 import { useAICharacter } from '../ai-characters/AICharacterProvider';
 import { AICharacterAvatar } from '../ai-characters/AICharacterAvatar';
@@ -91,7 +96,7 @@ interface AIExperienceContainerV2Props {
   skill: LearningSkill;
   selectedCharacter?: string;
   selectedCareer?: any;
-  onComplete: (success: boolean) => void;
+  onComplete: (xpEarned?: number) => void;
   onNext: () => void;
   onBack?: () => void;
   userId?: string;
@@ -122,6 +127,7 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
   userId,
   totalSubjects = 4, // Default to 4 subjects if not provided
   currentSubjectIndex = 0, // Default to first subject
+  rubricSessionId,
   masterNarrative,
   narrativeLoading,
   companionId = sessionStorage.getItem('selectedCompanion') || 'pat'
@@ -182,7 +188,7 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
 
   // Testing shortcut - skip directly to Discover container
   const handleSkipToDiscover = () => {
-    onComplete(true); // Pass true to move to next container
+    handleExperienceComplete(); // Complete tracking and move to next container
   };
 
   // ================================================================
@@ -198,6 +204,11 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
   const [showChallengeFeedback, setShowChallengeFeedback] = useState<Record<number, boolean>>({});
   const [showHint, setShowHint] = useState(false);
   const [simulationComplete, setSimulationComplete] = useState(false);
+  // Journey Tracking - Use rubric session ID if available, otherwise generate unique ID
+  const [trackingSessionId] = useState(() =>
+    rubricSessionId ||
+    `session-${student?.id || 'unknown'}-${Date.now()}`
+  );
   const [sessionId] = useState(`experience-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`);
   const [currentHint, setCurrentHint] = useState<string | null>(null);
   const [companionMessage, setCompanionMessage] = useState<{ text: string; emotion: string } | null>(null);
@@ -211,6 +222,11 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
   const [multiScenarioContent, setMultiScenarioContent] = useState<any>(null);
   const [currentScenarioIndex, setCurrentScenarioIndex] = useState(0);
   const [screenType, setScreenType] = useState<'intro' | 'scenario' | 'completion'>('intro');
+
+  // XP tracking
+  const [totalXPEarned, setTotalXPEarned] = useState(0);
+  const [showXPNotification, setShowXPNotification] = useState(false);
+  const [lastXPAwarded, setLastXPAwarded] = useState(0);
   const [scenarioProgress, setScenarioProgress] = useState<Record<number, boolean>>({});
   const [scenarioAnswers, setScenarioAnswers] = useState<Record<number, number>>({});
   
@@ -322,12 +338,44 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
       return;
     }
 
+    // Normalize subject to match database constraint
+    const normalizeSubject = (subject: string | undefined): 'Math' | 'ELA' | 'Science' | 'Social Studies' => {
+      if (!subject) return 'Math';
+      const normalized = subject.toLowerCase();
+      if (normalized.includes('math')) return 'Math';
+      if (normalized.includes('ela') || normalized.includes('english') || normalized.includes('reading')) return 'ELA';
+      if (normalized.includes('science')) return 'Science';
+      if (normalized.includes('social')) return 'Social Studies';
+      return 'Math'; // fallback
+    };
+
+    // Start journey tracking service for EXPERIENCE container
+    if (student?.id && skill?.skill_number) {
+      journeyTrackingService.startSession({
+        sessionId: trackingSessionId,
+        container: 'EXPERIENCE',
+        subject: normalizeSubject(skill?.subject as string),
+        skillId: skill.skill_number || '',
+        skillName: skill.skill_name || 'Unknown Skill',
+        gradeLevel: student.grade_level || 'K',
+        userId: student.id
+      }).then(result => {
+        if (result.success) {
+          console.log('📊 Journey tracking started for EXPERIENCE container');
+        } else {
+          console.warn('⚠️ Failed to start journey tracking:', result.error);
+        }
+      }).catch(err => {
+        console.error('❌ Journey tracking error:', err);
+      });
+    }
+
     setIsGenerating(true);
     setIsLoading(true);
     setError(null);
     const startTime = performance.now();
     const minimumLoadingTime = 2000; // Ensure loading screen shows for at least 2 seconds
-    
+
     try {
       // STEP 1: Initialize Daily Context (V2-JIT)
       const dailyContext = dailyContextManager.getCurrentContext() || 
@@ -690,17 +738,100 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
   
   const readTextAloud = async (text: string) => {
     if (!currentCharacter || !speakMessage) return;
-    
+
     voiceManagerService.stopSpeaking();
     setIsSpeaking(true);
-    
+
     try {
       await speakMessage(text);
     } finally {
       setIsSpeaking(false);
     }
   };
-  
+
+  // Handle container completion with tracking
+  const handleExperienceComplete = async () => {
+    let finalXPEarned = totalXPEarned; // Use the state variable tracking accumulated XP
+
+    try {
+      console.log('💾 Completing EXPERIENCE session tracking...');
+      console.log(`📊 Total XP earned during session: ${finalXPEarned}`);
+      const result = await journeyTrackingService.completeSession(
+        trackingSessionId,
+        'EXPERIENCE'
+      );
+
+      if (result.success) {
+        console.log('✅ EXPERIENCE session completed and saved');
+
+        // Get the completed session data to calculate XP
+        const sessionData = journeyTrackingService.getActiveSession(trackingSessionId, 'EXPERIENCE');
+
+        if (sessionData) {
+          // Normalize subject to match database constraint
+          const normalizeSubject = (subject: string | undefined): 'Math' | 'ELA' | 'Science' | 'Social Studies' => {
+            if (!subject) return 'Math';
+            const normalized = subject.toLowerCase();
+            if (normalized.includes('math')) return 'Math';
+            if (normalized.includes('ela') || normalized.includes('english') || normalized.includes('reading')) return 'ELA';
+            if (normalized.includes('science')) return 'Science';
+            if (normalized.includes('social')) return 'Social Studies';
+            return 'Math'; // fallback
+          };
+
+          // Award XP to PathIQ profile using actual earned XP from state
+          const xpResult = await pathiqPersistenceService.awardXP({
+            userId: student.id,
+            amount: finalXPEarned || 50, // Use tracked XP from state (fallback to 50 if somehow 0)
+            reason: `Completed ${skill?.skill_name || 'skill'} in EXPERIENCE container`,
+            category: 'learning',
+            sessionId: trackingSessionId,
+            container: 'EXPERIENCE',
+            subject: normalizeSubject(skill?.subject as string),
+            skillId: skill?.skill_number
+          });
+
+          if (xpResult.success) {
+            finalXPEarned = xpResult.amountAwarded;
+            console.log(`⭐ PathIQ XP awarded: +${finalXPEarned}`);
+
+            if (xpResult.levelUps && xpResult.levelUps > 0) {
+              console.log(`🎉 LEVEL UP! Now level ${xpResult.newLevel}!`);
+              // TODO: Show level up animation
+            }
+          }
+
+          // Update journey summary with EXPERIENCE progress
+          try {
+            const progress = await journeySummaryService.buildContainerProgress(
+              trackingSessionId,
+              'EXPERIENCE'
+            );
+
+            if (progress) {
+              await journeySummaryService.updateContainerProgress(
+                trackingSessionId,
+                'EXPERIENCE',
+                progress
+              );
+              console.log('✅ EXPERIENCE progress updated in journey summary');
+            }
+          } catch (summaryError) {
+            console.error('Failed to update journey summary:', summaryError);
+          }
+        }
+      } else {
+        console.warn('⚠️ Failed to complete session:', result.error);
+      }
+    } catch (error) {
+      console.error('❌ Error completing session:', error);
+    }
+
+    // Call the original onComplete callback with XP earned
+    console.log(`🎯 Calling onComplete with XP: ${finalXPEarned}`);
+    onComplete(finalXPEarned);
+  };
+
   // Greet on career intro phase
   useEffect(() => {
     if (phase === 'career_intro' && content && !hasGreeted && currentCharacter) {
@@ -844,6 +975,23 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
       readTextAloud(`${feedbackMessage || reaction.message} Let's think about this differently.`);
     }
 
+    // Record question attempt in journey tracking
+    const timeSpent = Math.round((Date.now() - phaseStartTime.current) / 1000); // seconds
+    journeyTrackingService.recordQuestionAttempt(
+      trackingSessionId,
+      'EXPERIENCE',
+      {
+        questionId: `challenge-${challengeIndex}`,
+        questionText: challenge.question || 'Challenge question',
+        studentAnswer: String(answerIndex),
+        correctAnswer: String(challenge.correct_choice),
+        isCorrect: isCorrect,
+        attemptNumber: 1,
+        timeSpent: timeSpent,
+        hintsUsed: showHint ? 1 : 0
+      }
+    ).catch(err => console.error('Failed to record question attempt:', err));
+
     // Track challenge attempt
     await unifiedLearningAnalyticsService.trackLearningEvent({
       studentId: student.id,
@@ -869,8 +1017,8 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
       } else {
         setSimulationComplete(true);
         setTimeout(() => {
-          setPhase('complete');
-          // Don't auto-advance - wait for user to click button
+          // Complete the experience and let MultiSubjectContainer show SummaryCelebrationScreen
+          handleExperienceComplete();
         }, 3000);
       }
     }, 4000);
@@ -1185,6 +1333,29 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
             </button>
           )}
 
+          {/* XP Notification */}
+          {showXPNotification && (
+            <div style={{
+              position: 'fixed',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              padding: '24px 48px',
+              backgroundColor: 'rgba(72, 187, 120, 0.95)',
+              color: 'white',
+              borderRadius: '16px',
+              fontSize: '32px',
+              fontWeight: 'bold',
+              zIndex: 10000,
+              boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+              animation: 'xpPop 0.5s ease-out',
+              textAlign: 'center'
+            }}>
+              <div style={{ marginBottom: '8px' }}>⭐</div>
+              <div>+{lastXPAwarded} XP</div>
+            </div>
+          )}
+
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'auto' }}>
           {/* Dynamic component selection based on feature flag */}
           {(() => {
@@ -1235,7 +1406,20 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
             onScenarioComplete={(index, wasCorrect) => {
               setScenarioAnswers(prev => ({ ...prev, [index]: wasCorrect ? 1 : 0 }));
               setScenarioProgress(prev => ({ ...prev, [index]: true }));
-              
+
+              // Award XP for correct answers
+              if (wasCorrect) {
+                const xpForQuestion = 15; // 15 XP per correct answer
+                setTotalXPEarned(prev => prev + xpForQuestion);
+                setLastXPAwarded(xpForQuestion);
+                setShowXPNotification(true);
+
+                // Hide XP notification after 2 seconds
+                setTimeout(() => {
+                  setShowXPNotification(false);
+                }, 2000);
+              }
+
               if (index < multiScenarioContent.totalScenarios - 1) {
                 // Move directly to next scenario without showing intro again
                 setTimeout(() => {
@@ -1249,16 +1433,8 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
               }
             }}
             onChallengeComplete={() => {
-              // Debug: Check if this is the final subject
-              const isFinalSubject = currentSubjectIndex >= (totalSubjects - 1);
-
-              if (isFinalSubject) {
-                setPhase('complete');
-                // Don't auto-advance - wait for user to click button
-              } else {
-                // Don't set phase to complete, just move to next subject
-                onComplete(true);
-              }
+              // Complete the experience and let MultiSubjectContainer show SummaryCelebrationScreen
+              handleExperienceComplete();
             }}
             onNext={() => {
               // Only show intro once at the beginning, then go to first scenario
@@ -1681,90 +1857,7 @@ export const AIExperienceContainerV2UNIFIED: React.FC<AIExperienceContainerV2Pro
     );
   }
 
-  // ================================================================
-  // COMPLETION PHASE
-  // ================================================================
-
-  if (phase === 'complete') {
-    return (
-      <div className={getContainerClassName()}>
-        {/* Comprehensive Progress Header */}
-        <ProgressHeader
-          containerType="EXPERIENCE"
-          title="Experience Complete"
-          career={selectedCareer}
-          skill={skill?.skill_name}
-          subject={skill?.subject}
-          progress={100}
-          currentPhase="Completed"
-          totalPhases={4}
-          showBackButton={true}
-          backPath="/app/dashboard"
-          showThemeToggle={false}
-          hideOnLoading={true}
-          isLoading={isLoading}
-        />
-        <div className={`${completionStyles.completionPhase} ${onBack ? completionStyles.withHeader : ''}`}>
-          <div className={completionStyles.completionCard}>
-            <div className={completionStyles.trophyIcon}>🎉</div>
-            <h1 className={completionStyles.completionTitle}>Experience Journey Complete!</h1>
-            <p className={completionStyles.completionSubtitle}>
-              Outstanding work exploring how {selectedCareer?.name || 'professionals'} use academic skills, {student.display_name}!
-            </p>
-
-            <div className={completionStyles.achievementSection}>
-              <h2 className={completionStyles.achievementTitle}>🏢 Career Skills Mastered as {selectedCareer?.name || 'Professional'}</h2>
-              <div className={completionStyles.achievementGrid}>
-                <div className={completionStyles.achievementBadge}>
-                  Used {selectedCareer?.name || 'career'}-specific tools and methods
-                </div>
-                <div className={completionStyles.achievementBadge}>
-                  Solved real {selectedCareer?.name || 'workplace'} challenges
-                </div>
-                <div className={completionStyles.achievementBadge}>
-                  Applied skills across multiple subjects
-                </div>
-                <div className={completionStyles.achievementBadge}>
-                  Made professional decisions
-                </div>
-              </div>
-            </div>
-
-            {/* Display earned rewards */}
-            {rewards.length > 0 && (
-              <div className={completionStyles.achievementSection}>
-                <h2 className={completionStyles.achievementTitle}>🏆 Rewards Earned</h2>
-                <div className={completionStyles.achievementGrid}>
-                  {rewards.map((reward, index) => (
-                    <div key={index} className={completionStyles.achievementBadge}>
-                      {reward.type === 'points' && `${reward.value} Experience Points`}
-                      {reward.type === 'badge' && `Badge: ${reward.value}`}
-                      {reward.type === 'visual' && `Animation: ${reward.value}`}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <div className={completionStyles.achievementSection}>
-              <h2 className={completionStyles.achievementTitle}>🔍 Ready to discover surprising ways {selectedCareer?.name || 'professionals'}s use each subject?</h2>
-            </div>
-
-            <button
-              onClick={() => {
-                // User is ready to continue
-                handleNavNext();
-                onComplete(true);
-              }}
-              className={completionStyles.actionButton}
-            >
-              Continue to Discover 🔍
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // Note: Completion phase removed - MultiSubjectContainer now shows SummaryCelebrationScreen
 
   return null;
 };
@@ -1794,6 +1887,20 @@ const inlineStyles = `
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: 0 auto 2rem;
+}
+
+@keyframes xpPop {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
 }
 
 @keyframes spin {

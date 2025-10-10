@@ -10,6 +10,8 @@ export interface User {
   [key: string]: any;
 }
 
+export type DemoUserType = 'production' | 'demo-student' | 'demo-viewer';
+
 const DEMO_USER_EMAILS = [
   'alex.davis@sandview.plainviewisd.edu',
   'sam.brown@sandview.plainviewisd.edu',
@@ -96,9 +98,36 @@ export function logDemoUserDetection(user: User | null | undefined, context: str
   const userFullName = user?.full_name;
   const userId = user?.id;
   const isDemo = isDemoUser(user);
-  
+
   console.log(`🔍 ${context} logout - User email:`, userEmail);
   console.log(`🔍 ${context} logout - User full_name:`, userFullName);
   console.log(`🔍 ${context} logout - User id:`, userId);
   console.log(`🔍 ${context} logout - Is demo user:`, isDemo);
+}
+
+/**
+ * Gets the demo user type for permission checking
+ * @param user - User object with id, email, and full_name
+ * @returns DemoUserType - 'production' (normal user), 'demo-student' (demo with write), or 'demo-viewer' (read-only)
+ */
+export function getDemoUserType(user: User | null | undefined): DemoUserType {
+  if (!user || !isDemoUser(user)) {
+    return 'production';
+  }
+
+  // Check if it's a parent/admin demo user (read-only viewer)
+  const viewerEmails = [
+    'principal@plainviewisd.edu',
+    'superintendent@plainviewisd.edu',
+    'sarah.davis@family.pathfinity.edu',
+    'mike.brown@family.pathfinity.edu'
+  ];
+
+  const userEmail = user.email;
+  if (userEmail && viewerEmails.includes(userEmail)) {
+    return 'demo-viewer';
+  }
+
+  // All other demo users are demo students (can write to local storage but not production DB)
+  return 'demo-student';
 }

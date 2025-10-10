@@ -44,6 +44,9 @@ export const SelectionConfirmationScreen: React.FC<SelectionConfirmationScreenPr
   const hasPlayedIntro = useRef(false);
   const hasPlayedGreeting = useRef(false);
 
+  // Capitalize companion name (e.g., "spark" -> "Spark")
+  const companionNameCapitalized = companionName.charAt(0).toUpperCase() + companionName.slice(1);
+
   // Get companion avatar or emoji
   const renderCompanionAvatar = () => {
     // Only these companions have image files
@@ -81,7 +84,7 @@ export const SelectionConfirmationScreen: React.FC<SelectionConfirmationScreenPr
         setIsAudioPlaying(true);
 
         // Pat's celebratory message
-        const farewellText = `Excellent choices, ${userName}! You've chosen to become a ${careerName} with ${companionName} as your learning companion. Let me introduce you to ${companionName}!`;
+        const farewellText = `Excellent choices, ${userName}! You've chosen to become a ${careerName} with ${companionNameCapitalized} as your learning companion. Let me introduce you to ${companionNameCapitalized}!`;
 
         try {
           await azureAudioService.playTextToSpeech(
@@ -93,7 +96,7 @@ export const SelectionConfirmationScreen: React.FC<SelectionConfirmationScreenPr
               companion_id: 'pat',
               variables: {
                 userName,
-                companionName
+                companionName: companionNameCapitalized
               }
             }
           );
@@ -133,7 +136,7 @@ export const SelectionConfirmationScreen: React.FC<SelectionConfirmationScreenPr
         setIsAudioPlaying(true);
 
         // Companion's celebratory introduction in their own voice
-        const greetingText = `Hello ${userName}! I'm ${companionName}, and I'm thrilled to be your learning companion for your ${careerName} journey! This is going to be incredible. Together, we'll explore, learn, and have so much fun. Let's make today amazing!`;
+        const greetingText = `Hello ${userName}! I'm ${companionNameCapitalized}, and I'm thrilled to be your learning companion for your ${careerName} journey! This is going to be incredible. Together, we'll explore, learn, and have so much fun. Let's make today amazing!`;
 
         try {
           await azureAudioService.playTextToSpeech(
@@ -145,7 +148,7 @@ export const SelectionConfirmationScreen: React.FC<SelectionConfirmationScreenPr
               companion_id: companionId,
               variables: {
                 userName,
-                companionName,
+                companionName: companionNameCapitalized,
                 careerName
               }
             }
@@ -392,7 +395,7 @@ export const SelectionConfirmationScreen: React.FC<SelectionConfirmationScreenPr
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.5 }}
                 >
-                  <h2>Hi {userName}! I'm {companionName}!</h2>
+                  <h2>Hi {userName}! I'm {companionNameCapitalized}!</h2>
                   <p>Together we'll master {careerName}!</p>
 
                   {/* Fun companion traits */}
@@ -455,7 +458,7 @@ export const SelectionConfirmationScreen: React.FC<SelectionConfirmationScreenPr
                 </div>
 
                 <h1>Your Journey Begins Now!</h1>
-                <p>{companionName} and you, exploring {careerName} together!</p>
+                <p>{companionNameCapitalized} and you, exploring {careerName} together!</p>
 
                 <motion.button
                   className={styles.beginButton}

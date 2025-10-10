@@ -201,7 +201,7 @@ export class GamificationRulesEngine extends BaseRulesEngine<GamificationContext
       id: 'calculate_points',
       name: 'Calculate Activity Points',
       priority: 1,
-      condition: (context) => !!context.activity,
+      condition: (context) => !!context.activity || !!context.action?.type,
       action: (context) => this.calculatePoints(context)
     });
 
@@ -687,11 +687,55 @@ export class GamificationRulesEngine extends BaseRulesEngine<GamificationContext
   // Rule action methods
 
   private calculatePoints(context: GamificationContext): RuleResult {
-    const { activity } = context;
+    const { activity, action } = context;
     let points = 0;
 
-    // Base points
-    if (activity.performance !== undefined) {
+    console.log('🎮 GamificationRulesEngine.calculatePoints called:', {
+      actionType: action?.type,
+      hasActivity: !!activity,
+      context: JSON.stringify(context, null, 2)
+    });
+
+    // Handle specific action types (practice_correct, assessment_correct, etc.)
+    if (action?.type) {
+      console.log('✅ Processing action type:', action.type);
+      switch (action.type) {
+        case 'practice_correct':
+          points = 10; // Base XP for practice question
+          if (action.context?.firstTry) {
+            points += this.progressionRules.points.base.firstTry;
+          }
+          break;
+
+        case 'assessment_correct':
+          points = 20; // Base XP for assessment (higher than practice)
+          if (action.context?.responseTime && action.context.responseTime < 10000) { // Fast answer
+            points += this.progressionRules.points.bonus.speed;
+          }
+          break;
+
+        case 'assessment_attempt':
+          points = 5; // Partial credit for attempting assessment
+          break;
+
+        default:
+          // Fall back to activity-based calculation for other actions
+          if (activity?.performance !== undefined) {
+            if (activity.performance >= 0.9) {
+              points += this.progressionRules.points.base.correctAnswer;
+              points += this.progressionRules.points.bonus.accuracy;
+            } else if (activity.performance >= 0.7) {
+              points += this.progressionRules.points.base.correctAnswer;
+            } else if (activity.performance >= 0.5) {
+              points += this.progressionRules.points.base.retry;
+            } else {
+              points += this.progressionRules.points.penalties.wrongAnswer;
+            }
+          }
+          break;
+      }
+    } else if (activity?.performance !== undefined) {
+      // Legacy: Handle activity-based calculation when no action type specified
       if (activity.performance >= 0.9) {
         points += this.progressionRules.points.base.correctAnswer;
         points += this.progressionRules.points.bonus.accuracy;
@@ -704,15 +748,15 @@ export class GamificationRulesEngine extends BaseRulesEngine<GamificationContext
       }
     }
 
-    // Speed bonus
-    if (activity.duration && activity.duration < 300000) { // Under 5 minutes
+    // Speed bonus (if not already applied by action type)
+    if (activity?.duration && activity.duration < 300000 && !action?.type?.includes('correct')) {
       points += this.progressionRules.points.bonus.speed;
     }
 
     // Difficulty bonus
-    if (activity.difficulty === 'hard') {
+    if (activity?.difficulty === 'hard') {
       points *= 1.5;
-    } else if (activity.difficulty === 'medium') {
+    } else if (activity?.difficulty === 'medium') {
       points *= 1.2;
     }
 
@@ -721,14 +765,22 @@ export class GamificationRulesEngine extends BaseRulesEngine<GamificationContext
       points += this.progressionRules.points.bonus.career;
     }
 
+    const finalXP = Math.max(0, Math.round(points));
+    console.log('🎯 GamificationRulesEngine.calculatePoints result:', {
+      finalXP,
+      actionType: action?.type
+    });
+
     return {
       success: true,
       data: {
-        points: Math.max(0, Math.round(points)),
+        xp: finalXP, // Changed from 'points' to 'xp' to match ContainerIntegration.ts lookup
+        points: finalXP, // Keep both for backwards compatibility
         breakdown: {
           base: this.progressionRules.points.base.correctAnswer,
-          performance: activity.performance,
-          difficulty: activity.difficulty,
+          actionType: action?.type,
+          performance: activity?.performance,
+          difficulty: activity?.difficulty,
           career: context.career?.name
         }
       }

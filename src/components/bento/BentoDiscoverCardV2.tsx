@@ -349,55 +349,61 @@ export const BentoDiscoverCardV2: React.FC<BentoDiscoverCardProps> = ({
 
         {/* Horizontal Tiles Row */}
         <div className={styles.scenarioTilesRow}>
-          {/* Field Trip Event Context - TILE 1 */}
+          {/* LEFT TILE: Career Professional + Question */}
           <div className={styles.eventContextTile}>
-            <div className={styles.eventHeader}>
-              <span className={styles.eventIcon}>{careerEvent.emoji}</span>
-              <h3 className={styles.eventTitle}>Field Trip: {careerEvent.event}</h3>
+            {/* Career Professional Badge - Student is the career professional */}
+            <div className={styles.careerProfessionalBadge}>
+              <span>{careerEvent.emoji}</span>
+              <span>{career?.name} {studentName}</span>
             </div>
 
-            {/* PHASE 1: Show activity.description */}
+            {/* Station Title */}
+            {(currentScenario.stationTitle || currentScenario.title) && (
+              <h3 className={styles.eventTitle}>
+                {currentScenario.stationTitle || currentScenario.title}
+              </h3>
+            )}
+
+            {/* Question Text */}
+            <h3 className={styles.questionText}>
+              {currentScenario.question || currentScenario.description || 'Discovery Challenge'}
+            </h3>
+
+            {/* Activity Description */}
             {currentScenario.activity?.description && (
               <div className={styles.activityDescription}>
                 <strong>What You'll Investigate:</strong>
                 <p>{currentScenario.activity.description}</p>
               </div>
             )}
-
-            {/* PHASE 1: Show activity.supportingData */}
-            {currentScenario.activity?.supportingData && (
-              <div className={styles.supportingData}>
-                <strong>Resources Available:</strong>
-                <p>{currentScenario.activity.supportingData}</p>
-              </div>
-            )}
-
-            {/* Fallback to existing context */}
-            {!currentScenario.activity?.description && !currentScenario.activity?.supportingData && (
-              <p className={styles.eventDescription}>
-                {currentScenario.context ||
-                 currentScenario.careerContext ||
-                 `At the ${careerEvent.event}, you'll discover how ${career?.name}s use ${currentScenario.subject || skill?.name}!`}
-              </p>
-            )}
           </div>
 
-          {/* Discovery Question - TILE 2 */}
+          {/* RIGHT TILE: Companion + Instructions + Supporting Data */}
           <div className={styles.questionTile}>
-            <div className={styles.questionHeader}>
+            {/* Companion Image Bubble */}
+            <div className={styles.companionBubble}>
+              <img
+                src={`/images/companions/${companion?.id || 'finn'}-light.png`}
+                alt={companion?.name || 'Companion'}
+                onError={(e) => {
+                  // Fallback if image doesn't load
+                  e.currentTarget.style.display = 'none';
+                }}
+              />
+            </div>
+
+            {/* Scenario Type Badge */}
+            <div style={{ textAlign: 'center' }}>
               <span className={`${styles.scenarioBadge} ${styles[scenarioType]}`}>
                 {scenarioType === 'explore' ? '🔍 Explore' :
                  scenarioType === 'practice' ? '✨ Practice' : '🏆 Challenge'}
               </span>
-              {/* PHASE 1: Show stationTitle */}
-              {(currentScenario.stationTitle || currentScenario.title) && (
-                <span className={styles.questionTitle}>
-                  {currentScenario.stationTitle || currentScenario.title}
-                </span>
-              )}
+              <h4 className={styles.questionTitle}>
+                {currentScenario.stationTitle || currentScenario.title}
+              </h4>
             </div>
 
-            {/* PHASE 1: Show activity.prompt */}
+            {/* Instructions */}
             {currentScenario.activity?.prompt && (
               <div className={styles.activityPrompt}>
                 <strong>Instructions:</strong>
@@ -405,10 +411,33 @@ export const BentoDiscoverCardV2: React.FC<BentoDiscoverCardProps> = ({
               </div>
             )}
 
-            {/* Question text */}
-            <h3 className={styles.questionText}>
-              {currentScenario.description || currentScenario.question || 'Discovery Challenge'}
-            </h3>
+            {/* Visual Resource - Supporting Data */}
+            {currentScenario.activity?.supportingData && (
+              <div className={styles.supportingDataImage}>
+                <div style={{
+                  padding: 'var(--space-4)',
+                  background: 'var(--bg-secondary)',
+                  borderRadius: 'var(--radius-md)',
+                  border: '1px solid var(--border-color)',
+                  color: 'var(--text-primary)',
+                  whiteSpace: 'pre-wrap',
+                  fontFamily: 'var(--font-mono, monospace)',
+                  fontSize: 'var(--text-sm)',
+                  lineHeight: '1.6'
+                }}>
+                  {currentScenario.activity.supportingData}
+                </div>
+                <p style={{
+                  marginTop: 'var(--space-2)',
+                  fontSize: 'var(--text-xs)',
+                  fontStyle: 'italic',
+                  color: 'var(--text-tertiary)',
+                  textAlign: 'center'
+                }}>
+                  (Visual resource provided)
+                </p>
+              </div>
+            )}
           </div>
         </div>
 
@@ -416,24 +445,29 @@ export const BentoDiscoverCardV2: React.FC<BentoDiscoverCardProps> = ({
 
         {/* Options */}
         <div className={styles.optionsGrid}>
-          {(currentScenario.options || []).map((option: string, index: number) => (
-            <button
-              key={index}
-              onClick={() => handleAnswerSelect(index)}
-              className={`${styles.optionButton} ${
-                selectedAnswerIndex === index ? styles.optionSelected : ''
-              } ${
-                showFeedback && index === currentScenario.correct_choice ? styles.optionCorrect : ''
-              } ${
-                showFeedback && selectedAnswerIndex === index && index !== currentScenario.correct_choice
-                  ? styles.optionIncorrect : ''
-              }`}
-              disabled={showFeedback}
-            >
-              <span className={styles.optionNumber}>{index + 1}</span>
-              <span className={styles.optionText}>{option}</span>
-            </button>
-          ))}
+          {(currentScenario.options || []).map((option: string, index: number) => {
+            const optionLabel = String.fromCharCode(65 + index); // A, B, C, D
+            return (
+              <button
+                key={index}
+                onClick={() => handleAnswerSelect(index)}
+                className={`${styles.optionButton} ${
+                  selectedAnswerIndex === index ? styles.optionSelected : ''
+                } ${
+                  showFeedback && index === currentScenario.correct_choice ? styles.optionCorrect : ''
+                } ${
+                  showFeedback && selectedAnswerIndex === index && index !== currentScenario.correct_choice
+                    ? styles.optionIncorrect : ''
+                }`}
+                disabled={showFeedback}
+              >
+                <span className={styles.optionNumber}>{index + 1}</span>
+                <span className={styles.optionLabel}>=</span>
+                <span className={styles.optionLetter}>{optionLabel}:</span>
+                <span className={styles.optionText}>{option}</span>
+              </button>
+            );
+          })}
         </div>
 
         {/* Feedback */}
@@ -545,6 +579,9 @@ export const BentoDiscoverCardV2: React.FC<BentoDiscoverCardProps> = ({
 
         <button
           onClick={() => {
+            console.log('🎯 Complete Journey button clicked');
+            console.log('🔍 onComplete:', onComplete ? 'defined' : 'undefined');
+            console.log('🔍 onNavNext:', onNavNext ? 'defined' : 'undefined');
             if (onNavNext) onNavNext();
             if (onComplete) onComplete(true);
           }}

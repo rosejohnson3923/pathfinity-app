@@ -12,6 +12,9 @@ interface TwoPanelModalProps {
   gradeLevel?: string;
   modalTitle?: string;
   onClose?: () => void;
+  // XP summary from recently completed subject
+  recentXPEarned?: number;
+  recentXPSource?: string; // e.g., "Math"
 }
 
 /**
@@ -28,7 +31,9 @@ export const TwoPanelModal: React.FC<TwoPanelModalProps> = ({
   userId,
   gradeLevel,
   modalTitle,
-  onClose
+  onClose,
+  recentXPEarned,
+  recentXPSource
 }) => {
   // Start with sidebar collapsed on mobile devices
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(() => {
@@ -85,6 +90,8 @@ export const TwoPanelModal: React.FC<TwoPanelModalProps> = ({
             gradeLevel={gradeLevel}
             isCollapsed={isSidebarCollapsed}
             onToggleCollapse={handleToggleSidebar}
+            recentXPEarned={recentXPEarned}
+            recentXPSource={recentXPSource}
           />
         )}
       </div>

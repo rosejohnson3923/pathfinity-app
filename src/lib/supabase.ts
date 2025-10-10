@@ -73,7 +73,16 @@ export const getSupabaseClient = supabase;
 export const getCurrentUserId = async () => {
   try {
     const client = await supabase();
-    const { data: { user } } = await client.auth.getUser();
+    const { data: { user }, error } = await client.auth.getUser();
+
+    // Debug logging
+    if (!user) {
+      console.warn('⚠️ getCurrentUserId: No authenticated user found');
+      console.log('Auth error:', error);
+    } else {
+      console.log('✅ getCurrentUserId: Authenticated user ID:', user.id);
+    }
+
     return user?.id || '550e8400-e29b-41d4-a716-446655440000'; // Fallback to demo user ID
   } catch (error) {
     console.error('Error getting current user ID:', error);

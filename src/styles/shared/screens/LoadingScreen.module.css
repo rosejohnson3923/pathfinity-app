@@ -571,3 +571,113 @@
     font-size: 2.5rem;
   }
 }
+/* ============================================
+   XP SUMMARY CARD (Subject Transition)
+   ============================================ */
+.xpSummaryCard {
+  margin: var(--space-4) 0;
+  padding: var(--space-4);
+  background: var(--bg-card);
+  border: 2px solid var(--accent-primary);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  animation: slideInUp 0.5s var(--easing-out);
+  max-width: 400px;
+  width: 100%;
+}
+
+.xpSummaryContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.xpSummaryHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.xpSummaryIcon {
+  font-size: 2rem;
+  animation: bounce 1s ease-in-out infinite;
+}
+
+.xpSummaryLabel {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  color: var(--text-primary);
+}
+
+.xpSummaryPoints {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.xpAmount {
+  font-size: 3rem;
+  font-weight: var(--weight-bold);
+  color: var(--accent-primary);
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.xpLabel {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Animations */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .xpSummaryCard {
+    padding: var(--space-3);
+    max-width: 90%;
+  }
+
+  .xpAmount {
+    font-size: 2.5rem;
+  }
+
+  .xpSummaryLabel {
+    font-size: var(--text-base);
+  }
+}

@@ -381,6 +381,8 @@ Your role is to create engaging, age-appropriate content that:
 4. Sets activities in the workplace: "${storyContext.workplaceSetting}"
 5. Connects learning to career context: "${storyContext.careerContext}"
 
+IMPORTANT: Follow the companion's voice and maintain story consistency with the narrative arc.
+
 Generate content that matches the exact data structure requirements provided.
 Ensure all questions, hints, and explanations align with each other (intra-rubric consistency).`;
   }
@@ -525,7 +527,7 @@ ${storyContext.companionVoice}
 WORKPLACE SETTING:
 ${storyContext.workplaceSetting}
 
-STUDENT NAME: ${enrichedNarrative.userId}
+STUDENT NAME: ${enrichedNarrative.studentName}
 CAREER: ${enrichedNarrative.career}
 COMPANION: ${enrichedNarrative.companion}`;
 
@@ -604,6 +606,37 @@ CRITICAL FORMAT REQUIREMENTS:
 - The "visual" field is for emojis/descriptions to accompany the QUESTION, not the answer options
 - All answer choices must be readable text that students can understand without images
 - Example: Good question: "What is a community?" Bad question: "Which picture shows a community?"
+
+MULTIPLE CHOICE ANSWER VALIDATION:
+- Each multiple choice question MUST have EXACTLY ONE correct answer
+- Carefully check that only ONE option matches the question criteria
+- Example INCORRECT: "Find the uppercase letter: 'D', 'd', 'e', 'E'" (both D and E are uppercase - TWO correct answers)
+- Example CORRECT: "Find the uppercase letter: 'A', 'b', 'c', 'd'" (only A is uppercase - ONE correct answer)
+- For letter recognition: ensure only one letter matches the criteria (uppercase/lowercase/specific letter)
+- For number questions: ensure only one option is the correct answer
+- Double-check each question before including it in the response
+
+FILL_BLANK QUESTION REQUIREMENTS:
+- For type "fill_blank", provide a COMPLETE SENTENCE with one key term to be blanked out
+- DO NOT provide incomplete sentences ending with "..." or trailing articles like "the", "a", "an"
+- Example INCORRECT: "Doctors work with others in the..." (incomplete - ends with "the...")
+- Example CORRECT: "Doctors work with others in the hospital" (complete sentence)
+- The system will automatically convert your complete sentence into a fill-in-the-blank question
+- CRITICAL: You MUST provide the "options" array with exactly 4 choices
+- The "options" array MUST include the correct answer and 3 contextually-appropriate distractors
+- DO NOT rely on the system to generate options - YOU must provide them
+- Example format:
+  {
+    "type": "fill_blank",
+    "question": "Doctors work with others in the hospital",
+    "correct_answer": "hospital",
+    "options": ["hospital", "school", "store", "park"],
+    "explanation": "Doctors work in hospitals where they care for patients"
+  }
+- Options should be single words or short phrases that could grammatically fit in the blank
+- Make distractors plausible but clearly distinguishable from the correct answer
+- Example INCORRECT options: ["answer", "solution", "result", "response"] (too generic)
+- Example CORRECT options: ["hospital", "clinic", "pharmacy", "office"] (contextually related)
 
 IMPORTANT: Provide exactly 3 practice questions and 1 assessment question with actual content.`;
 
@@ -717,6 +750,14 @@ IMPORTANT: Provide exactly 3 examples, 2 practice, and 1 assessment scenario wit
       case 'DISCOVER':
         return `${basePrompt}
 
+CHARACTER ROLES FOR DISCOVER CONTAINER:
+- The STUDENT (${enrichedNarrative.studentName}) takes on the role of the CAREER PROFESSIONAL in the narrative
+- Example: "Firefighter ${enrichedNarrative.studentName}" where the student IS the firefighter
+- The COMPANION (${enrichedNarrative.companion}) is an AI guide who accompanies the student
+- There are ONLY 4 companions: Finn, Spark, Sage, Harmony - NEVER invent other companion names
+- NEVER combine roles: "Firefighter ${enrichedNarrative.companion}" is WRONG - the companion guides, doesn't become the firefighter
+- Correct: "${enrichedNarrative.companion} says, 'As ${enrichedNarrative.career} ${enrichedNarrative.studentName}, you'll need to...'"
+
 GENERATE:
 1. Create unified scenario that ties all subjects together
 2. Create 4 discovery stations (one per subject: Math, ELA, Science, Social Studies)
@@ -726,7 +767,7 @@ Replace placeholders with actual discovery content:
 {
   "unifiedScenario": {
     "title": "Real scenario title connecting all subjects",
-    "narrativeSetup": "Engaging story that ties Math, ELA, Science, and Social Studies together",
+    "narrativeSetup": "Engaging story where the student (${enrichedNarrative.studentName}) takes on the ${enrichedNarrative.career} role, with companion (${enrichedNarrative.companion}) as their guide.",
     "challenge": "The main challenge students will solve across all stations",
     "careerConnection": "How this relates to the career and real-world application"
   },
@@ -837,6 +878,18 @@ CRITICAL FORMAT REQUIREMENTS:
 - All answer choices must be readable text that students can understand without images
 - Example: Good question: "What is a community?" Bad question: "Which picture shows a community?"
 
+SUPPORTING DATA REQUIREMENTS:
+- The "supportingData" field MUST contain the ACTUAL CONTENT that students will investigate, NOT descriptions of what could be provided
+- DO NOT write meta-text like "Examples of patient notes" or "Visual aids showing..."
+- DO provide the complete, real data that answers the question
+- Example INCORRECT: "supportingData": "Examples of short patient notes: 1) Patient needs water, 2) Patient needs rest"
+- Example CORRECT: "supportingData": "PATIENT NOTE A: Temperature 98.6°F, needs water and rest. PATIENT NOTE B: Temperature 102°F, needs fever medicine. PATIENT NOTE C: Minor cut on hand, needs bandage. PATIENT NOTE D: Upset stomach, needs food and observation."
+- For reading tasks: provide the full text passage students must read
+- For data analysis: provide the complete dataset or chart information as text
+- For investigation tasks: provide all the evidence/clues students need to examine
+- Students should be able to read the supportingData and find the answer to the question
+- The supportingData is the PRIMARY RESOURCE - questions ask students to analyze this data
+
 IMPORTANT: Provide unified scenario and exactly 4 discoveryStations (one per subject) with actual content.`;
 
       default:
@@ -861,7 +914,7 @@ IMPORTANT: Provide unified scenario and exactly 4 discoveryStations (one per sub
       skillName: skill.name,
       skillDescription: skill.description,
       gradeLevel: skill.gradeLevel,
-      studentName: enrichedNarrative.userId,
+      studentName: enrichedNarrative.studentName,
       career: enrichedNarrative.career,
       companion: enrichedNarrative.companion,
       sessionId: enrichedNarrative.sessionId

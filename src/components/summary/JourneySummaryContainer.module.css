@@ -1,0 +1,225 @@
+/**
+ * Journey Summary Container Styles
+ * Loading, error, and empty states
+ */
+
+.container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8);
+  background: var(--bg-primary);
+}
+
+/* ================================================================
+   LOADING STATE
+   ================================================================ */
+
+.loadingState {
+  text-align: center;
+  max-width: 400px;
+}
+
+.spinner {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto var(--space-6);
+  border: 4px solid var(--border-subtle);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loadingText {
+  font-size: var(--font-lg);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* ================================================================
+   ERROR STATE
+   ================================================================ */
+
+.errorState {
+  text-align: center;
+  max-width: 500px;
+  padding: var(--space-8);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-xl);
+  border: 2px solid var(--error);
+}
+
+.errorIcon {
+  font-size: 64px;
+  margin-bottom: var(--space-4);
+}
+
+.errorTitle {
+  font-size: var(--font-2xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-3);
+}
+
+.errorMessage {
+  font-size: var(--font-base);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-6);
+  line-height: 1.6;
+}
+
+.errorActions {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: center;
+}
+
+.retryButton {
+  padding: var(--space-3) var(--space-6);
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-lg);
+  font-size: var(--font-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.retryButton:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.retryButton:active {
+  transform: translateY(0);
+}
+
+.dashboardButton {
+  padding: var(--space-3) var(--space-6);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 2px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.dashboardButton:hover {
+  background: var(--bg-hover);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dashboardButton:active {
+  transform: translateY(0);
+}
+
+/* ================================================================
+   EMPTY STATE
+   ================================================================ */
+
+.emptyState {
+  text-align: center;
+  max-width: 500px;
+  padding: var(--space-8);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-xl);
+  border: 2px dashed var(--border-subtle);
+}
+
+.emptyIcon {
+  font-size: 64px;
+  margin-bottom: var(--space-4);
+}
+
+.emptyTitle {
+  font-size: var(--font-2xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-3);
+}
+
+.emptyMessage {
+  font-size: var(--font-base);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-6);
+  line-height: 1.6;
+}
+
+/* ================================================================
+   DARK THEME
+   ================================================================ */
+
+[data-theme='dark'] .container {
+  background: var(--dark-bg-primary);
+}
+
+[data-theme='dark'] .errorState,
+[data-theme='dark'] .emptyState {
+  background: var(--dark-bg-secondary);
+  border-color: var(--dark-border-subtle);
+}
+
+[data-theme='dark'] .errorTitle,
+[data-theme='dark'] .emptyTitle {
+  color: var(--dark-text-primary);
+}
+
+[data-theme='dark'] .errorMessage,
+[data-theme='dark'] .emptyMessage,
+[data-theme='dark'] .loadingText {
+  color: var(--dark-text-secondary);
+}
+
+[data-theme='dark'] .dashboardButton {
+  background: var(--dark-bg-tertiary);
+  color: var(--dark-text-primary);
+  border-color: var(--dark-border-default);
+}
+
+[data-theme='dark'] .dashboardButton:hover {
+  background: var(--dark-bg-hover);
+  border-color: var(--dark-primary);
+}
+
+[data-theme='dark'] .spinner {
+  border-color: var(--dark-border-subtle);
+  border-top-color: var(--dark-primary);
+}
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+
+@media (max-width: 640px) {
+  .container {
+    padding: var(--space-4);
+  }
+
+  .errorState,
+  .emptyState {
+    padding: var(--space-6);
+  }
+
+  .errorActions {
+    flex-direction: column;
+  }
+
+  .retryButton,
+  .dashboardButton {
+    width: 100%;
+  }
+}
