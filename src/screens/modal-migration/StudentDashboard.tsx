@@ -196,10 +196,19 @@ const StudentDashboardInner: React.FC = () => {
 
           // Set dashboard selections from session with full objects
           // The career needs to be the name/title for the computed properties to work
+          const careerName = session.career?.name || session.career?.title || session.career_name || 'Explorer';
+          const careerId = session.career?.id || careerName.toLowerCase().replace(/\s+/g, '-');
+
           setDashboardSelections({
             companion: session.companion?.name || session.companion_name || 'pat',
-            career: session.career?.name || session.career?.title || session.career_name || 'Explorer'
+            career: careerName
           });
+
+          // Store in sessionStorage for use in other pages (e.g., Career Bingo)
+          sessionStorage.setItem('selectedCareer', JSON.stringify({
+            career: careerName,
+            careerId: careerId
+          }));
 
           // Restore completed containers from session progress
           const completedSet = new Set<string>();
@@ -246,6 +255,13 @@ const StudentDashboardInner: React.FC = () => {
 
   const handleCareerSelection = (selection: { career: string; careerId: string }) => {
     console.log('🎯 Career selected:', selection);
+
+    // Store in sessionStorage for use in other pages (e.g., Career Bingo)
+    sessionStorage.setItem('selectedCareer', JSON.stringify({
+      career: selection.career,
+      careerId: selection.careerId
+    }));
+
     setDashboardSelections({
       career: selection.career,
       careerId: selection.careerId,
@@ -288,6 +304,12 @@ const StudentDashboardInner: React.FC = () => {
           id: dashboardSelections.career.toLowerCase().replace(/\s+/g, '-'),
           name: dashboardSelections.career
         };
+
+        // Ensure sessionStorage is updated with latest selection
+        sessionStorage.setItem('selectedCareer', JSON.stringify({
+          career: careerData.name,
+          careerId: careerData.id
+        }));
 
         const companionData = {
           id: dashboardSelections.companion,

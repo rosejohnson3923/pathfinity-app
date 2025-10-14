@@ -1947,8 +1947,16 @@ export const AILearnContainerV2UNIFIED: React.FC<AILearnContainerV2Props> = ({
                   // Priority 1: Media URL (actual image)
                   if (questionObj.media?.url) return questionObj.media.url;
 
-                  // Priority 2: Visual content (but NOT if it looks like answer text)
-                  const visual = questionObj.visual;
+                  // Priority 2: Explicit image field
+                  if (questionObj.image && typeof questionObj.image === 'string') {
+                    // Only use if it's a URL or short emoji/icon (not answer text)
+                    if (questionObj.image.includes('http') || questionObj.image.length < 50) {
+                      return questionObj.image;
+                    }
+                  }
+
+                  // Priority 3: Visual content (but NOT if it looks like answer text)
+                  const visual = questionObj.visual?.content || questionObj.visual;
                   if (visual && typeof visual === 'string') {
                     // Reject if it contains answer-like text patterns or is too long
                     const looksLikeAnswer = visual.toLowerCase().includes('a group of') ||

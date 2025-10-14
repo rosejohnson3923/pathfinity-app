@@ -10,24 +10,37 @@
 @import './tokens/layout.css';
 @import './tokens/typography.css';
 @import './tokens/effects.css';
+@import './tokens/glass.css';
 
 /* Component Styles */
 @import './components/base.css';
 @import './components/containers.css';
+@import './components/glass.css';
 
 /**
  * USAGE:
- * 
+ *
  * In your component:
  * import '@/design-system/index.css';
- * 
+ *
  * Or import specific tokens:
  * import '@/design-system/tokens/colors.css';
- * 
+ * import '@/design-system/tokens/glass.css';
+ *
  * Then use the tokens in your CSS:
  * .my-component {
  *   background: var(--color-bg-elevated);
  *   padding: var(--space-6);
  *   border-radius: var(--radius-card);
+ * }
+ *
+ * For glassmorphism (gamification components):
+ * <div className="glass-card">Content here</div>
+ *
+ * Or with custom tokens:
+ * .my-glass-component {
+ *   background: var(--glass-bg-base);
+ *   backdrop-filter: var(--glass-blur);
+ *   border: 1px solid var(--glass-border);
  * }
  */

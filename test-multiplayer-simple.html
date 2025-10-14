@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discovered Live! Test</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 { color: white; margin-bottom: 20px; text-align: center; }
+        h2 { margin-bottom: 15px; color: #333; }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        button:hover { transform: scale(1.02); }
+        button:active { transform: scale(0.98); }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .bingo-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin: 15px 0;
+        }
+        .square {
+            aspect-ratio: 1;
+            background: #f5f5f5;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .square:hover { background: #e0e0ff; transform: scale(1.05); }
+        .square.unlocked {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            font-weight: bold;
+            transform: scale(1.1);
+        }
+        .square.center {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: white;
+            font-weight: bold;
+            cursor: default;
+        }
+        .icon { font-size: 20px; margin-bottom: 3px; }
+        .career-name {
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .stat { display: flex; justify-content: space-between; margin: 10px 0; }
+        .player {
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .player.you { background: #e0e0ff; border: 2px solid #667eea; }
+        #log { max-height: 200px; overflow-y: auto; font-size: 12px; }
+        .log-entry { padding: 5px; margin: 3px 0; background: #f5f5f5; border-radius: 4px; }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal.show { display: flex; }
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            max-width: 600px;
+            text-align: center;
+        }
+        .podium { display: flex; justify-content: center; gap: 20px; margin: 30px 0; }
+        .podium-place {
+            padding: 20px;
+            border-radius: 8px;
+            min-width: 120px;
+        }
+        .podium-1 { background: gold; height: 150px; }
+        .podium-2 { background: silver; height: 120px; }
+        .podium-3 { background: #cd7f32; height: 100px; }
+    </style>
+</head>
+<body>
+    <h1>🎮 Discovered Live! Multiplayer Test</h1>
+
+    <div class="container">
+        <div class="card">
+            <button onclick="startGame()" id="startBtn">🚀 START NEW GAME</button>
+            <div class="stat">
+                <span><strong>Room:</strong> <span id="room">TEST-ROOM</span></span>
+                <span><strong>Status:</strong> <span id="status">Click Start to begin</span></span>
+                <span><strong>Timer:</strong> <span id="timer">--</span></span>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="card" style="grid-column: span 2;">
+                <h2>Question <span id="qNum">-</span></h2>
+                <p id="question" style="font-size: 18px; margin: 15px 0;">Click START NEW GAME to begin!</p>
+                <p id="skill" style="color: #666; font-size: 14px;">-</p>
+
+                <h2 style="margin-top: 20px;">Your Bingo Card</h2>
+                <div id="bingoGrid" class="bingo-grid">
+                    <div class="square" style="grid-column: span 5; min-height: 100px;">
+                        <p style="color: #999;">Bingo card will appear here</p>
+                    </div>
+                </div>
+                <div class="stat">
+                    <span>Unlocked: <strong id="unlocked">0</strong>/25</span>
+                    <span>Bingos: <strong id="bingos">0</strong></span>
+                    <span>XP: <strong id="xp">0</strong></span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Players</h2>
+                <div id="players">
+                    <p style="color: #999; text-align: center; padding: 20px;">Players will appear here</p>
+                </div>
+
+                <h2 style="margin-top: 20px;">Event Log</h2>
+                <div id="log">
+                    <div class="log-entry">✅ Ready to start!</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="resultsModal" class="modal">
+        <div class="modal-content">
+            <h1>🎉 Game Complete! 🎉</h1>
+            <div class="podium" id="podium"></div>
+            <div id="finalStandings"></div>
+            <button onclick="startGame()">🔄 Play Again</button>
+            <button onclick="closeModal()" style="background: #666;">Close</button>
+        </div>
+    </div>
+
+    <script>
+        console.log('Script loaded!');
+
+        const careers = ['Chef', 'Teacher', 'Doctor', 'Nurse', 'Firefighter', 'Programmer', 'Artist', 'Musician', 'Scientist', 'Engineer', 'Pilot', 'Lawyer', 'Architect', 'Writer', 'Mechanic', 'Electrician', 'Farmer', 'Librarian', 'Dentist', 'Veterinarian', 'Photographer', 'Police Officer', 'Athlete', 'Plumber', 'Accountant'];
+
+        const questions = [
+            { q: "I prepare delicious meals", a: "Chef" },
+            { q: "I help students learn", a: "Teacher" },
+            { q: "I treat patients in hospitals", a: "Doctor" },
+            { q: "I provide patient care", a: "Nurse" },
+            { q: "I put out fires", a: "Firefighter" },
+            { q: "I write computer code", a: "Programmer" },
+            { q: "I create visual art", a: "Artist" },
+            { q: "I perform music", a: "Musician" },
+            { q: "I conduct experiments", a: "Scientist" },
+            { q: "I design structures", a: "Engineer" },
+            { q: "I fly aircraft", a: "Pilot" },
+            { q: "I represent clients in court", a: "Lawyer" },
+            { q: "I design buildings", a: "Architect" },
+            { q: "I create stories", a: "Writer" },
+            { q: "I repair vehicles", a: "Mechanic" },
+            { q: "I work with electrical systems", a: "Electrician" },
+            { q: "I grow crops", a: "Farmer" },
+            { q: "I manage library collections", a: "Librarian" },
+            { q: "I care for teeth", a: "Dentist" },
+            { q: "I treat animals", a: "Veterinarian" },
+        ];
+
+        let game = {
+            grid: [],
+            unlocked: [],
+            players: [],
+            qNum: 0,
+            timer: 15,
+            xp: 0,
+            bingos: 0,
+            running: false
+        };
+
+        function log(msg) {
+            const logDiv = document.getElementById('log');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.textContent = msg;
+            logDiv.insertBefore(entry, logDiv.firstChild);
+            if (logDiv.children.length > 20) logDiv.removeChild(logDiv.lastChild);
+        }
+
+        function startGame(userCareer = null) {
+            console.log('Starting game...');
+            log('🎮 Starting new game!');
+
+            // TODO: In production, get userCareer from user session/profile
+            // For testing, we'll use a random career or passed parameter
+
+            try {
+                const grid = makeGrid(userCareer);
+                const players = makePlayers();
+
+                game = {
+                    grid: grid,
+                    unlocked: [12], // Center square (position 12) is always unlocked
+                    players: players,
+                    qNum: 0,
+                    timer: 8,
+                    xp: 0,
+                    bingos: 0,
+                    running: true,
+                    completedRows: [],
+                    completedCols: [],
+                    completedDiags: []
+                };
+                console.log('Game state created:', game);
+            } catch (error) {
+                console.error('Error creating game state:', error);
+                alert('Error: ' + error.message);
+                return;
+            }
+
+            document.getElementById('resultsModal').classList.remove('show');
+            renderGrid();
+            renderPlayers();
+            updateStats();
+            document.getElementById('status').textContent = 'Starting...';
+            setTimeout(nextQuestion, 2000);
+            console.log('Game started successfully!');
+        }
+
+        function makeGrid(userCareer = null) {
+            // If no user career provided (for testing), pick a random one
+            if (!userCareer) {
+                userCareer = careers[Math.floor(Math.random() * careers.length)];
+            }
+
+            const grid = [];
+            const used = new Set();
+
+            // Reserve user's career for center square
+            used.add(userCareer);
+
+            for (let i = 0; i < 25; i++) {
+                // Center square (position 12) is always user's chosen career (free space)
+                if (i === 12) {
+                    grid.push(userCareer);
+                    continue;
+                }
+
+                let career;
+                let attempts = 0;
+                do {
+                    career = careers[Math.floor(Math.random() * careers.length)];
+                    attempts++;
+                    if (attempts > 100) {
+                        console.error('Cannot generate unique grid - not enough unique careers available');
+                        throw new Error('Cannot generate unique grid - not enough careers');
+                    }
+                }
+                while (used.has(career));
+                used.add(career);
+                grid.push(career);
+            }
+            return grid;
+        }
+
+        function makePlayers() {
+            return [
+                { name: 'You', xp: 0, correct: 0, isAI: false },
+                { name: 'Aaron B.', xp: 0, correct: 0, isAI: true, diff: 0.7 },
+                { name: 'Jessica M.', xp: 0, correct: 0, isAI: true, diff: 0.8 },
+                { name: 'Marcus L.', xp: 0, correct: 0, isAI: true, diff: 0.6 },
+                { name: 'Sophia K.', xp: 0, correct: 0, isAI: true, diff: 0.75 },
+                { name: 'Tyler R.', xp: 0, correct: 0, isAI: true, diff: 0.65 },
+            ];
+        }
+
+        function renderGrid() {
+            const gridEl = document.getElementById('bingoGrid');
+            if (!gridEl) {
+                console.error('bingoGrid element not found!');
+                return;
+            }
+
+            gridEl.innerHTML = '';
+
+            game.grid.forEach((career, idx) => {
+                const sq = document.createElement('div');
+                const row = Math.floor(idx / 5);
+                const col = idx % 5;
+                const isCenter = row === 2 && col === 2;
+                const unlocked = game.unlocked.some(u => u === idx);
+
+                sq.className = 'square' + (isCenter ? ' center' : '') + (unlocked ? ' unlocked' : '');
+                sq.innerHTML = isCenter ? `<div class="icon">${getIcon(career)}</div><div class="career-name" title="${career}">${career}</div><div style="font-size:10px;margin-top:3px;">⭐ MY CAREER</div>` : `<div class="icon">${getIcon(career)}</div><div class="career-name" title="${career}">${career}</div>`;
+
+                if (!isCenter && !unlocked && game.running) {
+                    sq.onclick = () => handleClick(idx, career);
+                }
+
+                gridEl.appendChild(sq);
+            });
+        }
+
+        function getIcon(career) {
+            const icons = {Chef:'👨‍🍳',Teacher:'👩‍🏫',Doctor:'👨‍⚕️',Nurse:'👩‍⚕️',Firefighter:'👨‍🚒',Programmer:'👨‍💻',Artist:'👨‍🎨',Musician:'👨‍🎤',Scientist:'👨‍🔬',Engineer:'👨‍🔧',Pilot:'👨‍✈️',Lawyer:'⚖️',Architect:'📐',Writer:'✍️',Mechanic:'🔧',Electrician:'⚡',Farmer:'👨‍🌾',Librarian:'📚',Dentist:'🦷',Veterinarian:'👨‍⚕️',Photographer:'📷','Police Officer':'👮',Athlete:'⛹️',Plumber:'🔧',Accountant:'💰'};
+            return icons[career] || '💼';
+        }
+
+        function handleClick(idx, career) {
+            if (!game.running || !game.currentQ) return;
+            if (game.userAnswered) return; // Already answered this question
+
+            const correct = career === game.currentQ.a;
+            log(correct ? `✅ You clicked ${career}. Correct!` : `❌ You clicked ${career}. Wrong!`);
+
+            if (correct) {
+                game.unlocked.push(idx);
+                game.xp += 10;
+                game.players[0].xp = game.xp;
+                game.players[0].correct++;
+                checkBingos();
+                renderGrid();
+                updateStats();
+                renderPlayers();
+            }
+
+            game.userAnswered = true; // Mark that user has answered
+        }
+
+        function simulateAI() {
+            // AI players answer at random times during the question
+            game.players.slice(1).forEach((p, idx) => {
+                // Random delay between 1-8 seconds
+                const delay = Math.random() * 7000 + 1000;
+                setTimeout(() => {
+                    if (!game.running || !game.currentQ) return;
+                    if (game.currentQ !== game.lastQ) return; // Question changed, don't answer old one
+
+                    if (Math.random() < p.diff) {
+                        p.correct++;
+                        p.xp += 10;
+                        log(`✅ ${p.name} answered correctly!`);
+                    } else {
+                        log(`❌ ${p.name} answered incorrectly`);
+                    }
+                    renderPlayers();
+                }, delay);
+            });
+        }
+
+        function checkBingos() {
+            // Initialize tracking arrays if needed
+            if (!game.completedRows) game.completedRows = [];
+            if (!game.completedCols) game.completedCols = [];
+            if (!game.completedDiags) game.completedDiags = [];
+
+            // Check rows
+            for (let r = 0; r < 5; r++) {
+                const row = [r*5, r*5+1, r*5+2, r*5+3, r*5+4];
+                if (row.every(i => game.unlocked.includes(i))) {
+                    if (!game.completedRows.includes(r)) {
+                        game.bingos++;
+                        game.xp += 50;
+                        game.players[0].xp = game.xp;
+                        game.completedRows.push(r);
+                        log('🎉 BINGO! Row ' + (r + 1) + ' completed! +50 XP');
+                    }
+                }
+            }
+
+            // Check columns
+            for (let c = 0; c < 5; c++) {
+                const col = [c, c+5, c+10, c+15, c+20];
+                if (col.every(i => game.unlocked.includes(i))) {
+                    if (!game.completedCols.includes(c)) {
+                        game.bingos++;
+                        game.xp += 50;
+                        game.players[0].xp = game.xp;
+                        game.completedCols.push(c);
+                        log('🎉 BINGO! Column ' + (c + 1) + ' completed! +50 XP');
+                    }
+                }
+            }
+
+            // Check diagonal (top-left to bottom-right)
+            const diag1 = [0, 6, 12, 18, 24];
+            if (diag1.every(i => game.unlocked.includes(i))) {
+                if (!game.completedDiags.includes('diag1')) {
+                    game.bingos++;
+                    game.xp += 50;
+                    game.players[0].xp = game.xp;
+                    game.completedDiags.push('diag1');
+                    log('🎉 BINGO! Diagonal completed! +50 XP');
+                }
+            }
+
+            // Check diagonal (top-right to bottom-left)
+            const diag2 = [4, 8, 12, 16, 20];
+            if (diag2.every(i => game.unlocked.includes(i))) {
+                if (!game.completedDiags.includes('diag2')) {
+                    game.bingos++;
+                    game.xp += 50;
+                    game.players[0].xp = game.xp;
+                    game.completedDiags.push('diag2');
+                    log('🎉 BINGO! Diagonal completed! +50 XP');
+                }
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('unlocked').textContent = game.unlocked.length;
+            document.getElementById('bingos').textContent = game.bingos;
+            document.getElementById('xp').textContent = game.xp;
+        }
+
+        function renderPlayers() {
+            const sorted = [...game.players].sort((a,b) => b.xp - a.xp);
+            document.getElementById('players').innerHTML = sorted.map((p, i) =>
+                `<div class="player ${p.name === 'You' ? 'you' : ''}">
+                    <div><strong>${['🥇','🥈','🥉'][i] || `#${i+1}`} ${p.name}</strong> ${p.isAI ? '🤖' : ''}<br>
+                    <small>${p.correct} correct</small></div>
+                    <div><strong>${p.xp} XP</strong></div>
+                </div>`
+            ).join('');
+        }
+
+        function nextQuestion() {
+            if (game.qNum >= 20) {
+                endGame();
+                return;
+            }
+
+            game.qNum++;
+            game.currentQ = questions[(game.qNum - 1) % questions.length];
+            game.lastQ = game.currentQ; // Track for AI answers
+            game.timer = 8; // 8 seconds per question
+            game.userAnswered = false; // Reset for new question
+
+            document.getElementById('qNum').textContent = game.qNum;
+            document.getElementById('question').textContent = game.currentQ.q;
+            document.getElementById('skill').textContent = `Answer: ${game.currentQ.a}`;
+            document.getElementById('status').textContent = `Question ${game.qNum}/20`;
+
+            log(`📢 Q${game.qNum}: ${game.currentQ.q}`);
+
+            // Start AI players answering at random times
+            simulateAI();
+
+            startTimer();
+        }
+
+        function startTimer() {
+            // Clear any existing timer
+            if (game.timerInterval) {
+                clearInterval(game.timerInterval);
+            }
+
+            game.timerInterval = setInterval(() => {
+                game.timer--;
+                document.getElementById('timer').textContent = game.timer + 's';
+                if (game.timer <= 0) {
+                    clearInterval(game.timerInterval);
+                    log('⏰ Time up!');
+                    setTimeout(nextQuestion, 1500); // Move to next question after 1.5s
+                }
+            }, 1000);
+        }
+
+        function endGame() {
+            game.running = false;
+            document.getElementById('status').textContent = 'Complete!';
+            log('🏁 Game finished!');
+
+            game.players[0].xp = game.xp;
+            const sorted = [...game.players].sort((a,b) => b.xp - a.xp);
+
+            document.getElementById('podium').innerHTML = [1,0,2].map(i =>
+                sorted[i] ? `<div class="podium-place podium-${i+1}">
+                    <div style="font-size:40px">${['🏆','🥈','🥉'][i]}</div>
+                    <strong>${sorted[i].name}</strong><br>${sorted[i].xp} XP
+                </div>` : ''
+            ).join('');
+
+            document.getElementById('finalStandings').innerHTML = sorted.map((p,i) =>
+                `<div class="player ${p.name === 'You' ? 'you' : ''}">
+                    <span><strong>${['🥇','🥈','🥉'][i] || `#${i+1}`} ${p.name}</strong> ${p.isAI?'🤖':''}</span>
+                    <strong>${p.xp} XP</strong>
+                </div>`
+            ).join('');
+
+            document.getElementById('resultsModal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('resultsModal').classList.remove('show');
+        }
+
+        window.onload = () => {
+            console.log('Page loaded!');
+            log('✅ Page loaded. Click START NEW GAME!');
+        };
+    </script>
+</body>
+</html>

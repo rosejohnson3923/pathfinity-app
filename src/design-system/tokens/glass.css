@@ -1,0 +1,153 @@
+/**
+ * GLASSMORPHISM DESIGN TOKENS
+ * ============================
+ * Tokens for glass morphism effects with light/dark theme support
+ * Used primarily for gamification experiences (Discovered Live!, entry/exit screens)
+ */
+
+:root {
+  /* =========================
+     BLUR INTENSITY LEVELS
+     ========================= */
+
+  --glass-blur-sm: blur(8px);
+  --glass-blur-md: blur(12px);
+  --glass-blur-lg: blur(16px);
+  --glass-blur-xl: blur(20px);
+
+  /* =========================
+     LIGHT THEME GLASS
+     ========================= */
+
+  /* Base glass surfaces */
+  --glass-bg-base-light: rgba(255, 255, 255, 0.7);
+  --glass-bg-elevated-light: rgba(255, 255, 255, 0.8);
+  --glass-bg-subtle-light: rgba(255, 255, 255, 0.5);
+
+  /* Glass borders */
+  --glass-border-light: rgba(255, 255, 255, 0.8);
+  --glass-border-strong-light: rgba(255, 255, 255, 0.9);
+  --glass-border-subtle-light: rgba(255, 255, 255, 0.3);
+
+  /* Glass shadows */
+  --glass-shadow-light: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --glass-shadow-strong-light: 0 12px 48px rgba(0, 0, 0, 0.15);
+
+  /* Gamification-specific glass (with color tints) */
+  --glass-game-primary-light: rgba(102, 126, 234, 0.15); /* Purple tint */
+  --glass-game-success-light: rgba(16, 185, 129, 0.15); /* Green tint */
+  --glass-game-warning-light: rgba(245, 158, 11, 0.15); /* Amber tint */
+
+  /* Text colors for light theme glass */
+  --glass-text-primary-light: rgb(17, 24, 39); /* gray-900 */
+  --glass-text-secondary-light: rgb(55, 65, 81); /* gray-700 */
+  --glass-text-tertiary-light: rgb(75, 85, 99); /* gray-600 */
+  --glass-text-muted-light: rgb(107, 114, 128); /* gray-500 */
+
+  /* Icon colors for light theme glass */
+  --glass-icon-primary-light: rgb(124, 58, 237); /* purple-600 */
+  --glass-icon-accent-light: rgb(234, 179, 8); /* yellow-500 */
+  --glass-icon-success-light: rgb(22, 163, 74); /* green-600 */
+  --glass-icon-warning-light: rgb(234, 88, 12); /* orange-600 */
+
+  /* =========================
+     DARK THEME GLASS
+     ========================= */
+
+  /* Base glass surfaces */
+  --glass-bg-base-dark: rgba(0, 0, 0, 0.5);
+  --glass-bg-elevated-dark: rgba(0, 0, 0, 0.6);
+  --glass-bg-subtle-dark: rgba(0, 0, 0, 0.3);
+
+  /* Glass borders */
+  --glass-border-dark: rgba(255, 255, 255, 0.1);
+  --glass-border-strong-dark: rgba(255, 255, 255, 0.2);
+  --glass-border-subtle-dark: rgba(255, 255, 255, 0.05);
+
+  /* Glass shadows */
+  --glass-shadow-dark: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --glass-shadow-strong-dark: 0 12px 48px rgba(0, 0, 0, 0.5);
+
+  /* Gamification-specific glass (with color tints) */
+  --glass-game-primary-dark: rgba(102, 126, 234, 0.25); /* Purple tint */
+  --glass-game-success-dark: rgba(16, 185, 129, 0.25); /* Green tint */
+  --glass-game-warning-dark: rgba(245, 158, 11, 0.25); /* Amber tint */
+
+  /* Text colors for dark theme glass */
+  --glass-text-primary-dark: rgb(255, 255, 255); /* white */
+  --glass-text-secondary-dark: rgba(255, 255, 255, 0.9); /* white/90 */
+  --glass-text-tertiary-dark: rgba(255, 255, 255, 0.8); /* white/80 */
+  --glass-text-muted-dark: rgba(255, 255, 255, 0.7); /* white/70 */
+
+  /* Icon colors for dark theme glass */
+  --glass-icon-primary-dark: rgb(255, 255, 255); /* white */
+  --glass-icon-accent-dark: rgb(253, 224, 71); /* yellow-300 */
+  --glass-icon-success-dark: rgb(134, 239, 172); /* green-300 */
+  --glass-icon-warning-dark: rgb(251, 146, 60); /* orange-400 */
+
+  /* =========================
+     ACTIVE THEME TOKENS
+     These change based on data-theme
+     ========================= */
+
+  /* Default to light theme */
+  --glass-bg-base: var(--glass-bg-base-light);
+  --glass-bg-elevated: var(--glass-bg-elevated-light);
+  --glass-bg-subtle: var(--glass-bg-subtle-light);
+
+  --glass-border: var(--glass-border-light);
+  --glass-border-strong: var(--glass-border-strong-light);
+  --glass-border-subtle: var(--glass-border-subtle-light);
+
+  --glass-shadow: var(--glass-shadow-light);
+  --glass-shadow-strong: var(--glass-shadow-strong-light);
+
+  --glass-game-primary: var(--glass-game-primary-light);
+  --glass-game-success: var(--glass-game-success-light);
+  --glass-game-warning: var(--glass-game-warning-light);
+
+  /* Text colors */
+  --glass-text-primary: var(--glass-text-primary-light);
+  --glass-text-secondary: var(--glass-text-secondary-light);
+  --glass-text-tertiary: var(--glass-text-tertiary-light);
+  --glass-text-muted: var(--glass-text-muted-light);
+
+  /* Icon colors */
+  --glass-icon-primary: var(--glass-icon-primary-light);
+  --glass-icon-accent: var(--glass-icon-accent-light);
+  --glass-icon-success: var(--glass-icon-success-light);
+  --glass-icon-warning: var(--glass-icon-warning-light);
+
+  /* Default blur level */
+  --glass-blur: var(--glass-blur-md);
+}
+
+/* =========================
+   DARK THEME OVERRIDES
+   ========================= */
+[data-theme="dark"] {
+  --glass-bg-base: var(--glass-bg-base-dark);
+  --glass-bg-elevated: var(--glass-bg-elevated-dark);
+  --glass-bg-subtle: var(--glass-bg-subtle-dark);
+
+  --glass-border: var(--glass-border-dark);
+  --glass-border-strong: var(--glass-border-strong-dark);
+  --glass-border-subtle: var(--glass-border-subtle-dark);
+
+  --glass-shadow: var(--glass-shadow-dark);
+  --glass-shadow-strong: var(--glass-shadow-strong-dark);
+
+  --glass-game-primary: var(--glass-game-primary-dark);
+  --glass-game-success: var(--glass-game-success-dark);
+  --glass-game-warning: var(--glass-game-warning-dark);
+
+  --glass-text-primary: var(--glass-text-primary-dark);
+  --glass-text-secondary: var(--glass-text-secondary-dark);
+  --glass-text-tertiary: var(--glass-text-tertiary-dark);
+  --glass-text-muted: var(--glass-text-muted-dark);
+
+  --glass-icon-primary: var(--glass-icon-primary-dark);
+  --glass-icon-accent: var(--glass-icon-accent-dark);
+  --glass-icon-success: var(--glass-icon-success-dark);
+  --glass-icon-warning: var(--glass-icon-warning-dark);
+}

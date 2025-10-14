@@ -333,7 +333,7 @@ export const WelcomeBackModal: React.FC<WelcomeBackModalProps> = ({
         >
           {/* Backdrop - clicking does nothing to prevent blank screen */}
           <motion.div
-            className="absolute inset-0 bg-black/40 backdrop-blur-md"
+            className="absolute inset-0 glass-modal-backdrop"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             onClick={(e) => {

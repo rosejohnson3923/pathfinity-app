@@ -56,6 +56,9 @@ import { TestUnifiedLessonWithCareerSelector } from './components/TestUnifiedLes
 import { TestUnifiedLessonSimple } from './components/TestUnifiedLessonSimple';
 import { TestCareerSelectionWithGradeLevel } from './components/TestCareerSelectionWithGradeLevel';
 import { TestCareerProgressionDatabase } from './components/TestCareerProgressionDatabase';
+import { DiscoveredLiveTestPage } from './pages/DiscoveredLiveTestPage';
+import { DiscoveredLivePage } from './pages/DiscoveredLivePage';
+import { CareerBingoLobbyPage } from './pages/CareerBingoLobbyPage';
 // Test components moved to Archive - commented out
 // import YouTubeTest from './test-youtube';
 // import NarrativeTest from './test-narrative';
@@ -121,6 +124,7 @@ function App() {
                   <Route path="/test/simple" element={<TestUnifiedLessonSimple />} />
                   <Route path="/test/career-grade-level" element={<TestCareerSelectionWithGradeLevel />} />
                   <Route path="/test/career-database" element={<TestCareerProgressionDatabase />} />
+                  <Route path="/test/discovered-live" element={<DiscoveredLiveTestPage />} />
                   {/* Test routes commented out - components moved to Archive
                   <Route path="/test/youtube" element={<YouTubeTest />} />
                   <Route path="/test/narrative" element={<NarrativeTest />} />
@@ -201,6 +205,18 @@ function App() {
                   } />
                   <Route path="/app/unauthorized" element={<Unauthorized />} />
                   
+                  {/* Discovered Live! Routes */}
+                  <Route path="/discovered-live" element={
+                    <ProtectedRoute>
+                      <DiscoveredLivePage />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/discovered-live/career-bingo" element={
+                    <ProtectedRoute>
+                      <CareerBingoLobbyPage />
+                    </ProtectedRoute>
+                  } />
+
                   {/* Development routes without /app prefix */}
                   <Route path="/dashboard" element={
                     <ProtectedRoute>

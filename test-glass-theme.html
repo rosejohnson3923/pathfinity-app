@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glassmorphism Theme Test</title>
+    <style>
+        /* Import design system */
+        @import './src/design-system/tokens/colors.css';
+        @import './src/design-system/tokens/glass.css';
+        @import './src/design-system/components/glass.css';
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            min-height: 100vh;
+            padding: 40px 20px;
+            transition: background 0.3s ease;
+        }
+
+        /* Light theme background */
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        /* Dark theme background */
+        [data-theme="dark"] body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+
+        .theme-toggle {
+            background: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: transform 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            color: white;
+            font-size: 1.8rem;
+            margin: 40px 0 20px;
+            text-align: center;
+        }
+
+        /* Demo content styling */
+        .demo-content h3 {
+            color: var(--color-text-primary);
+            margin-bottom: 12px;
+        }
+
+        .demo-content p {
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+        }
+
+        .demo-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background: var(--glass-game-primary);
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        /* Bingo demo */
+        .bingo-demo-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .bingo-demo-square {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            text-align: center;
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        .demo-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        /* Player card demo */
+        .player-demo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .player-name {
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        .player-xp {
+            font-weight: 700;
+            color: var(--color-text-primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 Glassmorphism Theme Test</h1>
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <span id="theme-icon">🌙</span> Toggle Dark Mode
+            </button>
+        </div>
+
+        <h2 class="section-title">Base Glass Components</h2>
+        <div class="grid">
+            <div class="glass-card">
+                <div class="demo-content">
+                    <h3>Glass Card</h3>
+                    <p>Standard glassmorphism card with medium blur. Perfect for content panels and game UI.</p>
+                    <span class="demo-badge">.glass-card</span>
+                </div>
+            </div>
+
+            <div class="glass-card-sm glass-elevated">
+                <div class="demo-content">
+                    <h3>Elevated Glass (Small)</h3>
+                    <p>Higher opacity for important UI elements. More prominent and easier to read.</p>
+                    <span class="demo-badge">.glass-card-sm .glass-elevated</span>
+                </div>
+            </div>
+
+            <div class="glass-card glass-subtle">
+                <div class="demo-content">
+                    <h3>Subtle Glass</h3>
+                    <p>Lower opacity for background elements. Less prominent, allows more background to show through.</p>
+                    <span class="demo-badge">.glass-subtle</span>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Gamification Glass</h2>
+        <div class="grid">
+            <div class="glass-game">
+                <div class="demo-content">
+                    <h3>🎮 Game Primary</h3>
+                    <p>Glass with purple game tint. Use for main game UI elements.</p>
+                    <span class="demo-badge">.glass-game</span>
+                </div>
+            </div>
+
+            <div class="glass-game glass-game-success">
+                <div class="demo-content">
+                    <h3>✅ Success State</h3>
+                    <p>Glass with green success tint. Use for correct answers, achievements.</p>
+                    <span class="demo-badge">.glass-game-success</span>
+                </div>
+            </div>
+
+            <div class="glass-game glass-game-warning">
+                <div class="demo-content">
+                    <h3>⭐ Special State</h3>
+                    <p>Glass with amber warning tint. Use for special squares, bonus items.</p>
+                    <span class="demo-badge">.glass-game-warning</span>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Bingo Game Components</h2>
+        <div class="glass-bingo-container">
+            <h3 style="color: var(--color-text-primary); margin-bottom: 16px; text-align: center;">
+                Career Bingo Grid Demo
+            </h3>
+            <div class="bingo-demo-grid">
+                <div class="glass-bingo-square bingo-demo-square">
+                    <div class="demo-icon">👨‍🍳</div>
+                    <div>Chef</div>
+                </div>
+                <div class="glass-bingo-square glass-bingo-square-unlocked bingo-demo-square">
+                    <div class="demo-icon">👩‍🏫</div>
+                    <div>Teacher</div>
+                </div>
+                <div class="glass-bingo-square bingo-demo-square">
+                    <div class="demo-icon">👨‍⚕️</div>
+                    <div>Doctor</div>
+                </div>
+                <div class="glass-bingo-square glass-bingo-square-unlocked bingo-demo-square">
+                    <div class="demo-icon">👨‍🚒</div>
+                    <div>Firefighter</div>
+                </div>
+                <div class="glass-bingo-square bingo-demo-square">
+                    <div class="demo-icon">👨‍💻</div>
+                    <div>Programmer</div>
+                </div>
+
+                <div class="glass-bingo-square glass-bingo-square-unlocked bingo-demo-square">
+                    <div class="demo-icon">👨‍🎨</div>
+                    <div>Artist</div>
+                </div>
+                <div class="glass-bingo-square bingo-demo-square">
+                    <div class="demo-icon">👨‍🎤</div>
+                    <div>Musician</div>
+                </div>
+                <div class="glass-bingo-square glass-bingo-square-unlocked bingo-demo-square">
+                    <div class="demo-icon">👨‍🔬</div>
+                    <div>Scientist</div>
+                </div>
+                <div class="glass-bingo-square bingo-demo-square">
+                    <div class="demo-icon">👨‍🔧</div>
+                    <div>Engineer</div>
+                </div>
+                <div class="glass-bingo-square bingo-demo-square">
+                    <div class="demo-icon">👨‍✈️</div>
+                    <div>Pilot</div>
+                </div>
+
+                <div class="glass-bingo-square bingo-demo-square">
+                    <div class="demo-icon">⚖️</div>
+                    <div>Lawyer</div>
+                </div>
+                <div class="glass-bingo-square bingo-demo-square">
+                    <div class="demo-icon">📐</div>
+                    <div>Architect</div>
+                </div>
+                <div class="glass-bingo-square glass-bingo-square-center bingo-demo-square">
+                    <div class="demo-icon">✍️</div>
+                    <div>Writer</div>
+                    <div style="font-size: 10px; margin-top: 4px;">⭐ MY CAREER</div>
+                </div>
+                <div class="glass-bingo-square bingo-demo-square">
+                    <div class="demo-icon">🔧</div>
+                    <div>Mechanic</div>
+                </div>
+                <div class="glass-bingo-square bingo-demo-square">
+                    <div class="demo-icon">⚡</div>
+                    <div>Electrician</div>
+                </div>
+
+                <div class="glass-bingo-square bingo-demo-square">
+                    <div class="demo-icon">👨‍🌾</div>
+                    <div>Farmer</div>
+                </div>
+                <div class="glass-bingo-square bingo-demo-square">
+                    <div class="demo-icon">📚</div>
+                    <div>Librarian</div>
+                </div>
+                <div class="glass-bingo-square bingo-demo-square">
+                    <div class="demo-icon">🦷</div>
+                    <div>Dentist</div>
+                </div>
+                <div class="glass-bingo-square bingo-demo-square">
+                    <div class="demo-icon">👨‍⚕️</div>
+                    <div>Vet</div>
+                </div>
+                <div class="glass-bingo-square bingo-demo-square">
+                    <div class="demo-icon">📷</div>
+                    <div>Photographer</div>
+                </div>
+
+                <div class="glass-bingo-square bingo-demo-square">
+                    <div class="demo-icon">👮</div>
+                    <div>Police</div>
+                </div>
+                <div class="glass-bingo-square bingo-demo-square">
+                    <div class="demo-icon">⛹️</div>
+                    <div>Athlete</div>
+                </div>
+                <div class="glass-bingo-square bingo-demo-square">
+                    <div class="demo-icon">🔧</div>
+                    <div>Plumber</div>
+                </div>
+                <div class="glass-bingo-square bingo-demo-square">
+                    <div class="demo-icon">💰</div>
+                    <div>Accountant</div>
+                </div>
+                <div class="glass-bingo-square bingo-demo-square">
+                    <div class="demo-icon">🏗️</div>
+                    <div>Builder</div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Player Cards</h2>
+        <div class="grid">
+            <div class="glass-player-card glass-player-card-active">
+                <div class="player-demo">
+                    <div>
+                        <div class="player-name">🥇 You</div>
+                        <div style="font-size: 14px; color: var(--color-text-secondary); margin-top: 4px;">
+                            12 correct
+                        </div>
+                    </div>
+                    <div class="player-xp">250 XP</div>
+                </div>
+            </div>
+
+            <div class="glass-player-card">
+                <div class="player-demo">
+                    <div>
+                        <div class="player-name">🥈 Aaron B. 🤖</div>
+                        <div style="font-size: 14px; color: var(--color-text-secondary); margin-top: 4px;">
+                            10 correct
+                        </div>
+                    </div>
+                    <div class="player-xp">210 XP</div>
+                </div>
+            </div>
+
+            <div class="glass-player-card">
+                <div class="player-demo">
+                    <div>
+                        <div class="player-name">🥉 Jessica M. 🤖</div>
+                        <div style="font-size: 14px; color: var(--color-text-secondary); margin-top: 4px;">
+                            9 correct
+                        </div>
+                    </div>
+                    <div class="player-xp">190 XP</div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Glass Panel & Modal</h2>
+        <div class="grid">
+            <div class="glass-panel">
+                <div class="demo-content">
+                    <h3>Glass Panel</h3>
+                    <p>Flatter glass surface for headers, sidebars, and fixed UI sections.</p>
+                    <span class="demo-badge">.glass-panel</span>
+                </div>
+            </div>
+
+            <div class="glass-modal">
+                <div class="demo-content">
+                    <h3>Glass Modal</h3>
+                    <p>Elevated glass with stronger blur for modal dialog boxes.</p>
+                    <span class="demo-badge">.glass-modal</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; color: white; margin-top: 60px; padding: 20px;">
+            <p style="font-size: 14px; opacity: 0.9;">
+                ✨ All glass effects automatically adapt to light/dark theme<br>
+                🎨 Powered by Pathfinity Design System
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+
+            // Update button icon
+            const icon = document.getElementById('theme-icon');
+            icon.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+
+            // Save preference
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            const icon = document.getElementById('theme-icon');
+            icon.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        });
+    </script>
+</body>
+</html>

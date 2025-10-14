@@ -1,0 +1,370 @@
+/**
+ * GLASSMORPHISM COMPONENT UTILITIES
+ * ==================================
+ * Reusable glass component classes for gamification experiences
+ * All classes automatically support light/dark themes via tokens
+ */
+
+/* =========================
+   BASE GLASS UTILITIES
+   ========================= */
+
+/**
+ * Base glass effect
+ * Apply to any element for basic glassmorphism
+ */
+.glass {
+  background: var(--glass-bg-base);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+/**
+ * Glass variants by opacity
+ */
+.glass-elevated {
+  background: var(--glass-bg-elevated);
+  border: 1px solid var(--glass-border-strong);
+  box-shadow: var(--glass-shadow-strong);
+}
+
+.glass-subtle {
+  background: var(--glass-bg-subtle);
+  border: 1px solid var(--glass-border-subtle);
+}
+
+/**
+ * Glass blur intensity modifiers
+ */
+.glass-blur-sm {
+  backdrop-filter: var(--glass-blur-sm);
+  -webkit-backdrop-filter: var(--glass-blur-sm);
+}
+
+.glass-blur-lg {
+  backdrop-filter: var(--glass-blur-lg);
+  -webkit-backdrop-filter: var(--glass-blur-lg);
+}
+
+.glass-blur-xl {
+  backdrop-filter: var(--glass-blur-xl);
+  -webkit-backdrop-filter: var(--glass-blur-xl);
+}
+
+/* =========================
+   GLASS CARD COMPONENTS
+   ========================= */
+
+/**
+ * Standard glass card
+ * Use for panels, modals, and content containers
+ */
+.glass-card {
+  background: var(--glass-bg-base);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: var(--glass-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--glass-shadow-strong);
+}
+
+/**
+ * Glass card variants
+ */
+.glass-card-sm {
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.glass-card-lg {
+  padding: 32px;
+  border-radius: 20px;
+}
+
+/* =========================
+   GLASS PANEL COMPONENTS
+   ========================= */
+
+/**
+ * Glass panel - flatter than card, no hover effect
+ * Use for fixed UI sections like headers, sidebars
+ */
+.glass-panel {
+  background: var(--glass-bg-elevated);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border-strong);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--glass-shadow);
+}
+
+/* =========================
+   GLASS MODAL COMPONENTS
+   ========================= */
+
+/**
+ * Glass modal backdrop
+ * Use as overlay behind modals
+ */
+.glass-modal-backdrop {
+  background: var(--glass-bg-subtle);
+  backdrop-filter: var(--glass-blur-lg);
+  -webkit-backdrop-filter: var(--glass-blur-lg);
+}
+
+/**
+ * Glass modal content
+ * Use for modal dialog boxes
+ */
+.glass-modal {
+  background: var(--glass-bg-elevated);
+  backdrop-filter: var(--glass-blur-xl);
+  -webkit-backdrop-filter: var(--glass-blur-xl);
+  border: 1px solid var(--glass-border-strong);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: var(--glass-shadow-strong);
+}
+
+/* =========================
+   GAMIFICATION GLASS
+   ========================= */
+
+/**
+ * Glass components with game-specific tints
+ * Use for game UI elements to add subtle color
+ */
+.glass-game {
+  background: linear-gradient(135deg, var(--glass-bg-base), var(--glass-game-primary));
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: var(--glass-shadow);
+}
+
+.glass-game-success {
+  background: linear-gradient(135deg, var(--glass-bg-base), var(--glass-game-success));
+  border-color: var(--glass-border-strong);
+}
+
+.glass-game-warning {
+  background: linear-gradient(135deg, var(--glass-bg-base), var(--glass-game-warning));
+  border-color: var(--glass-border-strong);
+}
+
+/* =========================
+   GLASS BINGO COMPONENTS
+   ========================= */
+
+/**
+ * Bingo grid container
+ * Specialized glass for bingo game board
+ */
+.glass-bingo-container {
+  background: var(--glass-bg-elevated);
+  backdrop-filter: var(--glass-blur-lg);
+  -webkit-backdrop-filter: var(--glass-blur-lg);
+  border: 2px solid var(--glass-border-strong);
+  border-radius: 20px;
+  padding: 8px;
+  box-shadow: var(--glass-shadow-strong);
+}
+
+/**
+ * Bingo square base
+ * Individual squares on the bingo board
+ */
+.glass-bingo-square {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: var(--glass-blur-sm);
+  -webkit-backdrop-filter: var(--glass-blur-sm);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  padding: 4px;
+  transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .glass-bingo-square {
+  background: rgba(255, 255, 255, 0.12);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+}
+
+.glass-bingo-square:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: scale(1.05);
+}
+
+[data-theme="dark"] .glass-bingo-square:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/**
+ * Bingo square states
+ */
+.glass-bingo-square-unlocked {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.4), rgba(16, 185, 129, 0.6)) !important;
+  border: 3px solid rgb(16, 185, 129) !important;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.5) !important;
+}
+
+.glass-bingo-square-center {
+  background: linear-gradient(135deg, var(--glass-bg-elevated), var(--glass-game-warning));
+  border-color: var(--glass-border-strong);
+}
+
+/* =========================
+   GLASS PLAYER CARD
+   ========================= */
+
+/**
+ * Player card for multiplayer games
+ * Shows player name, avatar, score
+ */
+.glass-player-card {
+  background: var(--glass-bg-base);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: var(--glass-shadow);
+  transition: all 0.2s ease;
+}
+
+.glass-player-card-active {
+  background: var(--glass-bg-elevated);
+  border: 2px solid var(--glass-border-strong);
+  transform: scale(1.05);
+}
+
+/* =========================
+   UTILITY CLASSES
+   ========================= */
+
+/**
+ * Add glass effect to existing components
+ */
+.with-glass-bg {
+  background: var(--glass-bg-base);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+
+.with-glass-border {
+  border: 1px solid var(--glass-border);
+}
+
+.with-glass-shadow {
+  box-shadow: var(--glass-shadow);
+}
+
+/**
+ * Remove glass effect (useful for overrides)
+ */
+.no-glass {
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none;
+  box-shadow: none;
+}
+
+/* =========================
+   TEXT COLOR UTILITIES
+   ========================= */
+
+/**
+ * Theme-aware text colors for glass components
+ * Automatically adapt to light/dark theme
+ */
+.glass-text-primary {
+  color: var(--glass-text-primary);
+}
+
+.glass-text-secondary {
+  color: var(--glass-text-secondary);
+}
+
+.glass-text-tertiary {
+  color: var(--glass-text-tertiary);
+}
+
+.glass-text-muted {
+  color: var(--glass-text-muted);
+}
+
+/* =========================
+   ICON COLOR UTILITIES
+   ========================= */
+
+/**
+ * Theme-aware icon colors for glass components
+ * Use for icons, badges, and accent elements
+ */
+.glass-icon-primary {
+  color: var(--glass-icon-primary);
+}
+
+.glass-icon-accent {
+  color: var(--glass-icon-accent);
+}
+
+.glass-icon-success {
+  color: var(--glass-icon-success);
+}
+
+.glass-icon-warning {
+  color: var(--glass-icon-warning);
+}
+
+/* =========================
+   RESPONSIVE ADJUSTMENTS
+   ========================= */
+
+/**
+ * Reduce blur on mobile for better performance
+ */
+@media (max-width: 768px) {
+  .glass,
+  .glass-card,
+  .glass-panel,
+  .glass-modal,
+  .glass-game,
+  .glass-bingo-container,
+  .with-glass-bg {
+    backdrop-filter: var(--glass-blur-sm);
+    -webkit-backdrop-filter: var(--glass-blur-sm);
+  }
+}
+
+/**
+ * Disable glassmorphism for reduced motion preference
+ */
+@media (prefers-reduced-motion: reduce) {
+  .glass,
+  .glass-card,
+  .glass-panel,
+  .glass-modal,
+  .glass-game,
+  .glass-bingo-container,
+  .glass-player-card,
+  .with-glass-bg {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: var(--color-bg-elevated);
+  }
+}

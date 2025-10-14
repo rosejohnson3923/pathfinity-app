@@ -750,7 +750,24 @@ export class FillBlankGeneratorService {
     
     // If the question already has _____, we need to find what word should go there
     if (sourceText.includes('_____')) {
-      // Try to extract from explanation or other fields
+      // PRIORITY 1: Check if AI already provided correct_answer
+      if (aiQuestion.correct_answer &&
+          aiQuestion.correct_answer !== 'undefined' &&
+          aiQuestion.correct_answer !== 'answer') {
+        console.log('✅ Using AI-provided correct_answer for pre-blanked question:', aiQuestion.correct_answer);
+        return {
+          ...aiQuestion,
+          question: sourceText,
+          correct_answer: aiQuestion.correct_answer,
+          template: sourceText.replace('_____', '{{blank_0}}'),
+          blanks: [{
+            id: 'blank_0',
+            correctAnswers: this.generateAnswerVariations(aiQuestion.correct_answer)
+          }]
+        };
+      }
+
+      // PRIORITY 2: Try to extract from explanation or other fields
       if (aiQuestion.explanation) {
         const match = aiQuestion.explanation.match(/answer is[:\s]+['"]?([^'"\s,.]+)['"]?/i) ||
                      aiQuestion.explanation.match(/correct (?:answer|response) is[:\s]+['"]?([^'"\s,.]+)['"]?/i) ||
@@ -767,8 +784,8 @@ export class FillBlankGeneratorService {
           };
         }
       }
-      
-      // Can't determine answer, create a simple fallback
+
+      // PRIORITY 3: Can't determine answer, create a simple fallback
       console.error('⚠️ Cannot determine answer for pre-blanked question:', sourceText);
       const fallbackAnswer = 'answer'; // Better than [unknown] which breaks the UI
       return {
@@ -777,7 +794,7 @@ export class FillBlankGeneratorService {
         correct_answer: fallbackAnswer,
         template: sourceText.replace('_____', '{{blank_0}}'),
         blanks: [{
-          id: 'blank_0', 
+          id: 'blank_0',
           correctAnswers: [fallbackAnswer]
         }]
       };
@@ -849,6 +866,28 @@ export class FillBlankGeneratorService {
       options.add('run');
       options.add('running');
       options.add('walks');
+    }
+    // Common nouns and verbs used in community/career contexts
+    else if (lowerAnswer === 'work') {
+      options.add('play');
+      options.add('live');
+      options.add('help');
+    } else if (lowerAnswer === 'help' || lowerAnswer === 'helps') {
+      options.add('work');
+      options.add('play');
+      options.add('care');
+    } else if (lowerAnswer === 'hospital') {
+      options.add('school');
+      options.add('store');
+      options.add('park');
+    } else if (lowerAnswer === 'school') {
+      options.add('hospital');
+      options.add('home');
+      options.add('park');
+    } else if (lowerAnswer === 'together') {
+      options.add('alone');
+      options.add('separately');
+      options.add('apart');
     }
     // Subject-specific distractors
     else if (context?.toLowerCase().includes('math')) {

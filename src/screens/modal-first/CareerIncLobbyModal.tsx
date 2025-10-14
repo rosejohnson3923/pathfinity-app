@@ -10,6 +10,7 @@ import { azureAudioService } from '../../services/azureAudioService';
 import { useStudentProfile } from '../../hooks/useStudentProfile';
 import { useAuth } from '../../hooks/useAuth';
 import { useNarrative } from '../../contexts/NarrativeContext';
+import { DiscoveredLiveCard } from '../../components/discovered-live/DiscoveredLiveCard';
 import './CareerIncLobbyModal.css';
 
 interface CareerIncLobbyModalProps {
@@ -532,6 +533,18 @@ export const CareerIncLobbyModal: React.FC<CareerIncLobbyModalProps> = ({
             );
           })}
         </div>
+      </div>
+
+      {/* Discovered Live! Integration Card */}
+      <div style={{
+        maxWidth: '1200px',
+        margin: '3rem auto 2rem',
+        padding: '0 2rem'
+      }}>
+        <DiscoveredLiveCard
+          isUnlocked={true} // TODO: TESTING ONLY - Change back to: completedContainers.size === 3
+          completedContainers={completedContainers.size}
+        />
       </div>
 
       {/* Progress Overview */}
