@@ -177,15 +177,15 @@ export const DiscoveredLivePage: React.FC = () => {
 
     // ===== CHALLENGE ROOMS (20-30 min) =====
     {
-      id: 'ecg-challenge',
-      name: 'ECG Challenge Cards',
+      id: 'career-challenge',
+      name: 'Career Challenge',
       description: 'Strategic career exploration through challenge cards and skill building activities!',
       icon: <Target className="w-12 h-12" />,
-      playerCount: '2-4 players',
+      playerCount: '2-6 players',
       duration: '20-30 min',
       difficulty: 'Hard',
-      status: 'coming_soon',
-      route: '',
+      status: 'available',
+      route: '/discovered-live/career-challenge',
       category: 'challenge',
       badge: 'NEW'
     },

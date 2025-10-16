@@ -59,6 +59,9 @@ import { TestCareerProgressionDatabase } from './components/TestCareerProgressio
 import { DiscoveredLiveTestPage } from './pages/DiscoveredLiveTestPage';
 import { DiscoveredLivePage } from './pages/DiscoveredLivePage';
 import { CareerBingoLobbyPage } from './pages/CareerBingoLobbyPage';
+import { CareerChallengePage } from './pages/CareerChallengePage';
+import { ExecutiveDecisionRoom } from './pages/ExecutiveDecisionRoom';
+import TestAIGeneration from './components/CareerChallenge/TestAIGeneration';
 // Test components moved to Archive - commented out
 // import YouTubeTest from './test-youtube';
 // import NarrativeTest from './test-narrative';
@@ -125,6 +128,7 @@ function App() {
                   <Route path="/test/career-grade-level" element={<TestCareerSelectionWithGradeLevel />} />
                   <Route path="/test/career-database" element={<TestCareerProgressionDatabase />} />
                   <Route path="/test/discovered-live" element={<DiscoveredLiveTestPage />} />
+                  <Route path="/test/ai-generation" element={<TestAIGeneration />} />
                   {/* Test routes commented out - components moved to Archive
                   <Route path="/test/youtube" element={<YouTubeTest />} />
                   <Route path="/test/narrative" element={<NarrativeTest />} />
@@ -214,6 +218,16 @@ function App() {
                   <Route path="/discovered-live/career-bingo" element={
                     <ProtectedRoute>
                       <CareerBingoLobbyPage />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/discovered-live/career-challenge/*" element={
+                    <ProtectedRoute>
+                      <CareerChallengePage />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/executive-decision/room/:roomId" element={
+                    <ProtectedRoute>
+                      <ExecutiveDecisionRoom />
                     </ProtectedRoute>
                   } />
 
