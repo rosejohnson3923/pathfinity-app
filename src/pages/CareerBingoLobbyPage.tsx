@@ -17,13 +17,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Trophy, Zap, ArrowLeft, Grid3x3, Star, Clock, Users, Loader } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../contexts/AuthContext';
-import { MultiplayerGameRoom } from '../components/discovered-live/MultiplayerGameRoom';
+import { MultiplayerGameRoom, GameSummaryData } from '../components/discovered-live/MultiplayerGameRoom';
+import { BingoGameSummary } from '../components/discovered-live/BingoGameSummary';
 import { perpetualRoomManager } from '../services/PerpetualRoomManager';
 import { gameOrchestrator } from '../services/GameOrchestrator';
 import type { PerpetualRoom, GameSession, SessionParticipant } from '../types/DiscoveredLiveMultiplayerTypes';
 import '../design-system/index.css';
 
-type LobbyState = 'rules' | 'joining' | 'waiting' | 'playing';
+type LobbyState = 'rules' | 'joining' | 'waiting' | 'playing' | 'summary';
 
 export const CareerBingoLobbyPage: React.FC = () => {
   const navigate = useNavigate();
@@ -35,6 +36,7 @@ export const CareerBingoLobbyPage: React.FC = () => {
   const [myParticipant, setMyParticipant] = useState<SessionParticipant | null>(null);
   const [countdown, setCountdown] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
+  const [gameSummary, setGameSummary] = useState<GameSummaryData | null>(null);
 
   // Get user's career from sessionStorage (set during career selection)
   const getSessionCareer = () => {
@@ -67,11 +69,21 @@ export const CareerBingoLobbyPage: React.FC = () => {
     navigate('/discovered-live');
   };
 
-  const handleGameComplete = () => {
-    setLobbyState('rules');
+  const handleGameComplete = (summaryData: GameSummaryData) => {
+    console.log('🏁 [CareerBingoLobby] handleGameComplete called - showing summary');
+    setGameSummary(summaryData);
+    setLobbyState('summary');
+  };
+
+  const handlePlayAgain = () => {
+    setGameSummary(null);
     setSession(null);
     setMyParticipant(null);
-    // Could show results modal here
+    setLobbyState('rules');
+  };
+
+  const handleReturnToHub = () => {
+    navigate('/discovered-live');
   };
 
   /**
@@ -181,12 +193,20 @@ export const CareerBingoLobbyPage: React.FC = () => {
       setMyParticipant(me);
 
       // 3. Start game loop (question cycling)
-      console.log('🎮 Starting game loop for session:', newSession.id);
+      console.log('🎮 [CareerBingoLobby] Starting game loop for session:', newSession.id);
+      console.log('📊 [CareerBingoLobby] Session details:', {
+        totalQuestions: newSession.totalQuestions,
+        currentQuestionNumber: newSession.currentQuestionNumber,
+        bingoSlotsTotal: newSession.bingoSlotsTotal,
+        status: newSession.status
+      });
+
       gameOrchestrator.startGameLoop(newSession.id).catch(err => {
         console.error('Error in game loop:', err);
       });
 
       // 4. Enter game room
+      console.log('🚀 [CareerBingoLobby] Entering game room (lobbyState -> playing)');
       setLobbyState('playing');
 
     } catch (err) {
@@ -320,6 +340,22 @@ export const CareerBingoLobbyPage: React.FC = () => {
         myBingoCard={myParticipant.bingoCard}
         userName={userName}
         onComplete={handleGameComplete}
+      />
+    );
+  }
+
+  // If showing game summary
+  if (lobbyState === 'summary' && gameSummary) {
+    return (
+      <BingoGameSummary
+        playerResults={gameSummary.playerResults}
+        totalQuestions={gameSummary.totalQuestions}
+        userXPEarned={gameSummary.userXPEarned}
+        userAccuracy={gameSummary.userAccuracy}
+        userBingos={gameSummary.userBingos}
+        userMaxStreak={gameSummary.userMaxStreak}
+        onPlayAgain={handlePlayAgain}
+        onReturnToHub={handleReturnToHub}
       />
     );
   }

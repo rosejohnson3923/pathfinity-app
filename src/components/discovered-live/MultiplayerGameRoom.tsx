@@ -53,13 +53,32 @@ interface GameState {
   userAnswered: boolean;
 }
 
+export interface GameSummaryData {
+  playerResults: {
+    id: string;
+    name: string;
+    xp: number;
+    correct: number;
+    total: number;
+    bingos: number;
+    streak: number;
+    isCurrentUser: boolean;
+    rank: number;
+  }[];
+  totalQuestions: number;
+  userXPEarned: number;
+  userAccuracy: number;
+  userBingos: number;
+  userMaxStreak: number;
+}
+
 interface MultiplayerGameRoomProps {
   sessionId: string;
   roomId: string;
   myParticipantId: string;
   myBingoCard: { careers: string[][] }; // From database
   userName: string;
-  onComplete: () => void;
+  onComplete: (summaryData: GameSummaryData) => void;
 }
 
 export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
@@ -118,6 +137,12 @@ export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
    */
   const initializeGame = async () => {
     try {
+      console.log('🎮 [MultiplayerGameRoom] Initializing game...', {
+        sessionId,
+        roomId,
+        myParticipantId
+      });
+
       // Subscribe to WebSocket events for this room
       await discoveredLiveRealtimeService.subscribeToRoom(roomId, {
         question_started: handleQuestionAsked,
@@ -143,6 +168,8 @@ export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
         completedLines: [],
         userAnswered: false,
       };
+
+      console.log('📊 [MultiplayerGameRoom] Initial game state created');
 
       setGame(initialState);
       gameRef.current = initialState;
@@ -397,7 +424,8 @@ export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
    */
   const handleGameEnded = (event: any) => {
     const payload = event.data;
-    console.log('🏁 Game ended:', payload);
+    console.log('🏁 [MultiplayerGameRoom] Game ended event received:', payload);
+    console.log('📊 [MultiplayerGameRoom] Current game state:', game);
 
     setGame(prev => prev ? { ...prev, running: false } : null);
 
@@ -408,8 +436,56 @@ export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
       origin: { y: 0.6 }
     });
 
-    // Call completion after delay
-    setTimeout(() => onComplete(), 3000);
+    console.log('⏰ [MultiplayerGameRoom] Will call onComplete() in 3 seconds');
+
+    // Prepare summary data
+    setTimeout(() => {
+      const g = gameRef.current;
+      if (!g) {
+        console.error('❌ No game state available for summary');
+        onComplete({
+          playerResults: [],
+          totalQuestions: 20,
+          userXPEarned: 0,
+          userAccuracy: 0,
+          userBingos: 0,
+          userMaxStreak: 0
+        });
+        return;
+      }
+
+      // Sort players by XP (descending) and assign ranks
+      const sortedPlayers = [...g.players].sort((a, b) => b.xp - a.xp);
+      const playerResults = sortedPlayers.map((player, index) => ({
+        id: player.id,
+        name: player.name,
+        xp: player.xp,
+        correct: player.correct,
+        total: g.questionNumber, // Total questions asked
+        bingos: player.bingos,
+        streak: player.streak,
+        isCurrentUser: player.isCurrentUser || false,
+        rank: index + 1
+      }));
+
+      // Get current user stats
+      const currentUser = g.players.find(p => p.isCurrentUser);
+      const userCorrect = currentUser?.correct || 0;
+      const userAccuracy = g.questionNumber > 0 ? Math.round((userCorrect / g.questionNumber) * 100) : 0;
+
+      const summaryData: GameSummaryData = {
+        playerResults,
+        totalQuestions: g.questionNumber,
+        userXPEarned: currentUser?.xp || 0,
+        userAccuracy,
+        userBingos: currentUser?.bingos || 0,
+        userMaxStreak: currentUser?.streak || 0
+      };
+
+      console.log('📊 [MultiplayerGameRoom] Summary data prepared:', summaryData);
+      console.log('👋 [MultiplayerGameRoom] Calling onComplete() with summary');
+      onComplete(summaryData);
+    }, 3000);
   };
 
   /**
