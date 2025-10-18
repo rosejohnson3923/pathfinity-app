@@ -75,6 +75,11 @@ export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
   const [careerDetails, setCareerDetails] = useState<Map<string, { careerName: string; icon: string; }>>(new Map());
   const gameRef = useRef<GameState | null>(null);
 
+  // XP notification state
+  const [showXPNotification, setShowXPNotification] = useState(false);
+  const [lastXPAwarded, setLastXPAwarded] = useState(0);
+  const [xpNotificationType, setXPNotificationType] = useState<'success' | 'error'>('success');
+
   // Initialize game on mount
   useEffect(() => {
     initializeGame();
@@ -493,16 +498,27 @@ export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
         responseTime
       );
 
-      // Show immediate feedback
+      // Show immediate feedback with XP notification
       if (result.isCorrect) {
-        // Success feedback (WebSocket will handle the rest)
+        // Success feedback with floating XP notification
         console.log('✅ Correct answer!');
+
+        const xpEarned = result.xpEarned || 10;
+        setLastXPAwarded(xpEarned);
+        setXPNotificationType('success');
+        setShowXPNotification(true);
+        setTimeout(() => setShowXPNotification(false), 2000);
 
         // Mark this question as answered for current user
         setGame(prev => prev ? { ...prev, userAnswered: true } : null);
       } else {
-        // Error feedback - user can try again with a different square
+        // Error feedback with floating XP notification - user can try again with a different square
         console.log('❌ Incorrect answer - try another square');
+
+        setLastXPAwarded(-5);
+        setXPNotificationType('error');
+        setShowXPNotification(true);
+        setTimeout(() => setShowXPNotification(false), 2000);
       }
     } catch (error) {
       console.error('Error processing click:', error);
@@ -586,7 +602,7 @@ export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
         {/* Game Grid */}
         <div className="flex flex-col lg:flex-row gap-4">
           {/* Left Column - Question & Bingo Grid */}
-          <div className="flex-1 space-y-4">
+          <div className="flex-1 space-y-4 min-w-[500px]">
             {/* Question Display */}
             {game.currentClue && (
               <QuestionDisplayCard
@@ -638,6 +654,29 @@ export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Floating XP Notification */}
+      {showXPNotification && (
+        <div style={{
+          position: 'fixed',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          padding: '16px 32px',
+          backgroundColor: xpNotificationType === 'success' ? 'rgba(72, 187, 120, 0.95)' : 'rgba(239, 68, 68, 0.95)',
+          color: 'white',
+          borderRadius: '12px',
+          fontSize: '24px',
+          fontWeight: 'bold',
+          zIndex: 10000,
+          boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+          animation: 'xpPop 0.5s ease-out',
+          textAlign: 'center'
+        }}>
+          <div style={{ marginBottom: '4px' }}>{xpNotificationType === 'success' ? '⭐' : '❌'}</div>
+          <div>{xpNotificationType === 'success' ? '+' : ''}{lastXPAwarded} XP</div>
+        </div>
+      )}
     </div>
   );
 };

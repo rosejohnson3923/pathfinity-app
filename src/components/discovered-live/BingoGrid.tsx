@@ -73,7 +73,7 @@ export const BingoGrid: React.FC<BingoGridProps> = ({
 
   return (
     <div className="glass-bingo-container w-full">
-      <div className="grid grid-cols-5 gap-1 w-full" style={{ gridTemplateColumns: 'repeat(5, minmax(0, 1fr))' }}>
+      <div className="grid gap-1.5 w-full" style={{ gridTemplateColumns: 'repeat(5, minmax(0, 1fr))' }}>
         {grid.map((rowCareers, row) =>
           rowCareers.map((careerCode, col) => {
             const idx = row * 5 + col;
@@ -95,7 +95,7 @@ export const BingoGrid: React.FC<BingoGridProps> = ({
                   text-center
                   ${isCenter ? 'glass-bingo-square-center' : ''}
                   ${isUnlocked ? 'glass-bingo-square-unlocked' : ''}
-                  ${!isUnlocked && !disabled ? 'cursor-pointer hover:brightness-110' : 'cursor-default'}
+                  ${!isUnlocked && !disabled ? 'cursor-pointer' : 'cursor-default'}
                 `}
                 initial={{ opacity: 0, scale: 0 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -103,42 +103,45 @@ export const BingoGrid: React.FC<BingoGridProps> = ({
                 whileHover={!isUnlocked && !disabled ? { scale: 1.05 } : {}}
                 title={careerName}
               >
-                {/* Career Icon - EXTRA LARGE */}
-                <div className={`text-6xl ${!isUnlocked && !isCenter ? 'opacity-90' : ''}`}>
-                  {icon}
-                </div>
+                {/* Content wrapper - positioned above background and overlay */}
+                <div className="relative z-10 flex flex-col items-center justify-center">
+                  {/* Career Icon - EXTRA LARGE */}
+                  <div className={`text-6xl ${!isUnlocked && !isCenter ? 'opacity-90' : ''}`}>
+                    {icon}
+                  </div>
 
-                {/* Career Name - LARGER */}
-                <div
-                  className={`text-base font-bold leading-tight mt-1 ${
-                    isUnlocked || isCenter
-                      ? 'text-white drop-shadow-md'
-                      : 'text-white/90 drop-shadow-md'
-                  }`}
-                  style={{
-                    maxWidth: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    whiteSpace: 'normal'
-                  }}
-                >
-                  {careerName}
-                </div>
-
-                {/* Center Star Badge */}
-                {isCenter && (
-                  <motion.div
-                    className="text-base mt-1 text-yellow-300 font-black drop-shadow-lg"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 0.5, type: 'spring' }}
+                  {/* Career Name - LARGER */}
+                  <div
+                    className={`text-base font-bold leading-tight mt-1 ${
+                      isUnlocked || isCenter
+                        ? 'text-white drop-shadow-md'
+                        : 'text-white/90 drop-shadow-md'
+                    }`}
+                    style={{
+                      maxWidth: '100%',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
+                      whiteSpace: 'normal'
+                    }}
                   >
-                    ⭐ FREE
-                  </motion.div>
-                )}
+                    {careerName}
+                  </div>
+
+                  {/* Center Star Badge */}
+                  {isCenter && (
+                    <motion.div
+                      className="text-base mt-1 text-yellow-300 font-black drop-shadow-lg"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.5, type: 'spring' }}
+                    >
+                      ⭐ FREE
+                    </motion.div>
+                  )}
+                </div>
               </motion.button>
             );
           })

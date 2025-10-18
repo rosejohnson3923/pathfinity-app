@@ -132,7 +132,23 @@ export const DiscoveredLivePage: React.FC = () => {
 
   // Get user info
   const userName = user?.full_name?.split(' ')[0] || user?.email?.split('@')[0] || 'Player';
-  const userCareer = 'Teacher'; // TODO: Get from user session
+
+  // Get user's career from sessionStorage (set during career selection)
+  const getSessionCareer = () => {
+    const storedCareer = sessionStorage.getItem('selectedCareer');
+    if (storedCareer) {
+      try {
+        const parsed = JSON.parse(storedCareer);
+        return parsed.career || parsed.name || 'Explorer';
+      } catch {
+        // If not JSON, treat as plain string
+        return storedCareer;
+      }
+    }
+    return 'Explorer'; // Default fallback
+  };
+
+  const userCareer = getSessionCareer();
 
   // Available games in Discovered Live! Arcade
   const games: GameCardData[] = [
@@ -176,6 +192,19 @@ export const DiscoveredLivePage: React.FC = () => {
     },
 
     // ===== CHALLENGE ROOMS (20-30 min) =====
+    {
+      id: 'career-challenge-multiplayer',
+      name: 'Career Challenge MP',
+      description: 'Drop into 24/7 perpetual rooms! Play 5-round games with continuous matchmaking!',
+      icon: <Users className="w-12 h-12" />,
+      playerCount: '2-8 players',
+      duration: '5 rounds',
+      difficulty: 'Medium',
+      status: 'available',
+      route: '/discovered-live/career-challenge-multiplayer',
+      category: 'challenge',
+      badge: 'LIVE'
+    },
     {
       id: 'career-challenge',
       name: 'Career Challenge',
