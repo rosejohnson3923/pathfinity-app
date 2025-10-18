@@ -60,6 +60,7 @@ import { DiscoveredLiveTestPage } from './pages/DiscoveredLiveTestPage';
 import { DiscoveredLivePage } from './pages/DiscoveredLivePage';
 import { CareerBingoLobbyPage } from './pages/CareerBingoLobbyPage';
 import { CareerChallengePage } from './pages/CareerChallengePage';
+import { CCMPage } from './pages/CCMPage';
 import { ExecutiveDecisionRoom } from './pages/ExecutiveDecisionRoom';
 import TestAIGeneration from './components/CareerChallenge/TestAIGeneration';
 // Test components moved to Archive - commented out
@@ -223,6 +224,11 @@ function App() {
                   <Route path="/discovered-live/career-challenge/*" element={
                     <ProtectedRoute>
                       <CareerChallengePage />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/discovered-live/career-challenge-multiplayer" element={
+                    <ProtectedRoute>
+                      <CCMPage />
                     </ProtectedRoute>
                   } />
                   <Route path="/executive-decision/room/:roomId" element={
