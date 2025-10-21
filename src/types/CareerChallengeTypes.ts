@@ -958,6 +958,7 @@ export interface SolutionCard {
   leadershipImpacts: Partial<SixCs>;
   realWorldExample?: string;
   learningPoint?: string;
+  rationale?: string; // AI-generated explanation of why this solution is perfect/imperfect
 }
 
 /**

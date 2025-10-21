@@ -269,7 +269,7 @@ const ExecutiveDecisionRoom: React.FC = () => {
     if (roomId) {
       companyRoomService.unsubscribeFromRoom(roomId);
     }
-    navigate('/discovered-live/career-challenge-multiplayer');
+    navigate('/discovered-live');
   };
 
   if (loading) {
@@ -290,10 +290,10 @@ const ExecutiveDecisionRoom: React.FC = () => {
           <AlertCircle className="w-12 h-12 mx-auto mb-4 text-red-500" />
           <p>Room not found</p>
           <button
-            onClick={() => navigate('/discovered-live/career-challenge-multiplayer')}
+            onClick={() => navigate('/discovered-live')}
             className="mt-4 px-4 py-2 bg-purple-600 rounded-lg hover:bg-purple-700"
           >
-            Back to Rooms
+            Back to Lobby
           </button>
         </div>
       </div>
@@ -419,7 +419,7 @@ const ExecutiveDecisionRoom: React.FC = () => {
               <ExecutiveResultsScreen
                 results={gameResults}
                 onPlayAgain={handlePlayAgain}
-                onBackToLobby={() => navigate('/discovered-live/career-challenge-multiplayer')}
+                onBackToLobby={() => navigate('/discovered-live')}
               />
             )}
           </div>

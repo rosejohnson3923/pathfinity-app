@@ -174,7 +174,7 @@ const ExecutiveResultsScreen: React.FC<ExecutiveResultsScreenProps> = ({
           <Target className="w-5 h-5 mr-2 text-green-400" />
           Solution Analysis
         </h3>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4 mb-6">
           <div className="bg-green-900/20 border border-green-500/30 rounded-lg p-4">
             <div className="flex items-center justify-between mb-2">
               <span className="font-semibold text-green-400">Perfect Solutions</span>
@@ -193,7 +193,46 @@ const ExecutiveResultsScreen: React.FC<ExecutiveResultsScreenProps> = ({
           </div>
         </div>
 
-        <div className="mt-4 p-3 bg-yellow-900/20 border border-yellow-500/30 rounded-lg">
+        {/* Your Selected Solutions */}
+        <div className="mb-4">
+          <h4 className="font-semibold text-gray-300 mb-3 flex items-center">
+            <Star className="w-4 h-4 mr-2" />
+            Your Selected Solutions
+          </h4>
+          <div className="space-y-3">
+            {results.selectedSolutions.map((solution, index) => {
+              const isPerfect = results.perfectSolutions.some(ps => ps.id === solution.id);
+              return (
+                <div
+                  key={`selected-${solution.id || index}`}
+                  className={`p-4 rounded-lg border-l-4 ${
+                    isPerfect
+                      ? 'bg-green-900/20 border-green-500'
+                      : 'bg-red-900/20 border-red-500'
+                  }`}
+                >
+                  <div className="flex items-start gap-2 mb-2">
+                    {isPerfect ? (
+                      <CheckCircle className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
+                    ) : (
+                      <XCircle className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
+                    )}
+                    <div className="flex-1">
+                      <p className="text-sm text-gray-200">{solution.content}</p>
+                      {solution.rationale && (
+                        <p className="text-xs text-gray-400 mt-2 italic">
+                          <span className="font-semibold">Rationale:</span> {solution.rationale}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="p-3 bg-yellow-900/20 border border-yellow-500/30 rounded-lg">
           <p className="text-sm text-yellow-400">
             <Info className="w-4 h-4 inline mr-1" />
             Executive lens {results.selectedExecutive} {
