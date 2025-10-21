@@ -44,12 +44,17 @@ interface GameCardProps {
 }
 
 const GameCard: React.FC<GameCardProps> = ({ game, index, onPlay, onShowRules }) => {
+  // Category-specific styling
+  const categoryStyles = game.category === 'quick_play'
+    ? 'border-l-4 border-green-500/50 hover:border-green-500 hover:shadow-xl hover:shadow-green-500/20'
+    : 'border-l-4 border-purple-500/50 hover:border-purple-500 hover:shadow-xl hover:shadow-purple-500/20';
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
-      className={`glass-card group relative ${
+      className={`glass-card group relative ${categoryStyles} ${
         game.status === 'coming_soon' ? 'opacity-60' : 'hover:scale-[1.02]'
       } transition-all duration-200`}
     >
@@ -58,10 +63,10 @@ const GameCard: React.FC<GameCardProps> = ({ game, index, onPlay, onShowRules })
         <div className="absolute top-4 right-4 z-10">
           <span className={`text-[10px] font-bold px-2 py-1 rounded-full ${
             game.badge === 'LIVE'
-              ? 'bg-green-500 text-white animate-pulse'
+              ? 'bg-green-500 text-white animate-pulse shadow-lg shadow-green-500/50'
               : game.badge === 'NEW'
-              ? 'bg-purple-500 text-white'
-              : 'bg-orange-500 text-white'
+              ? 'bg-purple-500 text-white shadow-lg shadow-purple-500/50'
+              : 'bg-orange-500 text-white shadow-lg shadow-orange-500/50'
           }`}>
             {game.badge}
           </span>
@@ -70,10 +75,12 @@ const GameCard: React.FC<GameCardProps> = ({ game, index, onPlay, onShowRules })
 
       {/* Game Icon */}
       <div className="flex items-center justify-center mb-4">
-        <div className={`glass-game p-6 rounded-2xl ${
+        <div className={`p-6 rounded-2xl ${
           game.status === 'available'
-            ? 'glass-icon-primary'
-            : 'glass-text-muted'
+            ? game.category === 'quick_play'
+              ? 'bg-gradient-to-br from-cyan-500/20 to-green-500/20 glass-icon-primary'
+              : 'bg-gradient-to-br from-purple-500/20 to-pink-500/20 glass-icon-primary'
+            : 'glass-game glass-text-muted'
         }`}>
           {game.icon}
         </div>
@@ -121,8 +128,8 @@ const GameCard: React.FC<GameCardProps> = ({ game, index, onPlay, onShowRules })
             Play Now
           </motion.button>
 
-          {/* Show Rules button for Career Bingo and Career Challenge MP */}
-          {(game.id === 'career-bingo' || game.id === 'career-challenge-multiplayer') && onShowRules && (
+          {/* Show Rules button for Career Bingo, CEO Takeover, and The Decision Desk */}
+          {(game.id === 'career-bingo' || game.id === 'career-challenge-multiplayer' || game.id === 'decision-desk') && onShowRules && (
             <button
               onClick={() => onShowRules(game)}
               className="w-full glass-subtle hover:glass-hover text-center py-2 px-4 rounded-lg font-medium flex items-center justify-center gap-2 glass-text-secondary transition-all"
@@ -226,17 +233,17 @@ export const DiscoveredLivePage: React.FC = () => {
       badge: 'LIVE'
     },
     {
-      id: 'career-challenge',
-      name: 'Company Rescue',
-      description: 'Become a strategic business consultant! Fix failing businesses, guide epic turnarounds, and power up your entrepreneurial skills',
+      id: 'decision-desk',
+      name: 'The Decision Desk',
+      description: 'Step into the C-Suite! Face live business scenarios, choose the right executive for the job, and master decision-making with AI-powered leadership analysis',
       icon: <Target className="w-12 h-12" />,
-      playerCount: '2-6 players',
+      playerCount: '1-4 players',
       duration: '20-30 min',
       difficulty: 'Hard',
       status: 'available',
       route: '/discovered-live/career-challenge',
       category: 'challenge',
-      badge: 'NEW'
+      badge: 'LIVE'
     },
     {
       id: 'skill-showdown',
@@ -372,23 +379,31 @@ export const DiscoveredLivePage: React.FC = () => {
 
         {/* Stats Cards */}
         <div className="grid md:grid-cols-4 gap-4 mb-8">
-          <div className="glass-game text-center p-6">
-            <Trophy className="w-8 h-8 glass-icon-accent mx-auto mb-2" />
+          <div className="glass-game text-center p-6 border-t-2 border-yellow-500/50 hover:border-yellow-500 transition-colors">
+            <div className="inline-flex p-2 bg-gradient-to-br from-yellow-500/20 to-orange-500/20 rounded-lg mb-2">
+              <Trophy className="w-8 h-8 text-yellow-400" />
+            </div>
             <div className="text-2xl font-bold glass-text-primary mb-1">0</div>
             <div className="glass-text-tertiary text-sm">Games Played</div>
           </div>
-          <div className="glass-game text-center p-6">
-            <Zap className="w-8 h-8 glass-icon-primary mx-auto mb-2" />
+          <div className="glass-game text-center p-6 border-t-2 border-blue-500/50 hover:border-blue-500 transition-colors">
+            <div className="inline-flex p-2 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-lg mb-2">
+              <Zap className="w-8 h-8 text-blue-400" />
+            </div>
             <div className="text-2xl font-bold glass-text-primary mb-1">0</div>
             <div className="glass-text-tertiary text-sm">Total XP</div>
           </div>
-          <div className="glass-game text-center p-6">
-            <Star className="w-8 h-8 glass-icon-primary mx-auto mb-2" />
+          <div className="glass-game text-center p-6 border-t-2 border-purple-500/50 hover:border-purple-500 transition-colors">
+            <div className="inline-flex p-2 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-lg mb-2">
+              <Star className="w-8 h-8 text-purple-400" />
+            </div>
             <div className="text-2xl font-bold glass-text-primary mb-1">-</div>
             <div className="glass-text-tertiary text-sm">Rank</div>
           </div>
-          <div className="glass-game text-center p-6">
-            <TrendingUp className="w-8 h-8 glass-icon-success mx-auto mb-2" />
+          <div className="glass-game text-center p-6 border-t-2 border-green-500/50 hover:border-green-500 transition-colors">
+            <div className="inline-flex p-2 bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-lg mb-2">
+              <TrendingUp className="w-8 h-8 text-green-400" />
+            </div>
             <div className="text-2xl font-bold glass-text-primary mb-1">0%</div>
             <div className="glass-text-tertiary text-sm">Win Rate</div>
           </div>
@@ -397,11 +412,14 @@ export const DiscoveredLivePage: React.FC = () => {
         {/* Quick Play Section */}
         <div className="mb-12">
           <div className="flex items-center gap-3 mb-6">
-            <Zap className="w-8 h-8 glass-icon-accent" />
-            <div>
+            <div className="p-3 bg-gradient-to-br from-green-500/20 to-cyan-500/20 rounded-xl">
+              <Zap className="w-8 h-8 text-green-400" />
+            </div>
+            <div className="flex-1">
               <h3 className="text-3xl font-bold glass-text-primary">Quick Play</h3>
               <p className="glass-text-tertiary text-sm">Fast-paced games • 5-10 minutes • Jump in anytime</p>
             </div>
+            <div className="hidden md:block flex-1 h-1 bg-gradient-to-r from-green-500/50 to-transparent rounded-full"></div>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {quickPlayGames.map((game, index) => (
@@ -413,11 +431,14 @@ export const DiscoveredLivePage: React.FC = () => {
         {/* Challenge Rooms Section */}
         <div>
           <div className="flex items-center gap-3 mb-6">
-            <Target className="w-8 h-8 glass-icon-primary" />
-            <div>
+            <div className="p-3 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl">
+              <Target className="w-8 h-8 text-purple-400" />
+            </div>
+            <div className="flex-1">
               <h3 className="text-3xl font-bold glass-text-primary">Challenge Rooms</h3>
               <p className="glass-text-tertiary text-sm">Strategy & teamwork • 20-40 minutes • Deep learning</p>
             </div>
+            <div className="hidden md:block flex-1 h-1 bg-gradient-to-r from-purple-500/50 to-transparent rounded-full"></div>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {challengeGames.map((game, index) => (
@@ -925,6 +946,226 @@ export const DiscoveredLivePage: React.FC = () => {
                 <Play className="w-5 h-5" fill="currentColor" />
                 Ready to Play!
               </motion.button>
+                </>
+              )}
+
+              {/* The Decision Desk Rules */}
+              {selectedGameForRules.id === 'decision-desk' && (
+                <>
+                  {/* Game Overview */}
+                  <div className="mb-6">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Sparkles className="w-5 h-5 glass-icon-accent" />
+                      <h3 className="text-xl font-bold glass-text-primary">Game Overview</h3>
+                    </div>
+                    <p className="glass-text-secondary leading-relaxed">
+                      Welcome to <span className="font-bold glass-text-primary">The Decision Desk</span>! Step into the C-Suite and face real business challenges powered by <span className="font-bold glass-text-primary">live AI</span>. Choose the right executive, select the best solutions, and receive personalized leadership analysis based on the <span className="font-bold glass-text-primary">6 C's of Leadership</span> framework!
+                    </p>
+                  </div>
+
+                  {/* Game Flow */}
+                  <div className="mb-6">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Play className="w-5 h-5 glass-icon-primary" />
+                      <h3 className="text-xl font-bold glass-text-primary">How to Play</h3>
+                    </div>
+
+                    <div className="space-y-3">
+                      {/* Step 1 */}
+                      <div className="glass-subtle p-4 rounded-lg">
+                        <div className="flex items-start gap-3">
+                          <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
+                            1
+                          </div>
+                          <div>
+                            <h4 className="font-bold glass-text-primary mb-1 flex items-center gap-2">
+                              <AlertCircle className="w-4 h-4" />
+                              Face a Live Business Scenario
+                            </h4>
+                            <p className="glass-text-secondary text-sm">
+                              AI generates a unique business challenge in real-time - it could be a <span className="font-bold text-red-400">Crisis</span>, <span className="font-bold text-yellow-400">Risk</span>, or <span className="font-bold text-green-400">Opportunity</span>. Each scenario is different and tailored to your grade level!
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Step 2 */}
+                      <div className="glass-subtle p-4 rounded-lg">
+                        <div className="flex items-start gap-3">
+                          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
+                            2
+                          </div>
+                          <div>
+                            <h4 className="font-bold glass-text-primary mb-1 flex items-center gap-2">
+                              <Users className="w-4 h-4" />
+                              Choose the Right Executive
+                            </h4>
+                            <p className="glass-text-secondary text-sm mb-2">
+                              Select which C-Suite executive is best suited to handle this challenge:
+                            </p>
+                            <div className="grid grid-cols-2 gap-2 text-xs">
+                              <div className="glass-game p-2 rounded">👔 <span className="font-semibold">CMO</span> - Marketing Leader</div>
+                              <div className="glass-game p-2 rounded">💰 <span className="font-semibold">CFO</span> - Financial Expert</div>
+                              <div className="glass-game p-2 rounded">🤝 <span className="font-semibold">CHRO</span> - People Champion</div>
+                              <div className="glass-game p-2 rounded">⚙️ <span className="font-semibold">COO</span> - Operations Master</div>
+                              <div className="glass-game p-2 rounded">💻 <span className="font-semibold">CTO</span> - Tech Innovator</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Step 3 */}
+                      <div className="glass-subtle p-4 rounded-lg">
+                        <div className="flex items-start gap-3">
+                          <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
+                            3
+                          </div>
+                          <div>
+                            <h4 className="font-bold glass-text-primary mb-1 flex items-center gap-2">
+                              <Brain className="w-4 h-4" />
+                              Select Solutions with Executive Lens
+                            </h4>
+                            <p className="glass-text-secondary text-sm">
+                              Review AI-generated solutions through your chosen executive's <span className="font-bold text-purple-400">"lens"</span>. Each executive sees solutions differently based on their expertise and biases. Choose the <span className="font-bold text-green-400">perfect solutions</span> while avoiding <span className="font-bold text-red-400">flawed ones</span>!
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Step 4 */}
+                      <div className="glass-subtle p-4 rounded-lg border-2 border-yellow-500/30">
+                        <div className="flex items-start gap-3">
+                          <div className="w-8 h-8 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
+                            4
+                          </div>
+                          <div>
+                            <h4 className="font-bold glass-text-primary mb-1 flex items-center gap-2">
+                              <Award className="w-4 h-4" />
+                              Receive Leadership Analysis
+                            </h4>
+                            <p className="glass-text-secondary text-sm">
+                              Get personalized AI analysis on your decision-making based on the <span className="font-bold text-yellow-400">6 C's of Leadership</span>. Discover your leadership strengths, areas for growth, and career recommendations based on your decision patterns!
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* The 6 C's of Leadership */}
+                  <div className="mb-6">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Star className="w-5 h-5 glass-icon-accent" />
+                      <h3 className="text-xl font-bold glass-text-primary">The 6 C's of Leadership</h3>
+                    </div>
+
+                    <p className="glass-text-secondary text-sm mb-3">
+                      Your decisions are evaluated using this leadership framework:
+                    </p>
+
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="glass-subtle p-3 rounded-lg">
+                        <div className="font-bold glass-text-primary text-sm mb-1">💎 Character</div>
+                        <div className="glass-text-tertiary text-xs">Making ethical choices with integrity</div>
+                      </div>
+                      <div className="glass-subtle p-3 rounded-lg">
+                        <div className="font-bold glass-text-primary text-sm mb-1">🎯 Competence</div>
+                        <div className="glass-text-tertiary text-xs">Business acumen and solution quality</div>
+                      </div>
+                      <div className="glass-subtle p-3 rounded-lg">
+                        <div className="font-bold glass-text-primary text-sm mb-1">💬 Communication</div>
+                        <div className="glass-text-tertiary text-xs">Understanding stakeholder needs</div>
+                      </div>
+                      <div className="glass-subtle p-3 rounded-lg">
+                        <div className="font-bold glass-text-primary text-sm mb-1">❤️ Compassion</div>
+                        <div className="glass-text-tertiary text-xs">People-focused considerations</div>
+                      </div>
+                      <div className="glass-subtle p-3 rounded-lg">
+                        <div className="font-bold glass-text-primary text-sm mb-1">🔥 Commitment</div>
+                        <div className="glass-text-tertiary text-xs">Follow-through and dedication</div>
+                      </div>
+                      <div className="glass-subtle p-3 rounded-lg">
+                        <div className="font-bold glass-text-primary text-sm mb-1">💪 Confidence</div>
+                        <div className="glass-text-tertiary text-xs">Decisiveness and conviction</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Executive Lens Bias */}
+                  <div className="mb-6">
+                    <div className="glass-accent p-4 rounded-lg border-l-4 border-purple-500">
+                      <div className="flex items-start gap-3">
+                        <Info className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
+                        <div>
+                          <h4 className="font-bold glass-text-primary mb-1">💡 Executive Lens Bias</h4>
+                          <p className="glass-text-secondary text-sm">
+                            Each executive role has unique perspectives and blind spots! A CFO might see financial benefits but miss cultural impacts. A CHRO might prioritize people but overlook operational efficiency. Learning to recognize these biases is key to becoming a well-rounded leader!
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Winning & Scoring */}
+                  <div className="mb-6">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Trophy className="w-5 h-5 glass-icon-accent" />
+                      <h3 className="text-xl font-bold glass-text-primary">Scoring & Growth</h3>
+                    </div>
+                    <div className="glass-subtle p-4 rounded-lg space-y-2">
+                      <div className="flex justify-between items-center text-sm">
+                        <span className="glass-text-secondary">Choose Optimal Executive:</span>
+                        <span className="font-bold text-green-500">Bonus Points</span>
+                      </div>
+                      <div className="flex justify-between items-center text-sm">
+                        <span className="glass-text-secondary">Select Perfect Solutions:</span>
+                        <span className="font-bold text-blue-500">+20 points each</span>
+                      </div>
+                      <div className="flex justify-between items-center text-sm">
+                        <span className="glass-text-secondary">Select Imperfect Solutions:</span>
+                        <span className="font-bold text-yellow-500">+10 points each</span>
+                      </div>
+                      <div className="flex justify-between items-center text-sm">
+                        <span className="glass-text-secondary">Decision Speed Bonus:</span>
+                        <span className="font-bold text-purple-500">Up to +50 points</span>
+                      </div>
+                      <div className="flex justify-between items-center text-sm border-t border-white/10 pt-2 mt-2">
+                        <span className="glass-text-primary font-semibold">Career Recommendations:</span>
+                        <span className="font-bold text-yellow-400">Personalized AI Insights</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Pro Tips */}
+                  <div className="glass-accent p-4 rounded-lg">
+                    <h4 className="font-bold glass-text-primary mb-2 flex items-center gap-2">
+                      <Zap className="w-4 h-4 glass-icon-accent" />
+                      Pro Tips
+                    </h4>
+                    <ul className="space-y-1.5 text-sm glass-text-secondary">
+                      <li>• Read the scenario carefully - the best executive depends on the core problem!</li>
+                      <li>• Each executive has biases - don't trust their lens blindly</li>
+                      <li>• Perfect solutions address ALL stakeholders, not just one group</li>
+                      <li>• Balance speed with thoughtfulness - rushing leads to mistakes</li>
+                      <li>• Use the 6 C's feedback to improve your leadership skills over time</li>
+                      <li>• Every scenario is unique thanks to live AI generation!</li>
+                    </ul>
+                  </div>
+
+                  {/* Play Button */}
+                  <motion.button
+                    onClick={() => {
+                      setShowRulesModal(false);
+                      setSelectedGameForRules(null);
+                      navigate(selectedGameForRules.route);
+                    }}
+                    className="w-full mt-6 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold py-4 px-6 rounded-xl shadow-lg flex items-center justify-center gap-2"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <Play className="w-5 h-5" fill="currentColor" />
+                    Ready to Lead!
+                  </motion.button>
                 </>
               )}
             </motion.div>
