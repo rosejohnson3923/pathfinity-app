@@ -42,6 +42,7 @@ import { scenarioManager } from './ScenarioManager';
 import { lensEffectEngine } from './LensEffectEngine';
 import { leadershipAnalyzer } from './LeadershipAnalyzer';
 import { executiveDecisionAIService } from './ExecutiveDecisionAIService';
+import { aiPlayerPoolService } from './AIPlayerPoolService';
 
 class CareerChallengeService {
   private static instance: CareerChallengeService;
@@ -1285,6 +1286,77 @@ class CareerChallengeService {
       .eq('id', roomId);
 
     return true;
+  }
+
+  /**
+   * Populate room with AI players from centralized pool
+   * Uses AIPlayerPoolService to ensure consistent AI player names across all games
+   */
+  async populateRoomWithAIPlayers(
+    roomId: string,
+    targetPlayerCount: number = 4
+  ): Promise<void> {
+    if (!this.client) await this.initialize();
+
+    try {
+      // Get current player count in room
+      const { data: room } = await this.client
+        .from('cc_company_rooms')
+        .select('current_players, max_players')
+        .eq('id', roomId)
+        .single();
+
+      if (!room) {
+        console.error('Room not found:', roomId);
+        return;
+      }
+
+      const currentPlayerCount = room.current_players || 0;
+      const maxPlayers = Math.min(targetPlayerCount, room.max_players);
+      const aiPlayersNeeded = maxPlayers - currentPlayerCount;
+
+      if (aiPlayersNeeded <= 0) {
+        console.log(`[Room ${roomId}] Already has ${currentPlayerCount} players, no AI needed`);
+        return;
+      }
+
+      console.log(`[Room ${roomId}] Adding ${aiPlayersNeeded} AI players (current: ${currentPlayerCount}, target: ${maxPlayers})`);
+
+      // Get AI players from centralized pool
+      const aiPlayers = aiPlayerPoolService.getRandomPlayers(aiPlayersNeeded, roomId);
+
+      // Add each AI player to cc_game_session_players table
+      for (let i = 0; i < aiPlayers.length; i++) {
+        const aiPlayer = aiPlayers[i];
+
+        const { error } = await this.client
+          .from('cc_game_session_players')
+          .insert({
+            session_id: null,
+            room_id: roomId,
+            player_id: aiPlayer.id,
+            display_name: aiPlayer.name,
+            is_ready: true,
+            is_host: false,
+            is_active: true,
+            join_order: currentPlayerCount + i + 1
+          });
+
+        if (error) {
+          console.error(`Error adding AI player ${aiPlayer.name}:`, error);
+        }
+      }
+
+      // Update room player count
+      await this.client
+        .from('cc_company_rooms')
+        .update({ current_players: currentPlayerCount + aiPlayers.length })
+        .eq('id', roomId);
+
+      console.log(`✅ Added ${aiPlayers.length} AI players to room:`, aiPlayers.map(p => p.name).join(', '));
+    } catch (error) {
+      console.error('Error populating room with AI players:', error);
+    }
   }
 
   /**

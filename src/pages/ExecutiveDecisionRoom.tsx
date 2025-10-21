@@ -125,6 +125,9 @@ const ExecutiveDecisionRoom: React.FC = () => {
 
       setRoom(currentRoom || null);
 
+      // Populate room with AI players if needed (using centralized pool)
+      await careerChallengeService.populateRoomWithAIPlayers(roomId, 4);
+
       // Subscribe to real-time updates
       await companyRoomService.subscribeToRoom(
         roomId,

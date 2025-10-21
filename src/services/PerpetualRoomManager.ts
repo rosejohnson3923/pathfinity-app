@@ -12,7 +12,7 @@
  */
 
 import { supabase } from '../lib/supabase';
-import { aiAgentService } from './AIAgentService';
+import { aiPlayerPoolService } from './AIPlayerPoolService';
 import type {
   PerpetualRoom,
   GameSession,
@@ -394,12 +394,18 @@ class PerpetualRoomManager {
   ): Promise<void> {
     const client = await supabase();
 
-    // Create AI agents
-    const agents = aiAgentService.createMixedTeam(count);
+    // Get AI players from centralized pool (ensures consistent names across all games)
+    const aiPlayers = aiPlayerPoolService.getRandomPlayers(count, roomId);
+    console.log(`🤖 Adding ${aiPlayers.length} AI players from centralized pool:`, aiPlayers.map(p => p.name).join(', '));
 
-    for (const agent of agents) {
+    for (const aiPlayer of aiPlayers) {
       // Generate unique bingo card for each AI
       const bingoCard = await this.generateUniqueBingoCard('elementary');
+
+      // Map difficulty based on difficultyMix
+      const difficulty = difficultyMix === 'mixed'
+        ? ['easy', 'medium', 'hard'][Math.floor(Math.random() * 3)]
+        : difficultyMix;
 
       await client
         .from('dl_session_participants')
@@ -407,15 +413,18 @@ class PerpetualRoomManager {
           game_session_id: sessionId,
           perpetual_room_id: roomId,
           participant_type: 'ai_agent',
-          display_name: agent.displayName,
-          ai_difficulty: agent.difficulty,
-          ai_personality: agent.personality,
+          student_id: aiPlayer.id, // Use centralized AI player ID
+          display_name: aiPlayer.name, // Use centralized AI player name
+          ai_difficulty: difficulty as 'easy' | 'medium' | 'hard',
+          ai_personality: 'friendly', // Default personality (can be randomized if needed)
           bingo_card: bingoCard,
           unlocked_squares: [],
           completed_lines: { rows: [], columns: [], diagonals: [] },
           connection_status: 'connected',
         });
     }
+
+    console.log(`✅ Added ${aiPlayers.length} AI players to Career Bingo session ${sessionId}`);
   }
 
   /**
