@@ -192,7 +192,7 @@ const ExecutiveSelectionModal: React.FC<ExecutiveSelectionModalProps> = ({
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="w-full max-w-6xl mx-auto p-6"
+      className="w-full max-w-[1300px] mx-auto p-6"
     >
       {/* Scenario Display */}
       <div className="bg-gray-900/80 backdrop-blur-sm rounded-xl p-6 mb-6 border-2 border-purple-500/30">

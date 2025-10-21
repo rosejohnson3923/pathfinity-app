@@ -114,7 +114,7 @@ class DiscoveredLiveService {
     };
 
     const { data: game, error } = await client
-      .from('dl_games')
+      .from('cb_games')
       .insert(gameData)
       .select()
       .single();
@@ -139,7 +139,7 @@ class DiscoveredLiveService {
 
     // Get distinct career codes that have active clues for this grade category
     const { data: cluesData, error: cluesError } = await client
-      .from('dl_clues')
+      .from('cb_clues')
       .select('career_code')
       .eq('grade_category', gradeCategory)
       .eq('is_active', true);
@@ -222,7 +222,7 @@ class DiscoveredLiveService {
 
     // 1. Get game details
     const { data: gameDB, error: gameError } = await client
-      .from('dl_games')
+      .from('cb_games')
       .select('*')
       .eq('id', gameId)
       .single();
@@ -297,7 +297,7 @@ class DiscoveredLiveService {
 
     // 3. Get suitable clues for careers in grid
     const { data: clues, error: cluesError } = await client
-      .from('dl_clues')
+      .from('cb_clues')
       .select('*')
       .in('career_code', gridCareers)
       .eq('is_active', true)
@@ -426,8 +426,8 @@ class DiscoveredLiveService {
 
     // 1. Get game and clue
     const [gameResponse, clueResponse] = await Promise.all([
-      client.from('dl_games').select('*').eq('id', gameId).single(),
-      client.from('dl_clues').select('*').eq('id', clueId).single()
+      client.from('cb_games').select('*').eq('id', gameId).single(),
+      client.from('cb_clues').select('*').eq('id', clueId).single()
     ]);
 
     if (gameResponse.error || !gameResponse.data) {
@@ -473,7 +473,7 @@ class DiscoveredLiveService {
       unlocked_position: unlockedPosition as any
     };
 
-    await client.from('dl_answers').insert(answerData);
+    await client.from('cb_answers').insert(answerData);
 
     // 6. Update game state
     const updatedUnlockedSquares = [...game.unlockedSquares];
@@ -544,7 +544,7 @@ class DiscoveredLiveService {
     console.log('Updating game with data:', updatedGame);
 
     const { data: updateResult, error: updateError } = await client
-      .from('dl_games')
+      .from('cb_games')
       .update(updatedGame)
       .eq('id', gameId);
 
@@ -670,7 +670,7 @@ class DiscoveredLiveService {
     const client = await supabase();
 
     const { data, error } = await client
-      .from('dl_games')
+      .from('cb_games')
       .select('*')
       .eq('id', gameId)
       .single();
@@ -690,7 +690,7 @@ class DiscoveredLiveService {
     const client = await supabase();
 
     const { data, error } = await client
-      .from('dl_games')
+      .from('cb_games')
       .select('*')
       .eq('student_id', studentId)
       .order('started_at', { ascending: false })
@@ -754,7 +754,7 @@ class DiscoveredLiveService {
     const client = await supabase();
 
     const { data, error } = await client
-      .from('dl_games')
+      .from('cb_games')
       .select('*')
       .eq('student_id', studentId)
       .eq('status', 'completed');

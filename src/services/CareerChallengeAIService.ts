@@ -739,7 +739,7 @@ Focus on teaching real teamwork concepts and industry collaboration patterns.`;
 
     try {
       await this.client
-        .from('cc_ai_content_cache')
+        .from('dd_ai_content_cache')
         .upsert({
           industry_code: industryCode,
           content_type: 'full_industry',

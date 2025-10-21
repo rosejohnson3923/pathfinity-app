@@ -212,7 +212,7 @@ export const CareerChallengeTestSuite: React.FC = () => {
     setCurrentTest('Industries Table');
     updateTestStatus(category, 'Industries Table', 'running');
     try {
-      const { data, error } = await supabase.from('cc_industries').select('*');
+      const { data, error } = await supabase.from('dd_industries').select('*');
       if (error) throw error;
 
       updateTestStatus(category, 'Industries Table', 'passed', `${data.length} industries found`);
@@ -276,7 +276,7 @@ export const CareerChallengeTestSuite: React.FC = () => {
     updateTestStatus(category, 'Get Challenges', 'running');
     try {
       const { data: industries } = await supabase
-        .from('cc_industries')
+        .from('dd_industries')
         .select('id')
         .limit(1)
         .single();

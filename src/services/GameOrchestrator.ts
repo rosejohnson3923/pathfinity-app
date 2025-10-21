@@ -98,7 +98,7 @@ class GameOrchestrator {
 
     // Get session details
     const { data: session, error: sessionError } = await client
-      .from('dl_game_sessions')
+      .from('cb_game_sessions')
       .select('*')
       .eq('id', sessionId)
       .single();
@@ -114,7 +114,7 @@ class GameOrchestrator {
     while (this.gameLoops.get(sessionId) && questionIndex < totalQuestions) {
       // Check if game should end early (all bingo slots filled)
       const { data: currentSession } = await client
-        .from('dl_game_sessions')
+        .from('cb_game_sessions')
         .select('bingo_slots_remaining, status')
         .eq('id', sessionId)
         .single();
@@ -154,8 +154,8 @@ class GameOrchestrator {
 
     // 1. Get session and participants
     const { data: session } = await client
-      .from('dl_game_sessions')
-      .select('*, dl_perpetual_rooms(*)')
+      .from('cb_game_sessions')
+      .select('*, cb_perpetual_rooms(*)')
       .eq('id', sessionId)
       .single();
 
@@ -164,7 +164,7 @@ class GameOrchestrator {
     }
 
     const participants = await perpetualRoomManager.getSessionParticipants(sessionId);
-    const room = session.dl_perpetual_rooms;
+    const room = session.cb_perpetual_rooms;
 
     // 2. Select next clue
     const clue = await this.getNextClue(sessionId, room.grade_level);
@@ -190,7 +190,7 @@ class GameOrchestrator {
 
     // 4. Update session
     await client
-      .from('dl_game_sessions')
+      .from('cb_game_sessions')
       .update({
         current_question_number: questionNumber,
         questions_asked: [...(session.questions_asked || []), clue.id],
@@ -231,7 +231,7 @@ class GameOrchestrator {
 
     // Get session to see what questions have been asked
     const { data: session } = await client
-      .from('dl_game_sessions')
+      .from('cb_game_sessions')
       .select('questions_asked')
       .eq('id', sessionId)
       .single();
@@ -242,7 +242,7 @@ class GameOrchestrator {
     let askedCareerCodes: string[] = [];
     if (askedClueIds.length > 0) {
       const { data: askedClues } = await client
-        .from('dl_clues')
+        .from('cb_clues')
         .select('career_code')
         .in('id', askedClueIds);
 
@@ -252,7 +252,7 @@ class GameOrchestrator {
 
     // Build query - exclude clues for careers we've already asked about
     let query = client
-      .from('dl_clues')
+      .from('cb_clues')
       .select('*')
       .eq('grade_category', gradeLevel || 'elementary')
       .eq('is_active', true);
@@ -376,7 +376,7 @@ class GameOrchestrator {
 
     // Get participant
     const { data: participant } = await client
-      .from('dl_session_participants')
+      .from('cb_session_participants')
       .select('*')
       .eq('id', participantId)
       .single();
@@ -391,7 +391,7 @@ class GameOrchestrator {
 
     // Record click event
     const questionState = this.activeGames.get(sessionId);
-    await client.from('dl_click_events').insert({
+    await client.from('cb_click_events').insert({
       game_session_id: sessionId,
       participant_id: participantId,
       question_number: questionState?.questionNumber || 0,
@@ -411,7 +411,7 @@ class GameOrchestrator {
       const newXP = Math.max(0, participant.total_xp + xpPenalty); // XP cannot go below 0
 
       await client
-        .from('dl_session_participants')
+        .from('cb_session_participants')
         .update({
           incorrect_answers: participant.incorrect_answers + 1,
           total_xp: newXP,
@@ -423,7 +423,7 @@ class GameOrchestrator {
 
       // Broadcast wrong answer (no unlock) with penalty
       const { data: session } = await client
-        .from('dl_game_sessions')
+        .from('cb_game_sessions')
         .select('perpetual_room_id')
         .eq('id', sessionId)
         .single();
@@ -469,7 +469,7 @@ class GameOrchestrator {
 
     // Update participant
     await client
-      .from('dl_session_participants')
+      .from('cb_session_participants')
       .update({
         unlocked_squares: unlockedSquares,
         completed_lines: updatedCompletedLines,
@@ -482,7 +482,7 @@ class GameOrchestrator {
 
     // Broadcast correct answer
     const { data: session } = await client
-      .from('dl_game_sessions')
+      .from('cb_game_sessions')
       .select('perpetual_room_id')
       .eq('id', sessionId)
       .single();
@@ -537,8 +537,8 @@ class GameOrchestrator {
 
     // Get session
     const { data: session } = await client
-      .from('dl_game_sessions')
-      .select('*, dl_perpetual_rooms(*)')
+      .from('cb_game_sessions')
+      .select('*, cb_perpetual_rooms(*)')
       .eq('id', sessionId)
       .single();
 
@@ -548,7 +548,7 @@ class GameOrchestrator {
 
     // Get participant
     const { data: participant } = await client
-      .from('dl_session_participants')
+      .from('cb_session_participants')
       .select('*')
       .eq('id', participantId)
       .single();
@@ -586,7 +586,7 @@ class GameOrchestrator {
     // Update session
     const bingoWinners = [...(session.bingo_winners || []), bingoWinner];
     await client
-      .from('dl_game_sessions')
+      .from('cb_game_sessions')
       .update({
         bingo_winners: bingoWinners,
         bingo_slots_remaining: session.bingo_slots_remaining - 1,
@@ -595,7 +595,7 @@ class GameOrchestrator {
 
     // Update participant
     await client
-      .from('dl_session_participants')
+      .from('cb_session_participants')
       .update({
         bingos_won: participant.bingos_won + 1,
         total_xp: participant.total_xp + this.getBingoXP(bingoNumber),
@@ -671,8 +671,8 @@ class GameOrchestrator {
 
     // Get session
     const { data: session } = await client
-      .from('dl_game_sessions')
-      .select('*, dl_perpetual_rooms(*)')
+      .from('cb_game_sessions')
+      .select('*, cb_perpetual_rooms(*)')
       .eq('id', sessionId)
       .single();
 
@@ -706,7 +706,7 @@ class GameOrchestrator {
     await perpetualRoomManager.completeGame(sessionId);
 
     // Broadcast game completed
-    const room = session.dl_perpetual_rooms;
+    const room = session.cb_perpetual_rooms;
     const nextGameStartsAt = new Date(Date.now() + (room.intermission_duration_seconds || 10) * 1000);
 
     await discoveredLiveRealtimeService.broadcastGameCompleted(

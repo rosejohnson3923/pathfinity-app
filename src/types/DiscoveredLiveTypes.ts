@@ -5,7 +5,7 @@
  * where students match career clues to careers, unlocking a bingo grid.
  *
  * NOTE: Database columns use snake_case, TypeScript interfaces use camelCase.
- * Database tables use DL_ prefix: dl_clues, dl_games, dl_answers
+ * Database tables use DL_ prefix: cb_clues, cb_games, cb_answers
  * See docs/NAMING_CONVENTIONS.md for details.
  */
 
@@ -16,7 +16,7 @@
 /**
  * Career Clue
  * A single question/clue that students answer to unlock bingo squares
- * Database table: dl_clues
+ * Database table: cb_clues
  */
 export interface CareerClue {
   id: string;
@@ -39,7 +39,7 @@ export interface CareerClue {
 /**
  * Discovered Live! Game Session
  * Tracks an individual game session
- * Database table: dl_games
+ * Database table: cb_games
  */
 export interface DiscoveredLiveGame {
   id: string;
@@ -72,7 +72,7 @@ export interface DiscoveredLiveGame {
 /**
  * Discovered Live! Answer
  * Tracks a single answer within a game
- * Database table: dl_answers
+ * Database table: cb_answers
  */
 export interface DiscoveredLiveAnswer {
   id: string;

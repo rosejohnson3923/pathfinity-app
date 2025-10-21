@@ -98,7 +98,7 @@ class DiscoveredLiveRealtimeService {
         {
           event: 'UPDATE',
           schema: 'public',
-          table: 'dl_game_sessions',
+          table: 'cb_game_sessions',
           filter: `perpetual_room_id=eq.${roomId}`,
         },
         (payload) => this.handleSessionUpdate(roomId, payload)
@@ -108,7 +108,7 @@ class DiscoveredLiveRealtimeService {
         {
           event: 'INSERT',
           schema: 'public',
-          table: 'dl_session_participants',
+          table: 'cb_session_participants',
           filter: `perpetual_room_id=eq.${roomId}`,
         },
         (payload) => this.handleParticipantJoin(roomId, payload)
@@ -118,7 +118,7 @@ class DiscoveredLiveRealtimeService {
         {
           event: 'UPDATE',
           schema: 'public',
-          table: 'dl_session_participants',
+          table: 'cb_session_participants',
           filter: `perpetual_room_id=eq.${roomId}`,
         },
         (payload) => this.handleParticipantUpdate(roomId, payload)
@@ -128,7 +128,7 @@ class DiscoveredLiveRealtimeService {
         {
           event: '*',
           schema: 'public',
-          table: 'dl_spectators',
+          table: 'cb_spectators',
           filter: `perpetual_room_id=eq.${roomId}`,
         },
         (payload) => this.handleSpectatorChange(roomId, payload)

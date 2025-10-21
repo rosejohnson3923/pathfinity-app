@@ -91,7 +91,7 @@ class PerpetualRoomScheduler {
 
       // Get all active, featured rooms
       const { data: rooms, error } = await client
-        .from('dl_perpetual_rooms')
+        .from('cb_perpetual_rooms')
         .select('*')
         .eq('is_active', true)
         .eq('is_featured', true);
@@ -154,7 +154,7 @@ class PerpetualRoomScheduler {
 
       // Double-check room status (prevent race conditions)
       const { data: room, error: roomError } = await client
-        .from('dl_perpetual_rooms')
+        .from('cb_perpetual_rooms')
         .select('*')
         .eq('id', roomId)
         .single();
@@ -205,7 +205,7 @@ class PerpetualRoomScheduler {
     // Get the session ID
     const client = await supabase();
     const { data: room } = await client
-      .from('dl_perpetual_rooms')
+      .from('cb_perpetual_rooms')
       .select('current_game_id')
       .eq('id', roomId)
       .single();
@@ -222,7 +222,7 @@ class PerpetualRoomScheduler {
 
     // Get current game session
     const { data: room } = await client
-      .from('dl_perpetual_rooms')
+      .from('cb_perpetual_rooms')
       .select('current_game_id')
       .eq('id', roomId)
       .single();
@@ -233,13 +233,13 @@ class PerpetualRoomScheduler {
 
       // Mark session as abandoned
       await client
-        .from('dl_game_sessions')
+        .from('cb_game_sessions')
         .update({ status: 'abandoned' })
         .eq('id', room.current_game_id);
 
       // Update room to intermission
       await client
-        .from('dl_perpetual_rooms')
+        .from('cb_perpetual_rooms')
         .update({
           status: 'intermission',
           current_game_id: null,
@@ -258,7 +258,7 @@ class PerpetualRoomScheduler {
     const client = await supabase();
 
     await client
-      .from('dl_perpetual_rooms')
+      .from('cb_perpetual_rooms')
       .update({ status: 'paused' })
       .eq('id', roomId);
 
@@ -273,7 +273,7 @@ class PerpetualRoomScheduler {
 
     // Set to intermission and schedule immediate game start
     await client
-      .from('dl_perpetual_rooms')
+      .from('cb_perpetual_rooms')
       .update({
         status: 'intermission',
         next_game_starts_at: new Date(Date.now() + 5000).toISOString(), // 5 seconds
@@ -309,10 +309,10 @@ class PerpetualRoomScheduler {
     const client = await supabase();
 
     const { data: rooms, error } = await client
-      .from('dl_perpetual_rooms')
+      .from('cb_perpetual_rooms')
       .select(`
         *,
-        dl_game_sessions!dl_game_sessions_perpetual_room_id_fkey(
+        cb_game_sessions!cb_game_sessions_perpetual_room_id_fkey(
           id,
           status,
           started_at,
@@ -352,7 +352,7 @@ class PerpetualRoomScheduler {
 
       // Check if rooms are accessible
       const { data: rooms, error } = await client
-        .from('dl_perpetual_rooms')
+        .from('cb_perpetual_rooms')
         .select('id, room_code, status')
         .eq('is_active', true)
         .limit(1);
@@ -367,7 +367,7 @@ class PerpetualRoomScheduler {
 
       // Check for stuck rooms (in intermission for > 5 minutes)
       const { data: stuckRooms } = await client
-        .from('dl_perpetual_rooms')
+        .from('cb_perpetual_rooms')
         .select('id, room_code, next_game_starts_at')
         .eq('status', 'intermission')
         .lt('next_game_starts_at', new Date(Date.now() - 300000).toISOString());

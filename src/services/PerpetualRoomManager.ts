@@ -54,7 +54,7 @@ class PerpetualRoomManager {
     const client = await supabase();
 
     const { data, error } = await client
-      .from('dl_perpetual_rooms')
+      .from('cb_perpetual_rooms')
       .select('*')
       .eq('is_active', true)
       .eq('is_featured', true)
@@ -104,7 +104,7 @@ class PerpetualRoomManager {
     const client = await supabase();
 
     const { data, error } = await client
-      .from('dl_perpetual_rooms')
+      .from('cb_perpetual_rooms')
       .select('*')
       .eq('room_code', roomCode)
       .single();
@@ -164,7 +164,7 @@ class PerpetualRoomManager {
 
     // 1. Get room details
     const { data: roomData, error: roomError } = await client
-      .from('dl_perpetual_rooms')
+      .from('cb_perpetual_rooms')
       .select('*')
       .eq('id', roomId)
       .single();
@@ -177,7 +177,7 @@ class PerpetualRoomManager {
 
     // 2. Get spectators who will join
     const { data: spectators } = await client
-      .from('dl_spectators')
+      .from('cb_spectators')
       .select('*')
       .eq('perpetual_room_id', roomId)
       .eq('will_join_next_game', true);
@@ -192,7 +192,7 @@ class PerpetualRoomManager {
     const bingoSlots = room.bingo_slots_per_game;
 
     const { data: session, error: sessionError } = await client
-      .from('dl_game_sessions')
+      .from('cb_game_sessions')
       .insert({
         perpetual_room_id: roomId,
         game_number: gameNumber,
@@ -229,7 +229,7 @@ class PerpetualRoomManager {
 
       // Clear spectators (they're now active players)
       await client
-        .from('dl_spectators')
+        .from('cb_spectators')
         .delete()
         .eq('perpetual_room_id', roomId);
     }
@@ -241,7 +241,7 @@ class PerpetualRoomManager {
 
     // 7. Update room state
     await client
-      .from('dl_perpetual_rooms')
+      .from('cb_perpetual_rooms')
       .update({
         status: 'active',
         current_game_number: gameNumber,
@@ -277,7 +277,7 @@ class PerpetualRoomManager {
 
     // 1. Get session
     const { data: session, error: sessionError } = await client
-      .from('dl_game_sessions')
+      .from('cb_game_sessions')
       .select('*')
       .eq('id', sessionId)
       .single();
@@ -293,7 +293,7 @@ class PerpetualRoomManager {
 
     // 3. Mark session as completed
     await client
-      .from('dl_game_sessions')
+      .from('cb_game_sessions')
       .update({
         status: 'completed',
         completed_at: now.toISOString(),
@@ -303,7 +303,7 @@ class PerpetualRoomManager {
 
     // 4. Get room and start intermission
     const { data: room } = await client
-      .from('dl_perpetual_rooms')
+      .from('cb_perpetual_rooms')
       .select('*')
       .eq('id', session.perpetual_room_id)
       .single();
@@ -312,7 +312,7 @@ class PerpetualRoomManager {
       const nextGameStartsAt = new Date(now.getTime() + room.intermission_duration_seconds * 1000);
 
       await client
-        .from('dl_perpetual_rooms')
+        .from('cb_perpetual_rooms')
         .update({
           status: 'intermission',
           next_game_starts_at: nextGameStartsAt.toISOString(),
@@ -342,7 +342,7 @@ class PerpetualRoomManager {
     const bingoCard = await this.generateUniqueBingoCard('elementary', userCareerCode);
 
     const { data, error } = await client
-      .from('dl_session_participants')
+      .from('cb_session_participants')
       .insert({
         game_session_id: sessionId,
         perpetual_room_id: roomId,
@@ -409,7 +409,7 @@ class PerpetualRoomManager {
         : difficultyMix;
 
       await client
-        .from('dl_session_participants')
+        .from('cb_session_participants')
         .insert({
           game_session_id: sessionId,
           perpetual_room_id: roomId,
@@ -442,7 +442,7 @@ class PerpetualRoomManager {
 
     // Get distinct career codes with active clues
     const { data: cluesData } = await client
-      .from('dl_clues')
+      .from('cb_clues')
       .select('career_code')
       .eq('grade_category', gradeCategory)
       .eq('is_active', true);
@@ -510,7 +510,7 @@ class PerpetualRoomManager {
     const client = await supabase();
 
     const { data, error } = await client
-      .from('dl_session_participants')
+      .from('cb_session_participants')
       .select('*')
       .eq('game_session_id', sessionId)
       .eq('is_active', true);
@@ -562,14 +562,14 @@ class PerpetualRoomManager {
 
     // Get current game session ID
     const { data: room } = await client
-      .from('dl_perpetual_rooms')
+      .from('cb_perpetual_rooms')
       .select('current_game_id')
       .eq('id', roomId)
       .single();
 
     // First, check if spectator already exists
     const { data: existingSpectator } = await client
-      .from('dl_spectators')
+      .from('cb_spectators')
       .select('*')
       .eq('perpetual_room_id', roomId)
       .eq('user_id', userId)
@@ -578,7 +578,7 @@ class PerpetualRoomManager {
     if (existingSpectator) {
       // Update existing spectator record
       const { data: updated, error: updateError } = await client
-        .from('dl_spectators')
+        .from('cb_spectators')
         .update({
           current_game_session_id: room?.current_game_id,
           display_name: displayName,
@@ -608,7 +608,7 @@ class PerpetualRoomManager {
 
     // Insert new spectator
     const { data, error } = await client
-      .from('dl_spectators')
+      .from('cb_spectators')
       .insert({
         perpetual_room_id: roomId,
         current_game_session_id: room?.current_game_id,
@@ -643,7 +643,7 @@ class PerpetualRoomManager {
     const client = await supabase();
 
     await client
-      .from('dl_spectators')
+      .from('cb_spectators')
       .delete()
       .eq('perpetual_room_id', roomId)
       .eq('user_id', userId);
@@ -656,7 +656,7 @@ class PerpetualRoomManager {
     const client = await supabase();
 
     const { data, error } = await client
-      .from('dl_spectators')
+      .from('cb_spectators')
       .select('*')
       .eq('perpetual_room_id', roomId);
 

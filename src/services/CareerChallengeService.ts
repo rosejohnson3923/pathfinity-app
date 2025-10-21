@@ -72,7 +72,7 @@ class CareerChallengeService {
     if (!this.client) await this.initialize();
 
     const query = this.client
-      .from('cc_industries')
+      .from('dd_industries')
       .select('*')
       .order('name');
 
@@ -100,7 +100,7 @@ class CareerChallengeService {
     if (!this.client) await this.initialize();
 
     let query = this.client
-      .from('cc_challenges')
+      .from('dd_challenges')
       .select('*')
       .eq('industry_id', industryId)
       .eq('is_active', true);
@@ -129,7 +129,7 @@ class CareerChallengeService {
     if (!this.client) await this.initialize();
 
     let query = this.client
-      .from('cc_challenges')
+      .from('dd_challenges')
       .select('*')
       .eq('is_active', true);
 
@@ -165,7 +165,7 @@ class CareerChallengeService {
     if (!this.client) await this.initialize();
 
     const { data, error } = await this.client
-      .from('cc_role_cards')
+      .from('dd_role_cards')
       .select('*')
       .eq('industry_id', industryId)
       .eq('is_active', true)
@@ -187,10 +187,10 @@ class CareerChallengeService {
     if (!this.client) await this.initialize();
 
     const { data, error } = await this.client
-      .from('cc_player_collections')
+      .from('dd_player_collections')
       .select(`
         *,
-        cc_role_cards (*)
+        dd_role_cards (*)
       `)
       .eq('player_id', playerId)
       .gt('quantity', 0)
@@ -205,7 +205,7 @@ class CareerChallengeService {
       id: item.id,
       playerId: item.player_id,
       roleCardId: item.role_card_id,
-      roleCard: item.cc_role_cards ? dbRoleCardToRoleCard(item.cc_role_cards) : undefined,
+      roleCard: item.dd_role_cards ? dbRoleCardToRoleCard(item.dd_role_cards) : undefined,
       quantity: item.quantity,
       firstAcquiredAt: item.first_acquired_at,
       lastAcquiredAt: item.last_acquired_at,
@@ -236,7 +236,7 @@ class CareerChallengeService {
 
     // Check if player already owns this card
     const { data: existing } = await this.client
-      .from('cc_player_collections')
+      .from('dd_player_collections')
       .select('id, quantity')
       .eq('player_id', playerId)
       .eq('role_card_id', roleCardId)
@@ -245,7 +245,7 @@ class CareerChallengeService {
     if (existing) {
       // Update quantity
       const { error } = await this.client
-        .from('cc_player_collections')
+        .from('dd_player_collections')
         .update({
           quantity: existing.quantity + 1,
           last_acquired_at: new Date().toISOString()
@@ -256,7 +256,7 @@ class CareerChallengeService {
     } else {
       // Insert new collection entry
       const { error } = await this.client
-        .from('cc_player_collections')
+        .from('dd_player_collections')
         .insert({
           player_id: playerId,
           role_card_id: roleCardId,
@@ -283,7 +283,7 @@ class CareerChallengeService {
 
     // Get role codes from card IDs
     const { data: roleCards } = await this.client
-      .from('cc_role_cards')
+      .from('dd_role_cards')
       .select('role_code')
       .in('id', roleCardIds);
 
@@ -295,7 +295,7 @@ class CareerChallengeService {
 
     // Get all synergies for this industry
     const { data: synergies, error } = await this.client
-      .from('cc_synergy_definitions')
+      .from('dd_synergy_definitions')
       .select('*')
       .eq('industry_id', industryId)
       .eq('is_active', true);
@@ -364,7 +364,7 @@ class CareerChallengeService {
 
     // Get role cards
     const { data: roleCards } = await this.client
-      .from('cc_role_cards')
+      .from('dd_role_cards')
       .select('*')
       .in('id', roleCardIds);
 
@@ -380,8 +380,8 @@ class CareerChallengeService {
 
     // Get challenge details
     const { data: challenge } = await this.client
-      .from('cc_challenges')
-      .select('*, cc_industries(*)')
+      .from('dd_challenges')
+      .select('*, dd_industries(*)')
       .eq('id', challengeId)
       .single();
 
@@ -437,7 +437,7 @@ class CareerChallengeService {
 
     // Get industry
     const { data: industry } = await this.client
-      .from('cc_industries')
+      .from('dd_industries')
       .select('id')
       .eq('code', industryCode)
       .single();
@@ -476,7 +476,7 @@ class CareerChallengeService {
     };
 
     const { data: session, error } = await this.client
-      .from('cc_challenge_sessions')
+      .from('dd_challenge_sessions')
       .insert(sessionData)
       .select()
       .single();
@@ -519,8 +519,8 @@ class CareerChallengeService {
 
     // Get session
     const { data: session } = await this.client
-      .from('cc_challenge_sessions')
-      .select('*, cc_challenges(*)')
+      .from('dd_challenge_sessions')
+      .select('*, dd_challenges(*)')
       .eq('id', sessionId)
       .single();
 
@@ -528,7 +528,7 @@ class CareerChallengeService {
       throw new Error('Session not found');
     }
 
-    const challenge = dbChallengeToChallenge(session.cc_challenges);
+    const challenge = dbChallengeToChallenge(session.dd_challenges);
 
     // Validate role count
     if (roleCardIds.length < challenge.minRolesRequired ||
@@ -541,7 +541,7 @@ class CareerChallengeService {
 
     // Evaluate challenge outcome using database function
     const { data: evaluation } = await this.client
-      .rpc('cc_evaluate_challenge', {
+      .rpc('dd_evaluate_challenge', {
         p_team_power: teamPower.totalPower,
         p_challenge_id: challenge.id
       });
@@ -560,9 +560,9 @@ class CareerChallengeService {
         newAchievements.push('Perfect Challenge!');
         // Award a rare card
         const { data: rareCard } = await this.client
-          .from('cc_role_cards')
+          .from('dd_role_cards')
           .select('*')
-          .eq('industry_id', session.cc_challenges.industry_id)
+          .eq('industry_id', session.dd_challenges.industry_id)
           .in('rarity', ['rare', 'epic'])
           .limit(1)
           .single();
@@ -575,9 +575,9 @@ class CareerChallengeService {
         xpEarned = 50;
         // Award a common card
         const { data: commonCard } = await this.client
-          .from('cc_role_cards')
+          .from('dd_role_cards')
           .select('*')
-          .eq('industry_id', session.cc_challenges.industry_id)
+          .eq('industry_id', session.dd_challenges.industry_id)
           .in('rarity', ['common', 'uncommon'])
           .limit(1)
           .single();
@@ -593,7 +593,7 @@ class CareerChallengeService {
 
     // Update session
     await this.client
-      .from('cc_challenge_sessions')
+      .from('dd_challenge_sessions')
       .update({
         team_composition: {
           formation: 'balanced',
@@ -646,7 +646,7 @@ class CareerChallengeService {
     if (!this.client) await this.initialize();
 
     const { data, error } = await this.client
-      .from('cc_player_progress')
+      .from('dd_player_progress')
       .select('*')
       .eq('player_id', playerId)
       .single();
@@ -655,7 +655,7 @@ class CareerChallengeService {
       // Create initial progress record if doesn't exist
       if (error?.code === 'PGRST116') { // No rows returned
         const { data: newProgress } = await this.client
-          .from('cc_player_progress')
+          .from('dd_player_progress')
           .insert({
             player_id: playerId,
             total_challenges_attempted: 0,
@@ -729,7 +729,7 @@ class CareerChallengeService {
     }
 
     await this.client
-      .from('cc_player_progress')
+      .from('dd_player_progress')
       .update(updates)
       .eq('player_id', playerId);
   }
@@ -745,7 +745,7 @@ class CareerChallengeService {
     if (!this.client) await this.initialize();
 
     const { data: collection } = await this.client
-      .from('cc_player_collections')
+      .from('dd_player_collections')
       .select('times_used, wins_with_card')
       .eq('player_id', playerId)
       .eq('role_card_id', cardId)
@@ -761,7 +761,7 @@ class CareerChallengeService {
       }
 
       await this.client
-        .from('cc_player_collections')
+        .from('dd_player_collections')
         .update(updates)
         .eq('player_id', playerId)
         .eq('role_card_id', cardId);
@@ -827,7 +827,7 @@ class CareerChallengeService {
     if (!this.client) await this.initialize();
 
     const { data, error } = await this.client
-      .from('cc_game_sessions')
+      .from('dd_game_sessions')
       .insert({
         host_player_id: hostPlayerId,
         industry_id: industryId,
@@ -848,7 +848,7 @@ class CareerChallengeService {
     // Add host as first player
     if (data) {
       const { error: playerError } = await this.client
-        .from('cc_game_session_players')
+        .from('dd_game_session_players')
         .insert({
           session_id: data.id,
           player_id: hostPlayerId,
@@ -878,7 +878,7 @@ class CareerChallengeService {
 
     // Check if session exists and has room
     const { data: session } = await this.client
-      .from('cc_game_sessions')
+      .from('dd_game_sessions')
       .select('current_players, max_players, status')
       .eq('id', sessionId)
       .single();
@@ -889,7 +889,7 @@ class CareerChallengeService {
 
     // Check if player is already in the session
     const { data: existingPlayer } = await this.client
-      .from('cc_game_session_players')
+      .from('dd_game_session_players')
       .select('id')
       .eq('session_id', sessionId)
       .eq('player_id', playerId)
@@ -902,7 +902,7 @@ class CareerChallengeService {
 
     // Add player to session
     const { error } = await this.client
-      .from('cc_game_session_players')
+      .from('dd_game_session_players')
       .insert({
         session_id: sessionId,
         player_id: playerId,
@@ -919,7 +919,7 @@ class CareerChallengeService {
 
     // Update player count
     await this.client
-      .from('cc_game_sessions')
+      .from('dd_game_sessions')
       .update({ current_players: session.current_players + 1 })
       .eq('id', sessionId);
 
@@ -933,7 +933,7 @@ class CareerChallengeService {
     if (!this.client) await this.initialize();
 
     const { data, error } = await this.client
-      .from('cc_game_sessions')
+      .from('dd_game_sessions')
       .select('*')
       .in('status', ['waiting', 'playing'])
       .order('created_at', { ascending: false });
@@ -953,10 +953,10 @@ class CareerChallengeService {
     if (!this.client) await this.initialize();
 
     const { data, error } = await this.client
-      .from('cc_game_sessions')
+      .from('dd_game_sessions')
       .select(`
         *,
-        cc_game_session_players (*)
+        dd_game_session_players (*)
       `)
       .eq('id', sessionId)
       .single();
@@ -976,7 +976,7 @@ class CareerChallengeService {
     if (!this.client) await this.initialize();
 
     const { error } = await this.client
-      .from('cc_game_sessions')
+      .from('dd_game_sessions')
       .update({
         status: 'finished',
         winner_player_id: winnerId,
@@ -998,7 +998,7 @@ class CareerChallengeService {
 
     // Get all challenges for the industry
     const { data, error } = await this.client
-      .from('cc_challenges')
+      .from('dd_challenges')
       .select('*')
       .eq('industry_id', industryId)
       .eq('is_active', true);
@@ -1029,7 +1029,7 @@ class CareerChallengeService {
 
     // Get session industry
     const { data: session } = await this.client
-      .from('cc_game_sessions')
+      .from('dd_game_sessions')
       .select('industry_id')
       .eq('id', sessionId)
       .single();
@@ -1038,7 +1038,7 @@ class CareerChallengeService {
 
     // Get all role cards for the industry
     const { data: cards, error } = await this.client
-      .from('cc_role_cards')
+      .from('dd_role_cards')
       .select('*')
       .eq('industry_id', session.industry_id)
       .eq('is_active', true);
@@ -1082,7 +1082,7 @@ class CareerChallengeService {
 
     // Get challenge
     const { data: challenge } = await this.client
-      .from('cc_challenges')
+      .from('dd_challenges')
       .select('*')
       .eq('id', challengeId)
       .single();
@@ -1133,17 +1133,17 @@ class CareerChallengeService {
     const today = new Date().toISOString().split('T')[0];
 
     const { data } = await this.client
-      .from('cc_daily_challenges')
+      .from('dd_daily_challenges')
       .select(`
         *,
-        cc_challenges (*)
+        dd_challenges (*)
       `)
       .eq('active_date', today)
       .eq('challenge_type', 'daily')
       .single();
 
-    if (data?.cc_challenges) {
-      return dbChallengeToChallenge(data.cc_challenges);
+    if (data?.dd_challenges) {
+      return dbChallengeToChallenge(data.dd_challenges);
     }
 
     // If no daily challenge exists, create one
@@ -1163,7 +1163,7 @@ class CareerChallengeService {
     const today = new Date().toISOString().split('T')[0];
 
     await this.client
-      .from('cc_daily_challenges')
+      .from('dd_daily_challenges')
       .insert({
         challenge_id: challenge.id,
         active_date: today,
@@ -1192,10 +1192,10 @@ class CareerChallengeService {
     const dbGradeCategory = gradeCategory === 'elementary' ? 'elementary' : 'other';
 
     const { data, error } = await this.client
-      .from('cc_company_rooms')
+      .from('dd_company_rooms')
       .select(`
         *,
-        cc_industries (*)
+        dd_industries (*)
       `)
       .eq('is_active', true)
       .eq('grade_category', dbGradeCategory)
@@ -1211,7 +1211,7 @@ class CareerChallengeService {
       code: room.code,
       name: room.name,
       industryId: room.industry_id,
-      industry: room.cc_industries ? dbIndustryToIndustry(room.cc_industries) : undefined,
+      industry: room.dd_industries ? dbIndustryToIndustry(room.dd_industries) : undefined,
       description: room.description,
       companySize: room.company_size,
       revenue: room.revenue,
@@ -1227,7 +1227,112 @@ class CareerChallengeService {
   }
 
   /**
-   * Join a company room
+   * Join a company room and create a session-specific instance
+   * Each player gets their own session with their own set of AI opponents
+   */
+  async joinCompanyRoomAndCreateSession(
+    roomId: string,
+    playerId: string,
+    displayName: string,
+    targetPlayerCount: number = 6
+  ): Promise<string | null> {
+    if (!this.client) await this.initialize();
+
+    try {
+      // Check if player already has an active session in this room
+      const { data: existingSession, error: checkError } = await this.client
+        .from('dd_game_session_players')
+        .select('session_id')
+        .eq('player_id', playerId)
+        .eq('room_id', roomId)
+        .eq('is_active', true)
+        .not('session_id', 'is', null)
+        .single();
+
+      if (checkError && checkError.code !== 'PGRST116') {
+        // PGRST116 is "not found" error, which is expected if no existing session
+        console.warn(`⚠️ Error checking for existing session (might be missing room_id column):`, checkError);
+      }
+
+      if (existingSession?.session_id) {
+        console.log(`Player ${displayName} already has session ${existingSession.session_id}`);
+        return existingSession.session_id;
+      }
+
+      // Create a lobby session for this player
+      const { data: session, error: sessionError } = await this.client
+        .from('dd_executive_sessions')
+        .insert({
+          room_id: roomId,
+          player_id: playerId,
+          status: 'lobby', // New status for waiting in lobby
+          total_score: 0,
+        })
+        .select()
+        .single();
+
+      if (sessionError || !session) {
+        console.error('Error creating session:', sessionError);
+        return null;
+      }
+
+      console.log(`✅ Created session ${session.id} for ${displayName} in room ${roomId}`);
+
+      // Add player to session
+      const { error: playerInsertError } = await this.client
+        .from('dd_game_session_players')
+        .insert({
+          session_id: session.id,
+          room_id: roomId,
+          player_id: playerId,
+          display_name: displayName,
+          is_ready: true,
+          is_host: true,
+          is_active: true,
+          join_order: 1
+        });
+
+      if (playerInsertError) {
+        console.error(`❌ Error adding player to session:`, playerInsertError);
+        // Continue anyway - player might already exist
+      }
+
+      // Add AI players to this specific session
+      const aiPlayersNeeded = targetPlayerCount - 1; // -1 for the human player
+      const aiPlayers = aiPlayerPoolService.getRandomPlayers(aiPlayersNeeded, `${roomId}-${session.id}`);
+
+      for (let i = 0; i < aiPlayers.length; i++) {
+        const aiPlayer = aiPlayers[i];
+        const { error: aiInsertError } = await this.client
+          .from('dd_game_session_players')
+          .insert({
+            session_id: session.id,
+            room_id: roomId,
+            player_id: aiPlayer.id,
+            display_name: aiPlayer.name,
+            is_ready: true,
+            is_host: false,
+            is_active: true,
+            join_order: i + 2
+          });
+
+        if (aiInsertError) {
+          console.error(`❌ Error adding AI player ${aiPlayer.name}:`, aiInsertError);
+          // Continue anyway - player might already exist
+        }
+      }
+
+      console.log(`✅ Added ${aiPlayers.length} AI players to session:`, aiPlayers.map(p => p.name).join(', '));
+
+      return session.id;
+    } catch (error) {
+      console.error('Error joining room and creating session:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Join a company room (legacy method, consider using joinCompanyRoomAndCreateSession instead)
    */
   async joinCompanyRoom(
     roomId: string,
@@ -1238,7 +1343,7 @@ class CareerChallengeService {
 
     // Check if room exists and has space
     const { data: room } = await this.client
-      .from('cc_company_rooms')
+      .from('dd_company_rooms')
       .select('current_players, max_players')
       .eq('id', roomId)
       .single();
@@ -1249,7 +1354,7 @@ class CareerChallengeService {
 
     // Check if player is already in a room
     const { data: existingPlayer } = await this.client
-      .from('cc_game_session_players')
+      .from('dd_game_session_players')
       .select('id')
       .eq('player_id', playerId)
       .eq('room_id', roomId)
@@ -1262,7 +1367,7 @@ class CareerChallengeService {
 
     // Add player to room
     const { error } = await this.client
-      .from('cc_game_session_players')
+      .from('dd_game_session_players')
       .insert({
         session_id: null, // Will be set when game starts
         room_id: roomId,
@@ -1281,7 +1386,7 @@ class CareerChallengeService {
 
     // Update room player count
     await this.client
-      .from('cc_company_rooms')
+      .from('dd_company_rooms')
       .update({ current_players: room.current_players + 1 })
       .eq('id', roomId);
 
@@ -1299,9 +1404,27 @@ class CareerChallengeService {
     if (!this.client) await this.initialize();
 
     try {
+      // First, clean up any old AI players with generic "Player" names
+      // These are from before the centralized AI pool was implemented
+      const { data: oldAIPlayers } = await this.client
+        .from('dd_game_session_players')
+        .select('id')
+        .eq('room_id', roomId)
+        .eq('display_name', 'Player')
+        .eq('is_active', true);
+
+      if (oldAIPlayers && oldAIPlayers.length > 0) {
+        console.log(`🧹 Removing ${oldAIPlayers.length} old generic AI players from room ${roomId}`);
+        await this.client
+          .from('dd_game_session_players')
+          .delete()
+          .eq('room_id', roomId)
+          .eq('display_name', 'Player');
+      }
+
       // Get current player count in room
       const { data: room } = await this.client
-        .from('cc_company_rooms')
+        .from('dd_company_rooms')
         .select('current_players, max_players')
         .eq('id', roomId)
         .single();
@@ -1311,12 +1434,24 @@ class CareerChallengeService {
         return;
       }
 
-      const currentPlayerCount = room.current_players || 0;
+      // Recalculate actual player count after cleanup
+      const { data: activePlayers } = await this.client
+        .from('dd_game_session_players')
+        .select('id')
+        .eq('room_id', roomId)
+        .eq('is_active', true);
+
+      const currentPlayerCount = activePlayers?.length || 0;
       const maxPlayers = Math.min(targetPlayerCount, room.max_players);
       const aiPlayersNeeded = maxPlayers - currentPlayerCount;
 
       if (aiPlayersNeeded <= 0) {
         console.log(`[Room ${roomId}] Already has ${currentPlayerCount} players, no AI needed`);
+        // Update room player count to match reality
+        await this.client
+          .from('dd_company_rooms')
+          .update({ current_players: currentPlayerCount })
+          .eq('id', roomId);
         return;
       }
 
@@ -1325,12 +1460,12 @@ class CareerChallengeService {
       // Get AI players from centralized pool
       const aiPlayers = aiPlayerPoolService.getRandomPlayers(aiPlayersNeeded, roomId);
 
-      // Add each AI player to cc_game_session_players table
+      // Add each AI player to dd_game_session_players table
       for (let i = 0; i < aiPlayers.length; i++) {
         const aiPlayer = aiPlayers[i];
 
         const { error } = await this.client
-          .from('cc_game_session_players')
+          .from('dd_game_session_players')
           .insert({
             session_id: null,
             room_id: roomId,
@@ -1349,7 +1484,7 @@ class CareerChallengeService {
 
       // Update room player count
       await this.client
-        .from('cc_company_rooms')
+        .from('dd_company_rooms')
         .update({ current_players: currentPlayerCount + aiPlayers.length })
         .eq('id', roomId);
 
@@ -1372,10 +1507,10 @@ class CareerChallengeService {
 
     // Get room and industry context
     const { data: room } = await this.client
-      .from('cc_company_rooms')
+      .from('dd_company_rooms')
       .select(`
         *,
-        cc_industries (*)
+        dd_industries (*)
       `)
       .eq('id', roomId)
       .single();
@@ -1386,7 +1521,7 @@ class CareerChallengeService {
     }
 
     // Validate that the industry relationship is properly loaded
-    if (!room.cc_industries) {
+    if (!room.dd_industries) {
       console.error('Industry data not found for room');
       return null;
     }
@@ -1394,8 +1529,8 @@ class CareerChallengeService {
     // Create industry context
     const industryContext: IndustryContext = {
       industryId: room.industry_id,
-      industryName: room.cc_industries.name,
-      industryCode: room.cc_industries.code,
+      industryName: room.dd_industries.name,
+      industryCode: room.dd_industries.code,
       companySize: room.company_size,
       companyAge: room.company_age,
       companyValues: room.company_values,
@@ -1462,7 +1597,7 @@ class CareerChallengeService {
 
     // Create session
     const { data: session, error } = await this.client
-      .from('cc_executive_sessions')
+      .from('dd_executive_sessions')
       .insert({
         room_id: roomId,
         player_id: playerId,
@@ -1509,7 +1644,7 @@ class CareerChallengeService {
     if (!this.client) await this.initialize();
 
     const { error } = await this.client
-      .from('cc_executive_sessions')
+      .from('dd_executive_sessions')
       .update({
         selected_executive: executive,
         status: 'selecting_solutions',
@@ -1532,10 +1667,10 @@ class CareerChallengeService {
 
     // Get session data with room information to determine grade category
     const { data: session } = await this.client
-      .from('cc_executive_sessions')
+      .from('dd_executive_sessions')
       .select(`
         *,
-        cc_company_rooms (grade_category)
+        dd_company_rooms (grade_category)
       `)
       .eq('id', sessionId)
       .single();
@@ -1553,7 +1688,7 @@ class CareerChallengeService {
     // Determine grade category from room
     // Database stores 'elementary' or 'other' (middle/high)
     // Convert 'other' to 'middle' for the analyzer (or leave as 'other' since function accepts elementary/middle/high)
-    const dbGradeCategory = session.cc_company_rooms?.grade_category || 'other';
+    const dbGradeCategory = session.dd_company_rooms?.grade_category || 'other';
     const gradeCategory: 'elementary' | 'middle' | 'high' =
       dbGradeCategory === 'elementary' ? 'elementary' : 'middle';
 
@@ -1595,7 +1730,7 @@ class CareerChallengeService {
 
     // Update session
     await this.client
-      .from('cc_executive_sessions')
+      .from('dd_executive_sessions')
       .update({
         selected_solutions: solutionIds,
         time_spent_seconds: timeSpentSeconds,
@@ -1671,7 +1806,7 @@ class CareerChallengeService {
 
     // Get current stats
     const { data: stats } = await this.client
-      .from('cc_executive_stats')
+      .from('dd_executive_stats')
       .select('*')
       .eq('player_id', playerId)
       .single();
@@ -1693,13 +1828,13 @@ class CareerChallengeService {
       };
 
       await this.client
-        .from('cc_executive_stats')
+        .from('dd_executive_stats')
         .update(updates)
         .eq('player_id', playerId);
     } else {
       // Create new stats record
       await this.client
-        .from('cc_executive_stats')
+        .from('dd_executive_stats')
         .insert({
           player_id: playerId,
           total_sessions_played: 1,
@@ -1758,7 +1893,7 @@ class CareerChallengeService {
     if (!this.client) await this.initialize();
 
     const { count } = await this.client
-      .from('cc_executive_sessions')
+      .from('dd_executive_sessions')
       .select('*', { count: 'exact', head: true })
       .eq('room_id', roomId)
       .eq('status', 'completed')
@@ -1768,7 +1903,81 @@ class CareerChallengeService {
   }
 
   /**
-   * Get room leaderboard
+   * Get session-specific leaderboard (only players in this session)
+   */
+  async getSessionLeaderboard(
+    sessionId: string
+  ): Promise<any[]> {
+    if (!this.client) await this.initialize();
+
+    console.log(`🔍 getSessionLeaderboard called with sessionId: ${sessionId}`);
+
+    // Get all players in this session
+    const { data: sessionPlayers, error: playersError } = await this.client
+      .from('dd_game_session_players')
+      .select('player_id, display_name')
+      .eq('session_id', sessionId)
+      .eq('is_active', true);
+
+    console.log(`🔍 Query result - sessionPlayers:`, sessionPlayers?.length || 0, playersError);
+
+    if (!sessionPlayers || sessionPlayers.length === 0) {
+      console.log(`⚠️ No session players found for session ${sessionId}`);
+      return [];
+    }
+
+    const playerIds = sessionPlayers.map((p: any) => p.player_id);
+
+    // Get completed sessions for these players in this room
+    const { data: completedSessions } = await this.client
+      .from('dd_executive_sessions')
+      .select('player_id, total_score, six_cs_scores, completed_at, room_id')
+      .eq('session_id', sessionId)
+      .eq('status', 'completed');
+
+    // Create a map of display names
+    const nameMap = new Map(sessionPlayers.map((p: any) => [p.player_id, p.display_name]));
+
+    // Create a map of best scores per player
+    const scoreMap = new Map();
+    if (completedSessions) {
+      for (const session of completedSessions) {
+        const existing = scoreMap.get(session.player_id);
+        if (!existing || session.total_score > existing.total_score) {
+          scoreMap.set(session.player_id, session);
+        }
+      }
+    }
+
+    // Build leaderboard with all session players
+    const leaderboard = sessionPlayers.map((player: any) => {
+      const session = scoreMap.get(player.player_id);
+      return {
+        playerId: player.player_id,
+        displayName: player.display_name,
+        score: session?.total_score || 0,
+        sixCs: session?.six_cs_scores || null,
+        completedAt: session?.completed_at || null,
+      };
+    });
+
+    // Sort by score descending, then by name
+    leaderboard.sort((a, b) => {
+      if (b.score !== a.score) {
+        return b.score - a.score;
+      }
+      return a.displayName.localeCompare(b.displayName);
+    });
+
+    // Add rank
+    return leaderboard.map((entry, index) => ({
+      ...entry,
+      rank: index + 1,
+    }));
+  }
+
+  /**
+   * Get room leaderboard (legacy - shows all players who ever played in room)
    */
   async getRoomLeaderboard(
     roomId: string,
@@ -1776,40 +1985,73 @@ class CareerChallengeService {
   ): Promise<any[]> {
     if (!this.client) await this.initialize();
 
-    // Get sessions without joining
-    const { data: sessions, error } = await this.client
-      .from('cc_executive_sessions')
+    // Get completed sessions
+    const { data: completedSessions, error } = await this.client
+      .from('dd_executive_sessions')
       .select('player_id, total_score, six_cs_scores, completed_at')
       .eq('room_id', roomId)
       .eq('status', 'completed')
-      .order('total_score', { ascending: false })
-      .limit(limit);
+      .order('total_score', { ascending: false });
 
     if (error) {
       console.error('Error fetching leaderboard:', error);
       return [];
     }
 
-    if (!sessions || sessions.length === 0) return [];
-
-    // Get player display names separately
-    const playerIds = [...new Set(sessions.map((s: any) => s.player_id))];
-    const { data: players } = await this.client
-      .from('cc_game_session_players')
+    // Get all active players in the room
+    const { data: activePlayers } = await this.client
+      .from('dd_game_session_players')
       .select('player_id, display_name')
-      .in('player_id', playerIds);
+      .eq('room_id', roomId)
+      .eq('is_active', true);
 
-    // Create a map of player display names
-    const playerNames = new Map(players?.map((p: any) => [p.player_id, p.display_name]) || []);
+    if (!activePlayers || activePlayers.length === 0) {
+      return completedSessions?.map((entry: any, index: number) => ({
+        rank: index + 1,
+        playerId: entry.player_id,
+        displayName: 'Unknown Player',
+        score: entry.total_score,
+        sixCs: entry.six_cs_scores,
+        completedAt: entry.completed_at
+      })) || [];
+    }
 
-    return sessions.map((entry: any, index: number) => ({
+    // Create a map of best scores per player
+    const scoreMap = new Map();
+    if (completedSessions) {
+      for (const session of completedSessions) {
+        const existing = scoreMap.get(session.player_id);
+        if (!existing || session.total_score > existing.total_score) {
+          scoreMap.set(session.player_id, session);
+        }
+      }
+    }
+
+    // Build leaderboard with all active players
+    const leaderboard = activePlayers.map((player: any) => {
+      const session = scoreMap.get(player.player_id);
+      return {
+        playerId: player.player_id,
+        displayName: player.display_name,
+        score: session?.total_score || 0,
+        sixCs: session?.six_cs_scores || null,
+        completedAt: session?.completed_at || null,
+      };
+    });
+
+    // Sort by score descending, then by name
+    leaderboard.sort((a, b) => {
+      if (b.score !== a.score) {
+        return b.score - a.score;
+      }
+      return a.displayName.localeCompare(b.displayName);
+    });
+
+    // Add rank and limit results
+    return leaderboard.map((entry, index) => ({
+      ...entry,
       rank: index + 1,
-      playerId: entry.player_id,
-      displayName: playerNames.get(entry.player_id) || 'Unknown Player',
-      score: entry.total_score,
-      sixCs: entry.six_cs_scores,
-      completedAt: entry.completed_at
-    }));
+    })).slice(0, limit);
   }
 
   /**
@@ -1822,10 +2064,10 @@ class CareerChallengeService {
     if (!this.client) await this.initialize();
 
     const { data, error } = await this.client
-      .from('cc_executive_sessions')
+      .from('dd_executive_sessions')
       .select(`
         *,
-        cc_company_rooms (name)
+        dd_company_rooms (name)
       `)
       .eq('player_id', playerId)
       .eq('status', 'completed')

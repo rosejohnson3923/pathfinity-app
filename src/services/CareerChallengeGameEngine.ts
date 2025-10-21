@@ -164,8 +164,8 @@ export class CareerChallengeGameEngine {
         };
 
         // Load existing players from session
-        if (session.cc_game_session_players && Array.isArray(session.cc_game_session_players)) {
-          for (const player of session.cc_game_session_players) {
+        if (session.dd_game_session_players && Array.isArray(session.dd_game_session_players)) {
+          for (const player of session.dd_game_session_players) {
             this.gameState.players.set(player.player_id, {
               playerId: player.player_id,
               displayName: player.display_name || 'Player',
@@ -586,7 +586,7 @@ export class CareerChallengeGameEngine {
       .on('postgres_changes', {
         event: '*',
         schema: 'public',
-        table: 'cc_game_sessions',
+        table: 'dd_game_sessions',
         filter: `id=eq.${sessionId}`,
       }, (payload: any) => {
         this.handleSessionUpdate(payload);

@@ -175,8 +175,8 @@ class DisconnectionHandler {
 
       // Get participant info
       const { data: participant, error: fetchError } = await client
-        .from('dl_session_participants')
-        .select('*, dl_game_sessions!inner(perpetual_room_id)')
+        .from('cb_session_participants')
+        .select('*, cb_game_sessions!inner(perpetual_room_id)')
         .eq('id', participantId)
         .single();
 
@@ -187,7 +187,7 @@ class DisconnectionHandler {
 
       // Update connection status
       const { error: updateError } = await client
-        .from('dl_session_participants')
+        .from('cb_session_participants')
         .update({
           connection_status: 'disconnected',
         })
@@ -202,7 +202,7 @@ class DisconnectionHandler {
 
       // Broadcast disconnection event
       await discoveredLiveRealtimeService.broadcastEvent(
-        (participant as any).dl_game_sessions.perpetual_room_id,
+        (participant as any).cb_game_sessions.perpetual_room_id,
         'participant_disconnected',
         {
           participantId,
@@ -224,8 +224,8 @@ class DisconnectionHandler {
 
       // Get participant info
       const { data: participant, error: fetchError } = await client
-        .from('dl_session_participants')
-        .select('*, dl_game_sessions!inner(perpetual_room_id, id)')
+        .from('cb_session_participants')
+        .select('*, cb_game_sessions!inner(perpetual_room_id, id)')
         .eq('id', participantId)
         .single();
 
@@ -236,7 +236,7 @@ class DisconnectionHandler {
 
       // Update connection status
       const { error: updateError } = await client
-        .from('dl_session_participants')
+        .from('cb_session_participants')
         .update({
           connection_status: 'connected',
         })
@@ -251,7 +251,7 @@ class DisconnectionHandler {
 
       // Broadcast reconnection event
       await discoveredLiveRealtimeService.broadcastEvent(
-        (participant as any).dl_game_sessions.perpetual_room_id,
+        (participant as any).cb_game_sessions.perpetual_room_id,
         'participant_reconnected',
         {
           participantId,
@@ -263,7 +263,7 @@ class DisconnectionHandler {
       // Sync missed events
       const missedEvents = await this.getMissedEvents(
         participantId,
-        (participant as any).dl_game_sessions.id
+        (participant as any).cb_game_sessions.id
       );
 
       // Send missed events to reconnected player
@@ -290,7 +290,7 @@ class DisconnectionHandler {
 
       // Get participant's last known question
       const { data: participant } = await client
-        .from('dl_session_participants')
+        .from('cb_session_participants')
         .select('*')
         .eq('id', participantId)
         .single();
@@ -301,7 +301,7 @@ class DisconnectionHandler {
 
       // Get current session state
       const { data: session } = await client
-        .from('dl_game_sessions')
+        .from('cb_game_sessions')
         .select('*')
         .eq('id', sessionId)
         .single();
@@ -312,14 +312,14 @@ class DisconnectionHandler {
 
       // Get all click events that happened while disconnected
       const { data: clickEvents } = await client
-        .from('dl_click_events')
+        .from('cb_click_events')
         .select('*')
         .eq('game_session_id', sessionId)
         .order('question_number', { ascending: true });
 
       // Get updated participant data
       const { data: updatedParticipant } = await client
-        .from('dl_session_participants')
+        .from('cb_session_participants')
         .select('*')
         .eq('id', participantId)
         .single();
@@ -357,7 +357,7 @@ class DisconnectionHandler {
       const client = await supabase();
 
       const { data: participant, error } = await client
-        .from('dl_session_participants')
+        .from('cb_session_participants')
         .select('*')
         .eq('id', participantId)
         .single();
@@ -410,7 +410,7 @@ class DisconnectionHandler {
 
       // Mark participant as AI-controlled
       const { error } = await client
-        .from('dl_session_participants')
+        .from('cb_session_participants')
         .update({
           connection_status: 'disconnected',
           // Could add an 'ai_takeover_enabled' field
@@ -436,7 +436,7 @@ class DisconnectionHandler {
       const client = await supabase();
 
       const { error } = await client
-        .from('dl_session_participants')
+        .from('cb_session_participants')
         .update({
           connection_status: 'connected',
           // Could remove 'ai_takeover_enabled' field

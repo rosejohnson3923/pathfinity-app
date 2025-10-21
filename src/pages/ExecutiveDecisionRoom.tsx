@@ -9,7 +9,6 @@ import {
   Play,
   Clock,
   TrendingUp,
-  Star,
   ChevronRight,
   LogOut,
   Crown,
@@ -60,6 +59,35 @@ const ExecutiveDecisionRoom: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const initRef = useRef(false); // Prevent duplicate initialization from React StrictMode
+
+  // Format player name with grade level: "FirstName(Grade)"
+  const getPlayerDisplayName = (): string => {
+    if (!user) return 'Player';
+
+    let firstName = 'Player';
+
+    // Try to get first name from full_name
+    if (user.full_name) {
+      const nameParts = user.full_name.trim().split(/\s+/);
+      firstName = nameParts[0];
+    } else if (user.firstName) {
+      firstName = user.firstName;
+    } else if (user.email) {
+      // Use email username as fallback
+      const emailName = user.email.split('@')[0];
+      firstName = emailName.charAt(0).toUpperCase() + emailName.slice(1);
+    }
+
+    // Add grade level if available
+    if (user.grade_level) {
+      return `${firstName}(${user.grade_level})`;
+    }
+
+    return firstName;
+  };
+
+  const playerDisplayName = getPlayerDisplayName();
 
   // Room state
   const [room, setRoom] = useState<CompanyRoom | null>(null);
@@ -67,6 +95,7 @@ const ExecutiveDecisionRoom: React.FC = () => {
   const [leaderboard, setLeaderboard] = useState<any[]>([]);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState('');
+  const [lobbySessionId, setLobbySessionId] = useState<string | null>(null); // Session created on join
 
   // Game state
   const [gamePhase, setGamePhase] = useState<GamePhase>('lobby');
@@ -78,13 +107,16 @@ const ExecutiveDecisionRoom: React.FC = () => {
 
   // UI state
   const [loading, setLoading] = useState(true);
-  const [showChat, setShowChat] = useState(true);
-  const [difficulty, setDifficulty] = useState(3);
+  const [showChat, setShowChat] = useState(false); // Show leaderboard by default
 
   useEffect(() => {
-    if (roomId && user) {
+    // Prevent duplicate initialization from React StrictMode double-mounting
+    if (roomId && user && !initRef.current) {
+      initRef.current = true;
+      console.log('🔧 Initializing room - first mount only');
       initializeRoom();
     }
+
     return () => {
       if (roomId) {
         companyRoomService.unsubscribeFromRoom(roomId);
@@ -101,9 +133,6 @@ const ExecutiveDecisionRoom: React.FC = () => {
 
     setLoading(true);
     try {
-      // Join the room
-      await careerChallengeService.joinCompanyRoom(roomId, user.id, user.username || 'Player');
-
       // Get room details - try both grade categories to find the room
       let currentRoom: CompanyRoom | undefined;
 
@@ -125,8 +154,21 @@ const ExecutiveDecisionRoom: React.FC = () => {
 
       setRoom(currentRoom || null);
 
-      // Populate room with AI players if needed (using centralized pool)
-      await careerChallengeService.populateRoomWithAIPlayers(roomId, 4);
+      // Join room and create a session-specific instance with AI players
+      const sessionId = await careerChallengeService.joinCompanyRoomAndCreateSession(
+        roomId,
+        user.id,
+        playerDisplayName,
+        6 // Total players including user
+      );
+
+      if (!sessionId) {
+        console.error('Failed to create session');
+        return;
+      }
+
+      setLobbySessionId(sessionId);
+      console.log(`✅ Joined room with session ${sessionId}`);
 
       // Subscribe to real-time updates
       await companyRoomService.subscribeToRoom(
@@ -136,19 +178,27 @@ const ExecutiveDecisionRoom: React.FC = () => {
         handleLeaderboardUpdate
       );
 
-      // Load initial data
-      const [roomPlayers, roomMessages, roomLeaderboard] = await Promise.all([
-        companyRoomService.getRoomPlayers(roomId),
+      // Load initial data for this specific session
+      console.log(`🔍 Loading data for session ${sessionId}...`);
+      const [sessionPlayers, roomMessages, sessionLeaderboard] = await Promise.all([
+        companyRoomService.getSessionPlayers(sessionId),
         companyRoomService.getRoomMessages(roomId),
-        careerChallengeService.getRoomLeaderboard(roomId)
+        careerChallengeService.getSessionLeaderboard(sessionId)
       ]);
 
-      setPlayers(roomPlayers);
+      console.log(`📊 Session players loaded:`, sessionPlayers.length, sessionPlayers);
+      console.log(`📊 Session leaderboard loaded:`, sessionLeaderboard.length, sessionLeaderboard);
+
+      setPlayers(sessionPlayers);
       setMessages(roomMessages);
-      setLeaderboard(roomLeaderboard);
+      setLeaderboard(sessionLeaderboard);
+
+      setLoading(false);
+
+      // Auto-start the game immediately instead of showing lobby
+      await startGame();
     } catch (error) {
       console.error('Error initializing room:', error);
-    } finally {
       setLoading(false);
     }
   };
@@ -175,7 +225,7 @@ const ExecutiveDecisionRoom: React.FC = () => {
     await companyRoomService.sendMessage(
       roomId,
       user.id,
-      user.username || 'Player',
+      playerDisplayName,
       newMessage,
       'chat'
     );
@@ -186,6 +236,8 @@ const ExecutiveDecisionRoom: React.FC = () => {
     if (!roomId || !user) return;
 
     setLoading(true);
+    setGamePhase('selecting-executive'); // Show loading state with correct phase
+
     try {
       // Get grade category from user's grade level
       let gradeCategory: 'elementary' | 'middle' | 'high' | undefined = undefined;
@@ -197,25 +249,17 @@ const ExecutiveDecisionRoom: React.FC = () => {
       const newSession = await careerChallengeService.startExecutiveDecisionSession(
         roomId,
         user.id,
-        difficulty,
+        3, // Default difficulty level (used for scoring/time only)
         gradeCategory
       );
 
       if (newSession) {
         setSession(newSession);
-        setGamePhase('selecting-executive');
-
-        // Announce to room
-        await companyRoomService.sendMessage(
-          roomId,
-          user.id,
-          user.username || 'Player',
-          `started a new Executive Decision challenge!`,
-          'system'
-        );
+        // Phase already set above
       }
     } catch (error) {
       console.error('Error starting game:', error);
+      setGamePhase('lobby'); // Fallback to lobby on error
     } finally {
       setLoading(false);
     }
@@ -251,7 +295,7 @@ const ExecutiveDecisionRoom: React.FC = () => {
           await companyRoomService.broadcastAchievement(
             roomId,
             user.id,
-            user.username || 'Player',
+            playerDisplayName,
             achievement
           );
         }
@@ -305,7 +349,8 @@ const ExecutiveDecisionRoom: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 text-white">
-      <div className="h-screen flex">
+      <div className="max-w-[1300px] mx-auto">
+        <div className="h-screen flex">
         {/* Main Game Area */}
         <div className="flex-1 flex flex-col">
           {/* Room Header */}
@@ -343,34 +388,6 @@ const ExecutiveDecisionRoom: React.FC = () => {
                     <p className="text-gray-300">
                       Lead as CEO and make critical business decisions through executive lenses
                     </p>
-                  </div>
-
-                  {/* Game Settings */}
-                  <div className="mb-8">
-                    <h3 className="text-lg font-semibold mb-4">Select Difficulty</h3>
-                    <div className="grid grid-cols-5 gap-2">
-                      {[1, 2, 3, 4, 5].map((level) => (
-                        <button
-                          key={`difficulty-${level}`}
-                          onClick={() => setDifficulty(level)}
-                          className={`p-3 rounded-lg border-2 transition-all ${
-                            difficulty === level
-                              ? 'bg-purple-600 border-purple-400'
-                              : 'bg-gray-700 border-gray-600 hover:bg-gray-600'
-                          }`}
-                        >
-                          <div className="flex justify-center mb-1">
-                            {Array.from({ length: level }, (_, i) => (
-                              <Star
-                                key={`star-${level}-${i}`}
-                                className="w-4 h-4 text-yellow-400 fill-yellow-400"
-                              />
-                            ))}
-                          </div>
-                          <p className="text-xs">Level {level}</p>
-                        </button>
-                      ))}
-                    </div>
                   </div>
 
                   {/* Company Values */}
@@ -429,7 +446,7 @@ const ExecutiveDecisionRoom: React.FC = () => {
         </div>
 
         {/* Right Sidebar */}
-        <div className="w-96 bg-gray-900/50 backdrop-blur-sm border-l border-purple-500/20 flex flex-col">
+        <div className="w-64 bg-gray-900/50 backdrop-blur-sm border-l border-purple-500/20 flex flex-col">
           {/* Tabs */}
           <div className="flex border-b border-gray-700">
             <button
@@ -521,78 +538,61 @@ const ExecutiveDecisionRoom: React.FC = () => {
                 </h3>
                 {leaderboard.length === 0 ? (
                   <p className="text-gray-400 text-center py-8">
-                    No games completed yet. Be the first!
+                    No players in room yet
                   </p>
                 ) : (
                   <div className="space-y-2">
-                    {leaderboard.map((entry, index) => (
-                      <div
-                        key={`leaderboard-${entry.playerId}-${entry.rank || index}`}
-                        className={`flex items-center justify-between p-3 rounded-lg ${
-                          index === 0
-                            ? 'bg-yellow-900/20 border border-yellow-500/30'
-                            : index === 1
-                            ? 'bg-gray-600/20 border border-gray-500/30'
-                            : index === 2
-                            ? 'bg-orange-900/20 border border-orange-500/30'
-                            : 'bg-gray-800/50'
-                        }`}
-                      >
-                        <div className="flex items-center">
-                          <span className="font-bold text-xl mr-3">
-                            #{entry.rank}
-                          </span>
-                          <div>
-                            <p className="font-semibold">{entry.displayName}</p>
-                            <p className="text-xs text-gray-400">
-                              Score: {entry.score.toLocaleString()}
-                            </p>
-                          </div>
-                        </div>
-                        {index < 3 && (
-                          <Trophy
-                            className={`w-5 h-5 ${
-                              index === 0
-                                ? 'text-yellow-400'
+                    {leaderboard.map((entry, index) => {
+                      const hasPlayed = entry.score > 0;
+                      const isTopThree = index < 3 && hasPlayed;
+
+                      return (
+                        <div
+                          key={`leaderboard-${entry.playerId}-${entry.rank || index}`}
+                          className={`flex items-center justify-between p-3 rounded-lg ${
+                            isTopThree
+                              ? index === 0
+                                ? 'bg-yellow-900/20 border border-yellow-500/30'
                                 : index === 1
-                                ? 'text-gray-400'
-                                : 'text-orange-400'
-                            }`}
-                          />
-                        )}
-                      </div>
-                    ))}
+                                ? 'bg-gray-600/20 border border-gray-500/30'
+                                : 'bg-orange-900/20 border border-orange-500/30'
+                              : 'bg-gray-800/50'
+                          }`}
+                        >
+                          <div className="flex items-center">
+                            <span className="font-bold text-xl mr-3">
+                              #{entry.rank}
+                            </span>
+                            <div>
+                              <p className="font-semibold">{entry.displayName}</p>
+                              <p className="text-xs text-gray-400">
+                                {hasPlayed
+                                  ? `Score: ${entry.score.toLocaleString()}`
+                                  : 'Not played yet'}
+                              </p>
+                            </div>
+                          </div>
+                          {isTopThree && (
+                            <Trophy
+                              className={`w-5 h-5 ${
+                                index === 0
+                                  ? 'text-yellow-400'
+                                  : index === 1
+                                  ? 'text-gray-400'
+                                  : 'text-orange-400'
+                              }`}
+                            />
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
-
-                {/* Active Players */}
-                <div className="mt-6">
-                  <h4 className="font-semibold mb-2 flex items-center">
-                    <Users className="w-4 h-4 mr-2 text-green-400" />
-                    Active Players ({players.filter(p => p.isActive).length})
-                  </h4>
-                  <div className="space-y-1">
-                    {players
-                      .filter(p => p.isActive)
-                      .map((player, idx) => (
-                        <div
-                          key={`active-player-${player.playerId}-${idx}`}
-                          className="flex items-center justify-between text-sm py-1"
-                        >
-                          <span className="text-gray-300">
-                            {player.displayName}
-                          </span>
-                          <span className="text-xs text-gray-500">
-                            {player.sessionCount} games
-                          </span>
-                        </div>
-                      ))}
-                  </div>
-                </div>
               </div>
             )}
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

@@ -400,7 +400,7 @@ const ExecutiveResultsScreen: React.FC<ExecutiveResultsScreenProps> = ({
 
 
   return (
-    <div className="w-full max-w-6xl mx-auto p-6">
+    <div className="w-full max-w-[1300px] mx-auto p-6">
       {/* Main Results Card */}
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}

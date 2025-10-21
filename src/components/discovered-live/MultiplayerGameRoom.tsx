@@ -198,7 +198,7 @@ export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
 
       // Get current session state
       const { data: session, error } = await client
-        .from('dl_game_sessions')
+        .from('cb_game_sessions')
         .select('*')
         .eq('id', sessionId)
         .single();
@@ -210,7 +210,7 @@ export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
 
       // Get current participant state (unlocked squares)
       const { data: participant } = await client
-        .from('dl_session_participants')
+        .from('cb_session_participants')
         .select('unlocked_squares')
         .eq('id', myParticipantId)
         .single();

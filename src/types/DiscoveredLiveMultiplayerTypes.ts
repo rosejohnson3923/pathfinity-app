@@ -19,7 +19,7 @@ import type { GridPosition, BingoGrid, CareerClue } from './DiscoveredLiveTypes'
 /**
  * Perpetual Room
  * Always-on room that runs continuous games
- * Database table: dl_perpetual_rooms
+ * Database table: cb_perpetual_rooms
  */
 export interface PerpetualRoom {
   id: string;
@@ -111,7 +111,7 @@ export type RoomStatus = 'active' | 'intermission' | 'paused';
 /**
  * Game Session
  * Individual game within a perpetual room
- * Database table: dl_game_sessions
+ * Database table: cb_game_sessions
  */
 export interface GameSession {
   id: string;
@@ -182,7 +182,7 @@ export interface BingoWinner {
 /**
  * Session Participant
  * A player in a game session (human or AI)
- * Database table: dl_session_participants
+ * Database table: cb_session_participants
  */
 export interface SessionParticipant {
   id: string;
@@ -264,7 +264,7 @@ export interface CompletedLines {
 /**
  * Spectator
  * User watching a room, waiting for next game
- * Database table: dl_spectators
+ * Database table: cb_spectators
  */
 export interface Spectator {
   id: string;
@@ -296,7 +296,7 @@ export interface DbSpectator {
 /**
  * Click Event
  * Individual click in a multiplayer game
- * Database table: dl_click_events
+ * Database table: cb_click_events
  */
 export interface ClickEvent {
   id: string;

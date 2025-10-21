@@ -40,7 +40,7 @@ export default async function handler(
 
         // Save to database
         const { error: challengeError } = await supabase
-          .from('cc_challenges')
+          .from('dd_challenges')
           .insert({
             industry_id: await getIndustryId(data.industry),
             challenge_code: `AI_${Date.now()}`,
@@ -71,7 +71,7 @@ export default async function handler(
 
         // Save to database
         const { error: roleError } = await supabase
-          .from('cc_role_cards')
+          .from('dd_role_cards')
           .insert({
             industry_id: await getIndustryId(data.industry),
             role_code: `AI_${Date.now()}`,
@@ -99,7 +99,7 @@ export default async function handler(
 
         // Save to database
         const { error: synergyError } = await supabase
-          .from('cc_synergies')
+          .from('dd_synergies')
           .insert({
             industry_id: await getIndustryId(data.industry),
             synergy_name: result.synergyName,
@@ -125,7 +125,7 @@ export default async function handler(
 
         // Save challenges
         for (const challenge of result.challenges) {
-          await supabase.from('cc_challenges').insert({
+          await supabase.from('dd_challenges').insert({
             industry_id: industryId,
             challenge_code: `AI_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
             title: challenge.title,
@@ -146,7 +146,7 @@ export default async function handler(
 
         // Save role cards
         for (const roleCard of result.roleCards) {
-          await supabase.from('cc_role_cards').insert({
+          await supabase.from('dd_role_cards').insert({
             industry_id: industryId,
             role_code: `AI_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
             role_name: roleCard.roleName,
@@ -166,7 +166,7 @@ export default async function handler(
 
         // Save synergies
         for (const synergy of result.synergies) {
-          await supabase.from('cc_synergies').insert({
+          await supabase.from('dd_synergies').insert({
             industry_id: industryId,
             synergy_name: synergy.synergyName,
             synergy_type: 'additive',
@@ -201,7 +201,7 @@ export default async function handler(
 // Helper function to get industry ID
 async function getIndustryId(industryCode: string): Promise<string> {
   const { data, error } = await supabase
-    .from('cc_industries')
+    .from('dd_industries')
     .select('id')
     .eq('code', industryCode)
     .single();

@@ -12,7 +12,7 @@ async function checkCompanyRoomIndustries() {
 
   // 1. Check what industries exist
   const { data: industries, error: indError } = await client
-    .from('cc_industries')
+    .from('dd_industries')
     .select('id, code, name')
     .order('name');
 
@@ -29,7 +29,7 @@ async function checkCompanyRoomIndustries() {
 
   // 2. Check company rooms and their industry associations
   const { data: rooms, error: roomError } = await client
-    .from('cc_company_rooms')
+    .from('dd_company_rooms')
     .select(`
       id,
       code,
@@ -66,7 +66,7 @@ async function checkCompanyRoomIndustries() {
 
       for (const room of roomsToUpdate) {
         const { error: updateError } = await client
-          .from('cc_company_rooms')
+          .from('dd_company_rooms')
           .update({ industry_id: defaultIndustryId })
           .eq('id', room.id);
 
@@ -88,7 +88,7 @@ async function checkCompanyRoomIndustries() {
 
   if (testRoomId) {
     const { data: testRoom, error: joinError } = await client
-      .from('cc_company_rooms')
+      .from('dd_company_rooms')
       .select(`
         *,
         cc_industries (*)

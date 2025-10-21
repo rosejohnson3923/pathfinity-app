@@ -214,7 +214,7 @@ class CCMXPService {
 
     // Get or create student progress record
     const { data: progress } = await this.client
-      .from('cc_player_progress')
+      .from('ccm_player_progression')
       .select('*')
       .eq('player_id', studentId)
       .single();
@@ -248,7 +248,7 @@ class CCMXPService {
       updates.win_rate = ((updates.total_challenges_succeeded / updates.total_challenges_attempted) * 100).toFixed(2);
 
       await this.client
-        .from('cc_player_progress')
+        .from('ccm_player_progression')
         .update(updates)
         .eq('player_id', studentId);
 
@@ -257,7 +257,7 @@ class CCMXPService {
       const level = this.calculateLevel(xpEarned);
 
       await this.client
-        .from('cc_player_progress')
+        .from('ccm_player_progression')
         .insert({
           player_id: studentId,
           total_xp: xpEarned,

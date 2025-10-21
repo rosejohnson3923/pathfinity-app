@@ -168,7 +168,7 @@ const SolutionSelectionScreen: React.FC<SolutionSelectionScreenProps> = ({
   }, [lensedSolutions]);
 
   return (
-    <div className="w-full max-w-7xl mx-auto p-6">
+    <div className="w-full max-w-[1300px] mx-auto p-6">
       {/* Header */}
       <div className="bg-gray-900/80 backdrop-blur-sm rounded-xl p-4 mb-6 border-2 border-purple-500/30">
         <div className="flex items-center justify-between">

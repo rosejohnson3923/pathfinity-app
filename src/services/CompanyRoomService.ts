@@ -192,14 +192,14 @@ export class CompanyRoomService {
 
     // Check which rooms already exist
     const { data: existingRooms } = await this.client
-      .from('cc_company_rooms')
+      .from('dd_company_rooms')
       .select('code');
 
     const existingCodes = new Set(existingRooms?.map((r: any) => r.code) || []);
 
     // Get industry IDs
     const { data: industries } = await this.client
-      .from('cc_industries')
+      .from('dd_industries')
       .select('id, code');
 
     const industryMap = new Map(industries?.map((i: any) => [i.code, i.id]) || []);
@@ -217,7 +217,7 @@ export class CompanyRoomService {
 
     if (roomsToInsert.length > 0) {
       const { error } = await this.client
-        .from('cc_company_rooms')
+        .from('dd_company_rooms')
         .insert(roomsToInsert);
 
       if (error) {
@@ -256,7 +256,7 @@ export class CompanyRoomService {
           {
             event: '*',
             schema: 'public',
-            table: 'cc_game_session_players',
+            table: 'dd_game_session_players',
             filter: `room_id=eq.${roomId}`,
           },
           (payload: any) => {
@@ -268,7 +268,7 @@ export class CompanyRoomService {
           {
             event: 'INSERT',
             schema: 'public',
-            table: 'cc_room_messages',
+            table: 'dd_room_messages',
             filter: `room_id=eq.${roomId}`,
           },
           (payload: any) => {
@@ -280,7 +280,7 @@ export class CompanyRoomService {
           {
             event: '*',
             schema: 'public',
-            table: 'cc_executive_sessions',
+            table: 'dd_executive_sessions',
             filter: `room_id=eq.${roomId}`,
           },
           (payload: any) => {
@@ -327,7 +327,7 @@ export class CompanyRoomService {
     if (!this.client) await this.initialize();
 
     const { error } = await this.client
-      .from('cc_room_messages')
+      .from('dd_room_messages')
       .insert({
         room_id: roomId,
         player_id: playerId,
@@ -342,12 +342,75 @@ export class CompanyRoomService {
   /**
    * Get room players
    */
+  /**
+   * Get players for a specific session (session-scoped)
+   */
+  async getSessionPlayers(sessionId: string): Promise<RoomPlayer[]> {
+    if (!this.client) await this.initialize();
+
+    console.log(`🔍 getSessionPlayers called with sessionId: ${sessionId}`);
+
+    // Get session players
+    const { data: players, error } = await this.client
+      .from('dd_game_session_players')
+      .select('*')
+      .eq('session_id', sessionId)
+      .eq('is_active', true);
+
+    console.log(`🔍 Query result - players:`, players?.length || 0, error);
+
+    if (error) {
+      console.error('Error fetching session players:', error);
+      return [];
+    }
+
+    if (!players || players.length === 0) {
+      console.log(`⚠️ No session players found for session ${sessionId}`);
+      return [];
+    }
+
+    // Get player stats separately
+    const playerIds = players.map((p: any) => p.player_id);
+    const { data: stats } = await this.client
+      .from('dd_executive_stats')
+      .select('*')
+      .in('player_id', playerIds);
+
+    // Create a map of player stats
+    const statsMap = new Map(stats?.map((s: any) => [s.player_id, s]) || []);
+
+    return players.map((player: any) => {
+      const playerStats = statsMap.get(player.player_id);
+
+      return {
+        playerId: player.player_id,
+        displayName: player.display_name,
+        avatar: player.avatar_url,
+        isActive: player.is_active,
+        currentScore: player.current_score || 0,
+        sessionCount: playerStats?.total_sessions_played || 0,
+        lastActiveAt: player.last_active_at || player.joined_at,
+        sixCsAverages: playerStats ? {
+          character: playerStats.avg_character_score,
+          competence: playerStats.avg_competence_score,
+          communication: playerStats.avg_communication_score,
+          compassion: playerStats.avg_compassion_score,
+          commitment: playerStats.avg_commitment_score,
+          confidence: playerStats.avg_confidence_score,
+        } : undefined,
+      };
+    });
+  }
+
+  /**
+   * Get players for a room (room-scoped, legacy)
+   */
   async getRoomPlayers(roomId: string): Promise<RoomPlayer[]> {
     if (!this.client) await this.initialize();
 
     // Get room players
     const { data: players, error } = await this.client
-      .from('cc_game_session_players')
+      .from('dd_game_session_players')
       .select('*')
       .eq('room_id', roomId)
       .eq('is_active', true);
@@ -362,7 +425,7 @@ export class CompanyRoomService {
     // Get player stats separately
     const playerIds = players.map((p: any) => p.player_id);
     const { data: stats } = await this.client
-      .from('cc_executive_stats')
+      .from('dd_executive_stats')
       .select('*')
       .in('player_id', playerIds);
 
@@ -402,7 +465,7 @@ export class CompanyRoomService {
     if (!this.client) await this.initialize();
 
     const { data, error } = await this.client
-      .from('cc_room_messages')
+      .from('dd_room_messages')
       .select('*')
       .eq('room_id', roomId)
       .order('created_at', { ascending: false })
@@ -480,7 +543,7 @@ export class CompanyRoomService {
     if (!this.client) await this.initialize();
 
     const { data: sessions } = await this.client
-      .from('cc_executive_sessions')
+      .from('dd_executive_sessions')
       .select('total_score, selected_executive, six_cs_scores')
       .eq('room_id', roomId)
       .eq('status', 'completed');
@@ -582,7 +645,7 @@ export class CompanyRoomService {
     if (!this.client) await this.initialize();
 
     const { data, error } = await this.client
-      .from('cc_company_rooms')
+      .from('dd_company_rooms')
       .select('*')
       .eq('id', roomId)
       .single();
@@ -611,8 +674,9 @@ export class CompanyRoomService {
   private async getRoomLeaderboard(roomId: string): Promise<any[]> {
     if (!this.client) await this.initialize();
 
-    const { data } = await this.client
-      .from('cc_executive_sessions')
+    // Get completed sessions
+    const { data: completedSessions } = await this.client
+      .from('dd_executive_sessions')
       .select(`
         player_id,
         total_score,
@@ -621,10 +685,55 @@ export class CompanyRoomService {
       `)
       .eq('room_id', roomId)
       .eq('status', 'completed')
-      .order('total_score', { ascending: false })
-      .limit(10);
+      .order('total_score', { ascending: false });
 
-    return data || [];
+    // Get all active players in the room
+    const { data: activePlayers } = await this.client
+      .from('dd_game_session_players')
+      .select('player_id, display_name')
+      .eq('room_id', roomId)
+      .eq('is_active', true);
+
+    if (!activePlayers || activePlayers.length === 0) {
+      return completedSessions || [];
+    }
+
+    // Create a map of best scores per player
+    const scoreMap = new Map();
+    if (completedSessions) {
+      for (const session of completedSessions) {
+        const existing = scoreMap.get(session.player_id);
+        if (!existing || session.total_score > existing.total_score) {
+          scoreMap.set(session.player_id, session);
+        }
+      }
+    }
+
+    // Build leaderboard with all active players
+    const leaderboard = activePlayers.map((player: any) => {
+      const session = scoreMap.get(player.player_id);
+      return {
+        playerId: player.player_id,
+        displayName: player.display_name,
+        score: session?.total_score || 0,
+        sixCs: session?.six_cs_scores || null,
+        completedAt: session?.completed_at || null,
+      };
+    });
+
+    // Sort by score descending, then by name
+    leaderboard.sort((a, b) => {
+      if (b.score !== a.score) {
+        return b.score - a.score;
+      }
+      return a.displayName.localeCompare(b.displayName);
+    });
+
+    // Add rank
+    return leaderboard.map((entry, index) => ({
+      ...entry,
+      rank: index + 1,
+    })).slice(0, 10);
   }
 
   private handlePlayerChange(roomId: string, payload: any): void {

@@ -96,7 +96,7 @@ class CareerChallengeDBTest {
     console.log(`\n${colors.blue}Testing: Industries${colors.reset}`);
 
     const { data: industries, error } = await this.client
-      .from('cc_industries')
+      .from('dd_industries')
       .select('*')
       .eq('is_active', true);
 
@@ -131,7 +131,7 @@ class CareerChallengeDBTest {
     console.log(`\n${colors.blue}Testing: Challenges${colors.reset}`);
 
     const { data: challenges, error } = await this.client
-      .from('cc_challenges')
+      .from('dd_challenges')
       .select(`
         *,
         cc_industries (
@@ -177,7 +177,7 @@ class CareerChallengeDBTest {
     console.log(`\n${colors.blue}Testing: Role Cards${colors.reset}`);
 
     const { data: roleCards, error } = await this.client
-      .from('cc_role_cards')
+      .from('dd_role_cards')
       .select(`
         *,
         cc_industries (
@@ -238,7 +238,7 @@ class CareerChallengeDBTest {
     console.log(`\n${colors.blue}Testing: Synergies${colors.reset}`);
 
     const { data: synergies, error } = await this.client
-      .from('cc_synergy_definitions')
+      .from('dd_synergy_definitions')
       .select(`
         *,
         cc_industries (
@@ -322,7 +322,7 @@ class CareerChallengeDBTest {
 
     // Get a random challenge
     const { data: challenges } = await this.client
-      .from('cc_challenges')
+      .from('dd_challenges')
       .select('id, title, base_difficulty_score, perfect_score')
       .limit(1);
 
