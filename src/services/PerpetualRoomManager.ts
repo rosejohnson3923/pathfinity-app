@@ -353,6 +353,7 @@ class PerpetualRoomManager {
         unlocked_squares: [],
         completed_lines: { rows: [], columns: [], diagonals: [] },
         connection_status: 'connected',
+        is_active: true, // Explicitly set for consistency
       })
       .select()
       .single();
@@ -421,6 +422,7 @@ class PerpetualRoomManager {
           unlocked_squares: [],
           completed_lines: { rows: [], columns: [], diagonals: [] },
           connection_status: 'connected',
+          is_active: true, // Ensure AI players appear in leaderboard
         });
     }
 
