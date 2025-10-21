@@ -145,7 +145,7 @@ const StudentDashboardRedesigned: React.FC = () => {
   const handleGameClick = (gameId: string) => {
     switch (gameId) {
       case 'career-challenge':
-        navigate('/career-challenge/rooms');
+        navigate('/discovered-live/career-challenge-multiplayer');
         break;
       case 'bingo-careers':
         navigate('/bingo-careers');

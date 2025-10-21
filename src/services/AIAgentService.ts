@@ -5,7 +5,7 @@
  * Features:
  * - Realistic click behavior based on difficulty
  * - Variable response times
- * - Human-like names (e.g., "Sara S.", "James T.")
+ * - Human-like names from centralized AIPlayerPoolService
  * - Grid-aware position finding
  */
 
@@ -17,38 +17,7 @@ import type {
   GridPosition,
 } from '../types/DiscoveredLiveMultiplayerTypes';
 import type { CareerClue } from '../types/DiscoveredLiveTypes';
-
-/**
- * Reserved name combinations to avoid conflicts with:
- * - AI Companions: Finn, Harmony, Sage, Spark
- * - Demo Users: Sam B., Alex D., Jordan S., Taylor J.
- */
-const RESERVED_NAMES = ['Finn', 'Harmony', 'Sage', 'Spark'];
-const RESERVED_NAME_COMBOS = ['Sam B.', 'Alex D.', 'Jordan S.', 'Taylor J.'];
-
-/**
- * Human-like names for AI players in multiplayer games
- * Format: FirstName LastInitial.
- * NOTE: Can use Sam, Alex, Jordan, Taylor but with DIFFERENT last initials
- * Avoided combinations: Sam B., Alex D., Jordan S., Taylor J.
- */
-const AI_PLAYER_NAMES = [
-  // Female names
-  'Sara S.', 'Emily R.', 'Maya P.', 'Sophia L.', 'Ava C.',
-  'Isabella H.', 'Mia D.', 'Charlotte F.', 'Amelia W.', 'Harper B.',
-  'Ella K.', 'Grace M.', 'Lily N.', 'Chloe T.', 'Zoe J.',
-  'Nora V.', 'Hannah G.', 'Layla Q.', 'Riley X.', 'Aria Z.',
-
-  // Male names
-  'James T.', 'Lucas M.', 'Noah W.', 'Ethan B.', 'Mason J.',
-  'Logan H.', 'Oliver K.', 'Elijah R.', 'Aiden P.', 'Jackson D.',
-  'Liam F.', 'Carter N.', 'Owen G.', 'Leo V.', 'Henry C.',
-  'Jack S.', 'Ryan L.', 'Tyler Q.', 'Dylan X.', 'Caleb Z.',
-
-  // Gender-neutral names (OK to use Sam, Alex, Jordan, Taylor with different last initials)
-  'Sam W.', 'Alex Y.', 'Jordan E.', 'Taylor I.', 'Casey A.', 'Morgan O.',
-  'Jamie U.', 'Quinn R.', 'Avery P.', 'Dakota M.',
-];
+import { aiPlayerPoolService } from './AIPlayerPoolService';
 
 /**
  * Predefined AI Agent Configurations
@@ -108,16 +77,16 @@ class AIAgentService {
   }
 
   /**
-   * Get a random unused human name
+   * Get a random unused human name from centralized pool
    */
   private getRandomHumanName(usedNames: Set<string>): string {
-    const availableNames = AI_PLAYER_NAMES.filter(name => !usedNames.has(name));
+    const allNames = aiPlayerPoolService.getAllPlayerNames();
+    const availableNames = allNames.filter(name => !usedNames.has(name));
 
     if (availableNames.length === 0) {
-      // If all names are used, append a number to a random name
-      const baseName = AI_PLAYER_NAMES[Math.floor(Math.random() * AI_PLAYER_NAMES.length)];
-      const nameWithoutDot = baseName.replace('.', '');
-      return `${nameWithoutDot} ${Math.floor(Math.random() * 100)}`;
+      // If all names are used, just get a random name from pool (rare edge case)
+      const randomPlayer = aiPlayerPoolService.getRandomPlayer();
+      return randomPlayer.name;
     }
 
     return availableNames[Math.floor(Math.random() * availableNames.length)];

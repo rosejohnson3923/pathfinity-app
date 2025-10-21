@@ -937,7 +937,11 @@ export interface BusinessScenario {
   companyRoomId?: string; // If specific to a company
   industrySpecific: boolean;
   executivePitches: Record<CSuiteRole, string>;
+  lensMultipliers: Record<CSuiteRole, number>; // Scoring multipliers for each executive lens
   tags?: string[];
+  context?: string; // Additional context for the challenge
+  pCategory?: string; // P category (people, product, process, place, promotion, price)
+  gradeCategory?: 'elementary' | 'middle' | 'high'; // Grade level
 }
 
 /**
@@ -1221,7 +1225,11 @@ export function dbBusinessScenarioToBusinessScenario(db: any): BusinessScenario 
     companyRoomId: db.company_room_id,
     industrySpecific: db.industry_specific,
     executivePitches: db.executive_pitches || {},
+    lensMultipliers: db.lens_multipliers || {},
     tags: db.tags,
+    context: db.context,
+    pCategory: db.p_category,
+    gradeCategory: db.grade_category,
   };
 }
 

@@ -1,12 +1,13 @@
 /**
  * CCM (Career Challenge Multiplayer) Hub
- * Perpetual room browser and join interface
+ * Company lobby browser and join interface
  *
- * Key differences from CC:
- * - Perpetual rooms (always-on) instead of player-created rooms
- * - No "create room" option
- * - Shows game status (active/intermission)
- * - Queue system for joining during active games
+ * Features:
+ * - 30 company lobbies across 3 grade levels
+ * - Grade level filtering (Elementary, Middle, High)
+ * - Company branding with logos and colors
+ * - 6 P-category challenges per company
+ * - Real business scenarios with C-Suite lens system
  */
 
 import React, { useState, useEffect } from 'react';
@@ -22,22 +23,36 @@ import {
   Globe,
   Star,
   TrendingUp,
-  AlertCircle
+  AlertCircle,
+  Building2,
+  Briefcase,
+  GraduationCap
 } from 'lucide-react';
 
-interface PerpetualRoom {
+interface CompanyLobby {
   id: string;
-  roomCode: string;
-  roomName: string;
+  code: string;
+  name: string;
   description: string;
-  status: 'active' | 'intermission';
-  currentPlayerCount: number;
-  maxPlayersPerGame: number;
-  currentGameNumber: number;
-  nextGameStartsAt?: string;
-  themeColor: string;
-  difficultyRange: string;
-  totalGamesPlayed: number;
+  logoIcon: string;
+  colorScheme: {
+    primary: string;
+    secondary: string;
+    accent: string;
+  };
+  companySize: string;
+  gradeCategory: 'elementary' | 'middle' | 'high';
+  industry: {
+    id: string;
+    name: string;
+    code: string;
+    icon?: string;
+    color_scheme?: {
+      primary: string;
+      secondary: string;
+    };
+  };
+  challengeCount: number;
 }
 
 interface CCMHubProps {
@@ -53,98 +68,90 @@ export const CCMHub: React.FC<CCMHubProps> = ({
   onBack,
   onJoinRoom
 }) => {
-  const [rooms, setRooms] = useState<PerpetualRoom[]>([]);
+  const [companies, setCompanies] = useState<CompanyLobby[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedRoom, setSelectedRoom] = useState<PerpetualRoom | null>(null);
+  const [selectedCompany, setSelectedCompany] = useState<CompanyLobby | null>(null);
   const [joining, setJoining] = useState(false);
+  const [gradeFilter, setGradeFilter] = useState<'all' | 'elementary' | 'middle' | 'high'>('all');
 
-  // Load featured perpetual rooms
+  // Load company lobbies
   useEffect(() => {
-    loadRooms();
+    loadCompanies();
+  }, [gradeFilter]);
 
-    // Refresh room status every 5 seconds
-    const interval = setInterval(loadRooms, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const loadRooms = async () => {
+  const loadCompanies = async () => {
+    setLoading(true);
     try {
       await ccmService.initialize();
-      const featuredRooms = await ccmService.getFeaturedRooms();
+      const filter = gradeFilter === 'all' ? undefined : gradeFilter;
+      const companyLobbies = await ccmService.getCompanyLobbies(filter);
 
-      setRooms(featuredRooms.map(room => ({
-        id: room.id,
-        roomCode: room.room_code,
-        roomName: room.room_name,
-        description: room.description || 'Multiplayer career challenge',
-        status: room.status,
-        currentPlayerCount: room.current_player_count || 0,
-        maxPlayersPerGame: room.max_players_per_game || 8,
-        currentGameNumber: room.current_game_number || 1,
-        nextGameStartsAt: room.next_game_starts_at,
-        themeColor: room.theme_color || 'blue',
-        difficultyRange: room.difficulty_range || 'All Levels',
-        totalGamesPlayed: room.total_games_played || 0,
+      setCompanies(companyLobbies.map((company: any) => ({
+        id: company.id,
+        code: company.code,
+        name: company.name,
+        description: company.description || 'Real business challenges',
+        logoIcon: company.logo_icon || '🏢',
+        colorScheme: company.color_scheme || {
+          primary: '#3B82F6',
+          secondary: '#1E40AF',
+          accent: '#60A5FA'
+        },
+        companySize: company.company_size || 'Unknown',
+        gradeCategory: company.grade_category,
+        industry: {
+          id: company.industry?.id || '',
+          name: company.industry?.name || 'General',
+          code: company.industry?.code || 'general',
+          icon: company.industry?.icon,
+          color_scheme: company.industry?.color_scheme
+        },
+        challengeCount: company.challengeCount || 6,
       })));
 
       setLoading(false);
     } catch (err) {
-      console.error('Failed to load rooms:', err);
-      setError('Failed to load rooms');
+      console.error('Failed to load company lobbies:', err);
+      setError('Failed to load company lobbies');
       setLoading(false);
     }
   };
 
-  const handleJoinRoom = async (room: PerpetualRoom) => {
+  const handleJoinCompany = async (company: CompanyLobby) => {
     setJoining(true);
     setError(null);
 
     try {
-      const result = await ccmService.joinRoom(room.id, playerId, playerName);
-
-      if (result.success) {
-        onJoinRoom(room.id, room.roomCode);
-      } else {
-        setError(result.message || 'Failed to join room');
-      }
+      // For now, directly navigate to the game room
+      // TODO: Implement proper lobby joining logic
+      onJoinRoom(company.id, company.code);
     } catch (err: any) {
-      console.error('Error joining room:', err);
-      setError(err.message || 'Failed to join room');
+      console.error('Error joining company:', err);
+      setError(err.message || 'Failed to join company');
     } finally {
       setJoining(false);
     }
   };
 
-  // Get color scheme for room
-  const getColorScheme = (color: string) => {
-    const schemes: Record<string, string> = {
-      blue: 'from-blue-600 to-indigo-600',
-      purple: 'from-purple-600 to-pink-600',
-      green: 'from-green-600 to-emerald-600',
-      orange: 'from-orange-600 to-red-600',
+  // Get grade level badge color
+  const getGradeBadgeColor = (grade: string) => {
+    const colors: Record<string, string> = {
+      elementary: 'bg-green-500',
+      middle: 'bg-blue-500',
+      high: 'bg-purple-500',
     };
-    return schemes[color] || schemes.blue;
+    return colors[grade] || 'bg-gray-500';
   };
 
-  // Get icon for room
-  const getRoomIcon = (roomCode: string) => {
-    if (roomCode.includes('GLOBAL')) return Globe;
-    if (roomCode.includes('SKILL')) return TrendingUp;
-    if (roomCode.includes('CASUAL')) return Star;
-    return Trophy;
-  };
-
-  // Calculate countdown for intermission
-  const getCountdown = (nextGameStartsAt: string | undefined) => {
-    if (!nextGameStartsAt) return null;
-
-    const now = new Date().getTime();
-    const target = new Date(nextGameStartsAt).getTime();
-    const diff = Math.max(0, target - now);
-    const seconds = Math.floor(diff / 1000);
-
-    return seconds;
+  // Get grade level display name
+  const getGradeDisplayName = (grade: string) => {
+    const names: Record<string, string> = {
+      elementary: 'Elementary',
+      middle: 'Middle School',
+      high: 'High School',
+    };
+    return names[grade] || grade;
   };
 
   return (
@@ -162,7 +169,7 @@ export const CCMHub: React.FC<CCMHubProps> = ({
             <div>
               <h1 className="text-3xl font-bold text-white flex items-center gap-3">
                 <Zap className="w-8 h-8 text-yellow-400" />
-                Career Challenge Multiplayer
+                CEO Takeover
                 <span className="px-3 py-1 bg-green-500/20 rounded-lg border border-green-500/50 text-green-300 text-sm font-medium">
                   24/7 LIVE
                 </span>
@@ -182,145 +189,213 @@ export const CCMHub: React.FC<CCMHubProps> = ({
       <div className="max-w-7xl mx-auto">
         {loading ? (
           <div className="flex items-center justify-center min-h-[60vh]">
-            <div className="text-white text-xl">Loading rooms...</div>
+            <div className="text-white text-xl">Loading company lobbies...</div>
           </div>
         ) : (
           <>
             {/* Info Banner */}
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 mb-6">
               <div className="flex items-start gap-3">
-                <AlertCircle className="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0" />
+                <Building2 className="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="text-white font-medium">Perpetual Room System</p>
+                  <p className="text-white font-medium">Choose Your Company Challenge</p>
                   <p className="text-white/70 text-sm mt-1">
-                    Games run continuously with 15-second intermissions. Join during intermission to play immediately,
-                    or queue up during an active game to join the next one!
+                    Select from 30 companies across 14 cutting-edge industries. Each company has 6 business challenges impacting the 6 P's of business growth: Product, Price, Place, Promotion, People, and Process. Choose your C-Suite lens and solve real-world scenarios!
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* Room List */}
-            <div className="space-y-4">
+            {/* Grade Level Filter Tabs */}
+            <div className="mb-6">
+              <div className="flex gap-2 flex-wrap">
+                <button
+                  onClick={() => setGradeFilter('all')}
+                  className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                    gradeFilter === 'all'
+                      ? 'bg-white text-purple-900'
+                      : 'bg-white/10 text-white hover:bg-white/20'
+                  }`}
+                >
+                  <span className="flex items-center gap-2">
+                    <Globe className="w-4 h-4" />
+                    All Companies
+                  </span>
+                </button>
+                <button
+                  onClick={() => setGradeFilter('elementary')}
+                  className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                    gradeFilter === 'elementary'
+                      ? 'bg-green-500 text-white'
+                      : 'bg-white/10 text-white hover:bg-white/20'
+                  }`}
+                >
+                  <span className="flex items-center gap-2">
+                    <GraduationCap className="w-4 h-4" />
+                    Elementary
+                  </span>
+                </button>
+                <button
+                  onClick={() => setGradeFilter('middle')}
+                  className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                    gradeFilter === 'middle'
+                      ? 'bg-blue-500 text-white'
+                      : 'bg-white/10 text-white hover:bg-white/20'
+                  }`}
+                >
+                  <span className="flex items-center gap-2">
+                    <GraduationCap className="w-4 h-4" />
+                    Middle School
+                  </span>
+                </button>
+                <button
+                  onClick={() => setGradeFilter('high')}
+                  className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                    gradeFilter === 'high'
+                      ? 'bg-purple-500 text-white'
+                      : 'bg-white/10 text-white hover:bg-white/20'
+                  }`}
+                >
+                  <span className="flex items-center gap-2">
+                    <GraduationCap className="w-4 h-4" />
+                    High School
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            {/* Company List - Grouped by Industry */}
+            <div className="space-y-8">
+              {/* Total Count Header */}
               <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-                <Trophy className="w-6 h-6 text-yellow-400" />
-                Featured Rooms ({rooms.length})
+                <Building2 className="w-6 h-6 text-yellow-400" />
+                {gradeFilter === 'all' ? 'All Companies' : `${getGradeDisplayName(gradeFilter)} Companies`} ({companies.length})
               </h2>
 
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {rooms.map((room, index) => {
-                  const IconComponent = getRoomIcon(room.roomCode);
-                  const countdown = getCountdown(room.nextGameStartsAt);
+              {/* Group companies by industry */}
+              {Object.entries(
+                companies.reduce((acc, company) => {
+                  const industryName = company.industry.name || 'Other';
+                  if (!acc[industryName]) {
+                    acc[industryName] = [];
+                  }
+                  acc[industryName].push(company);
+                  return acc;
+                }, {} as Record<string, CompanyLobby[]>)
+              )
+              .sort(([nameA], [nameB]) => nameA.localeCompare(nameB)) // Sort industries alphabetically
+              .map(([industryName, industryCompanies], industryIndex) => (
+                <div key={industryName} className="space-y-4">
+                  {/* Industry Section Header */}
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: industryIndex * 0.1 }}
+                    className="flex items-center gap-3"
+                  >
+                    <div className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
+                      <span className="text-2xl">{industryCompanies[0].industry.icon || '🏢'}</span>
+                      <h3 className="text-xl font-bold text-white">{industryName}</h3>
+                      <span className="text-sm text-white/70">({industryCompanies.length})</span>
+                    </div>
+                    <div className="flex-1 h-px bg-gradient-to-r from-white/20 to-transparent"></div>
+                  </motion.div>
 
+                  {/* Companies Grid for this Industry */}
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {industryCompanies
+                      .sort((a, b) => a.name.localeCompare(b.name)) // Sort companies alphabetically within industry
+                      .map((company, index) => {
                   return (
                     <motion.div
-                      key={room.id}
+                      key={company.id}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.1 }}
-                      className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:scale-[1.02] transition-all duration-200 relative"
+                      className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:scale-[1.02] transition-all duration-200 relative max-w-md mx-auto w-full"
+                      style={{
+                        borderTop: `4px solid ${company.colorScheme.primary}`
+                      }}
                     >
-                      {/* Status Badge - Top Right */}
+                      {/* Grade Badge - Top Right */}
                       <div className="absolute top-4 right-4">
-                        {room.status === 'intermission' ? (
-                          <span className="text-[10px] font-bold px-2 py-1 rounded-full bg-green-500 text-white animate-pulse">
-                            OPEN
-                          </span>
-                        ) : (
-                          <span className="text-[10px] font-bold px-2 py-1 rounded-full bg-orange-500 text-white">
-                            ACTIVE
-                          </span>
-                        )}
+                        <span className={`text-[10px] font-bold px-2 py-1 rounded-full ${getGradeBadgeColor(company.gradeCategory)} text-white`}>
+                          {company.gradeCategory.toUpperCase()}
+                        </span>
                       </div>
 
-                      {/* Room Icon */}
+                      {/* Company Logo */}
                       <div className="flex items-center justify-center mb-4">
-                        <div className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${getColorScheme(room.themeColor)} flex items-center justify-center shadow-lg`}>
-                          <IconComponent className="w-10 h-10 text-white" />
+                        <div
+                          className="w-20 h-20 rounded-2xl flex items-center justify-center shadow-lg text-4xl"
+                          style={{
+                            background: `linear-gradient(135deg, ${company.colorScheme.primary}, ${company.colorScheme.secondary})`
+                          }}
+                        >
+                          {company.logoIcon}
                         </div>
                       </div>
 
-                      {/* Room Name */}
+                      {/* Company Name */}
                       <h4 className="text-2xl font-bold text-center mb-2">
-                        {room.roomName}
+                        {company.name}
                       </h4>
 
-                      {/* Room Code */}
+                      {/* Industry Badge */}
                       <div className="flex justify-center mb-2">
-                        <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs font-mono text-gray-600 dark:text-gray-400">
-                          {room.roomCode}
+                        <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs font-medium text-gray-600 dark:text-gray-400 flex items-center gap-1">
+                          <Briefcase className="w-3 h-3" />
+                          {company.industry.name}
                         </span>
                       </div>
 
                       {/* Description */}
                       <p className="text-sm text-gray-600 dark:text-gray-400 text-center mb-4 min-h-[3rem]">
-                        {room.description}
+                        {company.description}
                       </p>
 
                       {/* Stats Grid */}
                       <div className="grid grid-cols-3 gap-2 mb-4">
                         <div className="bg-gray-100 dark:bg-gray-700 text-center py-2 px-1 rounded-lg">
-                          <Users className="w-4 h-4 text-blue-500 mx-auto mb-1" />
-                          <div className="text-gray-600 dark:text-gray-400 font-semibold text-xs">
-                            {room.currentPlayerCount}/{room.maxPlayersPerGame}
-                          </div>
-                        </div>
-                        <div className="bg-gray-100 dark:bg-gray-700 text-center py-2 px-1 rounded-lg">
                           <Trophy className="w-4 h-4 text-yellow-500 mx-auto mb-1" />
                           <div className="text-gray-600 dark:text-gray-400 font-semibold text-xs">
-                            Game #{room.currentGameNumber}
+                            {company.challengeCount} challenges
+                          </div>
+                        </div>
+                        <div className="bg-green-100 dark:bg-green-900/30 text-center py-2 px-1 rounded-lg border border-green-500/30">
+                          <Zap className="w-4 h-4 text-green-500 mx-auto mb-1" />
+                          <div className="text-green-700 dark:text-green-400 font-bold text-xs">
+                            Join Anytime
                           </div>
                         </div>
                         <div className="bg-gray-100 dark:bg-gray-700 text-center py-2 px-1 rounded-lg">
-                          <TrendingUp className="w-4 h-4 text-green-500 mx-auto mb-1" />
+                          <Building2 className="w-4 h-4 text-blue-500 mx-auto mb-1" />
                           <div className="text-gray-600 dark:text-gray-400 font-semibold text-xs">
-                            {room.totalGamesPlayed} played
+                            {company.companySize}
                           </div>
                         </div>
                       </div>
 
-                      {/* Status Info */}
-                      {room.status === 'intermission' && countdown !== null && (
-                        <p className="text-center text-sm text-gray-500 dark:text-gray-400 mb-3">
-                          <Clock className="w-3 h-3 inline mr-1" />
-                          Next game in {countdown}s
-                        </p>
-                      )}
-
                       {/* Join Button */}
-                      {room.currentPlayerCount >= room.maxPlayersPerGame ? (
-                        <div className="w-full bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-400 text-center py-3 px-6 rounded-xl font-bold cursor-not-allowed">
-                          Room Full
-                        </div>
-                      ) : (
-                        <motion.button
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          onClick={() => handleJoinRoom(room)}
-                          disabled={joining}
-                          className={`w-full font-bold py-3 px-6 rounded-xl shadow-lg flex items-center justify-center gap-2 ${
-                            room.status === 'intermission'
-                              ? `bg-gradient-to-r ${getColorScheme(room.themeColor)} text-white`
-                              : 'bg-white/10 text-white border border-white/30'
-                          }`}
-                        >
-                          {room.status === 'intermission' ? (
-                            <>
-                              <Play className="w-5 h-5" fill="currentColor" />
-                              Join Now
-                            </>
-                          ) : (
-                            <>
-                              <Clock className="w-5 h-5" />
-                              Queue Up
-                            </>
-                          )}
-                        </motion.button>
-                      )}
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => handleJoinCompany(company)}
+                        disabled={joining}
+                        className="w-full font-bold py-3 px-6 rounded-xl shadow-lg flex items-center justify-center gap-2 text-white"
+                        style={{
+                          background: `linear-gradient(135deg, ${company.colorScheme.primary}, ${company.colorScheme.secondary})`
+                        }}
+                      >
+                        <Play className="w-5 h-5" fill="currentColor" />
+                        Join Company
+                      </motion.button>
                     </motion.div>
                   );
-                })}
-              </div>
+                    })}
+                  </div>
+                </div>
+              ))}
             </div>
           </>
         )}

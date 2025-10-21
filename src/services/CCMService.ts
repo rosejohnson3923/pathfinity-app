@@ -57,6 +57,138 @@ class CCMService {
   }
 
   /**
+   * Get company lobbies filtered by grade level
+   * @param gradeCategory - Optional filter for 'elementary', 'middle', or 'high'
+   * @returns Array of company rooms with challenge counts
+   */
+  async getCompanyLobbies(gradeCategory?: 'elementary' | 'middle' | 'high'): Promise<any[]> {
+    if (!this.client) await this.initialize();
+
+    let query = this.client
+      .from('ccm_company_rooms')
+      .select(`
+        *,
+        ccm_industries:industry_id (
+          id,
+          name,
+          code,
+          icon,
+          color_scheme
+        )
+      `)
+      .eq('is_active', true);
+
+    if (gradeCategory) {
+      query = query.eq('grade_category', gradeCategory);
+    }
+
+    query = query.order('grade_category').order('name');
+
+    const { data: companies, error } = await query;
+
+    if (error) {
+      console.error('Error fetching company lobbies:', error);
+      return [];
+    }
+
+    if (!companies) return [];
+
+    // Get challenge counts for each company
+    const companiesWithCounts = await Promise.all(
+      companies.map(async (company) => {
+        const { count } = await this.client
+          .from('ccm_business_scenarios')
+          .select('id', { count: 'exact', head: true })
+          .eq('company_room_id', company.id);
+
+        return {
+          ...company,
+          challengeCount: count || 0,
+          industry: company.ccm_industries
+        };
+      })
+    );
+
+    return companiesWithCounts;
+  }
+
+  /**
+   * Get company room details with all challenges
+   * @param companyRoomId - The company room ID
+   * @returns Company details with all associated challenges
+   */
+  async getCompanyRoomDetails(companyRoomId: string): Promise<any> {
+    if (!this.client) await this.initialize();
+
+    const { data: company, error: companyError } = await this.client
+      .from('ccm_company_rooms')
+      .select(`
+        *,
+        ccm_industries:industry_id (
+          id,
+          name,
+          code,
+          icon,
+          color_scheme
+        )
+      `)
+      .eq('id', companyRoomId)
+      .single();
+
+    if (companyError) {
+      console.error('Error fetching company room details:', companyError);
+      return null;
+    }
+
+    // Get all challenges for this company
+    const { data: challenges, error: challengesError } = await this.client
+      .from('ccm_business_scenarios')
+      .select('*')
+      .eq('company_room_id', companyRoomId)
+      .order('p_category');
+
+    if (challengesError) {
+      console.error('Error fetching company challenges:', challengesError);
+    }
+
+    return {
+      ...company,
+      industry: company.ccm_industries,
+      challenges: challenges || []
+    };
+  }
+
+  /**
+   * Get challenges for a specific company room
+   * @param companyRoomId - The company room ID
+   * @param pCategory - Optional P category filter
+   * @returns Array of business scenarios
+   */
+  async getCompanyChallenges(companyRoomId: string, pCategory?: string): Promise<any[]> {
+    if (!this.client) await this.initialize();
+
+    let query = this.client
+      .from('ccm_business_scenarios')
+      .select('*')
+      .eq('company_room_id', companyRoomId);
+
+    if (pCategory) {
+      query = query.eq('p_category', pCategory);
+    }
+
+    query = query.order('p_category');
+
+    const { data, error } = await query;
+
+    if (error) {
+      console.error('Error fetching company challenges:', error);
+      return [];
+    }
+
+    return data || [];
+  }
+
+  /**
    * Get room status (active or intermission)
    */
   async getRoomStatus(roomId: string): Promise<any> {
@@ -247,6 +379,107 @@ class CCMService {
     }
 
     return data;
+  }
+
+  /**
+   * Get random challenge card for a specific round
+   * Optionally filter by P category if specified
+   */
+  async getChallengeCard(pCategory?: string): Promise<any> {
+    if (!this.client) await this.initialize();
+
+    let query = this.client
+      .from('ccm_challenge_cards')
+      .select('*')
+      .eq('is_active', true);
+
+    if (pCategory) {
+      query = query.eq('p_category', pCategory);
+    }
+
+    const { data: challenges, error } = await query;
+
+    if (error) {
+      console.error('Error fetching challenge cards:', error);
+      return null;
+    }
+
+    if (!challenges || challenges.length === 0) {
+      return null;
+    }
+
+    // Return random challenge from filtered set
+    const randomIndex = Math.floor(Math.random() * challenges.length);
+    return challenges[randomIndex];
+  }
+
+  /**
+   * Get 6 role cards dynamically filtered by challenge P category
+   *
+   * Filtering logic:
+   * 1. Prioritize "perfect" quality roles for the current P category
+   * 2. Fill remaining slots with "good" quality roles (up to 6 total)
+   * 3. Exclude "not_in" quality roles
+   * 4. Exclude C-Suite leader roles (CEO, CFO, CMO, CTO, CHRO, COO) - they are lens choices, not playable cards
+   * 5. Shuffle results to randomize order
+   *
+   * @param pCategory - The P category of the current challenge (people, product, process, place, promotion, price)
+   * @returns Array of 6 role card IDs filtered for the challenge
+   */
+  async getRoleCardsForChallenge(pCategory: string): Promise<string[]> {
+    if (!this.client) await this.initialize();
+
+    const qualityField = `quality_for_${pCategory}`;
+
+    // C-Suite leader card codes to exclude (these are lens choices, not playable role cards)
+    const excludedCardCodes = [
+      'CCM_CEO_EXECUTIVE_LEADER',
+      'CCM_CFO_FINANCIAL_OFFICER',
+      'CCM_CMO_MARKETING_OFFICER',
+      'CCM_CTO_TECHNOLOGY_OFFICER',
+      'CCM_CHRO_HR_OFFICER',
+      'CCM_COO_OPERATIONS_OFFICER'
+    ];
+
+    // Get all "perfect" quality roles for this P category (excluding C-Suite leaders)
+    const { data: perfectRoles, error: perfectError } = await this.client
+      .from('ccm_role_cards')
+      .select('id, card_code')
+      .eq(qualityField, 'perfect')
+      .eq('is_active', true)
+      .not('card_code', 'in', `(${excludedCardCodes.join(',')})`);
+
+    if (perfectError) {
+      console.error('Error fetching perfect roles:', perfectError);
+    }
+
+    // Get "good" quality roles to fill remaining slots (excluding C-Suite leaders)
+    const { data: goodRoles, error: goodError } = await this.client
+      .from('ccm_role_cards')
+      .select('id, card_code')
+      .eq(qualityField, 'good')
+      .eq('is_active', true)
+      .not('card_code', 'in', `(${excludedCardCodes.join(',')})`);
+
+    if (goodError) {
+      console.error('Error fetching good roles:', goodError);
+    }
+
+    // Combine: All perfect + good to reach 6 total
+    let availableRoles = [...(perfectRoles || [])];
+    const remainingSlots = 6 - availableRoles.length;
+
+    if (remainingSlots > 0 && goodRoles) {
+      // Shuffle good roles before taking to add variety
+      const shuffledGood = goodRoles.sort(() => Math.random() - 0.5);
+      availableRoles = [...availableRoles, ...shuffledGood.slice(0, remainingSlots)];
+    }
+
+    // Shuffle final selection to randomize order
+    const shuffled = availableRoles.sort(() => Math.random() - 0.5);
+
+    // Ensure we return exactly 6 roles
+    return shuffled.slice(0, 6).map((role: any) => role.id);
   }
 
   /**

@@ -71,4 +71,18 @@ html {
 /* Tailwind utilities layer */
 @layer utilities {
   /* Custom utility classes can go here */
+
+  /* Golden Card Animation */
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+    }
+    50% {
+      box-shadow: 0 0 40px rgba(255, 215, 0, 0.8);
+    }
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
 }

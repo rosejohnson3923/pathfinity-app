@@ -18,7 +18,34 @@ export const CCMPage: React.FC = () => {
   const [currentRoomCode, setCurrentRoomCode] = useState<string | null>(null);
 
   const playerId = user?.id || 'guest-' + Math.random().toString(36).slice(2);
-  const playerName = user?.full_name?.split(' ')[0] || user?.email?.split('@')[0] || 'Player';
+
+  // Format player name as "First Name Last Initial" to match AI players
+  const getFormattedPlayerName = (): string => {
+    if (user?.full_name) {
+      const nameParts = user.full_name.trim().split(/\s+/);
+      if (nameParts.length >= 2) {
+        // Has first and last name: "John Doe" -> "John D."
+        const firstName = nameParts[0];
+        const lastInitial = nameParts[nameParts.length - 1][0].toUpperCase();
+        return `${firstName} ${lastInitial}.`;
+      } else if (nameParts.length === 1) {
+        // Only one name: "John" -> "John P." (P for Player)
+        return `${nameParts[0]} P.`;
+      }
+    }
+
+    if (user?.email) {
+      // Use email username: "john@example.com" -> "John P."
+      const emailName = user.email.split('@')[0];
+      const capitalizedName = emailName.charAt(0).toUpperCase() + emailName.slice(1);
+      return `${capitalizedName} P.`;
+    }
+
+    // Fallback
+    return 'Player P.';
+  };
+
+  const playerName = getFormattedPlayerName();
 
   const handleBack = () => {
     navigate('/discovered-live');

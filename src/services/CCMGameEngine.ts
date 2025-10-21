@@ -43,7 +43,7 @@ export interface CCMParticipantState {
   displayName: string;
   roleHand: string[];           // Array of 10 role card IDs
   synergyHand: string[];        // Array of 5 synergy card IDs
-  hasGoldenCard: boolean;
+  hasGoldenCard: boolean;       // Golden Card = AI Companion (120 points, once per game)
   cSuiteChoice?: string;        // Selected C-suite role
   totalScore: number;
   roundScores: number[];        // Score per round [round1, round2, ...]
@@ -51,8 +51,8 @@ export interface CCMParticipantState {
   currentRoundPlay?: {
     roleCardId: string;
     synergyCardId: string;
-    useGoldenCard: boolean;
-    useMvpBonus: boolean;
+    useGoldenCard: boolean;     // Use Golden Card (AI Companion) for 120 points
+    useMvpBonus: boolean;       // Use MVP card from previous round (+10 points)
     submittedAt: string;
   };
   isActive: boolean;
@@ -91,8 +91,66 @@ export class CCMGameEngine {
     MAX_PARTICIPANTS: 8,
     ROLE_CARDS_PER_HAND: 10,
     SYNERGY_CARDS_PER_HAND: 5,
-    GOLDEN_CARD_MULTIPLIER: 2,
+    GOLDEN_CARD_PERFECT_SCORE: 130, // AI Companion card gives perfect score (equals max possible)
     MVP_BONUS_SCORE: 10,
+    BASE_SCORE_PERFECT: 60,
+    BASE_SCORE_GOOD: 40,
+    BASE_SCORE_NOT_IN: 25,
+    SYNERGY_MULTIPLIER: 1.20,
+    SPEED_BONUS_MULTIPLIER: 1.20, // For locking in quickly
+  };
+
+  // C-Suite Lens Multiplier Matrix
+  // Maps how each C-Suite role's perspective amplifies performance in each of the 6 P's
+  private readonly LENS_MULTIPLIERS: Record<string, Record<string, number>> = {
+    'ceo': {
+      'people': 1.5,    // Perfect lens alignment
+      'product': 1.2,   // Good lens alignment
+      'process': 1.2,
+      'place': 1.2,
+      'promotion': 1.2,
+      'price': 1.2
+    },
+    'cfo': {
+      'people': 1.0,    // Not in lens
+      'product': 1.0,
+      'process': 1.2,
+      'place': 1.0,
+      'promotion': 1.0,
+      'price': 1.5      // Perfect lens alignment (Financial focus)
+    },
+    'cmo': {
+      'people': 1.2,
+      'product': 1.2,
+      'process': 1.0,
+      'place': 1.2,
+      'promotion': 1.5, // Perfect lens alignment (Marketing focus)
+      'price': 1.0
+    },
+    'cto': {
+      'people': 1.0,
+      'product': 1.5,   // Perfect lens alignment (Technology/Product focus)
+      'process': 1.2,
+      'place': 1.0,
+      'promotion': 1.0,
+      'price': 1.2
+    },
+    'chro': {
+      'people': 1.5,    // Perfect lens alignment (People focus)
+      'product': 1.0,
+      'process': 1.2,
+      'place': 1.0,
+      'promotion': 1.2,
+      'price': 1.0
+    },
+    'coo': {
+      'people': 1.2,
+      'product': 1.2,
+      'process': 1.5,   // Perfect lens alignment (Operations/Process focus)
+      'place': 1.2,
+      'promotion': 1.0,
+      'price': 1.0
+    }
   };
 
   constructor() {
@@ -430,19 +488,29 @@ export class CCMGameEngine {
     for (const [participantId, participant] of this.gameState.participants.entries()) {
       if (!participant.currentRoundPlay || !participant.isActive) continue;
 
-      // Calculate base score (would integrate with soft skills matrix)
-      const baseScore = this.calculateRoundScore(participant);
+      let finalScore: number;
+      let baseScore: number;
 
-      // Apply golden card multiplier
-      let finalScore = baseScore;
+      // Golden Card (AI Companion) gives perfect score of 130 points
       if (participant.currentRoundPlay.useGoldenCard) {
-        finalScore *= this.CONFIG.GOLDEN_CARD_MULTIPLIER;
+        baseScore = this.CONFIG.GOLDEN_CARD_PERFECT_SCORE;
+        finalScore = this.CONFIG.GOLDEN_CARD_PERFECT_SCORE;
         participant.hasGoldenCard = false; // Consume golden card
-      }
-
-      // Apply MVP bonus if applicable
-      if (participant.currentRoundPlay.useMvpBonus) {
-        finalScore += this.CONFIG.MVP_BONUS_SCORE;
+      } else {
+        // Calculate score using lens-based scoring
+        const scoreResult = await this.calculateRoundScore({
+          participantId: participantId,
+          roleCardId: participant.currentRoundPlay.roleCardId,
+          synergyCardId: participant.currentRoundPlay.synergyCardId,
+          specialCardType: participant.currentRoundPlay.useMvpBonus ? 'mvp' : null,
+          cSuiteChoice: participant.cSuiteChoice || null,
+          challengeCardId: this.gameState.currentChallengeCard.id,
+          currentRound: this.gameState.currentRound,
+          speedBonus: false // TODO: Track lock-in timing for speed bonus
+        });
+        baseScore = scoreResult.baseScore;
+        finalScore = scoreResult.finalScore;
+        console.log('[CCM Score]', participant.displayName, scoreResult.breakdown);
       }
 
       participant.roundScores.push(finalScore);
@@ -586,20 +654,128 @@ export class CCMGameEngine {
   }
 
   /**
-   * Calculate round score based on card selection
-   * TODO: Integrate with soft skills matrix for actual calculation
+   * Public API for calculating round score (used by API endpoints)
+   * Implements lens-based scoring with C-Suite perspective multipliers
    */
-  private calculateRoundScore(participant: CCMParticipantState): number {
-    if (!this.gameState?.currentChallengeCard) return 0;
+  async calculateRoundScore(params: {
+    participantId: string;
+    roleCardId: string | null;
+    synergyCardId: string | null;
+    specialCardType: 'golden' | 'mvp' | null;
+    cSuiteChoice: string | null;
+    challengeCardId: string;
+    currentRound: number;
+    speedBonus?: boolean; // Whether player locked in within speed bonus window
+  }): Promise<{
+    baseScore: number;
+    synergyMultiplier: number;
+    lensMultiplier: number;
+    speedMultiplier: number;
+    finalScore: number;
+    breakdown: string;
+  }> {
+    if (!this.supabase) await this.initSupabase();
 
-    // Placeholder scoring logic
-    // In production, this would query ccm_soft_skills_matrix
-    const baseScores = this.gameState.currentChallengeCard.baseScores;
+    // Golden Card (AI Companion) gives perfect score of 130 points
+    // No role card or synergy card needed - it's an automatic perfect score
+    if (params.specialCardType === 'golden') {
+      return {
+        baseScore: this.CONFIG.GOLDEN_CARD_PERFECT_SCORE,
+        synergyMultiplier: 1.0,
+        lensMultiplier: 1.0,
+        speedMultiplier: 1.0,
+        finalScore: this.CONFIG.GOLDEN_CARD_PERFECT_SCORE,
+        breakdown: 'Golden Card: Flat 130 points'
+      };
+    }
 
-    // Random score for now (would be calculated from matrix)
-    const scoreOptions = [baseScores.perfect, baseScores.good, baseScores.pass];
-    return scoreOptions[Math.floor(Math.random() * scoreOptions.length)];
+    // Regular scoring logic (including MVP cards)
+    if (!params.roleCardId) {
+      throw new Error('Role card required for non-golden scoring');
+    }
+
+    // Step 1: Get role card quality data
+    const { data: roleCard, error: roleError } = await this.supabase
+      .from('ccm_role_cards')
+      .select('quality_for_people, quality_for_product, quality_for_process, quality_for_place, quality_for_promotion, quality_for_price, c_suite_org')
+      .eq('id', params.roleCardId)
+      .single();
+
+    if (roleError || !roleCard) {
+      throw new Error('Role card not found');
+    }
+
+    // Step 2: Get challenge card P category
+    const { data: challengeCard, error: challengeError } = await this.supabase
+      .from('ccm_challenge_cards')
+      .select('primary_p_category')
+      .eq('id', params.challengeCardId)
+      .single();
+
+    if (challengeError || !challengeCard) {
+      throw new Error('Challenge card not found');
+    }
+
+    const pCategory = challengeCard.primary_p_category; // e.g., 'people', 'product', etc.
+
+    // Step 3: Determine base score from role card quality for this P category
+    const qualityField = `quality_for_${pCategory}` as keyof typeof roleCard;
+    const quality = roleCard[qualityField] as 'perfect' | 'good' | 'not_in';
+
+    let baseScore: number;
+    if (quality === 'perfect') {
+      baseScore = this.CONFIG.BASE_SCORE_PERFECT; // 60
+    } else if (quality === 'good') {
+      baseScore = this.CONFIG.BASE_SCORE_GOOD; // 40
+    } else {
+      baseScore = this.CONFIG.BASE_SCORE_NOT_IN; // 25
+    }
+
+    // Step 4: Synergy multiplier (1.20 if synergy card used)
+    const synergyMultiplier = params.synergyCardId
+      ? this.CONFIG.SYNERGY_MULTIPLIER
+      : 1.0;
+
+    // Step 5: Lens multiplier from C-Suite choice
+    let lensMultiplier = 1.0;
+    if (params.cSuiteChoice && this.LENS_MULTIPLIERS[params.cSuiteChoice]) {
+      lensMultiplier = this.LENS_MULTIPLIERS[params.cSuiteChoice][pCategory] || 1.0;
+    }
+
+    // Step 6: Speed bonus (1.20 if locked in quickly)
+    const speedMultiplier = params.speedBonus
+      ? this.CONFIG.SPEED_BONUS_MULTIPLIER
+      : 1.0;
+
+    // Step 7: Calculate final score
+    // Formula: Base × Synergy × Lens × Speed
+    // Max possible: 60 × 1.20 × 1.5 × 1.20 = 130 (equals Golden Card)
+    let finalScore = baseScore * synergyMultiplier * lensMultiplier * speedMultiplier;
+
+    // MVP card adds bonus on top of calculated score
+    if (params.specialCardType === 'mvp') {
+      finalScore += this.CONFIG.MVP_BONUS_SCORE;
+    }
+
+    // Create breakdown string for debugging
+    const breakdown = [
+      `Base: ${baseScore} (${quality})`,
+      `Synergy: ×${synergyMultiplier}`,
+      `Lens: ×${lensMultiplier} (${params.cSuiteChoice || 'none'} → ${pCategory})`,
+      `Speed: ×${speedMultiplier}`,
+      params.specialCardType === 'mvp' ? `MVP: +${this.CONFIG.MVP_BONUS_SCORE}` : null
+    ].filter(Boolean).join(' | ');
+
+    return {
+      baseScore,
+      synergyMultiplier,
+      lensMultiplier,
+      speedMultiplier,
+      finalScore: Math.round(finalScore),
+      breakdown
+    };
   }
+
 
   /**
    * Draw a random challenge card for the round

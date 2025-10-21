@@ -1,0 +1,97 @@
+/**
+ * CCM Card & Background Styling
+ * Handles card back theme switching and gradient backgrounds
+ * for Career Challenge Multiplayer
+ */
+
+/* ===========================
+   GRADIENT BACKGROUNDS
+   =========================== */
+
+/* Light theme gradient background */
+.ccm-gradient-light {
+  background: linear-gradient(135deg,
+    #9333ea 0%,      /* purple-600 */
+    #ec4899 50%,     /* pink-600 */
+    #3b82f6 100%     /* blue-600 */
+  );
+}
+
+/* Dark theme gradient background */
+.ccm-gradient-dark {
+  background: linear-gradient(135deg,
+    #111827 0%,      /* gray-900 */
+    #581c87 50%,     /* purple-900 */
+    #701a75 100%     /* magenta-900 */
+  );
+}
+
+/* Combined gradient class (responsive to theme) */
+.ccm-background {
+  background: linear-gradient(135deg, #9333ea 0%, #ec4899 50%, #3b82f6 100%);
+}
+
+[data-theme="dark"] .ccm-background {
+  background: linear-gradient(135deg, #111827 0%, #581c87 50%, #701a75 100%);
+}
+
+/* Optional: Gradient with subtle texture overlay */
+.ccm-background-textured {
+  background:
+    linear-gradient(135deg, rgba(147, 51, 234, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg%3E%3Cpolygon fill='%23ffffff' opacity='0.3' points='30 0 45 15 30 30 15 15'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: auto, 60px 60px;
+}
+
+[data-theme="dark"] .ccm-background-textured {
+  background:
+    linear-gradient(135deg, rgba(88, 28, 135, 0.05) 0%, rgba(112, 26, 117, 0.05) 100%),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg%3E%3Cpolygon fill='%23ffffff' opacity='0.2' points='30 0 45 15 30 30 15 15'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: auto, 60px 60px;
+}
+
+/* ===========================
+   CARD BACK THEME SWITCHING
+   =========================== */
+
+/* Light theme - show light card, hide dark card */
+.dark-theme-card {
+  opacity: 0 !important;
+}
+
+/* Dark theme - hide light card, show dark card */
+[data-theme="dark"] .dark-theme-card {
+  opacity: 1 !important;
+}
+
+[data-theme="dark"] .dark-theme-card ~ div {
+  /* Keep card counter visible on top */
+  z-index: 10;
+}
+
+/* ===========================
+   CARD BACK ANIMATION
+   =========================== */
+
+.ccm-card-back {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ccm-card-back:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* ===========================
+   UTILITY CLASSES
+   =========================== */
+
+/* Hide scrollbar for horizontal scroll containers */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, Opera */
+}

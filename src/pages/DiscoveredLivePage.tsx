@@ -13,8 +13,8 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Play, Users, Trophy, Zap, Crown, ArrowLeft, Grid3x3, Gamepad2, Star, TrendingUp, Clock, Target, Sparkles } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Play, Users, Trophy, Zap, Crown, ArrowLeft, Grid3x3, Gamepad2, Star, TrendingUp, Clock, Target, Sparkles, Info, X, Building2, Brain, Award } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../contexts/AuthContext';
 import { useThemeContext } from '../contexts/ThemeContext';
@@ -40,9 +40,10 @@ interface GameCardProps {
   game: GameCardData;
   index: number;
   onPlay: (game: GameCardData) => void;
+  onShowRules?: (game: GameCardData) => void;
 }
 
-const GameCard: React.FC<GameCardProps> = ({ game, index, onPlay }) => {
+const GameCard: React.FC<GameCardProps> = ({ game, index, onPlay, onShowRules }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -82,7 +83,9 @@ const GameCard: React.FC<GameCardProps> = ({ game, index, onPlay }) => {
       <h4 className="text-2xl font-bold glass-text-primary mb-2 text-center">
         {game.name}
       </h4>
-      <p className="glass-text-secondary text-center mb-4 min-h-[3rem]">
+      <p className={`glass-text-secondary mb-4 min-h-[3rem] ${
+        game.category === 'challenge' ? 'text-justify' : 'text-center'
+      }`}>
         {game.description}
       </p>
 
@@ -107,15 +110,28 @@ const GameCard: React.FC<GameCardProps> = ({ game, index, onPlay }) => {
 
       {/* Play Button */}
       {game.status === 'available' ? (
-        <motion.button
-          onClick={() => onPlay(game)}
-          className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg flex items-center justify-center gap-2"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <Play className="w-5 h-5" fill="currentColor" />
-          Play Now
-        </motion.button>
+        <div className="space-y-2">
+          <motion.button
+            onClick={() => onPlay(game)}
+            className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg flex items-center justify-center gap-2"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Play className="w-5 h-5" fill="currentColor" />
+            Play Now
+          </motion.button>
+
+          {/* Show Rules button only for Career Challenge MP */}
+          {game.id === 'career-challenge-multiplayer' && onShowRules && (
+            <button
+              onClick={() => onShowRules(game)}
+              className="w-full glass-subtle hover:glass-hover text-center py-2 px-4 rounded-lg font-medium flex items-center justify-center gap-2 glass-text-secondary transition-all"
+            >
+              <Info className="w-4 h-4" />
+              <span className="text-sm">How to Play</span>
+            </button>
+          )}
+        </div>
       ) : (
         <div className="w-full glass-subtle text-center py-3 px-6 rounded-xl glass-text-muted font-bold">
           Coming Soon
@@ -129,6 +145,9 @@ export const DiscoveredLivePage: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const { theme } = useThemeContext();
+
+  // State for rules modal
+  const [showRulesModal, setShowRulesModal] = useState(false);
 
   // Get user info
   const userName = user?.full_name?.split(' ')[0] || user?.email?.split('@')[0] || 'Player';
@@ -194,11 +213,11 @@ export const DiscoveredLivePage: React.FC = () => {
     // ===== CHALLENGE ROOMS (20-30 min) =====
     {
       id: 'career-challenge-multiplayer',
-      name: 'Career Challenge MP',
-      description: 'Drop into 24/7 perpetual rooms! Play 5-round games with continuous matchmaking!',
+      name: 'CEO Takeover',
+      description: 'Choose from 30 companies, solve real business challenges across the 6 P\'s of Business. Select the optimal C-Suite lens for strategic scoring!',
       icon: <Users className="w-12 h-12" />,
-      playerCount: '2-8 players',
-      duration: '5 rounds',
+      playerCount: '2-4 players',
+      duration: '6 rounds',
       difficulty: 'Medium',
       status: 'available',
       route: '/discovered-live/career-challenge-multiplayer',
@@ -207,8 +226,8 @@ export const DiscoveredLivePage: React.FC = () => {
     },
     {
       id: 'career-challenge',
-      name: 'Career Challenge',
-      description: 'Strategic career exploration through challenge cards and skill building activities!',
+      name: 'Company Rescue',
+      description: 'Become a strategic business consultant! Fix failing businesses, guide epic turnarounds, and power up your entrepreneurial skills',
       icon: <Target className="w-12 h-12" />,
       playerCount: '2-6 players',
       duration: '20-30 min',
@@ -252,6 +271,10 @@ export const DiscoveredLivePage: React.FC = () => {
     if (game.status === 'available') {
       navigate(game.route);
     }
+  };
+
+  const handleShowRules = (game: GameCardData) => {
+    setShowRulesModal(true);
   };
 
   const handleBackToDashboard = () => {
@@ -380,7 +403,7 @@ export const DiscoveredLivePage: React.FC = () => {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {quickPlayGames.map((game, index) => (
-              <GameCard key={game.id} game={game} index={index} onPlay={handlePlayGame} />
+              <GameCard key={game.id} game={game} index={index} onPlay={handlePlayGame} onShowRules={handleShowRules} />
             ))}
           </div>
         </div>
@@ -396,11 +419,224 @@ export const DiscoveredLivePage: React.FC = () => {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {challengeGames.map((game, index) => (
-              <GameCard key={game.id} game={game} index={index} onPlay={handlePlayGame} />
+              <GameCard key={game.id} game={game} index={index} onPlay={handlePlayGame} onShowRules={handleShowRules} />
             ))}
           </div>
         </div>
       </div>
+
+      {/* Career Challenge MP Rules Modal */}
+      <AnimatePresence>
+        {showRulesModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+            onClick={() => setShowRulesModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="glass-card max-w-3xl w-full max-h-[90vh] overflow-y-auto"
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between mb-6 sticky top-0 glass-card z-10 pb-4 border-b border-white/10">
+                <div>
+                  <h2 className="text-3xl font-bold glass-text-primary flex items-center gap-3">
+                    <Users className="w-8 h-8 glass-icon-accent" />
+                    CEO Takeover
+                  </h2>
+                  <p className="glass-text-tertiary text-sm mt-1">How to Play</p>
+                </div>
+                <button
+                  onClick={() => setShowRulesModal(false)}
+                  className="glass-card-sm p-2 hover:scale-110 transition-transform"
+                >
+                  <X className="w-6 h-6 glass-icon-primary" />
+                </button>
+              </div>
+
+              {/* Game Overview */}
+              <div className="mb-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <Sparkles className="w-5 h-5 glass-icon-accent" />
+                  <h3 className="text-xl font-bold glass-text-primary">Game Overview</h3>
+                </div>
+                <p className="glass-text-secondary leading-relaxed">
+                  Choose from <span className="font-bold glass-text-primary">30 real companies</span> across different industries and solve business challenges through the lens of a C-Suite executive! Strategic thinking and the right perspective can multiply your score!
+                </p>
+              </div>
+
+              {/* Game Flow */}
+              <div className="mb-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <Play className="w-5 h-5 glass-icon-primary" />
+                  <h3 className="text-xl font-bold glass-text-primary">Game Flow</h3>
+                </div>
+
+                <div className="space-y-3">
+                  {/* Step 1 */}
+                  <div className="glass-subtle p-4 rounded-lg">
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
+                        1
+                      </div>
+                      <div>
+                        <h4 className="font-bold glass-text-primary mb-1 flex items-center gap-2">
+                          <Building2 className="w-4 h-4" />
+                          Choose Your Company
+                        </h4>
+                        <p className="glass-text-secondary text-sm">
+                          Select from 30 companies (10 elementary, 10 middle school, 10 high school levels). Each company has 6 unique business challenges across the 6 P categories.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Step 2 */}
+                  <div className="glass-subtle p-4 rounded-lg">
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
+                        2
+                      </div>
+                      <div>
+                        <h4 className="font-bold glass-text-primary mb-1 flex items-center gap-2">
+                          <Brain className="w-4 h-4" />
+                          Round 1: Select Your C-Suite Lens
+                        </h4>
+                        <p className="glass-text-secondary text-sm mb-2">
+                          Choose which executive perspective you'll use for the entire game:
+                        </p>
+                        <div className="grid grid-cols-2 gap-2 text-xs">
+                          <div className="glass-game p-2 rounded">👔 <span className="font-semibold">CEO</span> - Strategy & Leadership</div>
+                          <div className="glass-game p-2 rounded">💰 <span className="font-semibold">CFO</span> - Finance & Numbers</div>
+                          <div className="glass-game p-2 rounded">📢 <span className="font-semibold">CMO</span> - Marketing & Brand</div>
+                          <div className="glass-game p-2 rounded">💻 <span className="font-semibold">CTO</span> - Technology & Innovation</div>
+                          <div className="glass-game p-2 rounded">🤝 <span className="font-semibold">CHRO</span> - People & Culture</div>
+                          <div className="glass-game p-2 rounded">⚙️ <span className="font-semibold">COO</span> - Operations & Process</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Step 3 */}
+                  <div className="glass-subtle p-4 rounded-lg">
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
+                        3
+                      </div>
+                      <div>
+                        <h4 className="font-bold glass-text-primary mb-1 flex items-center gap-2">
+                          <Target className="w-4 h-4" />
+                          Rounds 2-6: Solve Business Challenges
+                        </h4>
+                        <p className="glass-text-secondary text-sm mb-2">
+                          Face one challenge from each of the <span className="font-bold">6 P Categories</span>:
+                        </p>
+                        <div className="grid grid-cols-2 gap-2 text-xs">
+                          <div className="glass-game p-2 rounded">👥 <span className="font-semibold">People</span></div>
+                          <div className="glass-game p-2 rounded">📦 <span className="font-semibold">Product</span></div>
+                          <div className="glass-game p-2 rounded">⚙️ <span className="font-semibold">Process</span></div>
+                          <div className="glass-game p-2 rounded">📍 <span className="font-semibold">Place</span></div>
+                          <div className="glass-game p-2 rounded">📢 <span className="font-semibold">Promotion</span></div>
+                          <div className="glass-game p-2 rounded">💰 <span className="font-semibold">Price</span></div>
+                        </div>
+                        <p className="glass-text-tertiary text-xs mt-2 italic">
+                          5 of 6 P categories are randomly selected each game
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Scoring */}
+              <div className="mb-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <Award className="w-5 h-5 glass-icon-accent" />
+                  <h3 className="text-xl font-bold glass-text-primary">Scoring System</h3>
+                </div>
+
+                <div className="glass-subtle p-4 rounded-lg space-y-3">
+                  <div>
+                    <h4 className="font-semibold glass-text-primary mb-2">Lens Multipliers</h4>
+                    <p className="glass-text-secondary text-sm mb-2">
+                      Your chosen C-Suite lens affects your score based on the challenge category:
+                    </p>
+                    <div className="glass-game p-3 rounded-lg space-y-1.5 text-sm">
+                      <div className="flex justify-between">
+                        <span className="glass-text-secondary">Perfect Match:</span>
+                        <span className="font-bold text-green-500">+30% Bonus (1.30x)</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="glass-text-secondary">Strong Match:</span>
+                        <span className="font-bold text-blue-500">+25% Bonus (1.25x)</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="glass-text-secondary">Good Match:</span>
+                        <span className="font-bold text-purple-500">+15-20% Bonus (1.15-1.20x)</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="glass-text-secondary">Neutral Match:</span>
+                        <span className="font-bold glass-text-muted">No Bonus (1.0x)</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="glass-game p-3 rounded-lg">
+                    <p className="glass-text-primary text-sm font-semibold mb-1">Example:</p>
+                    <p className="glass-text-secondary text-xs">
+                      CHRO gets <span className="font-bold text-green-500">1.30x</span> on <span className="font-bold">People</span> challenges, but only <span className="font-bold">1.0x</span> on <span className="font-bold">Price</span> challenges.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Winning */}
+              <div className="mb-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <Trophy className="w-5 h-5 glass-icon-accent" />
+                  <h3 className="text-xl font-bold glass-text-primary">Winning</h3>
+                </div>
+                <p className="glass-text-secondary text-sm">
+                  After 6 rounds, the player with the <span className="font-bold glass-text-primary">highest total score</span> wins! Strategic lens selection and understanding the company's challenges are key to victory.
+                </p>
+              </div>
+
+              {/* Quick Tips */}
+              <div className="glass-accent p-4 rounded-lg">
+                <h4 className="font-bold glass-text-primary mb-2 flex items-center gap-2">
+                  <Zap className="w-4 h-4 glass-icon-accent" />
+                  Pro Tips
+                </h4>
+                <ul className="space-y-1.5 text-sm glass-text-secondary">
+                  <li>• Choose a lens that matches your strategic thinking style</li>
+                  <li>• Read each challenge carefully to understand the business context</li>
+                  <li>• Consider how your executive would view each problem</li>
+                  <li>• Different companies have different challenge difficulties based on grade level</li>
+                </ul>
+              </div>
+
+              {/* Play Button */}
+              <motion.button
+                onClick={() => {
+                  setShowRulesModal(false);
+                  navigate('/discovered-live/career-challenge-multiplayer');
+                }}
+                className="w-full mt-6 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold py-4 px-6 rounded-xl shadow-lg flex items-center justify-center gap-2"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Play className="w-5 h-5" fill="currentColor" />
+                Ready to Play!
+              </motion.button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

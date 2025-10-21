@@ -57,11 +57,21 @@
 2. Player chooses C-Suite lens (Round 1 only: CEO, CFO, CMO, CTO, CHRO)
 3. Player selects Role card (from hand of 10)
 4. Player optionally selects Synergy card (from hand of 5)
-5. Player optionally plays Golden card (once per game) OR MVP card (from previous round)
+5. Player optionally plays **Golden Card (AI Companion)** (once per game, 120 points) **OR** MVP card (from previous round, +10 points)
 6. Lock in selection
 7. Scoring calculated with multipliers
 8. Round ends, scores displayed
 9. Player selects MVP card for next round (if applicable)
+
+**Special Cards:**
+- **Golden Card** = AI Companion card (visual: gold card background + user's selected aiCompanion image overlay)
+  - Awards perfect score: **120 points** (no multipliers applied)
+  - Single use per game
+  - Cannot be used with MVP card in same round
+- **MVP Card** = Carried over from previous round
+  - Awards bonus: **+10 points** added to final score
+  - Earned by selecting after each round
+  - Cannot be used with Golden Card in same round
 
 ---
 

@@ -535,82 +535,18 @@ export const CareerIncLobbyModal: React.FC<CareerIncLobbyModalProps> = ({
         </div>
       </div>
 
-      {/* Discovered Live! Integration Card */}
+      {/* Discovered Live! Integration Card - PROMINENT PLACEMENT */}
       <div style={{
-        maxWidth: '1200px',
-        margin: '3rem auto 2rem',
-        padding: '0 2rem'
+        maxWidth: '1400px',
+        margin: '4rem auto',
+        padding: '0 2rem',
+        transform: 'scale(1.08)',
+        transformOrigin: 'center'
       }}>
         <DiscoveredLiveCard
           isUnlocked={true} // TODO: TESTING ONLY - Change back to: completedContainers.size === 3
           completedContainers={completedContainers.size}
         />
-      </div>
-
-      {/* Progress Overview */}
-      <div className="progress-overview">
-        <h3>Today's Progress Goals</h3>
-        
-        {/* Progress Bar */}
-        <div className="overall-progress" style={{
-          margin: '1rem 0 2rem',
-          padding: '0 2rem'
-        }}>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginBottom: '0.5rem',
-            fontSize: '0.9rem',
-            fontWeight: '600'
-          }}>
-            <span>Overall Progress</span>
-            <span>{completedContainers.size}/3 Containers</span>
-          </div>
-          <div style={{
-            height: '12px',
-            background: theme === 'dark' ? '#2D3748' : '#E2E8F0',
-            borderRadius: '6px',
-            overflow: 'hidden'
-          }}>
-            <div style={{
-              width: `${(completedContainers.size / 3) * 100}%`,
-              height: '100%',
-              background: 'linear-gradient(90deg, #8B5CF6 0%, #059669 50%, #DC2626 100%)',
-              transition: 'width 0.5s ease-out'
-            }} />
-          </div>
-        </div>
-        
-        <div className="progress-stats">
-          <div className="stat-item">
-            <span className="stat-icon">🎯</span>
-            <div className="stat-content">
-              <span className="stat-value">{completedContainers.size}/3</span>
-              <span className="stat-label">Completed</span>
-            </div>
-          </div>
-          <div className="stat-item">
-            <span className="stat-icon">⏱️</span>
-            <div className="stat-content">
-              <span className="stat-value">2-3hrs</span>
-              <span className="stat-label">Total Time</span>
-            </div>
-          </div>
-          <div className="stat-item">
-            <span className="stat-icon">📈</span>
-            <div className="stat-content">
-              <span className="stat-value">15+</span>
-              <span className="stat-label">Skills</span>
-            </div>
-          </div>
-          <div className="stat-item">
-            <span className="stat-icon">🏆</span>
-            <div className="stat-content">
-              <span className="stat-value">100%</span>
-              <span className="stat-label">Career Ready</span>
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* Footer */}
