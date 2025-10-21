@@ -383,9 +383,11 @@ class CCMService {
 
   /**
    * Get random challenge card for a specific round
-   * Optionally filter by P category if specified
+   * Optionally filter by P category and grade level
+   * @param pCategory - The P category to filter by (people, product, process, place, promotion, price)
+   * @param gradeLevel - The grade level to match (elementary, middle, high)
    */
-  async getChallengeCard(pCategory?: string): Promise<any> {
+  async getChallengeCard(pCategory?: string, gradeLevel?: string): Promise<any> {
     if (!this.client) await this.initialize();
 
     let query = this.client
@@ -397,6 +399,10 @@ class CCMService {
       query = query.eq('p_category', pCategory);
     }
 
+    if (gradeLevel) {
+      query = query.eq('grade_level', gradeLevel);
+    }
+
     const { data: challenges, error } = await query;
 
     if (error) {
@@ -405,6 +411,7 @@ class CCMService {
     }
 
     if (!challenges || challenges.length === 0) {
+      console.warn(`No challenge cards found for p_category: ${pCategory}, grade_level: ${gradeLevel}`);
       return null;
     }
 

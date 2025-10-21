@@ -121,8 +121,8 @@ const GameCard: React.FC<GameCardProps> = ({ game, index, onPlay, onShowRules })
             Play Now
           </motion.button>
 
-          {/* Show Rules button only for Career Challenge MP */}
-          {game.id === 'career-challenge-multiplayer' && onShowRules && (
+          {/* Show Rules button for Career Bingo and Career Challenge MP */}
+          {(game.id === 'career-bingo' || game.id === 'career-challenge-multiplayer') && onShowRules && (
             <button
               onClick={() => onShowRules(game)}
               className="w-full glass-subtle hover:glass-hover text-center py-2 px-4 rounded-lg font-medium flex items-center justify-center gap-2 glass-text-secondary transition-all"
@@ -148,6 +148,7 @@ export const DiscoveredLivePage: React.FC = () => {
 
   // State for rules modal
   const [showRulesModal, setShowRulesModal] = useState(false);
+  const [selectedGameForRules, setSelectedGameForRules] = useState<GameCardData | null>(null);
 
   // Get user info
   const userName = user?.full_name?.split(' ')[0] || user?.email?.split('@')[0] || 'Player';
@@ -274,6 +275,7 @@ export const DiscoveredLivePage: React.FC = () => {
   };
 
   const handleShowRules = (game: GameCardData) => {
+    setSelectedGameForRules(game);
     setShowRulesModal(true);
   };
 
@@ -425,9 +427,9 @@ export const DiscoveredLivePage: React.FC = () => {
         </div>
       </div>
 
-      {/* Career Challenge MP Rules Modal */}
+      {/* Rules Modal */}
       <AnimatePresence>
-        {showRulesModal && (
+        {showRulesModal && selectedGameForRules && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -446,29 +448,218 @@ export const DiscoveredLivePage: React.FC = () => {
               <div className="flex items-center justify-between mb-6 sticky top-0 glass-card z-10 pb-4 border-b border-white/10">
                 <div>
                   <h2 className="text-3xl font-bold glass-text-primary flex items-center gap-3">
-                    <Users className="w-8 h-8 glass-icon-accent" />
-                    CEO Takeover
+                    {selectedGameForRules.icon}
+                    {selectedGameForRules.name}
                   </h2>
                   <p className="glass-text-tertiary text-sm mt-1">How to Play</p>
                 </div>
                 <button
-                  onClick={() => setShowRulesModal(false)}
+                  onClick={() => {
+                    setShowRulesModal(false);
+                    setSelectedGameForRules(null);
+                  }}
                   className="glass-card-sm p-2 hover:scale-110 transition-transform"
                 >
                   <X className="w-6 h-6 glass-icon-primary" />
                 </button>
               </div>
 
-              {/* Game Overview */}
-              <div className="mb-6">
-                <div className="flex items-center gap-2 mb-3">
-                  <Sparkles className="w-5 h-5 glass-icon-accent" />
-                  <h3 className="text-xl font-bold glass-text-primary">Game Overview</h3>
-                </div>
-                <p className="glass-text-secondary leading-relaxed">
-                  Choose from <span className="font-bold glass-text-primary">30 real companies</span> across different industries and solve business challenges through the lens of a C-Suite executive! Strategic thinking and the right perspective can multiply your score!
-                </p>
-              </div>
+              {/* Career Bingo Rules */}
+              {selectedGameForRules.id === 'career-bingo' && (
+                <>
+                  {/* Game Overview */}
+                  <div className="mb-6">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Sparkles className="w-5 h-5 glass-icon-accent" />
+                      <h3 className="text-xl font-bold glass-text-primary">Game Overview</h3>
+                    </div>
+                    <p className="glass-text-secondary leading-relaxed">
+                      Answer career clues to fill your <span className="font-bold glass-text-primary">5×5 bingo card</span>! Each correct answer unlocks a career square. Complete 5 squares in a row, column, or diagonal to score <span className="font-bold glass-text-primary">BINGO</span> and earn bonus XP!
+                    </p>
+                  </div>
+
+                  {/* Game Flow */}
+                  <div className="mb-6">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Play className="w-5 h-5 glass-icon-primary" />
+                      <h3 className="text-xl font-bold glass-text-primary">How to Play</h3>
+                    </div>
+
+                    <div className="space-y-3">
+                      {/* Step 1 */}
+                      <div className="glass-subtle p-4 rounded-lg">
+                        <div className="flex items-start gap-3">
+                          <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
+                            1
+                          </div>
+                          <div>
+                            <h4 className="font-bold glass-text-primary mb-1 flex items-center gap-2">
+                              <Grid3x3 className="w-4 h-4" />
+                              Your Bingo Card
+                            </h4>
+                            <p className="glass-text-secondary text-sm">
+                              You'll receive a <span className="font-bold">5×5 bingo card</span> with 25 career squares. Your selected career appears in the <span className="font-bold text-yellow-400">center as a FREE space</span> to give you a head start!
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Step 2 */}
+                      <div className="glass-subtle p-4 rounded-lg">
+                        <div className="flex items-start gap-3">
+                          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
+                            2
+                          </div>
+                          <div>
+                            <h4 className="font-bold glass-text-primary mb-1 flex items-center gap-2">
+                              <Brain className="w-4 h-4" />
+                              Answer Career Clues
+                            </h4>
+                            <p className="glass-text-secondary text-sm">
+                              Each question presents a career clue. Read carefully and select the correct career from the multiple choice options. You have <span className="font-bold text-yellow-400">8 seconds</span> to answer each question!
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Step 3 */}
+                      <div className="glass-subtle p-4 rounded-lg">
+                        <div className="flex items-start gap-3">
+                          <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
+                            3
+                          </div>
+                          <div>
+                            <h4 className="font-bold glass-text-primary mb-1 flex items-center gap-2">
+                              <Star className="w-4 h-4" />
+                              Unlock Career Squares
+                            </h4>
+                            <p className="glass-text-secondary text-sm">
+                              When you answer correctly, that career will be <span className="font-bold text-green-400">marked on your bingo card</span> if it appears in any of your 25 squares. Each unlocked square earns you <span className="font-bold text-blue-400">+10 XP</span>!
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Step 4 */}
+                      <div className="glass-subtle p-4 rounded-lg border-2 border-yellow-500/30">
+                        <div className="flex items-start gap-3">
+                          <div className="w-8 h-8 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
+                            4
+                          </div>
+                          <div>
+                            <h4 className="font-bold glass-text-primary mb-1 flex items-center gap-2">
+                              <Trophy className="w-4 h-4" />
+                              Score BINGO!
+                            </h4>
+                            <p className="glass-text-secondary text-sm">
+                              Complete <span className="font-bold text-yellow-400">5 squares in a row</span> (horizontal, vertical, or diagonal) to score <span className="font-bold text-yellow-400">BINGO</span> and earn a <span className="font-bold text-green-400">+50 XP bonus</span>! You can score multiple BINGOs in one game!
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Scoring */}
+                  <div className="mb-6">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Award className="w-5 h-5 glass-icon-accent" />
+                      <h3 className="text-xl font-bold glass-text-primary">Scoring System</h3>
+                    </div>
+
+                    <div className="glass-subtle p-4 rounded-lg space-y-3">
+                      <div className="glass-game p-3 rounded-lg space-y-2 text-sm">
+                        <div className="flex justify-between items-center">
+                          <span className="glass-text-secondary">Correct Answer:</span>
+                          <span className="font-bold text-green-500">+10 XP</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="glass-text-secondary">Wrong Answer:</span>
+                          <span className="font-bold text-red-500">-5 XP</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="glass-text-secondary">BINGO Bonus:</span>
+                          <span className="font-bold text-yellow-500">+50 XP</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="glass-text-secondary">Answer Streak Bonus:</span>
+                          <span className="font-bold text-blue-500">+Extra XP</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Important Tips */}
+                  <div className="mb-6">
+                    <div className="glass-accent p-4 rounded-lg border-l-4 border-red-500">
+                      <div className="flex items-start gap-3">
+                        <Info className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
+                        <div>
+                          <h4 className="font-bold text-red-300 mb-1">⚠️ Important</h4>
+                          <p className="glass-text-secondary text-sm">
+                            Wrong answers not only cost you <span className="font-bold text-red-300">-5 XP</span>, but also <span className="font-bold text-red-300">break your answer streak</span>! Stay focused and think carefully before answering.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Winning */}
+                  <div className="mb-6">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Trophy className="w-5 h-5 glass-icon-accent" />
+                      <h3 className="text-xl font-bold glass-text-primary">Winning</h3>
+                    </div>
+                    <p className="glass-text-secondary text-sm">
+                      The player with the <span className="font-bold glass-text-primary">highest total XP</span> at the end of the game wins! Maximize your score by answering correctly, maintaining streaks, and scoring multiple BINGOs!
+                    </p>
+                  </div>
+
+                  {/* Pro Tips */}
+                  <div className="glass-accent p-4 rounded-lg">
+                    <h4 className="font-bold glass-text-primary mb-2 flex items-center gap-2">
+                      <Zap className="w-4 h-4 glass-icon-accent" />
+                      Pro Tips
+                    </h4>
+                    <ul className="space-y-1.5 text-sm glass-text-secondary">
+                      <li>• Focus on completing diagonals first - they're often easier to spot!</li>
+                      <li>• Answer quickly to build streaks and earn bonus XP</li>
+                      <li>• Your center FREE space gives you a strategic advantage for completing BINGOs</li>
+                      <li>• Read each career clue carefully - rushing leads to mistakes!</li>
+                      <li>• Watch the leaderboard to see how you stack up against other players</li>
+                    </ul>
+                  </div>
+
+                  {/* Play Button */}
+                  <motion.button
+                    onClick={() => {
+                      setShowRulesModal(false);
+                      setSelectedGameForRules(null);
+                      navigate(selectedGameForRules.route);
+                    }}
+                    className="w-full mt-6 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold py-4 px-6 rounded-xl shadow-lg flex items-center justify-center gap-2"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <Play className="w-5 h-5" fill="currentColor" />
+                    Ready to Play!
+                  </motion.button>
+                </>
+              )}
+
+              {/* CEO Takeover Rules */}
+              {selectedGameForRules.id === 'career-challenge-multiplayer' && (
+                <>
+                  {/* Game Overview */}
+                  <div className="mb-6">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Sparkles className="w-5 h-5 glass-icon-accent" />
+                      <h3 className="text-xl font-bold glass-text-primary">Game Overview</h3>
+                    </div>
+                    <p className="glass-text-secondary leading-relaxed">
+                      Choose from <span className="font-bold glass-text-primary">30 real companies</span> across different industries and solve business challenges through the lens of a C-Suite executive! Strategic thinking and the right perspective can multiply your score!
+                    </p>
+                  </div>
 
               {/* Game Flow */}
               <div className="mb-6">
@@ -525,8 +716,26 @@ export const DiscoveredLivePage: React.FC = () => {
                   {/* Step 3 */}
                   <div className="glass-subtle p-4 rounded-lg">
                     <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
+                      <div className="w-8 h-8 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
                         3
+                      </div>
+                      <div>
+                        <h4 className="font-bold glass-text-primary mb-1 flex items-center gap-2">
+                          <Trophy className="w-4 h-4" />
+                          Round 2: Receive Random MVP Card
+                        </h4>
+                        <p className="glass-text-secondary text-sm">
+                          At the start of Round 2, you'll receive a <span className="font-bold text-yellow-400">random MVP card</span> from your role card hand. This card provides a <span className="font-bold">+10 bonus</span> when used, but can only be played once per game!
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Step 4 */}
+                  <div className="glass-subtle p-4 rounded-lg">
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
+                        4
                       </div>
                       <div>
                         <h4 className="font-bold glass-text-primary mb-1 flex items-center gap-2">
@@ -546,6 +755,37 @@ export const DiscoveredLivePage: React.FC = () => {
                         </div>
                         <p className="glass-text-tertiary text-xs mt-2 italic">
                           5 of 6 P categories are randomly selected each game
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Step 5 */}
+                  <div className="glass-subtle p-4 rounded-lg border-2 border-purple-500/30">
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
+                        5
+                      </div>
+                      <div>
+                        <h4 className="font-bold glass-text-primary mb-1 flex items-center gap-2">
+                          <Star className="w-4 h-4" />
+                          Bonus Play: Strategic MVP Swaps
+                        </h4>
+                        <p className="glass-text-secondary text-sm mb-2">
+                          After completing Rounds 2, 3, and 4, you'll have a <span className="font-bold text-purple-400">Bonus Play</span> opportunity:
+                        </p>
+                        <div className="glass-game p-3 rounded-lg space-y-2 text-xs">
+                          <div className="flex items-start gap-2">
+                            <span className="text-green-400">✓</span>
+                            <span className="glass-text-secondary"><span className="font-bold">Keep</span> your current MVP card (play it safe)</span>
+                          </div>
+                          <div className="flex items-start gap-2">
+                            <span className="text-purple-400">⟳</span>
+                            <span className="glass-text-secondary"><span className="font-bold">Swap</span> for a different role card from your hand (strategic risk)</span>
+                          </div>
+                        </div>
+                        <p className="glass-text-tertiary text-xs mt-2 italic">
+                          Choose wisely! Your final MVP card determines your +10 bonus play.
                         </p>
                       </div>
                     </div>
@@ -595,6 +835,55 @@ export const DiscoveredLivePage: React.FC = () => {
                 </div>
               </div>
 
+              {/* Special Cards */}
+              <div className="mb-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <Star className="w-5 h-5 glass-icon-accent" />
+                  <h3 className="text-xl font-bold glass-text-primary">Special Cards</h3>
+                </div>
+
+                <div className="space-y-3">
+                  {/* MVP Card */}
+                  <div className="glass-subtle p-4 rounded-lg border-l-4 border-yellow-500">
+                    <div className="flex items-start gap-3">
+                      <Trophy className="w-5 h-5 text-yellow-400 mt-0.5 flex-shrink-0" />
+                      <div>
+                        <h4 className="font-bold glass-text-primary mb-1">MVP Card (+10 Bonus)</h4>
+                        <p className="glass-text-secondary text-sm">
+                          Randomly assigned in Round 2 from your hand. Provides <span className="font-bold text-yellow-400">+10 bonus points</span> when used. Can be swapped during Bonus Play phases. <span className="font-bold">One-time use only!</span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Golden Card */}
+                  <div className="glass-subtle p-4 rounded-lg border-l-4 border-blue-500">
+                    <div className="flex items-start gap-3">
+                      <Star className="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0" />
+                      <div>
+                        <h4 className="font-bold glass-text-primary mb-1">Golden Card (130 Points)</h4>
+                        <p className="glass-text-secondary text-sm">
+                          A powerful AI companion card worth <span className="font-bold text-blue-400">130 points</span>. Available from Round 2. <span className="font-bold">One-time use only!</span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Round 5 Restriction */}
+                  <div className="glass-accent p-4 rounded-lg border-l-4 border-red-500">
+                    <div className="flex items-start gap-3">
+                      <Info className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
+                      <div>
+                        <h4 className="font-bold text-red-300 mb-1">⚠️ Round 5 Restriction</h4>
+                        <p className="glass-text-secondary text-sm">
+                          In Round 5, you can use <span className="font-bold text-red-300">EITHER</span> your MVP card <span className="font-bold text-red-300">OR</span> your Golden card, but <span className="font-bold text-red-300">NOT BOTH</span>! Choose your strategy wisely!
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               {/* Winning */}
               <div className="mb-6">
                 <div className="flex items-center gap-2 mb-3">
@@ -602,7 +891,7 @@ export const DiscoveredLivePage: React.FC = () => {
                   <h3 className="text-xl font-bold glass-text-primary">Winning</h3>
                 </div>
                 <p className="glass-text-secondary text-sm">
-                  After 6 rounds, the player with the <span className="font-bold glass-text-primary">highest total score</span> wins! Strategic lens selection and understanding the company's challenges are key to victory.
+                  After 6 rounds, the player with the <span className="font-bold glass-text-primary">highest total score</span> wins! Strategic lens selection, smart use of special cards, and understanding the company's challenges are key to victory.
                 </p>
               </div>
 
@@ -616,6 +905,8 @@ export const DiscoveredLivePage: React.FC = () => {
                   <li>• Choose a lens that matches your strategic thinking style</li>
                   <li>• Read each challenge carefully to understand the business context</li>
                   <li>• Consider how your executive would view each problem</li>
+                  <li>• Use Bonus Play wisely - swap your MVP if you have a better role card for upcoming challenges</li>
+                  <li>• Save your special cards (MVP or Golden) for high-scoring opportunities</li>
                   <li>• Different companies have different challenge difficulties based on grade level</li>
                 </ul>
               </div>
@@ -624,6 +915,7 @@ export const DiscoveredLivePage: React.FC = () => {
               <motion.button
                 onClick={() => {
                   setShowRulesModal(false);
+                  setSelectedGameForRules(null);
                   navigate('/discovered-live/career-challenge-multiplayer');
                 }}
                 className="w-full mt-6 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold py-4 px-6 rounded-xl shadow-lg flex items-center justify-center gap-2"
@@ -633,6 +925,8 @@ export const DiscoveredLivePage: React.FC = () => {
                 <Play className="w-5 h-5" fill="currentColor" />
                 Ready to Play!
               </motion.button>
+                </>
+              )}
             </motion.div>
           </motion.div>
         )}

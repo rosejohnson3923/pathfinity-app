@@ -200,7 +200,7 @@ export const CCMHub: React.FC<CCMHubProps> = ({
                 <div>
                   <p className="text-white font-medium">Choose Your Company Challenge</p>
                   <p className="text-white/70 text-sm mt-1">
-                    Select from 30 companies across 14 cutting-edge industries. Each company has 6 business challenges impacting the 6 P's of business growth: Product, Price, Place, Promotion, People, and Process. Choose your C-Suite lens and solve real-world scenarios!
+                    Select from 30 companies across 14 cutting-edge industries. Each company has 6 business challenges impacting the 6 P's of business growth: Product, Price, Place, Promotion, People, and Process. Choose your C-Suite lens, receive a random MVP card in Round 2, and use strategic Bonus Plays after Rounds 2-4 to keep or swap your MVP card for a +10 point advantage!
                   </p>
                 </div>
               </div>

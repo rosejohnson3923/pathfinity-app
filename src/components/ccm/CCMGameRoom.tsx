@@ -34,6 +34,7 @@ import { ChallengeCard } from './ChallengeCard';
 import { MVPCard } from './MVPCard';
 import { GameBoard } from './GameBoard';
 import { PlayerCardTray } from './PlayerCardTray';
+import { BonusPlayModal } from './BonusPlayModal';
 import '../../design-system/index.css';
 import './ccm-cards.css';
 
@@ -220,37 +221,26 @@ export const CCMGameRoom: React.FC<CCMGameRoomProps> = ({
   const [hasGoldenCard, setHasGoldenCard] = useState(true); // Player has 1 Golden Card per game
   const [selectedGoldenCard, setSelectedGoldenCard] = useState(false); // Whether Golden Card is selected this round
 
-  // MVP Card state
-  const [savedMVPCombo, setSavedMVPCombo] = useState<{
-    roleCardName: string;
-    synergyCardName: string;
-    cSuiteOrg: 'ceo' | 'cfo' | 'cmo' | 'cto' | 'chro' | 'coo';
-    averageScore: number;
-    savedFromGameNumber: number;
-  } | null>({
-    // Mock saved combo for testing
-    roleCardName: 'Software Engineer',
-    synergyCardName: 'Master Improver',
-    cSuiteOrg: 'cto',
-    averageScore: 115,
-    savedFromGameNumber: 3
-  });
-  const [hasMVPCard, setHasMVPCard] = useState(true); // Player has MVP card saved
+  // MVP Card state - Store full RoleCardData so we can display it in Bonus Play modal
+  const [randomlyAssignedMVPCardId, setRandomlyAssignedMVPCardId] = useState<string | null>(null); // Randomly assigned card when Round 2 starts
+  const [mvpCard, setMvpCard] = useState<{
+    roleCardData: RoleCardData; // Full card data for display in modal
+    lockedInRound: number; // Which round it was locked/last swapped
+  } | null>(null); // The locked MVP card (becomes available after first Bonus Play)
+  const [hasMVPCard, setHasMVPCard] = useState(false); // Whether MVP card is available to use
   const [selectedMVPCard, setSelectedMVPCard] = useState(false); // Whether MVP Card is selected this round
+  const [showBonusPlayModal, setShowBonusPlayModal] = useState(false); // Show "Bonus Play" modal after Rounds 2, 3, 4
+  const [bonusPlayRound, setBonusPlayRound] = useState<number | null>(null); // Which round triggered Bonus Play
 
   // Company details
   const [companyDetails, setCompanyDetails] = useState<CompanyDetails | null>(null);
   const [loadingCompany, setLoadingCompany] = useState(true);
   const [companyChallenges, setCompanyChallenges] = useState<any[]>([]); // Store actual company challenges
 
-  // Get user's AI companion from context (fallback to 'finn' if not available)
-  let aiCompanionName: 'finn' | 'harmony' | 'sage' | 'spark' = 'finn';
-  try {
-    const aiCharacterContext = useAICharacter();
-    aiCompanionName = (aiCharacterContext?.currentCharacter?.id as 'finn' | 'harmony' | 'sage' | 'spark') || 'finn';
-  } catch (error) {
-    console.warn('[CCMGameRoom] AICharacterProvider not available, defaulting to Finn');
-  }
+  // Get user's AI companion from context for Golden Card display
+  const aiCharacterContext = useAICharacter();
+  const aiCompanionName: 'finn' | 'harmony' | 'sage' | 'spark' =
+    (aiCharacterContext?.currentCharacter?.id as 'finn' | 'harmony' | 'sage' | 'spark') || 'finn';
 
   /**
    * Load company details on mount
@@ -638,12 +628,12 @@ export const CCMGameRoom: React.FC<CCMGameRoomProps> = ({
       let challengeCard: ChallengeCardData;
 
       try {
-        // Step 1: Get generic challenge card for this P category
+        // Step 1: Get generic challenge card for this P category AND grade level
         await ccmService.initialize();
-        const challengeCardData = await ccmService.getChallengeCard(pCategory);
+        const challengeCardData = await ccmService.getChallengeCard(pCategory, companyDetails?.gradeCategory);
 
         if (!challengeCardData) {
-          throw new Error('No challenge card found for P category: ' + pCategory);
+          throw new Error(`No challenge card found for P category: ${pCategory}, grade level: ${companyDetails?.gradeCategory}`);
         }
 
         console.log('[CCMGameRoom] Challenge card from ccm_challenge_cards:', challengeCardData);
@@ -788,6 +778,67 @@ export const CCMGameRoom: React.FC<CCMGameRoomProps> = ({
           }));
 
           setLeftStack(transformedRoleCards);
+
+          // Round 2: Randomly assign MVP card - SEPARATE from hand, VISIBLE and USABLE immediately
+          if (currentRound === 2 && !mvpCard && transformedRoleCards.length > 0) {
+            // Fetch a DIFFERENT role card that is NOT in the current leftStack
+            // This ensures the MVP card is unique and not a duplicate
+            const currentCardIds = transformedRoleCards.map(card => card.id);
+
+            const { data: otherRoleCards, error: mvpError } = await supabaseClient
+              .from('ccm_role_cards')
+              .select('*')
+              .eq('is_active', true)
+              .not('id', 'in', `(${currentCardIds.join(',')})`) // Exclude current hand cards
+              .limit(10); // Get 10 candidates
+
+            if (mvpError || !otherRoleCards || otherRoleCards.length === 0) {
+              console.error('[CCM MVP] Error fetching separate MVP card:', mvpError);
+              // Fallback: use a card from hand if we can't get a separate one
+              const randomIndex = Math.floor(Math.random() * transformedRoleCards.length);
+              const fallbackCard = transformedRoleCards[randomIndex];
+
+              setMvpCard({
+                roleCardData: fallbackCard,
+                lockedInRound: 2
+              });
+              setHasMVPCard(true);
+              console.warn('[CCM MVP] FALLBACK: Using card from hand as MVP:', fallbackCard.displayName);
+            } else {
+              // Successfully fetched separate cards - pick one randomly
+              const randomIndex = Math.floor(Math.random() * otherRoleCards.length);
+              const mvpCardRaw = otherRoleCards[randomIndex];
+
+              // Transform to RoleCardData format
+              const mvpRoleCard: RoleCardData = {
+                type: 'role' as const,
+                id: mvpCardRaw.id,
+                cardCode: mvpCardRaw.card_code,
+                displayName: mvpCardRaw.display_name,
+                description: mvpCardRaw.description,
+                cSuiteOrg: mvpCardRaw.c_suite_org,
+                qualityForPeople: mvpCardRaw.quality_for_people,
+                qualityForProduct: mvpCardRaw.quality_for_product,
+                qualityForProcess: mvpCardRaw.quality_for_process,
+                qualityForPlace: mvpCardRaw.quality_for_place,
+                qualityForPromotion: mvpCardRaw.quality_for_promotion,
+                qualityForPrice: mvpCardRaw.quality_for_price,
+                primarySoftSkills: mvpCardRaw.primary_soft_skills || [],
+                secondarySoftSkills: mvpCardRaw.secondary_soft_skills || [],
+                colorTheme: mvpCardRaw.color_theme,
+                gradeLevel: mvpCardRaw.grade_level
+              };
+
+              setMvpCard({
+                roleCardData: mvpRoleCard, // Store complete card data
+                lockedInRound: 2
+              });
+              setHasMVPCard(true); // Enable MVP card for use
+
+              console.log('[CCM MVP] Randomly assigned UNIQUE MVP card (NOT in hand):', mvpRoleCard.displayName, '(ID:', mvpRoleCard.id, ')');
+              console.log('[CCM MVP] Player can use this card for +10 bonus points, or wait for Bonus Play after Round 2 to swap');
+            }
+          }
         }
       } catch (error) {
         console.error('Error loading dynamic role cards:', error);
@@ -967,6 +1018,12 @@ export const CCMGameRoom: React.FC<CCMGameRoomProps> = ({
     if (!hasGoldenCard) return; // Can't use if already used
     if (currentRound === 1) return; // Can't use in Round 1 (C-Suite selection)
 
+    // Round 5 restriction: Can't use Golden if MVP is already selected
+    if (currentRound === 5 && selectedMVPCard) {
+      console.log('[CCM Round 5] Cannot select Golden Card - MVP card already selected. You can only use ONE special card in Round 5.');
+      return;
+    }
+
     // Toggle Golden Card selection
     setSelectedGoldenCard(!selectedGoldenCard);
     // Clear other selections when Golden Card is selected
@@ -983,8 +1040,14 @@ export const CCMGameRoom: React.FC<CCMGameRoomProps> = ({
     // Check if current player has already locked in
     const currentPlayer = players.find(p => p.id === playerId);
     if (currentPlayer?.hasPlayed) return; // Already locked in this round
-    if (!hasMVPCard || !savedMVPCombo) return; // Can't use if not saved or already used
+    if (!hasMVPCard || !mvpCard) return; // Can't use if not available or already used
     if (currentRound === 1) return; // Can't use in Round 1 (C-Suite selection)
+
+    // Round 5 restriction: Can't use MVP if Golden is already selected
+    if (currentRound === 5 && selectedGoldenCard) {
+      console.log('[CCM Round 5] Cannot select MVP Card - Golden card already selected. You can only use ONE special card in Round 5.');
+      return;
+    }
 
     // Toggle MVP Card selection
     setSelectedMVPCard(!selectedMVPCard);
@@ -993,6 +1056,66 @@ export const CCMGameRoom: React.FC<CCMGameRoomProps> = ({
       setSelectedCardId(null);
       setSelectedGoldenCard(false);
     }
+  };
+
+  /**
+   * Handle keeping the current MVP card (Bonus Play decision)
+   */
+  const handleKeepMVPCard = () => {
+    if (!mvpCard || !bonusPlayRound) return;
+
+    console.log(`[CCM MVP] Player chose to keep MVP card: ${mvpCard.roleCardData.displayName} (Round ${bonusPlayRound})`);
+
+    // Update the locked round to track when it was last confirmed
+    setMvpCard({
+      ...mvpCard,
+      lockedInRound: bonusPlayRound
+    });
+
+    // Close modal and advance to next round
+    setShowBonusPlayModal(false);
+    setBonusPlayRound(null);
+
+    // Advance to next round
+    setTimeout(() => {
+      setCurrentRound(bonusPlayRound + 1);
+      setPlayers(prevPlayers => prevPlayers.map(p => ({ ...p, hasPlayed: false, selectedRoleCard: undefined, selectedSpecialCard: undefined })));
+      setMasterMessage(`Round ${bonusPlayRound + 1} starting...`);
+    }, 1000);
+  };
+
+  /**
+   * Handle swapping the MVP card for a different role card (Bonus Play decision)
+   */
+  const handleSwapMVPCard = (newCardId: string) => {
+    if (!bonusPlayRound) return;
+
+    // Find the new card from the available role cards
+    const newCard = leftStack.find(card => card.type === 'role' && card.id === newCardId) as RoleCardData | undefined;
+
+    if (!newCard) {
+      console.error('[CCM MVP] ERROR: Cannot find new card to swap to:', newCardId);
+      return;
+    }
+
+    console.log(`[CCM MVP] Player swapped MVP card from ${mvpCard?.roleCardData.displayName || 'none'} to ${newCard.displayName} (Round ${bonusPlayRound})`);
+
+    // Update MVP card with the new selection - store full RoleCardData
+    setMvpCard({
+      roleCardData: newCard, // Store complete card data
+      lockedInRound: bonusPlayRound
+    });
+
+    // Close modal and advance to next round
+    setShowBonusPlayModal(false);
+    setBonusPlayRound(null);
+
+    // Advance to next round
+    setTimeout(() => {
+      setCurrentRound(bonusPlayRound + 1);
+      setPlayers(prevPlayers => prevPlayers.map(p => ({ ...p, hasPlayed: false, selectedRoleCard: undefined, selectedSpecialCard: undefined })));
+      setMasterMessage(`MVP Card swapped! Round ${bonusPlayRound + 1} starting...`);
+    }, 1000);
   };
 
   /**
@@ -1062,13 +1185,16 @@ export const CCMGameRoom: React.FC<CCMGameRoomProps> = ({
         console.log('[CCMGameRoom] Round 2+ - Card selection:', { selectedCardId, selectedGoldenCard });
 
         // MOCK MODE: Calculate score locally
+        // TODO: In production, this should use CCMGameEngine.calculateRoundScore()
         let scoreToAdd = 0;
         if (selectedGoldenCard) {
           scoreToAdd = 130; // Golden Card = flat 130 points
           console.log('[CCMGameRoom] Golden Card used! +130 points');
-        } else if (selectedMVPCard && savedMVPCombo) {
-          scoreToAdd = savedMVPCombo.averageScore; // MVP Card = saved combo's average score
-          console.log('[CCMGameRoom] MVP Card used! +' + scoreToAdd + ' points');
+        } else if (selectedMVPCard && mvpCard) {
+          // MVP Card = base score (like regular card) + 10 bonus
+          const baseScore = Math.floor(Math.random() * 50) + 40; // 40-90 points
+          scoreToAdd = baseScore + 10; // +10 MVP bonus
+          console.log('[CCMGameRoom] MVP Card used!', mvpCard.roleCardData.displayName, '+' + scoreToAdd + ' points (base: ' + baseScore + ' + MVP bonus: 10)');
         } else {
           scoreToAdd = Math.floor(Math.random() * 50) + 40; // Regular cards: 40-90 points
           console.log('[CCMGameRoom] Regular card used! +' + scoreToAdd + ' points');
@@ -1133,19 +1259,29 @@ export const CCMGameRoom: React.FC<CCMGameRoomProps> = ({
         console.log(`[User Lock-In] Round ${currentRound}: ${newPlayers.filter(p => p.hasPlayed).length}/${newPlayers.length} players ready, allLocked: ${allLocked}`);
 
         if (allLocked) {
-          console.log(`[User Lock-In] All players locked in Round ${currentRound}! Advancing round in 2 seconds...`);
-          setTimeout(() => {
-            if (currentRound >= 6) {
-              console.log('[User Lock-In] Game complete! Showing victory screen...');
-              setGamePhase('complete');
-              setShowVictory(true);
-            } else {
-              console.log(`[User Lock-In] Advancing from Round ${currentRound} to Round ${currentRound + 1}`);
-              setCurrentRound(currentRound + 1);
-              setPlayers(prevPlayers => prevPlayers.map(p => ({ ...p, hasPlayed: false, selectedRoleCard: undefined, selectedSpecialCard: undefined })));
-              setMasterMessage('Round complete! Starting next round...');
-            }
-          }, 2000);
+          // Check if this is a Bonus Play round (after Rounds 2, 3, or 4)
+          if (currentRound >= 2 && currentRound <= 4 && mvpCard) {
+            console.log(`[CCM MVP] All players locked in Round ${currentRound}! Triggering Bonus Play modal...`);
+            setTimeout(() => {
+              setBonusPlayRound(currentRound);
+              setShowBonusPlayModal(true);
+              setMasterMessage(`Round ${currentRound} complete! Choose your MVP card strategy...`);
+            }, 2000);
+          } else {
+            console.log(`[User Lock-In] All players locked in Round ${currentRound}! Advancing round in 2 seconds...`);
+            setTimeout(() => {
+              if (currentRound >= 6) {
+                console.log('[User Lock-In] Game complete! Showing victory screen...');
+                setGamePhase('complete');
+                setShowVictory(true);
+              } else {
+                console.log(`[User Lock-In] Advancing from Round ${currentRound} to Round ${currentRound + 1}`);
+                setCurrentRound(currentRound + 1);
+                setPlayers(prevPlayers => prevPlayers.map(p => ({ ...p, hasPlayed: false, selectedRoleCard: undefined, selectedSpecialCard: undefined })));
+                setMasterMessage('Round complete! Starting next round...');
+              }
+            }, 2000);
+          }
         }
       }
 
@@ -1403,8 +1539,11 @@ export const CCMGameRoom: React.FC<CCMGameRoomProps> = ({
                       <p className="glass-text-primary font-medium text-sm mb-1">How to Play</p>
                       <ul className="glass-text-secondary text-xs space-y-1">
                         <li>• Round 1: Choose your C-Suite lens</li>
+                        <li>• Round 2: Receive a random MVP card</li>
                         <li>• Rounds 2-6: Solve business challenges</li>
-                        <li>• Earn points with strategic card choices</li>
+                        <li>• Bonus Play: After Rounds 2-4, keep or swap your MVP card</li>
+                        <li>• MVP card gives +10 bonus points when used</li>
+                        <li>• Round 5: Use MVP OR Golden card (not both!)</li>
                         <li>• Lens multipliers boost your score!</li>
                       </ul>
                     </div>
@@ -1517,7 +1656,8 @@ export const CCMGameRoom: React.FC<CCMGameRoomProps> = ({
                   setHasGoldenCard(true);
                   setSelectedGoldenCard(false);
                   // Reset MVP Card for new game
-                  setHasMVPCard(true);
+                  setMvpCard(null);
+                  setHasMVPCard(false); // MVP card assigned in Round 2, not at start
                   setSelectedMVPCard(false);
                 }}
                 className="flex-1 py-3 bg-gradient-to-r from-green-500 to-blue-500 text-white rounded-xl font-semibold"
@@ -1924,7 +2064,13 @@ export const CCMGameRoom: React.FC<CCMGameRoomProps> = ({
                       aiCompanionName={aiCompanionName}
                       onGoldenCardSelect={handleSelectGoldenCard}
                       currentRound={currentRound}
-                      savedMVPCombo={savedMVPCombo}
+                      savedMVPCombo={mvpCard ? {
+                        roleCardName: mvpCard.roleCardData.displayName,
+                        synergyCardName: '', // Not used in new flow
+                        cSuiteOrg: mvpCard.roleCardData.cSuiteOrg,
+                        averageScore: 70, // Mock average score (base 60 + MVP bonus 10)
+                        savedFromGameNumber: mvpCard.lockedInRound
+                      } : null}
                       hasMVPCard={hasMVPCard}
                       selectedMVPCard={selectedMVPCard}
                       onMVPCardSelect={handleSelectMVPCard}
@@ -1945,7 +2091,7 @@ export const CCMGameRoom: React.FC<CCMGameRoomProps> = ({
                     className="px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl font-bold text-lg shadow-lg hover:scale-105 transition-transform"
                   >
                     {selectedGoldenCard ? 'Lock In Golden Card (130 Points)' :
-                     selectedMVPCard && savedMVPCombo ? `Lock In MVP Card (${savedMVPCombo.averageScore} Points)` :
+                     selectedMVPCard && mvpCard ? `Lock In MVP Card (+10 Bonus)` :
                      'Lock In Selection'}
                   </button>
                 </motion.div>
@@ -1968,6 +2114,21 @@ export const CCMGameRoom: React.FC<CCMGameRoomProps> = ({
             </div>
           </div>
         </div>
+
+        {/* Bonus Play Modal - Appears after Rounds 2, 3, 4 */}
+        <AnimatePresence>
+          {showBonusPlayModal && bonusPlayRound && mvpCard && (
+            <BonusPlayModal
+              roundNumber={bonusPlayRound}
+              currentMVPCard={mvpCard.roleCardData} // Use stored card data directly
+              availableRoleCards={leftStack.filter(
+                (card): card is RoleCardData => card.type === 'role' && card.id !== selectedCardId
+              )} // Filter out the card that was just used this round (only 5 cards available)
+              onKeepMVPCard={handleKeepMVPCard}
+              onSwapMVPCard={handleSwapMVPCard}
+            />
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

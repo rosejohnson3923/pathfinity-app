@@ -8,6 +8,7 @@ import { CCMHub } from '../components/ccm/CCMHub';
 import { CCMGameRoom } from '../components/ccm/CCMGameRoom';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../contexts/AuthContext';
+import { AICharacterProvider } from '../components/ai-characters/AICharacterProvider';
 
 export const CCMPage: React.FC = () => {
   const navigate = useNavigate();
@@ -75,13 +76,15 @@ export const CCMPage: React.FC = () => {
       )}
 
       {view === 'game' && currentRoomId && currentRoomCode && (
-        <CCMGameRoom
-          roomId={currentRoomId}
-          roomCode={currentRoomCode}
-          playerId={playerId}
-          playerName={playerName}
-          onLeave={handleLeaveRoom}
-        />
+        <AICharacterProvider>
+          <CCMGameRoom
+            roomId={currentRoomId}
+            roomCode={currentRoomCode}
+            playerId={playerId}
+            playerName={playerName}
+            onLeave={handleLeaveRoom}
+          />
+        </AICharacterProvider>
       )}
     </div>
   );

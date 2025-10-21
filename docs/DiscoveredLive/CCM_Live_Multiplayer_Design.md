@@ -314,10 +314,12 @@ Around the table, each player shows:
 - Can only be used ONCE per game
 - Available from Round 2 onwards
 
-**Option 3: MVP Card (Saved Role)**
-- Use a Role card saved from previous round
-- Requires Synergy card to activate
-- Bonus +10 points for reusing your best card
+**Option 3: MVP Card (Bonus Play System)**
+- In Round 2, you receive a random MVP card from your hand
+- After Rounds 2, 3, and 4, you can keep or swap your MVP card (Bonus Play)
+- When used, provides +10 bonus points on top of base score
+- Can only be used ONCE per game
+- Round 5 restriction: Can use MVP OR Golden card, but not both
 
 ### Card Selection Mechanics
 
@@ -631,12 +633,14 @@ Quality Ratings:
 - Once used, becomes disabled ("USED" overlay)
 - Strategic value: Guarantees max score when lens is weak
 
-**MVP Card:**
-- Unlocked at end of Round 1
-- Player can save their selected Role card
-- Can be reused in any future round
-- Requires Synergy card pairing
-- +10 bonus points when used
+**MVP Card (Bonus Play System):**
+- Randomly assigned in Round 2 from player's role card hand
+- Visible and usable immediately in Round 2
+- After Rounds 2, 3, and 4: Bonus Play modal appears
+- Player choice: Keep current MVP card OR swap for different role card
+- Provides +10 bonus points when used (added to base score)
+- Can only be used ONCE per game
+- Round 5 restriction: Cannot use both MVP AND Golden in same round
 
 ---
 
@@ -1132,9 +1136,10 @@ class CCMGameEngine {
 
 ## Open Questions & Decisions Needed
 
-1. **MVP Card mechanics:**
-   - Can MVP be selected in Round 1 and used in Round 2?
-   - Or only cards from Round 2+ can become MVP?
+1. **MVP Card mechanics:** ✅ RESOLVED
+   - MVP card randomly assigned from hand at start of Round 2
+   - Bonus Play modal appears after Rounds 2, 3, and 4 for keep/swap decision
+   - Round 5 restriction: MVP OR Golden (not both)
 
 2. **Golden Card timing:**
    - Currently disabled Round 1, available Round 2+
