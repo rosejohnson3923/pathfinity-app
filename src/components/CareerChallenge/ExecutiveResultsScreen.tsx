@@ -202,6 +202,9 @@ const ExecutiveResultsScreen: React.FC<ExecutiveResultsScreenProps> = ({
           <div className="space-y-3">
             {results.selectedSolutions.map((solution, index) => {
               const isPerfect = results.perfectSolutions.some(ps => ps.id === solution.id);
+              // Extract first sentence from content
+              const firstSentence = solution.content.split(/[.!?]/)[0].trim() + '.';
+
               return (
                 <div
                   key={`selected-${solution.id || index}`}
@@ -211,17 +214,17 @@ const ExecutiveResultsScreen: React.FC<ExecutiveResultsScreenProps> = ({
                       : 'bg-red-900/20 border-red-500'
                   }`}
                 >
-                  <div className="flex items-start gap-2 mb-2">
+                  <div className="flex items-start gap-2">
                     {isPerfect ? (
                       <CheckCircle className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
                     ) : (
                       <XCircle className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
                     )}
                     <div className="flex-1">
-                      <p className="text-sm text-gray-200">{solution.content}</p>
+                      <p className="text-sm text-gray-200 font-medium">{firstSentence}</p>
                       {solution.rationale && (
                         <p className="text-xs text-gray-400 mt-2 italic">
-                          <span className="font-semibold">Rationale:</span> {solution.rationale}
+                          {solution.rationale}
                         </p>
                       )}
                     </div>

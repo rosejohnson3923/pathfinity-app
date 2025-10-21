@@ -328,7 +328,7 @@ ${request.avoidTopics ? `Avoid these topics: ${request.avoidTopics.join(', ')}` 
         systemPrompt,
         {
           temperature: 0.8, // Keep creative for good solutions
-          maxTokens: 4000, // Increased to avoid JSON truncation
+          maxTokens: 6000, // Increased to 6000 to ensure both perfect and imperfect solutions arrays complete
           jsonMode: true
         }
       );
@@ -350,6 +350,20 @@ ${request.avoidTopics ? `Avoid these topics: ${request.avoidTopics.join(', ')}` 
         throw new Error('Failed to parse solution JSON');
       }
 
+      // Validate that both arrays exist
+      if (!generated.perfectSolutions || !Array.isArray(generated.perfectSolutions)) {
+        console.error('❌ Missing or invalid perfectSolutions array');
+        throw new Error('Invalid AI response: missing perfectSolutions');
+      }
+
+      if (!generated.imperfectSolutions || !Array.isArray(generated.imperfectSolutions)) {
+        console.warn('⚠️ Missing or invalid imperfectSolutions array - AI response may have been truncated');
+        console.warn('Response length:', response.length);
+        console.warn('Perfect solutions count:', generated.perfectSolutions?.length);
+        // Set to empty array and let fallback handle it
+        generated.imperfectSolutions = [];
+      }
+
       const perfect = generated.perfectSolutions.map((sol, i) =>
         this.mapGeneratedToSolution(sol, `perfect-${i}`, true)
       );
@@ -357,6 +371,12 @@ ${request.avoidTopics ? `Avoid these topics: ${request.avoidTopics.join(', ')}` 
       const imperfect = generated.imperfectSolutions.map((sol, i) =>
         this.mapGeneratedToSolution(sol, `imperfect-${i}`, false)
       );
+
+      // If we don't have enough imperfect solutions, fall back to template-based generation
+      if (imperfect.length < request.imperfectCount) {
+        console.warn(`⚠️ Only ${imperfect.length}/${request.imperfectCount} imperfect solutions generated. Using fallback.`);
+        throw new Error('Incomplete AI response - missing imperfect solutions');
+      }
 
       return { perfect, imperfect };
     } catch (error) {
