@@ -340,6 +340,7 @@ export const CareerBingoLobbyPage: React.FC = () => {
         myBingoCard={myParticipant.bingoCard}
         userName={userName}
         onComplete={handleGameComplete}
+        onLeave={handleBackToHub}
       />
     );
   }

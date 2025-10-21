@@ -79,6 +79,7 @@ interface MultiplayerGameRoomProps {
   myBingoCard: { careers: string[][] }; // From database
   userName: string;
   onComplete: (summaryData: GameSummaryData) => void;
+  onLeave?: () => void; // Optional handler for leaving mid-game
 }
 
 export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
@@ -87,7 +88,8 @@ export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
   myParticipantId,
   myBingoCard,
   userName,
-  onComplete
+  onComplete,
+  onLeave
 }) => {
   const [game, setGame] = useState<GameState | null>(null);
   const [showBingoAnimation, setShowBingoAnimation] = useState(false);
@@ -638,14 +640,17 @@ export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
         <div className="glass-panel mb-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <motion.button
-                onClick={onComplete}
-                className="glass-card-sm p-3 hover:scale-105 transition-transform"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <ArrowLeft className="w-5 h-5 text-white" />
-              </motion.button>
+              {onLeave && (
+                <motion.button
+                  onClick={onLeave}
+                  className="glass-card-sm p-3 hover:scale-105 transition-transform"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  title="Leave game and return to lobby"
+                >
+                  <ArrowLeft className="w-5 h-5 text-white" />
+                </motion.button>
+              )}
               <div>
                 <h1 className="text-2xl font-bold text-white flex items-center gap-2">
                   <Trophy className="w-6 h-6 text-yellow-300" />
