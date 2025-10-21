@@ -348,7 +348,7 @@ const ExecutiveDecisionRoom: React.FC = () => {
                     <div className="grid grid-cols-5 gap-2">
                       {[1, 2, 3, 4, 5].map((level) => (
                         <button
-                          key={level}
+                          key={`difficulty-${level}`}
                           onClick={() => setDifficulty(level)}
                           className={`p-3 rounded-lg border-2 transition-all ${
                             difficulty === level
@@ -359,7 +359,7 @@ const ExecutiveDecisionRoom: React.FC = () => {
                           <div className="flex justify-center mb-1">
                             {Array.from({ length: level }, (_, i) => (
                               <Star
-                                key={i}
+                                key={`star-${level}-${i}`}
                                 className="w-4 h-4 text-yellow-400 fill-yellow-400"
                               />
                             ))}
@@ -376,7 +376,7 @@ const ExecutiveDecisionRoom: React.FC = () => {
                     <div className="flex flex-wrap gap-2">
                       {room.companyValues?.map((value, i) => (
                         <span
-                          key={i}
+                          key={`value-${value}-${i}`}
                           className="px-3 py-1 bg-purple-900/30 border border-purple-500/30 rounded-lg text-sm"
                         >
                           {value}
@@ -459,9 +459,9 @@ const ExecutiveDecisionRoom: React.FC = () => {
               <div className="h-full flex flex-col">
                 {/* Messages */}
                 <div className="flex-1 overflow-y-auto p-4 space-y-3">
-                  {messages.map((msg) => (
+                  {messages.map((msg, msgIdx) => (
                     <div
-                      key={msg.id}
+                      key={`msg-${msg.id}-${msgIdx}`}
                       className={`${
                         msg.type === 'system'
                           ? 'text-center text-gray-400 text-sm italic'
@@ -524,7 +524,7 @@ const ExecutiveDecisionRoom: React.FC = () => {
                   <div className="space-y-2">
                     {leaderboard.map((entry, index) => (
                       <div
-                        key={`${entry.playerId}-${index}`}
+                        key={`leaderboard-${entry.playerId}-${entry.rank || index}`}
                         className={`flex items-center justify-between p-3 rounded-lg ${
                           index === 0
                             ? 'bg-yellow-900/20 border border-yellow-500/30'
@@ -571,9 +571,9 @@ const ExecutiveDecisionRoom: React.FC = () => {
                   <div className="space-y-1">
                     {players
                       .filter(p => p.isActive)
-                      .map((player) => (
+                      .map((player, idx) => (
                         <div
-                          key={player.playerId}
+                          key={`active-player-${player.playerId}-${idx}`}
                           className="flex items-center justify-between text-sm py-1"
                         >
                           <span className="text-gray-300">

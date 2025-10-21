@@ -1107,6 +1107,19 @@ export interface LeadershipInsight {
 }
 
 /**
+ * Leadership insights summary
+ * Comprehensive feedback on leadership decision-making
+ */
+export interface LeadershipInsights {
+  strengths: string[];
+  improvements: string[];
+  biasAwareness: string;
+  decisionQuality: string;
+  businessImpact: string;
+  leadershipGrowth: string;
+}
+
+/**
  * Career path recommendation
  */
 export interface CareerPath {

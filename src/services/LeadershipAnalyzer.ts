@@ -11,6 +11,7 @@ import {
   CSuiteRole,
   LeadershipScore,
   LeadershipInsight,
+  LeadershipInsights,
   CareerPath,
   BusinessScenario,
   ScenarioType,
@@ -280,7 +281,69 @@ export class LeadershipAnalyzer {
   /**
    * Generate insights based on 6 C's scores
    */
-  public generateInsights(sixCs: SixCs): LeadershipInsight[] {
+  /**
+   * Generate comprehensive leadership insights summary
+   */
+  public generateInsights(sixCs: SixCs): LeadershipInsights {
+    const avgScore = Object.values(sixCs).reduce((sum, score) => sum + score, 0) / 6;
+
+    // Determine strengths (scores >= 4)
+    const strengths: string[] = [];
+    if (sixCs.character >= 4) strengths.push('Strong ethical decision-making and integrity');
+    if (sixCs.competence >= 4) strengths.push('Excellent problem-solving and strategic thinking');
+    if (sixCs.communication >= 4) strengths.push('Effective stakeholder communication');
+    if (sixCs.compassion >= 4) strengths.push('People-first leadership approach');
+    if (sixCs.commitment >= 4) strengths.push('Long-term dedication and persistence');
+    if (sixCs.confidence >= 4) strengths.push('Decisive and confident under pressure');
+
+    // Determine improvements (scores < 3)
+    const improvements: string[] = [];
+    if (sixCs.character < 3) improvements.push('Prioritize ethical considerations in all decisions');
+    if (sixCs.competence < 3) improvements.push('Develop analytical and strategic thinking skills');
+    if (sixCs.communication < 3) improvements.push('Improve stakeholder communication and messaging');
+    if (sixCs.compassion < 3) improvements.push('Consider human impact more deeply');
+    if (sixCs.commitment < 3) improvements.push('Build long-term vision and follow-through');
+    if (sixCs.confidence < 3) improvements.push('Strengthen decision-making confidence');
+
+    // Generate insights based on average score
+    const biasAwareness = avgScore >= 4
+      ? 'Excellent awareness of executive biases and perspectives'
+      : avgScore >= 3
+      ? 'Good understanding of different executive viewpoints with room to grow'
+      : 'Need to develop deeper awareness of how different roles view problems';
+
+    const decisionQuality = avgScore >= 4
+      ? 'High-quality decisions that balance multiple stakeholder needs'
+      : avgScore >= 3
+      ? 'Solid decision-making with some areas for improvement'
+      : 'Decision-making needs significant development';
+
+    const businessImpact = avgScore >= 4
+      ? 'Your decisions are likely to drive positive long-term business outcomes and stakeholder value'
+      : avgScore >= 3
+      ? 'Decisions show promise but may have mixed results without refinement'
+      : 'Current approach may lead to suboptimal business outcomes';
+
+    const leadershipGrowth = avgScore >= 4
+      ? 'Continue refining your leadership by seeking diverse perspectives and challenging assumptions'
+      : avgScore >= 3
+      ? 'Focus on strengthening your weakest C\'s while maintaining your current strengths'
+      : 'Invest time in leadership development, especially in your lowest-scoring areas';
+
+    return {
+      strengths,
+      improvements,
+      biasAwareness,
+      decisionQuality,
+      businessImpact,
+      leadershipGrowth
+    };
+  }
+
+  /**
+   * Generate detailed insights for each C (legacy method - for future use)
+   */
+  public generateDetailedInsights(sixCs: SixCs): LeadershipInsight[] {
     const insights: LeadershipInsight[] = [];
 
     // Analyze each C
