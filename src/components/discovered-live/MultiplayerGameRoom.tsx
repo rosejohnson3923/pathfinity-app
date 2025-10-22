@@ -16,16 +16,27 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
-import { Trophy, ArrowLeft } from 'lucide-react';
+import { Trophy, ArrowLeft, MessageSquare, Send } from 'lucide-react';
 import { BingoGrid } from './BingoGrid';
 import { QuestionDisplayCard } from './QuestionDisplayCard';
 import { PlayerLeaderboardCard } from './PlayerLeaderboardCard';
+import LeaderboardPanel from '../LeaderboardPanel';
 import { discoveredLiveRealtimeService } from '../../services/DiscoveredLiveRealtimeService';
 import { gameOrchestrator } from '../../services/GameOrchestrator';
 import { perpetualRoomManager } from '../../services/PerpetualRoomManager';
+import { companyRoomService } from '../../services/CompanyRoomService';
 import { supabase } from '../../lib/supabase';
 import type { GridPosition, CareerClue } from '../../types/DiscoveredLiveMultiplayerTypes';
 import '../../design-system/index.css';
+
+interface ChatMessage {
+  id: string;
+  playerId: string;
+  playerName: string;
+  message: string;
+  type: 'chat' | 'system' | 'achievement';
+  timestamp: string;
+}
 
 interface Player {
   id: string;
@@ -95,8 +106,14 @@ export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
   const [showBingoAnimation, setShowBingoAnimation] = useState(false);
   const [careerDetails, setCareerDetails] = useState<Map<string, { careerName: string; icon: string; }>>(new Map());
   const gameRef = useRef<GameState | null>(null);
+  const chatEndRef = useRef<HTMLDivElement>(null);
 
-  // XP notification state
+  // Chat state
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [newMessage, setNewMessage] = useState('');
+
+  // UI state
+  const [showLeaderboard, setShowLeaderboard] = useState(true); // Show leader tab by default
   const [showXPNotification, setShowXPNotification] = useState(false);
   const [lastXPAwarded, setLastXPAwarded] = useState(0);
   const [xpNotificationType, setXPNotificationType] = useState<'success' | 'error'>('success');
@@ -108,6 +125,7 @@ export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
     return () => {
       // Cleanup: unsubscribe from room events
       discoveredLiveRealtimeService.unsubscribeFromRoom(roomId);
+      companyRoomService.unsubscribeFromRoom(roomId);
     };
   }, []);
 
@@ -134,6 +152,34 @@ export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
     return () => clearInterval(interval);
   }, [game?.currentClue, game?.timer, game?.userAnswered]);
 
+  // Auto-scroll chat to bottom when new messages arrive
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  /**
+   * Handle incoming chat messages
+   */
+  const handleNewMessage = (message: ChatMessage) => {
+    setMessages(prev => [...prev, message]);
+  };
+
+  /**
+   * Send a chat message to the room
+   */
+  const sendChatMessage = async () => {
+    if (!newMessage.trim() || !roomId) return;
+
+    await companyRoomService.sendMessage(
+      roomId,
+      myParticipantId,
+      userName,
+      newMessage,
+      'chat'
+    );
+    setNewMessage('');
+  };
+
   /**
    * Initialize game state from database
    */
@@ -155,6 +201,14 @@ export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
         participant_joined: handlePlayerJoined,
         participant_left: handlePlayerLeft,
       });
+
+      // Subscribe to chat messages
+      await companyRoomService.subscribeToRoom(
+        roomId,
+        handleNewMessage,
+        () => {}, // No players update handler needed (using discoveredLiveRealtimeService)
+        () => {}  // No leaderboard update handler needed
+      );
 
       // Initialize game state
       const initialState: GameState = {
@@ -181,6 +235,10 @@ export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
 
       // Fetch initial participant data
       await loadParticipants();
+
+      // Load initial chat messages
+      const roomMessages = await companyRoomService.getRoomMessages(roomId);
+      setMessages(roomMessages);
 
       // Fetch current game state (question, timer, etc.)
       await loadCurrentGameState();
@@ -705,9 +763,100 @@ export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
             />
           </div>
 
-          {/* Right Column - Leaderboard */}
+          {/* Right Column - Sidebar with Tabs */}
           <div className="lg:w-72 lg:max-w-[280px] flex-shrink-0">
-            <PlayerLeaderboardCard players={game.players} />
+            <div className="glass-panel h-full flex flex-col">
+              {/* Tabs */}
+              <div className="flex border-b border-white/10">
+                <button
+                  onClick={() => setShowLeaderboard(false)}
+                  className={`flex-1 py-3 px-2 font-semibold transition-colors flex items-center justify-center gap-2 ${
+                    !showLeaderboard
+                      ? 'bg-purple-600 text-white'
+                      : 'bg-gray-800/50 text-gray-400 hover:text-white'
+                  }`}
+                >
+                  <MessageSquare className="w-4 h-4 flex-shrink-0" />
+                  <span className="truncate">Chat</span>
+                </button>
+                <button
+                  onClick={() => setShowLeaderboard(true)}
+                  className={`flex-1 py-3 px-2 font-semibold transition-colors flex items-center justify-center gap-2 ${
+                    showLeaderboard
+                      ? 'bg-purple-600 text-white'
+                      : 'bg-gray-800/50 text-gray-400 hover:text-white'
+                  }`}
+                >
+                  <Trophy className="w-4 h-4 flex-shrink-0" />
+                  <span className="truncate">Leader</span>
+                </button>
+              </div>
+
+              {/* Content */}
+              <div className="flex-1 overflow-hidden">
+                {showLeaderboard ? (
+                  <div className="p-4">
+                    <PlayerLeaderboardCard players={game.players} />
+                  </div>
+                ) : (
+                  <div className="h-full flex flex-col">
+                    {/* Messages */}
+                    <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                      {messages.map((msg, msgIdx) => (
+                        <div
+                          key={`msg-${msg.id}-${msgIdx}`}
+                          className={`${
+                            msg.type === 'system'
+                              ? 'text-center text-gray-400 text-sm italic'
+                              : msg.type === 'achievement'
+                              ? 'bg-yellow-900/20 border border-yellow-500/30 rounded-lg p-2 text-sm'
+                              : ''
+                          }`}
+                        >
+                          {msg.type === 'chat' && (
+                            <div>
+                              <span className="font-semibold text-purple-400">
+                                {msg.playerName}:
+                              </span>
+                              <span className="ml-2 text-gray-200">{msg.message}</span>
+                            </div>
+                          )}
+                          {msg.type === 'system' && <span>{msg.message}</span>}
+                          {msg.type === 'achievement' && (
+                            <div className="flex items-center">
+                              <Trophy className="w-4 h-4 mr-2 text-yellow-400" />
+                              <span>{msg.message}</span>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                      <div ref={chatEndRef} />
+                    </div>
+
+                    {/* Chat Input */}
+                    <div className="p-4 border-t border-gray-700">
+                      <div className="relative">
+                        <input
+                          type="text"
+                          value={newMessage}
+                          onChange={(e) => setNewMessage(e.target.value)}
+                          onKeyPress={(e) => e.key === 'Enter' && sendChatMessage()}
+                          placeholder="Type a message..."
+                          className="w-full px-3 py-2 pr-12 bg-gray-800 border border-gray-600 rounded-lg focus:outline-none focus:border-purple-500 text-white"
+                        />
+                        <button
+                          onClick={sendChatMessage}
+                          className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-purple-400 hover:text-purple-300 transition-colors flex-shrink-0"
+                          aria-label="Send message"
+                        >
+                          <Send className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>

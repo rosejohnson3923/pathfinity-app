@@ -34,68 +34,64 @@ export const PlayerLeaderboardCard: React.FC<PlayerLeaderboardCardProps> = ({ pl
   const sortedPlayers = [...players].sort((a, b) => b.xp - a.xp);
 
   return (
-    <div className="glass-card">
+    <div className="h-full flex flex-col">
       {/* Header */}
-      <div className="flex items-center gap-2 mb-4">
-        <Users className="w-6 h-6 text-purple-300" />
-        <h3 className="text-white font-bold text-lg">Live Leaderboard</h3>
+      <div className="flex items-center gap-2 p-4 border-b border-white/10">
+        <Users className="w-5 h-5 text-purple-300 flex-shrink-0" />
+        <h3 className="text-white font-bold">Live Leaderboard</h3>
       </div>
 
       {/* Players List */}
-      <div className="space-y-2">
+      <div className="flex-1 overflow-y-auto p-3 space-y-2">
         {sortedPlayers.map((player, index) => (
           <motion.div
             key={player.name}
             className={`
-              glass-player-card
-              ${player.isCurrentUser ? 'glass-player-card-active ring-2 ring-purple-400' : ''}
+              rounded-lg p-2.5
+              ${player.isCurrentUser
+                ? 'bg-purple-600/30 border border-purple-400'
+                : 'bg-white/5 border border-white/10'
+              }
             `}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: index * 0.05 }}
           >
-            <div className="flex items-center justify-between">
-              {/* Rank & Name */}
-              <div className="flex items-center gap-3">
-                {/* Medal or Rank */}
-                <div className="w-8 text-center text-xl font-bold">
-                  {index < 3 ? medals[index] : `#${index + 1}`}
-                </div>
+            {/* Rank & Name Row */}
+            <div className="flex items-center gap-2 mb-1">
+              {/* Rank */}
+              <span className="text-base font-bold text-white flex-shrink-0 w-6">
+                {index < 3 ? medals[index] : `#${index + 1}`}
+              </span>
 
-                {/* Player Info */}
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className={`font-semibold ${
-                      player.isCurrentUser
-                        ? 'text-white'
-                        : 'text-gray-200 dark:text-gray-300'
-                    }`}>
-                      {player.name}
-                    </span>
-                    {player.isAI && (
-                      <span className="text-xs text-white/60">🤖</span>
-                    )}
-                    {player.isCurrentUser && (
-                      <span className="text-xs bg-purple-500 text-white px-2 py-0.5 rounded-full">
-                        YOU
-                      </span>
-                    )}
-                  </div>
-                  <div className="text-xs text-white/60">
-                    {player.correct} correct
-                  </div>
-                </div>
-              </div>
+              {/* Name */}
+              <span className={`font-semibold text-sm truncate ${
+                player.isCurrentUser ? 'text-white' : 'text-gray-200'
+              }`}>
+                {player.name}
+              </span>
 
-              {/* XP */}
-              <div className="text-right">
-                <div className="flex items-center gap-1">
-                  <Zap className="w-4 h-4 text-yellow-300" />
-                  <span className="font-bold text-white text-lg">
-                    {player.xp}
-                  </span>
-                </div>
-                <div className="text-xs text-white/60">XP</div>
+              {/* Badges */}
+              {player.isAI && (
+                <span className="text-xs flex-shrink-0">🤖</span>
+              )}
+              {player.isCurrentUser && (
+                <span className="text-xs bg-purple-500 text-white px-1.5 py-0.5 rounded flex-shrink-0">
+                  YOU
+                </span>
+              )}
+            </div>
+
+            {/* Stats Row */}
+            <div className="flex items-center justify-between text-xs pl-8">
+              <span className="text-white/70">
+                {player.correct} correct
+              </span>
+              <div className="flex items-center gap-1">
+                <Zap className="w-3.5 h-3.5 text-yellow-300" />
+                <span className="font-bold text-white">
+                  {player.xp} XP
+                </span>
               </div>
             </div>
           </motion.div>
@@ -105,15 +101,15 @@ export const PlayerLeaderboardCard: React.FC<PlayerLeaderboardCardProps> = ({ pl
       {/* Current User Position Summary */}
       {sortedPlayers.length > 0 && (
         <motion.div
-          className="mt-4 glass-game-warning p-3 rounded-lg"
+          className="p-3 border-t border-white/10 bg-purple-900/20"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
         >
           <div className="flex items-center justify-between">
-            <span className="text-white/90 text-sm">Your Rank:</span>
-            <span className="text-white font-bold text-lg">
-              {sortedPlayers.findIndex(p => p.isCurrentUser) + 1} / {sortedPlayers.length}
+            <span className="text-white/80 text-sm">Your Rank:</span>
+            <span className="text-white font-bold">
+              #{sortedPlayers.findIndex(p => p.isCurrentUser) + 1} of {sortedPlayers.length}
             </span>
           </div>
         </motion.div>

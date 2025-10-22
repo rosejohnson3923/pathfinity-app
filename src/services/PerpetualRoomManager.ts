@@ -191,6 +191,13 @@ class PerpetualRoomManager {
     const gameNumber = room.current_game_number + 1;
     const bingoSlots = room.bingo_slots_per_game;
 
+    // Clean up any existing session for this game number (from failed previous attempts)
+    await client
+      .from('cb_game_sessions')
+      .delete()
+      .eq('perpetual_room_id', roomId)
+      .eq('game_number', gameNumber);
+
     const { data: session, error: sessionError } = await client
       .from('cb_game_sessions')
       .insert({
@@ -224,7 +231,7 @@ class PerpetualRoomManager {
 
         console.log(`👤 Adding participant: ${spectator.display_name}, userId: ${spectator.user_id}, careerCode: ${careerCode}`);
 
-        await this.addHumanParticipant(session.id, roomId, spectator.user_id, spectator.display_name, careerCode);
+        await this.addHumanParticipant(session.id, roomId, spectator.user_id, spectator.display_name, careerCode, room.grade_level);
       }
 
       // Clear spectators (they're now active players)
@@ -236,7 +243,7 @@ class PerpetualRoomManager {
 
     // 6. Add AI agents
     if (aiNeeded > 0) {
-      await this.addAIAgents(session.id, roomId, aiNeeded, room.ai_difficulty_mix);
+      await this.addAIAgents(session.id, roomId, aiNeeded, room.ai_difficulty_mix, room.grade_level);
     }
 
     // 7. Update room state
@@ -328,18 +335,20 @@ class PerpetualRoomManager {
   /**
    * Add human participant to game session
    * @param userCareerCode - The user's career code for center square
+   * @param gradeLevel - Grade level from room (maps to grade_category in clues)
    */
   private async addHumanParticipant(
     sessionId: string,
     roomId: string,
     userId: string,
     displayName: string,
-    userCareerCode: string
+    userCareerCode: string,
+    gradeLevel: string
   ): Promise<SessionParticipant> {
     const client = await supabase();
 
     // Generate unique bingo card for this participant with their career in center
-    const bingoCard = await this.generateUniqueBingoCard('elementary', userCareerCode);
+    const bingoCard = await this.generateUniqueBingoCard(gradeLevel, userCareerCode);
 
     const { data, error } = await client
       .from('cb_session_participants')
@@ -391,7 +400,8 @@ class PerpetualRoomManager {
     sessionId: string,
     roomId: string,
     count: number,
-    difficultyMix: 'mixed' | 'easy' | 'medium' | 'hard'
+    difficultyMix: 'mixed' | 'easy' | 'medium' | 'hard',
+    gradeLevel: string
   ): Promise<void> {
     const client = await supabase();
 
@@ -401,7 +411,7 @@ class PerpetualRoomManager {
 
     for (const aiPlayer of aiPlayers) {
       // Generate unique bingo card for each AI
-      const bingoCard = await this.generateUniqueBingoCard('elementary');
+      const bingoCard = await this.generateUniqueBingoCard(gradeLevel);
 
       // Map difficulty based on difficultyMix
       const difficulty = difficultyMix === 'mixed'
@@ -414,7 +424,7 @@ class PerpetualRoomManager {
           game_session_id: sessionId,
           perpetual_room_id: roomId,
           participant_type: 'ai_agent',
-          student_id: aiPlayer.id, // Use centralized AI player ID
+          user_id: aiPlayer.id, // Use centralized AI player ID
           display_name: aiPlayer.name, // Use centralized AI player name
           ai_difficulty: difficulty as 'easy' | 'medium' | 'hard',
           ai_personality: 'friendly', // Default personality (can be randomized if needed)

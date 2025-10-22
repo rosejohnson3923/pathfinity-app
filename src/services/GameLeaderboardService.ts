@@ -85,12 +85,12 @@ class GameLeaderboardService {
           perpetual_room_id,
           started_at,
           cb_session_participants!inner (
-            player_id,
+            user_id,
             display_name,
             total_xp,
-            total_bingos,
+            bingos_won,
             correct_answers,
-            total_answers,
+            incorrect_answers,
             is_active
           )
         `)
@@ -132,27 +132,28 @@ class GameLeaderboardService {
           : [session.cb_session_participants];
 
         for (const participant of participants) {
-          const existing = playerStats.get(participant.player_id);
+          const existing = playerStats.get(participant.user_id);
+          const totalAnswers = (participant.correct_answers || 0) + (participant.incorrect_answers || 0);
 
           if (existing) {
             existing.totalXP += participant.total_xp || 0;
             existing.gamesPlayed += 1;
-            existing.totalBingos += participant.total_bingos || 0;
+            existing.totalBingos += participant.bingos_won || 0;
             existing.totalCorrect += participant.correct_answers || 0;
-            existing.totalAnswers += participant.total_answers || 0;
+            existing.totalAnswers += totalAnswers;
             existing.bestGameXP = Math.max(existing.bestGameXP, participant.total_xp || 0);
             if (session.started_at > existing.lastPlayedAt) {
               existing.lastPlayedAt = session.started_at;
             }
           } else {
-            playerStats.set(participant.player_id, {
-              playerId: participant.player_id,
+            playerStats.set(participant.user_id, {
+              playerId: participant.user_id,
               displayName: participant.display_name,
               totalXP: participant.total_xp || 0,
               gamesPlayed: 1,
-              totalBingos: participant.total_bingos || 0,
+              totalBingos: participant.bingos_won || 0,
               totalCorrect: participant.correct_answers || 0,
-              totalAnswers: participant.total_answers || 0,
+              totalAnswers: totalAnswers,
               bestGameXP: participant.total_xp || 0,
               lastPlayedAt: session.started_at
             });
