@@ -18,6 +18,7 @@ interface RoomPlayer {
   displayName: string;
   avatar?: string;
   isActive: boolean;
+  isHost: boolean;
   currentScore: number;
   sessionCount: number;
   lastActiveAt: string;
@@ -387,6 +388,7 @@ export class CompanyRoomService {
         displayName: player.display_name,
         avatar: player.avatar_url,
         isActive: player.is_active,
+        isHost: player.is_host || false,
         currentScore: player.current_score || 0,
         sessionCount: playerStats?.total_sessions_played || 0,
         lastActiveAt: player.last_active_at || player.joined_at,
@@ -440,6 +442,7 @@ export class CompanyRoomService {
         displayName: player.display_name,
         avatar: player.avatar_url,
         isActive: player.is_active,
+        isHost: player.is_host || false,
         currentScore: player.current_score || 0,
         sessionCount: playerStats?.total_sessions_played || 0,
         lastActiveAt: player.last_active_at || player.joined_at,

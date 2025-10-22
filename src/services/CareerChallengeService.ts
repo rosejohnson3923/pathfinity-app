@@ -42,7 +42,8 @@ import { scenarioManager } from './ScenarioManager';
 import { lensEffectEngine } from './LensEffectEngine';
 import { leadershipAnalyzer } from './LeadershipAnalyzer';
 import { executiveDecisionAIService } from './ExecutiveDecisionAIService';
-import { aiPlayerPoolService } from './AIPlayerPoolService';
+import { aiPlayerPoolService, AIPlayerPoolService } from './AIPlayerPoolService';
+import { companyRoomService } from './CompanyRoomService';
 
 class CareerChallengeService {
   private static instance: CareerChallengeService;
@@ -1256,6 +1257,40 @@ class CareerChallengeService {
 
       if (existingSession?.session_id) {
         console.log(`Player ${displayName} already has session ${existingSession.session_id}`);
+
+        // Clean up old AI players even for existing sessions (handles old string IDs)
+        console.log('🧹 Cleaning up old AI players from existing session...');
+        await this.client
+          .from('dd_game_session_players')
+          .delete()
+          .eq('room_id', roomId)
+          .eq('is_host', false); // Delete all AI players (is_host: false)
+
+        // Regenerate AI players with proper UUIDs
+        console.log('🔄 Regenerating AI players with UUIDs...');
+        AIPlayerPoolService.resetInstance();
+        const poolService = AIPlayerPoolService.getInstance();
+        const aiPlayersNeeded = targetPlayerCount - 1;
+        const aiPlayers = poolService.getRandomPlayers(aiPlayersNeeded, `${roomId}-${existingSession.session_id}`);
+
+        // Add new AI players with UUIDs
+        for (let i = 0; i < aiPlayers.length; i++) {
+          const aiPlayer = aiPlayers[i];
+          await this.client
+            .from('dd_game_session_players')
+            .insert({
+              session_id: existingSession.session_id,
+              room_id: roomId,
+              player_id: aiPlayer.id,
+              display_name: aiPlayer.name,
+              is_ready: true,
+              is_host: false,
+              is_active: true,
+              join_order: i + 2
+            });
+        }
+        console.log(`✅ Regenerated ${aiPlayers.length} AI players with UUIDs`);
+
         return existingSession.session_id;
       }
 
@@ -1278,10 +1313,10 @@ class CareerChallengeService {
 
       console.log(`✅ Created session ${session.id} for ${displayName} in room ${roomId}`);
 
-      // Add player to session
+      // Add player to session (use upsert to prevent duplicates)
       const { error: playerInsertError } = await this.client
         .from('dd_game_session_players')
-        .insert({
+        .upsert({
           session_id: session.id,
           room_id: roomId,
           player_id: playerId,
@@ -1290,22 +1325,49 @@ class CareerChallengeService {
           is_host: true,
           is_active: true,
           join_order: 1
+        }, {
+          onConflict: 'room_id,player_id',
+          ignoreDuplicates: false
         });
 
       if (playerInsertError) {
         console.error(`❌ Error adding player to session:`, playerInsertError);
         // Continue anyway - player might already exist
+      } else {
+        // Send system message announcing player joined
+        await companyRoomService.sendMessage(
+          roomId,
+          playerId,
+          displayName,
+          `${displayName} joined the room`,
+          'system'
+        );
       }
 
       // Add AI players to this specific session
       const aiPlayersNeeded = targetPlayerCount - 1; // -1 for the human player
-      const aiPlayers = aiPlayerPoolService.getRandomPlayers(aiPlayersNeeded, `${roomId}-${session.id}`);
+
+      // ALWAYS clean up old AI players and force reset (handles caching issues)
+      console.log('🧹 Cleaning up old AI players from room...');
+      await this.client
+        .from('dd_game_session_players')
+        .delete()
+        .eq('room_id', roomId)
+        .eq('is_host', false); // Delete all AI players (is_host: false)
+
+      // Force fresh UUID generation (handles browser cache issues)
+      console.log('🔄 Forcing fresh AI player pool generation...');
+      AIPlayerPoolService.resetInstance();
+      const poolService = AIPlayerPoolService.getInstance();
+      console.log('✅ AI player pool ready with UUID-based IDs');
+
+      const aiPlayers = poolService.getRandomPlayers(aiPlayersNeeded, `${roomId}-${session.id}`);
 
       for (let i = 0; i < aiPlayers.length; i++) {
         const aiPlayer = aiPlayers[i];
         const { error: aiInsertError } = await this.client
           .from('dd_game_session_players')
-          .insert({
+          .upsert({
             session_id: session.id,
             room_id: roomId,
             player_id: aiPlayer.id,
@@ -1314,11 +1376,23 @@ class CareerChallengeService {
             is_host: false,
             is_active: true,
             join_order: i + 2
+          }, {
+            onConflict: 'room_id,player_id',
+            ignoreDuplicates: false
           });
 
         if (aiInsertError) {
           console.error(`❌ Error adding AI player ${aiPlayer.name}:`, aiInsertError);
           // Continue anyway - player might already exist
+        } else {
+          // Send system message announcing AI player joined
+          await companyRoomService.sendMessage(
+            roomId,
+            aiPlayer.id,
+            aiPlayer.name,
+            `${aiPlayer.name} joined the room`,
+            'system'
+          );
         }
       }
 
@@ -1504,6 +1578,15 @@ class CareerChallengeService {
     gradeCategory?: 'elementary' | 'middle' | 'high'
   ): Promise<ExecutiveDecisionSession | null> {
     if (!this.client) await this.initialize();
+
+    // Reset current_score to 0 when starting new game (prevents stale scores on leaderboard)
+    console.log('🔄 Resetting current_score for player:', playerId, 'in room:', roomId);
+    await this.client
+      .from('dd_game_session_players')
+      .update({ current_score: 0 })
+      .eq('player_id', playerId)
+      .eq('room_id', roomId)
+      .eq('is_active', true);
 
     // Get room and industry context
     const { data: room } = await this.client
@@ -1748,6 +1831,26 @@ class CareerChallengeService {
         completed_at: new Date().toISOString()
       })
       .eq('id', sessionId);
+
+    // Update player's current score in the session players table for leaderboard
+    // Note: dd_game_session_players uses the lobby session_id, not the game session_id
+    // So we match on player_id + room_id instead
+    console.log('🎯 Updating dd_game_session_players for player:', session.player_id, 'room:', session.room_id, 'score:', scoreResult.totalScore);
+    const { error: scoreUpdateError } = await this.client
+      .from('dd_game_session_players')
+      .update({
+        current_score: scoreResult.totalScore,
+        last_action_at: new Date().toISOString()
+      })
+      .eq('player_id', session.player_id)
+      .eq('room_id', session.room_id)
+      .eq('is_active', true);
+
+    if (scoreUpdateError) {
+      console.error('❌ Error updating dd_game_session_players score:', scoreUpdateError);
+    } else {
+      console.log('✅ Successfully updated dd_game_session_players score to', scoreResult.totalScore);
+    }
 
     // Update player XP and stats
     await this.updateExecutivePlayerStats(

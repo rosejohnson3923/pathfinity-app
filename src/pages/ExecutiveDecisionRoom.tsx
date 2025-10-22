@@ -20,6 +20,7 @@ import {
 import { useAuthContext } from '../contexts/AuthContext';
 import { careerChallengeService } from '../services/CareerChallengeService';
 import { companyRoomService } from '../services/CompanyRoomService';
+import { decisionDeskAIPlayerService } from '../services/DecisionDeskAIPlayerService';
 import {
   CompanyRoom,
   ExecutiveDecisionSession,
@@ -31,6 +32,7 @@ import {
 import ExecutiveSelectionModal from '../components/CareerChallenge/ExecutiveSelectionModal';
 import SolutionSelectionScreen from '../components/CareerChallenge/SolutionSelectionScreen';
 import ExecutiveResultsScreen from '../components/CareerChallenge/ExecutiveResultsScreen';
+import LeaderboardPanel from '../components/LeaderboardPanel';
 import { mapGradeLevelToCategory } from '../services/ai-prompts/rules/ExecutiveDecisionRules';
 
 interface RoomPlayer {
@@ -38,6 +40,7 @@ interface RoomPlayer {
   displayName: string;
   avatar?: string;
   isActive: boolean;
+  isHost: boolean;
   currentScore: number;
   sessionCount: number;
   lastActiveAt: string;
@@ -196,7 +199,7 @@ const ExecutiveDecisionRoom: React.FC = () => {
       setLoading(false);
 
       // Auto-start the game immediately instead of showing lobby
-      await startGame();
+      await startGame(sessionPlayers);
     } catch (error) {
       console.error('Error initializing room:', error);
       setLoading(false);
@@ -232,7 +235,7 @@ const ExecutiveDecisionRoom: React.FC = () => {
     setNewMessage('');
   };
 
-  const startGame = async () => {
+  const startGame = async (roomPlayers?: RoomPlayer[]) => {
     if (!roomId || !user) return;
 
     setLoading(true);
@@ -256,6 +259,36 @@ const ExecutiveDecisionRoom: React.FC = () => {
       if (newSession) {
         setSession(newSession);
         // Phase already set above
+
+        // Start AI player simulations
+        // Use passed players or fall back to state (for manual restarts)
+        const currentPlayers = roomPlayers || players;
+        console.log('🎮 All players in room:', currentPlayers);
+        // AI players are identified by isHost: false
+        const aiPlayers = currentPlayers
+          .filter(p => !p.isHost)
+          .map(p => ({ id: p.playerId, name: p.displayName }));
+
+        console.log('🎮 Filtered AI players:', aiPlayers);
+
+        if (aiPlayers.length > 0) {
+          console.log(`🤖 Starting simulations for ${aiPlayers.length} AI players`);
+          const aiConfigs = decisionDeskAIPlayerService.generateAIPlayerConfigs(aiPlayers);
+
+          // Trigger AI simulations asynchronously
+          decisionDeskAIPlayerService.simulateAIPlayers(
+            roomId,
+            aiConfigs,
+            newSession.scenario,
+            newSession.solutionCards,
+            newSession.perfectSolutions.map(s => s.id),
+            gradeCategory
+          ).catch(err => {
+            console.error('❌ Error starting AI simulations:', err);
+          });
+        } else {
+          console.log('⚠️ No AI players found to simulate');
+        }
       }
     } catch (error) {
       console.error('Error starting game:', error);
@@ -315,6 +348,8 @@ const ExecutiveDecisionRoom: React.FC = () => {
   const leaveRoom = () => {
     if (roomId) {
       companyRoomService.unsubscribeFromRoom(roomId);
+      // Cancel any active AI simulations
+      decisionDeskAIPlayerService.cancelSimulations(roomId);
     }
     navigate('/discovered-live');
   };
@@ -451,25 +486,25 @@ const ExecutiveDecisionRoom: React.FC = () => {
           <div className="flex border-b border-gray-700">
             <button
               onClick={() => setShowChat(true)}
-              className={`flex-1 py-3 px-4 font-semibold transition-colors ${
+              className={`flex-1 py-3 px-2 font-semibold transition-colors flex items-center justify-center gap-2 ${
                 showChat
                   ? 'bg-purple-600 text-white'
                   : 'bg-gray-800 text-gray-400 hover:text-white'
               }`}
             >
-              <MessageSquare className="w-4 h-4 inline mr-2" />
-              Chat ({messages.length})
+              <MessageSquare className="w-4 h-4 flex-shrink-0" />
+              <span className="truncate">Chat ({messages.length})</span>
             </button>
             <button
               onClick={() => setShowChat(false)}
-              className={`flex-1 py-3 px-4 font-semibold transition-colors ${
+              className={`flex-1 py-3 px-2 font-semibold transition-colors flex items-center justify-center gap-2 ${
                 !showChat
                   ? 'bg-purple-600 text-white'
                   : 'bg-gray-800 text-gray-400 hover:text-white'
               }`}
             >
-              <Trophy className="w-4 h-4 inline mr-2" />
-              Leaderboard
+              <Trophy className="w-4 h-4 flex-shrink-0" />
+              <span className="truncate">Leader</span>
             </button>
           </div>
 
@@ -531,64 +566,14 @@ const ExecutiveDecisionRoom: React.FC = () => {
                 </div>
               </div>
             ) : (
-              <div className="p-4 space-y-3">
-                <h3 className="font-semibold text-lg mb-3 flex items-center">
-                  <Crown className="w-5 h-5 mr-2 text-yellow-400" />
-                  Room Leaderboard
-                </h3>
-                {leaderboard.length === 0 ? (
-                  <p className="text-gray-400 text-center py-8">
-                    No players in room yet
-                  </p>
-                ) : (
-                  <div className="space-y-2">
-                    {leaderboard.map((entry, index) => {
-                      const hasPlayed = entry.score > 0;
-                      const isTopThree = index < 3 && hasPlayed;
-
-                      return (
-                        <div
-                          key={`leaderboard-${entry.playerId}-${entry.rank || index}`}
-                          className={`flex items-center justify-between p-3 rounded-lg ${
-                            isTopThree
-                              ? index === 0
-                                ? 'bg-yellow-900/20 border border-yellow-500/30'
-                                : index === 1
-                                ? 'bg-gray-600/20 border border-gray-500/30'
-                                : 'bg-orange-900/20 border border-orange-500/30'
-                              : 'bg-gray-800/50'
-                          }`}
-                        >
-                          <div className="flex items-center">
-                            <span className="font-bold text-xl mr-3">
-                              #{entry.rank}
-                            </span>
-                            <div>
-                              <p className="font-semibold">{entry.displayName}</p>
-                              <p className="text-xs text-gray-400">
-                                {hasPlayed
-                                  ? `Score: ${entry.score.toLocaleString()}`
-                                  : 'Not played yet'}
-                              </p>
-                            </div>
-                          </div>
-                          {isTopThree && (
-                            <Trophy
-                              className={`w-5 h-5 ${
-                                index === 0
-                                  ? 'text-yellow-400'
-                                  : index === 1
-                                  ? 'text-gray-400'
-                                  : 'text-orange-400'
-                              }`}
-                            />
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
+              <LeaderboardPanel
+                gameType="decision_desk"
+                currentPlayerId={user?.id}
+                filters={{ sessionId: lobbySessionId || undefined, roomId: room?.id }}
+                title="Room Leaderboard"
+                autoRefresh={true}
+                refreshInterval={10000}
+              />
             )}
           </div>
         </div>

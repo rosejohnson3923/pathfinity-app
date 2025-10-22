@@ -10,6 +10,8 @@
  * - Session-based tracking to avoid same players appearing together repeatedly
  */
 
+import { v4 as uuidv4 } from 'uuid';
+
 interface AIPlayer {
   id: string;
   name: string;
@@ -69,9 +71,9 @@ class AIPlayerPoolService {
   private usedCombinations: Set<string>; // Track recent player combinations to avoid repeats
 
   private constructor() {
-    // Initialize player pool with all names
+    // Initialize player pool with all names using uuid library (more reliable than crypto.randomUUID)
     this.playerPool = AI_PLAYER_NAME_POOL.map((name, index) => ({
-      id: `ai-player-${index}`,
+      id: uuidv4(), // Generate proper UUID for database compatibility
       name: name,
       avatar: AVATAR_POOL[index % AVATAR_POOL.length],
     }));
@@ -80,13 +82,28 @@ class AIPlayerPoolService {
 
     // Validate no prohibited names exist in pool
     this.validatePool();
+
+    // Log first player ID to verify UUID format
+    if (this.playerPool.length > 0) {
+      console.log('✅ AI Player Pool created with UUID format. Sample ID:', this.playerPool[0].id);
+    }
   }
 
   static getInstance(): AIPlayerPoolService {
     if (!AIPlayerPoolService.instance) {
+      console.log('🔨 Creating NEW AIPlayerPoolService instance...');
       AIPlayerPoolService.instance = new AIPlayerPoolService();
     }
     return AIPlayerPoolService.instance;
+  }
+
+  /**
+   * Force reset the singleton instance (useful after code changes or for testing)
+   */
+  static resetInstance(): void {
+    console.log('🔄 Resetting AIPlayerPoolService instance...');
+    AIPlayerPoolService.instance = new AIPlayerPoolService();
+    console.log('✅ AIPlayerPoolService reset complete');
   }
 
   /**
@@ -294,4 +311,5 @@ class AIPlayerPoolService {
 }
 
 export const aiPlayerPoolService = AIPlayerPoolService.getInstance();
+export { AIPlayerPoolService }; // Export class for static method access
 export type { AIPlayer };

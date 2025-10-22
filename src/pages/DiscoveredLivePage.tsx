@@ -331,7 +331,7 @@ export const DiscoveredLivePage: React.FC = () => {
                     <Crown className="w-8 h-8 glass-icon-accent" />
                     Discovered Live!
                   </h1>
-                  <p className="glass-text-secondary text-sm">Career Bingo • Multiplayer</p>
+                  <p className="glass-text-secondary text-sm">A Gamified Career Arcade</p>
                 </div>
               </div>
 
