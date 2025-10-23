@@ -24,7 +24,7 @@ INSERT INTO cb_perpetual_rooms (
   6,    -- 6 players (1 human + 5 AI)
   3,    -- 3 bingo slots available
   8,    -- 8 seconds per question
-  20,   -- 20 questions per game
+  30,   -- 30 questions per game (temporary for bingo testing)
   'elementary',
   true,
   true,

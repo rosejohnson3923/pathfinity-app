@@ -1,7 +1,26 @@
 /**
  * Game Leaderboard Service
- * Provides in-game leaderboard rankings for Discovered Live! multiplayer games
- * Each game displays its own leaderboard in a sidebar
+ *
+ * Database-backed leaderboard service for multiplayer games.
+ * Queries Supabase for participant stats and calculates rankings.
+ *
+ * IMPORTANT: This service queries the DATABASE, not live game state.
+ *
+ * USE THIS SERVICE WHEN:
+ * - Need all-time/historical rankings across multiple games
+ * - Database is the source of truth for rankings
+ * - Auto-refresh with slight delay is acceptable
+ * - Examples: Decision Desk current session, Career Bingo global all-time rankings
+ *
+ * DO NOT USE WHEN:
+ * - Need instant real-time updates during active gameplay
+ * - Game maintains live state via WebSocket that updates faster than DB
+ * - For those cases, use game.players state directly (e.g., PlayerLeaderboardCard)
+ *
+ * Supported Games:
+ * - Career Bingo: All-time rankings OR current session (but see note above)
+ * - Decision Desk: Current session rankings
+ * - CEO Takeover: Current session rankings
  */
 
 import { supabase } from '../lib/supabase';
@@ -63,10 +82,79 @@ class GameLeaderboardService {
   }
 
   /**
+   * Get Current Session Leaderboard for Career Bingo
+   * Shows live rankings for players in the active game session
+   */
+  private async getCurrentSessionLeaderboard(sessionId: string, limit: number): Promise<CareerBingoLeaderboardEntry[]> {
+    if (!this.client) return [];
+
+    try {
+      // Query participants - sorted by total_xp descending
+      const { data: participants, error } = await this.client
+        .from('cb_session_participants')
+        .select('*')
+        .eq('game_session_id', sessionId)
+        .eq('is_active', true)
+        .order('total_xp', { ascending: false })
+        .limit(limit);
+
+      if (error) {
+        console.error('Error fetching current session leaderboard:', error);
+        return [];
+      }
+
+      if (!participants || participants.length === 0) {
+        return [];
+      }
+
+      console.log('🎯 getCurrentSessionLeaderboard - Raw participants:', participants);
+      console.log('🎯 First participant XP from DB:', participants[0]?.total_xp, 'Display:', participants[0]?.display_name);
+
+      // Format as leaderboard entries
+      const formatted = participants.map((participant: any, index: number) => {
+        const totalAnswers = (participant.correct_answers || 0) + (participant.incorrect_answers || 0);
+        const accuracy = totalAnswers > 0
+          ? Math.round((participant.correct_answers / totalAnswers) * 100)
+          : 0;
+
+        const entry = {
+          rank: index + 1,
+          playerId: participant.user_id,
+          displayName: participant.display_name,
+          totalXP: participant.total_xp || 0,
+          gamesPlayed: 1, // Current game
+          totalBingos: participant.bingos_won || 0,
+          accuracy,
+          bestGameXP: participant.total_xp || 0,
+          lastPlayedAt: participant.updated_at || participant.created_at,
+          isCurrentPlayer: false // Will be set by UI component
+        };
+
+        console.log(`🎯 Formatted entry for ${entry.displayName}:`, {
+          totalXP: entry.totalXP,
+          raw_total_xp: participant.total_xp,
+          correct: participant.correct_answers,
+          incorrect: participant.incorrect_answers
+        });
+
+        return entry;
+      });
+
+      return formatted;
+
+    } catch (error) {
+      console.error('Error in getCurrentSessionLeaderboard:', error);
+      return [];
+    }
+  }
+
+  /**
    * Get Career Bingo Leaderboard
-   * Ranks players by total XP across all completed games
+   * - If sessionId provided: Shows current session players (live game)
+   * - If no sessionId: Shows all-time rankings across completed games
    */
   async getCareerBingoLeaderboard(filters?: {
+    sessionId?: string;
     roomId?: string;
     gradeCategory?: 'elementary' | 'middle' | 'high';
     limit?: number;
@@ -77,7 +165,12 @@ class GameLeaderboardService {
     const limit = filters?.limit || 100;
 
     try {
-      // Query cb_game_sessions to get all completed games with participants
+      // If sessionId provided, show current session players (live game)
+      if (filters?.sessionId) {
+        return this.getCurrentSessionLeaderboard(filters.sessionId, limit);
+      }
+
+      // Otherwise, show all-time rankings from completed games
       let query = this.client
         .from('cb_game_sessions')
         .select(`

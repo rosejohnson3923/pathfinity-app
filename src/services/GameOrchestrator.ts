@@ -107,7 +107,7 @@ class GameOrchestrator {
       throw new Error(`Session not found: ${sessionId}`);
     }
 
-    const totalQuestions = session.total_questions || 20;
+    const totalQuestions = session.total_questions || 30; // Temporary: increased for bingo testing
     let questionIndex = session.current_question_number || 0;
 
     // Game loop
@@ -250,30 +250,79 @@ class GameOrchestrator {
       console.log(`🚫 Already asked careers: ${askedCareerCodes.join(', ')}`);
     }
 
-    // Build query - exclude clues for careers we've already asked about
-    let query = client
-      .from('cb_clues')
-      .select('*')
-      .eq('grade_category', gradeLevel || 'elementary')
-      .eq('is_active', true);
+    // STEP 1: Get all careers sorted by total times_shown (aggregated)
+    // This ensures fair distribution across careers, not individual clues
+    const { data: careerStats, error: careerError } = await client.rpc('get_career_clue_stats', {
+      p_grade_category: gradeLevel || 'elementary',
+      p_excluded_careers: askedCareerCodes
+    });
 
-    // Exclude careers we've already asked about
-    if (askedCareerCodes.length > 0) {
-      query = query.not('career_code', 'in', `(${askedCareerCodes.join(',')})`);
+    // Fallback if RPC function doesn't exist - use manual aggregation
+    let availableCareers: string[] = [];
+
+    if (careerError || !careerStats || careerStats.length === 0) {
+      console.log('⚠️ RPC function not available, using fallback career selection');
+
+      // Get all clues for this grade level, excluding already-asked careers
+      let fallbackQuery = client
+        .from('cb_clues')
+        .select('career_code, times_shown')
+        .eq('grade_category', gradeLevel || 'elementary')
+        .eq('is_active', true);
+
+      if (askedCareerCodes.length > 0) {
+        fallbackQuery = fallbackQuery.not('career_code', 'in', `(${askedCareerCodes.join(',')})`);
+      }
+
+      const { data: allClues } = await fallbackQuery;
+
+      if (allClues && allClues.length > 0) {
+        // Group by career and calculate total times_shown
+        const careerMap = new Map<string, number>();
+        allClues.forEach(clue => {
+          const current = careerMap.get(clue.career_code) || 0;
+          careerMap.set(clue.career_code, current + (clue.times_shown || 0));
+        });
+
+        // Sort careers by total times_shown
+        availableCareers = Array.from(careerMap.entries())
+          .sort((a, b) => a[1] - b[1]) // Sort by times_shown ascending
+          .slice(0, 10) // Take top 10 least-shown careers
+          .map(([career]) => career);
+      }
+    } else {
+      availableCareers = careerStats.slice(0, 10).map((stat: any) => stat.career_code);
     }
 
-    const { data: clues, error } = await query
-      .order('times_shown', { ascending: true })
-      .limit(10);
-
-    if (error || !clues || clues.length === 0) {
-      console.error('Error fetching clues:', error);
+    if (availableCareers.length === 0) {
+      console.error('No available careers found');
       return null;
     }
 
-    // Pick random from top 10 least-shown
-    const randomClue = clues[Math.floor(Math.random() * clues.length)];
-    console.log(`✅ Selected new career: ${randomClue.career_code}`);
+    // STEP 2: Pick a random career from the top 10 least-shown
+    const selectedCareer = availableCareers[Math.floor(Math.random() * availableCareers.length)];
+    console.log(`🎯 Selected career from top ${availableCareers.length} least-shown: ${selectedCareer}`);
+    console.log(`   Available careers: ${availableCareers.join(', ')}`);
+
+    // STEP 3: Get all clues for this career and pick a random one
+    const { data: careerClues, error: cluesError } = await client
+      .from('cb_clues')
+      .select('*')
+      .eq('career_code', selectedCareer)
+      .eq('grade_category', gradeLevel || 'elementary')
+      .eq('is_active', true);
+
+    if (cluesError || !careerClues || careerClues.length === 0) {
+      console.error('Error fetching clues for selected career:', cluesError);
+      return null;
+    }
+
+    // Pick random clue from this career (prefer least-shown clues)
+    const sortedCareerClues = careerClues.sort((a, b) => (a.times_shown || 0) - (b.times_shown || 0));
+    const topClues = sortedCareerClues.slice(0, Math.min(5, sortedCareerClues.length)); // Top 5 least-shown clues for this career
+    const randomClue = topClues[Math.floor(Math.random() * topClues.length)];
+    console.log(`✅ Selected clue for ${selectedCareer}: "${randomClue.clue_text.substring(0, 50)}..."`);
+    console.log(`   Clue has been shown ${randomClue.times_shown || 0} times`);
 
     return {
       id: randomClue.id,
@@ -385,6 +434,16 @@ class GameOrchestrator {
       throw new Error('Participant not found');
     }
 
+    // Check if square is already unlocked (prevent double-clicking or clicking pre-unlocked squares)
+    const isAlreadyUnlocked = (participant.unlocked_squares || []).some(
+      (pos: GridPosition) => pos.row === position.row && pos.col === position.col
+    );
+
+    if (isAlreadyUnlocked) {
+      console.log(`⚠️ ${participant.display_name} clicked already unlocked square at (${position.row},${position.col}) - ignoring`);
+      return { isCorrect: false }; // Return without penalty or reward
+    }
+
     // Get career at clicked position
     const clickedCareer = participant.bingo_card.careers[position.row][position.col];
     const isCorrect = clickedCareer === clue.careerCode;
@@ -408,12 +467,13 @@ class GameOrchestrator {
     if (!isCorrect) {
       // PENALTY for wrong answer: -5 XP, break streak, increment incorrect count
       const xpPenalty = -5;
-      const newXP = Math.max(0, participant.total_xp + xpPenalty); // XP cannot go below 0
+      const currentXP = participant.total_xp || 0; // Handle NULL
+      const newXP = Math.max(0, currentXP + xpPenalty); // XP cannot go below 0
 
       await client
         .from('cb_session_participants')
         .update({
-          incorrect_answers: participant.incorrect_answers + 1,
+          incorrect_answers: (participant.incorrect_answers || 0) + 1,
           total_xp: newXP,
           current_streak: 0, // Break streak on wrong answer
         })
@@ -447,38 +507,58 @@ class GameOrchestrator {
     }
 
     // Correct answer - unlock square
+    console.log(`🔓 [processClick] ${participant.display_name} - Current unlocked from DB:`, participant.unlocked_squares);
+    console.log(`🔓 [processClick] ${participant.display_name} - Adding position:`, position);
     const unlockedSquares = [...(participant.unlocked_squares || []), position];
-    const completedLines = participant.completed_lines || { rows: [], columns: [], diagonals: [] };
+    console.log(`🔓 [processClick] ${participant.display_name} - New unlocked array (${unlockedSquares.length} total):`, unlockedSquares);
+    const completedLines = participant.completed_lines || { rows: [], columns: [], diagonals: [], corners: false };
 
     // Check for new bingos
     const newBingos = perpetualRoomManager.checkForBingos(unlockedSquares, completedLines);
-    const hasBingo = newBingos.rows.length > 0 || newBingos.columns.length > 0 || newBingos.diagonals.length > 0;
+    const hasBingo = newBingos.rows.length > 0 || newBingos.columns.length > 0 || newBingos.diagonals.length > 0 || newBingos.corners === true;
 
     // Update completed lines
     const updatedCompletedLines = {
       rows: [...completedLines.rows, ...newBingos.rows],
       columns: [...completedLines.columns, ...newBingos.columns],
       diagonals: [...completedLines.diagonals, ...newBingos.diagonals],
+      corners: completedLines.corners || newBingos.corners || false,
     };
 
     // Calculate XP
     const baseXP = 10;
     const speedBonus = responseTime < 5 ? 5 : 0;
-    const streakBonus = this.calculateStreakBonus(participant.current_streak + 1);
+    const currentStreak = participant.current_streak || 0;
+    const streakBonus = this.calculateStreakBonus(currentStreak + 1);
     const totalXP = baseXP + speedBonus + streakBonus;
 
-    // Update participant
-    await client
+    // Update participant (handle NULLs with defaults)
+    const { error: updateError } = await client
       .from('cb_session_participants')
       .update({
         unlocked_squares: unlockedSquares,
         completed_lines: updatedCompletedLines,
-        correct_answers: participant.correct_answers + 1,
-        total_xp: participant.total_xp + totalXP,
-        current_streak: participant.current_streak + 1,
-        max_streak: Math.max(participant.max_streak, participant.current_streak + 1),
+        correct_answers: (participant.correct_answers || 0) + 1,
+        total_xp: (participant.total_xp || 0) + totalXP,
+        current_streak: currentStreak + 1,
+        max_streak: Math.max(participant.max_streak || 0, currentStreak + 1),
       })
       .eq('id', participantId);
+
+    if (updateError) {
+      console.error(`❌ [processClick] Failed to update participant ${participant.display_name}:`, updateError);
+    } else {
+      console.log(`✅ [processClick] Updated ${participant.display_name} - Saved ${unlockedSquares.length} unlocked squares to DB`);
+
+      // VERIFY: Read back what was actually saved
+      const { data: verifyData } = await client
+        .from('cb_session_participants')
+        .select('unlocked_squares')
+        .eq('id', participantId)
+        .single();
+
+      console.log(`🔍 [VERIFY] Immediately after update, DB shows ${(verifyData?.unlocked_squares || []).length} unlocked squares:`, verifyData?.unlocked_squares);
+    }
 
     // Broadcast correct answer
     const { data: session } = await client
@@ -530,7 +610,7 @@ class GameOrchestrator {
   private async handleBingo(
     sessionId: string,
     participantId: string,
-    newBingos: { rows: number[]; columns: number[]; diagonals: number[] },
+    newBingos: { rows: number[]; columns: number[]; diagonals: number[]; corners?: boolean },
     questionNumber: number
   ): Promise<void> {
     const client = await supabase();
@@ -555,8 +635,8 @@ class GameOrchestrator {
 
     if (!participant) return;
 
-    // Determine which type of bingo (prioritize in order: row, column, diagonal)
-    let bingoType: 'row' | 'column' | 'diagonal';
+    // Determine which type of bingo (prioritize in order: row, column, diagonal, corners)
+    let bingoType: 'row' | 'column' | 'diagonal' | 'corners';
     let bingoIndex: number;
 
     if (newBingos.rows.length > 0) {
@@ -565,9 +645,12 @@ class GameOrchestrator {
     } else if (newBingos.columns.length > 0) {
       bingoType = 'column';
       bingoIndex = newBingos.columns[0];
-    } else {
+    } else if (newBingos.diagonals.length > 0) {
       bingoType = 'diagonal';
       bingoIndex = newBingos.diagonals[0];
+    } else {
+      bingoType = 'corners';
+      bingoIndex = 0; // Corners don't have an index
     }
 
     // Calculate bingo number (1-based)
@@ -593,12 +676,12 @@ class GameOrchestrator {
       })
       .eq('id', sessionId);
 
-    // Update participant
+    // Update participant (handle NULLs)
     await client
       .from('cb_session_participants')
       .update({
-        bingos_won: participant.bingos_won + 1,
-        total_xp: participant.total_xp + this.getBingoXP(bingoNumber),
+        bingos_won: (participant.bingos_won || 0) + 1,
+        total_xp: (participant.total_xp || 0) + this.getBingoXP(bingoNumber),
       })
       .eq('id', participantId);
 
@@ -646,7 +729,7 @@ class GameOrchestrator {
         participant.completedLines
       );
 
-      const hasBingo = newBingos.rows.length > 0 || newBingos.columns.length > 0 || newBingos.diagonals.length > 0;
+      const hasBingo = newBingos.rows.length > 0 || newBingos.columns.length > 0 || newBingos.diagonals.length > 0 || newBingos.corners === true;
 
       if (hasBingo) {
         const questionState = this.activeGames.get(sessionId);

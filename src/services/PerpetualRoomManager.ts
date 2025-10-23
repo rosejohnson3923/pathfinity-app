@@ -222,6 +222,9 @@ class PerpetualRoomManager {
     }
 
     // 5. Create participants (humans from spectators)
+    // NOTE: room.grade_level is ALREADY a grade_category ('elementary', 'middle', 'high')
+    console.log(`🎯 Room grade_level (already a category): ${room.grade_level}`);
+
     if (spectators && spectators.length > 0) {
       for (const spectator of spectators) {
         // Use the provided career code if this is the current user, otherwise default to 'teacher'
@@ -335,7 +338,7 @@ class PerpetualRoomManager {
   /**
    * Add human participant to game session
    * @param userCareerCode - The user's career code for center square
-   * @param gradeLevel - Grade level from room (maps to grade_category in clues)
+   * @param gradeCategory - Grade category ('elementary', 'middle', 'high') for filtering careers/clues
    */
   private async addHumanParticipant(
     sessionId: string,
@@ -343,12 +346,12 @@ class PerpetualRoomManager {
     userId: string,
     displayName: string,
     userCareerCode: string,
-    gradeLevel: string
+    gradeCategory: string
   ): Promise<SessionParticipant> {
     const client = await supabase();
 
     // Generate unique bingo card for this participant with their career in center
-    const bingoCard = await this.generateUniqueBingoCard(gradeLevel, userCareerCode);
+    const bingoCard = await this.generateUniqueBingoCard(gradeCategory, userCareerCode);
 
     const { data, error } = await client
       .from('cb_session_participants')
@@ -359,10 +362,16 @@ class PerpetualRoomManager {
         user_id: userId,
         display_name: displayName,
         bingo_card: bingoCard,
-        unlocked_squares: [],
-        completed_lines: { rows: [], columns: [], diagonals: [] },
+        unlocked_squares: [bingoCard.userCareerPosition], // Pre-unlock center square (user's career)
+        completed_lines: { rows: [], columns: [], diagonals: [], corners: false },
         connection_status: 'connected',
-        is_active: true, // Explicitly set for consistency
+        is_active: true,
+        total_xp: 0,
+        correct_answers: 0,
+        incorrect_answers: 0,
+        bingos_won: 0,
+        current_streak: 0,
+        max_streak: 0,
       })
       .select()
       .single();
@@ -395,13 +404,14 @@ class PerpetualRoomManager {
 
   /**
    * Add AI agents to game session
+   * @param gradeCategory - Grade category ('elementary', 'middle', 'high') for filtering careers/clues
    */
   private async addAIAgents(
     sessionId: string,
     roomId: string,
     count: number,
     difficultyMix: 'mixed' | 'easy' | 'medium' | 'hard',
-    gradeLevel: string
+    gradeCategory: string
   ): Promise<void> {
     const client = await supabase();
 
@@ -411,7 +421,7 @@ class PerpetualRoomManager {
 
     for (const aiPlayer of aiPlayers) {
       // Generate unique bingo card for each AI
-      const bingoCard = await this.generateUniqueBingoCard(gradeLevel);
+      const bingoCard = await this.generateUniqueBingoCard(gradeCategory);
 
       // Map difficulty based on difficultyMix
       const difficulty = difficultyMix === 'mixed'
@@ -429,10 +439,16 @@ class PerpetualRoomManager {
           ai_difficulty: difficulty as 'easy' | 'medium' | 'hard',
           ai_personality: 'friendly', // Default personality (can be randomized if needed)
           bingo_card: bingoCard,
-          unlocked_squares: [],
-          completed_lines: { rows: [], columns: [], diagonals: [] },
+          unlocked_squares: [bingoCard.userCareerPosition], // Pre-unlock center square
+          completed_lines: { rows: [], columns: [], diagonals: [], corners: false },
           connection_status: 'connected',
-          is_active: true, // Ensure AI players appear in leaderboard
+          is_active: true,
+          total_xp: 0,
+          correct_answers: 0,
+          incorrect_answers: 0,
+          bingos_won: 0,
+          current_streak: 0,
+          max_streak: 0,
         });
     }
 
@@ -692,14 +708,21 @@ class PerpetualRoomManager {
 
   /**
    * Check for new bingos for a participant
+   * Patterns: rows, columns, diagonals, 4 corners
    */
   checkForBingos(
     unlockedSquares: GridPosition[],
-    completedLines: { rows: number[]; columns: number[]; diagonals: number[] }
-  ): { rows: number[]; columns: number[]; diagonals: number[] } {
+    completedLines: { rows: number[]; columns: number[]; diagonals: number[]; corners?: boolean }
+  ): { rows: number[]; columns: number[]; diagonals: number[]; corners?: boolean } {
     const newRows: number[] = [];
     const newColumns: number[] = [];
     const newDiagonals: number[] = [];
+    let newCorners: boolean = false;
+
+    console.log(`🔍 [Bingo Check] Total unlocked: ${unlockedSquares.length}/25`);
+    console.log(`🔍 [Bingo Check] Unlocked positions:`, unlockedSquares);
+    console.log(`🔍 [Bingo Check] First 3 positions (stringified):`, JSON.stringify(unlockedSquares.slice(0, 3)));
+    console.log(`🔍 [Bingo Check] Already completed:`, completedLines);
 
     // Check rows (0-4)
     for (let row = 0; row < 5; row++) {
@@ -709,6 +732,7 @@ class PerpetualRoomManager {
         unlockedSquares.some(pos => pos.row === row && pos.col === col)
       );
 
+      console.log(`🔍 [Bingo Check] Row ${row}: ${rowComplete ? '✅ BINGO!' : '❌'}`);
       if (rowComplete) {
         newRows.push(row);
       }
@@ -722,6 +746,7 @@ class PerpetualRoomManager {
         unlockedSquares.some(pos => pos.row === row && pos.col === col)
       );
 
+      console.log(`🔍 [Bingo Check] Column ${col}: ${colComplete ? '✅ BINGO!' : '❌'}`);
       if (colComplete) {
         newColumns.push(col);
       }
@@ -733,6 +758,7 @@ class PerpetualRoomManager {
         unlockedSquares.some(pos => pos.row === i && pos.col === i)
       );
 
+      console.log(`🔍 [Bingo Check] Diagonal \\ (TL-BR): ${diag1Complete ? '✅ BINGO!' : '❌'}`);
       if (diag1Complete) {
         newDiagonals.push(0);
       }
@@ -744,12 +770,33 @@ class PerpetualRoomManager {
         unlockedSquares.some(pos => pos.row === i && pos.col === 4 - i)
       );
 
+      console.log(`🔍 [Bingo Check] Diagonal / (TR-BL): ${diag2Complete ? '✅ BINGO!' : '❌'}`);
       if (diag2Complete) {
         newDiagonals.push(1);
       }
     }
 
-    return { rows: newRows, columns: newColumns, diagonals: newDiagonals };
+    // Check 4 corners
+    if (!completedLines.corners) {
+      const cornersComplete = [
+        { row: 0, col: 0 },  // Top-left
+        { row: 0, col: 4 },  // Top-right
+        { row: 4, col: 0 },  // Bottom-left
+        { row: 4, col: 4 }   // Bottom-right
+      ].every(corner =>
+        unlockedSquares.some(pos => pos.row === corner.row && pos.col === corner.col)
+      );
+
+      console.log(`🔍 [Bingo Check] 4 Corners: ${cornersComplete ? '✅ BINGO!' : '❌'}`);
+      if (cornersComplete) {
+        newCorners = true;
+      }
+    }
+
+    const result = { rows: newRows, columns: newColumns, diagonals: newDiagonals, corners: newCorners };
+    console.log(`🎯 [Bingo Check] RESULT:`, result);
+
+    return result;
   }
 }
 

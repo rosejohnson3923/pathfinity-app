@@ -57,6 +57,7 @@ interface GameState {
   unlocked: GridPosition[]; // Unlocked squares
   players: Player[];
   questionNumber: number;
+  totalQuestions: number; // Total questions for this session (from database)
   timer: number;
   currentClue?: CareerClue;
   running: boolean;
@@ -87,7 +88,7 @@ interface MultiplayerGameRoomProps {
   sessionId: string;
   roomId: string;
   myParticipantId: string;
-  myBingoCard: { careers: string[][] }; // From database
+  myBingoCard: BingoGrid; // From database - includes careers AND userCareerPosition
   userName: string;
   onComplete: (summaryData: GameSummaryData) => void;
   onLeave?: () => void; // Optional handler for leaving mid-game
@@ -216,9 +217,10 @@ export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
         roomId,
         myParticipantId,
         grid: myBingoCard.careers,
-        unlocked: [{ row: 2, col: 2 }], // Pre-unlock center square (FREE space)
+        unlocked: [myBingoCard.userCareerPosition], // Pre-unlock user's selected career square
         players: [], // Will be populated from database
         questionNumber: 0,
+        totalQuestions: 30, // Default - will be updated from database
         timer: 8,
         running: true,
         completedLines: [],
@@ -278,6 +280,7 @@ export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
           ...prev,
           unlocked: participant.unlocked_squares as GridPosition[],
           questionNumber: session.current_question_number || 0,
+          totalQuestions: session.total_questions || 30, // Load from database
         } : null);
       }
 
@@ -463,7 +466,7 @@ export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
           origin: { y: 0.6 },
           colors: ['#9333ea', '#ec4899', '#14b8a6', '#f59e0b']
         });
-        setTimeout(() => setShowBingoAnimation(false), 3000);
+        setTimeout(() => setShowBingoAnimation(false), 6000); // Show for 6 seconds
 
         return {
           ...prev,
@@ -505,7 +508,7 @@ export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
         console.error('❌ No game state available for summary');
         onComplete({
           playerResults: [],
-          totalQuestions: 20,
+          totalQuestions: 30, // Default - should match initial state
           userXPEarned: 0,
           userAccuracy: 0,
           userBingos: 0,
@@ -715,7 +718,7 @@ export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
                   Career Bingo
                 </h1>
                 <p className="text-white/60 text-sm">
-                  Question {game.questionNumber}/20
+                  Question {game.questionNumber}/{game.totalQuestions}
                 </p>
               </div>
             </div>
@@ -746,7 +749,7 @@ export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
             {game.currentClue && (
               <QuestionDisplayCard
                 questionNumber={game.questionNumber}
-                totalQuestions={20}
+                totalQuestions={game.totalQuestions}
                 questionText={game.currentClue.clueText}
                 timer={game.timer}
                 maxTimer={8}
@@ -795,7 +798,21 @@ export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
               {/* Content */}
               <div className="flex-1 overflow-hidden">
                 {showLeaderboard ? (
-                  <div className="p-4">
+                  <div className="h-full">
+                    {/*
+                      Use PlayerLeaderboardCard for live gameplay rankings.
+
+                      Why not LeaderboardPanel?
+                      - Career Bingo maintains live game state via WebSocket events
+                      - game.players updates instantly as players answer questions
+                      - Database writes may be delayed/batched
+                      - PlayerLeaderboardCard shows instant real-time updates
+
+                      LeaderboardPanel is better for:
+                      - All-time global rankings (multiple completed games)
+                      - Games where database is source of truth
+                      - Post-game historical views
+                    */}
                     <PlayerLeaderboardCard players={game.players} />
                   </div>
                 ) : (
@@ -871,15 +888,21 @@ export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="glass-modal p-12 text-center pointer-events-auto"
+              className="glass-modal p-12 text-center pointer-events-auto max-w-4xl mx-auto"
+              style={{ minWidth: '600px' }}
               initial={{ scale: 0, rotate: -180 }}
               animate={{ scale: 1, rotate: 0 }}
               exit={{ scale: 0, rotate: 180 }}
               transition={{ type: 'spring' }}
             >
-              <div className="text-8xl mb-4">🎉</div>
-              <h2 className="text-5xl font-bold text-white mb-2">BINGO!</h2>
-              <p className="text-2xl text-white/90">+50 XP Bonus!</p>
+              <div className="flex items-center justify-center gap-6 flex-wrap">
+                <div className="text-9xl">🎉</div>
+                <div className="flex flex-col items-start">
+                  <h2 className="text-6xl font-bold text-white mb-2 whitespace-nowrap">BINGO!</h2>
+                  <p className="text-3xl text-yellow-400 font-bold">+50 XP Bonus!</p>
+                </div>
+                <div className="text-9xl">🎉</div>
+              </div>
             </motion.div>
           </motion.div>
         )}

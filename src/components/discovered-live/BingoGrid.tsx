@@ -71,6 +71,19 @@ export const BingoGrid: React.FC<BingoGridProps> = ({
     return careerIcons[careerName] || '💼';
   };
 
+  // Helper to format career name with word wrap for long names
+  const formatCareerName = (careerName: string): string => {
+    // If total chars (including space) > 14 AND has 2+ words, wrap to 2 lines
+    if (careerName.length > 14 && careerName.includes(' ')) {
+      const words = careerName.split(' ');
+      if (words.length >= 2) {
+        // Move second word (and any remaining) to next line
+        return `${words[0]}\n${words.slice(1).join(' ')}`;
+      }
+    }
+    return careerName;
+  };
+
   return (
     <div className="glass-bingo-container w-full">
       <div className="grid gap-1.5 w-full" style={{ gridTemplateColumns: 'repeat(5, minmax(0, 1fr))' }}>
@@ -80,6 +93,7 @@ export const BingoGrid: React.FC<BingoGridProps> = ({
             const isCenter = row === 2 && col === 2;
             const isUnlocked = isPositionUnlocked(row, col);
             const careerName = getCareerName(careerCode);
+            const formattedName = formatCareerName(careerName);
             const icon = getCareerIcon(careerCode, careerName);
 
             return (
@@ -119,15 +133,11 @@ export const BingoGrid: React.FC<BingoGridProps> = ({
                     }`}
                     style={{
                       maxWidth: '100%',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                      whiteSpace: 'normal'
+                      whiteSpace: 'pre-line', // Respect newline characters for word wrap
+                      textAlign: 'center'
                     }}
                   >
-                    {careerName}
+                    {formattedName}
                   </div>
 
                   {/* Center Star Badge */}

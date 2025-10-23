@@ -1,14 +1,26 @@
 /**
  * Player Leaderboard Card
  *
- * Real-time player rankings with glass cards
+ * Real-time player rankings for ACTIVE multiplayer games with WebSocket updates.
+ *
+ * USE THIS WHEN:
+ * - Displaying live rankings during an active game session
+ * - Game state is maintained in memory via WebSocket events
+ * - Real-time updates are needed as players answer questions
+ * - Examples: Career Bingo during gameplay
+ *
+ * DO NOT USE WHEN:
+ * - Need all-time/historical rankings (use LeaderboardPanel)
+ * - Need database-backed rankings (use LeaderboardPanel)
+ * - Game doesn't maintain local state (use LeaderboardPanel)
  *
  * Features:
- * - Sorted by XP
+ * - Sorted by XP (from local game state)
  * - Current user highlighted
  * - AI player indicators
  * - Trophy medals for top 3
  * - Glass player card styling
+ * - Instant updates (no database queries)
  */
 
 import React from 'react';

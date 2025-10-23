@@ -1,7 +1,27 @@
 /**
  * Leaderboard Panel Component
- * Reusable leaderboard display for all Discovered Live! games
- * Designed to fit in w-64 (256px) sidebar with tabbed interface
+ *
+ * Database-backed leaderboard display for multiplayer games.
+ * Queries Supabase for participant stats and rankings.
+ *
+ * USE THIS WHEN:
+ * - Need all-time/historical rankings across multiple completed games
+ * - Game doesn't maintain live state in memory
+ * - Database is the source of truth for rankings
+ * - Auto-refresh is acceptable (not instant WebSocket updates)
+ * - Examples: Decision Desk current session, Career Bingo global all-time rankings
+ *
+ * DO NOT USE WHEN:
+ * - Need instant real-time updates during active gameplay with WebSocket
+ * - Game maintains local state that updates faster than database
+ * - Examples: Career Bingo DURING active gameplay (use PlayerLeaderboardCard instead)
+ *
+ * Features:
+ * - Queries cb_session_participants or other tables
+ * - Auto-refresh every 10 seconds (configurable)
+ * - Supports filtering by session/room/grade
+ * - Game-specific metric displays (Career Bingo, Decision Desk, CEO Takeover)
+ * - Designed to fit in w-64 (256px) sidebar with tabbed interface
  */
 
 import React, { useState, useEffect } from 'react';
