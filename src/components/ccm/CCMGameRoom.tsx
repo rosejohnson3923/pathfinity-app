@@ -27,6 +27,7 @@ import type { CCMEvent } from '../../services/CCMRealtimeService';
 import { ccmService } from '../../services/CCMService';
 import { aiPlayerPoolService } from '../../services/AIPlayerPoolService';
 import { useAICharacter } from '../ai-characters/AICharacterProvider';
+import { masterSoundSystem } from '../../services/MasterSoundSystem';
 import { CCMGoldenCard } from './CCMGoldenCard';
 import { RoleCard } from './RoleCard';
 import { SynergyCard } from './SynergyCard';
@@ -288,6 +289,19 @@ export const CCMGameRoom: React.FC<CCMGameRoomProps> = ({
   }, [roomId]);
 
   /**
+   * Sound system lifecycle
+   */
+  useEffect(() => {
+    // Start sound session for CEO Takeover
+    masterSoundSystem.startGameSession('career-bingo'); // Using career-bingo type for now
+
+    return () => {
+      // Stop sound session when leaving
+      masterSoundSystem.endGameSession();
+    };
+  }, []);
+
+  /**
    * Initialize card stacks
    */
   useEffect(() => {
@@ -396,6 +410,9 @@ export const CCMGameRoom: React.FC<CCMGameRoomProps> = ({
                 console.log('[AI Players] Game complete! Showing victory screen...');
                 setGamePhase('complete');
                 setShowVictory(true);
+
+                // Play game complete sound
+                masterSoundSystem.playGameComplete();
               } else {
                 console.log(`[AI Players] Advancing from Round ${currentRound} to Round ${currentRound + 1}`);
                 setCurrentRound(currentRound + 1);
@@ -531,6 +548,9 @@ export const CCMGameRoom: React.FC<CCMGameRoomProps> = ({
             console.log('[CCMGameRoom] Game ended:', event.data);
             setGamePhase('complete');
             setShowVictory(true);
+
+            // Play game complete sound
+            masterSoundSystem.playGameComplete();
           },
 
           leaderboard_updated: (event: CCMEvent) => {
@@ -992,6 +1012,9 @@ export const CCMGameRoom: React.FC<CCMGameRoomProps> = ({
     setCurrentRound(1);
     setRoundTimer(60);
     setMasterMessage('The Challenge Master begins the game...');
+
+    // Play game start sound
+    masterSoundSystem.playGameStart();
   };
 
   /**
@@ -1001,6 +1024,9 @@ export const CCMGameRoom: React.FC<CCMGameRoomProps> = ({
     // Check if current player has already locked in
     const currentPlayer = players.find(p => p.id === playerId);
     if (currentPlayer?.hasPlayed) return; // Already locked in this round
+
+    // Play click sound
+    masterSoundSystem.playClick();
 
     setSelectedCardId(cardId);
     // Deselect special cards if a regular card is selected
@@ -1023,6 +1049,9 @@ export const CCMGameRoom: React.FC<CCMGameRoomProps> = ({
       console.log('[CCM Round 5] Cannot select Golden Card - MVP card already selected. You can only use ONE special card in Round 5.');
       return;
     }
+
+    // Play click sound
+    masterSoundSystem.playClick();
 
     // Toggle Golden Card selection
     setSelectedGoldenCard(!selectedGoldenCard);
@@ -1048,6 +1077,9 @@ export const CCMGameRoom: React.FC<CCMGameRoomProps> = ({
       console.log('[CCM Round 5] Cannot select MVP Card - Golden card already selected. You can only use ONE special card in Round 5.');
       return;
     }
+
+    // Play click sound
+    masterSoundSystem.playClick();
 
     // Toggle MVP Card selection
     setSelectedMVPCard(!selectedMVPCard);
@@ -1274,6 +1306,9 @@ export const CCMGameRoom: React.FC<CCMGameRoomProps> = ({
                 console.log('[User Lock-In] Game complete! Showing victory screen...');
                 setGamePhase('complete');
                 setShowVictory(true);
+
+                // Play game complete sound
+                masterSoundSystem.playGameComplete();
               } else {
                 console.log(`[User Lock-In] Advancing from Round ${currentRound} to Round ${currentRound + 1}`);
                 setCurrentRound(currentRound + 1);

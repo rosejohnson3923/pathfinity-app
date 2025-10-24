@@ -51,6 +51,7 @@ class SoundEffectsService {
   private sfxVolume: number = 0.7;
   private currentMusic: HTMLAudioElement | null = null;
   private fadeIntervals: Map<SoundType, NodeJS.Timeout> = new Map();
+  private musicLoopHandler: ((this: HTMLAudioElement, ev: Event) => any) | null = null;
 
   // Sound URLs (can be replaced with actual asset paths)
   private soundUrls: Record<SoundType, string> = {
@@ -174,7 +175,14 @@ class SoundEffectsService {
 
     const soundAsset = this.sounds.get(soundType);
     if (!soundAsset || !soundAsset.isLoaded) {
-      console.warn(`Sound not loaded: ${soundType}`);
+      console.warn(`Sound not loaded: ${soundType}, attempting to load now...`);
+      // Auto-load the sound if not loaded yet
+      this.loadSound(soundType).then(() => {
+        // Retry playing after loading
+        this.play(soundType, options);
+      }).catch(err => {
+        console.error(`Failed to load sound: ${soundType}`, err);
+      });
       return;
     }
 
@@ -248,10 +256,10 @@ class SoundEffectsService {
   playAnswerFeedback(isCorrect: boolean, isFast: boolean = false): void {
     if (isCorrect) {
       this.play('answer_correct', {
-        volume: isFast ? 0.9 : 0.7,
+        volume: isFast ? 1.0 : 0.9,  // Increased: was 0.9/0.7, now 1.0/0.9
       });
     } else {
-      this.play('answer_incorrect', { volume: 0.6 });
+      this.play('answer_incorrect', { volume: 0.35 });  // Decreased: was 0.6, now 0.35
     }
   }
 
@@ -331,12 +339,35 @@ class SoundEffectsService {
     if (this.currentMusic) return;
 
     const musicAsset = this.sounds.get('background_music');
-    if (!musicAsset || !musicAsset.isLoaded) return;
+    if (!musicAsset || !musicAsset.isLoaded) {
+      console.warn('Background music not loaded, attempting to load now...');
+      // Auto-load background music if not loaded yet
+      this.loadSound('background_music').then(() => {
+        // Retry starting music after loading
+        this.startBackgroundMusic();
+      }).catch(err => {
+        console.error('Failed to load background music:', err);
+      });
+      return;
+    }
 
     try {
       const audio = musicAsset.audio;
       audio.volume = this.musicVolume * this.masterVolume;
       audio.loop = true;
+
+      // Create seamless loop handler (only if not already created)
+      if (!this.musicLoopHandler) {
+        this.musicLoopHandler = () => {
+          // When 0.1 seconds from end, restart to avoid any gap/silence
+          if (audio.duration > 0 && audio.currentTime >= audio.duration - 0.1) {
+            audio.currentTime = 0;
+          }
+        };
+      }
+
+      // Add seamless loop handler
+      audio.addEventListener('timeupdate', this.musicLoopHandler);
 
       audio.play().catch(err => {
         console.warn('Failed to start background music:', err);
@@ -353,6 +384,11 @@ class SoundEffectsService {
    */
   stopBackgroundMusic(fadeOutMs: number = 1000): void {
     if (!this.currentMusic) return;
+
+    // Remove seamless loop handler
+    if (this.musicLoopHandler) {
+      this.currentMusic.removeEventListener('timeupdate', this.musicLoopHandler);
+    }
 
     if (fadeOutMs > 0) {
       this.fadeOut(this.currentMusic, fadeOutMs, () => {
@@ -587,3 +623,4 @@ class SoundEffectsService {
 }
 
 export const soundEffectsService = SoundEffectsService.getInstance();
+export type { SoundType };

@@ -26,6 +26,7 @@ import { gameOrchestrator } from '../../services/GameOrchestrator';
 import { perpetualRoomManager } from '../../services/PerpetualRoomManager';
 import { companyRoomService } from '../../services/CompanyRoomService';
 import { supabase } from '../../lib/supabase';
+import { masterSoundSystem } from '../../services/MasterSoundSystem';
 import type { GridPosition, CareerClue } from '../../types/DiscoveredLiveMultiplayerTypes';
 import '../../design-system/index.css';
 
@@ -123,10 +124,16 @@ export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
   useEffect(() => {
     initializeGame();
 
+    // Start background music and sound effects
+    masterSoundSystem.startGameSession('career-bingo');
+
     return () => {
       // Cleanup: unsubscribe from room events
       discoveredLiveRealtimeService.unsubscribeFromRoom(roomId);
       companyRoomService.unsubscribeFromRoom(roomId);
+
+      // Stop background music with fade out
+      masterSoundSystem.endGameSession();
     };
   }, []);
 
@@ -363,6 +370,9 @@ export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
     const payload = event.data;
     console.log('❓ Received question:', payload);
 
+    // Play question start sound
+    masterSoundSystem.playQuestionStart();
+
     // Create CareerClue object from the payload
     const clue: CareerClue = {
       id: '', // Not provided in broadcast
@@ -459,6 +469,9 @@ export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
 
       // If it's the current user, show celebration
       if (payload.participantId === myParticipantId) {
+        // Play bingo celebration sound
+        masterSoundSystem.playBingoCelebration();
+
         setShowBingoAnimation(true);
         confetti({
           particleCount: 150,
@@ -491,6 +504,9 @@ export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
     console.log('📊 [MultiplayerGameRoom] Current game state:', game);
 
     setGame(prev => prev ? { ...prev, running: false } : null);
+
+    // Play game complete sound
+    masterSoundSystem.playGameComplete();
 
     // Final confetti
     confetti({
@@ -642,6 +658,9 @@ export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
         // Success feedback with floating XP notification
         console.log('✅ Correct answer!');
 
+        // Play correct answer sound
+        masterSoundSystem.playCorrectAnswer();
+
         const xpEarned = result.xpEarned || 10;
         setLastXPAwarded(xpEarned);
         setXPNotificationType('success');
@@ -653,6 +672,9 @@ export const MultiplayerGameRoom: React.FC<MultiplayerGameRoomProps> = ({
       } else {
         // Error feedback with floating XP notification - user can try again with a different square
         console.log('❌ Incorrect answer - try another square');
+
+        // Play incorrect answer sound
+        masterSoundSystem.playIncorrectAnswer();
 
         setLastXPAwarded(-5);
         setXPNotificationType('error');

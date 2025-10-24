@@ -21,6 +21,7 @@ import { useAuthContext } from '../contexts/AuthContext';
 import { careerChallengeService } from '../services/CareerChallengeService';
 import { companyRoomService } from '../services/CompanyRoomService';
 import { decisionDeskAIPlayerService } from '../services/DecisionDeskAIPlayerService';
+import { masterSoundSystem } from '../services/MasterSoundSystem';
 import {
   CompanyRoom,
   ExecutiveDecisionSession,
@@ -118,12 +119,18 @@ const ExecutiveDecisionRoom: React.FC = () => {
       initRef.current = true;
       console.log('🔧 Initializing room - first mount only');
       initializeRoom();
+
+      // Start sound system for CEO Takeover/Decision Desk
+      masterSoundSystem.startGameSession('decision-desk');
     }
 
     return () => {
       if (roomId) {
         companyRoomService.unsubscribeFromRoom(roomId);
       }
+
+      // Stop sound system when leaving
+      masterSoundSystem.endGameSession();
     };
   }, [roomId, user]);
 
@@ -301,6 +308,9 @@ const ExecutiveDecisionRoom: React.FC = () => {
   const handleExecutiveSelected = async (executive: CSuiteRole) => {
     if (!session) return;
 
+    // Play selection confirmation sound
+    masterSoundSystem.playClick();
+
     setSelectedExecutive(executive);
     await careerChallengeService.selectExecutive(session.id, executive);
     setGamePhase('selecting-solutions');
@@ -321,6 +331,22 @@ const ExecutiveDecisionRoom: React.FC = () => {
     if (results) {
       setGameResults(results);
       setGamePhase('results');
+
+      // Play sound based on performance
+      const perfectCount = results.perfectSelected || 0;
+      const imperfectCount = results.imperfectSelected || 0;
+      const scorePercentage = (results.totalScore / 500) * 100; // Assuming max score of 500
+
+      if (scorePercentage >= 80 || perfectCount > imperfectCount) {
+        // Great performance - play celebration sound
+        masterSoundSystem.playCorrectAnswer();
+      } else if (scorePercentage >= 50) {
+        // Decent performance - play game complete sound
+        masterSoundSystem.playGameComplete();
+      } else {
+        // Poor performance - play neutral complete sound
+        masterSoundSystem.playGameComplete();
+      }
 
       // Announce achievement if any
       if (results.newAchievements && results.newAchievements.length > 0 && roomId && user) {
