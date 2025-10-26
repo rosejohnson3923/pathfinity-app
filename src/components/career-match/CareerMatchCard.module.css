@@ -1,0 +1,442 @@
+/**
+ * Career Match Card Styles
+ * 3D flip animation with smooth transitions
+ */
+
+/* ============================================================================
+   CARD CONTAINER
+   ============================================================================ */
+
+.cardContainer {
+  perspective: 1000px;
+  cursor: pointer;
+  user-select: none;
+  animation: cardEnter 0.4s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes cardEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Size variants - LANDSCAPE orientation */
+.cardContainer.small {
+  width: 160px;
+  height: 120px;
+}
+
+.cardContainer.medium {
+  width: 220px;
+  height: 170px;
+}
+
+.cardContainer.large {
+  width: 280px;
+  height: 220px;
+}
+
+/* ============================================================================
+   CARD (3D FLIP CONTAINER)
+   ============================================================================ */
+
+.card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card:hover:not(.disabled):not(.matched):not(.flipped) {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card:active:not(.disabled):not(.matched):not(.flipped) {
+  transform: translateY(-2px) scale(0.98);
+}
+
+.card.flipped .cardFront {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.card.flipped .cardBack {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.card.matched {
+  animation: matchPulse 0.6s ease-out;
+  cursor: default;
+  box-shadow: 0 0 20px rgba(76, 175, 80, 0.6);
+}
+
+.card.disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+@keyframes matchPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ============================================================================
+   CARD FACES
+   ============================================================================ */
+
+.cardFace {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Front (Career Image) - Shows when FLIPPED */
+.cardFront {
+  background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #e0e0e0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Back (CM Logo) - Shows when UNFLIPPED */
+.cardBack {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.7) 0%, rgba(79, 70, 229, 0.7) 100%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ============================================================================
+   FRONT: CAREER IMAGE
+   ============================================================================ */
+
+.careerImageWrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.careerImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.careerNameBanner {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+  padding: 8px 6px 6px 6px;
+  text-align: center;
+}
+
+.careerName {
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.medium .careerName {
+  font-size: 13px;
+}
+
+.large .careerName {
+  font-size: 15px;
+}
+
+/* ============================================================================
+   MATCHED OVERLAY
+   ============================================================================ */
+
+.matchedOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(76, 175, 80, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.matchedBadge {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #4caf50;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+  animation: badgePop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.medium .matchedBadge {
+  width: 50px;
+  height: 50px;
+  font-size: 28px;
+}
+
+.large .matchedBadge {
+  width: 60px;
+  height: 60px;
+  font-size: 32px;
+}
+
+@keyframes badgePop {
+  0% {
+    transform: scale(0) rotate(-180deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ============================================================================
+   BACK: GLASSMORPHIC DESIGN
+   ============================================================================ */
+
+.backDesign {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  position: relative;
+}
+
+.backLogo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 2;
+}
+
+.logoCircle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.medium .logoCircle {
+  width: 60px;
+  height: 60px;
+}
+
+.large .logoCircle {
+  width: 70px;
+  height: 70px;
+}
+
+.logoText {
+  font-size: 18px;
+  font-weight: 900;
+  color: white;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  letter-spacing: 0.5px;
+}
+
+.medium .logoText {
+  font-size: 22px;
+}
+
+.large .logoText {
+  font-size: 26px;
+}
+
+.brandName {
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  opacity: 0.95;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 4px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.medium .brandName {
+  font-size: 11px;
+  padding: 5px 14px;
+}
+
+.large .brandName {
+  font-size: 12px;
+  padding: 6px 16px;
+}
+
+/* ============================================================================
+   BACK: DECORATIVE PATTERN (Glassmorphic Shimmer)
+   ============================================================================ */
+
+.backPattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.15;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.patternGrid {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 12px;
+  padding: 16px;
+}
+
+.patternDot {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 70%, transparent 100%);
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+.patternDot:nth-child(odd) {
+  animation-delay: 0.5s;
+}
+
+.patternDot:nth-child(3n) {
+  animation-delay: 1s;
+}
+
+@keyframes shimmer {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+}
+
+/* ============================================================================
+   DEBUG INFO
+   ============================================================================ */
+
+.debugInfo {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  font-size: 9px;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: monospace;
+}
+
+/* ============================================================================
+   RESPONSIVE (LANDSCAPE orientation maintained)
+   ============================================================================ */
+
+@media (max-width: 768px) {
+  .cardContainer.medium {
+    width: 125px;
+    height: 100px;
+  }
+
+  .cardContainer.large {
+    width: 150px;
+    height: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cardContainer.small {
+    width: 75px;
+    height: 60px;
+  }
+
+  .cardContainer.medium {
+    width: 100px;
+    height: 80px;
+  }
+
+  .cardContainer.large {
+    width: 125px;
+    height: 100px;
+  }
+}

@@ -27,7 +27,6 @@ import { continuousJourneyIntegration } from '../../services/ContinuousJourneyIn
 import { skillClusterService } from '../../services/SkillClusterService';
 
 import { skillProgressionService } from '../../services/skillProgressionService';
-import { SkillProgressionDebugPanel } from '../debug/SkillProgressionDebugPanel';
 import type { StudentProfile, LearningSkill } from '../../services/AILearningJourneyService';
 
 // RULES ENGINE INTEGRATION
@@ -684,15 +683,6 @@ const MultiSubjectContainerV2UNIFIED: React.FC<MultiSubjectContainerV2Props> = (
         
         {/* Main Container */}
         {renderContainer()}
-        
-        {/* Debug Panel in Development */}
-        {process.env.NODE_ENV === 'development' && (
-          <SkillProgressionDebugPanel 
-            studentId={student.id}
-            currentSubject={currentSubject}
-            currentSkill={getCurrentSkill}
-          />
-        )}
       </div>
     </ToastProvider>
   );

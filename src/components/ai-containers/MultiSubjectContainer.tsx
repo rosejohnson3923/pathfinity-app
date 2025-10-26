@@ -11,7 +11,6 @@ import { AIExperienceContainerV2UNIFIED as AIExperienceContainer } from './AIExp
 import { AIDiscoverContainer } from './AIDiscoverContainer';
 import { staticDataService } from '../../services/StaticDataService';
 import { skillProgressionService } from '../../services/skillProgressionService';
-import { SkillProgressionDebugPanel } from '../debug/SkillProgressionDebugPanel';
 import type { StudentProfile, LearningSkill } from '../../services/AILearningJourneyService';
 
 // Add CSS animations
@@ -434,19 +433,6 @@ const MultiSubjectContainerBase: React.FC<MultiSubjectContainerProps> = ({
       paddingTop: '90px' // Add space for the new fixed progress bar
     }}>
       {renderProgress()}
-      
-      {/* Debug Panel - Only in development */}
-      {process.env.NODE_ENV === 'development' && (
-        <SkillProgressionDebugPanel 
-          userId={student.id} 
-          grade={student.grade_level}
-          onProgressChange={() => {
-            // Force re-render to pick up new skill
-            window.location.reload();
-          }}
-        />
-      )}
-      
       <div style={{
         position: 'relative',
         width: '100%',

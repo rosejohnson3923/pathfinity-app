@@ -36,7 +36,7 @@
 
 import { soundEffectsService } from './SoundEffectsService';
 
-export type GameType = 'career-bingo' | 'ceo-takeover' | 'decision-desk' | 'career-challenge';
+export type GameType = 'career-bingo' | 'ceo-takeover' | 'decision-desk' | 'career-challenge' | 'career-match';
 
 interface GameSessionConfig {
   gameType: GameType;
@@ -295,6 +295,46 @@ class MasterSoundSystem {
   playSpectatorMode(): void {
     if (this.isSFXEnabled()) {
       soundEffectsService.playSpectatorMode();
+    }
+  }
+
+  // ============================================================
+  // CAREER MATCH GAME SOUNDS
+  // ============================================================
+
+  /**
+   * Play card flip sound (Career Match)
+   */
+  playCardFlip(): void {
+    if (this.isSFXEnabled()) {
+      soundEffectsService.playClick(); // Use click sound for card flip
+    }
+  }
+
+  /**
+   * Play match success sound (Career Match)
+   */
+  playMatchSuccess(): void {
+    if (this.isSFXEnabled()) {
+      soundEffectsService.playAnswerFeedback(true); // Use correct answer sound
+    }
+  }
+
+  /**
+   * Play card mismatch sound (Career Match)
+   */
+  playCardMismatch(): void {
+    if (this.isSFXEnabled()) {
+      soundEffectsService.playAnswerFeedback(false); // Use incorrect answer sound
+    }
+  }
+
+  /**
+   * Play turn change sound (Career Match)
+   */
+  playTurnChange(): void {
+    if (this.isSFXEnabled()) {
+      soundEffectsService.playClick(); // Use click sound for turn change
     }
   }
 

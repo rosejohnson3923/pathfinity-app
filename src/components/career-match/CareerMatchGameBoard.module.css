@@ -1,0 +1,386 @@
+/**
+ * Career Match Game Board Styles
+ * Main game layout with card grid and leaderboard
+ */
+
+/* ============================================================================
+   CONTAINER
+   ============================================================================ */
+
+.gameBoardContainer {
+  width: 100%;
+  min-height: 100vh;
+  background: var(--background);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================================================
+   HEADER
+   ============================================================================ */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: var(--glass-bg-elevated);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border-strong);
+  border-radius: 16px;
+  box-shadow: var(--glass-shadow);
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--glass-text-primary);
+  margin: 0;
+}
+
+.difficulty {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--glass-text-secondary);
+  background: var(--glass-bg-base);
+  backdrop-filter: var(--glass-blur-sm);
+  -webkit-backdrop-filter: var(--glass-blur-sm);
+  border: 1px solid var(--glass-border);
+  padding: 6px 12px;
+  border-radius: 8px;
+  text-transform: capitalize;
+}
+
+.timer {
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+  padding: 8px 16px;
+  background: #e8f5e9;
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+}
+
+.timerWarning {
+  background: #ffebee;
+  color: #c62828;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* ============================================================================
+   MAIN CONTENT
+   ============================================================================ */
+
+.mainContent {
+  display: flex;
+  gap: 20px;
+  flex: 1;
+}
+
+/* ============================================================================
+   SIDEBAR (LEADERBOARD)
+   ============================================================================ */
+
+.sidebar {
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.leaderboard {
+  background: var(--glass-bg-elevated);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border-strong);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--glass-shadow);
+}
+
+.leaderboard h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--glass-text-primary);
+  border-bottom: 2px solid var(--glass-border);
+  padding-bottom: 8px;
+}
+
+.playerEntry {
+  display: grid;
+  grid-template-columns: 40px 1fr auto auto;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+}
+
+.playerEntry:hover {
+  background: var(--glass-bg-base);
+}
+
+.playerEntry.activeTurn {
+  background: var(--glass-bg-base);
+  backdrop-filter: var(--glass-blur-sm);
+  -webkit-backdrop-filter: var(--glass-blur-sm);
+  border: 2px solid var(--glass-icon-primary);
+  box-shadow: var(--glass-shadow);
+  animation: activeGlow 2s infinite;
+}
+
+.playerEntry.currentUser {
+  background: var(--glass-bg-elevated);
+  border: 2px solid var(--glass-icon-accent);
+  box-shadow: var(--glass-shadow);
+}
+
+@keyframes activeGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 rgba(33, 150, 243, 0);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(33, 150, 243, 0.4);
+  }
+}
+
+.rank {
+  font-size: 20px;
+  text-align: center;
+}
+
+.playerName {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--glass-text-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.aiTag {
+  font-size: 10px;
+  background: var(--glass-bg-base);
+  color: var(--glass-text-secondary);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  border: 1px solid var(--glass-border);
+}
+
+.matches {
+  font-size: 13px;
+  color: var(--glass-text-secondary);
+  font-weight: 600;
+}
+
+.streak {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--glass-icon-warning);
+}
+
+/* ============================================================================
+   TURN INDICATOR
+   ============================================================================ */
+
+.turnIndicator {
+  background: var(--glass-bg-elevated);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border-strong);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--glass-shadow);
+  text-align: center;
+}
+
+.turnLabel {
+  font-size: 12px;
+  color: var(--glass-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.currentPlayerName {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--glass-icon-primary);
+}
+
+.youTag {
+  color: var(--glass-icon-accent);
+  font-size: 14px;
+}
+
+/* ============================================================================
+   CARD GRID
+   ============================================================================ */
+
+.cardGridContainer {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--glass-bg-elevated);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border-strong);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: var(--glass-shadow);
+}
+
+.cardGrid {
+  display: grid;
+  gap: 16px;
+  max-width: 100%;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ============================================================================
+   LOADING & ERROR STATES
+   ============================================================================ */
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  color: white;
+  font-size: 18px;
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  color: white;
+  font-size: 18px;
+  gap: 16px;
+}
+
+.error button {
+  padding: 12px 24px;
+  background: white;
+  color: #667eea;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.error button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 1200px) {
+  .mainContent {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    gap: 16px;
+  }
+
+  .leaderboard,
+  .turnIndicator {
+    flex: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .sidebar {
+    flex-direction: column;
+  }
+
+  .cardGrid {
+    gap: 12px;
+  }
+
+  .cardGridContainer {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .gameBoardContainer {
+    padding: 12px;
+  }
+
+  .header {
+    padding: 12px;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+
+  .cardGrid {
+    gap: 8px;
+  }
+
+  .cardGridContainer {
+    padding: 12px;
+  }
+}

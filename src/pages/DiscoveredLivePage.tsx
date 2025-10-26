@@ -14,7 +14,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Play, Users, Trophy, Zap, Crown, ArrowLeft, Grid3x3, Gamepad2, Star, TrendingUp, Clock, Target, Sparkles, Info, X, Building2, Brain, Award } from 'lucide-react';
+import { Play, Users, Trophy, Zap, Crown, ArrowLeft, Grid3x3, Gamepad2, Star, TrendingUp, Clock, Target, Sparkles, Info, X, Building2, Brain, Award, CreditCard } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../contexts/AuthContext';
 import { useThemeContext } from '../contexts/ThemeContext';
@@ -128,8 +128,8 @@ const GameCard: React.FC<GameCardProps> = ({ game, index, onPlay, onShowRules })
             Play Now
           </motion.button>
 
-          {/* Show Rules button for Career Bingo, CEO Takeover, and The Decision Desk */}
-          {(game.id === 'career-bingo' || game.id === 'career-challenge-multiplayer' || game.id === 'decision-desk') && onShowRules && (
+          {/* Show Rules button for Career Bingo, Career Match, CEO Takeover, and The Decision Desk */}
+          {(game.id === 'career-bingo' || game.id === 'career-match' || game.id === 'career-challenge-multiplayer' || game.id === 'decision-desk') && onShowRules && (
             <button
               onClick={() => onShowRules(game)}
               className="w-full glass-subtle hover:glass-hover text-center py-2 px-4 rounded-lg font-medium flex items-center justify-center gap-2 glass-text-secondary transition-all"
@@ -192,6 +192,19 @@ export const DiscoveredLivePage: React.FC = () => {
       route: '/discovered-live/career-bingo',
       category: 'quick_play',
       badge: 'LIVE'
+    },
+    {
+      id: 'career-match',
+      name: 'Career Match',
+      description: 'Test your memory! Flip cards to find matching career pairs and build winning streaks!',
+      icon: <CreditCard className="w-12 h-12" />,
+      playerCount: '2-4 players',
+      duration: '3-8 min',
+      difficulty: 'Easy',
+      status: 'available',
+      route: '/discovered-live/career-match',
+      category: 'quick_play',
+      badge: 'NEW'
     },
     {
       id: 'career-trivia',
@@ -946,6 +959,114 @@ export const DiscoveredLivePage: React.FC = () => {
                 <Play className="w-5 h-5" fill="currentColor" />
                 Ready to Play!
               </motion.button>
+                </>
+              )}
+
+              {/* Career Match Rules */}
+              {selectedGameForRules.id === 'career-match' && (
+                <>
+                  {/* Game Overview */}
+                  <div className="mb-6">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Sparkles className="w-5 h-5 glass-icon-accent" />
+                      <h3 className="text-xl font-bold glass-text-primary">Game Overview</h3>
+                    </div>
+                    <p className="glass-text-secondary leading-relaxed">
+                      Test your memory in <span className="font-bold glass-text-primary">Career Match</span>! Flip cards to find matching career pairs, build winning streaks, and compete against other players to earn the highest score!
+                    </p>
+                  </div>
+
+                  {/* How to Play */}
+                  <div className="mb-6">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Gamepad2 className="w-5 h-5 glass-icon-primary" />
+                      <h3 className="text-xl font-bold glass-text-primary">How to Play</h3>
+                    </div>
+                    <ul className="space-y-2 glass-text-secondary">
+                      <li className="flex items-start gap-2">
+                        <span className="font-bold glass-text-primary mt-0.5">•</span>
+                        <span><strong className="glass-text-primary">Take Turns:</strong> Each player flips two cards per turn to find matching career pairs</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="font-bold glass-text-primary mt-0.5">•</span>
+                        <span><strong className="glass-text-primary">Remember Locations:</strong> Pay attention to card positions to make strategic matches</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="font-bold glass-text-primary mt-0.5">•</span>
+                        <span><strong className="glass-text-primary">Build Streaks:</strong> Match 3+ pairs in a row to earn bonus XP</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="font-bold glass-text-primary mt-0.5">•</span>
+                        <span><strong className="glass-text-primary">Compete to Win:</strong> Player with the most matches earns top rank and bonus rewards</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Scoring System */}
+                  <div className="mb-6">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Trophy className="w-5 h-5 glass-icon-warning" />
+                      <h3 className="text-xl font-bold glass-text-primary">Scoring</h3>
+                    </div>
+                    <div className="space-y-2 glass-text-secondary">
+                      <div className="flex items-center gap-2">
+                        <Zap className="w-4 h-4 glass-icon-accent flex-shrink-0" />
+                        <span><strong className="glass-text-primary">Base XP:</strong> 100 XP per match</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Zap className="w-4 h-4 glass-icon-accent flex-shrink-0" />
+                        <span><strong className="glass-text-primary">Streak Bonus:</strong> +50 XP for 3+ consecutive matches</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Zap className="w-4 h-4 glass-icon-accent flex-shrink-0" />
+                        <span><strong className="glass-text-primary">Rank Bonus:</strong> 1st: +50 XP • 2nd: +30 XP • 3rd: +10 XP</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Zap className="w-4 h-4 glass-icon-accent flex-shrink-0" />
+                        <span><strong className="glass-text-primary">Completion:</strong> +25 XP for finishing</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Difficulty Levels */}
+                  <div className="mb-6">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Target className="w-5 h-5 glass-icon-success" />
+                      <h3 className="text-xl font-bold glass-text-primary">Difficulty Levels</h3>
+                    </div>
+                    <div className="grid grid-cols-3 gap-3">
+                      <div className="glass-subtle p-3 rounded-lg text-center">
+                        <div className="font-bold glass-text-primary mb-1">Easy</div>
+                        <div className="text-sm glass-text-secondary">12 cards</div>
+                        <div className="text-xs glass-text-tertiary">3×4 grid</div>
+                      </div>
+                      <div className="glass-subtle p-3 rounded-lg text-center">
+                        <div className="font-bold glass-text-primary mb-1">Medium</div>
+                        <div className="text-sm glass-text-secondary">20 cards</div>
+                        <div className="text-xs glass-text-tertiary">4×5 grid</div>
+                      </div>
+                      <div className="glass-subtle p-3 rounded-lg text-center">
+                        <div className="font-bold glass-text-primary mb-1">Hard</div>
+                        <div className="text-sm glass-text-secondary">30 cards</div>
+                        <div className="text-xs glass-text-tertiary">5×6 grid</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Play Button */}
+                  <motion.button
+                    onClick={() => {
+                      setShowRulesModal(false);
+                      setSelectedGameForRules(null);
+                      navigate('/discovered-live/career-match');
+                    }}
+                    className="w-full mt-6 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold py-4 px-6 rounded-xl shadow-lg flex items-center justify-center gap-2"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <Play className="w-5 h-5" fill="currentColor" />
+                    Ready to Play!
+                  </motion.button>
                 </>
               )}
 

@@ -10,7 +10,6 @@ import { AIExperienceContainerV2 } from './AIExperienceContainerV2';
 import { AIDiscoverContainerV2 } from './AIDiscoverContainerV2';
 import { skillsData } from '../../data/skillsDataComplete';
 import { skillProgressionService } from '../../services/skillProgressionService';
-import { SkillProgressionDebugPanel } from '../debug/SkillProgressionDebugPanel';
 import type { StudentProfile, LearningSkill } from '../../services/AILearningJourneyService';
 
 // RULES ENGINE INTEGRATION
@@ -585,16 +584,6 @@ const MultiSubjectContainerV2: React.FC<MultiSubjectContainerV2Props> = ({
         <div className={`${styles.contentWrapper} ${styles.subjectTransition}`}>
           {renderContainer()}
         </div>
-        
-        {/* Debug Panel (if in development) */}
-        {process.env.NODE_ENV === 'development' && getCurrentSkill && (
-          <SkillProgressionDebugPanel 
-            currentSubject={currentSubject}
-            currentSkill={getCurrentSkill}
-            progress={subjectProgress}
-          />
-        )}
-        
         {/* Transition Overlay */}
         {renderTransition()}
       </div>

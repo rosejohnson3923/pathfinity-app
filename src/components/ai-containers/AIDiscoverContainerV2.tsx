@@ -1055,7 +1055,7 @@ export const AIDiscoverContainerV2: React.FC<AIDiscoverContainerV2Props> = ({
 
 const styles = `
 .ai-discover-container {
-  max-width: 900px;
+  max-width: 1300px;
   margin: 0 auto;
   padding: 2rem;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;

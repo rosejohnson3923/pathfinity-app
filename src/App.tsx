@@ -62,6 +62,7 @@ import { CareerBingoLobbyPage } from './pages/CareerBingoLobbyPage';
 import { CareerChallengePage } from './pages/CareerChallengePage';
 import { CCMPage } from './pages/CCMPage';
 import { ExecutiveDecisionRoom } from './pages/ExecutiveDecisionRoom';
+import { CareerMatchLobbyPage } from './pages/CareerMatchLobbyPage';
 import TestAIGeneration from './components/CareerChallenge/TestAIGeneration';
 // Test components moved to Archive - commented out
 // import YouTubeTest from './test-youtube';
@@ -129,6 +130,7 @@ function App() {
                   <Route path="/test/career-grade-level" element={<TestCareerSelectionWithGradeLevel />} />
                   <Route path="/test/career-database" element={<TestCareerProgressionDatabase />} />
                   <Route path="/test/discovered-live" element={<DiscoveredLiveTestPage />} />
+                  <Route path="/test/career-match" element={<CareerMatchLobbyPage />} />
                   <Route path="/test/ai-generation" element={<TestAIGeneration />} />
                   {/* Test routes commented out - components moved to Archive
                   <Route path="/test/youtube" element={<YouTubeTest />} />
@@ -234,6 +236,11 @@ function App() {
                   <Route path="/executive-decision/room/:roomId" element={
                     <ProtectedRoute>
                       <ExecutiveDecisionRoom />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/discovered-live/career-match" element={
+                    <ProtectedRoute>
+                      <CareerMatchLobbyPage />
                     </ProtectedRoute>
                   } />
 
