@@ -91,23 +91,26 @@ const CareerMatchCard: React.FC<CareerMatchCardProps> = ({
           )}
         </div>
 
-        {/* Card Back (Pathfinity Branding) */}
+        {/* Card Back (Animated Video) */}
         <div className={`${styles.cardFace} ${styles.cardBack}`}>
           <div className={styles.backDesign}>
-            <div className={styles.backLogo}>
-              <div className={styles.logoCircle}>
-                <span className={styles.logoText}>CM</span>
+            <video
+              className={styles.backVideo}
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+            >
+              <source src="/images/DiscoveredLive/DiscoveredLive_Flip.mp4" type="video/mp4" />
+              {/* Fallback for browsers that don't support video */}
+              <div className={styles.backLogo}>
+                <div className={styles.logoCircle}>
+                  <span className={styles.logoText}>CM</span>
+                </div>
+                <div className={styles.brandName}>Career Match</div>
               </div>
-              <div className={styles.brandName}>Career Match</div>
-            </div>
-            <div className={styles.backPattern}>
-              {/* Decorative pattern */}
-              <div className={styles.patternGrid}>
-                {Array.from({ length: 16 }).map((_, i) => (
-                  <div key={i} className={styles.patternDot} />
-                ))}
-              </div>
-            </div>
+            </video>
           </div>
         </div>
       </div>
