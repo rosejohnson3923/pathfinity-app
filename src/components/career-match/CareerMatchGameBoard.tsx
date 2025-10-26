@@ -423,11 +423,23 @@ const CareerMatchGameBoard: React.FC<CareerMatchGameBoardProps> = ({
     setRoomState((prevState) => {
       if (!prevState) return prevState;
 
+      // Find the next player and check if it's the current user by comparing user_id
+      const nextPlayer = prevState.players.find(p => p.id === data.next_player_id);
+      const isUserTurn = nextPlayer?.user_id === currentUserId;
+
+      console.log('[GameBoard] Turn changed:', {
+        next_player_id: data.next_player_id,
+        next_player_name: nextPlayer?.display_name,
+        next_player_user_id: nextPlayer?.user_id,
+        current_user_id: currentUserId,
+        is_user_turn: isUserTurn
+      });
+
       return {
         ...prevState,
         current_turn_player_id: data.next_player_id,
         current_turn_number: data.turn_number,
-        is_user_turn: prevState.players.find(p => p.id === data.next_player_id)?.is_current_user || false,
+        is_user_turn: isUserTurn,
         players: prevState.players.map(p => ({
           ...p,
           is_active_turn: p.id === data.next_player_id
